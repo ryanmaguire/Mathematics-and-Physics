@@ -1,0 +1,1535 @@
+\documentclass[crop=false,class=book]{standalone}
+%---------------PREAMBLE------------%
+\input{../../preamble.tex}
+%---------------GLOSSARY------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------Title Page-----------%
+\begin{document}
+\chapter{Algebraic Geometry}
+\section{Notes on Cox, Little, and O'Shea}
+\subsection{Preliminaries}
+\subsubsection{Groups}
+\begin{definition}
+A binary operation on a set $S$ is a function $*:S\times S \rightarrow S$.
+\end{definition}
+\begin{definition}
+A group is a set $G$ and a binary operation $*$, denoted $\langle G,*\rangle$, such that:
+\begin{enumerate}
+    \item $\forall_{a,b,c\in G}$, $a*(b*c) = (a*b)*c$ \hfill [Associativity]
+    \item $\exists_{e\in G}$ such that $\forall_{a\in G}$, $a*e=e*a = a$ \hfill [Existence of Neutral Element]
+    \item $\forall_{a\in G}$, $\exists_{b\in G}$ such that $a*b = b*a = e$. We write $b=a^{-1}$. \hfill [Existence of Inverse Elements]
+\end{enumerate}
+\end{definition}
+\begin{definition}
+An Abelian group is a group $\langle G,*\rangle$ such that $\forall_{a\in G},a*b=b*a$
+\end{definition}
+\begin{theorem}
+If $\langle G, *\rangle$ is a group with neutral element $e$, then $e$ is unique.
+\end{theorem}
+\begin{theorem}
+If $\langle G,*\rangle$ is a group and $a\in G$, then $a^{-1}$ is unique.
+\end{theorem}
+\begin{theorem}
+If $p$ is prime, then $\mathbb{Z}_p\setminus \{0\}$ is a group under multiplication modulo $p$.
+\end{theorem}
+\begin{remark}
+$\mathbb{Z}$ is NOT a group under multiplication. Multiplicative inverses may not be integers.
+\end{remark}
+\begin{definition}
+An injective function is a function $f:A\rightarrow B$ such that $\forall_{a,b\in A}$, $f(a)=f(b)\Rightarrow a=b$.
+\end{definition}
+\begin{definition}
+A surjective functions is a function $f:A\rightarrow B$ such that $\forall_{b\in B}$, $\exists_{a\in A}:f(a)=b$.
+\end{definition}
+\begin{definition}
+A bijective function is a function that is both injective and surjective.
+\end{definition}
+\begin{definition}
+A permutation on a set $S$ is a bijective function $\sigma:S\rightarrow S$.
+\end{definition}
+\begin{definition}
+The composition $f:A\rightarrow B$ and $g:B\rightarrow C$ is $g\circ f:A\rightarrow C$ defined by $x\mapsto g(f(x))$.
+\end{definition}
+\begin{definition}
+A subgroup of a group $\langle G,*\rangle$ is a set $H\subset G$ such that $\langle H,*\rangle$ is a group.
+\end{definition}
+\subsubsection{Fields and Rings}
+\begin{definition}
+A field is a set $k$ with two binary operations $+$ and $\cdot$ such that:
+\begin{enumerate}
+    \item $\forall_{a,b,c\in k}$, $a+(b+c)=(a+b)+c$ \hfill [Associativity of Addition]
+    \item $\forall_{a,b,c\in k}$, $a\cdot(b\cdot c) = (a\cdot b)\cdot c$ \hfill [Associativity of Multiplication]
+    \item $\forall_{a,b\in k}$, $a+b=b+a$ \hfill [Commutativity of Addition]
+    \item $\forall_{a,b\in k}$, $a\cdot b = b\cdot a$ \hfill [Commutativity of Multiplication]
+    \item $\exists_{0 \in k}$ such that $\forall_{a\in k}$, $a+0=0+a = a$ \hfill [Existence of Additive Identity]
+    \item $\exists_{1\in k}$ such that $\forall_{a\in k}$, $1\cdot a=a\cdot 1 = a$ \hfill [Existence of Multiplicative Identity]
+    \item $\forall_{a\in k}$ there is a $b\in k$ such that $a+b=0$ \hfill [Existence of Additive Inverse]
+    \item $\forall_{a\in k}$, $a\ne 0$, there is a $b\in k$ such that $a\cdot b = 1$ \hfill [Existence of Multiplicative Inverses]
+    \item $\forall_{a,b,c\in k}$, $a\cdot(b+c) = a\cdot b + a\cdot c$ \hfill [Multiplication Distributes Over Addition]
+\end{enumerate}
+\end{definition}
+\begin{remark}
+We usually omit the multiplication symbol $\cdot$ and just write $ab$ instead of $a\cdot b$
+\end{remark}
+\begin{theorem}
+If $k$ is a field, then $\langle k, + \rangle$ is an Abelian group.
+\end{theorem}
+\begin{theorem}
+If $k$ is a field and $a\in k$, then $a\cdot 0 = 0$
+\end{theorem}
+\begin{remark}
+If $k$ is a field and $0=1$, then $k=\{0\}$. This makes the "Zero Field," rather boring.
+\end{remark}
+\begin{theorem}
+If $-1$ is the additive inverse of $1$, then $(-1)^2 = 1$
+\end{theorem}
+\begin{definition}
+A ring is a set $R$ with two binary operations $+$ and $\cdot$ such that:
+\begin{enumerate}
+    \item $\forall_{a,b,c\in k}$, $a+(b+c)=(a+b)+c$ \hfill [Associativity of Addition]
+    \item $\forall_{a,b,c\in k}$, $a\cdot(b\cdot c) = (a\cdot b)\cdot c$ \hfill [Associativity of Multiplication]
+    \item $\forall_{a,b\in k}$, $a+b=b+a$ \hfill [Commutativity of Addition]
+    \item $\exists_{0 \in k}$ such that $\forall_{a\in k}$, $a+0=0+a = a$ \hfill [Existence of Additive Identity]
+    \item $\forall_{a\in k}$, $\exists_{b\in k}$ such that $a+b=0$ \hfill [Existence of Additive Inverse]
+    \item $\forall_{a,b,c\in k}$, $a\cdot(b+c) = a\cdot b + a\cdot c$ and $(b+c)\cdot a = b\cdot a + c\cdot a$ \hfill [Distributive Property]
+\end{enumerate}
+\end{definition}
+\begin{definition}
+A commutative ring is a ring $R$ such that $\forall_{a,b\in R},ab=ba$
+\end{definition}
+\begin{definition}
+A commutative ring with unity is a commutative ring such that $\exists_{1\in R}\forall_{a\in R}:1a=a$
+\end{definition}
+\begin{remark}
+In rings and fields, $+$ is usually called addition and $\cdot$ is usually called multiplication.
+\end{remark}
+\begin{corollary}
+If $R$ is a ring and $a\in R$, then $a\cdot 0 = 0\cdot a=0$
+\end{corollary}
+\begin{definition}
+An integral domain is a commutative ring such that $ab=0\Rightarrow a=0$ or $b=0$
+\end{definition}
+\begin{definition}
+A divisor of zero in a ring $R$ is an element $a\in R$ such that $\exists_{b\in R\setminus\{0\}}:ab=0$
+\end{definition}
+\begin{theorem}
+$a$ divisor of zero in a ring $R$ if and only if $f:R\rightarrow R$, $f(x) = ax$ is not injective.
+\end{theorem}
+\begin{theorem}
+Any field $k$ is an integral domain.
+\end{theorem}
+\begin{definition}
+An ideal of a commutative ring is a set $I\subset R$ such that:
+\begin{enumerate}
+    \item $0\in I$ \hfill [Existence of Additive Inverse]
+    \item $\forall_{a,b\in I}$, $a+b\in I$ \hfill [Closure Under Addition]
+    \item $\forall_{a\in I,b\in R}$, $a b \in I$ \hfill [Absorption Property]
+\end{enumerate}
+\end{definition}
+\subsubsection{Determinants}
+The elementary definitions from linear algebra are presumed. The set of all permutations of $\mathbb{Z}_{n}$ is denoted $S_n$. $S_{n}$ is a group under composition, $\langle S_{n},\circ\rangle$
+\begin{definition}
+The permutation matrix of $\sigma \in S_{n}$, denoted $P_{\sigma}$, is the matrix formed by the image of the identity matrix $I_{n}$ under the mapping $(a_{ij})\mapsto (a_{i\sigma(j)})$
+\end{definition}
+\begin{example}
+Consider the permutation on $\mathbb{Z}_3$ defined by the cycle $1\rightarrow 3 \rightarrow 2 \rightarrow 1$. We can make this a matrix equation as follows:
+\begin{equation*}
+    \begin{bmatrix} 0 & 0 & 1 \\ 1 & 0 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} = \begin{bmatrix} 3 \\ 1 \\ 2 \end{bmatrix}    
+\end{equation*}
+The leftmost matrix is obtained by permuting the columns of the identity matrix $I_{3}$ by $\sigma$.
+\end{example}
+\begin{definition}
+The sign of a permutation $\sigma\in S_{n}$ is $\sgn(\sigma) = \det(P_{\sigma})$.
+\end{definition}
+\begin{remark}
+From the way $P_{\sigma}$ is defined, $\sgn(\sigma) = \det(P_{\sigma}) = \pm 1$, depending on $\sigma$.
+\end{remark}
+\begin{theorem}
+If $A=(a_{ij})$ is an $n\times n$ matrix, then $\det(A) = \underset{\sigma \in S_n}\sum \sgn(\sigma) \prod_{k=1}^{n} a_{k\sigma(k)}$.
+\end{theorem}
+\subsection{Geometry, Algebra, and Algorithms}
+This section introduces the basic ideas. Affine varieties and ideals in the polynomial ring $k[x_1,\hdots ,x_n]$ are studied. Finally, polynomials in one variable are studied to introduce the role of algorithms.
+\subsubsection{Polynomials and Affine Space}
+To link algebra and geometry, we will study polynomials over a field. Fields are important because linear algebra works over any field $k$. There are three particular fields that will be used the most:
+\begin{enumerate}
+    \item $\mathbb{Q}$: This field is used for computer examples.
+    \item $\mathbb{R}$: This field is used for drawing pictures of curves and surfaces.
+    \item $\mathbb{C}$: This field is used for proving many theorems.
+\end{enumerate}
+\begin{definition}
+A monomial in $x_1,\hdots,x_n$ is a product $\prod_{i=1}^{n}x_{i}^{\alpha_{i}}$, where $\alpha_{1},\hdots,\alpha_{n}\in\mathbb{N}_0$
+\end{definition}
+\begin{definition}
+The total degree of a monomial $x_1^{\alpha_1}\cdots x_n^{\alpha_n}$ is the sum $\sum_{i=1}^{n}\alpha_{i}$
+\end{definition}
+\begin{notation}
+For $\alpha_1,\hdots, \alpha_n\in \mathbb{N}_0$, let $\alpha = (\alpha_1,\hdots ,\alpha_n)$. We write $\prod_{i=1}^{n}x_{i}^{\alpha_{i}}=x^{\alpha}$
+\end{notation}
+\begin{definition}
+A polynomial $f$ in $x_1,\hdots, x_n$ is a finite linear combination of monomials over $k$.
+\end{definition}
+\begin{notation}
+The set of all polynomials in $n$ variables with coefficients in $k$ is denoted $k[x_1,\hdots ,x_n]$
+\end{notation}
+\begin{definition}
+For a polynomial $f = \sum_{\alpha} a_\alpha x^\alpha \in k[x_1,\hdots ,x_n]$, $a_\alpha$ is called the coefficient of $x^\alpha$
+\end{definition}
+\begin{definition}
+A term of $f=\sum_{\alpha} a_\alpha x^\alpha \in k[x_1,\hdots ,x_n]$ is a product $a_\alpha x^\alpha$ where $a_\alpha \ne 0$
+\end{definition}
+\begin{definition}
+The total degree of $f=\sum_{\alpha}a_\alpha x^\alpha$, denoted $\deg(f)$, is $\deg(f) = \max\{|\alpha|:a_\alpha \ne 0\}$
+\end{definition}
+\begin{definition}
+The zero polynomial is the polynomial with all zero coefficients.
+\end{definition}
+\begin{theorem}
+The sum and product of polynomials in $k[x_1,\hdots ,x_n]$ is a polynomial in $k[x_1,\hdots ,x_n]$
+\end{theorem}
+\begin{definition}
+A divisor of $f\in k[x_{1},\hdots ,x_{n}]$, is a $g\in k[x_{1},\hdots,x_{n}]$ such that $\exists_{h\in k[x_{1},\hdots,x_{n}]}:f = gh$
+\end{definition}
+\begin{theorem}
+For all $n\in\mathbb{N}$, $k[x_1,\hdots ,x_n]$ is a commutative ring.
+\end{theorem}
+\begin{remark}
+Because of this we call $k[x_1,\hdots ,x_n]$ a polynomial ring.
+\end{remark}
+\begin{definition}
+The $n-$dimensional affine space over $k$ is the set $k^{n}=\{(a_1,\hdots, a_n):a_1,\hdots,a_n \in k\}$
+\end{definition}
+\begin{remark}
+A polynomial defines a function $f:k^n \rightarrow k$
+\end{remark}
+\begin{definition}
+A zero function $f:k^n \rightarrow k$ is a function such that $f(x) = 0$ for all $x\in k^n$
+\end{definition}
+\begin{remark}
+A zero function and the zero polynomial are not necessarily the same thing. That is, there are fields $k$ with non-zero polynomials that evaluate to zero at every point.
+\end{remark}
+\begin{theorem}
+There exists fields $k$, $f\in k[x]$ such that $f$ is a non-zero polynomial and $\forall_{a\in k},f(a)=0$
+\end{theorem}
+\begin{theorem}
+If $k$ is an infinite field, $f\in k[x_1,\hdots ,x_n]$, then $f$ is a zero function if and only if it is the zero polynomial.
+\end{theorem}
+\begin{theorem}
+If $k$ is an infinite field and $f,g\in k[x_1,\hdots ,x_n]$, then $f=g$ if and only if $f:k^n\rightarrow k$ and $g:k^n \rightarrow k$ give the same function.
+\end{theorem}
+There is a special property for polynomials over the complex numbers $\mathbb{C}$.
+\begin{theorem}
+Every non-constant polynomial $f\in \mathbb{C}[x]$ has a root in $\mathbb{C}$.
+\end{theorem}
+\begin{definition}
+An algebraically closed field is a field such that for non-constant $f$, $\exists_{x\in k}:f(x)=0$.
+\end{definition}
+\subsubsection{Affine Varieties}
+\begin{definition}
+The affine variety of $f_1,\hdots, f_s \in k[x_1,\hdots ,x_n]$ is $\{x\in k^n:\forall_{1\leq i \leq s},f_i(x) = 0\}$
+\end{definition}
+\begin{notation}
+The affine variety of $f_{1},\hdots,f_{s}\in k[x_{1},\hdots,x_{n}]$ is denoted $\mathbf{V}(f_1,\hdots, f_s)$
+\end{notation}
+The affine variety of a finite set of polynomials is the solution set of the system of equations $f_{i}(x)=0$
+\begin{example}
+$\mathbf{V}(x^2+y^2-1)\subset\mathbb{R}^2$ is the set of solutions to $x^2+y^2-1 = 0$: The unit circle.
+\end{example}
+\begin{example}
+The conic sections (Circles, ellipses, parabolas, and hyperbolas) are affine varieties. The graphs of rational functions are also affine varieties. For if $y = \frac{P(x)}{Q(x)}$, where $P,Q\in \mathbb{R}[x]$, then $\mathbf{V}\big(yQ(x)-P(x)\big)$ is an affine variety equivalent to that graph.
+\end{example}
+\begin{example}
+The surfaces the represent affine varieties need not be smooth everywhere. Indeed, $\mathbf{V}(z^2-x^2-y^2)$ is the graph of a cone with its apex at the origin. As such, the surface obtained is not smooth at the origin. Such points are called singular points.
+\end{example}
+\begin{example}
+The twisted cubic is $\mathbf{V}(y-x^2,z-x^3)$, with the parametrization $\{(t,t^2,t^3):t\in \mathbb{R}\}$
+\end{example}
+The notion of dimension is very subtle. In previous examples, if we have $m$ polynomials in $\mathbb{R}^n$, we expect a surface of $n-m$ dimension. This is not always the case, however.
+\begin{example}
+$\mathbf{V}(xz,yz)$ is the set of solutions to $xy=yz=0$. If $z=0$, then any point $(x,y,0)\in \mathbb{R}^3$ satisfies this. If $z\ne 0$, then $x=y=0$ and thus and point $(0,0,z)\in \mathbb{R}^3$ is a solution. Thus, $\mathbf{V}(xz,yz)$ is the union of the $xy$ plane and the $z$ axis. So $\mathbf{V}(xz,yz)$ is two dimensional, not one.
+\end{example}
+\begin{definition}
+A linear variety is an affine variety in which the defining polynomials are linear.
+\end{definition}
+\begin{example}
+Let $k$ be a field and consider the following polynomials:
+\begin{align*}
+    a_{11}x_{1}+\hdots+a_{1n}x_{n}&=b_{1}\\
+    \vdots&\\
+    a_{m1}x_{1}+\hdots+a_{mn}x_{n}&=b_{m}
+\end{align*}
+From linear algebra we know that the method of Gaussian Elimination and row-reduction gives us the solution set of the system of equations. We also know that the dimension of the solutions set is $n-r$, where $r$ is the number of independent equations (Also known as the rank of the coefficient matrix). The dimension of an affine variety is also determined by the number of independent equations, however the term ``Independent," is much more subtle.
+\end{example}
+\begin{example}
+Find the maximum of $f(x,y,z) = x^3+2xyz-z^2$ subject to $g(x,y,z) = x^2+y^2+z^2=1$. From multivariable calculus, specifically the method of Lagrange Multipliers, we know this occurs when $\nabla(f) = \lambda \nabla(g)$, for some $\lambda \in \mathbb{R}$. This gives us the following:
+\begin{align*}
+    x^{2}+2yz&=2\lambda x & 2xy-2z&=2\lambda z\\
+    2xz&=2\lambda y & x^{2}+y^{2}+z^2&=1
+\end{align*}
+Solving this via algebraic means can be a nightmare. Various algorithms exist, however.
+\end{example}
+\begin{remark}
+It is possible for an affine variety to be the empty set. Let $k=\mathbb{R}$, and $f=x^{2}+y^{2}+1$. Then $\mathbf{V}(f)=\emptyset$. That is, there is no real solution to $x^2+y^2 = -1$.
+\end{remark}
+\begin{example}
+Consider a robot arm. The ``Armpit," is at the origin, and the ``Elbow," is at the point $(x,y)\in \mathbb{R}^2$ where $x^2+y^2 = r^2$ ($r$ is the length of ``Bicep.") The ``Hand," will then be at $(z,w)\in \mathbb{R}^2$ where $(x-z)^2 + (y-w)^2 = \ell^2$ ($\ell$ is the length of the ``Forearm.") Not every point $(x,y,z,w)\in \mathbb{R}^4$ represents a possible position of the robot arm, there are the following constraints:
+\begin{align*}
+    x^{2}+y^{2}&=r^{2}\\ 
+    (x-z)^{2}+(y-z)^{2}&=\ell^{2}
+\end{align*}
+The solution set defines an affine variety in $\mathbb{R}^4$. For arms in $\mathbb{R}^3$, the solution set would be in $\mathbb{R}^6$.
+\end{example}
+\begin{theorem}
+If $V,W\subset k^n$ are affine varieties, then so are $V\cup W$ and $V\cap W$. Moreover:
+\begin{enumerate}
+    \item $\mathbf{V}(f_{1},\hdots,f_{s})\cap\mathbf{V}(g_{1},\hdots,g_{s})=\mathbf{V}(f_{1},\hdots,f_{s},g_{1},\hdots,g_{t})$
+    \item $\mathbf{V}(f_{1},\hdots,f_{s})\cup\mathbf{V}(g_{1},\hdots,g_{s})=\mathbf{V}(f_{i}g_{j}:1\leq i\leq s,1\leq j\leq t)$
+\end{enumerate}
+\end{theorem}
+\begin{example}
+$\mathbf{V}(xz,yz)=\mathbf{V}(xy)\cup\mathbf{V}(z)$. $\mathbf{V}(xz,yz)$ is the union of the $xy$ plane and the $z$ axis.
+\end{example}
+\begin{example}
+For the twisted cubic: $\mathbf{V}(y-x^{2},z-x^{3})=\mathbf{V}(y-x^{2})\cap\mathbf{V}(z-x^{3})$
+\end{example}
+Several problems arise concerning affine varieties:
+\begin{enumerate}
+    \item Can we determine if $\mathbf{V}(f_{1},\hdots,f_{s})\ne\emptyset$?\hfill [Consistency]
+    \item Can we determine if $\mathbf{V}(f_{1},\hdots,f_{s})$ is finite?\hfill [Finiteness]
+    \item Can we determine the ``Dimension," of $\mathbf{V}(f_{1},\hdots,f_{s})$?
+\end{enumerate}
+The answer to these questions is yes, although we must be careful in choosing the field we work with. 
+\subsubsection{Parametrizations of Affine Varieties}
+We now arrive at the problem of describing all of the points in an affine variety. 
+\begin{example}
+Consider the system in $\mathbb{R}[x,y,z]$:
+\begin{align*}
+    x+y+z&=1\\
+    x+2y-z&=3
+\end{align*}
+From linear algebra we get the row echelon matrix:
+\begin{equation*}
+    \begin{bmatrix*}[r]1&0&3&\vline&-1\\0&\phantom{-}1&-2&\vline&2\end{bmatrix*}    
+\end{equation*}
+Letting $z=t$, we get $x = -3t-1$ and $y = 2+2t$. The parametrization of the affine variety is thus $\{(-3t-1,2t+2,t):t\in \mathbb{R}\}$. We call $t$ a parameter, and $(-3t-1,2t+2,t)$ a parametrization.
+\end{example}
+\begin{example}
+One way to parametrize the unit circle uses trigonometric functions: $(\cos(t),\sin(t))$. A rational way to do this is $\big(\frac{1-t^2}{1+t^2}, \frac{2t}{1+t^2}\big)$. This parametrizes the entire unit circle, with the exception of the point $(-1,0)$. This point is $\underset{t\rightarrow\infty}{\lim}\big(\frac{1-t^{2}}{1+t^{2}},\frac{2t}{1+t^{2}}\big)$. So in a sense, $(-1,0)$ is a ``Point at infinity."
+\end{example}
+\begin{definition}
+A parametrization of an affine variety $\mathbf{V}(f_1,\hdots, f_s) \subset k^n$ is a set of $j$ equations $x_{j}=f_{j}(t_{1},\hdots,t_{m})$, whose solution set $S$ is such that $S\subset\mathbf{V}(f_{1},\hdots,f_{s})$, and for all $g_{1},\hdots,g_{t}$ such that $S\subset\mathbf{V}(g_{1},\hdots,g_{t})$, $\mathbf{V}(f_{1},\hdots,f_{s})\subset\mathbf{V}(g_{1},\hdots,g_{s})$
+\end{definition}
+\begin{remark}
+Solutions to $x_k = f_k(t_1,\hdots, t_m)$ lie in $\mathbf{V}(f_1,\hdots, f_s)$ and $\mathbf{V}(f_1,\hdots, f_s)$ is the smallest affine variety containing these points.
+\end{remark}
+\begin{definition}
+A rational function in $x_1,\hdots, x_n$ is a quotient $\frac{P(x)}{Q(x)}:P,Q \in k[x_1,\hdots ,x_n],Q\ne 0$.
+\end{definition}
+\begin{definition}
+$k(x_1,\hdots ,x_n)$ is the set of all rational functions over a field $k$ in $x_1,\hdots, x_n$.
+\end{definition}
+\begin{definition}
+Equal rational functions are functions $\frac{P_1}{Q_1}, \frac{P_2}{Q_2} \in k(x_1,\hdots ,x_n)$ where $P_1Q_2 = P_2Q_1$.
+\end{definition}
+\begin{theorem}
+If $k$ is a field, then $k(x_1,\hdots ,x_n)$ is a field.
+\end{theorem}
+\begin{definition}
+A rational representation of an affine variety is a rational parametrization.
+\end{definition}
+\begin{definition}
+A polynomial representation of an affine variety is a polynomial parametrization.
+\end{definition}
+\begin{remark}
+Writing out an affine variety as $V=\mathbf{V}(f_{1},\hdots,f_{s})$ is called an implicit representation.
+\end{remark}
+There are two questions that arise from parametrization:
+\begin{enumerate}
+    \item Does every affine variety have a rational parametric representation?
+    \item Given a parametric representation of an affine variety, can we find the implicit representation?
+\end{enumerate}
+The answers are: No to the first question, yes to the second. Indeed, most affine varieties cannot be parametrized by rational functions.
+\begin{example}
+Find the affine variety parametrized by:
+\begin{align*}
+    x&=1+t\\
+    y&=1+t^{2}
+\end{align*}
+We have that $t=x-1$, and thus $y=1+(x-1)^{2}=x^{2}-2x+2$.
+\end{example}
+\begin{remark}
+The process described above involved eliminating the variable $t$ and creating a polynomial in $x$ and $y$. This illustrates the role played by elimination theory.
+\end{remark}
+\begin{example}
+Let's parametrize the unit circle in a rational manner. Let $(x,y)$ be a point on the unit circle and draw a line from the point $(-1,0)$ to $(x,y)$. This line intersects the $y-$axis at some point $(0,t)$. We have that the slope of this line is $m =\frac{t-0}{0-(-1)}=\frac{y-0}{x-(-1)}=\frac{y}{x+1}$. So $y=t(x+1)$. But $x^{2}+y^{2}=1$, so $x^2+t^{2}(x+1)^{2}=1\Leftrightarrow x^{2}+x\frac{2t^{2}}{1+t^{2}}=\frac{1-t^2}{1+t^2}\Leftrightarrow (x+\frac{t^{2}}{1+t^{2}})^{2}=\frac{1}{(1+t^{2})^{2}}\Leftrightarrow x=\frac{-t^{2}\pm 1}{1+t^{2}}$. But $x\in [-1,1]$, and thus we get $x = \frac{1-t^2}{1+t^2}$. But $y = t(x+1)$, and thus $y = \frac{2t}{1+t^2}$. $(x,y)=(\frac{1-t^{2}}{1+t^{2}},\frac{2t}{1+t^{2}})$.
+\end{example}
+\begin{definition}
+The tangent surface of a smooth curve $\Gamma:\mathbb{R}\rightarrow \mathbb{R}^n$ is $\{\Gamma(t)+u\Gamma'(t):t,u\in \mathbb{R}\}$
+\end{definition}
+\begin{remark}
+The tangent surface is obtained by taking the union of all of the tangent lines to every point on the curve. $t$ tells us which point on the curve we are one, and $u$ tells us how far along the tangent line we are.
+\end{remark}
+\begin{example}
+The twisted cubic is the curve defined by $\mathbf{r}(t) = (t,t^2,t^3)$. It's tangent surface is $\mathbf{r}+u\mathbf{r}'(t)=(t,t^2,t^3)+u(1,2t,3t^3)=(t+u,t^2+2ut,t^3+3ut^2)$. One question that arises is ``Is this an affine variety? If so, what are the defining polynomials." The answer for this particular surface is yes. The graph of this surface is equal to $\mathbf{V}(-4x^3z+3x^2y^2-4y^3+6xyz-z^2)$.
+\end{example}
+An application of this is in the design of complex objects such as automobile hoods and airplane wings. Engineers need curves and surfaces that are easy to describe, quick to draw, and varied in shape. Polynomials and rational functions satisfy this criteria. Complicated curves are usually formed by joining together simpler curves. Suppose a design engineer needs to draw a curve in the plane. The curves in question need to join smoothly, and thus the tangent directions need to match at the endpoints. The engineer must control the following:
+\begin{enumerate}
+    \item The starting and ending points of the curve.
+    \item The tangent directions at the starting and ending points.
+\end{enumerate}
+The B\'{e}zier Cubic does this.
+\begin{definition}
+The B\'{e}zier Cubic in $\mathbb{R}^2$ is defined by:
+\begin{align*}
+    x &= (1-t)^3 x_0+3t(1-t)^2x_1+3t^2(1-t)x_2+t^3x_3 \\
+    y &= (1-t)^2 y_0+3t(1-t)^2y_1+3t^2(1-t)y_2+t^3y_3
+\end{align*}
+Where $x_0,x_1,x_2,x_3,y_0,y_1,y_2,y_3$ are input parameters.
+\end{definition}
+When $t=0$, we have $x = x_0, y=y_0$. Thus $(x_0,y_0)$ is the starting point. Similarly $(x_3,y_3)$ is the end point. The derivatives are:
+\begin{align*}
+    x' &= -3(1-t)^2x_0 + 3(1-t)(1-3t)x_1+3t(2-3t)x_2+3t^2x_3 \\
+    y' &= -3(1-t)^2y_0 + 3(1-t)(1-3t)y_1+3t(2-3t)y_2+3t^2y_3
+\end{align*}
+So $(x'(0),y'(0)) = \big(3(x_1-x_0),3(y_1-y_0)\big)$ and $(x'(1),y'(1)) = \big(3(x_3-x_2),3(y_3-y_2)\big)$. Hence, choosing $x_1,x_2$ and $y_1,y_2$ carefully allows that designer to control the tangent of the curve at the endpoints. Moreover, choosing the point $(x_1,y_1)$ makes the tangent at $(x(0),y(0))$ point in the same direction as the line from $(x_0,y_0)$ to $(x_1,y_1)$. Similarly, choosing $(x_2,y_2)$ makes the tangent at $(x(1),y(1))$ point in the same direction as the line from $(x_2,y_2)$ to $(x_3,y_3)$.
+\begin{definition}
+The control polygon of a B\'{e}zier Cubic in $\mathbb{R}^2$ is the polygon formed by the lines $(x_0,y_0)\rightarrow(x_1,y_1)\rightarrow(x_2,y_2)\rightarrow(x_3,y_3)\rightarrow (x_0,y_0)$.
+\end{definition}
+Interestingly enough, the B\'{e}zier Cubic always lies inside the control polygon. The final thing to control is the length of the tangents at the endpoint. But from equations $1.3$ and $1.4$, the lengths are three times the distance from $(x_0,y_0)$ to $(x_1,y_1)$ and $(x_2,y_2)$ to $(x_3,y_3)$, respectively. 
+\subsubsection{Ideals}
+\begin{definition}
+An ideal of a polynomial ring $k[x_1,\hdots ,x_n]$ is a set $I\subset k[x_1,\hdots ,x_n]$ such that:
+\begin{enumerate}
+\begin{multicols}{3}
+    \item $0\in I$
+    \item $\forall_{f,g\in I}, f+g\in I$ 
+    \item $\forall_{f\in I, h\in k[x_1,\hdots ,x_n]}, hf\in I$
+\end{multicols}
+\end{enumerate}
+\end{definition}
+\begin{definition}
+The ideal generated by a set $\{f_1,\hdots, f_s\} \subset k[x_1,\hdots ,x_n]$ is the set $\langle f_1,\hdots, f_s\rangle = \{\sum_{i=1}^{s} h_i f_i:h_1,\hdots, h_s\in k[x_1,\hdots ,x_n]\}$.
+\end{definition}
+\begin{theorem}
+If $f_1,\hdots, f_s\in k[x_1,\hdots ,x_n]$, then $\langle f_1,\hdots, f_s\rangle$ is an ideal.
+\end{theorem}
+\begin{remark}
+The ideal $\langle f_1,\hdots, f_s\rangle$ has a nice interpretation. If $x\in k$ such that $f_1(x) = \hdots = f_s(x) = 0$, then for any set of polynomials $h_1,\hdots, h_s$, we have $h_1(x)f_1(x) = \hdots = h_s(x)f_s(x) = 0$, and adding the equations we get $h_1(x)f_1(x)+\hdots + h_s(x)f_s(x) = 0$. Thus we can think of $\langle f_1,\hdots, f_s\rangle$ as the set of all "Polynomial consequences," of the equations $f_1 = \hdots = f_s = 0$.
+\end{remark}
+\begin{example}
+Consider the following system:
+\begin{align*}
+    x&=1+t&y&=1+t^{2}
+\end{align*}
+We can eliminate $t$ to obtain $y = x^2-2x+2$. To see this, write
+\begin{align*}
+    x-1-t&=0&-y+1+t^{2}&=0
+\end{align*}
+Multiplying this first by by $x-1+t$ and adding, we get $(x-1)^2-y+1 = 0$. Thus $y = x^2-2x+2$.
+\end{example}
+\begin{definition}
+A finitely generated ideal is an ideal such that $\exists_{f_1,\hdots, f_s}: I = \langle f_1,\hdots, f_s\rangle$.
+\end{definition}
+\begin{definition}
+A basis of an ideal is a set $\{f_1,\hdots, f_s\}\subset k[x_1,\hdots ,x_n]$ such that $I=\langle f_{1},\hdots,f_{s}\rangle$
+\end{definition}
+Hilbert's Basis Theorem, to be proved later, states that every ideal in $k[x_{1},\hdots,x_{n}]$ is finitely generated. An ideal in $k[x_{1},\hdots,x_{n}]$ is similar to a subspace in linear algebra. Both must be closed under multiplication and addition, except that in a subspace we multiply by scalars and in an ideal we multiply by polynomials. 
+\begin{theorem}
+If $\langle f_1,\hdots, f_s\rangle = \langle g_1,\hdots, g_t\rangle$, then $\mathbf{V}(f_1,\hdots, f_s) = \mathbf{V}(g_1,\hdots, g_s)$.
+\end{theorem}
+\begin{example}
+$\langle2x^2+3y^2-11,x^2-y^2-3\rangle = \langle x^2-4,y^2-1\rangle$. So, $\mathbf{V}(2x^2+3y^2-11,x^2-y^2-3) = \{(2,1),(-2,1),(2,-1),(-2,-1)\}$. Changing basis simplifies the problem.
+\end{example}
+\begin{definition}
+The ideal of an affine variety $V \subset k^n$ is $\mathbf{I}(V)=\{f\in k[x_1,\hdots ,x_n]:\forall_{x\in V}f(x)=0\}$
+\end{definition}
+\begin{theorem}
+If $V\subset k^n$ is an affine variety, then $\mathbf{I}(V)$ is an ideal of $k[x_1,\hdots ,x_n]$.
+\end{theorem}
+\begin{theorem}
+For any field $k$, $\mathbf{I}\big(\{(0,0)\}\big) = \langle x,y\rangle$.
+\end{theorem}
+\begin{theorem}
+For any infinite field $k$, $\mathbf{I}(k^n) = \{0\}$.
+\end{theorem}
+\begin{theorem}
+If $V = \mathbf{V}(y-x^2,z-x^3)\subset \mathbb{R}^3$, $f\in \mathbf{I}(V)$, then $\exists_{h_1,h_2,r(x)\in \mathbb{R}[x,y,z]}$ such that $f=h_1(y-x^2)+h_2(z-x^3)+r$.
+\end{theorem}
+\begin{theorem}
+If $V = \mathbf{V}(y-x^2,z-x^3)\subset \mathbb{R}^3$, then $\mathbf{I}(V) = \langle y-x^2,z-x^3\rangle$
+\end{theorem}
+\begin{remark}
+It is not always true that $\mathbf{I}(\mathbf{V}(f_1,\hdots, f_s)) = \langle f_1,\hdots, f_s\rangle$.
+\end{remark}
+\begin{theorem}
+If $f_1,\hdots, f_s \in k[x_1,\hdots ,x_n]$, then $\langle f_1,\hdots, f_s \rangle \subset \mathbf{I}(\mathbf{V}(f_1,\hdots, f_s))$.
+\end{theorem}
+\begin{theorem}
+There exists fields $k$ and polynomials such that $\langle f_1,\hdots,f_s\rangle \ne \mathbf{I}(\mathbf{V}(f_1,\hdots, f_s))$
+\end{theorem}
+\begin{theorem}
+If $k$ is a field, $V,W\subset k^n$ are affine varieties, then $V\subset W$ if and only if $\mathbf{I}(W)\subset \mathbf{I}(V)$.
+\end{theorem}
+\begin{theorem}
+If $k$ is a field, $W,W\subset k^n$ are affine varieties, then $V=W$ if and only if $\mathbf{I}(W)=\mathbf{I}(V)$.
+\end{theorem}
+Three questions arise concerning ideals in $k[x_1,\hdots ,x_n]$.
+\begin{enumerate}
+    \item Can every ideal $I\subset k[x_1,\hdots ,x_n]$ be written as $\langle f_1,\hdots, f_s\rangle$ for some $f_1,\hdots, f_s \in k[x_1,\hdots ,x_n]$?
+    \item If $f_1,\hdots, f_s\in k[x_1,\hdots ,x_n]$, $f\in k[x_1,\hdots ,x_n]$, is there an algorithm to see if $f\in\langle f_{1},\hdots,f_{s}\rangle$?
+    \item Is there a relation between $\langle f_1,\hdots, f_s\rangle$ and $\mathbf{I}(\mathbf{V}(f_1,\hdots, f_s))$?
+\end{enumerate}
+\subsubsection{Polynomials in One Variable}
+This section studies the division algorithm of polynomials in one variable.
+\begin{definition}
+The leading term of $f=\sum_{k=1}^{n}a_kx^{k}\in k[x]$, where $a_{n}\ne 0$, is $\LT(f)=a_nx^{n}$.
+\end{definition}
+\begin{example}
+If $f=2x^{3}-4x+3$, then $\LT(f)=2x^{3}$.
+\end{example}
+\begin{theorem}
+If $k$ is a field and $g\in k[x]\setminus\{0\}$, then $\forall_{f\in k[x]},\exists_{q,r\in k[x]}:f=qg+r$, where either $r=0$ or $\deg(r)<\deg(g)$. Furthermore, $q$ and $r$ are unique.
+\end{theorem}
+\begin{remark}
+From the uniqueness of $r$, we call $r$ the remainder of $f$ with respect to $g$.
+\end{remark}
+\begin{theorem}
+If $k$ is a field and $f\in k[x]$ is a non-zero polynomial, then $f$ has at most $\deg(f)$ roots.
+\end{theorem}
+\begin{definition}
+A principal ideal is an ideal generated by a single element.
+\end{definition}
+\begin{theorem}
+If $k$ is a field, then every ideal of $k[x]$ is principal.
+\end{theorem}
+\begin{theorem}
+If $\langle f\rangle=\langle g$ are ideals in $k[x]$, then there is a constant $h$ such that $f=hg$.
+\end{theorem}
+\begin{definition}
+A greatest common divisor of $f,g\in k[x]$ is a polynomial $h\in k[x]$ such that $h$ divides $f$ and $g$ and $\forall_{p\in k[x]}$ such that $p$ divides $f$ and $g$, $p$ divides $h$. 
+\end{definition}
+\begin{theorem}
+If $f,g\in k[x]$, then there is a greatest common divisor of $f$ and $g$.
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x]$, and $h_{1},h_{2}$ are greatest common divisors of $f$ and $g$, then there is a constant $c\in k$ such that $h_{1}=ch_{2}$.
+\end{theorem}
+\begin{remark}
+The Euclidean Algorithm is used for computational purposes to compute the greatest common divisor of two polynomials. Let $f,g\in k[x]$.
+\begin{enumerate}
+    \item Let $h_{1}=f$
+    \item Let $s_{1}=g$
+    \item While $s_{n}\ne 0$, do the following:
+    \begin{enumerate}
+        \item $r_{n}=remainder(h_{n},s_{n})$
+        \item $h_{n+1}=s_{n}$
+        \item $s_{n+1}=r_{n}$
+    \end{enumerate}
+\end{enumerate}
+There is an $N\in \mathbb{N}$ such that for all $n>N$, $h_n = h_N$. Letting $h = h_N$, this is the greatest common divisor of $f$ and $g$. This comes from $\GCD(f,g)=\GCD(f-qg,g)=\GCD(r,g)$ and the fact that $\deg(r)<\deg(g)$. So $\deg(r_{n+1})<\deg(r_{n})$, and eventually $\deg(r_{N})=0$.
+\end{remark}
+\begin{definition}
+A greatest common divisor of polynomials $f_1,\hdots, f_s \in k[x]$ is a polynomial $h\in k[x]$ such that $h$ divides $f_1,\hdots, f_s$ and if $p\in k[x]$ such that $p$ divides $f_1,\hdots, f_s$, then $p$ divides $h$.
+\end{definition}
+\begin{theorem}
+If $f_{1},\hdots, f_{s}\in k[x]$, then there is a polynomial $h\in k[x]$ that is a greatest common divisor of $f_{1},\hdots,f_{s}$.
+\end{theorem}
+\begin{theorem}
+If $f_{1},\hdots,f_{s}\in k[x]$, and if $h$ is a GCD of $f_{1},\hdots, f_{s}$, then $\langle h\rangle=\langle f_{1},\hdots, f_{s}\rangle$
+\end{theorem}
+\subsection{Groebner Bases}
+\subsubsection{Introduction}
+There are three problems we wish to address:
+\begin{enumerate}
+    \item Does every Ideal $I\subset k[x_1,\hdots ,x_n]$ have a finite generating set?
+    \item Given $f\in k[x_1,\hdots ,x_n]$, and $I = \langle f_1,\hdots, f_s\rangle$, can we determine if $f\in I?$
+    \item For $f_1,\hdots, f_s \in k[x_1,\hdots ,x_n]$, can we determine what $\mathbf{V}(f_1,\hdots, f_s)$ is?
+\end{enumerate}
+We've already solved this in the case of one variable, $n=1$. The case of $n\in \mathbb{N}$ where $f_1,\hdots, f_s$ are linear functions is the subject of linear algebra. Both the Eucldiean algorithm and the methods of linear algebra require a notion of ordering of terms. In the case of one variable, if $n>m$ we write $x^n>x^m$. In the case of linear algebra we usually write $x_n>x_{n-1}>\hdots > x_2 > x_1$. 
+\subsubsection{Orderings on the Monomials in \texorpdfstring{$k[x_1,\hdots ,x_n]$}{kx}}
+\begin{definition}
+A monomial ordering on $k[x_1,\hdots, x_n]$ is any relation $\succ$ on $\mathbb{N}^n$ such that:
+\begin{enumerate}
+    \item $\succ$ is a total ordering.
+    \item If $\alpha \succ \beta$ and $\gamma \in \mathbb{N}^n$, then $\alpha+\gamma \succ \beta + \gamma$.
+    \item $\succ$ is a well-ordering on $\mathbb{N}^n$. 
+\end{enumerate}
+\end{definition}
+\begin{theorem}
+An ordering $\prec$ on $\mathbb{N}^n$ is a well-ordering if and only if for any monotonically decreasing sequence $\{a_n\}_{n=1}^{\infty}$, there is an $N\in \mathbb{N}$ such that for all $n>N$, $a_n = a_N$.
+\end{theorem}
+\begin{proof}
+For if $\prec$ is a well ordering, then $\{a_n\}_{n=1}^{\infty}$ contains a least element $x$. Suppose $a_n$ contains a strictly decreasing subsequence. But $\prec$ is a well ordering, and therefore $\{a_n\}_{n=1}^{\infty}$ contains a least element $x$. But again $\prec$ is a well ordering, and thus $\{a_n\}_{n=1}^{\infty} \setminus \{x\}$ contains a least element $y$. But then $x\prec y$, and $x$ is the least element of $\{a_n\}_{n=1}^{\infty}$. Therefore there is an $a_n$ such that $x\preceq a_n \preceq y$. But $a_n$ is strictly decreasing, and therefore $a_{n+1} \preceq x$, and thus $a_{n+2} \prec x$. But $x$ is the least element of $\{a_n\}_{n=1}^{\infty}$, a contradiction. Therefore $a_n$ contains no strictly increasing subsequence. Suppose every decreasing sequence eventually terminates. Let $E\subset \mathbb{N}^n$. Suppose there is no least element. Then we can construct a strictly decreasing sequence. But every decreasing sequence eventually terminates, a contradiction. Therefore, etc.
+\end{proof}
+\begin{definition}
+If $\alpha,\beta \in \mathbb{N}^n$, then $\alpha$ is said to be lexicographically greater than $\beta$, denoted $\underset{Lex}{>}$, if the left-most entry of $\alpha-\beta$ is positive.
+\end{definition}
+\begin{theorem}
+The Lexicographic Ordering is a monomial ordering.
+\end{theorem}
+\begin{definition}
+The graded lexicographic ordering $\underset{GrLex}{>}$ on $\mathbb{N}^n$ is an ordering on $\mathbb{N}^n$ such that $\alpha \underset{GrLex}{>}\beta$ if and only if either $|\alpha|>|\beta|$, or $|\alpha| = |\beta|$ and $\alpha \underset{Lex}{>}\beta$.
+\end{definition}
+\begin{theorem}
+The graded lexicographic ordering is a monomial ordering.
+\end{theorem}
+\begin{definition}
+For $f=\sum_{\alpha} a_{\alpha} x^\alpha \in k[x_1,\hdots ,x_n]$, and $\prec$ a monomial ordering, the multidegree of $f$ is $\multideg(f) = \max\{\alpha\in\mathbb{N}^n: a_{\alpha} \ne 0\}$.
+\end{definition}
+\begin{definition}
+For $f=\sum_{\alpha}a_\alpha x^\alpha \in k[x_1,\hdots ,x_n]$ and monomial order $>$, the leading coefficient of $f$ is $LC(f) =a_{\multideg(f)}\in k$
+\end{definition}
+\begin{definition}
+For $f=\sum_{\alpha} a_{\alpha} x^\alpha \in k[x_1,\hdots ,x_n]$, and $\prec$ a monomial ordering, the leading monomial of $f$ is $\LM(f) = x^{\multideg(f)}$
+\end{definition}
+\begin{definition}
+For $f=\sum_{\alpha} a_{\alpha} x^{\alpha} \in k[x_1,\hdots ,x_n]$, and $\prec$ a monomial ordering, the leading term of $f$ is $\LT(f) = \LC(f)\cdot \LM(f)$.
+\end{definition}
+\begin{theorem}
+If $f,g\in k[x_1,\hdots ,x_n]$ are non-zero, then $\multideg(fg)=\multideg(f)+\multideg(g)$
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x_1,\hdots ,x_n]$ are non-zero, and if $f+g \ne 0$, then $\multideg(f+g) \leq \max\{\multideg(f),\multideg(g)\}$.
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x_1,\hdots ,x_n]$ are non-zero, $f+g\ne 0$, and if $\multideg(f)\ne \multideg(g)$, then $\multideg(f+g) = \max\{\multideg(f),\multideg(g)\}$.
+\end{theorem}
+\begin{theorem}
+If $>$ is a monomial ordering on $\mathbb{N}^n$, and $F = (f_1,\hdots, f_s)$ is an ordered $s-$tuple of polynomials in $k[x_1,\hdots ,x_n]$, then every $f\in k[x_1,\hdots ,x_n]$ can be written as $f = r+\sum_{k=1}^{s} a_k f_k$, where $a_k,r\in k[x_1,\hdots ,x_n]$, and either $r=0$ or $r$ is a linear combination, with coefficients in $k$, of monomials, none of which is divisible by any of $\LT(f_1),\hdots, \LT(f_s)$. We call $r$ the remainder of $f$ with respect to $F$.
+\end{theorem}
+\begin{definition}
+An ideal $I\subset k[x_1,\hdots ,x_n]$ is a monomial ideal if there is a subset $A\subset \mathbb{N}^n$ such that $I$ consists of all polynomials which are finite sums of the form $\sum_{\alpha} h_{\alpha} x^\alpha$, where $h_{\alpha} \in k[x_1,\hdots ,x_n]$. 
+\end{definition}
+\begin{theorem}
+If $I=\langle x^\alpha: \alpha \in A\}$ is a monomial ideal, then a monomial $x^\beta$ lies in $I$ if and only if $x^\beta$ is divisible by $x^\alpha$ for some $\alpha \in A$.
+\end{theorem}
+\begin{theorem}
+If $I$ is a monomial ideal, and $f\in k[x_1,\hdots ,x_n]$, then the following are equivalent:
+\begin{enumerate}
+        \item $f\in I$
+        \item Every term of $f$ lies in $I$.
+        \item $f$ is a $k-$linear combination of the monomials in $I$.
+\end{enumerate}
+\end{theorem}
+\begin{theorem}[Dickson's Lemma]
+If $I=\langle x^\alpha: \alpha \in A\rangle$ is a monomial ideal, then $I$ can be written as $\langle x^{\alpha(1)}, \hdots, x^{\alpha(s)}\rangle$, where $\alpha(1),\hdots, \alpha(s) \in A$. 
+\end{theorem}
+\begin{theorem}
+If $>$ is a relation on $\mathbb{N}^n$ such that $>$ is a total ordering and for $\alpha>\beta$ and $\gamma\in \mathbb{N}^n$, $\alpha+\gamma>\beta+\gamma$, then $>$ is a well-ordering if and only if for all $\alpha \in \mathbb{N}^n$, $\alpha \geq 0$.
+\end{theorem}
+\subsubsection{The Hilbert Basis Theorem and Groebner Bases}
+\begin{definition}
+For a non-zero ideal $I\subset k[x_1,\hdots ,x_n]$, $\LT(I)$ is the set of leading terms of elements of $I$. $\langle \LT(I)\rangle$ is the ideal generated by this set.
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $\langle \LT(I)\rangle$ is a monomial ideal.
+\end{theorem}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then there are $g_1,\hdots, g_t\in I$ such that $\langle \LT(I)\rangle = \langle \LT(g_1),\hdots, \LT(g_t)\rangle$
+\end{theorem}
+\begin{theorem}[Hilbert Basis Theorem]
+Every ideal $I\subset k[x_1,\hdots ,x_n]$ has a finite generating set.
+\end{theorem}
+\begin{definition}
+For a monomial order $>$, a finite subset $G=\{g_1,\hdots, g_t\}$ of an ideal $I$ is said to be a Groebner Basis if $\langle \LT(g_1),\hdots, \LT(g_t)\rangle = \langle \LT(I)\rangle$
+\end{definition}
+\begin{theorem}
+If $>$ is a monomial order, then every non-zero ideal $I\subset k[x_1,\hdots ,x_n]$ has a Groebner basis.
+\end{theorem}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is a non-zero ideal and $G$ is a Groebner Basis, then $G$ is also a generated set of $I$.
+\end{theorem}
+\begin{theorem}[The Ascending Chain Condition]
+If $I_n$ is a sequence of ideals such that $I_{n}\subset I_{n+1}$, then there is an $N\in \mathbb{N}$ such that for all $n>N$, $I_n = I_N$.
+\end{theorem}
+\begin{definition}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $\textbf{V}(I)$ is the set $\{\alpha \in k^n: \forall_{f\in I},f(\alpha) = 0\}$
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $\textbf{V}(I)$ is an affine variety.
+\end{theorem}
+\begin{theorem}
+If $I = \langle f_1,\hdots, f_s\rangle$, then $\textbf{V}(I) = \mathbf{V}(f_1,\hdots, f_s)$.
+\end{theorem}
+\subsubsection{Properties of Groebner Bases}
+\begin{theorem}
+If $G=\{g_1,\hdots, g_t\}$ is a Groebner basis of $I\subset k[x_1,\hdots ,x_n]$ and $f\in k[x_1,\hdots ,x_n]$, then there is a unique $r\in k[x_1,\hdots ,x_n]$ such that $r$ is not divisible by any of $\LT(g_1),\hdots, \LT(g_t)$, and there is a $g\in I$ such that $f = g+r$. 
+\end{theorem}
+\begin{notation}
+We write $\overline{f}^{F}$ for the remainder on division of $f$ by $F = (f_{1},\hdots,f_{s})$
+\end{notation}
+\begin{definition}
+If $f,g\in k[x_1,\hdots ,x_n]$ are non-zero polynomials, $\multideg(f) = \alpha$, $\multideg(g) = \beta$, and if $\gamma = (\gamma_1,\hdots, \gamma_n)$, where $\gamma_k = \max\{\alpha_k,\beta_k\}$, then $x^y$ is the least common multiple of $\LM(f)$ and $\LM(g)$, denoted $x^y = \LCM(\LM(f),\LM(g))$.
+\end{definition}
+\begin{definition}
+If $f,g\in k[x_1,\hdots ,x_n]$ are non-zero, then the $S-$polynomial of $f$ and $g$ is $S(f,g) = \frac{x^y}{\LT(f)}f - \frac{x^y}{\LT(g)}g$
+\end{definition}
+\begin{theorem}[Buchberger's Criterion]
+If $I$ is a polynomial ideal, then a basis $G=\{g_1,\hdots, g_t\}$ for $I$ is a Groebner basis for $I$ if and only if for all pairs $i\ne j$, the remainder on division of $S(g_i,g_j)$ by $G$ is zero.
+\end{theorem}
+\subsection{Elimination Theory}
+\subsubsection{The Elimination and Extension Theorems}
+\begin{definition}
+If $I = \langle f_1,\hdots, f_s\rangle \subset k[x_1,\hdots ,x_n]$, the $\ell-$th elimination ideal, denoted $I_{\ell}$, is the ideal defined as $I_{\ell} = I \cap k[x_{\ell+1},\hdots, x_n]$.
+\end{definition}
+\begin{theorem}
+For $\ell \in \mathbb{Z}_{n-1}$, if $I = \langle f_1,\hdots, f_s\rangle\subset k[x_1,\hdots ,x_n]$ is an ideal, then $I_{\ell}$ is an ideal of $k[x_1,\hdots ,x_n]$.
+\end{theorem}
+\begin{theorem}[The Elimination Theorem]
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal and $G$ is a Groebner Basis of $I$ with respect to the lexicographic ordering $x_1>x_2>\hdots > x_n$, then for all $\ell \in \mathbb{Z}_{n}$, $G_{\ell} = G\cap k[x_{\ell+1},\hdots, x_n]$ is a Groebner Basis of $I_{\ell}$.
+\end{theorem}
+\begin{theorem}[The Extension Theorem]
+If $I = \langle f_1,\hdots, g_s\rangle \subset \mathbb{C}[x_1,\hdots ,x_n]$, and if $I_1$ is the first elimination ideal of $I$, and if for all $i\in \mathbb{Z}_s$ $f_i = g(x_2,\hdots, x_n)x_1^{N_i}+h$, where the degree of the $x_1$ component of $h$ is less than $N_i$, and if $(a_2,\hdots, a_n)\notin \textbf{V}(g_1,\hdots, g_s)$, then there is an $a_1 \in \mathbb{C}$ such that $(a_1,\hdots, a_n)\in \textbf{V}(I)$
+\end{theorem}
+\begin{remark}
+The requirement that we work in $\mathbb{C}$ is crucial. This theorem does not hold in $\mathbb{R}$. 
+\end{remark}
+\begin{theorem}
+If $I = \langle f_1,\hdots, f_s\rangle \subset \mathbb{C}[x_1,\hdots, x_n]$ if for some $i$, $f_i$ is of the form $f_i = cx_1^N + g(x_1,\hdots, x_n)$, where the degree of the $x_1$ term in $g$ is less than $N$, and $c \ne 0$, and if $(a_2,\hdots, a_n) \in \textbf{V}(I_{1})$, then there is an $a_1 \in \mathbb{C}$ such that $(a_1,\hdots, a_n) \in \textbf{V}(I)$.
+\end{theorem}
+\subsubsection{The Geometry of Elimination}
+\begin{definition}
+The projectiom map $\pi_{\ell}: \mathbb{C}^n \rightarrow \mathbb{C}^{n-\ell}$ is defined as $\pi_{\ell}(a_1,\hdots, a_n) = (a_{\ell+1},\hdots, a_n)$.
+\end{definition}
+\begin{theorem}
+If $V=\mathbf{V}(f_1,\hdots, f_s) \subset \mathbb{C}^n$, and $I_{\ell}$ is the $\ell-$th elimination ideal of $\langle f_1,\hdots, f_s\rangle$, then $\pi_{\ell}(V) \subset \textbf{V}(I_{\ell})$
+\end{theorem}
+\begin{theorem}
+If $V = \mathbf{V}(f_1,\hdots, f_s) \subset \mathbb{C}^n$, and $G_{\ell}$ is as defined in the extension theorem, then $\textbf{V}(I_{\ell}) = \pi_{\ell}(V)\cup G_{\ell}$
+\end{theorem}
+\begin{theorem}[The First Closure Theorem]
+If $V = \mathbf{V}(f_1,\hdots, f_s) \subset \mathbb{C}^n$ and $I_{\ell}$ is the $\ell-$th elimination ideal of $\langle f_1,\hdots, f_s\rangle$, then $\textbf{V}(I_{\ell})$ is the smallest affine variety containing $\pi_{\ell}(V)\subset \mathbb{C}^{n-\ell}$.
+\end{theorem}
+\begin{theorem}[The Second Closure Theorem]
+If $V = \mathbf{V}(f_1,\hdots, f_s) \subset \mathbb{C}^n$, $V\ne \emptyset$, and if $I_{\ell}$ is the $\ell-$th elimination ideal of $\langle f_1,\hdots, f_s\rangle$, then there is an affine variety $W\underset{Proper}{\subset} \textbf{V}(I_{\ell})$ such that $\textbf{V}(I_{\ell})\setminus W \subset \pi_{\ell}(V)$.
+\end{theorem}
+\begin{theorem}
+If $V = \mathbf{V}(f_1,\hdots, f_s)\subset \mathbb{C}^n$ and if for some $i$, $f_i$ is of the form $f_i = cx_1^N + g$, where the $x_1$ terms in $g$ are of degree less than $N$, and $c\ne 0$, then $\pi_{1}(V) = \textbf{V}(I_{1})$.
+\end{theorem}
+\subsubsection{Implicitization}
+\begin{definition}
+A polynomial parametrization is a finite set of equations $x_k = f_k(t_1,\hdots, t_m)\in k[t_1,\hdots, t_m]$. The function $F:k^m\rightarrow k^n$ is the image defined by $(t_1,\hdots, t_m)\mapsto (x_1,\hdots, x_n)$
+\end{definition}
+\begin{theorem}[The Polynomial Implicitization Theorem]
+If $k$ is an infinite field and $F:k^m\rightarrow k^n$ is a function determined by some polynomial parametrization, and if $I$ is an ideal $I = \langle x_1-f_1,\hdots, x_n - f_n\rangle \subset k[t_1,\hdots, t_m, x_1,\hdots, x_n]$, then $\textbf{V}(I_m)$ is the smallest variety in $k^n$ containing $F(k^n)$, where $I_m$ is the $m^{th}$ elimination ideal.
+\end{theorem}
+\begin{definition}
+A rational parametrization is a finite set of equations $x_k = f_k(t_1,\hdots, t_m)\in k(t_1,\hdots, t_m)$
+\end{definition}
+\begin{theorem}[Rational Implicitization]
+If $k$ is an infinite field, $f_k, g_k, k=1,2,\hdots, n$ are a rational parametrization, $W = \mathbf{V}(g_1,\hdots, g_s)$, and if $F:k^m\setminus W \rightarrow k^n$ is the function determined by the rational parametrization, if $J = \langle g_1 x_1 - g_1,\hdots, g_n x_n - g_n, 1-gy\rangle \subset k[y,t_1,\hdots, g_m, x_1,\hdots, x_n]$, where $g = g_1\cdots g_n$, and if $J_{m+1}$ is the $(m+1)^{th}$ elimination ideal, then $\textbf{V}(J_{m+1})$ is the smallest variety in $k^n$ containing $F(K^m\setminus W)$.
+\end{theorem}
+\subsubsection{Singular Points and Envelopes}
+\begin{definition}
+A singular point on an affine variety $\mathbf{V}(f)$ is a point $x\in k$ such that there exists no tangent line at $x$.
+\end{definition}
+\begin{remark}
+For curves in the plane, this usually happens when either the curve intersects itself or has a kink in it.
+\end{remark}
+\begin{definition}
+If $k\in \mathbb{N}$, if $(a,b)\in \mathbf{V}(f)$, and if $L$ is a line through $(a,b)$, then $L$ meets $\mathbf{V}(f)$ with multiplicity $k$ at $(a,b)$ if $L$ can be linearly parametrized in $x$ and $y$ so that $t=0$ is a root of multiplicity $k$ of the polynomial $g(t) = f(a+ct,b+dt)$.
+\end{definition}
+\begin{theorem}
+If $f\in k[x,y]$, $(a,b) \in \mathbf{V}(f)$, and if $\nabla f(a,b) \ne (0,0)$, then there is a unique line through $(a,b)$ which meets $\mathbf{V}(f)$ with multiplicity $k\geq 2$.
+\end{theorem}
+\begin{theorem}
+If $f\in k[x,y]$, $(a,b) \in \mathbf{V}(f)$, and if $\nabla f(a,b) = 0$, then every line through $(a,b)$ meets $\mathbf{V}(f)$ with multiplicity $k \geq 2$.
+\end{theorem}
+\begin{definition}
+If $f\in k[x,y]$, $(a,b) \in \mathbf{V}(f)$, and if $\nabla f(a,b) \ne (0,0)$, then the tangent line of $\mathbf{V}(f)$ at $(a,b)$ is the unique line through $(a,b)$ with multiplicity $k\geq 2$. We say that $(a,b)$ is a non-singular point of $\mathbf{V}(f)$.
+\end{definition}
+\begin{definition}
+If $f\in k[x,y]$, $(a,b) \in \mathbf{V}(f)$, and if $\nabla f(a,b) = (0,0)$, then we say that $(a,b)$ is a singular point of $\mathbf{V}(f)$.
+\end{definition}
+\begin{definition}
+If $\mathbf{V}(F_t)$ is a family of curves in $\mathbb{R}^2$, its envelope consists of all points $(x,y) \in \mathbb{R}^2$ such that $F(x,y,t) = 0$ and $\frac{\partial}{\partial t}F(x,y,t) = 0$ for some $t\in \mathbb{R}$.
+\end{definition}
+\subsubsection{Unique Factorization and Resultants}
+\begin{definition}
+If $k$ is a field, then a polynomial $f\in k[x_1,\hdots ,x_n]$ is said to be irreducible if $f$ is non-constant and is not the product of two non-constant polynomials in $k[x_1,\hdots ,x_n]$.
+\end{definition}
+\begin{theorem}
+Every non-constant polynomial $f\in k[x_1,\hdots ,x_n]$ can be written as a product of polynomials which are irreducible over $k$
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x_1,\hdots ,x_n]$ have positive degree in $x_1$, then $f$ and $g$ have a common factor in $k[x_1,\hdots ,x_n]$ of positive degree in $x_1$ if and only if they have a common factor in $k(x_2,\hdots, x_n)[x_1]$
+\end{theorem}
+\begin{theorem}
+Every non-constant $f\in k[x_1,\hdots ,x_n]$ can be written as a product $f = f_1\cdots f_r$ of irreducibles of $k$. Furthermore, if $f = g_1\cdots g_s$, where the $g_k$ are irreducible, then $r=s$ and there are constants $\alpha_1,\hdots, \alpha_n$ such that $\{f_1,\hdots, f_r\} = \{\alpha_1 g_1, \hdots, \alpha_r g_r\}$.
+\end{theorem}
+\begin{theorem}
+If $f,g \in k[x]$ are polynomials of degree $\ell>0$ and $m>0$, respectively, then $f$ and $g$ have a common factor if and only if there are polynomials $A,B\in k[x]$ such that $A$ and $B$ are not both zero, $A$ has degree at most $m-1$ and $B$ has degree at most $\ell-1$, and $Af+Bg = 0$.
+\end{theorem}
+\begin{definition}
+If $f = a_0 x^{\ell} +\hdots + a_{\ell}$ and $g = b_0 x^m + \hdots b_m$, then the Sylvester Matrix is:
+\begin{equation*}
+    \begin{pmatrix} a_0 & 0 & 0 & 0 & b_0 & 0 & 0 & 0 \\ a_1 & a_0 & 0 & 0 & b_1 & b_0 & 0 & 0 \\ \vdots & \vdots & \ddots & 0 & \vdots & \vdots & \ddots & 0 \\ \vdots & \vdots & \ddots & a_{0} & \vdots & \vdots & \ddots & b_0 \\ a_{\ell} & \hdots & \hdots & a_{1} & b_{m} & \hdots & \hdots & 0 \\ 0 & a_{\ell} & \hdots & \vdots & 0 & b_{m} & \hdots & \vdots\\ 0 & 0 & \ddots & 0 & 0 & \hdots & \ddots & 0 \\ 0 & \hdots & \hdots & a_{\ell} & 0 & \hdots & \hdots & b_{m} \end{pmatrix}
+\end{equation*}
+\end{definition}
+\begin{theorem}
+If $f,g \in k[x]$, then the resultant of $f$ and $g$ is the determinant of the Sylvester matrix of $f$ and $g$.
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x]$ are polynomials of positive degree, then the resultant of $f$ and $g$ is an integer polynomial in the coefficients of $f$ and $g$.
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x]$ are polynomials of positive degree, then $f$ and $g$ have a common factor if and only if their resultant is zero.
+\end{theorem}
+\begin{theorem}
+If $f,g\in k[x]$ are of positive degree, then there are polynomials $A,B \in k[x]$ such that $Af + Bg = Resultant(f,g)$
+\end{theorem}
+\subsection{The Algebra-Geometry Dictionary}
+\subsubsection{Hilbert's Nullstellensatz}
+\begin{theorem}[The Weak Nullstellensatz Theorem]
+If $k$ is an algebraically closed field and $I \subset k[x_1,\hdots ,x_n]$ is an ideal such that $\mathbf{V}(I) = \emptyset$, then $I = k[x_1,\hdots ,x_n]$.
+\end{theorem}
+\begin{theorem}[Hilbert's Nullstellensatz]
+If $k$ is an algebraically closed, $f_{1},\hdots,f_{s}\in k[x_{1},\hdots,x_{n}]$, and if $f\in \textbf{I}\big(\mathbf{V}(f_1,\hdots, f_s)\big)$, then $\exists_{m\in\mathbb{N}}$ such that $f^m \in \langle f_1,\hdots, f_s \rangle$.
+\end{theorem}
+\subsubsection{Radical Ideals and the Ideal-Variety Correspondence}
+\begin{theorem}
+If $V$ is an affine variety, and if $f\in \textbf{I}(V)$, then $f^m\in \textbf{I}(V)$.
+\end{theorem}
+\begin{definition}
+An ideal $I$ is said to be radical $f^m \in I$ implies $f\in I$ for some $m\geq 1$.
+\end{definition}
+\begin{theorem}
+If $V$ is an affine variety, then $\textbf{I}(V)$ is a radical ideal.
+\end{theorem}
+\begin{definition}
+The radical of an ideal $I\subset k[x_{1},\hdots,x_{n}]$ is the set $\sqrt{I}=\{f:f^{m}\in I,m\in\mathbb{N}\}$.
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $\sqrt{I}$ is an ideal.
+\end{theorem}
+\begin{theorem}[The Strong Nullstellensatz]
+If $k$ is an algebraically closed, and $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $\textbf{I}(\mathbf{V}(I))=\sqrt{I}$.
+\end{theorem}
+\begin{theorem}[The Ideal-Variety Correspondence]
+If $k$ is a field, then the maps $\textrm{affine varieties} \overset{\textbf{I}}\rightarrow \textrm{ideals}$ and $\textrm{ideals} \overset{\mathbf{V}}\rightarrow \textrm{affine varieties}$ are inclusion reversing and for any afffine variety $V$, $\mathbf{V}\big(\textbf{I}(V)\big) = V$.
+\end{theorem}
+\begin{theorem}[Radical Membership Theorem]
+If $k$ is a field and $I=\langle f_1,\hdots, f_s\rangle\subset k[x_1,\hdots ,x_n]$ is an ideal, then $f\in \sqrt{I}$ if and only if the constant polynomial $1$ belongs to $\langle f_1,\hdots, f_s, 1-yf\rangle$.
+\end{theorem}
+\begin{theorem}
+If $f\in k[x_1,\hdots ,x_n]$, and $I = \langle f\rangle$, and if $f = f_1^{\alpha_1}\cdots f_s^{\alpha_s}$, then $\sqrt{I} = \langle f_1\cdots f_s\rangle$.
+\end{theorem}
+\begin{definition}
+The reduction of a polynomial $f\in k[x_1,\hdots ,x_n]$ is the polynomial $f_{red}$ such that $\langle f_{red}\rangle = \sqrt{\langle f\rangle}$.
+\end{definition}
+\begin{definition}
+A square free polynomial is a polynomial $f\in k[x_1,\hdots ,x_n]$ such that $f = f_{red}$.
+\end{definition}
+\begin{definition}
+If $f,g\in k[x_1,\hdots ,x_n]$, then $h\in k[x_1,\hdots ,x_n]$ is said to be the greatest common divisor of $f$ and $g$ if $f$ divides $f$ and $g$, and if $p$ is any polynomial that divides $f$ and $g$, then $p$ divides $h$.
+\end{definition}
+\begin{theorem}
+If $k$ is a field such that $\mathbb{Q} \subset k$, and $I = \langle f\rangle$ for some $f\in k[x_1,\hdots ,x_n]$, then $\sqrt{I} = \langle f_{red}\rangle$, where $f_{red} = \frac{f}{GCD\big(f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \hdots, \frac{\partial f}{\partial x_n}\big)}$
+\end{theorem}
+\subsubsection{Sums, Products, and Intersections of Ideals}
+\begin{definition}
+If $I$ and $J$ are ideals of a the ring $k[x_1,\hdots ,x_n]$, then the sum of $I$ and $J$, denoted $I+J$, is the set $I+J = \{f+g: f\in I, g\in J\}$.
+\end{definition}
+\begin{theorem}
+If $I$ and $J$ are ideals in $k[x_1,\hdots ,x_n]$, then $I+J$ is also an ideal in $k[x_1,\hdots ,x_n]$.
+\end{theorem}
+\begin{theorem}
+If $I$ and $J$ are ideals in $k[x_1,\hdots ,x_n]$, then $I+J$ is the smallest ideal containing $I$ and $J$.
+\end{theorem}
+\begin{theorem}
+If $f_1,\hdots, f_r \in k[x_1,\hdots ,x_n]$, then $\langle f_1,\hdots, f_r\rangle \sum_{k=1}^{r} \langle f_k\rangle$
+\end{theorem}
+\begin{theorem}
+If $I$ and $J$ are ideals in $k[x_1,\hdots ,x_n]$, then $\mathbf{V}(I+J) = \mathbf{V}(I) \cap \mathbf{V}(J)$.
+\end{theorem}
+\begin{definition}
+If $I$ and $J$ are two ideals in $k[x_1,\hdots ,x_n]$, then their product, denoted $I\cdot J$, is defined to be the ideal generated by all polynomials $f\cdot g$, where $f\in I$, and $g\in J$.
+\end{definition}
+\begin{theorem}
+If $I = \langle f_1,\hdots, f_r\rangle$ and $J = \langle g_1,\hdots, g_s\rangle$, then $I \cdot J$ is generated by the set of all products $\{f_ig_j:1\leq i\leq r, 1\leq j \leq s\}$
+\end{theorem}
+\begin{theorem}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then $\mathbf{V}(I\cdot J) = \mathbf{V}(I)\cup \mathbf{V}(J)$.
+\end{theorem}
+\begin{definition}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then the intersection of $I$ and $J$, denoted $I\cap J$, is the set of polynomials in both $I$ and $J$.
+\end{definition}
+\begin{theorem}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then $I\cap J$ is an ideal.
+\end{theorem}
+\subsubsection{Zariski Closure and Quotients of Ideals}
+\begin{theorem}
+If $S\subset k^n$, then the affine variety $\mathbf{V}\big(\textbf{I}(S)\big)$ is the smallest affine variety that contains $S$.
+\end{theorem}
+\begin{definition}
+The Zariski Closure of a subset $S$, denoted $\overline{S}$, of an affine space is the smallest affine algebraic variety containing the set. 
+\end{definition}
+\begin{theorem}
+If $k$ is an algebraically closed field and $V = \mathbf{V}(f_1,\hdots, f_s)\subset k^n$, then $\mathbf{V}(I_{\ell})$ is the Zariski Closure of $\pi_{\ell}(V)$.
+\end{theorem}
+\begin{theorem}
+If $V$ and $W$ are varieties such that $V\subset W$, then $W = V\cup \overline{\big(W\setminus V\big)}$.
+\end{theorem}
+\begin{definition}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then $I:J$ is the set, $\{f\in k[x_1,\hdots ,x_n]: fg \in I\ \forall_{g\in J}\}$ and is called the ideal quotient of $I$ by $J$.
+\end{definition}
+\begin{theorem}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then $I:J$ is an ideal.
+\end{theorem}
+\begin{theorem}
+If $I,J\subset k[x_1,\hdots ,x_n]$ are ideals, then $\overline{\mathbf{V}(I)\setminus \mathbf{V}(J)} \subset \mathbf{V}(I:J)$.
+\end{theorem}
+\begin{theorem}
+If $I,J\subset k^n$ are affine varieties, then $\textbf{I}(V): \textbf{I}(W) = \textbf{I}(V\setminus)$
+\end{theorem}
+\begin{theorem}
+If $I,J, K \subset k[x_1,\hdots ,x_n]$, then $I:k[x_1,\hdots ,x_n] = I$.
+\end{theorem}
+\begin{theorem}
+If $I,J,K \subset k[x_1,\hdots ,x_n]$ are ideals, then $I\cdot J \subset K$ if and only if $I \subset K:J$
+\end{theorem}
+\begin{theorem}
+If $I,J,K \subset k[x_1,\hdots ,x_n]$ are ideals, then $J\subset I$ if and only if $I:J = k[x_1,\hdots ,x_n]$
+\end{theorem}
+\begin{theorem}
+If $I$ is an ideal, $g\in k[x_1,\hdots ,x_n]$, and if $\{h_1,\hdots, h_p\}$ is a basis of the ideal $I\cap \langle g \rangle$, then $\{h_1/g,\hdots, h_p/g\}$ is a basis of $I:\langle g\rangle$.
+\end{theorem}
+\subsubsection{Irreducible Varieties and Prime Ideals}
+\begin{definition}
+An affine variety $V\subset k^n$ is irreducible if there are no affine varieties $V_1, V_2$, such that $V = V_1\cup V_2$, $V_1,V_2\ne \emptyset$, and $V_1 \ne V, V_2 \ne V$.
+\end{definition}
+\begin{definition}
+An ideal $I\subset k[x_1,\hdots ,x_n]$ is said to be prime if whenever $f,g\in k[x_1,\hdots ,x_n]$ and $fg\in I$, either $f\in I$ or $g\in I$.
+\end{definition}
+\begin{theorem}
+If $V\subset k^n$ is an affine variety, then $V$ is irreducible if and only if $\textbf{I}(V)$ is a prime ideal.
+\end{theorem}
+\begin{definition}
+An ideal $I\subset k[x_1,\hdots ,x_n]$ is said to be maximal if $I \ne k[x_1,\hdots ,x_n]$ and any ideal $J$ containing $I$ is such that either $J = I$ or $J = k[x_1,\hdots ,x_n]$.
+\end{definition}
+\begin{definition}
+An ideal $I\subset k[x_1,\hdots ,x_n]$ is called proper if $I$ is not equal to $k[x_1,\hdots ,x_n]$.
+\end{definition}
+\begin{theorem}
+If $k$ is a field and $I = \langle x_1-a_1,\hdots, x_n-a_n\rangle$ is and ideal where $a_1,\hdots, a_n \in k$, then $I$ is maximal.
+\end{theorem}
+\begin{theorem}
+If $k$ is a field, then any maximal ideal is also a prime ideal.
+\end{theorem}
+\begin{theorem}
+If $k$ is an algebraically closed field, then every maximal ideal of $k[x_1,\hdots ,x_n]$ is of the form $\langle x_1-a_1,\hdots, x_n-a_n\rangle$ for some $a_1,\hdots, a_n\in k$.
+\end{theorem}
+\begin{definition}
+A primary decomposition of an ideal $I$ is an expression of $I$ as an intersection of primary ideals $I = \cap_{i=1}^{r} Q_{i}$.
+\end{definition}
+\begin{definition}
+A primary decomposition of an ideal $I$ is said to be minimal $\sqrt{Q_i}$ are all distinct and $\cap_{j\ne i}Q_j \not \subset Q_i$
+\end{definition}
+\begin{theorem}
+If $I,J$ are primary and $\sqrt{I}=\sqrt{J}$, then $I\cap J$ is primary.
+\end{theorem}
+\begin{theorem}[Lasker-Noether Theorem]
+Every ideal $I \subset k[x_1,\hdots ,x_n]$ has a minimal primary decomposition.
+\end{theorem}
+\subsection{Polynomials and Rational Functions on a Variety}
+\subsubsection{Polynomial Mappings}
+\begin{definition}
+If $V\subset k^m$, $W\subset k^n$ are affine varieties, a function $\phi:V\rightarrow W$ is said to be a polynomial mapping if there exist polynomials $f_1,\hdots, f_n\in k[x_1,\hdots, x_m]$ such that $\phi(a_1,\hdots, a_m) = \big(f_1(a_1,\hdots, a_m),\hdots, f_n(a_1,\hdots, a_m)\big)$ for all $(a_1,\hdots, a_m) \in V$. We say that $(f_1,\hdots, f_n)$ represents $\phi$.
+\end{definition}
+\begin{theorem}
+If $V\subset k^m$ is an affine variety, then $f,g\in k[x_1,\hdots, x_m]$ represent the same polnyomial on $V$ if and only if $f-g \in \textbf{I}(V)$.
+\end{theorem}
+\begin{theorem}
+If $V\subset k^m$ is an affine variety, then $(f_1,\hdots, f_n)$ and $(g_1,\hdots, g_n)$ represent the same polynomial mapping if and only if $f_i-g_i \in \textbf{I}(V)$ for $1\leq i \leq n$.
+\end{theorem}
+\begin{notation}
+The set of polynomial mappings from $V$ to $k$ is denoted $k[V]$.
+\end{notation}
+\begin{theorem}
+If $V\subset k^n$ is an affine variety, the the following are equivalent:
+\begin{enumerate}
+\begin{multicols}{3}
+    \item $V$ is irreducible.
+    \item $\textbf{I}(V)$ is a prime ideal.
+    \item $k[V]$ is an integral domain.
+\end{multicols}
+\end{enumerate}
+\end{theorem}
+\subsubsection{Quotients of Polynomial Rings}
+\begin{definition}
+If $I\subset k[x_{1},\hdots,x_{n}]$ is an ideal, if $f,g\in k[x_{1},\hdots,x_{n}]$, then $f$ and $g$ are congruent modulo $I$, denoted $f\equiv g\mod I$, if $f-g\in I$.
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then the congruence modulo $I$ is an equivalence relation on $k[x_1,\hdots ,x_n]$.
+\end{theorem}
+\begin{theorem}
+There exists a bijection from the set of distinct polynomial functions $\phi:V\rightarrow k$ and the set of equivalence classes of polynomials under congruence modulo $\textbf{I}(V)$.
+\end{theorem}
+\begin{definition}
+The quotient of $k[x_1,\hdots ,x_n]$ modulo $I$, denoted $k[x_1,\hdots ,x_n]/I$, is the set of equivalence classes for congruence modulo $I$.
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then $k[x_1,\hdots ,x_n]/I$ is a commutative ring under the sum and product operations.
+\end{theorem}
+\begin{definition}
+A ring isomorphism of rings $R$ and $S$ is a bijective function $\phi:R\rightarrow S$ such that:
+\begin{enumerate}
+\begin{multicols}{2}
+    \item For all $a,b\in R$, $\phi(a+b) = \phi(a)+\phi(b)$
+    \item For all $a,b\in R$, $\phi(ab) = \phi(a)\phi(b)$
+\end{multicols}
+\end{enumerate}
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then there is a bijection between the ideals in the quotient ring $k[x_1,\hdots ,x_n]/I$ and the ideals of $k[x_1,\hdots ,x_n]$ that contain $I$.
+\end{theorem}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then every ideal of $k[x_1,\hdots ,x_n]/I$ is finitely generated.
+\end{theorem}
+\subsubsection{The Coordinate Ring of an Affine Variety}
+\begin{definition}
+The coordinate ring of an affine variety $V\subset k^n$ is the ring $k[V]$.
+\end{definition}
+\begin{definition}
+If $V\subset k^n$ is an affine variety, and if $J = \langle \phi_1,\hdots, \phi_s\rangle \subset k[V]$, then $\mathbf{V}_{V}(J) = \{x\in V:\forall_{\phi \in J}, \phi(x) = 0 \}$ is called the subvariety of $V$.
+\end{definition}
+\begin{theorem}
+If $V\subset k^n$ is an affine variety and if $J\subset k[V]$ is an ideal, then $W = \mathbf{V}_{V}(J)$ is an affine variety in $k^n$ contained in $V$.
+\end{theorem}
+\begin{theorem}
+If $V\subset k^n$ is an affine variety, and if $W\subset V$, then $\mathbf{V}_{V}(W)$ is an ideal of $k[V]$.
+\end{theorem}
+\begin{definition}
+If $V$ is an irreducible variety in $k^n$, then the function field, denoted $QF(k[V])$, on $V$ is the quotient field of $k[V]$.
+\end{definition}
+\begin{definition}
+If $V\subset k^m$ and $W\subset k^n$ are irreducible affine varieties, then a rational mapping is a function $\phi$ such that $\phi(x_1,\hdots, x_m) = \bigg(\frac{f_1(x_1,\hdots, x_m)}{g_1(x_1,\hdots, x_m)}, \hdots, \frac{f_n(x_1,\hdots, x_m)}{g_n(x_1,\hdots, x_m)}\bigg)$.
+\end{definition}
+\begin{theorem}
+Two rational mappings $\phi,\psi:V\rightarrow W$ are equal if and only if there is a proper subvariety $V'\subset V$ such that $\phi$ and $\psi$ are defined on $V\setminus V'$ and $\phi(p) = \psi(p)$ for all $p \in V\setminus V'$.
+\end{theorem}
+\begin{theorem}[The Closure Theorem]
+If $k$ is an algebraically closed field, $V=\mathbf{V}(I)$, $V\ne \emptyset$, then there is an affine variety $W\underset{Proper}\subset \mathbf{V}(I_{\ell})$ such that $\mathbf{V}(I_{\ell})\setminus W \subset \pi_{\ell}(V)$.
+\end{theorem}
+\section{Miscellaneous Notes}
+\subsection{\'{E}tale Cohomology}
+\subsubsection{Review of Schemes}
+\begin{remark}
+Limitations of Affine Varieties:
+\begin{enumerate}
+    \item One would like to construct spaces by gluing together simpler pieces, like in geometry and topology.
+    \item Difficult over non-algebraically closed fields.
+    \item Keeping track of multiplicities.
+\end{enumerate}
+\end{remark}
+Grothendieck's Theory of Schemes gives solutions to these problems. Should $x^{2}+y^{2}=-1$ and $x^{2}+y^{2}=3$ be regarded as the same over $\mathbb{A}_{\mathbb{R}}^{2}$? They both have no solution. The answer is no. An isomorphism should be given by an invertible transformation. In general, the affine variety $X\subset \mathbb{A}_{R}^n$ is completely determined by the coordinate ring $S = \mathcal{O}(X) = R[x_1,\hdots, x_n]/(f_1,\hdots, f_N)$. Given a compact Hausdorff space $X$, let $C(X)$ denote the set of continous complex valued functions. This is a commutative ring with identity. With the supremum norm, it becomes a unital $C^{*}-$algebra.
+\begin{theorem}
+The map $X\rightarrow MaxC(X)$ is a homeomorphism.
+\end{theorem}
+Given a continuous map of spaces $f:X\rightarrow Y$, we get a homomorphism $C(Y)\rightarrow C(X)$ given by $g\mapsto g\circ f$. Thus $C(X)$ can be regarded as a contravariant functor. 
+\begin{theorem}[Gelfand]
+The functor $X\mapsto C(X)$ induces an equivalence between the category of compact Hausdorff spaces and the opposite category of commutative unital $C^{*}-$algebras.
+\end{theorem}
+\begin{definition}
+The spectrum of $R$, denoted $\Spec(R)$, is the set of prime ideals of $R$.
+\end{definition}
+\begin{theorem}
+The Zariski topology on $\Spec(R)$ contains open sets $D(f)=\{p\in\Spec(R):f\notin p\}$
+\end{theorem}
+A function $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is $C^{\infty}$ if and only if its restriction to the neighborhood of every point is $C^{\infty}$. That is, $f\in C^{\infty}(X)$ if and only if for any open cover $\{U_i\},f\big|_{U_i}\in C^{\infty}(U_i)$.
+\begin{definition}
+If $X$ is a topological space, a presheaf of sets $\mathcal{F}$ is a collection of sets $\mathcal{F}(U)$ for each open set $U\subset X$ together with maps $\rho_{UV}:\mathcal{F}(U)\rightarrow \mathcal{F}(V)$ for each pair $U\subset V$ such that $\rho_{UU} = id$ and $\rho_{WV}\circ \rho_{VU} = \rho_{WU}$ whenever $U\subset V \subset W$.
+\end{definition}
+\begin{definition}
+A sheaf is a presheaf such that for any open cover $\{U_i\}$ of an open $U\subset X$ and section $f_i \in \mathcal{F}(U_i)$ such that $F_i\big|_{U_i\cap I_j} = f_j\big|_{U_i\cap U_j}$, there is a unique $f\in \mathcal{F}(U)$ such that $f_i = f\big|_{U_i}$.
+\end{definition}
+\begin{definition}
+A ringed space is a pair $(X,\mathcal{O}_X)$, where $X$ is a topological space and $\mathcal{O}_X$ is a sheaf of commutative rings.
+\end{definition}
+The collection of presheaves of a topological space form a category, denoted $Sh(X)$. 
+\begin{definition}
+A scheme is a ringed space $(X,\mathcal{O}_X)$ which is locally an affine space.
+\end{definition}
+\begin{theorem}
+A property of commutative rings extends to schemes if it is local.
+\end{theorem}
+\subsubsection{Differential Calculus of Schemes}
+\begin{definition}
+The tangent space of an affine variety $X = V(f_1,\hdots, f_N)\subset \mathbb{A}_{k}^n$, denoted $T_{X,p}$, is the set of point $v\in k^n$ such that $\sum \frac{\partial f_j}{\partial x_i}(p)v)i = 0$.
+\end{definition}
+\begin{definition}
+A domain $R = k[x_1,\hdots ,x_n]/(f_1,\hdots, f_N)$ or $\Spec(R)$ is smooth if and only if the rank of $\big(\frac{\partial f_j}{\partial x_i}(p)\big)$ is $n-$dim(R) for all $p\in Max(R)$. 
+\end{definition}
+\begin{definition}
+An \'{e}tale $R$ algebra is smooth of relative dimension $0$, where $\det(\frac{\partial f_i}{\partial x_j})$ is a unit in $S$.
+\end{definition}
+\begin{theorem}
+If $k$ is a field, then an algebra over $k$ is \'{e}tale if and only if it is a finite cartesian product of seperable field extensions. 
+\end{theorem}
+\begin{theorem}
+The tensor product of two \'{e}tale algebras is \'{e}tale.
+\end{theorem}
+\begin{theorem}
+If $S$ is \'{e}tale over $R$ and $T$ is \'{e}tale over $S$, then $T$ is \'{e}tale over $R$.
+\end{theorem}
+\begin{definition}
+If $R$ is a commutative ring and $S$ is an $R-$algebra and $M$ is an $S-$module, then an $R-$linear derivation from $S$ to $M$ is a map $\delta:S\rightarrow M$ such that $\delta(s_1+s_2) = \delta(s_1)+\delta(s_2)$, $\delta(s_1 s_2) = s_1 \delta(s_2)+s_2\delta(s_1)$, and $\delta(r) = 0$ for all $r\in R$.
+\end{definition}
+\begin{theorem}
+There exists an $S-$module $\Omega_{S/R}$ with a universal $R-$linear derivation $d:S\rightarrow \Omega_{S/R}$.
+\end{theorem}
+\begin{theorem}
+If $M$ is a finitely generated module over a Noetherian ring $R$, then these are equivalent:
+\begin{enumerate}
+\begin{multicols}{3}
+    \item $M$ is locally free.
+    \item $\forall_{p\in\Spec(R)}, R_{p}\otimes M$ is free.
+    \item $M$ is projective.
+\end{multicols}
+\end{enumerate}
+\end{theorem}
+\begin{definition}
+If $M$ is an $S-$module, then $M$ is called flat if $M\otimes i$ is injective for any $i$.
+\end{definition}
+\begin{theorem}
+If $S$ is an $R-$algebra and $M$ is an $S-$module, $f\in S$ is an element such that multiplication by $f$ is injective on $M\otimes k(m)$ for all $m \in Max(R)$, and if $M$ is flat over $R$, then $M/fM$ is flat over $R$.
+\end{theorem}
+\begin{theorem}
+A smooth algebra is flat.
+\end{theorem}
+\begin{theorem}
+If $R$ is a Noetherian ring, then a homomorphism $R\rightarrow S$ is \'{e}tale if and only if:
+\begin{enumerate}
+    \item $S$ is finitely generated as an algebra.
+    \item $S$ is flat as an $R$-module.
+    \item $\Omega_{S/R} = 0$.
+\end{enumerate}
+\end{theorem}
+\begin{definition}
+A sheaf on a scheme is quasi-coherent if it is with respect to some affine open cover.
+\end{definition}
+\begin{theorem}
+If $f:X\rightarrow Y$ is a morphism, there exists a quasi-coherent sheaf $\Omega_{X/Y}$ such that $\Omega_{X/Y}\big|_{\Spec(S_{ij})} = \Omega_{S_{ij}/R_i}$ for open affine covers $\Spec(R_i) = U_i$.
+\end{theorem}
+\subsubsection{The Fundamental \'{E}tale Group}
+\begin{definition}
+A topological group is a topological space $(X,\tau)$ with a group structure $(X,*)$ such that $*:X\times X\rightarrow X$ is a continuous function with respect to the product topology.
+\end{definition}
+\begin{theorem}
+A topological space is profinite if and only if it is compact Hausdorff and totally disconnected.
+\end{theorem}
+\begin{definition}
+The topological fundamental group of a topological space $X$, denoted $\pi_1(X)$, is the group of homotopy classes of loops in $X$ with a given base point.
+\end{definition}
+\begin{theorem}
+Any \'{e}tale morphism $Y\rightarrow X$ is a finite to one covering space of $X$ with the usual topology.
+\end{theorem}
+\begin{theorem}[Grothendieck's Theorem]
+If $X$ is a scheme of finite type of $\mathbb{C}$, then $\pi_{1}^{et}(X)$ is the profinite completion of $\pi_1{X}$.
+\end{theorem}
+\subsubsection{\'{E}tale Topology}
+\begin{remark}
+Given a topological space $(X,\tau)$, the topology $\tau$ (That is, the collection of open sets) forms a partially ordered set with respect to set inclusion. There also exists a notion of open covering $U = \cup U_i$.
+\end{remark}
+\begin{definition}
+A Groethendieck Topology on a category $C$ with fibre products is a collection of families of morphisms $U_i \rightarrow U$ such that:
+\begin{enumerate}
+    \item The family consisting of a single isomorphism $\{U \sim U\}$ is a covering.
+    \item If $\{U_i\rightarrow U\}$ and $\{V_{ij} \rightarrow U_i\}$ are coverings, then so is the composition $\{V_{ij}\rightarrow U\}$.
+\end{enumerate}
+\end{definition}
+\begin{definition}
+A site is a category with a Grothendieck Topology.
+\end{definition}
+\subsection{Groebner Basis}
+\begin{definition}
+If ring is a set $R$ with two binary operations $+$ and $\cdot$, called addition and multiplication, such that the following are true:
+\begin{enumerate}
+    \item $(R,+)$ is an Abelian Group.
+    \item $\forall_{a,b,c\in R}, (a\cdot b)\cdot c = a\cdot(b\cdot c)$
+    \item $a\cdot(b+c) = (a\cdot b)+(a\cdot c)$
+\end{enumerate}
+\end{definition}
+\begin{definition}
+A commutative ring is a ring $R$ such that $\forall_{a,b\in R}, a\cdot b=b\cdot a$
+\end{definition}
+\begin{definition}
+A ring with identity is a ring $R$ such that $\exists_{1_{R}\in R}:\forall_{a\in R}, 1_{R}\cdot a=a\cdot 1_{R}=a$
+\end{definition}
+\begin{definition}
+A subring of a ring with identity $R$ is a set $S\subset R$ such that $1_{R}\in S$, and $S$ is closed under the ring operations.
+\end{definition}
+\begin{remark}
+Any field is a ring.
+\end{remark}
+\begin{definition}
+A monomial in variables $x_1,\hdots, x_n$ over a ring $R$ is a product $x^\alpha = \prod_{k=1}^{n} x_1^{\alpha_1}$, where $(\alpha_1,\hdots, \alpha_n)\in \mathbb{N}^n$.
+\end{definition}
+\begin{notation}
+The set of monomials in $n$ variables over $R$ is denoted $\Mon_{R}(x_1,\hdots, x_n)$
+\end{notation}
+\begin{definition}
+If $\alpha,\beta \in \mathbb{N}^n$ such that $\alpha_i \leq \beta_i$, then $x^{\alpha}$ is said to divide $x^\beta$, denoted $x^\alpha \vert x^\beta$, if $x^\beta = x^\alpha \cdot x^\gamma$ for some $\gamma \in \mathbb{N}^n$.
+\end{definition}
+\begin{definition}
+A term is a monomial multiplied by a coefficient in $R$.
+\end{definition}
+\begin{definition}
+A polnyomial over $R$ is a finite $R-$linear combination of monomials, $f=\sum_{\alpha} a_{\alpha} \cdot x^{\alpha}$.
+\end{definition}
+\begin{notation}
+The set of all polynomials in $n$ variables over a ring $R$ is denoted $R[x_1,\hdots, x_n]$.
+\end{notation}
+\begin{theorem}
+If $R$ is a commutative ring with identity, then $R[x_1,\hdots, x_n]$ is a commutative ring with identity.
+\end{theorem}
+\begin{definition}
+A polynomial $f\in R[x_1,\hdots, x_n]$ is called a constant polynomial if $f\in R$.
+\end{definition}
+\begin{definition}
+A field $k$ is a commutative ring with identity such that for all $a\in k$, $a\ne 0$, there is a $b\in k$ such that $a\cdot b=1$
+\end{definition}
+\begin{remark}
+We usually work with fields and consider polynomial rings of the form $k[x_1,\hdots ,x_n]$.
+\end{remark}
+\begin{definition}
+A total ordering on a set $A$ is a relation $>$ such that $\forall_{a,b\in A}$, precisely one of the following truee:
+\begin{enumerate}
+    \begin{multicols}{3}
+    \item $a<b$
+    \item $a=b$
+    \item $b<a$
+    \end{multicols}
+\end{enumerate}
+\end{definition}
+\begin{definition}
+A relation $\sim$ on a set $A$ is said to be transitive if for all $a,b,c\in A$, if $a\sim b$ and $b\sim c$, then $a\sim c$.
+\end{definition}
+\begin{definition}
+A well ordering on a set $A$ is a relation $<$ such that for every subset $E\subset A$, there is an element $x\in E$ such that for all $y\in E$, $y\ne x$, we have $x<y$.
+\end{definition}
+\begin{remark}
+Equivalently, a well ordering on a set $A$ is relation $<$ such that for every monotonically decreasing sequence $\alpha_n$, there is an $N\in \mathbb{N}$ such that for all $n>N$, $\alpha_n = \alpha_N$. That is, decreasing sequences terminate.
+\end{remark}
+\begin{definition}
+A monomial ordering on $\mathbb{N}^n$ is a relation $>$ such that $>$ is total, transitive, well ordering. A well ordering on $k[x_1,\hdots ,x_n]$ is a well ordering on $\alpha = (\alpha_1,\hdots, \alpha_n) \in \mathbb{N}^n$.
+\end{definition}
+\begin{definition}
+The lexicographic ordering on $\mathbb{N}^n$ is defined as $(\alpha_1,\hdots, \alpha_n) \underset{Lex}{>} (\beta_1,\hdots, \beta_n)$ if the left-most non-zero entry of $(\alpha_1-\beta_1,\hdots, \alpha_n-\beta_n)$ is positive.
+\end{definition}
+\begin{theorem}
+The lexicographic ordering is a monomial ordering.
+\end{theorem}
+\begin{definition}
+The graded lexicographic ordering is defined as $(\alpha_1,\hdots, \alpha_n) \underset{GrLex}{>}(\beta_1,\hdots, \beta_n)$ if $|\alpha|>|\beta|$ or $|\alpha| = |\beta|$ and $\alpha \underset{Lex}{>}\beta$.
+\end{definition}
+\begin{theorem}
+The graded lexicographic ordering is a monomial ordering.
+\end{theorem}
+\begin{theorem}[The Division Algorithm]
+If $f_1,\hdots, f_s\in k[x_1,\hdots ,x_n]$ are non-zero polynomials and if $>$ is a monomial ordering, then there are $r,q_1,\hdots, q_n\in k[x_1,\hdots ,x_n]$ such that the following are true:
+\begin{enumerate}
+\item $f=q_1f_1+\hdots + q_sf_s + r$
+\item No term of $r$ is divisible by any of $\LT(f_1),\hdots, \LT(f_s)$.
+\item $\LT(f) = \max_{>}\{\LT(q_i)\cdot \LT(f_i):q_i \ne 0\}$
+\end{enumerate}
+\end{theorem}
+\begin{definition}
+An ideal $I = \langle x^{\alpha}: \alpha \in A\rangle = \{\sum_{\alpha} h_{\alpha} x^\alpha, h_{\alpha} \in k[x_1,\hdots ,x_n]\}$ is called a monomial ideal.
+\end{definition}
+\begin{theorem}
+If $I = \langle x^\alpha: \alpha \in A\rangle$ is a monomial ideal, $\beta \in \mathbb{N}^n$, then $x^\beta \in I$ if and only if there is an $\alpha \in A$ such that $x^\alpha$ divides $x^\beta$.
+\end{theorem}
+\begin{theorem}
+If $I$ is a monomial ideal, $f\in k[x_1,\hdots ,x_n]$, then the following are equivalent:
+\begin{enumerate}
+    \item $f\in I$
+    \item Every term of $f$ lies in $I$.
+    \item $f$ is a $k-$linear combination of monomials in $I$.
+\end{enumerate}
+\end{theorem}
+\begin{theorem}[Dickson's Lemma]
+Every monomial ideal of $k[x_1,\hdots ,x_n]$ is finitely generated.
+\end{theorem}
+\begin{theorem}[Hilbert's Basis Theorem]
+Every ideal $I\subset k[x_1,\hdots ,x_n]$ is finitely generated.
+\end{theorem}
+\begin{definition}
+If $>$ is a monomial ordering on $k[x_1,\hdots ,x_n]$, then a Groebner Basis of $I\subset k[x_1,\hdots ,x_n]$ is a set $G = \{g_1,\hdots, g_s\}$ such that $\langle \LT(I)\rangle = \langle \LT(g_1),\hdots, \LT(g_s)\rangle$
+\end{definition}
+\begin{theorem}
+Every non-zero ideal $I\subset k[x_1,\hdots ,x_n]$ has a Groebner Basis.
+\end{theorem}
+\subsection{Elimination Theory}
+\begin{definition}
+If $i\subset k[x_1,\hdots ,x_n]$ is an ideal, then the $i^{th}$ elimination ideal of $I$ is $I_{i} = I\cap k[x_{i+1},\hdots, x_n]$, $1\leq i \leq n$. $I_{0} = I$.
+\end{definition}
+\begin{theorem}[The Elimination Theorem]
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal and $G$ is a Groebner Basis of $I$ with respect to the lexicographic ordering, and $x_1>\hdots > x_n$, then for all $i=0,1,\hdots, n$, the set $G_i \cap k[x_1,\hdots ,x_n]$ is a Groebner Basis of the $i^{th}$ elimination ideal $I_{i}$.
+\end{theorem}
+\begin{remark}
+Using the lexicographic ordering, and for some ideal $I = \langle f_1,\hdots, f_s\rangle \subset k[x_1,\hdots ,x_n]$, to compute all elimination ideals $I_{i}$:
+\begin{enumerate}
+    \item Compute a Groebner Basis $G$ for $I$ with respect to the lex order on $k[x_1,\hdots ,x_n]$.
+    \item For all $i$, the elements $g\in G$ with $\LT(g)\in k[x_{i+1},\hdots, x_n]$ form a Groebner basis $I_{i}$ with respect to the lexicographic ordering on $k[x_{i+1},\hdots, x_n]$.
+\end{enumerate}
+\end{remark}
+\begin{definition}
+A monomial order on $k[x_1,\hdots, x_n,y_1,\hdots, y_m]$ is an elimination order with respect to $x_1,\hdots, x_n$ if the following holds for all $f\in k[x_1,\hdots, x_n, y_1, \hdots, y_m]$: $L(f) \in k[y_1,\hdots, y_m] \Rightarrow f\in k[y_1,\hdots, y_m]$
+\end{definition}
+\begin{theorem}[The Extension Theorem]
+If $k$ is an algebraically closed field, $I = \langle f_1,\hdots, f_s\rangle$, $I_{1}$ is the first elimination ideal of $I$, and if $f_i = g_i(x_2,\hdots, x_n)x_1^{N_i}+r_i$, where $r_i$ contains only terms where the degree of $x_1$ is less than $N_i$, and if $(a_2,\hdots, a_n)\in k^{n-1}$ such that $(a_2,\hdots, a_n) \notin \mathbf{V}(g_1,\hdots, g_s)$, then there is an $a_1 \in k$ such that $(a_1,\hdots, a_n) \in \mathbf{V}(I_1)$.
+\end{theorem}
+\begin{definition}
+The $k^{th}$ projection map on $k^n$ is $\pi_{k}: k^n\rightarrow k^{n-k}$ defined by $(a_1,\hdots, a_n) = (a_{k+1},\hdots, a_n)$
+\end{definition}
+\begin{remark}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, $X = \mathbf{V}(I)$, and $f\in I_k$, then $f(X) = 0$. Thus $f\big(\pi_{k}(X)\big)=0$, and therefore $\pi_{k}(X) \subset \mathbf{V}(I_k)$. Also $\pi_{k}(X)$ may NOT be Zariski closed.
+\end{remark}
+\begin{theorem}
+If $k$ is algebraically closed, then $\overline{\pi_k(X)}=\mathbf{V}(I_k)$.
+\end{theorem}
+\begin{theorem}
+If $k$ is an infinite field, $F:k^m \rightarrow k^n$ a function determined by some parametrization $x_j = f_j(t_1,\hdots, t_m)$, and if $I = \langle x_1-f_1,\hdots, x_n-f_n\rangle$, then $\mathbf{V}(I_m)$ is the smallest algebraic set in $k^n$ containing $F(k^m)$.
+\end{theorem}
+\begin{remark}
+$V(I_m)$ is the Zariski closure of $F(k^m)$.
+\end{remark}
+\subsection{The Zariski Topology}
+\subsubsection{The Zariski Topology}
+\begin{definition}
+A subset of $k^n$ is is closed in the Zariski Topology if it is an algebraic set. The Zariski Topology is formed by considering all such sets.
+\end{definition}
+\begin{definition}
+A topological space $X$ is called irreducible if for any closed subsets $X_1,X_2\subset X$ such that $X=X_1\cup X_2$, either $X=X_1$ or $X=X_2$. A topological space that is not irreducible is called reducible.
+\end{definition}
+\begin{definition}
+A subset $Y\subset X$ of a topological space is said to be irreducible if $Y$ is irreducible with respect to the inherited, or the induced topology.
+\end{definition}
+\begin{definition}
+A topological space $X$ is said to be disconnected if there are two non-empty closed subsets $X_1,X_2$ such that $X = X_1\cup X_2$, and $X_1\cap X_2 = \emptyset$.
+\end{definition}
+\begin{theorem}
+If $X$ is disconnected, then it is reducible.
+\end{theorem}
+\begin{proof}
+For if $X$ is disconnected, there are two non-empty closed sets $X_1,X_2\subset X$ such that $X_1\cap X_2 = \emptyset$ and $X = X_1\cup X_2$. But if $X_1$ and $X_2$ are non-empty and disjoint, then $X_1\ne X$ and $X_2 \ne X$. Therefore $X$ is reducible.
+\end{proof}
+\begin{definition}
+An algebraic affine variety is an irreducible closed subset of $k^n$.
+\end{definition}
+\begin{definition}
+An open subset of an affine variety is called a quasi-affine variety.
+\end{definition}
+\begin{definition}
+If $X\subset k^n$ is an algebraic set, then $k[x_1,\hdots ,x_n]/\mathbb{I}(X)$ is called the coordinate ring of $X$.
+\end{definition}
+\begin{definition}
+A set $Y$ in a topological space $X$ is said to be dense in $X$ if for every non-empty open set $\mathcal{O}$, $\mathcal{O}\cap Y\ne \emptyset$.
+\end{definition}
+\begin{theorem}
+A topological space $X$ is irreducible if and only if every non-empty open set is dense.
+\end{theorem}
+\begin{definition}
+An irreducible component of $X$ is a maximal irreducible subset of $X$.
+\end{definition}
+\begin{theorem}
+If $X$ is a closed topological space, then any irreducible subset $Y\subset X$ is contained in a maximal component.
+\end{theorem}
+\begin{theorem}
+If $X$ is a topological space, then it is the union of irreducible components.
+\end{theorem}
+\begin{definition}
+A topological space $X$ is called Noetherian if every descending chain $X_n \subset X_{n+1}$ of closed subsets stabilizes.
+\end{definition}
+\begin{theorem}
+If $X$ is a Noetherian Space, then every subset $Y\subset X$ can be written as a finite union of irreducible closed subsets.
+\end{theorem}
+\begin{theorem}
+Every algebraic set in $k^n$ can be expressed uniquely as a union of varieties.
+\end{theorem}
+\begin{theorem}
+If $R$ is an Noetherian ring, then $k[x_1,\hdots ,x_n]$ is Noetherian.
+\end{theorem}
+\begin{theorem}
+A ring $R$ is Noetherian if and only if every non-empty set of ideals in $R$ has a maximal element.
+\end{theorem}
+\begin{theorem}[Hilbert's Nullstellensats]
+If $k$ is an algebraically closed field, $I\subset R = k[x_1,\hdots ,x_n]$ is an ideal, and $f\in R$ is a polynomial which vanishes on $\mathbf{V}(I)$, then there is an $n\in \mathbb{N}$ such that $f^n \in I$.
+\end{theorem}
+\begin{definition}
+The dimension of a topological space $X$ is the supremum of all $n\in \mathbb{N}$ such that there is a chain $Z_0\subset Z_1\subset \hdots \subset Z_n$ of distinct irreducible closed subsets of $X$.
+\end{definition}
+\begin{theorem}
+If $k$ is a field, and $B$ is an integral domain which is finitely generated by a $k-$algebra, then the dimension of $B$ is equal to the transcendence degree of the quotient field $k(B)$ of $B$ over $k$.
+\end{theorem}
+\begin{theorem}
+The dimension of $k^n$ is $n$.
+\end{theorem}
+\begin{theorem}
+If $Y$ is a quasi-affine variety, then $\dim(Y) = \dim(\overline{Y})$.
+\end{theorem}
+\subsubsection{Problems}
+\begin{problem}
+Let $f\in k[x]$ be a non-constant polynomial in one variable over a field $k$. $f$ is called irreducible if $f\notin k$ and if it is not the product of two polynomials of strictly smaller degree. Prove the following are equivalent:
+\begin{enumerate}
+    \item $k[x]/\langle f\rangle$ is a field.
+    \item $k[x]/\langle f\rangle$ is an integral domain.
+    \item $f$ is irreducible.
+\end{enumerate}
+\end{problem}
+\begin{proof}[Solution]
+If $k[x]/\langle f\rangle$ is a field, then it is an integral domain. If $f$ is irreducible, then $\langle f\rangle$ is maximal and thus $k[x]/\langle f\rangle$ is a field. Finally, if $k[x]/\langle f\rangle$ is an integral domain, then $\langle f\rangle$ is prime. But if $\langle f\rangle$ is prime, then it is maximal. And if $\langle f\rangle$ is maximal, then $f$ is irreducible. 
+\end{proof}
+\begin{problem}
+Show every prime ideal is radical.
+\end{problem}
+\begin{proof}[Solution]
+Let $I$ be a prime ideal. Then if $fg\in I$, either $f\in I$ or $g\in I$. Suppose $f^n \in I$ for some $f\in R$. Then $f^{n-1}f \in R$. But then either $f^{n-1} \in I$ or $f\in I$. If $f\in I$, we are done. If not, by induction $f^{n-k} \in I$ and we obtain $f\in I$.
+\end{proof}
+\begin{problem}
+Show that any Noetherian Topological Space $X$ is compact.
+\end{problem}
+\begin{proof}[Solution]
+If $X$ is Noetherian, then every ascending chain terminates. Suppose $X$ is not compact. Then there is an open cover $\Delta$ with no finite subcover. Let $\mathcal{O}_1$ be a finite subcover. Then $\cup_{\mathcal{U}\in \mathcal{O}_1} \mathcal{U}$ is not all of $X$, otherwise $X$ would be compact. Thus there is an open subcover $\mathcal{O}_2$ such that $\mathcal{O}_1 \subset \mathcal{O}_2$. Inductively, we have a sequence $\mathcal{O}_n\subset \mathcal{O}_{n+1}$. Let $A_n = \cup_{k=1}^{n} \cup_{\mathcal{U}\in \mathcal{O}_k}\mathcal{U}$. Then $A_{n}\subset A_{n+1}$. But by the Noetherian property, this chain must stabilize. But then there is an $N\in \mathbb{N}$ such that $\mathcal{O}_{N+1} = \mathcal{O}_N$, a contradiction as we said $X$ is not compact. Therefore, etc.
+\end{proof}
+\begin{remark}
+This proof subtly requires the axiom of choice in the construction of such $\mathcal{O}'s$.
+\end{remark}
+\subsection{Notes on Varieties}
+\subsubsection{Affine Varieties}
+$k$ denotes an algebraically closed field. $\textbf{A}_{k}^n$ is the affine $k-$space in $n-$dimensions. An element $a=(a_1,\hdots, a_n)$ is called a point, and $a_i$ is called a coordinate.
+\begin{definition}
+The zero set of a set of polynomials $T = \{f_1,\hdots, f_s\}$ is the set $Z(T) = \{p\in \textbf{A}_k^n|f_i(p) = 0,i=1,\hdots, s\}$.
+\end{definition}
+\begin{notation}
+The set of polynomials in $n$ variables over $\textbf{A}_k^n$ is denoted $A$.
+\end{notation}
+\begin{definition}
+A subset $Y\subset \textbf{A}_k^n$ is an algebraic set if there exists a subset $T\subset A$ such that $Z(T) = Y$.
+\end{definition}
+\begin{theorem}
+The union of two algebraic sets is algebraic.
+\end{theorem}
+\begin{theorem}
+The intersection of two algebraic sets is algebraic.
+\end{theorem}
+\begin{definition}
+The Zariski topology $\mathcal{Z}$ on $\textbf{A}_{k}^n$ is the set of compliments of algebraic sets. That is, algebraic sets are closed.
+\end{definition}
+\begin{definition}
+A non-empty subset $Y$ of a topological space $X$ is irreducible if it cannot be expressed as the union $Y=Y_1\cup Y_2$ of two proper subsets, each on of which is closed in $Y$.
+\end{definition}
+\begin{definition}
+An affine algebraic variety is an irreducible subset of $\textbf{A}_k^n$ with respect to the induced topology.
+\end{definition}
+\begin{definition}
+An open subset of an affine variety is called a quasi-affine variety.
+\end{definition}
+\begin{notation}
+If $Y\subset \textbf{A}_k^n$, $I(Y) = \{f\in A:\forall_{p\in Y}, f(p) = 0\}$.
+\end{notation}
+\begin{theorem}
+\
+\begin{enumerate}
+    \item If $T_1\subset T_2$, the  $Z(T_2)\subset Z(T_1)$.
+    \item If $Y_1\subset Y_2 \subset \textbf{A}_k^n$, then $I(Y_2)\subset I(Y_1)$
+    \item $I(Y_1\cup Y_2) = I(Y_1)\cap I(Y_2)$.
+    \item If $a\subset A$, then $I(Z(a)) = \sqrt{a}$ (The radical of $a$).
+    \item If $Y\subset \textbf{A}_k^n$, then $Z(I(Y)) = \overline{Y}$ (The closure of $Y$).
+\end{enumerate}
+\end{theorem}
+\begin{theorem}[Hilbert's Nullstellensatz]
+If $k$ is an algebraically closed field, $a\subset A=k[x_1,\hdots ,x_n]$ is an ideal, and if $f\in A$ is a polynomial which vanishes on $Z(a)$, then there is an $r\in \mathbb{N}$ such that $f^{r}\in a$.
+\end{theorem}
+\begin{definition}
+The affine coordinate ring of an affine algebraic set $Y\subset \textbf{A}_k^n$ is $A/I(Y)$.
+\end{definition}
+\begin{definition}
+A topological space $X$ is called Noetherian if it satisfies the descending chain condition for closed subsets.
+\end{definition}
+\begin{theorem}
+A Noetherian Topological Space is compact.
+\end{theorem}
+\begin{definition}
+If $A$ is a ring, then height of a prime ideal $p$ is the supremum of all integers $n$ such that there is a chain $p_0\subset \hdots \subset p_n = p$ of distinct prime ideals.
+\end{definition}
+\begin{definition}
+The Krull dimension of a ring $A$ is the supremum of the height of all ideals.
+\end{definition}
+\begin{theorem}[Krull's Hauptidealsatz]
+If $A$ is a Noetherian Ring, and $f\in A$ has neither a zero divisor nor a unit, then every minimal prime ideal $p$ containing $f$ has height $1$.
+\end{theorem}
+\begin{theorem}
+The dimension of $\textbf{A}_k^n$ is $n$.
+\end{theorem}
+\subsubsection{Projective Varieties}
+\begin{definition}
+A subset $Y$ of $P^n$ is an algebraic set if there is a set $T$ of homogeneous elements of $S$ such that $Y=Z(T)$.
+\end{definition}
+\begin{definition}
+The Zariski Topology on $P^n$ is defined as the complements of algebraic sets. That is, algebraic sets are closed.
+\end{definition}
+\begin{definition}
+A projective algebraic variety is an irreducible algebraic set in $P^n$.
+\end{definition}
+\subsubsection{More Notes on Projective Varieties}
+\begin{definition}
+The projective $n-$space over $\mathbb{A}$, denoted $\mathbb{P}^n$, is the set of all one-dimensional linear subspaces of the vector space $\mathbb{A}^{n+1}$.
+\end{definition}
+\begin{remark}
+Equivalently, it is the set of all lines in $\mathbb{A}^{n+1}$ through the origin.
+\end{remark}
+\begin{definition}
+The projective $n$ space $\mathbb{P}^{n}$ over $k$ is the set of all equivalence classes $\mathbb{A}^{n+1}/\{0\}$, where $(a_1,\hdots, a_n)\sim (b_1,\hdots, b_n)$ if and only if there is a $\lambda\in\mathbb{A}\setminus\{0\}$ such that $b_{i}=\lambda a_{i}$.
+\end{definition}
+\begin{remark}
+Elements of $\mathbb{P}^{n}$ are called points.
+\end{remark}
+\begin{definition}
+A homogenous polynomial of degree $d$ is a polynomial $f$ such that $f(\lambda a_1,\hdots, \lambda a_n) = \lambda^d f(a_1,\hdots, a_n)$.
+\end{definition}
+\begin{theorem}
+If $I\subset k[x_1,\hdots ,x_n]$ is an ideal, then the following are equivalent:
+\begin{enumerate}
+    \item $I$ can be generated by homogeneous polynomials.
+    \item For every $f\in I$, the degree-$d$ part of $f$ in contained in $I$
+\end{enumerate}
+\end{theorem}
+\begin{definition}
+If $I\subset k[x_1,\hdots ,x_n]$ is a homogeneous ideal, then $\mathbf{V}(I)=\{(a_1:\hdots:a_{n})\in\mathbb{P}^{n}:f(a_{1},\hdots,a_{n})=0,f\in I\}$.
+\end{definition}
+\begin{definition}
+An algebraic subset of $\mathbb{P}^{n}$ is a set of the form $\mathbf{V}(I)$. These are called projective algebraic sets.
+\end{definition}
+\begin{theorem}
+Every projective algebraic set can be written as the zero set of finitely many homogeneous polynomials of the same degree.
+\end{theorem}
+\begin{definition}
+The projective close of and algebraic set $X\subset \mathbb{A}^n$ is the Zariski closure in $\mathbb{P}^n$ under the mapping $\mathbb{A}^n \rightarrow \mathbb{P}^n$ by $(x_1,\hdots, x_n) \mapsto (1:x_1,\hdots, x_n)$.
+\end{definition}
+\begin{theorem}
+If $f$ is the sum of forms $f = \sum_{d} f^{(d)}$, if $P\in \mathbb{P}^n$ and $f(x_1,\hdots, x_n) = 0$ for every choice of homogeneous coordinates, then for each $d$, $f^{(d)}(x_1,\hdots, x_n) = 0$.
+\end{theorem}
+\begin{definition}
+If $F\in \mathbb{A}[x_1,\hdots, x_n]$ is homogeneous of degree $d$, then its de-homogenization is the polynomial $f(x_1,\hdots, x_n) = F(1,x_1,\hdots, x_n)$.
+\end{definition}
+\begin{theorem}
+Let $X\subset \mathbb{A}^n$ be an affine algebraic set, $\overline{X}$ the projective closure. Then $\mathbb{I}(\overline{X})\subset \mathbb{A}[x_1,\hdots, x_n]$ is generated by the homogenization of all elements of $\mathbb{I}(X)$.
+\end{theorem}
+\begin{theorem}
+An algebraic set $X$ is irreducible if and only if the ideal $\mathbb{I}(X)$ is prime.
+\end{theorem}
+\begin{definition}
+An affine algebraic set $X\subset \mathbb{A}^{n+1}$ is called a cone if it is not empty, and if for all $\lambda \in k$, $(x_1,\hdots, x_n) \in X \Rightarrow (\lambda x_1,\hdots, \lambda x_n)\in X$.
+\end{definition}
+\begin{theorem}[The Projective Nullstellensatz]
+\
+\begin{enumerate}
+    \item If $X_1\subset X_2$ are algebraic set in $\mathbb{P}^n$, then $I(X_2)\subset I(X_1)$.
+    \item For any algebraic set $X\subset \mathbb{P}^n$, we have $\mathbf{V}(I(X)) = X$.
+    \item For any homogeneous ideal $I\subset k[x_1,\hdots ,x_n]$ such that $\mathbf{V}(I)\ne \emptyset$, we have $\mathbb{I}(\mathbf{V}(I)) = \sqrt{I}$.
+\end{enumerate}
+\end{theorem}
+\end{document}

@@ -1,0 +1,996 @@
+\documentclass[crop=false,class=book]{standalone}
+%---------------PREAMBLE------------%
+\input{../../preamble.tex}
+%---------------GLOSSARY------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------Title Page-----------%
+\begin{document}
+\chapter{Graph Theory}
+\section{Graph Theory I}
+\begin{definition}
+A graph is a set of points called vertices and a set of lines called edges that connect pairs of vertices. The vertex set is denoted $V(G)$, and the edge set is denoted $E(G)$.
+\end{definition}
+\begin{definition}
+If $u$ and $v$ are edges of a set, and if there is an edge connecting them, then they are said to be adjacent. 
+\end{definition}
+\begin{definition}
+A vertex that has no adjacent vertices is called isolated.
+\end{definition}
+\begin{definition}
+The edge connecting vertices $u$ and $v$ is said to be incident with them.
+\end{definition}
+\begin{definition}
+The size of $V(G)$ is written as $|V(G)|$, and is the number of vertices in the graph. Similarly with $|E(G)|$.
+\end{definition}
+\begin{definition}
+If $G$ is a graph, then a subgraph $G'$ of $G$ is a subset of vertices $V(G')\subset V(G)$ together with a subset of edges $E(G')\subset E(G)$, such that $V(G')$ and $E(G')$ are themselves a graph.
+\end{definition}
+\begin{definition}
+Given a graph $G$ with vertices $V(G)$ and edges $V(G)$, the complimentary graph is the graph with vertices $V(G)$ and edges $E(V)^C$ consisting of all of the edges not contained in $E(V)$. The complimentary graph is denoted $G^C$.
+\end{definition}
+\begin{theorem}
+For any graph $G$, $(G^C)^C = G$.
+\end{theorem}
+\begin{proof}
+For let $G$ be a graph and consider $G^C$. From the definition, either an edge is contained in $G$ or it is contained in $G^C$. If the edge is contained in $G^C$, then it is not contained in $(G^C)^C$, and vice versa. But if an edge is not contained in $G^C$, then it is contained in $G$, and thus edges in $(G^C)^C$ are contained in $G$. Similarly, if an edge is contained in $G$, then it is not contained in $G^C$, and thus it is contained in $(G^C)^C$. Thus all edges in $G$ are contained in $(G^C)^C$. But it was just proved that all edges in $(G^C)^C$ are contained in $G$. Thus $(G^C)^C = G$.
+\end{proof}
+\begin{definition}
+The number of edges incident with a vertex is called the degree of that vertex. The degree of a vertex $v$ is denoted $\deg(v)$.
+\end{definition}
+\begin{theorem}
+For any finite graph $G$, $\sum_{v\in V(G)} \deg(v) = 2|E(G)|$.
+\end{theorem}
+\begin{proof}
+We prove by induction. If there are zero edges, then the degree of each vertex is zero and $\sum_{v\in V(G)}\deg(v) = 0 = 2|E(G)|$, as $|E(G)| = 0$. If there is only one edge, suppose incident on the vertices $u$ and $v$, then $\deg(u) = \deg(v) = 1$, and thus $\sum_{v\in V(G)} \deg(v) = 1+1 = 2 = 2|E(G)|$, as $|E(G)| = 1$. Now suppose that if there are $n$ edges then $\sum_{v\in V(G)}\deg(v) = 2|E(G)|$. It suffices to show that this implies that if there $n+1$ edges this result remains valid. Let $G$ be a graph with $|E(G)| = n+1$. Let $uv$ be some edge in $E(V)$ incident to the vertices $u$ and $v$, and let $G'$ be the subgraph with vertices $V(G') = V(G)$ and edges $E(G')=E(G)\setminus \{uv\}$. Then $|E(G')| = n$, and therefore $\sum_{v\in V(G')}\deg(v) = 2n$. But $\sum_{v\in V(G)} \deg(v) - \sum_{v\in V(G')}\deg(v) = 2$, as the vertices $u$ and $v$ each have one more degree in $G$ than in $G'$, and all other vertices are the same. Thus $\sum_{v\in V(G)}\deg(v) = 2 + \sum_{v\in V(G')}\deg(v) = 2(n+1) = 2|E(G)|$.
+\end{proof}
+Euler's proof of the same theorem is as follows:
+\begin{theorem}[Handshaking Theorem]
+For every finite graph $G$, $\sum_{v\in V(G)}\deg(v) = 2|E(V)|$.
+\end{theorem}
+\begin{proof}
+If $|E(V)| = 0$, then no two vertices are adjacent and thus $\sum_{v\in V(G)}\deg(v) = 0$. Otherwise, each edge is incident on exactly two vertices. As the degree of a vertex is the number of edges which are incident on it, we see that each edge contributes to the degree of 2 vertices. Thus, adding up all of degrees of the vertices is just twice the total number of edges.
+\end{proof}
+\begin{corollary}
+For any finite graph $G$, $\sum_{v\in V(G)}\deg(v)$ is even.
+\end{corollary}
+\begin{proof} As $\sum_{v\in V(G)}\deg(v) = 2|E(G)|$, we have that the sum is twice the value of an integer, and thus is even.
+\end{proof}
+\begin{corollary}
+The number of vertices with an odd degree is even.
+\end{corollary}
+\begin{proof}
+For suppose not. Suppose there is an odd number of vertices with odd degree. Let $V_0(G)$ be the vertices with even degree, and $V_1(G)$ be the vertices with odd degree. But $\sum_{v\in V_0(G)}\deg(v) + \sum_{v\in V_1(G)} \deg(v) = \sum_{v\in V(G)}\deg(v) = 2|E(G)|$, which is even. But we have that $\sum_{v\in V_0(G)}\deg(v)$ is even, as for all $v\in V_{0}(G)$, $\deg(v)$ is even. Thus $\sum_{v\in V(G)}\deg(v) - \sum_{v\in V_0(G)}\deg(v)$ is even. But $\sum_{v\in V_1(G)}\deg(v) = \sum_{v\in V(G)}\deg(v) - \sum_{v\in V_0(G)}\deg(v)$, and is therefore even. But for all $v\in V_1(G)$, $\deg(v)$ is odd. And the sum of and odd number of odd numbers is odd. Thus, there cannot be an odd number of vertices with odd degree. Therefore there is an even number of such vertices.
+\end{proof}
+\begin{definition}
+A vertex with an odd degree is called odd, a vertex with even degree is called even.
+\end{definition}
+\begin{definition}
+Two graphs $G$ and $H$ are said to be isomorphic if and only if there is a bijective function $f:G\rightarrow H$ such that $\{u,v\}\in E(G)$ if and only if $\{f(u),f(v)\}\in E(H)$. We write $G \cong H$.
+\end{definition}
+\begin{lemma}
+If $G$ is a graph, and $w\in V(G)$, then the function $\chi_{\{v,w\}}^G = \begin{cases} 0 & \{v,w\} \notin V(G) \\ 1 & \{v,w\} \in V(G) \end{cases}$ satisfies $\deg(v) = \sum_{\underset{v\ne w}{w\in V(G)}} \chi_{\{v,w\}}^G$
+\end{lemma}
+\begin{proof}
+For $\deg(v)$ is the number of edges incident to it. As an edge is incident to exactly two vertices, for each edge connected to $v$ there is a $w\in V(G)$ such that $\{v,w\} \in E(G)$. Moreover, there are $\deg(v)$ vertices connected to it. Thus we have $\sum_{\underset{\{v,w\}\in E(G)}{w\in V(G)}} \chi_{\{v,w\}}^G = \sum_{\underset{\{v,w\}\in E(G)}{w\in V(G)}}1 = \deg(v)$. And finally $\sum_{\underset{v\ne w}{w\in V(G)}}\chi_{\{v,w\}}^G = \sum_{\underset{\{v,w\}\in E(G)}{w\in V(G)}}\chi_{\{v,w\}}^G+\sum_{\underset{\{v,w\}\notin E(G)}{w\in V(G)}}\chi_{\{v,w\}}^G = \deg(v) + 0 = \deg(v)$.
+\end{proof}
+\begin{theorem}
+The vertices of isomorphic graphs have the same degree.
+\end{theorem}
+\begin{proof}
+For let $G$ and $H$ be isomorphic with isomorphism $f$ and define $\chi_{\{v,w\}}^G = \begin{cases} 0 & \{v,w\} \notin V(G) \\ 1 & \{v,w\} \in V(G) \end{cases}$. Then $\deg(v) = \sum_{\underset{v\ne w}{w\in V(G)}}\chi_{\{v,w\}}^G =\sum_{\underset{v\ne w}{w\in V(G)}}\chi_{\{f(v),f(w)\}}^H = \deg(f(v))$. Thus, $\deg(v) = \deg(f(v))$.
+\end{proof}
+\begin{lemma}
+Define  $\chi_{\{v,w\}}^G = \begin{cases} 0 & \{v,w\} \notin V(G) \\ 1 & \{v,w\} \in V(G) \end{cases}$. Then $\chi_{\{v,w\}}^{G^C} = |1-\chi_{\{v,w\}}^G|$
+\end{lemma}
+\begin{proof}
+From the definition, $\chi_{\{v,w\}}^{G^C} = \begin{cases} 0 & \{v,w\} \notin V(G^C) \\ 1 & \{v,w\} \in V(G^C) \end{cases}$. But if $\{v,w\} \in V({G^C})$, then $\{v,w\}\notin V(G)$, and thus $\chi_{\{v,w\}}^G = 0$, $\chi_{\{v,w\}}^{G^C} = 1$. By reversing this argument we set that $\chi_{\{v,w\}}^{G} = 1$ when $\chi_{\{v,w\}}^{G^C} = 0$. The result immediately follows.
+\end{proof}
+\begin{corollary}
+If $G$ is a graph with $n$ vertices and $v$ is a vertex, then the sum of the degree of $v$ in $G$ and $G^C$ is $n-1$.
+\end{corollary}
+\begin{proof}
+This is because $\deg(v)_G+\deg(v)_{G^C} = \sum_{\underset{v\ne w}w\in V(G)}\chi_{\{v,w\}}^G + \sum_{\underset{v\ne w}{w\in V(G^C)}}\chi_{\{v,w\}}^{G^C} = \sum_{\underset{v\ne w}{w\in V(G)}} 1$. As there are $n-1$ elements of $V(G)$ not equal to $v$, we have that the sum is $n-1$.
+\end{proof}
+\begin{theorem}
+Graphs $G$ and $H$ are isomorphic if and only if $G^C$ and $H^C$ are isomorphic.
+\end{theorem}
+\begin{proof}
+For let $f:G\rightarrow H$ be an isomorphic function and suppose $\{v,w\}\notin E(G)$. Then, as $f$ is an isomorphism from $G$ to $H$, $\{f(v),f(w)\}\notin E(H)$. Thus, $\{v,w\}\in G^C$ and $\{f(v),f(w)\}\in H^C$. Similarly for any pair $\{V,W\}\in E(H^C)$, $\{f^{-1}(V),f^{-1}(W)\} \in E(G^C)$. Thus, $f^{-1}:G^C \rightarrow H^C$ is an isomorphism. Therefore if $G\cong H$, then $G^C \cong H^C$. By an identical argument, the converse is true.
+\end{proof}
+\begin{definition}
+If all pairs of vertices are adjacent, then the graph is called complete. The complete graph of $n$ vertices is denoted $K_n$. $K_1$ is called the trivial graph of one point.
+\end{definition}
+\begin{definition}
+The empty graph on $n$ vertices is the graph in which $|V(G)| = n$ and $|E(G)| = 0$. That is, it is the graph that has no connections and no two vertices are adjacent.
+\end{definition}
+\begin{corollary}
+For any $n\in \mathbb{N}$, $(K_n)^C$ is the empty graph on $n$ vertices.
+\end{corollary}
+\begin{proof}
+For $K_n$ contains all possible edges, and therefore $(K_n)^C$ contains no edges. But this is merely the empty graph on $n$ vertices.
+\end{proof}
+\begin{corollary}
+The degree of any vertex of a $K_n$ graph is $n-1$.
+\end{corollary}
+\begin{proof}
+For $\deg(v)_{K_n} + \deg(v)_{K_n^c}=n-1$ and $\deg(v)_{K_n^c} = 0$. Therefore, etc.
+\end{proof}
+\begin{corollary}
+For any graph $G$ of $n$ vertices, $|E(G)|\leq \frac{n^2-n}{2}$.
+\end{corollary}
+\begin{proof}
+For suppose $G$ is a complete graph $K_n$. Then $\sum_{v\in V(G)}\deg(v) = n(n-1) = 2|E(G)| \Rightarrow |E(G)| = \frac{n^2-n}{2}$. If $G$ is not the complete graph $K_n$, then it has fewer edges than $K_n$ and the $|E(G)| <|E(K_n)|= \frac{n^2-n}{2}$. Thus, for and arbitrary graph of $n$ elements, $|E(G)|\leq \frac{n^2-n}{2}$.
+\end{proof}
+\begin{definition}
+A graph is called regular if all of its vertices have the same degree. If the common degree is $k$, $G$ is called $k$-regular.
+\end{definition}
+\begin{corollary}
+$G$ is regular if and only if $G^C$ is regular. 
+\end{corollary}
+\begin{proof}
+For let $G$ be $k$-regular and suppose $G$ has $n$ vertices. Then given $v$ in $G^C$, it must have $n-1-k$ edges as $\deg(v)_G + \deg(v)_{G^C} = n-1$. But as $v$ is arbitrary, all vertices must have $n-1-k$ edges. Thus $G^C$ is $n-k-1$ regular
+\end{proof}
+\begin{corollary}
+$k$-regular graphs of odd degree have an even number of vertices.
+\end{corollary}
+\begin{proof}
+Suppose not and let $G$ be a $k$-regular graph with $n$ vertices, where $k$ and $n$ are odd. Then $\sum_{v\in V(G)}\deg(v) = 2|E(G)|$ from the handshaking theorem, and is thus even. But if $\sum_{v\in V(G)}\deg(v) = n\cdot k$, which is odd. A contradiction.
+\end{proof}
+\begin{definition}
+The degree sequence of a graph $G$ is a sequence of degrees of vertices of the graph in descending order.
+\end{definition}
+\begin{theorem}
+The degree sequence of a graph $G$ must contain a repeated degree.
+\end{theorem}
+\begin{proof}
+For suppose $G$ has $n$ vertices. Then $\max\{\deg(v)\} = n-1$. Thus, the range of degrees is $0$ to $n-1$. If there is no vertex with degree zero, then there are $n$ vertex and $n-1$ possible degrees, and therefore there must be at least one repeat. If there is a vertex with degree zero, then none of the vertices can have degree $n-1$. Thus the range of the vertices is $0$ to $n-2$. Thus there must be a repeat. 
+\end{proof}
+\begin{theorem}
+There exists graphs with the same degree sequence that are not
+isomorphic.
+\end{theorem}
+\begin{proof}
+For let $G$ be the graph consisting of two triangles, with no edge joining either of them. That is, $u_1\rightarrow u_2 \rightarrow u_3\rightarrow u_1$, and $u_4\rightarrow u_5 \rightarrow u_6 \rightarrow u_4$. The degree sequence is $2,2,2,2,2,2$. Take the hexagon as $H$, $v_1\rightarrow v_2 \rightarrow \hdots \rightarrow v_6 \rightarrow v_1$. $H$ and $G$ cannot be isomorphic for if they were we have that there is an edge between the two triangles in $G$. As no such edge exists, there is no isomorphism.
+\end{proof}
+\begin{definition}
+A $u-v$ walk is a sequence of vertices and edges beginning at $u$ and ending at $v$ such that vertices and edges alternate and each edge is incident with the vertices preceding and following it. We denote a walk by the vertices, as the edges are implied.
+\end{definition}
+\begin{definition}
+A closed walk begins and ends at the same vertex.
+\end{definition}
+\begin{definition}
+The length of a walk is the number of edges traversed. If an edge is traversed more than once, each time is counted.
+\end{definition}
+\begin{definition}
+A trail is a walk in which no edge is traversed more than once.
+\end{definition}
+\begin{definition} A circuit is a closed trail.
+\end{definition}
+\begin{definition}
+A path is a trail in which no vertex is repeated.
+\end{definition}
+\begin{definition}
+The shortest $u-v$ path is called a geodesic.
+\end{definition}
+\begin{definition}
+The length of a geodesic from $u$ to $v$ is called the distance between $u$ and $v$. It is denoted $d(u,v)$.
+\end{definition}
+\begin{definition}
+A graph that contains a pair of vertices with no path between them is called disconnected.
+\end{definition}
+\begin{definition}
+A graph that is not disconnected is called connected.
+\end{definition}
+\begin{corollary}
+If $G$ is a connected graph and $u$ and $v$ are points in $G$, then there is a path between them.
+\end{corollary}
+\begin{proof}
+For suppose not. But if there is no such path, then $G$ is disconnected, a contradiction. Therefore, etc.
+\end{proof}
+\begin{definition}
+A connected component of a graph is a subgraph such that every pair of vertices has a path between them.
+\end{definition}
+\begin{theorem}
+If $G$ is a graph, then either $G$ is connected or $G^C$ is connected, or both. 
+\end{theorem}
+\begin{proof}
+If both $G$ and $G^C$ are connected, we are done. Suppose $G$ is not connected. Then there are two elements $u$ and $v$ such that there is no path from $u$ to $v$. Then $\{u,v\}\in E(G^C)$. Let $r$ be any arbitrary point in $G$. Now either there is a path from $r$ to $v$, there is a path from $r$ to $u$, or there is a path to neither. There can not be a path to both as this would imply $u$ and $v$ are connected, but they are not. Thus in $G^C$ there must be an edge from $u$ to $r$ or $v$ to $r$, and as $u$ and $v$ are connected in $G^C$, $r$ must be connected to both vertices as well. But $r$ is arbitrary. Thus $G^C$ is connected.
+\end{proof}
+\begin{definition}
+A path on $n$ vertices is denoted $P_n$.
+\end{definition}
+\begin{corollary}
+If $G = P_n$, for some $n\in \mathbb{N}$, then the longest geodesic has length $n-1$.
+\end{corollary}
+\begin{proof}
+Let $G=P_n$ with vertices $v_k$, $k=1,2,\hdots, n$ and edges $\{v_k,v_{k+1}\}$, for $k=1,2,\hdots n-1$. First we show that such a geodesic starts and ends at the endpoints of $P_n$. For suppose not, and let such a geodesic begin at $v_k$. As paths retrace neither edges nor vertices, the next vertex is either $v_{k+1}$ or $v_{k-1}$. Suppose it is $v_{k+1}$. Suppose this geodesic terminates at $v_{k+N} \ne v_{n}$. But then the geodesic from $v_{k}$ to $v_{n}$ is longer than $v_{k+N}$. And similarly the geodesic from $v_1$ to $v_n$ is longer the geodesic from $v_k$ to $v_n$. Thus, the longest geodesic starts and ends at the endpoints of $P_n$. Next we compute the length of this geodesic. But as there are $n$ vertices, there are $n-1$ edges from $v_1$ to $v_n$, and thus the length is $n-1$.
+\end{proof}
+\begin{definition}
+The diameter of a connected graph is the length of the longest geodesic. That is, if $G$ is a connected graph, then the diameter of $G$ is $\max\{d(u,v): u,v\in V(G)\}$. The diameter is denoted $d(G)$.
+\end{definition}
+\begin{corollary}
+The two definitions of the previous definition are equivalent.
+\end{corollary}
+\begin{proof}
+For let $G$ be a connected graph and suppose the length of the longest geodesic is $d(G)\in \mathbb{N}$. Then for any such $u,v\in V(G)$, $d(u,v) \leq d(G)$, for if $d(u,v)> d(G)$ then the geodesic from $u$ to $v$ would be longer than $d(G)$, a contradiction. Thus the diameter is $\max\{d(u,v):u,v\in V(G)\}$. Now suppose $d(G) = \max\{d(u,v):u,v \in V(G)\}$. Suppose there is a geodesic from points $p$ and $q$ that is longer than $d(G)$. But then $d(p,q)>\max\{d(u,v):u,v\in V(G)\}$. A contradiction. Thus the diameter is the longest geodesic.
+\end{proof}
+\begin{corollary}
+For $n>1$, the diameter of any $K_n$ graph is $1$.
+\end{corollary}
+\begin{proof}
+If $n=1$, then $d(K_1) = 0$, as there are no geodesics in the graph. Thus, suppose $n>1$ and let $u$ and $v$ be arbitrary vertices of $K_n$. Then $d(u,v)=1$, as $K_n$ is a complete graph and thus there exists an edge between $u$ and $v$. But $u$ and $v$ are arbitrary. Thus $\max\{d(u,v):u,v\in V(G)\} = 1$. Therefore $d(K_n) = 1$.
+\end{proof}
+\begin{corollary}
+The diameter of any $P_n$ graph is $n-1$.
+\end{corollary}
+\begin{proof}
+For the diameter is the longest geodesic, and from corollary 1.10 this is $n-1$. Thus $d(P_n) = n-1$.
+\end{proof}
+\begin{corollary}
+For any connected graph $G$ where $|V(G)| = n$, $d(G) \leq n-1$.
+\end{corollary}
+\begin{proof}
+For let $G$ be a graph on $n$ vertices. Suppose $d(G)>n-1$. But as there are only $n$ elements, a path of length greater than $n-1$ must traverse some vertex more than once. But then this is not a path, and thus not a geodesic. So there is no geodesic of length greater than $n-1$. Thus $d(G)\leq n-1$.
+\end{proof}
+\begin{theorem}
+If a walk contains no repeated vertex, then it contains no repeated edge.
+\end{theorem}
+\begin{proof}
+Suppose not. Let $uv$ be an edge that is repeated. Then both $u$ and $v$ must be repeated, a contradiction. Thus if no edge is repeated, no edge is repeated.
+\end{proof}
+\begin{corollary}
+The degree sequence of $P_n$ is $1,1,2,\hdots, 2$. There are two $1's$, and $n-2$ $2's$.
+\end{corollary}
+\begin{proof}
+For if $v\in V(P_n)$ is an endpoint, then $\deg(u) = 1$. If not, then $\deg(u) = 2$. As there are only two endpoints, there must be $n-2$ vertices that are not endpoints. Thus the degree sequence is $1,1,2,\hdots,2$.
+\end{proof}
+\begin{corollary}
+The degree sequence of $K_n$ is $n-1,n-1,\hdots, n-1$.
+\end{corollary}
+\begin{proof}
+For given a point in $K_n$, there is an edge from $u$ to every other vertex in $K_n$. Thus there are $n-1$ such edges from such 
+a vertex, and therefore $\deg(u) = n-1$. As $u$ is arbitrary, for each $u\in V(K_n)$, $\deg(u) = n-1$. Thus the degree sequence is $n-1,n-1,\hdots, n-1$.
+\end{proof}
+\begin{definition}
+A cycle is a closed trail in which no vertex is repeated, with the the exception of the first vertex. That is, a cycle is a trail with one and only one repeated vertex (The start/end point).
+\end{definition}
+\begin{remark}
+A cycle is sometimes called a closed path.
+\end{remark}
+\begin{corollary}
+$2-regular$ graphs form cycles.
+\end{corollary}
+\begin{proof}
+For suppose there are $n$ vertices, and label them $v_1,\hdots, v_n$. As $\deg(v_1)=2$, there must be two vertices connected to it, let $v_2$ be such a vertex. Again, as $\deg(v_2)=2$ there must be two vertices connected to it. But $v_1$ is one such vertex, let $v_3$ be another. Continue in the manner until $v_n$. $v_n$ is connected to $v_{n-1}$, and for all $k=2,3,\hdots, n-1$, there are already two connections. Thus, $v_n$ must be adjacent to $v_1$. But this is a cycle. Therefore, etc.
+\end{proof}
+\begin{definition}
+A cycle on $n$ vertices is denoted $C_n$.
+\end{definition}
+\begin{remark}
+$C_3$ is usually called a triangle.
+\end{remark}
+\begin{corollary}
+For $n>2$, the degree sequence of $C_n$ is $2,2,\hdots, 2$.
+\end{corollary}
+\begin{proof}
+For given a point $u\in V(C_n)$, there are 2 edges incident to $u$, and thus $\deg(u) = 2$. But $u$ is arbitrary, and thus for any $u\in V(C_n)$, $\deg(u) = 2$. The degree sequence is therefore $2,2,\hdots, 2$.
+\end{proof}
+\begin{theorem}
+For a $C_n$ graph, $n>2$, $d(C_n) = \frac{n}{2}$ if $n$ is even, and $\frac{n-1}{2}$ is $n$ is odd.
+\end{theorem}
+\begin{proof}
+For suppose $n$ is odd and let $u$ be an arbitrary point in a $C_n$ graph. Then, for $v\ne u$ there are two independent paths $uu_1\hdots u_k v$ and $vu_{k+1}\hdots u_{n-2}u$. The length of the first being $k+1$ and the length of the second being $n-k-1$, the geodesic being the smaller of the two. When $k= \frac{n-3}{2}$ we have $k+1 = \frac{n-1}{2}$ and $n-k-1 = \frac{n+1}{2}$. When $k=\frac{n-1}{2}$ we have $k+1 = \frac{n+1}{2}$ and $n-k-1 = \frac{n-1}{2}$. Thus, the geodesic maximized at either of these points and is equal to $\frac{n-1}{2}$. As $u$ is arbitrary, $d(G) = \frac{n-1}{2}$. A similar argument follows when $n$ is even.
+\end{proof}
+\begin{definition}
+A graph that is isomorphic to its complement is called self-complementary.
+\end{definition}
+\begin{theorem}
+If $C_n$ is a cycle on n points, and $(C_n)^C$ is a cycle on $n$ points, then $n = 5$.
+\end{theorem}
+\begin{proof}
+For suppose $n=3$. Then $C_n = K_n$, and thus $(C_n)^C$ is the empty graph, and thus not a cycle. If $n = 4$, then given a vertex $u\in V(C_4)$ there is one and only one vertex $v$ such that $\{u,v\} \notin E(C_4)$. Thus $\{u,v\}$ is the only edge containing both $u$ and $v$ in $E((C_4)^C)$, thus $(C_4)^C$ is disconnected and therefore not a cycle. For $n=5$, $C_5$ and $(C_5)^C$ are both cycles. Given $n>5$, the degree of any point in $C_{n}$ is $2$, but the degree of any point in $(C_n)^C$ is $n-3$ as $\deg(u)_G + \deg(u)_{G^c} = n-1$. But then for $n>5, \deg(u)_{u\in (C_n)^C} > 2$ and thus cannot be a cycle. $C_5$ is the only cycle such that $(C_n)^C$ is also a cycle.
+\end{proof}
+\begin{theorem}
+Every circuit contains a cycle.
+\end{theorem}
+\begin{proof}
+For let $G$ be a circuit with $n$ vertices. If no vertices are repeated, with the exception of the starting point, then this is a cycle and we are done. Let the circuit be denoted by listing the vertices $v_1 \rightarrow v_n$. If a vertex is repeated in this sequence, remove all points in between. That is, if the sequence is $v_1,\hdots, v_k,\hdots, v_k, \hdots$, remove all of the points that lie between $v_k$ and itself. Our new sequence is $v_1, \hdots, v_k, \hdots$. Continue this refinement until we have returned to $v_1$ (Which will eventually happen as this is a circuit). Any point on this newly developed circuit is crossed once and only once from the refinement. But then this is a cycle.
+\end{proof}
+\begin{theorem}
+Every circuit is either a cycle or contains two cycles in it.
+\end{theorem}
+\begin{proof}
+Let $G$ be a proper circuit. That is, at least one vertex is repeated. Suppose this is $v_k$. Let the sequence of points traversed be listed as $v_1,\hdots, v_k, \hdots,v_k, \hdots, v_n$. Consider all of the points that lie between $v_k$ and itself. If we repeated the refinement done on the entire circuit from the previous theorem on just this subgraph, we again obtain a cycle. This cycle is different from the original one obtained as it contains edges not on the original. Thus, there are at least two cycles.
+\end{proof}
+\begin{definition}
+Two $u-v$ paths are said to be independent if the only common vertices are $u$ and $v$.
+\end{definition}
+\begin{theorem}
+If $u$ and $v$ are vertices that lie in the same cycle of some graph $G$, then there are at least 2 independent $u-v$ paths.
+\end{theorem}
+\begin{proof}
+For let $u$ and $v$ lie in the cycle $vv_1 \hdots v_k u v_{k+1}\hdots v_n v$. Then the path $v v_1 \hdots v_k u$ is a $u-v$ path, and the path $u v_{k+1} \hdots v_n v$ is a $u-v$ path, and moreover they are independent as the only common points are $u$ and $v$. And $u$ and $v$ are arbitrary points in the cycle. Thus every pair of vertices in the same cycle have at least two independent paths.
+\end{proof}
+\begin{definition}
+A connected graph without cycles is called a tree.
+\end{definition}
+\begin{definition}
+An $(n,e)$ connected graph is a graph on $n$ vertices with $e$ edges.
+\end{definition}
+\begin{theorem}
+If $u$ and $v$ are vertices of a tree, then there is only one $u-v$ path.
+\end{theorem}
+\begin{proof}
+Let $u$ and $v$ be points on a tree. As a tree is connected, there is at least one $u-v$ path. Suppose there is another. Let $a$ be the first point where the two paths diverge (This must happen at least once as the paths are not equal) and let $b$ be the first point where the paths converge (This must happen at least once as both paths end at the same point). But then there are two independent paths from $a$ to $b$, and thus a cycle. But trees do not have cycles. Therefore, etc.
+\end{proof}
+\begin{corollary}
+A tree with more than one point contains at least two elements with degree $1$.
+\end{corollary}
+\begin{proof}
+For let $G$ be a tree and $u,v\in G$ such that $d(u,v) = d(G)$. Then $\deg(u) = \deg(v) = 1$. For suppose not. Let $w$ be a point such that $vw\in E(G)$ but not on the path between $u$ and $v$. Then the only path between $u$ and $w$ contains the entirety of the $uv$ path, as there is only one path between two points in a tree. But then $d(u,w)>d(u,v)$, a contradiction. Thus the point $w$ does not exist and $\deg(v)=1$. Similarly, $\deg(u)=1$.
+\end{proof}
+\begin{corollary}
+The longest geodesic on a tree starts and ends at endpoints.
+\end{corollary}
+\begin{proof}
+For given any two points on a tree that are not endpoints we may append to them adjacent points and construct a longer geodesic. Thus, the longest such geodesic starts and ends at endpoints.
+\end{proof}
+\begin{lemma}
+A graph with $n$ vertices and $e$ edges has at least $n-e$ connected components (Or at least 1 if $n<e$).
+\end{lemma}
+\begin{proof}
+Let $G$ be a graph with $n$ vertices, and keep $n$ fixed throughout. We prove by induction on $e$. If $e=0$, there are $n$ connected components. Let $0<e < n$. By hypothesis there are at least $n-e$ connected components. If $u$ and $v$ are not adjacent and lie in the same connected component, then the new graph formed by appending $uv$ to $E(G)$ still has at least $n-e$ connected components. Let $u$ be in one and $v$ in another. If we Append to $E(G)$ the edge $uv$ then there $e+1$ edges at least $n-(e+1)$ connected components. Therefore, etc.
+\end{proof}
+\begin{corollary}
+A connected graph on $n$ vertices has at least $n-1$ edges.
+\end{corollary}
+\begin{proof}
+For the number of connected components $N$ of any graph with $n$ vertices and $e$ edges is at least $n-e$. That is $N\leq n-e$. But $N=1$ for connected graphs, so $n-e\leq 1 \Rightarrow n-1\leq e$.
+\end{proof}
+\begin{theorem}
+If a tree has $n$ vertices, it has $n-1$ edges.
+\end{theorem}
+\begin{proof} For as a tree is connected, there must at least be $n-1$ edges. If there are more than $n-1$ edges, then there must be a cycle as $\sum_{v\in V(G)} \deg(v) = 2e \geq 2n\Rightarrow e\geq n$. Thus, $e=n-1$. 
+\end{proof}
+\begin{definition}
+An induced subgraph $H$ of a graph $G$ is a set of vertices $V(H) \subset V(G)$ such that for all $u,v\in V(H)$ if $uv\in E(G)$ then $uv \in E(H)$.
+\end{definition}
+\begin{remark}
+That is, the induced subgraph is the graph produced by deleting points and only deleting the edges incident on said points.
+\end{remark}
+\begin{definition}
+If $H$ is a subgraph of $G$ and $V(H)=V(G)$, the $H$ is called a spanning graph of $G$.
+\end{definition}
+\begin{definition}
+If $H$ is a spanning graph of $G$ and $H$ is a tree, then it is called a spanning tree of $G$.
+\end{definition}
+\begin{corollary}
+The induced spanning subgraph of any graph $G$ is $G$.
+\end{corollary}
+\begin{proof}
+Let $H$ be an induced spanning subgraph of some graph $G$. As $H$ is a spanning graph, $V(H)=V(G)$. But as $H$ is an induced subgraph, $E(H)=E(G)$. But then $H=G$.
+\end{proof}
+\begin{theorem}
+All of the spanning trees of $C_n$ are isomorphic to each other.
+\end{theorem}
+\begin{proof}
+For let $C_n$ be the graph characterized by the walk $v_1\hdots v_n$ ($v_1$ and $v_n$ are adjacent). The spanning tree is produced by removing one and only one edge. Let one tree be the removal of $v_{k}v_{k+1}$ and another be $v_{j}v_{j+1}$. Define the isomorphism $f$ as $f(v_l) = v_{k-j+l \mod(n)}$. Then if $l=j+1$, $f(v_{j+1}) = v_{k+1}$, and thus is adjacent only to $f(v_{j+2 \mod(n)}) = v_{k+2\mod(n)}$. If $l=j$, then $f(v_j) = v_k$ and thus is only adjacent to $f(v_{j-1}\mod(n)) = v_{k-1}\mod(n)$. This is an isomorphism.
+\end{proof}
+\begin{remark}
+The isomorphism described above has the effect of "Rotating," one spanning tree to match the other.
+\end{remark}
+\begin{theorem}
+Disconnected sets do not have spanning trees.
+\end{theorem}
+\begin{proof}
+For let $G$ be a disconnected graph and suppose $u,v\in G$ are such that no path lie between them. Suppose $G$ has a spanning tree $H$ where $V(H)=V(G)$. Then, as $H$ is a tree, there is a path from $u$ to $v$. But as $E(H)\subset E(G)$, then there is a path from $u$ to $v$ in $G$, a contradiction. Therefore, etc.
+\end{proof}
+\begin{theorem}
+Given an $(n,e)$ connected graph $G$, the spanning tree of $G$ is a deletion of $e-n+1$ edges.
+\end{theorem}
+\begin{proof}
+For the number of edges in a tree is $n-1$, then $e-x = n-1$, where $x$ is the number of edges that are to be deleted. Solving for this yields $x=e-n+1$.
+\end{proof}
+\begin{definition}
+In a graph $G$, a bridge is an edge in $E(G)$ that is not contained in a cycle.
+\end{definition}
+\begin{corollary}
+Every edge of a tree is a bridge.
+\end{corollary}
+\begin{proof}
+For as trees contain no cycles, no edge lies within a cycle, and thus every edge is a bridge.
+\end{proof}
+\begin{corollary}
+If every edge of a graph $G$ is a bridge, then $G$ is a tree.
+\end{corollary}
+\begin{proof}
+For suppose not. Suppose $G$ contains a cycle in it. Then there is an edge contained within a cycle, and therefore an edge that is not a bridge. But every edge is a bridge, a contradiction. Therefore, etc.
+\end{proof}
+\begin{theorem}
+If $G$ is a connected graph with at least one cycle, then there exists a spanning tree.
+\end{theorem}
+\begin{proof}
+Let $G$ be a connected graph and let $v_1 \rightarrow v_n\rightarrow v_1$ be a cycle. Remove any edge in this cycle. The resulting subgraph is still connected, for given a point $u$ and a point $v$, either their geodesic contains the removed edge or it doesn't. If it doesn't, we are done. If not, there is another path from $u$ to $v$ as every cycle has two independent paths between all of its points. Thus $u$ and $v$ are still connected. As $u$ and $v$ are arbitrary, the graph $G$ is still connected. But now $v_1\rightarrow v_n \rightarrow v_1$ is no longer a cycle. For all other cycles, remove a single edge. The resulting subgraph is still connected. But then this final subgraph is a spanning graph containing no cycles and is connected, and is thus a spanning tree.
+\end{proof}
+\begin{corollary}
+If $G$ is a connected graph with at least one cycle, then it has more than one spanning tree.
+\end{corollary}
+\begin{proof}
+In the construction above, in any given cycle remove a different edge to obtain a new spanning tree.
+\end{proof}
+\begin{theorem}
+Given a graph $G$, an edge of $G$ is a bridge if and only if its deletion increases the number of components of $G$.
+\end{theorem}
+\begin{proof}
+For suppose the deletion of some edge $uv$ increases the number of components of $G$. Then $uv$ can not be the member of a cycle, otherwise there would be a second independent path from $u$ to $v$, and thus $u$ and $v$ would lie in the same component. Thus $uv$ is a bridge. Suppose $uv$ is an edge in $G$. Then if deleted, $u$ and $v$ would lie in two different components as otherwise $uv$ would be a cycle, but it is not. Thus the deletion of a bridge creates two new components.
+\end{proof}
+\begin{corollary}
+If $G$ is a connected graph and $v\in V(G)$ does not lie in a cycle, then the degree of $v$ in any spanning tree of $G$ is $\deg(v)$.
+\end{corollary}
+\begin{proof}
+It suffices to show that for any spanning tree of $G$, no edge incident on $v$ is removed. Let $u$ be some adjacent vertex. Then $uv$ is a bridge, for if not then it is contained in a cycle and thus $v$ is contained in a cycle, but it is not. Thus the deletion of $uv$ creates two connected components, and thus no spanning tree may be obtained. Thus, no edges may be deleted from $v$ in a spanning tree of $G$.
+\end{proof}
+\begin{theorem}
+Given a $K_n$ graph, there exists a $P_n$ spanning tree.
+\end{theorem}
+\begin{proof}
+For let $G$ be a $K_n$ graph and let $v\in V(G)$ be arbitrary. Let $u\ne v$ be arbitrary, and remove from $v$ all edges other than $uv$. The edge $uv$ exists as $G$ is complete. From $u$, let $w\ne u, w\ne v$ be arbitrary and remove from $u$all edges other than $uv$ and $uw$. Continue in this manner until the last vertex. The degree of every vertex is $2$, with the exception of $v$ and the last vertex, who have degree $1$. Thus, this is a $P_n$ graph.
+\end{proof}
+\begin{definition}
+The eccentricity of a vertex $v$ of a connected graph $G$ is the maximum value of $d(v,x)$ for all vertices $x\in V(G)$. It is denoted $e(v)$.
+\end{definition}
+\begin{definition}
+The center of a graph $G$ is the set of vertices $v\in G$ such that $e(v) \leq e(w)$ for all $w\in G$. This set is denoted $C(G)$.
+\end{definition}
+\begin{definition}
+The eccentricity of the center of a graph $G$ is called the radius of $G$, denoted $r(G)$.
+\end{definition}
+\begin{corollary}
+$\max\{e(v):v\in G\}= d(G)$.
+\end{corollary}
+\begin{proof}
+For $\max\{e(v):v\in G\} = \max\{d(v,x), x\in G:v\in G\} = d(G)$.
+\end{proof}
+\begin{corollary}
+The center of a $P_n$ graph $v_1\rightarrow v_n$ is $\{v_\frac{n}{2}\}$ if $n$ is even, and $\{v_{\frac{n-1}{2}},v_{\frac{n+1}{2}}\}$ if $n$ is odd.
+\end{corollary}
+\begin{proof}
+For $\max\{d(v_k,x):x\in G\} = \min\{n-k,k\}$. This is minized, when $n$ is even, for $k= \frac{n}{2}$, and is minimized for odd $n$ when $k=\frac{n\pm 1}{2}$.
+\end{proof}
+\begin{corollary}
+There exists graphs $G$ such that every element $v\in V(G)$ is also in $C(G)$.
+\end{corollary}
+\begin{proof}
+For let $G$ be a $K_n$ graph. Then $e(v) = 1$ for all $v\in V(G)$, and thus $C(G) = V(G)$.
+\end{proof}
+\begin{corollary}
+The eccentricities of all vertices within a tree that are not themselves endpoints are lowered by 1 if all endpoints of the tree are removed.
+\end{corollary}
+\begin{proof}
+For let $G$ be a tree, $v\in G$, and suppose $v$ is not an endpoint. Then $d(v,u)$ is maximized at an endpoint $x$. Thus removing all endpoints from $G$ reduces $e(v)$. Moreover, it does so by $1$, for the $d(v,u)$ will now be maximized at a point adjacent to $x$.
+\end{proof}
+\begin{theorem}[Jordan's Center Theorem]
+The center of a tree consists either of $1$ point of $2$.
+\end{theorem}
+\begin{proof}
+Let $G$ be a tree. Remove the endpoints from $G$ to create the subgraph $G'$. This is again a tree. From $G'$, remove the endpoints to create the subgraph $G''$. Continuing in the fashion we are left either with two adjacent points of equal eccentricity or with one point. Thus, the center contains either $1$ point or $2$.
+\end{proof}
+\begin{lemma}
+For a connected graph, $r(G) \leq d(G)$.
+\end{lemma}
+\begin{proof}
+For $r(G) = \min\{\max\{d(x,v):x\in G\} v\in G\} \leq \max\{d(x,v):x,v\in G\}=d(G)$.
+\end{proof}
+\begin{theorem}
+For any connected graph, $r(G) \leq d(G) \leq 2r(G)$.
+\end{theorem}
+\begin{proof}
+From the lemma, $r(G) \leq d(G)$. Let $u,v\in G$ be such that $d(u,v)=d(G)$ and let $w\in G$ be such that $e(w) = r(G)$. As $G$ is connected, $d(u,w)$ and $d(v,w)$ exists. But then $d(u,v)\leq d(u,w)+d(v,w) \leq r(G)+r(G)=2r(G)$. Thus, $r(G)\leq d(G)\leq 2r(G)$.
+\end{proof}
+\begin{corollary}
+There exists graphs $G$ such that $r(G) = d(G)$.
+\end{corollary}
+\begin{proof}
+For consider $G=P_2$. Then $r(G) = d(G) = 2$.
+\end{proof}
+\begin{corollary}
+There exists graphs $G$ such that $d(G) = 2r(G)$.
+\end{corollary}
+\begin{proof}
+For consider $G=P_5$. Then $d(G) = 2r(G) = 4$.
+\end{proof}
+\begin{definition}
+A graph $G$ is said to be bipartite if and only if there are two sets $V_1$ and $V_2$ such that $V(G) = V_1\cup V_2$ where $V_1\cap V_2 = \emptyset$, and if $uv \in E(G)$, then $u$ and $v$ are not both contained in one of the $V_i$.
+\end{definition}
+\begin{theorem}
+Every tree is bipartite.
+\end{theorem}
+\begin{proof}
+For let $G$ be a tree and $v\in G$ be an endpoint. Add $v$ to the set $V_1$. The vertex adjacent to $v$, call it $u$, append to $V_2$. For all element adjacent $u$ append to $V_1$. Continue in such a manner, oscillating between $V_1$ and $V_2$, until all elements are in either $V_1$ or $V_2$. Then $V_1 \cap V_2 = \emptyset$ and $V_1 \cup V_2 = V(G)$.
+\end{proof}
+\begin{theorem}
+$C_n$ is bipartite if and only if $n$ is even. 
+\end{theorem}
+\begin{proof}
+Let $G=C_n$, $n$ be even, and let $v_1\rightarrow v_n$ be a path on $n$ points in $C_n$. Append $v_1$ to $V_1$, $v_2$ to $v_2$, and so on. Then odd numbers are in $V_1$ and even numbers are in $V_2$, so $V_1\cup V_2 = V(G)$ and $V_1 \cap V_2 = \emptyset$. But as $n$ is even, $v_n \in V_2$. Thus, $v_1 v_n \in E(G)$ and $v_1$ and $v_n$ are not in the same partition of $V(G)$. Thus $C_n$ is bipartite. Now suppose $C_n$ is bipartite and suppose $n$ is odd. Let $v_1 \rightarrow v_n$ be a path on the $n$ points. Suppose $v_1 \in V_1$. Then $v_2 \in V_2$, and $v_n \in V_2$. But as $v_n$ is odd, $v_{n} \in V_1$, a contradiction. Thus if $C_n$ is bipartite, then $n$ is even.
+\end{proof}
+\begin{definition}
+If $G$ is a bipartite graph partition by $V_1$ and $V_2$, where $|V_1| = n$ and $|V_2| = m$, and if ever element of $V_1$ is adjacent to every element of $V_2$, then $G$ is called complete and is denoted $K_{n,m}$.
+\end{definition}
+\begin{corollary}
+$r(K_{1,n}) = 1$.
+\end{corollary}
+\begin{proof}
+For let $v\in V_1$ be the unique point. As $K_{1,n}$ is complete, every element of $V_2$ is adjacent to $V$. Thus, $e(v) = 1$. Therefore, $r(K_{1,n}) =1$.
+\end{proof}
+\begin{corollary}
+$C(K_{1,n})$ is the unique element of $V_1$.
+\end{corollary}
+\begin{proof}
+For if $v\in V_1$, then $e(v) = 1 = r(K_{1,n})$.
+\end{proof}
+\begin{corollary}
+$d(K_{1,n})=2$ for $n>1$.
+\end{corollary}
+\begin{proof}
+For let $v\in V_1$ be the unique point in $V_1$, and let $u_1$ and $u_2 \in V_2$ be arbitrary. Then $u_1$ and $u_2$ are not adjacent, and thus the only path between them is $u_1 v u_2$. Thus, $d(u_1,u_2) = 2$. But $u_1$ and $u_2$ are arbitrary. Thus, $d(K_{1,n}) = 2$.
+\end{proof}
+\begin{corollary}
+If $n\geq1$, $m> 1$ then $d(K_{m,n}) = 2$.
+\end{corollary}
+\begin{proof}
+For let $G=K_{m,n}$, $n\geq1$, $m> 1$. If $u\in V_1$ and $v\in V_2$, then $d(u,v) = 1$. If $u,v\in V_1$, then, for any $w\in V_2$, $uwv$ is a path from $u$ to $v$, and thus $d(u,v) = 2$. Thus, $d(K_{n.m}) = 2$.
+\end{proof}
+\begin{corollary}
+If $n,m\geq 1$, then $r(K_{m,n}) = 1$.
+\end{corollary}
+\begin{proof}
+For $r(K_{n,m}) = \min\{ \max\{d(u,v):u\in G\}: v\in G\} = 1$ (That is, take $u\in V_1$ and $v\in V_2$, and thus $d(u,v)=1$).
+\end{proof}
+\begin{corollary}
+$K_{m,n}^C$ contains a $P_m$ and a $P_n$ graph.
+\end{corollary}
+\begin{proof}
+For let $u_1,\hdots, u_m$ be in $V_1$, and $v_1,\hdots v_n$ be in $V_2$. Then $u_1 \rightarrow u_m$ and $v_1 \rightarrow v_n$ are paths in $K_{m,n}^C$.
+\end{proof}
+\begin{theorem}
+$K_{m,n}^C$ is disconnected.
+\end{theorem}
+\begin{proof}
+For let $u\in V_1$ and $v\in V_2$ be arbitrary. As $K_{m,n}$ is complete, $uv$ is an edge and thus $uv$ is not an edge in $K_{m,n}^C$. But as $u$ and $v$ were arbitrarily chosen, $V_1$ and $V_2$ are disconnected components in $K_{m,n}^C$.
+\end{proof}
+\begin{theorem}
+A $K_{m,n}$ graph is a tree if and only if $n$ or $m$ is equal to $1$.
+\end{theorem}
+\begin{proof}
+For suppose $m=1$. Then there are no cycles in $K_{1,n}$, as let $v\in V_1$ and $u_1,u_2\in V_2$ be arbitrary. Then the only path between these points is $u_1 v u_2$, and therefore there can be no cycles. No suppose $K_{n,m}$ is a tree. Then $\sum_{v\in V(K_{m,n})}\deg(v) = 2e=2(m+n-1)$, as this is a tree, and $\sum_{v\in V(K_{m,n})}\deg(v) = 2nm$. Thus, $n+m-1=mn$, so $n(m-1)=m-1$, and therefore either $m=1$ or $n=1$.
+\end{proof}
+\begin{theorem}
+If $G$ is such that $|V(G)|=6$, then either $G$ or $G^C$ contains a triangle as a subgraph.
+\end{theorem}
+\begin{proof}
+Let $k$ be a vertex of $G$. Let $k$ be a point with at least $3$ adjacent vertices. If no such point exists, then it must exist in $G^C$ as $\deg(k)_G+\deg(k)_{G^C}=5$. Let $r,t$ and $s$ be the points adjacent to $k$. If any of them are adjacent to one another, then together with $k$ they form a triangle. If no, then $r,t,s$ are adjacent in $G^C$ and thus there is a triangle.
+\end{proof}
+\begin{corollary}
+If $G$ is a graph and $|V(G)|\geq 6$, then either $G$ or $G^C$ contains a triangle subgraph.
+\end{corollary}
+\begin{proof}
+For let $k\in G$ be a vertex with at least $3$ adjacent vertices. If no such point exists, then it must exist in $G^C$ as $\deg(k)_G+\deg(k)_{G^C} = n-1 \geq 5$. Let $r,t,s$ be such adjacent points. If any of them are also adjacent, we are done. If not, then they are adjacent in $G^C$ and we are done.
+\end{proof}
+\begin{theorem}
+There exists graphs on $5$ vertices such that neither the graph nor the complement contain a triangle.
+\end{theorem}
+\begin{proof}
+For let the vertices be labelled $(1),\hdots,(5)$. Consider the "House," $(1)(2)(3)(4)(5)(1)$. Its complement is the "Star," $(1)(3)(5)(2)(4)(1)$. Neither contain triangles.
+\end{proof}
+\begin{definition}
+A graph is called planar if and only if it can be drawn in the plane with no edges intersecting. A graph that is not planar is called non-planar.
+\end{definition}
+\begin{definition}
+If a planar graph is drawn in a manner without intersecting edges, it is called a plane graph.
+\end{definition}
+\begin{corollary}
+All graphs with fewer than $5$ edges are planar.
+\end{corollary}
+\begin{proof}
+For $K_4$ is planar, and thus all smaller graphs are. To show this, let $(1)(2)(3)$ be the edges of a triangle. Place the fourth point $(4)$ in the center and then connect $(1)(4)$, $(2)(4)$, and $(3)(4)$. This is a plane graph of $K_4$ and thus $K_4$ is planar.
+\end{proof}
+\begin{theorem}
+All trees are planar.
+\end{theorem}
+\begin{proof}
+By induction. If $|V(G)| = 1$, we are done. Suppose it is true for $|V(G)| = n$. Let $G$ be a tree such that $|V(G)| = n+1$ and let $p$ be an endpoint adjacent to $u$. Deleting this creates a subtree on $n$ points. But then this is planar. Appending $p$ in a small enough neighborhood about $u$ shows that $G$ is planar.
+\end{proof}
+\begin{theorem}
+For all $n$, $K_{1,n}$ and $K_{2,n}$ are planar.
+\end{theorem}
+\begin{proof}
+For $K_{1,n}$ is simply a "Star," with $n$ endpoints whose sole adjacent vertex is the center, and is thus planar. For $K_{2,n}$, let $u_1,u_2 \in V_1$ and $v_1,\hdots, v_n \in V_2$. Place $u_1$ at $(-1,0)$ and $u_2$ at $(1,0)$. Place $v_k$ at $(k,0)$. Connect the straight lines from $v_k$ to $u_1$ and $u_2$. This is $K_{2,n}$ and is a plane graph. Thus, $K_{2,n}$ is planar.
+\end{proof}
+\begin{definition}
+A cutpoint of a graph is a point whose deletion increases the number of components of the graph.
+\end{definition}
+\begin{definition}
+A block of a graph is a maximal connected subgraph which contains no cutpoints relative to itself.
+\end{definition}
+\begin{theorem}
+A vertex $v$ on a tree is a cutpoint if and only if $\deg(v) \geq 2$.
+\end{theorem}
+\begin{proof}
+For suppose $v$ is a cutpoint. Then it is not an endpoint, as otherwise its deletion would not create disconnected components. But if it is not an endpoint, then $\deg(v)>1$. Thus, $\deg(v)\geq 2$. Now suppose $\deg(v) \geq 2$. Let $u$ and $w$ be two vertices adjacent to $v$ and not equal to each other. If we delete $v$, there is no path from $u$ to $w$ as if there were then there would be two independent paths from $u$ to $w$ and thus a cycle. But trees have no cycles. Thus, the deletion of $v$ disconnects the graph and $v$ is a cutpoint.
+\end{proof}
+\begin{theorem}
+Blocks of Trees.
+\end{theorem}
+\begin{corollary}
+A $C_n$ graph contains no cut points for $n>2$.
+\end{corollary}
+\begin{proof}
+For let $v$ be an arbitrary vertex in a $C_n$ graph and let $u$ and $w$ be other vertices ($n>2$, so such vertices exist). Then, as $C_n$ is a cycle, there are two independent paths from $u$ to $w$, one of which contains $v$ and the other not containing $v$. Thus, removing $v$ does not disconnect $C_n$. As $v$ is arbitrary, $C_n$ has no cutpoints for $n>2$.
+\end{proof}
+\begin{theorem}
+In a graph $G$ with $u,v\in V(G)$, if $uv\in E(G)$ and $u$ and $v$ are cutpoints, then $uv$ is a bridge.
+\end{theorem}
+\begin{proof}
+For let $u$ and $v$ be cutpoints of $G$ and suppose $uv\in E(G)$. Let $s$ and $t$ be vertices in two of the separate components that are formed by removing $v$. Thus, there is no path from $s$ to $t$. But then $uv$ cannot be part of a cycle, as then there would be two independent paths from $u$ to $v$, a contradiction. Thus $uv$ is a bridge.
+\end{proof}
+\begin{theorem}
+If $uv$ is a bridge, $\deg(u),\deg(v)>1$, then $u$ and $v$ are cutpoints.
+\end{theorem}
+\begin{proof}
+For let $uv$ be a bridge, let $s$ be adjacent to $u$ and $t$ adjacent to $v$. Any path from $s$ to $t$ must contain $uv$, as otherwise $uv$ would be contained in a cycle, but $uv$ is a bridge and thus is not contained in a cycle. Then the removal of $uv$ separates $s$ from $t$, and we now have disconnected components. Thus, $u$ and $v$ are cutpoints.
+\end{proof}
+\begin{corollary}
+If $uv$ is a bridge, and either $\deg(v)>1$ or $\deg(u)>1$ (But not necessarily both), then either $u$ or $v$ is a cutpoint.
+\end{corollary}
+\begin{proof}
+For let $uv$ be a bridge and suppose $\deg(v)>1$. Let $s$ be adjacent to $v$ and not equal to $u$. As $uv$ is a bridge, any path from $s$ to $u$ must contain $uv$. Thus, the removal of $v$ separates $u$ from $s$. That is, $v$ is a cutpoint.
+\end{proof}
+\begin{corollary}
+There exist graphs $G$ such that $u$ is a cutpoint of $G$, $ux \in E(G)$, and yet $ux$ is not a bridge.
+\end{corollary}
+\begin{proof}
+For let $K_3$ be the complete graph on vertices $t_1,t_2,t_3$, and append to it a single vertex and $v$ and connect it only to $t_1$. Then $t_1$ is a cutpoint, for it seperates $v$ from $t_2$ and $t_3$, $t_1t_2\in E(G)$, yet $t_1 t_2$ is not a bridge as it is contained within a cycle.
+\end{proof}
+\begin{definition}
+A coloring of a graph is an assignment of labels, denoted by colors, to vertices of the graph.
+\end{definition}
+\begin{definition}
+The chromatic number of a graph is the minimum number of unique colors that are needed to color a graph such that no two adjacent vertices have the same color. This is denoted $N(G)$.
+\end{definition}
+\begin{theorem}
+Even cycles $C_{2k}$ are $2-colorable$. That is, they have chromatic number $2$.
+\end{theorem}
+\begin{proof}
+For let $v_1$ be arbitrary, and call it blue. Characterize $C_{2k}$ by $v_1 v_2 \hdots v_{2k-1}v_{2k} v_1$. If $n$ is even, let $v_n$ be red, otherwise let it be blue. Thus, if $1<n<2k$, then $v_n$ and $v_{n+1}$ have different colors. For $n=2k$, $v_{2k-1}$ and $v_1$ are blue, and $v_{2k}$ is red. Thus, this is $2-colorable$.
+\end{proof}
+\begin{theorem}
+A graph $G$ has chromatic number $N(G)=2$ if and only if $G$ is bipartite.
+\end{theorem}
+\begin{proof}
+For let $G$ be bipartite, being the disjoint union of $V_1$ and $V_2$. Then, if $v\in V_1$ call it blue and if $v\in V_2$ call it red. Then no two adjacent vertices of $G$ are colored the same way, as elements of $V_1$ connect only to elements of $V_2$ and vice-versa. Thus, $N(G)=2$. If $N(G)=2$, then for $v\in G$ such that $v$ is blue, append to $V_1$. For $v\in G$ colored red, append to $V_2$. Then $V_1\cup V_2 = G$ and $V_1\cap V_2 = \emptyset$ as all elements of $G$ are either blue or red, exclusively. But as $N(G)=2$, if $v\in V_1$ and $u\in V_1$, then $uv\notin E(G)$. Similarly for $V_2$. Thus, $G$ is bipartite.
+\end{proof}
+\begin{theorem}
+If $G$ is a graph on $n$ vertices, and $N(G) = n$, then $G= K_n$.
+\end{theorem}
+\begin{proof}
+For let $G$ be a graph on $n$ vertices and let $N(G) = n$. Let $v,u\in G$ be arbitrary and suppose $v$ is blue. If $uv\notin E(G)$, then we may label $v$ freely as blue. But then, at most, $N(G)=n-1$, a contradiction. Thus $uv\in E(G)$. As $u$ and $v$ are arbitrary, all vertices are adjacent. Thus $G=K_n$.
+\end{proof}
+\begin{corollary}
+If $N(G) = 1$, then $G$ is totally disconnected $E(G)=\emptyset$, or $G$ contains one point.
+\end{corollary}
+\begin{proof}
+For if $G$ contains one point, we are done. Suppose not and let $u,v\in G$. If $uv \in E(G)$ then $u$ and $v$ cannot be colored the same way, and thus $N(G)>1$, a contradiction. Thus $uv\notin E(G)$. As $u$ and $v$ are arbitrary, $E(G) = \emptyset$.
+\end{proof}
+\begin{lemma}
+Trees are bipartite.
+\end{lemma}
+\begin{proof}
+By induction. A tree on two vertices is bipartite. Suppose a tree on $n$ vertices is bipartite. Let $G$ be a tree on $n+1$ vertices, and let $v\in G$ be an endpoint. Deleting $v$ creates a tree on $n$ vertices, and is thus bipartite. Appending $v$ back in, let $u$ be the unique vertices adjacent to $v$. Place $v$ in the partition not containing $u$. Thus $G$ is bipartite.
+\end{proof}
+\begin{corollary}
+Trees are two colorable.
+\end{corollary}
+\begin{proof}
+For as trees are bipartite, they are two colorable.
+\end{proof}
+\begin{corollary}
+There exist two-colorable graphs that are not trees.
+\end{corollary}
+\begin{proof}
+For consider $K_{3,3}$. It is a bipartite graph, and is therefore two-colorable. However it is not a tree as it contains cycles.
+\end{proof}
+\begin{definition}
+If a planar graph is drawn with no intersecting edges, it divides the plane into regions called the faces of the graph.
+\end{definition}
+\begin{definition}
+The outer face of a plane graph is the face which is unbounded in the plane.
+\end{definition}
+\begin{lemma}
+If $G$ is a plane connected graph with $F$ faces, and if a vertex $v$ is appended to $G$, if $v$ is made adjacent to $k$ vertices in $G$ and is still plane, then this new graph has $F+k-1$ faces,
+\end{lemma}
+\begin{proof}
+For let $G$ be a plane graph with $F$ faces. We prove by induction. Let $v$ be an appended vertex. If we add $1$ edge, we create no new faces as otherwise there is an intersection and the result is no longer planar. Suppose an addition of $k$ edges yields $k-1$ new faces. From $v$, add a new edge to some vertex $u$. As $G$ is connected, and as $G$ with $v$ is also connected, there is a path from $u$ to $v$ that does not contain $uv$. But then $uv$ creates a new region, that is the cycle on $uv$. Thus there is $k$ new faces.
+\end{proof}
+\begin{theorem}[Euler's Characteristic Theorem]
+For planar graphs $G$, if $G$ is represent as plane then $V-E+F=2$, where $V = |V(G)|$, $E=|E(G)|$, and $F$ is the number of faces.
+\end{theorem}
+\begin{proof}
+We prove by induction on the number of vertices. If $V=1$, then $F=1$ and $E=0$, thus $V-E+F=1-0+1=2$. Now, suppose on $n$ vertices, $V-E+F=2$. Then, for $n+1$ vertices with $k$ new vertices we have $(V+1)-(E+k)+(F+k-1) = V+1-E-k+F+k+1 = V-E+F=2$.
+\end{proof}
+\begin{lemma}
+$K_5$ is non-planar.
+\end{lemma}
+\begin{proof}
+Suppose not, and let it be represent in the plane as planar. Then $V=5$, $E = 10$, and thus $V-E = -5$, meaning $F = 7$. But each region is bounded by, at least, $3$ edges. As each edge is the boundary of at least $2$ regions, $\frac{3F}{2} \leq E$. But $\frac{3F}{2} = 10.5$ and $E=10$, a contradiction. Thus $K_5$ is non-planar.
+\end{proof}
+\begin{lemma}
+$K_{3,3}$ is non-planar.
+\end{lemma}
+\begin{proof}
+For suppose not. Then $V-E+F=2$. We have that $V=6$, $E= 9$, and thus $F=5$. But $F$ is contained within at least 4 edges, for $K_{3,3}$ has no cycles on $3$ vertices as it is Bipartite. But then, $\frac{4F}{2} = 2F \leq E = 9$. But $2F = 10$, a contradiction. Thus $K_{3,3}$ is nonplanar.
+\end{proof}
+\begin{lemma}
+If $G$ is nonplanar and $v$ is appended to $G$, then the result is nonplanar.
+\end{lemma}
+\begin{proof}
+For suppose not. That is $G$ with $v$ contains no intersecting vertices. Then deleting $v$ means that $G$ has no intersecting vertices, and is thus planar. But it is not, a contradiction. Thus the resulting graph is non-planar.
+\end{proof}
+\begin{theorem}
+For $n>4$, $K_n$ is non-planar.
+\end{theorem}
+\begin{proof}
+By induction. For $n=5$, we are done. Suppose it is true for $n$. Appending a new vertices results in yet again a non-planar graph. Thus $K_n$ is non-planar for $n>4$.
+\end{proof}
+\begin{theorem}
+For $n,m\geq 3$, $K_{n,m}$ is non-planar.
+\end{theorem}
+\begin{proof}
+For let $n,m\geq 3$. Choose $3$ elements in $V_1$ and $3$ in $V_2$. As $K_{n,m}$ is the complete bipartite graph, there are edges from the three chosen points in $V_1$ to the three chosen points in $V_2$, and vice-versa. But this is the $K_{3,3}$ graph, and is thus non-planar. Appending to this graph vertices also results in a non-planar graph. Thus $K_{n,m}$ is non-planar.
+\end{proof}
+\begin{lemma}
+The number of faces on a plane graph is maximized when each face is contained by a triangle, or is the outer face.
+\end{lemma}
+\begin{proof}
+For suppose not. Suppose a face is contained by $n>3$ sides and that this is the maximum number of faces on the graph. But as $n>3$, at least two vertices which contain the face are not adjacent and thus may be connected forming two new faces. But we say the graph had the maximal number of faces, a contradiction. Thus all faces form triangles.
+\end{proof}
+\begin{theorem}
+A planar graph on $n$ vertices has at most $3n-6$ edges.
+\end{theorem}
+\begin{proof}
+When a graph is maximized, the faces are contained within triangles. Then $\frac{2}{3}V= F$. But from Euler's Characteristic Formula, $V-E+F=2$. So, $n-V+\frac{2}{3}V = 2$, or $n-\frac{1}{3}V = 2$. So, $V=3n-6$. If the graph does not contain the maximal number of faces, it is less than this number. Thus, if a graph is planar, $E\leq 3V-6$.
+\end{proof}
+\begin{theorem}
+If $G$ is a planar connected graph, then it can be drawn such that any face is the outer face.
+\end{theorem}
+\begin{theorem}
+Euler's Characteristic Theorem may be modified for $k$ disconnected components.
+\end{theorem}
+\begin{corollary}
+For trees, $E=V-1$.
+\end{corollary}
+\begin{proof}
+For as tress have no cycle, $F=1$. But trees are connected and planar, and thus $V-E+F = 2$. Therefore $E=V-1$.
+\end{proof}
+\begin{corollary}
+For cycles $C_n$, $E=V$.
+\end{corollary}
+\begin{proof}
+For $F=2$. Thus, $V-E+2=2\Rightarrow V=E$.
+\end{proof}
+\begin{definition}
+If a planar graph can be drawn such that all of its vertices are touching the outer face it is called outer planar.
+\end{definition}
+\begin{corollary}
+Trees are outer planar.
+\end{corollary}
+\begin{proof}
+For trees, $F=1$, and thus every vertices touches the outer (Only) face.
+\end{proof}
+\begin{lemma}
+If $G$ is a connected graph that is not outer planar, then there exists a vertex $\deg(v)$ such that $\deg(v)>2$.
+\end{lemma}
+\begin{proof}
+For let $u \in G$ be such that $u$ does not touch the outer edge and let $w$ be a vertex that does. As $G$ is connected, there is a path from $u$ to $w$. Let $v$ be the first point on this path that touches the outer face. Then $\deg(v)>2$. For suppose not. $\deg(v)$ is at least $2$, as there is a path to $u$ and a path to $w$. But if there is no other adjacent vertex then $u$ and $w$ are adjacent to the same face. A contradiction. Thus $\deg(v)>2$.
+\end{proof}
+\begin{corollary}
+All cycles are outer planar.
+\end{corollary}
+\begin{proof}
+For all $v\in C_n$, $\deg(v)=2$. Thus $C_n$ cannot possible be not outer planar, and is therefore planar.
+\end{proof}
+\begin{definition}
+The point-connectivity of a graph is the minimum number of points whose deletion yields either a disconnected graph or a trivial one. For a graph $G$, this is denoted $k(G)$.
+\end{definition}
+\begin{corollary}
+A disconnected graph $G$ has $k(G) = 0$.
+\end{corollary}
+\begin{proof}
+For deleting zero points yields a disconnected graph.
+\end{proof}
+\begin{corollary}
+If $G$ is connected and has a cutpoint, then $k(G) = 1$.
+\end{corollary}
+\begin{proof}
+For the deletion of a cutpoint increases the number of disconnected components, and thus if $G$ is connected the deletion of a cutpoint makes it disconnected.
+\end{proof}
+\begin{corollary}
+If $G$ is connected and contains a bridge $uv$, then $k(G)=1$.
+\end{corollary}
+\begin{proof}
+For delete $u$ or $v$ from $G$. As $uv$ is a bridge, $G$ is now disconnected. Thus, $k(G) = 1$>
+\end{proof}
+\begin{corollary}
+$k(C_n) =2$
+\end{corollary}
+\begin{proof}
+For if delete some point $v$ from $C_n$. This is still connected as there are two independent paths from any two points in $C_n$. Let $u$ be a point not adjacent to $v$ (If $n=3$, delete another point and we arrive at the trivial graph). Deleting this point then disconnects the graph for there is now no path from the points adjacent to $v$. Thus $k(C_n)=2$.
+\end{proof}
+\begin{corollary}
+$k(K_n) = n-1$.
+\end{corollary}
+\begin{proof}
+For suppose not, and suppose $k(K_n)<n-1$. Delete $k<n-1$ points from $K_n$ and let $u,v$ be arbitrary points that remain (There are at least $2$ as $k<n-1$). But as the graph is $K_n$, $uv\in E(K_n)$. As $u$ and $v$ are arbitrary, the graph is still connected. Thus $k=n-1$ and we are left with the trivial graph.
+\end{proof}
+\begin{corollary}
+$k(K_{m,n}) = \min\{m,n\}$.
+\end{corollary}
+\begin{proof}
+For suppose not. Suppose $k(K_{m,n})<\min\{m,n\}$. Remove less than $\min\{m,n\}$ vertices from $K_{m,n}$ and let $u,v$ be arbitrary. If $u\in V_1$ and $v\in V_2$, we are done as $uv\in E(K_{m,n})$. Suppose $u,v\in V_1$. As less then $\min\{m,n\}$ points have been removed, there is still a $w\in V_2$. But then $uw$ and $wv$ exists. Thus there is a path from $u$ to $v$. As $u$ and $v$ are arbitrary, the graph is still connected. Finally, there exist a deletion of $\min\{n,m\}$ points that disconnected $K_{m,n}$. For suppose $|V_1| = m$ and $|V_2| = n$, and let $n<m$. Delete all points from $V_1$. This is disconnected as no points in $V_2$ are adjacent. Thus $k(K_{m,n})=\min\{m,n\}$.
+\end{proof}
+\begin{definition}
+A wheel on $n$ vertices $W_n$ is a cycle $C_{n-1}$ with a vertex $v$ appended that is adjacent to all elements of $C_{n-1}$.
+\end{definition}
+\begin{corollary}
+$r(W_n) = 1$.
+\end{corollary}
+\begin{proof}
+For recall $r(W_n) = \min\{\max\{d(v,x):x\in W_n\}v\in W_n\}$. Let $v$ be the appended vertex to $C_{n-1}$. Then $d(v,x) = 1$ for all $x\in W_n$. Thus $r(W_n) = 1$.
+\end{proof}
+\begin{corollary}
+$d(W_n) = 2$
+\end{corollary}
+\begin{proof}
+For $d(W_n) = \max\{\max\{d(v,x):x\in W_n\}v\in W_n\}$. Let $u$ be an element in the $C_{n-1}$ subgraph and $w$ be arbitrary. If $w= v$, the midpoint, then $d(u,w) = 1$. If $w$ is adjacent to $u$, then $d(u,w) = 1$. Otherwise $u$ and $w$ are connected by the path $uvw$. Thus, $d(u,w) = 2$. Therefore $d(W_n) = 2$>
+\end{proof}
+\begin{corollary}
+The center $C(W_n)$ is the appended vertex $v$.
+\end{corollary}
+\begin{proof}
+For $d(v,x) = 1 = r(W_n)$ for all other $x$.
+\end{proof}
+\begin{corollary}
+The radii of the maximum spanning tree of $W_n$ is equal to the radii of $P_n$.
+\end{corollary}
+\begin{proof}
+For the points on $C_{n-1}$, label $c_1,\hdots, c_{n-1}$, and let $v$ be the appended vertex. Define the spanning tree $vc_1\cdots c_{n-1}$. This is a $P_n$ graph and is thus the longest possible radii on $n$ points.
+\end{proof}
+\begin{corollary}
+The diameter of the maximum spanning tree of $W_n$ is the diameter of $P_n$>
+\end{corollary}
+\begin{proof}
+From the previous construction, there is a $P_n$ spanning tree and thus this is the maximal diameter on $n$ points.
+\end{proof}
+\begin{corollary}
+The minimum radii of any spanning tree of $W_n$ is $1$.
+\end{corollary}
+\begin{proof}
+For let $c_k$, $k=1,\hdots,n-1$ be the points on the $C_{n-1}$ subgraph and append $v$. Remove all edges incident on $c_k$ except that which lie on incident on $v$ as well. This is a tree. Moreover, for all $x\ne v$, $d(x,v) = 1$.
+\end{proof}
+\begin{corollary}
+The minimum diameter of any spanning tree of $W_n$ is $2$.
+\end{corollary}
+\begin{proof}
+The construction from the previous corollary has diameter $2$. There is no spanning tree of smaller diameter, for any two vertices $u$ and $w$ that are not adjacent in $W_n$ will not be adjacent in the spanning tree, and thus $d(u,w)>1$.
+\end{proof}
+\begin{definition}
+For a graph $G$ with vertices $v_1,\hdots, v_n$, the adjacency matrix $A(G)$ is a $n\times n$ binary matrix (A matrix whose elements are $0$ or $1$) such that the entry $a_{ij}= 1$ if $v_i v_j \in E(G)$, and $a_{ij}=0$ otherwise.
+\end{definition}
+\begin{corollary}
+For any graph $G$, if $a_{ij}$ is the entry of the $i^{th}$ row and $j^{th}$ column of $A(G)$, then the diagonal $a_{ii} = 0$.
+\end{corollary}
+\begin{proof}
+For as no vertex is adjacent to itself, $a_{ii}=0$.
+\end{proof}
+\begin{corollary}
+$A(K_n) = \begin{bmatrix} 0 & 1 &  \hdots & 1 & 1 \\ 1 & 0 & \hdots & 1 & 1 \\ \vdots & \ddots & \ddots & \vdots & \vdots \\ \vdots & \ddots & \ddots & \vdots & \vdots \\ 1 & 1 & \hdots & 1 & 0 \end{bmatrix}$. That is $a_{ij} = \begin{cases} 0, & i=j \\ 1, & i\ne j\end{cases}$
+\end{corollary}
+\begin{proof}
+For if $i\ne j$, then $v_iv_j \in E(K_n)$, and thus $a_{ij}=1$.
+\end{proof}
+\begin{corollary}
+For a graph $G$ with entries $a_{ij}$ of $A(G)$, $a_{ij} = a_{ji}$.
+\end{corollary}
+\begin{proof}
+For if $v_iv_j \in E(G)$, then $v_j v_i \in E(G)$. Thus, $a_{ij} = a_{ji}$.
+\end{proof}
+\begin{definition}
+A directed graph $G$ is a set of vertices $V(G)$ together with directed edges $E(G)$ that form ordered pairs $(a,b)$ between vertices. If $a$ and $b$ are vertices and there is a directed edge from $a$ to $b$ we write $ab \in E(G)$. These are also called digraphs.
+\end{definition}
+\begin{remark}
+It is not necessarily true that $(a,b) \in G$ implies $(b,a) \in G$. Indeed, it is not true that $(a,b) = (b,a)$, as these are ordered pairs.
+\end{remark}
+\begin{definition}
+A graph with multiple edges between vertices is called a multigraph.
+\end{definition}
+\begin{definition}
+In a multigraph, a loop is a connection from a vertex to itself.
+\end{definition}
+\begin{definition}
+If $G$ is a multigraph with vertices $v_1,\hdots, v_n$, then the adjacency matrix $A(G)$ is defined by the entries $a_{ij} = n$, where $n$ is the number of edges from $v_i$ to $v_j$. 
+\end{definition}
+\begin{remark}
+For a multigraph it is not necessarily true that $a_{ii}=0$, as loops may exist.
+\end{remark}
+\begin{corollary}
+If $G$ is a graph with vertices $v_1,\hdots, v_n$, and $a_{ij}$ are the entries of $A(G)$, then $\deg(v_i) = \sum_{j=1}^{n} a_{ij}$.
+\end{corollary}
+\begin{proof}
+For $\deg(v_i) = \sum_{\underset{v_j\ne v_i}{v_j\in V(G)}}\chi_{\{v_i,v_j\}}^G$. But $\chi_{\{v_i,v_j\}}^G = \begin{cases} 1, & v_iv_j\in E(G)\\ 0, & v_iv_j \notin E(G)\end{cases}$. Thus, $\chi_{\{v_i,v_i\}}^G = a_{ij}$, and $\deg(v_i) = \sum_{j=1}^{n} a_{ij}$
+\end{proof}
+\begin{theorem}
+For a graph $G$, it is not necessarily true that $A(G)^2$ is a binary matrix.
+\end{theorem}
+\begin{proof}
+For take $A(G) = \begin{bmatrix} 0 & 0 & 1 \\ 1 & 0 & 1 \\ 1& 1 & 0 \end{bmatrix}$. Then $A(G)^2 = \begin{bmatrix} 1 & 1 & 0 \\ 1 & 1 & 1 \\ 1 & 0 & 2 \end{bmatrix}$
+\end{proof}
+\begin{theorem}
+If $G$ is a graph on $n$ vertices with adjacency matrix $A(G)$ with elements $a_{ij}$, and if $a^2_{ij}$ are the elements of $A^2(G)$, then they represent the number of $v_{i}-v_{j}$ walks of length $2$.
+\end{theorem}
+\begin{proof}
+For $a^2_{ij} = \sum_{k=1}^{n} a_{ik}a_{kj}$. Now $a_{ik}a_{kj}$ is $1$ if and only if both $v_iv_k \in E(G)$ and $v_kv_j \in E(G)$ and zero otherwise.. But then there is a walk of length $2$ from $v_i$ to $v_j$ in the form of $v_i v_k v_j$. Thus, $a^2_{ij}$ is the number walks of length $2$ from $v_i$ to $v_j$.
+\end{proof} 
+\begin{theorem}
+If $G$ is a graph on $n$ vertices with adjacency matrix $A(G)$ with elements $a_{ij}$, and if $a^m_{ij}$ are the elements of $A^m(G)$, then the elements $a^m_{ij}$ are the number of walks of length $m$ from $v_i$ to $v_j$.
+\end{theorem}
+\begin{proof}
+By induction. The base case is solved by the previous theorem. Suppose the elements $b{ij}$ of $A^m(G)$ represent the number of walks of length $k$ from $v_i$ to $v_k$. Then $A^{m+1}(G)=A(G)A^m(G)$. Thus the elements are $c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}$. But $a_{ik}b_{kj} = \begin{cases} 0, & v_i v_k \notin E(G) \\ b_{kj}, & v_i v_k \in E(G)\end{cases}$. Thus $c_{ij} = \underset{v_i v_k \in E(G)}\sum b_{kj}$. But $b_{kj}$ is the number of walks from $v_k$ to $v_j$ of length $m$. But $v_i v_k \in E(G)$. But then there is a walk from $v_i$ to $v_j$ of length $m+1$ as $v_iv_k \in E(G)$. And this is a sum over all possible $v_k$ such that $v_iv_k \in E(G)$. Thus $c_{ij}$ is the number of walks from $v_i$ to $v_j$ of length $m+1$.
+\end{proof}
+\begin{theorem}
+If $G$ is a graph on $n$ vertices with adjacency matrix $A(G)$ and $k$ is the smallest number such that $\sum_{i=0}^{k} A^i(G)$ is non-zero, then $d(G) = k$.
+\end{theorem}
+\begin{proof}
+For suppose $\sum_{i=0}^{k}A^i(G)$ has no zero elements, and suppose $\sum_{i=0}^{k-1}A^i(G)$ has a zero element, say $a_{ij}$. Then there are no walk of lengths $1,2 \hdots, k-1$ from $v_i$ to $v_j$. As $\sum_{i=0}^{k} A^i(G)$ has no zeroes, there is a path from $v_{i}$ to $v_{j}$ of length $k$. Moreover, this is the shortest possible path. But as there are no zeros in this sum, every pair $v_k$ and $v_{\ell}$ has a path of at most length $k$. Thus $d(G)=k$.
+\end{proof}
+\begin{theorem}
+If $G$ is a graph with adjacency matrix $A(G)$ and no such $k\in \mathbb{G}$ exists such that $\sum_{i=0}^{k}A^i(G)$ has no zeros, then $G$ is disconnected.
+\end{theorem}
+\begin{proof}
+For the diameter of a connected graph is less than the number of vertices of the graph. Thus $G$ is disconnected.
+\end{proof}
+\section{Graph Theory II}
+\subsection{Spanning Trees}
+\subsection{Product Graphs}
+\subsection{Distance Properties of Graphs}
+\section{Additional Material}
+\subsection{F\'{a}ry's Theorem}
+\subsection{The Art Gallery Theorem}
+\subsection{F\'{a}ry's Theorem}
+\subsection{Kuratowski's Theorem}
+\subsection{Notes}
+\begin{theorem}
+If a graph $G$ has n vertices, and each vertex has more than $\frac{n}{2}$ edges, then it is connected.
+\end{theorem}
+\begin{proof}
+For suppose not. Suppose it can be disconnected into at least two graphs. Then the first graph must have more than $\frac{n}{2}$ vertices, as a given vertices has more than $\frac{n}{2}$ edges. But this must hold as well for any other connected graph. And the sum of these disconnected graphs has more than $n$ vertices, an impossibility. Therefore it is connected.
+\end{proof}
+\begin{definition}
+Two graphs $G$ and $H$ are isomorphic if there exists a bijective function $f:G\rightarrow H$ such that for all $v,w\in V(G)$, $\{v,w\}\in E(G)$ if and only if $\{f(v)<f(w)\}\in E(H)$.
+\end{definition}
+\begin{theorem} If $G$ and $H$ are isomorphic, then $\deg{v} = \deg(f(v))$.
+\end{theorem}
+\begin{proof}
+Define $\xi_{\{v,w\}}^{G}:E(G)\rightarrow \{0,1\}$ by $\xi_{\{v,w\}}^{G} = 0$ if $\{v,w\} \notin E(G)$ and 1 if $\{v,w\}\in E(G)$. Then $\deg(v)=\sum_{w\in V(G),w\ne v}\xi_{\{v,w\}}^{G}$. But $\xi_{\{f(v),f(w)\}}^{H} = \xi_{\{v,w\}}^{G}$, and from this we have:
+\begin{equation*}
+    \deg(f(v))=\sum_{f(v)\in V(H),f(v)\ne f(w)}\xi_{\{f(v),f(w)\}}^{H}=\sum_{w\in V(G),w\ne v}\xi_{\{v,w\}}^{G}=\deg(v)
+\end{equation*}
+\end{proof}
+\begin{remark}
+The previous function is an example of a characteristic function.
+\end{remark}
+\begin{problem}
+Given that a graph has diamater $d(G)\geq 3$, what can be said about $d(G^C)$, given $G^C$ is connected.
+\end{problem}
+\end{document}
