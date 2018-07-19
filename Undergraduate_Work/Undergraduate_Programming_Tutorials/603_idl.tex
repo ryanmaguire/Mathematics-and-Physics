@@ -1,0 +1,42 @@
+\documentclass[crop=false,class=book]{standalone}
+%---------------PREAMBLE------------%
+\input{preamble.tex}
+%---------------GLOSSARY------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------Title Page-----------%
+\begin{document}
+\chapter{IDL}
+\section{Tutorials}
+\subsection{Introduction}
+Summing down an $n\times m$ matrix into an $m$ element long vector is quicker
+using total(a,2), rather than using a for loop over total(a).\newline
+\begin{minipage}[t]{.48\textwidth}
+\centering
+\begin{lstlisting}[language=idl,basicstyle=\small\ttfamily,frame=single,caption=test.pro]
+a = dblarr(25600,25600)
+b = dblarr(25600)
+
+t1 = systime(/seconds)
+for i=0,25600-1 do b[i]=total(a[i,*])
+t2 = systime(/seconds)
+
+print, t2-t1
+
+t3 = systime(/seconds)
+b = total(a,2)
+t4 = systime(/seconds)
+print, t4-t3
+end
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[t]{.48\textwidth}
+\centering
+\begin{lstlisting}[language=bash,basicstyle=\small\ttfamily,frame=single,caption=output]
+IDL> .run test.pro
+        26.816771
+        12.986878
+\end{lstlisting}
+\end{minipage}
+\end{document}
