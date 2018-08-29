@@ -1,13 +1,24 @@
-\documentclass[crop=false,class=book]{standalone}
-%---------------PREAMBLE------------%
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
 \input{../../preamble.tex}
-%---------------GLOSSARY------------%
+%----------------------------GLOSSARY-------------------------------%
 \makeglossaries
 \loadglsentries{../../glossary}
 \loadglsentries{../../acronym}
-%--------------Title Page-----------%
+%--------------------------Main Document----------------------------%
 \begin{document}
-\chapter{Calculus I}
+\ifx\ifmain\undefined
+    \title{Calculus I}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \tableofcontents
+    \chapter*{Calculus I}
+    \markboth{}{CALCULUS I}
+    \setcounter{chapter}{1}
+\else
+    \chapter{Calculus I}
+\fi
 \section{Exams}
 \subsection{CLEP Exam}
 \begin{problem}
@@ -320,4 +331,17 @@ Compute the derivative of $g(t)=(t^{3}-2)^{\tan(t)}$
 \begin{proof}[Solution]
 Let $y(t)=\ln(g(t))$. Then $\frac{dy}{dt}(t)=\frac{d}{dt}(\tan(t)\ln(t^{3}-2))=\sec^{2}(t)\ln(t^{3}-2)+\tan(t)\frac{3t^{2}}{t^{3}-2}$. But $\frac{dy}{dt}(t)=\frac{d}{dt}(\ln(g(t)))=\frac{1}{g(t)}\frac{dg}{dt}(t)$. So $\frac{dg}{dt}(t)=(t^{3}-2)^{\tan(t)}(\sec^{2}(t)\ln(t^{3}-2)+\tan(t)\frac{3t^{2}}{t^{3}-2})$
 \end{proof}
+%-----------------Bibliographies and Glossaries---------------------%
+\ifx\ifmain\undefined
+    % Clear page separating last page of text from glossaries.
+    \clearpage
+    % Print all acronyms used throughout all texts.
+    \printglossary[type=\acronymtype]
+    % Clear page separating acronyms from glossary terms.
+    \clearpage
+    % Print glossary terms from all texts.
+    \printglossary[style=long]
+    % Clear page separating glossary terms from bibliography.
+    \clearpage
+\fi
 \end{document}
