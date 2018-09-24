@@ -1,0 +1,537 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../../preamble.tex}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\iffunct\undefined
+        \section*{Functional Analysis}
+        \setcounter{section}{1}
+    \fi
+    \subsection{Lecture 1: September 10, 2018}
+        \subsubsection{Completeness}
+            We will be talking about a bunch of different sets
+            throughout the course, so let's begin with some of
+            their notations:
+            \begin{itemize}
+                \item $\mathbb{N}$\quad The Natural Numbers.
+                      We'll use this a lot.
+                \item $\mathbb{Z}$\quad The Integers.
+                      We'll never talk about these.
+                \item $\mathbb{Q}$\quad The Rational Numbers.
+                      Good for examples and counterexamples.
+                \item $\mathbb{R}$\quad The Real Numbers.
+                      These are the numbers we'll primarily
+                      be concerned with.
+                \item $\mathbb{C}$\quad The Complex Numbers.
+                      See comment about $\mathbb{Z}$.
+            \end{itemize}
+            One of the fundamental properties of $\mathbb{R}$ is
+            that is is ``Complete.'' This property is fundamental
+            to many theorems involved in a standard calculus or
+            real analysis course. The concepts of differentiation
+            and convergence rely on completeness, and the
+            intermediate value theorem fails without it. On the
+            other hand, $\mathbb{Q}$ is not complete. $\mathbb{R}$
+            is also something called a ``Field,'' and an ordered
+            field at that. $\mathbb{Q}$ is also an ordered field.
+            This means addition, subtraction, multiplication, and
+            division are well defined operations (No dividing by
+            zero, though), and that there is a sense of order on
+            the set. For example, zero is less than one. The
+            special fact about $\mathbb{R}$ is that it is a
+            complete ordered field. In fact, $\mathbb{R}$ is the
+            \textit{only} complete ordered field (Up to isomorphism,
+            whatever that means). Completeness in $\mathbb{R}$ can
+            be stated as the fact that the real numbers have the
+            least upper bound property.
+            \begin{definition}
+                A subset of $\mathbb{R}$ that is bounded above is
+                a nonempty set $S\subset{\mathbb{R}}$ such that
+                there exists an $M\in\mathbb{R}$ such that for all
+                $x\in{S}$, $x\leq{M}$.
+            \end{definition}
+            \begin{definition}
+                An upper bound of a bounded above subset
+                $S\subset\mathbb{R}$ is a real number $M\in\mathbb{R}$
+                such that for all $x\in{S}$, $x\leq{M}$.
+            \end{definition}
+            For a subset $S$ of $\mathbb{R}$ is bounded above, then
+            there exists infinitely many bounds. The real numbers
+            have a special property that every bounded above set
+            has a smallest upper bound.
+            \begin{theorem}[Least Upper Bound Theorem]
+                If $S\subset{\mathbb{R}}$ is bounded above, then
+                there exists an $s\in\mathbb{R}$, called the least
+                upper bound, such that $s$ and an upper bound
+                and for all upper bounds $M$ of $S$, $s\leq{M}$.
+            \end{theorem}
+            \begin{theorem}
+                There exist subsets $S$ of $\mathbb{Q}$ such that
+                $S$ is bounded above, yet for all upper bounds
+                $M$ there exists an $s$ such that $s$ is an upper
+                bound of $S$ and $s<M$.
+            \end{theorem}
+            \begin{example}
+                As an example, consider the set
+                $\{x\in\mathbb{Q}:x^{2}\leq{2}\}$.
+                This set has no least upper bound. The reason
+                being is somewhat related to the fact that the
+                least upper bound ``Wants,'' to be $\sqrt{2}$,
+                but $\sqrt{2}$ is not a rational number. Thus
+                there is no rational number to fill the gap.
+                The rationals are incomplete.
+            \end{example}
+            The least upper bound property gives rise
+            to many theorems, many of which are equivalent
+            to this axiom.
+            \begin{theorem}
+                Bounded monotonic sequences converge.
+            \end{theorem}
+            \begin{proof}
+                Let $x_{n}$ be a bounded monotonic sequence that is
+                increasing in $\mathbb{R}$. If $x_{n}$ is decreasing, we
+                replace the least upper bound with the greatest lower
+                bound, and the proof is symmetric.
+                Then $S=\{x_{n}:n\in\mathbb{N}\}$ is a
+                non-empty subset of $\mathbb{R}$. But $x_{n}$ is
+                a bounded sequence, and therefore $S$ is a bounded
+                subset of $\mathbb{R}$.
+                By the least upper bound property
+                there exists a least upper bound $s\in\mathbb{R}$ of
+                $S$. We now show that $x_{n}\rightarrow{s}$. Let
+                $\varepsilon>0$ be given.
+                Since $s$ is the least upper bound,
+                $s-\varepsilon$ is not an upper bound of $S$, since
+                $s-\varepsilon<s$. Therefore there exists a point
+                $x_{N}\in{S}$ such that $s-\varepsilon<x_{n}$.
+                Let $N\in\mathbb{N}$ be such that $s-\varepsilon<x_{N}$.
+                But $x_{n}$ is monotonically increasing, and therefore
+                for all $n>N$, $x_{N}<x_{n}$.
+                But, as $s$ is a least upper
+                bound of $S$, $x_{n}\leq{s}$. But then, for all $n>N$,
+                $0<s-x_{n}<s-x_{N}<\varepsilon$.
+                Therefore, $x_{n}\rightarrow{s}$
+            \end{proof}
+            The least upper bound is, in a sense, the
+            reason why decimal expansions of
+            real numbers work. For example, let $x_{n}$ be the
+            sequence 3, 3.1, 3.14, 3.141, 3.1415, 3.14159, ...
+            This sequence, which is the decimal expansion of $\pi$,
+            is bounded by $4$. Therefore it has a least upper
+            bound. We define the number $\pi$ to be the least upper
+            bound of this sequence. Completeness is a very important
+            property, but so far it relies on ordering.
+            We want to find an equivalent definition of completeness
+            that does not rely on ordering, so that we may speak of
+            complete spaces, or sets, that have no notion of
+            ordering on them.
+            We start with a different definiton for the completeness
+            of $\mathbb{R}$.
+            \begin{definition}
+                A Cauchy sequence in $\mathbb{R}$ is a sequence
+                $x_{n}:\mathbb{N}\rightarrow\mathbb{R}$ such that
+                for all $\varepsilon>0$ there is an $N\in\mathbb{N}$
+                such that for all $n,m>N$, $|x_{n}-x_{m}|<\varepsilon$
+            \end{definition}
+            \begin{theorem}
+                \label{%
+                    FUNCTIONAL_ANALYSIS:CONVERGENT_SEEQUENCES_%
+                    ARE_CAUCHY_SEQUENCES%
+                }
+                If $x_{n}:\mathbb{N}\rightarrow\mathbb{R}$ is a 
+                convergent sequence, then it is a Cauchy-Sequence.
+            \end{theorem}
+            The converse of Thm.~\ref{%
+                FUNCTIONAL_ANALYSIS:CONVERGENT_SEEQUENCES_%
+                ARE_CAUCHY_SEQUENCES%
+            }
+            turns out to be a more general notion of completeness.
+            That is, we can apply this to spaces that don't have
+            a notion of order, but do have a notion of completeness.
+            \begin{theorem}
+                If $x_{n}:\mathbb{N}\rightarrow\mathbb{R}$ is
+                a Cauchy sequence, then it converges.
+            \end{theorem}
+            \begin{proof}
+                First we prove that Cauchy sequences are bounded.
+                Let $\varepsilon=1$. Then $\varepsilon>0$. But
+                as $x_{n}$ is a Cauchy sequence, there is an
+                $N\in\mathbb{N}$ such that for all $n,m>N$,
+                $|x_{n}-x_{m}|<\varepsilon$. That is, for all
+                $n,m>N$, $-1<x_{n}-x_{m}<1$. Let $m=N+1$. Then,
+                for all $n>N$, $x_{N+1}-1<x_{n}<x_{N+1}+1$.
+                Then, for all $n\in\mathbb{N}$,
+                $x_{n}\leq\max(\{x_{0},\hdots,1+x_{N+1}\})$. Therefore,
+                $x_{n}$ is bounded. Next we need to talk about
+                some fundamental properties of subsequences. Let
+                $k:\mathbb{N}\rightarrow\mathbb{N}$ be a strictly
+                increasing function. Then $x_{n_{k}}$ is a
+                subsequence of $x_{n}$. The notation is somewhat
+                strange here. We must first note that
+                $x_{n}:\mathbb{N}\rightarrow\mathbb{R}$ is really just
+                a function from the natural numbers to the real
+                numbers. When we write $x_{n}$, what we really
+                mean is $x(n)$. But nobody writes $x(0)$, $x(1),$
+                $\hdots$ even if that's what they really mean.
+                So a subsequence is merely function composition
+                of the two functions
+                $x:\mathbb{N}\rightarrow\mathbb{R}$
+                and $k:\mathbb{N}\rightarrow\mathbb{N}$. So
+                $x_{n_{k}}=x(k(n))$. Since $k$ is strictly increasing,
+                the ``ordering'' of the sequence remains the same,
+                we've simply skipped some
+                (Perhaps a lot) of the elements.
+                As an example, conside $k=n$. The most boring
+                subsequence in the world: It's the exact same
+                sequence. Or perhaps $k=2n$, which skips every other
+                point. There is an important theorem associated
+                to subsequences of bounded sequences, which we will
+                use now but prove later. This is the
+                Bolzano-Weierstrass theorem: Every bounded sequence
+                has a convergent subsequence. But if $x_{n}$ is
+                Cauchy, then it is bounded. By the
+                Bolzano-Weiestrass theorem there is a convergent
+                subsequence $x_{k_{n}}$. Let $x$ be the limit of
+                $x_{k_{n}}$. We now must show that
+                $x_{n}\rightarrow{x}$. Let $\varepsilon>0$ be given.
+                As $x_{k_{n}}\rightarrow{x}$, there is an
+                $N_{0}\in\mathbb{N}$ such that for all
+                $n>N_{0}$, $|x_{k_{x}}-x|<\frac{\varepsilon}{2}$.
+                But as $x_{n}$ is a Cauchy sequence, there is an
+                $N_{1}$ such that for all $n,m>N_{1}$, 
+                $|x_{n}-x_{m}|<\frac{\varepsilon}{2}$. Let
+                $N=\max\{N_{0},N_{1}\}$. Then for all $n>N$,
+                $|x-x_{n}|\leq|x-x_{k_{n}}|+|x_{k_{n}}-x_{n}|$.
+                But as $k_{n}$ is a subsequence,
+                $k_{n}\geq{n}$ and therefore $k_{n}>N$.
+                But then $|x_{k_{n}}-x_{n}|<\frac{\varepsilon}{2}$.
+                Therefore
+                $|x-x_{n}|\leq|x-x_{k_{}}|+|x_{k_{n}}-x_{n}|\leq%
+                 \frac{\varepsilon}{2}+\frac{\varepsilon}{2}%
+                 =\varepsilon$. Therefore, etc.
+            \end{proof}
+            Now to prove the Bolzano-Weierstrass Theorem.
+            \begin{theorem}
+                Every sequence in $\mathbb{R}$ has a monotonic
+                subsequence.
+            \end{theorem}
+            \begin{proof}
+                Let $x_{n}$ be a sequence in $\mathbb{R}$. Call
+                $n$ a ``peak point'' if $x_{n}\geq{x_{m}}$ for all
+                ${m}\geq{n}$. If there are infinitely many of
+                these ``peak points,'' then we have obtained
+                a decreasing sequence, since the $n^{th}$ peak point
+                will be greater than or equal to
+                the $(n+1)^{th}$ peak point. We have thus obtained
+                a monotonically increasing  subsequence.
+                If there are finitely many,
+                there are either $0$ or there is a last one,
+                $x_{n_{0}}$. But then $x_{n_{0}+1}$ is not a
+                peak point. But then there is a $k\in\mathbb{N}$
+                such that $k>n_{0}+1$ and $x_{k}\geq{x_{n_{0}+1}}$, for
+                otherwise $x_{n_{0}+1}$ would be a peak point.
+                But $x_{k}$ is also not a peak point, and so there is
+                a $k_{1}$ such that $k_{1}>k$ and
+                $x_{k_{1}}\geq{x_{k}}$. This pattern continues, and
+                we thus have a monotonically increasing subsequence.
+                If there are zero peak points,
+                repeat the argument above with $x_{n_{0}}=x_{0}$.
+            \end{proof}
+            There's probabbly some axiom of choice stuff going on
+            here, but oh well.
+            \begin{theorem}[Bolzano-Weierstrass Theorem]
+                Bounded sequences have a convergent subsequence.
+            \end{theorem}
+            \begin{proof}
+                By the previous theorem, all sequences have a
+                monotonic subsequence. But bounded monotonic
+                sequences converge. Therefore,
+                there is a convergent subsequence.
+            \end{proof}
+            This notion is so important it has a name.
+            \begin{definition}
+                A sequentially compact space is a space such that
+                every bounded sequence has a convergent subsequence.
+            \end{definition}
+            \begin{theorem}
+                $\mathbb{R}$ is sequentially compact.
+            \end{theorem}
+            For shit's and giggles, let's prove the intermediate
+            value theorem. A result used a lot in calculus, but
+            never quite ``proved'' in the rigorous sense of the word.
+            \begin{theorem}
+                If $f:[a,b]\rightarrow\mathbb{R}$ is continuous and
+                if $f(a)<f(b)$, then for all $z\in(f(a),f(b))$,
+                there is a $c\in(a,b)$ such that $f(c)=z$.
+            \end{theorem}
+            \begin{proof}
+                Let $x_{1}=\frac{a+b}{2}$. By trichotomy,
+                which is one of the ordering properties, either
+                $f(x_{1})=z$, $f(x_{1})<z$, or $f(x_{1})>z$. If
+                $f(x_{1})=z$, we are done. If not, suppose
+                $f(x_{1})<z$. The proof is symmetric for
+                $f(x_{1})>z$. Let $x_{2}=\frac{x_{1}+b}{2}$. We
+                continue checking whether $f(x_{2})=z$, and continue
+                dividing the region in two. If $f(x_{2})<z$, 
+                we set $x_{3}=\frac{x_{1}+x_{2}}{2}$, and if
+                $f(x_{2})>z$ we set $x_{3}=\frac{x_{2}+b}{2}$.
+                Note that $|x_{n+1}-x_{n}|=\frac{b-a}{2^{n+1}}$.
+                Moreover, $x_{n}$ converges. Suppose it converges to
+                $c$. Then $c\in[a,b]$. That is, the limit of a
+                function $x_{n}:\mathbb{N}\rightarrow[a,b]$ is
+                contained in $[a,b]$. This is related to the
+                ``compactness'' of $[a,b]$. Moreover, it is related
+                to the ``closedness'' of $[a,b]$. If there is an
+                $N\in\mathbb{N}$ such that $f(x_{N})=z$, then we are
+                done. Suppose not. Let $k_{n}$ be the
+                elements such that $f(x_{k_{n}})<z$ and $\ell_{n}$
+                be the elements such that $f(x_{\ell_{n}})>z$.
+                Both of these must be infinite. For suppose not.
+                Suppose there is a final $N$ such that
+                $f(x_{N})<z$. Then for all $n>N$, $f(x_{n})>z$.
+                But from how we've defined the sequence $x_{n}$,
+                we have that $x_{n}\rightarrow{x_{N}}$. From the
+                continuity of $f$, there is an open interval
+                about $X_{N}$ such that for all elements $x$
+                inside that interval, we have that$f(x)<z$.
+                A contradiction, since eventually some of the
+                $x_{n}$ will be in this interval, and thus
+                $f(x_{n})<z$. So, both $k_{n}$ and $\ell_{n}$ are
+                infinite. From continuity, we have
+                $\lim_{n\rightarrow\infty}f(x_{k_{n}})\leq{z}$
+                and
+                $\lim_{n\rightarrow\infty}f(x_{\ell_{n}})\geq{z}$.
+                Thus, $f(c)\leq{z}$ and $f(c)\geq{z}$, and therefore
+                $f(c)=z$.
+            \end{proof}
+            This theorem fails in $\mathbb{Q}$, for it relies on
+            the completeness of $\mathbb{R}$. For example,
+            $f(x)=x^{2}$ defined on $[0,4]$. Then $2\in[0,4]$, but
+            there is no rational such that $x^{2}=2$
+            (We use the irrationality of $\sqrt{2}$ a lot, huh?)
+            A cuter way to phrase this, in a more topological
+            sense, is that the image of $[a,b]$, which is an
+            interval, or a connected subset of $\mathbb{R}$,
+            is again an interval, or a connected subset of
+            $\mathbb{R}$. The proof that continuous functions take
+            connected sets (Intervals) to connected sets
+            (Again, intervals) is a lot easier than the one presented
+            here, but relies on notions from topology.
+            So we'll skip that.
+            Another commonly used theorem in calculus
+            (Again, usually not proved) is the extreme value theorem.
+            The extreme value is used to proved Rolle's theorem,
+            which says that if $f$ is differentiable on $(a,b)$
+            and if $f(a)=f(b)$, then there is a point
+            $c\in(a,b)$ such that $f'(c)=0$. This is used to
+            prove the mean value theorem, which says that
+            if $f$ is differentiable on $(a,b)$, then there is a point
+            $c\in(a,b)$ such that
+            $f'(c)=\frac{f(b)-f(a)}{b-a}$. This is in turned used to
+            prove the Fundamental Theorem of Calculus. So some very
+            important stuff going on here. First we prove that
+            continuous functions on closed and bounded sets (That is,
+            compact sets) are bounded. We stick to closed intervals
+            for now.
+            \begin{theorem}
+                If $f:[a,b]\rightarrow\mathbb{R}$ is continuous,
+                then it is bounded.
+            \end{theorem}
+            \begin{proof}
+                Suppose not. Then for all $n\in\mathbb{N}$, there is
+                an $x_{n}\in[a,b]$ such that $f(x_{n})>n$. But then
+                $x_{n}$ is a bounded sequence, and thus by
+                Bolzano-Weierstrass there is a convergent subsequence.
+                Let $x$ be the limit of this convergent subsequence.
+                But then $f(x_{k_{n}})\rightarrow{f(x)}$, this is
+                the fundamental property of continuous functions.
+                This is indeed equivalent to the standard
+                $\varepsilon-\delta$ definition of continuity.
+                But $f(x_{k_{n}})\rightarrow\infty$, and $f(x)<\infty$,
+                a contradition. Therefore, etc.
+            \end{proof}
+            \begin{theorem}[Exreme Value Theorem]
+                If $f:[a,b]\rightarrow\mathbb{R}$ is continuous,
+                then there exists $c\in[a,b]$ such that
+                for all $x\in[a,b]$, $f(x)\leq{f(c)}$
+            \end{theorem}
+            \begin{proof}
+                By the previous theorem,
+                $\{f(x):x\in[a,b]\}$ is bounded. By completeness,
+                there is a least upper bound. Let $s$ be such
+                a bound. If $s$ is the least upper bound, then
+                $s-1$ is not a least upper bound. Therefore this is
+                an $x_{0}\in[a,b]$ such that $s-1<f(x_{0})$. Similarly,
+                for all $n\in\mathbb{N}$, there is an
+                $x_{n}\in\mathbb{N}$ such that
+                $s-\frac{1}{n}<f(x_{n})$. But $x_{n}$ is a bounded
+                sequence, and bounded sequences have a convergent
+                subsequence. Let $x$ be the limit of this
+                subsequence. From continuity,
+                $f(x)=\lim_{n\rightarrow\infty}f(x_{k_{n}})$.
+                But $s-\frac{1}{n}\leq{f(x_{k_{n}})}\leq{s}$,
+                and therefore $f(x_{k_{n}})\rightarrow{s}$.
+                Thus, $f(x)=s$.
+            \end{proof}
+            Much the way the intermediate value theorem can be
+            generalized to say that the continuous image of
+            connected sets is connected, the extreme value
+            theorem can be generalized to say that the
+            continuous image of compact sets is compact.
+            The proof is rather easy, but requires
+            topology. So, we'll skip that too.
+            The requirement of these previous theorems on
+            continuity is crucial. Without continuity, functions
+            on $[a,b]$ need not be bounded. Without continuity,
+            functions on $(a,b)$ can just ``jump,'' right over
+            other points. Continuity is very important. It's so
+            important, let's talk about it for a moment.
+        \subsubsection{Continuity}
+            \begin{definition}
+                A function $f:S\rightarrow\mathbb{R}$
+                on a subset $S\subset\mathbb{R}$ continuous
+                at a point $x\in{S}$ is a function such that
+                for all $\varepsilon>0$ there is a $\delta>0$
+                such that for all $x_{0}\in{S}$ where
+                $|x-x_{0}|<\delta$, we have
+                $|f(x)-f(x_{0}|<\varepsilon$.
+            \end{definition}
+            We have used this several times already. It is
+            equivalent to the following.
+            \begin{theorem}
+                A function $f:S\rightarrow\mathbb{R}$
+                is continuous at a point $x\in{S}$ if
+                and only if for all sequences
+                $x_{n}:\mathbb{N}\rightarrow{S}$ such that
+                $x_{n}\rightarrow{x}$, we have
+                $f(x_{n})\rightarrow{f(x)}$.
+            \end{theorem}
+            \begin{definition}
+                A continuous function $f:S\rightarrow\mathbb{R}$
+                is a function that is continuous at all $x\in{S}$.
+            \end{definition}
+            This definition comes from the fact that
+            continuity is a point-wise property, and not a
+            ``curve'' property. Continuous functions are
+            functions that have point-wise continuity at
+            every point. The statement ``A continuous function
+            is a curve that you can draw,'' which many have
+            heard in calculus is slightly misleading. There
+            are functions that are continuous at one point and
+            no where else. There are functions that are
+            continuous on the irrationals and discontinuous
+            on the rationals. For this beast, if $x$ is
+            rational, write it as $x=\frac{p}{q}$ where $p$ and
+            $q$ are integers and relatively prime. Define
+            $f(x)=\frac{1}{q}$. If $x$ is irrational, define
+            $f(x)=0$. This function is continuous at every
+            irrational number and discontinuous at every
+            rational number. There is no ``reverse,'' of this
+            function. That is, there is no function continuous
+            on $\mathbb{Q}$ and discontinuous on every
+            irrational. Uniform continuity is a property of
+            all points in the domain of a function. In
+            ``fancy,'' notation, we can write the definition
+            of a continuous function as follows:
+            \begin{definition}
+                A continuous function on a set $S$ is a
+                function $f:S\rightarrow\mathbb{R}$ such that
+                $\forall_{x\in{S}}\forall_{\varepsilon>0}%
+                 \exists_{\delta>0}:\forall_{x_{0}\in{S}}:%
+                 |x-x_{0}|<\delta%
+                 \Rightarrow|f(x)-f(x_{0})|<\varepsilon$
+            \end{definition}
+            This says, give me a point $x$
+            and a positive number
+            $\varepsilon$ and I can find a $\delta$ satisfying
+            this property. The key part is that you must
+            specify the point first. That is, the $\delta$ I
+            choose may be very dependent on the $x$ you choose.
+            Uniform continuity occurs when a $\delta>0$ can be
+            chosen regardless of the $x$. The $\delta$ is
+            only dependent on the $\varepsilon$ chosen.
+            \begin{definition}
+                A uniformly continuous function on a set $S$
+                is a function $f:S\rightarrow\mathbb{R}$ such that
+                $\forall_{\varepsilon>0}\exists_{\delta>0}%
+                 \forall_{x\in{S}}:\forall_{x_{0}\in{S}}:%
+                 |x-x_{0}|<\delta,|f(x)-f(x_{0})|<\varepsilon$
+            \end{definition}
+            \begin{theorem}
+                If $f:S\rightarrow\mathbb{R}$ is uniformly
+                continuous, and if $x_{n}$ and $y_{n}$
+                are sequences in $S$ such that
+                $x_{n}-y_{n}\rightarrow{0}$, then
+                $f(x_{n})-f(y_{n})\rightarrow{0}$.
+            \end{theorem}
+            The requirement of uniform continuity is crucial.
+            Let $f:(0,1)\rightarrow\mathbb{R}$ be defined by
+            $f(x)=\frac{1}{x}$. Then $f$ is continuous, but
+            not uniformly continuous. Let $x_{n}=\frac{1}{n}$
+            and $y_{n}=\frac{1}{2n}$. Then
+            $y_{n}-x_{n}=\frac{1}{2n}\rightarrow{0}$, but
+            $f(y_{n})-f(x_{n})=2n-n=n$, and that diverges.
+            \begin{theorem}
+                If $f:[a,b]\rightarrow\mathbb{R}$ is
+                continuous, then it is uniformly continuous.
+            \end{theorem}
+            The above theorem relies on the fact that
+            $[a,b]$ is closed and bounded. Indeed, this is
+            the only thing it relies on, the fact that it's
+            an interval (Or connected) it unnecessary. We can
+            write a more general result.
+            \begin{theorem}
+                If $f:S\rightarrow\mathbb{R}$ is continuous
+                and if $S$ is compact, then $f$ is
+                uniformly continuous.
+            \end{theorem}
+            We end with a brief discussion on sequences of
+            functions.
+        \subsubsection{Sequences of Functions}
+            \begin{definition}
+                A sequence of functions
+                $f_{n}:S\rightarrow\mathbb{R}$ converges
+                point-wise to a function $f$ if
+                for all $x\in{S}$, $f_{n}(x)\rightarrow{f(x)}$
+            \end{definition}
+            Rewriting this in ``fancy,'' notation:
+            \begin{definition}
+                $f_{n}\rightarrow{f}$ point-wise if
+                $\forall_{x\in{S}}\forall_{\varepsilon>0}%
+                 \exists_{N\in\mathbb{N}}:\forall_{n>N},%
+                 |f(x)-f_{n}(x)|<\varepsilon$
+            \end{definition}
+            Uniform continuity requires that all of the
+            points of the domain converge to $f(x)$ at
+            the same speed. That is, given any $\varepsilon>0$
+            there is an $N\in\mathbb{N}$ that works for
+            all points. Point-Wise convergence does not
+            have this property. It is possible for a sequence
+            of functions to converge, point-wise, to zero,
+            and yet there is a sequence $x_{n}$ such that
+            $f_{n}(x_{n})\rightarrow\infty$. Uniform
+            convergence does not allow this.
+            \begin{definition}
+                $f_{n}\rightarrow{f}$ uniformly if
+                $\forall_{\varepsilon>0}%
+                 \exists_{N\in\mathbb{N}}%
+                 \forall_{x\in{S}}:\forall_{n>N},%
+                 |f(x)-f_{n}(x)|<\varepsilon$
+            \end{definition}
+            \begin{theorem}
+                If $f_{n}$ is a sequence of
+                continuous functions and if
+                $f_{n}\rightarrow{f}$ uniformly, then
+                $f$ is continuous.
+            \end{theorem}
+            The word ``uniformly,'' is crucial in
+            this definition. This theorem is not
+            necessarily true of point-wise converging
+            functions. Let
+            $f_{n}:[0,1]\rightarrow[0,1]$ be defined by
+            $f(x)=x^{n}$. Then $f_{n}$ converges to
+            $0$ if $x\ne{1}$, and $1$ if $x=1$. That is,
+            the limit function is discontinuous. This is
+            possible because $f_{n}$ does not
+            converge uniformly, only point-wise.
+\end{document}
