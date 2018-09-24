@@ -1,0 +1,445 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../../preamble.tex}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifsurgery\undefined
+        \section*{Surgery Theory}
+        \setcounter{section}{1}
+        \listoffigures
+        \renewcommand\thesubfigure{%
+            \arabic{section}.\arabic{figure}.\arabic{subfigure}%
+        }
+    \fi
+    \subsection{Lecture 4: Principle G-Bundles}
+        A brief discussion on complexes. A simplex
+        is a generalization of the notation of a triangle.
+        A triangle can be considered as the
+        convex-hull of $3$ non-coplanar points.
+        This is called a $2$-simplex. A $0$-simplex
+        is thus a point, and a $1$-simplex is a line.
+        This can be generalized into higher dimensions
+        as well. A $3$-simplex is a tetrahedron,
+        and an $n$-simplex is an $n$ dimensional triangle,
+        defined on $n+1$ non-hyper-coplanar points.
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \filldraw[draw=black,fill=black] (0,1) circle (0.1);
+                \node at (1.5,1) [right] {$0-\textrm{Simplex}$};
+                \filldraw[draw=black,fill=black] (-1,-2) circle (0.1);
+                \filldraw[draw=black,fill=black] (1,-2) circle (0.1);
+                \draw[draw=black,semithick] (1,-2) -- (-1,-2);
+                \node at (1.5,-2) [right] {$1-\textrm{Simplex}$};
+                \filldraw[fill=gray] (9,2)--(7.5,0)--(10.5,0)--cycle;
+                \filldraw[draw=black,fill=black] (9,2) circle (0.1);
+                \filldraw[draw=black,fill=black] (7.5,0) circle (0.1);
+                \filldraw[draw=black,fill=black]
+                    (10.5,0) circle (0.1);
+                \node at (12,1) {$2-\textrm{Simplex}$};
+                \filldraw[draw=black,fill=gray,opacity=0.2]
+                    (9,-1)--(7.5,-3)--(9,-2.3)--cycle;
+                \filldraw[draw=black,fill=gray,opacity=0.3]
+                    (9,-1)--(10.5,-3)--(9,-2.3)--cycle;
+                \filldraw[draw=black,fill=gray,opacity=0.4]
+                    (9,-2.3)--(7.5,-3)--(10.5,-3)--cycle;
+                \filldraw[draw=black,fill=gray,opacity=0.2,thick]
+                    (9,-1)--(7.5,-3)--(10.5,-3)--cycle;
+                \filldraw[draw=black,fill=black]
+                    (9,-1) circle (0.1);
+                \filldraw[draw=black,fill=black]
+                    (7.5,-3) circle (0.1);
+                \filldraw[draw=black,fill=black]
+                    (10.5,-3) circle (0.1);
+                \filldraw[draw=black,fill=black]
+                    (9,-2.3) circle (0.1);
+                \node at (12,-2) {$3-\textrm{Simplex}$};
+            \end{tikzpicture}
+            \caption[%
+                Surgery Theory - Simplices%
+            ]{%
+                Examples of Simplices%
+            }
+            \label{fig:surgery_theory_simplexes}
+        \end{figure}
+        A simplicial complex is a set of simplices
+        $\mathcal{H}$ such that the face of any element
+        of $\mathcal{H}$ is also contained in $\mathcal{H}$,
+        and the intersection of two simplices
+        $\sigma_{1},\sigma_{2}\in \mathcal{K}$ is a
+        face of both $\sigma_{1}$ and $\sigma_{2}$.
+        We return to studying surgery exact sequences
+        for $n\geq 5$. Let $\mathcal{M}$ be an $n$
+        dimensional manifold, and let $G = \pi_{1}(\mathcal{M})$.
+        In our surgery exact sequence we still have this
+        mysterious object $[\mathcal{M},G/Cat]$. Let Cat
+        be either PL or Top. The generalized Poincare
+        Conjecture says that, for $n\geq 5$,
+        $S^{PL}(S^{n})=S^{Top}(S^{n})=\{S^{n}\}$.
+        Let $\mathcal{M}=S^{n}$. Then
+        $G=\pi_{1}(\mathcal{M})=\{e\}$.
+        Then we have the following:
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}[>=latex]
+                \node (a) {$[S^{5},G/Cat]$};
+                \node (b) [right=of a] {$0$};
+                \node (c) [below=of a] {$\pi_{5}(G/Cat)$};
+                \node (d) [right=of c] {$0$};
+                \node (e) [left=of c] {$0$};
+                \node (TEXT) [above=2cm of c]
+                      {%
+                        $L_{6}(\mathbb{Z})\rightarrow%
+                         S^{Cat}(S^{5})\rightarrow%
+                         [S^{5},G/Cat]\rightarrow%
+                         L_{n}(\mathbb{Z})$
+                      };
+                \path[->] (a) edge (b);
+                \path[->] (c) edge (d);
+                \path[->] (e) edge (c);
+                \path[->] (a) edge (c);
+            \end{tikzpicture}
+            \caption[%
+                Surgery Theory - Diagram for Sequence
+                of $S^{5}$%
+            ]{%
+                Digram for the Surgery Exact Sequence of $S^{5}$%
+            }
+            \label{%
+                fig:surgery_theory_example_diagram_%
+                for_surgery_exact_sequence%
+            }
+        \end{figure}
+        So, $\pi_{5}(G/Cat)=\{e\}$. This gives us:
+        \begin{align*}
+            \cdots\rightarrow
+            S^{Cat}(S^{6})\rightarrow
+            [S^{6},G/Cat]
+            &\rightarrow
+            L_{6}(\mathbb{Z})\rightarrow\cdots\\
+            \cdots
+            &\rightarrow{0}\rightarrow\pi_{6}(G/Cat)\rightarrow
+            \mathbb{Z}_{2}\rightarrow{0}
+        \end{align*}
+        So, we have $\pi_{6}(G/Cat)\cong\mathbb{Z}_{2}$.
+        In general, $\pi_{n}(G/o)\cong L_{n}(\mathbb{Z})$.
+        \begin{theorem}[Wall's Theorem]
+            \begin{equation*}
+                L_{n}(\mathbb{Z})=
+                \begin{cases}
+                    \mathbb{Z},&n\equiv{0}\mod{4}\\
+                    0,&n\equiv{1}\mod{4}\\
+                    \mathbb{Z}_{2},&n\equiv{2}\mod{4}\\
+                    0,&n\equiv{3}\mod{4}
+                \end{cases}
+            \end{equation*}
+        \end{theorem}
+        All $L$ groups are periodic, and never have odd
+        torsion. That is, there is never
+        $\mathbb{Z}_{3},\mathbb{Z}_{5}$, etc. Wall groups
+        are hard to compute. Whatever $G/Cat$ is, its
+        homotopy groups for $n\geq 5$ are known.
+        \subsubsection{Principle G-Bundles}
+            A few things are needed:
+            \begin{itemize}
+                \item Map $p:E\rightarrow X$,
+                      where $E$ is a total space
+                      and $X$ is a base space.
+                \item The inverse-image $E_{x}=p^{-1}(\{x\})$
+                      is called the fiber over $x$.
+                \item $G$ (Group) acts on each $E_{x}$
+                      freely and transitively.
+                \item $G$ has to act `continuously.'
+                      Nearby points are taken to nearby points.
+            \end{itemize}
+            Then $p:E\rightarrow X$ is a $G-$principle bundle.
+            \begin{remark}
+                Freely means the only element that
+                fixes everything is the identity.
+            \end{remark}
+            \begin{example}
+                Take a sphere $S^{n}$ and a projection
+                $p:S^{n} \rightarrow \mathbb{RP}^{n}$.
+                $\mathbb{RP}^{n}$ is created by glueing
+                antipotal points together.
+                If $x\in \mathbb{RP}^{n}$, then $p^{-1}(\{x\})$
+                consists of $2$ antipotal points in $S^{n}$.
+                Now $\mathbb{Z}_{2}$ acts on a sphere.
+                $\mathbb{Z}_{2}=\{0,1\}$.
+                $0$ maps $x \mapsto x$ and $1$ maps $x\mapsto -$.
+                Note that $1+1 = 0$, as in $\mathbb{Z}_{2}$.
+                Given any point, you can get to another point
+                in the fiber. This is trivial in this example
+                as there are only two points in the fiber.
+                Also only the identity maps a point back
+                to itself. This action is free and transitive,
+                so $p:S^{n}\rightarrow\mathbb{RP}^{n}$
+                is a $\mathbb{Z}_{2}$-principle bundle.
+            \end{example}
+            \begin{remark}
+                Let $M$ be a manifold (Or a space)
+                with dimension $n$ and fundamental group $G$.
+                A universal cover $\tilde{M}$ of $M$ includes
+                a map $p:\tilde{M}\rightarrow M$ such that
+                $\tilde{M}$ is simply connected of dimension
+                $n$, i.e. $\pi_{1}(\tilde{M})=e$,
+                and $\forall_{x\in M}$,
+                $p^{-1}(x)$ is a collection of discrete points.
+            \end{remark}
+            \begin{remark}
+                $\pi_{1}(\mathbb{RP}^{n})=\mathbb{Z}_{2}$
+                and $S^{n}$ is a universal cover of
+                $\mathbb{RP}^{n}$. So this might come
+                from a general theory.
+            \end{remark}
+            \begin{example}
+                Take the circle $S^{1}$.
+                $\pi_{1}(S^{1})=\mathbb{Z}$.
+                There's a map $p(x)=e^{2\pi{ix}}$ of modulus 1.
+                Note that $p^{-1}(0) = \mathbb{Z}$.
+                So $p^{-1}(x)$ is just a shift of
+                $\mathbb{Z}$ $(\mathbb{Z}+r)$.
+                Note that $\pi_{1}(\mathbb{R})=e$.
+                So $\mathbb{R}$ is a universal cover of $S^{1}$.
+            \end{example}
+            \begin{example}
+                We may think $\mathbb{R}^2$ is a universal
+                cover of $S^{2}$, but $S^{2}$ is already
+                simply connected. S $p$ is simply the
+                identity map, and the universal cover of $S^{2}$
+                is simply $S^{2}$. All universal covers are
+                homotopy equivalent.
+            \end{example}
+            \begin{remark}
+                Let $x\in M$. Then, for all
+                $z\in p^{-1}(\{x\})$, and for all
+                $g\in \pi_{1}(M)$, there is an action
+                $gx\in p^{-1}(x)$. This uses the homotopy
+                lifting property.
+            \end{remark}
+                There is an action $G$ on $\tilde{M}$
+                which preserves the fiber
+                (Takes every element of a fiber to the
+                same fiber. That is, it does not mix fibers),
+                is transitive, and is free.
+                The map $p:\tilde{M}\rightarrow M$
+                is a $\pi_{1}(M)$ Principal Bundle.
+            \subsubsection{Functors}
+                Let $F$ be a functor
+                $F:\textit{Space}\rightarrow\textit{Groups}$.
+                So for all spaces $X$, we have a group $F(X)$.
+                There are many such examples:
+                \begin{itemize}
+                    \begin{multicols}{4}
+                        \item Cohomology
+                        \item Homology
+                        \item K-Theory
+                        \item Other Stuff
+                    \end{multicols}
+                \end{itemize}
+                \begin{remark}
+                    Homology: Take $M$ and triangulate.
+                    Take maps from the simplicial complex
+                    of $M$ to $G$ (Group) (Certain conditions).
+                    There's an equivalence relation on
+                    these maps. That set after taking the
+                    equivalence relations is the homology:
+                    $H_{n}(M,G)$. $n$ describes the type
+                    of simplicies. If $n>\dim(M)$,
+                    then $H_{n}(G,M)=0$.
+                    $H_{n}(M,G)=\{f:\Delta^{n}\rightarrow G\}$.
+                \end{remark}
+                \begin{remark}
+                    Cohomology is the set
+                    $H^{n}(M,G)=[H_{n}(M,G),G]$,
+                    that is, the \textit{dual}.
+                \end{remark}
+                We want to talk about cohomology.
+                Under special conditions there is
+                something called the Brown Representation
+                Theorem. Consider Cohomology $H^{n}(M,G)$,
+                with coefficients in $G$. Cohomology
+                is Homotopy invariant, that is if
+                $M\cong{N}$, then $H^{n}(M,G)\cong H^{n}(N,G)$.
+                The Brown-Representation Theorem says
+                that there is a classifying space $BG$
+                such that, for all spaces $M$, there is
+                a one-to-one correspondence between
+                $H^{n}(X,G)\leftrightarrow[X,BG]$.
+                In general, if $F$ is a functor,
+                then the Brown-Representation Theorem
+                says that there is a classifying space
+                $Y$ such that $F(X)$ has a one-to-one
+                correspondence with the homotopy classes
+                of maps, $[X,Y]$.
+                $F(x)\leftrightarrow[X,Y]$.
+                \begin{example}
+                    The Eilenberg-MacLane Space $K(G,n)$
+                    has the property that
+                    $\forall_{j\ne{n}}$,
+                    $\pi_{n}(K(G,n))=G$,
+                    and $\pi_{j}(K(G,n))=0$.
+                    $K(G,n)$ is the classifying
+                    space for cohomology.
+                \end{example}
+                \begin{theorem}
+                    $K(G,n)$ is the classifying
+                    space for cohomology. That is,
+                    up to homotopy,
+                    $H^{n}(X,G)\leftrightarrow[X,K(G,n)]$.
+                \end{theorem}
+                Let $\textrm{Prin}_{G}(X)$ be the collection
+                of $G-$principal bundles on $X$. With a
+                certain equivalence relation, it turns out
+                the $\textrm{Prin}_{G}(X)$ is a group. So
+                $\textrm{Prin}_{G}:\textit{Spaces}\rightarrow%
+                 \textit{Groups}$
+                is a functor. The Brown-Representation
+                Theorem implies that there is a classifying
+                space $BG$
+                $\textrm{Prin}_{G}\leftrightarrow[X,BG]$.
+                \begin{theorem}
+                    If $p:E\rightarrow X$ and $p':E'\rightarrow X$
+                    are both bundles over $X$, then there exists
+                    $p\oplus p':E\oplus E' \rightarrow X$
+                    COME BACK TO LATER
+                \end{theorem}
+            \subsubsection{Grothendique Groupification of Semigroup}
+                \begin{definition}
+                A semi-group is a group without the
+                requirement for invereses.
+                \end{definition}
+                \begin{example}
+                    $\{0,1,2,\hdots\}$ is a semi-group
+                    under addition.
+                \end{example}
+                Let $G$ be a semi-group. Constraint
+                $G\times{G}/\sim$.
+                $(a,b)\sim(c,d)$ if $a+d=b+c$.
+                So, $(2,3)\sim(4,5)\sim(7,8)\sim(-1,0)\equiv -1$.
+                The equivalence class of all of these things is
+                called $-1$. We still have all of the positive
+                integers, $(4,2)\sim(5,3) \sim(6,4) \equiv 2$.
+                This process adds all of the negatives. This
+                process, called Grothendique Construction on a
+                Semi-group creates a group out of a semi-group.
+                It is, in a way, the 'smallest' group containing
+                the semi-group. The groupification of
+                $\{0,1,2,3,\hdots\}$ will be $\mathbb{Z}$.
+                \begin{example}
+                    What are the vector bundles over a dot?
+                    There is $\mathbb{R}^{0}$ (A dot),
+                    $\mathbb{R}^{n},\hdots,\mathbb{R}^n,\hdots$
+                    There is an operation on this set
+                    $\{\mathbb{R}^{n}:n \geq 0\}$. This makes a
+                    semi-group, and there is a Grothendique
+                    Groupification
+                    $G_{r}(\mathbb{Z}_{\geq 0},+)=\mathbb{Z}$
+                \end{example}
+                Suppose M is a monoid/semigroup.
+                Not required to have an inverse but should
+                have an identity. For example,
+                $(\mathbb{Z}_{\geq 0},+)$ is a monoid.
+                Has identity, but no inverse.
+                Construct $M\times M=\{(a,b):a,b\in M\}$
+                with the operation $(a,b)+(c,d) = (a+c,b+d)$.
+                Think of $(a,b)$ as $a-b$. Note that in
+                regular math $'3-1'='4-2'$, so we want $(3,1)$
+                to equal $(4,2)$. We do this with the
+                equivalence rlation $(a,b)\sim (c,d)$ if
+                and only if $a+d=b+c$. Let $M\times M/\sim$
+                be called $M_{G}$. 
+                \begin{theorem}
+                    $M_{G}$ is a group.
+                \end{theorem}
+                \begin{theorem}
+                    There is an injection $i:M\rightarrow M_{G}$
+                    with the following property:
+                \begin{enumerate}
+                    \item $i(a)\sim (a,0)\sim(a+1,1)\sim(a+2,2)\sim\hdots$
+                \end{enumerate}
+                \end{theorem}
+            This construction is functorial, so if there are monoids $M,N$ with a semi-homomorphism $\phi:M\rightarrow N$ $(\phi(a*b)=\phi(a)*\phi(b))$ (Homomorphism for a semi-group), then there is a HM $\phi_{G}:M_{G}\rightarrow N_{G}$ so $G(Monoids,Semihomomorphism)\rightarrow (Groups,Homomorphism)$ is a functor.
+            \subsubsection{Suspension}
+            Let $X$ and $Y$ be disjoint topological spaces. The wedge product $X\vee Y$ is the one-point union of $X$ and $Y$. Take $X$, take $Y$, and glue one point together. 
+            \begin{theorem}
+            If $X$ and $Y$ are disjoint topological spaces, then $\pi_{1}(X\vee Y)=\pi_{1}(X)\oplus\pi_{1}(Y)$.
+            \end{theorem}
+            In the same context, the smash product of $X$ and $Y$ is $X\wedge Y=X\times Y/(X\vee Y)$. Picture $X=(0,1]$ in the $x$ axis and $Y=(0,1]$ in the $y$ axis. Then $X\times Y$ is a square in the $xy$ plane, and $X\vee Y$ is the $x$ and $y$ axes from $0$ to $1$. So $X\wedge Y$ takes all of the points on the two axes between $0$ and $1$ and smashes them down to the origin.
+            \begin{example}
+            $S^{1}\times [0,1]$ is the hollow cylinder, and $S^{1}\vee [0,1]$ is the boundary of the edge of the cylinder (The lid) and the line going down the cylinder parallel with the z-axis (the spine). So $X\wedge Y$ smashes down to a cone. This is then homeomorphic to $D^{2}$. 
+            \end{example}
+            \begin{example}
+            The torus can be visualized by the diagram shown in \ref{fig:surgery_theory_plane_representation_of_a_torus}. So $T^{2}=S^{1}\times S^{1}$. Using the diagram, we can see that the smash product $S^{1}\wedge S^{1}$ is homotopy equivalent to a sphere.
+            \end{example}
+            \begin{definition}
+            Let $X$ be a topological space. Then the suspension of $X$, denoted $\Sigma X$, is $S^{1}\wedge X$.
+            \end{definition}
+            So $\Sigma S^{n}=S^{n+1}$. The usefulness of smash has to do with $\pi_{k}(\Sigma X)=\pi_{k-1}(X)$. There's another thing called the Freudenthal suspension theorem.
+            \subsubsection{Higher Homotopy}
+            The fundamental group, which is the first homotopy group, is $\pi_{1}(X)$. Ingredients needed:
+            \begin{enumerate}
+                \item Topological Space $X$
+                \item A basepoint $x_{0}$
+            \end{enumerate}
+            \begin{definition}
+            The fundamental group of a topological space $X$ about a base point $x_{0}$ is the set $\pi_{1}(X)=[(S^{1},\star),(X,\star)]=Hom\big((S^{1},\star),(X,\star)\big)=\{f:S^{1}\rightarrow X:f(x)=\star\}/\textrm{Homotopy}$.
+            \end{definition}
+            $\pi_{1}(X)$ is a group using concatenation. Higher homotopy groups:
+            \begin{definition}
+            $\pi_{n}(X)=[(S^{n},\star),(X,\star)]$
+            \end{definition}
+            It turns out that $\pi_{n}(X)$ has a certain operation, for $n\geq 2$, such that it is an Abelian group. However, $\pi_{1}(X)$ need not be an Abelian group.
+            \begin{example}
+            The Klein bottle is an example of a space such that $\pi_{1}(X)$ is not an Abelian group.
+            \end{example}
+            The question becomes 'What are the Homotopy groups of sphere?' That is, what is $\pi_{m}(S^{n})$? Recall stereographic projection from before. Take $S^{n}$ and remove the north pole (The point $(0,0,1)$). This can be projected down to $\mathbb{R}^{2}$. This can be generalized to $n$ dimensions, and in general $S^{n}\setminus\{\textrm{North Pole}\}$ is homeomorphic to $\mathbb{R}^{n}$. Now $\mathbb{R}^{n}$ has $0$ homotopy groups because it is contractible (Can be smushed down to a point). If $m<n$, then we are mapping a small 'sphere' into a big 'sphere.
+            \begin{theorem}
+            If $n\ne m$, then there is no continuous function $f$ such that $f:S^{n}\rightarrow S^{m}$ is surjective.
+            \end{theorem}
+            Now, if $m<n$, then we map $S^{m}$ into $S^{n}$. But since there is no surjective continuous function we can remove a point from $S^{n}$, map it down to $\mathbb{R}^{n}$ and then contract. So, $\pi_{m}(S^{n})=0$ for all $m<n$. The next case is when $m=n$. There are three obvious maps: The constant map, the identity map, and the antipotal map. It can be shown that there are, for all $n$, countably many maps. So $\pi_{n}(S^{n})=\mathbb{Z}$. Another neat little fun fact is that $\pi_{3}(S^{2})=\mathbb{Z}$. (Related to Hopf fibration). Now, the suspension theorem says that $\pi_{n+1}(\Sigma X)=\pi_{n}(X)$. So $\mathbb{Z}=\pi_{3}(S^{2})=\pi_{4}(\Sigma S^4)=\pi_{4}(S^{3})=\pi_{5}(\Sigma S^{3})=\pi_{5}(S^{4})=\hdots$ so, if $m-n=1$, then $\pi_{m}(S^{n})=\mathbb{Z}$.
+            \begin{theorem}
+            $\pi_{3}(S^{2})=\mathbb{Z}$
+            \end{theorem}
+            \begin{theorem}
+            If $m-n=1$, and $n\geq 2$, then $\pi_{m}(S^{n})=\mathbb{Z}$
+            \end{theorem}
+            These are examples of stability theorems, or stability results.
+            \subsubsection{Fibrations}
+            \begin{definition}
+            A fibration is a map between topological spaces that has the homotopy lifting property for every space $X$.
+            \end{definition}
+            A fibration gives rise to a long exect sequence of homotopy groups
+            \begin{align*}
+                \pi_{3}(S^{1})\rightarrow\pi_{3}(S^{3})\rightarrow\pi_{3}(S^{2})\rightarrow\pi_{2}(S^{1})&\rightarrow\pi_{2}(S^{3})\rightarrow\pi_{2}(S^{1})\rightarrow\hdots\\
+                &\hdots\rightarrow\pi_{2}(S^{3})\rightarrow\pi_{2}(S^{2})\rightarrow\pi_{1}(S^{1})\rightarrow\pi_{1}(S^{3})\rightarrow\pi_{1}(S^{2})
+            \end{align*}
+            We need to know that $\pi_{n}(S^{1})=0$ if $n\geq 2$. An element of $\pi_{n}(S^{1})$ is $f:S^{n}\rightarrow S^{1}$. Stanley owe's me an explanation.
+            This becomes:
+            \begin{align*}
+                0\rightarrow\mathbb{Z}\rightarrow A\rightarrow 0\rightarrow 0\rightarrow\mathbb{Z}\rightarrow\mathbb{Z}\rightarrow 0\rightarrow 0
+            \end{align*}
+            \subsubsection{Classifying Space}
+            If $G$ is a group (discrete or not), then there is a classifying space (Topological space) $BG$ (unique up to homotopy) such that :
+            \begin{enumerate}
+                \item $\pi_{1}(BG)=G$ and $\pi_{n}(BG)=0$ for all $n\geq 2$.
+                \item There is a contractible space $EG$ that is a principle $G$ bundle with a $G$ action such that $BG\simeq EG/G$. $EG\rightarrow BG$.
+                \item For all spaces $X$ with a continuous map $f:X\rightarrow BG$, there is a pullback diagram
+                \item The correspondence $(X\rightarrow BG)\rightarrow (Y_{f}\downarrow X)$ has the property that, if $f\simeq g$, then $(Y_{f}\downarrow X)\overset{\textrm{Principle G-Bundle}}{=}(Y_{g}\downarrow X)$. This gives a map $[X,BG]\rightarrow Prin_{G}(X)$ which is a bijection.
+            \end{enumerate}
+            \begin{definition}
+            Let $V$ be a finite dimensional vector space over $\mathbb{F}$. We say that $B:V\times V\rightarrow\mathbb{F}$ is symmetric bilinear if:
+            \begin{enumerate}
+                \item $B(v,v')=B(v',v)$
+                \item $B(v+w,v')=B(v,v')+B(w,v')$
+                \item $B(\lambda v,w)=\lambda B(v,w)$
+            \end{enumerate}
+            \end{definition}
+            \begin{example}
+            Let $A$ be a symmetric real $n\times n$ matrix. Then $B:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n}\rightarrow \mathbb{R}$ given by $B(X,Y) = X^{T}AY$. This $B$ gives rise to a map $Q:V\rightarrow \mathbb{F}$ given by $Q(x)=B(x,x)$.
+            \begin{equation*}
+                Q(X)=\begin{bmatrix}x,y\end{bmatrix}\begin{bmatrix}2&0\\0&1\end{bmatrix}\begin{bmatrix}x&y\end{bmatrix}=2x^{2}+y
+            \end{equation*}
+            Which is a quadratic form.
+            \end{example}
+\end{document}
