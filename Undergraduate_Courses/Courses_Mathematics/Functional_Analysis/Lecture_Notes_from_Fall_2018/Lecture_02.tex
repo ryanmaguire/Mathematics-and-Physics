@@ -1,0 +1,442 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../../preamble.tex}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\iffunct\undefined
+        \section*{Functional Analysis}
+        \setcounter{section}{1}
+        \setcounter{subsection}{1}
+    \fi
+\subsection{Lecture 2: September 17, 2018}
+    \subsubsection{More on Continuity}
+        A function $f$ is continuous at a point $x$ if
+        for all $\varepsilon>0$ there exists a $\delta>0$
+        such that for all $x_{0}$ such that
+        $|x-x_{0}|<\delta$, we have that
+        $|f(x)-f(x_{0})|<\varepsilon$. This defines
+        continuity at a point. Continuity on a set
+        $S$ simply means that $f$ is continuous
+        at every point on the set. Uniform continuity,
+        however, is a set property. You don't have
+        uniform continuity at a point, you have this
+        on a set. A function $f$ is uniformly continuous
+        if for all $\varepsilon>0$ there is a $\delta>0$
+        such that for all $x$ and $x_{0}$ such that
+        $|x-x_{0}|<\delta$, it is true that
+        $|f(x)-f(x_{0})|<\varepsilon$. Note that in
+        the definition of continuity, the point $x$
+        is the first thing that is mentioned, whereas in
+        uniform continuity we really don't care about it
+        until the end of the definition.
+        \begin{theorem}
+            If $x_{n}$ and $y_{n}$ are sequences such
+            in a set $S$ such that $x_{n}-y_{n}\rightarrow{0}$,
+            and if $f:{S}\rightarrow\mathbb{R}$, then
+            $f$ is uniformly continuous if and only if
+            $f(x_{n})-f(y_{n})\rightarrow{0}$
+        \end{theorem}
+        \begin{theorem}
+            If $f:[a,b]\rightarrow\mathbb{R}$ is continuous,
+            then $f$ is uniformly continuous.
+        \end{theorem}
+        \begin{proof}
+            Let $x_{n}$, $y_{n}\in[a,b]$ be sequences such
+            that $x_{n}-y_{n}\rightarrow{0}$. By the
+            Bolzano-Weierstrass theorem there is a
+            convergent subsequence $x_{k_{n}}$. Let $x$
+            be the limit. But
+            $y_{k_{n}}=x_{k_{n}}-(y_{k_{n}}-x_{k_{n}})$,
+            and therefore $y_{k_{n}}\rightarrow{x}$.
+            Let $X_{n}=x_{k_{n}}$, and $Y_{n}=y_{k_{n}}$.
+            Then
+            $f(X_{n})-f(Y_{n})%
+             =(f(X_{n})-f(x))-(f(Y_{n}-f(x))$.
+            But from continuity, $f(x_{n})\rightarrow{f(x)}$
+            and $f(y_{n})\rightarrow{f(x)}$. Therefore, $f$
+            is uniformly continuous.
+        \end{proof}
+        A few notes on pointwise convergence, recapping
+        from last week. We say that $f_{n}\rightarrow{f}$
+        point-wise on a set $S$ if for all $x\in{S}$,
+        $f_{n}(x)-f(x)\rightarrow{0}$. We say that
+        $f_{n}\rightarrow{f}$ uniformly on $S$ if
+        $\underset{x\in{S}}{\sup}%
+         |f_{n}(x)-f(x)|\rightarrow{0}$.
+        \begin{example}
+            Let $f_{n}(x)=nxe^{-nx}$ on $[0,1]$.
+            Then for $x\in[0,1]$, $f_{n}(x)\rightarrow{0}$
+            and therefore $f_{n}(x)\rightarrow{0}$ poinwise
+            on $[0,1]$. Note that
+            $f_{n}'(x)=(n-n^{2}x)e^{-nx}$. This has a
+            zero at $x=\frac{1}{n}$, so we see that
+            $f_{n}(x)$ has a maximum
+            which evaluates to $e^{-1}$. But
+            $\sup|f_{n}(x)-f(x)|=\sup|f_{n}(x)|=e^{-1}$.
+            So $f_{n}(x)$ does not
+            \textit{uniformly} converge to $0$. The
+            convergence is only \textit{pointwise}.
+        \end{example}
+        \begin{theorem}[Weierstrass Approximation Theorem]
+            If $f:[a,b]\rightarrow\mathbb{R}$ is continuous,
+            then there is a sequence of polynomials
+            $f_{n}$ such that $f_{n}\rightarrow{f}$
+            uniformly on $[a,b]$.
+        \end{theorem}
+        \begin{proof}
+            We'll assume, for now, that $[a,b]=[0,1]$
+            and that $f(0)=f(1)=0$. Extend $f$ to be
+            zero outside of $[0,1]$. Let
+            $Q_{n}(x)=c_{n}(1-x^{2})^{n}$ on $[-1,1]$,
+            and choose $c_{n}$ such that
+            $\int_{-1}^{1}Q_{n}(x)dx=1$. So we have:
+            \begin{align*}
+                c_{n}\int_{-1}^{1}(1-x^{2})^{n}dx
+                &=2c_{n}\int_{0}^{1}(1-x^{2})^{n}dx
+                &
+                &\geq{2c_{n}}\int_{0}^{1}(1-x)^{n}dx\\
+                &=2c_{n}\int_{0}^{1}(1-x)^{n}(1+x)^{n}dx
+                &
+                &=\frac{2}{n+1}c_{n}
+            \end{align*}
+        From this we have that $c_{n}\leq{n+1}$. Let
+        $f_{n}(x)=\int_{0}^{1}f(t)Q_{n}(x-t)dx$.
+        Then $f_{n}(x)$ is a polynomial. Note that
+        $f(t)Q_{n}(x-t)$ is roughly zero when $t$ differs
+        from $x$ and $n$ is large enough. So we have:
+        \begin{equation*}
+            f_{n}(x)=\int_{0}^{1}f(t)Q_{n}(x-t)dt
+            \approx{f(x)}\int_{0}^{1}Q_{n}(x-t)dt=f(x)
+        \end{equation*}
+        The remainder of the proof is to quantify this.
+        Since $f$ is zero outside of $[0,1]$, if
+        we let $s=t-x$, then:
+        \begin{align*}
+            f_{n}(x)&=\int_{-x}^{1-x}f(s+x)Q_{n}(s)ds
+            =\int_{-1}^{1}f(s+x)Q_{n}(s)ds\\
+            \Rightarrow|f_{n}(x)-f(x)|
+            &=\bigg|\int_{-1}^{1}f(x+t)Q_{n}(t)dt
+            -\int_{-1}^{1}f(x)Q_{n}(t)dt\bigg|\\
+            \Rightarrow|f_{n}(x)-f(x)|
+            &\leq\int_{-1}^{1}|f(x+t)-f(x)|Q_{n}(t)dt
+        \end{align*}
+        This comes for the fact that$\int_{-1}^{1}Q_{n}(t)=1$
+        and from the integral version of the triangle
+        inequaility.
+        Suppose $\varepsilon>0$. Since $f$ is continuous
+        on $[0,1]$, it is uniformly continuous. But
+        if $f$ is uniformly continuous then there exists
+        a $\delta>0$ such that
+        $|f(x+t)-f(x)|<\frac{\varepsilon}{2}$ for all
+        $t<\delta$. So we have:
+        \begin{equation*}
+            |f_{n}(x)-f(x)|\leq
+            \int_{-1}^{-\delta}|f(x+t)-f(x)|Q_{n}(t)dt
+            +\int_{-\delta}^{\delta}|f(x+t)-f(x)|Q_{n}(t)dt
+            +\int_{\delta}^{1}|f(x+t)-f(x)|Q_{n}(t)dt
+        \end{equation*}
+        But $f$ is continuous on a closed and bounded
+        set and therefore $f$ is bounded. Let $M$ be
+        such a bound. Then $|(f(x+t)-f(x)|\leq{2M}$.
+        We have:
+        \begin{equation*}
+            |f_{n}(x)-f(x)|\leq
+            2M\int_{-1}^{-\delta}Q_{n}(t)dt
+            +\frac{\varepsilon}{2}
+            \int_{-\delta}^{\delta}Q_{n}(t)dt
+            +2M\int_{\delta}^{1}Q_{n}(t)dt
+        \end{equation*}
+        But for all $t\in[-1,-\delta]$,
+        $Q_{n}(t)\leq{Q_{n}(-\delta)}$. Similarly for
+        $t$ in $[\delta,1]$. Since $Q_{n}(t)$
+        is an even function:
+        \begin{equation*}
+            |f_{n}(x)-f(x)|\leq
+            4MQ_{n}(\delta)+
+            \frac{\varepsilon}{2}\int_{-1}^{1}Q_{n}(t)dt
+            =4MQ_{n}(\delta)+\frac{\varepsilon}{2}
+        \end{equation*}
+        But since $\delta>0$, $Q_{n}(\delta)\rightarrow0$.
+        Therefore, there is an $N\in\mathbb{N}$ such that
+        for all $n>N$,
+        $|Q_{n}(\delta)|<\frac{\varepsilon}{8M}$.
+        But then $4MQ_{n}(\delta)<\frac{\varepsilon}{2}$.
+        Therefore, etc.
+    \end{proof}
+        Another way to put this is that if $f$ is continuous
+        on $[a,b]$ and if $\varepsilon>0$, then there is
+        a polynomial $P$ such that for all $x\in[0,1]$,
+        $|f(x)-P(x)|<\varepsilon$. There is a generalization
+        of this. The set of functions need not be
+        polynomials. The set needs to be closed
+        under addition, multiplication, and scalar
+        multiplication, it must separate points,
+        and must not take every point to zero.
+        This is the Stone-Weierstrass theorem.
+    \subsubsection{Functional Analysis}
+        Functional analysis is concerned with normed spaces.
+        This is a vector space $V$ with a function, called
+        a norm, from $V$ to $[0,\infty)$. This is usually
+        written $\norm{\mathbf{x}}$ for an element
+        $\mathbf{x}\in{V}$. This norm must satisfy the
+        folllowing for all $\mathbf{x}$, $\mathbf{y}\in{V}$:
+        \begin{enumerate}
+            \item $\norm{\mathbf{x}}=0$ if and only
+                  if $\mathbf{x}=\mathbf{0}$
+                  \hfill[Definiteness]
+            \item $\norm{c\mathbf{x}}=|c|\norm{\mathbf{x}}$
+                  for all $c\in\mathbb{R}$.
+                  \hfill[Positiveness]
+            \item $\norm{\mathbf{x}+\mathbf{y}}%
+                   \leq\norm{\mathbf{x}}+\norm{\mathbf{y}}$
+                  \hfill[Triangle Inequality]
+        \end{enumerate}
+        \begin{example}
+            The following are normed spaces:
+            \begin{enumerate}
+                \begin{multicols}{2}
+                    \item $\mathbb{R}$ with $\norm{x}=|x|$
+                    \item $\mathbb{R}^{n}$ with
+                          $\norm{\mathbf{x}}%
+                           =\sqrt{\sum_{k=1}^{n}x_{k}^{2}}$
+                    \item $\mathbb{R}^{n}$ with
+                          $\norm{\mathbf{x}}%
+                           =(\sum_{k=1}^{n}x_{k}^{p})^{1/p}$
+                    \item $\ell^{p}$: sequences $x_{n}$
+                          such that
+                          $\sum_{k=1}^{\infty}|x_{n}|^P%
+                           <\infty$.
+                    \item $\mathbb{R}^{n}$ with
+                          $\norm{\mathbf{x}}%
+                           =\max\{x_{1},\hdots,x_{n}\}$
+                    \item $\ell^{\infty}$: Bounded sequences
+                          with $\norm{v}=\sup\{v_{n}\}$
+                \end{multicols}
+            \end{enumerate}
+        \end{example}
+        From the fact that $\ell^{\infty}$ is a normed space
+        we have that the set of convergent sequences,
+        again with the $\norm{}_{\infty}$ norm, is also
+        a normed space. The set of null sequences, which
+        is the set of sequences that converge to zero,
+        is also a normed space. A stranger normed space
+        is the set of all bounded continuous functions
+        $f:S\rightarrow\infty$ with norm
+        $\norm{f}=\sup\{|f(x)|\}$. Furthermore, the
+        set of all integrable functions with
+        bounded integrals, with norm
+        $(\int_{S}|f|^{p})^{1/p}$. If you allow integral
+        to mean Lebesgue Integrable, then this becomes
+        a special space denoted $L^{p}(S)$. As a final
+        example, the set of functions
+        $f:[a,b]\rightarrow\mathbb{R}$ such that
+        $(\int_{a}^{b}\sum_{k=0}^{n}|f^{(k)}|^{p})^{(1/p)}$
+        exists, denoted $W^{n,p}([a,b])$ is called
+        the Sobolev space.
+    \subsubsection{Metric Spaces}
+        A lot of the things we wish to
+        prove don't rely on the fact that all of these
+        spaces are vector spaces. Really, we only care about
+        the properties that the norm on the space has.
+        What matters is that there's a set and a notion
+        of distance on the set. This abstraction is the
+        fundamental concept of a metric space.
+        \begin{definition}
+            A metric space is a set $S$ and a function
+            $d:{X}\times{X}\rightarrow[0,\infty)$ such that:
+            \begin{enumerate}
+                \item For all $x$, $y\in{X}$, $d(x,y)=0$
+                      if and only if $x=y$.
+                      \hfill[Definitenes]
+                \item For all $x$, $y\in{X}$,
+                      $d(x,y)=d(y,x)$
+                      \hfill[Symmetry]
+                \item For all $x$, $y\in{X}$,
+                      $d(x,z)\leq{d(x,y)+d(y,z)}$
+                      \hfill[Triangile Inequality]
+            \end{enumerate}
+        \end{definition}
+        \begin{theorem}
+            If $(V,\norm{})$ is a vector space,
+            and if $d:{V}\times{V}\rightarrow[0,\infty)$
+            is defined by
+            $d(\mathbf{x},\mathbf{y})%
+             =\norm{\mathbf{x}-\mathbf{y}}$,
+            then $(V,d)$ is a metric space.
+        \end{theorem}
+        \begin{proof}
+            In order:
+            \begin{enumerate}
+                \item If $\norm{\mathbf{x}-\mathbf{y}}=0$,
+                      then $\mathbf{x}=\mathbf{y}$.
+                      Similarly,
+                      $\norm{\mathbf{x}-\mathbf{x}}%
+                       =\norm{\mathbf{0}}=0$.
+                \item $d(\mathbf{x},\mathbf{y})%
+                       =\norm{\mathbf{x}-\mathbf{y}}%
+                       =\norm{(-1)(\mathbf{y}-\mathbf{x})}%
+                       =|-1|\norm{\mathbf{y}-\mathbf{x}}%
+                       =\norm{\mathbf{y}-\mathbf{y}}%
+                       =d(y,x)$
+                \item The triangle inequality follows
+                      from the triangle inequality that
+                      norms have.
+            \end{enumerate}
+        \end{proof}
+        There are metric spaces that have nothing to do
+        with vector spaces or norms. Metric spaces are
+        a more abstract object. Every normed space
+        has an associated metric space since there
+        is the ``induced'' metric.
+        \begin{example}
+            Let $X$ be a set and let
+            $d(x,y)=\begin{cases}%
+                        0,&x=y\\%
+                        1,&{x}\ne{y}%
+                    \end{cases}$
+            This is the discrete metric on $X$.
+        \end{example}
+        \begin{example}
+            Let $X=\{a,b,c\}$, and
+            $d(a,b)=1$, $d(b,c)=2$. What value
+            must $d(a,c)$ have if $d$ is a metric on $X$?
+            We need $d(a,c)\leq{d(a,b)+d(b,c)}=1+2=3$.
+            Also $d(a,b)\leq{d(a,c)+d(c,b)}=d(a,c)+2$, and
+            therefore $-1\leq{d(a,c)}$. Finally, we need
+            $d(b,c)\leq{d(b,a)+d(a,c)}=1+d(a,c)$. Together
+            we have $d(a,c)\leq{3}$ and $1\leq{d(a,c)}$. So
+            Pick $d(a,c)=2$.
+            This makes $(X,d)$ a metric space.
+        \end{example}
+        \begin{example}
+            Let $X=\mathbb{R}$ and $d(x,y)=|x-y|$.
+            Then $(X,d)$ is a metric space.
+        \end{example}
+        \begin{example}
+            $\mathbb{R}$ with
+            $d(x,y)=|f(x)-f(y)|$, where
+            $f$ is injective, is a metric space.
+        \end{example}
+        \begin{example}
+            $\mathbb{R}$ with
+            $d(x,y)=|\tan^{-1}(x)-\tan^{-1}(y)|$ is a
+            metric. Moreover, $d(x,y)<\pi$ for all
+            $x,y\in\mathbb{R}$. Thus, we have found
+            a metric that makes $\mathbb{R}$ a bounded
+            set. As a fun fact, $x_{n}=n$ is a Cauchy
+            sequence in this metric space, but
+            this sequence does not converge to anything.
+            Thus we've found a metric on
+            $\mathbb{R}$ such that
+            $(\mathbb{R},d)$ is not complete.
+        \end{example}
+    \subsubsection{Topology}
+        \begin{definition}
+            The open ball of radius $r>0$
+            about a point $x$ in a metric space
+            $(X,d)$ is the set
+            $B_{r}(x)=\{y\in{X}:d(x,y)<r\}$
+        \end{definition}
+        The picture for this is a ``circle'' around the
+        point $x$ or radius $r$. However, this circle
+        can look very strange for weird metrics.
+        \begin{example}
+            If $X$ is a set and $d$ is the discrete metric,
+            then $B_{r}(x)$ is either the point $x$
+            (If $r\leq{1}$), or it is the entire set $X$.
+        \end{example}
+        \begin{example}
+            With $X=\mathbb{R}$ and $d$ the standard metric
+            $d(x,y)=|x-y|$, we have $B_{r}(x)$ is simply
+            the open interval $(x-r,x+r)$.
+        \end{example}
+        \begin{example}
+            Let $X=\mathbb{R}^{2}$ and define
+            $d_{p}(x,y)%
+             =(|x_{1}-y_{1}|^{p}+|x_{2}-y_{2}|^{p})^{1/p}$.
+            For $p=2$, an open ball is a circle around
+            the point $(x,y)$ of radius $r$. For $p=1$,
+            we have ``diamonds'' around the point $x$.
+            And for $p=\infty$ we have a square
+            around $x$.
+        \end{example}
+        If you have a vector space and a norm on it,
+        then the open balls about a point will have the
+        property of convexity. Convexity is a vector space
+        property, given two points the ``line'' between the
+        two remains in the set. Metric spaces have no such
+        notion. Since the balls of $\norm{}_{p}$ are not
+        convex with $p<1$, we have that $\norm{}_{p}$ is
+        a metric on $\mathbb{R}^{n}$
+        if and only if $p\geq{1}$.
+        \begin{definition}
+            We say that a subset of $X$ is open if
+            for all $x\in{S}$ there is an $r>0$
+            such that $B_{r}(x)\subset{S}$.
+        \end{definition}
+        \begin{example}
+            If $(X,d)$ is a metric space, then
+            $X$ is open, $\emptyset$ is open
+            (Vacuously true), and if $x\in{X}$ and
+            $r>0$, then $B_{r}(x)$ is open.
+        \end{example}
+        \begin{theorem}
+            If $(X,d)$ is a metric space, $x\in{X}$,
+            and $r>0$, then $B_{r}(x)$ is an open
+            subset of $X$.
+        \end{theorem}
+        \begin{proof}
+            If $z\in{B_{r}(x)}$, let $t=d(x,z)$.
+            Then $0\leq{t}<r$. Let $r'=r-t$.
+            But if $y\in{B_{r'}(z)}$, then
+            $d(x,y)\leq{d(x,z)+d(y,z)}<t+r'=t+r-t=r$.
+            Therefore $B_{r'}(z)\subset{B_{r}(x)}$.
+        \end{proof}
+        \begin{theorem}
+            A finite intersection of open sets is open.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{U}_{1},\hdots,\mathcal{U}_{n}$
+            are open and if
+            $x\in\cap_{k=1}^{n}\mathcal{U}_{k}$, then there
+            exists $r_{1},\hdots,r_{n}$ such that
+            $B_{r_{i}}(x)\subset\mathcal{U}_{i}$. Let
+            $r=\min\{r_{1},\hdots,r_{n}\}$. Then
+            $B_{r}(x)\subset\cap_{k=1}^{n}\mathcal{U}_{i}$
+        \end{proof}
+        \begin{theorem}
+            Arbitrary unions of open sets are open.
+        \end{theorem}
+        Infinite intersections need not be open.
+        The proof above would fail since the
+        $r_{i}$ can form a sequence tending to zero.
+        But indeed, let $X=\mathbb{R}$ and let
+        $d(x,y)=|x-y|$, and take
+        $\mathcal{U}_{n}=(-\frac{1}{n},\frac{1}{n})$.
+        Then all of the $\mathcal{U}_{n}$ are open,
+        yet the intersection, which is the set $\{0\}$,
+        is not open. All of this mumbo-jumbo creates
+        the more general notion of a topological space.
+        \begin{definition}
+            A topological space is a set $X$ and a
+            subset $\tau\subset\mathcal{P}(X)$ such that:
+            \begin{enumerate}
+                \item $\emptyset,X\in\tau$
+                \item Finite intersections of sets in $\tau$
+                      are also sets in $\tau$.
+                \item Arbitrary unions of sets in $\tau$
+                      are also sets in $\tau$.
+            \end{enumerate}
+        \end{definition}
+        \begin{definition}
+            An open subset of a topological space
+            $(X,\tau)$ is a set $\mathcal{U}\in\tau$.
+        \end{definition}
+        Here, $\mathcal{P}(X)$ denotes the \textit{power set}
+        of $X$. This is the set of all subsets of $X$.
+        The notion of a topological space generalizes the
+        notion of a metric space. There is no notion of
+        distance in such spaces, and things can be weird.
+        There are topological spaces that have no metric
+        associated with them.
+\end{document}
