@@ -1,13 +1,23 @@
-\documentclass[crop=false,class=book]{standalone}
+\documentclass[crop=false,class=book,oneside]{standalone}
 %----------------------------Preamble-------------------------------%
-\input{preamble.tex}
-%----------------------------GLOSSARY-------------------------------%
-\makeglossaries
-\loadglsentries{../../glossary}
-\loadglsentries{../../acronym}
-%---------------------------Title Page------------------------------%
+\input{../../../preamble.tex}
+%--------------------------Main Document----------------------------%
 \begin{document}
-    \chapter{Some More Stuff}
+    \newif\ifworkmiscellaneousgems
+    \ifx\ifwork\undefined
+        \title{Miscellaneous Gems}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Miscellaneous Gems}
+        \addcontentsline{toc}{chapter}{Miscellaneous Gems}
+        \markboth{}{MISCELLANEOUS GEMS}
+        \setcounter{chapter}{1}
+    \else
+        \chapter{Miscellaneous Gems}
+    \fi
         \section{On Uniform Convergence}
             \begin{definition}
                 A sequence of functions $f_n$ is said to converge
@@ -50,20 +60,99 @@
                 index, countable or uncountable.
             \end{definition}
             \begin{definition}
-                A set $A$ is said to be compact if and only if for all open coverings $\Delta$ there is a finite sub-cover $\Delta_0\subset \Delta$, such that $A\subset \cup_{A_k \in \Delta_0} A_k$.
+                A set $A$ is said to be compact if and
+                only if for all open coverings $\Delta$ there is
+                a finite sub-cover $\Delta_0\subset \Delta$, such
+                that $A\subset \cup_{A_k \in \Delta_0} A_k$.
             \end{definition}
             \begin{theorem}
                 [Heine-Borel Theorem]
                 Any closed-bounded subset of the real line is compact. 
             \end{theorem}
             \begin{proof}
-                For let $A$ be a closed and bounded subset of $\mathbb{R}$ with least upper bound $b$ and greatest lower bound $a$. Let $\Delta$ be an open covering, and let $X$ be the set of points $y\in A$ such that for all $s<y$ such that $s\in A$, there is a finite refinement of $\Delta$ which covers these points. $X$ is non-empty, as $a\in X$. The set $X$ is bounded, as for all points $y\in X$ we have that $a\leq y \leq b$. As bounded sets have a least upper bound, let $x$ be the least upper bound. Suppose $x<b$. As $x\in [a,b]$, there exists an element $A_k$ of $\Delta$ such that $x \in A_k$. But as $A_k$ is open and therefore there is an $r>0$ such that $y\in (x-r,x+r)\Rightarrow y \in A_k$. But then $y=x + \frac{r}{2} > x$ and $y\in A_k$. Therefore x is not the least upper bound as we have found an element in $X$ greater than $x$. Therefore $x\not<b$. And thus $x=b$.
+                For let $A$ be a closed and bounded subset of
+                $\mathbb{R}$ with least upper bound $b$ and
+                greatest lower bound $a$. Let $\Delta$ be an
+                open covering, and let $X$ be the set of
+                points $y\in A$ such that for all $s<y$ such
+                that $s\in A$, there is a finite refinement
+                of $\Delta$ which covers these points. $X$ is
+                non-empty, as $a\in X$. The set $X$ is bounded,
+                as for all points $y\in X$ we have that
+                $a\leq y\leq b$. As bounded sets have a least
+                upper bound, let $x$ be the least upper bound.
+                Suppose $x<b$. As $x\in [a,b]$, there exists an
+                element $A_k$ of $\Delta$ such that $x \in A_k$.
+                But as $A_k$ is open and therefore there is an
+                $r>0$ such that
+                $y\in (x-r,x+r)\Rightarrow y \in A_k$.
+                But then $y=x+\frac{r}{2}>x$ and
+                $y\in A_k$. Therefore x is not the
+                least upper bound as we have found an
+                element in $X$ greater than $x$.
+                Therefore $x\not<b$. And thus $x=b$.
             \end{proof}
             \begin{theorem}
-                If a sequence of functions are point-wise equicontinuous on a closed and bounded set, then they are uniformly equicontinuous.
+                If a sequence of functions are
+                point-wise equicontinuous on a closed
+                and bounded set, then they are
+                uniformly equicontinuous.
             \end{theorem}
             \begin{proof}
-                For let $A$ be a closed bounded subset of $\mathbb{R}$, and let $f_n(x)$ be a sequence of point-wise equicontinuous functions on $A$. As the set is closed and bounded, it is compact by the Heine-Borel theorem. Let $\varepsilon>0$ be given. For $x\in A$, define the function $\delta(x) = \min\{\sup\{\delta>0:\ |x-x_0|<\delta,\ x_0\in A \Rightarrow |f_n(x)-f_n(x_0)|<\frac{\varepsilon}{2}, \forall n\in\mathbb{N}\},b-a\}$. Construct the open covering $\mathcal{U}$ as follows: $\mathcal{U} = \{(x-\delta(x),x+\delta(x)):\ x\in A\}$. This is an open covering, as every set in $\mathcal{U}$ is open, and for all $x\in A$, $x\in(x-\delta(x),x+\delta(x))\in\mathcal{U}$. But as $A$ is compact, there is a finite sub-cover. Let $a=x_0<x_1<...<x_{n-1}<x_n=b$ be the centers of the remaining open sets in the sub-cover. Further refine this sub-covering as follows: If $(x_j-\delta(x_j),x_j+\delta(x_j))\subset (x_k-\delta(x_k),x_k+\delta(x_k))$ for $j\ne k$, then remove it from the sub-cover as it is superfluous. We now have a set of points $a=a_0<z_1<...<z_{N-1}<z_N=b$ such that $A \subset \cup_{i=0}^{N} (z_i-\delta(z_i),z_i+\delta(z_i))$. Let $\delta = \min\{\delta(z_0),...,\delta(z_N),\delta(b), \frac{(a+\delta(a)) - (z_1-\delta(z_1))}{2}, ..., \frac{(z_{N-1} + \delta(z_{N-1})) - (b-\delta(b))}{2}\}$. That is, $\delta$ is the smallest of the $\delta(z_i)$, or half of the smallest intersection of two consecutive intervals. Let $x\in A$ be arbitrary. If $(x-\delta,x+\delta)$ is contained entirely in one of the $(z_i-\delta(z_i),z_i+\delta(z_i))$ sets, then we have that $|x-x_0|<\delta \Rightarrow |x-x_0| <\delta(z_i) \Rightarrow |f_n(x)-f_n(x_0)|<\frac{\varepsilon}{2}$ for all $n\in\mathbb{N}$. Suppose that $(x-\delta,x+\delta)$ is contained in two of the $(x-\delta(z_i),x+\delta(z_i))$ sets. Note, it cannot be in three or more as we have refined the sub-cover in such a manner as to prevent this. Let $y$ be the center of the intersection of these two sets. Then we have that for $|x-x_0|<\delta$, then $|f_n(x)-f_n(x_0)| = |f_n(x) - f_n(y) + f_n(y) - f_n(x_0)| \leq |f_n(x) - f_n(y)| + |f_n(y) - f_n(x_0)|$. But $|x-y|$ and $|x_0-y|$ are less than $\frac{(z_i + \delta(z_i))-(z_{i+1}-\delta(z_{i+1}))}{2}$ apart, and therefore $|f_n(x) - f_n(y)|<\frac{\varepsilon}{2}$, and $|f_n(y) - f_n(x_0)| < \frac{\varepsilon}{2}$. Therefore, $|f_n(x) - f_n(x_0)|<\varepsilon$. And as $x$ is arbitrary, $f_n(x)$ is uniformly equicontinuous.
+                For let $A$ be a closed bounded subset
+                of $\mathbb{R}$, and let $f_n(x)$ be a sequence
+                of point-wise equicontinuous functions on $A$.
+                As the set is closed and bounded, it is compact
+                by the Heine-Borel theorem. Let $\varepsilon>0$
+                be given. For $x\in A$, define the function
+                $\delta(x)%
+                 =\min\{\sup\{\delta>0:|x-x_0|<\delta,\ x_0\in A%
+                  \Rightarrow |f_n(x)-f_n(x_0)|<\frac{\varepsilon}{2}$,
+                $\forall n\in\mathbb{N}\},b-a\}$.
+                Construct the open covering $\mathcal{U}$ as
+                follows:
+                $\mathcal{U}=\{(x-\delta(x),x+\delta(x)):\ x\in A\}$.
+                This is an open covering, as every set in
+                $\mathcal{U}$ is open, and for all
+                $x\in A$, $x\in(x-\delta(x),x+\delta(x))\in\mathcal{U}$.
+                But as $A$ is compact, there is a finite sub-cover.
+                Let $a=x_0<x_1<...<x_{n-1}<x_n=b$ be the centers
+                of the remaining open sets in the sub-cover.
+                Further refine this sub-covering as follows: If
+                $(x_j-\delta(x_j),x_j+\delta(x_j))%
+                 \subset (x_k-\delta(x_k),x_k+\delta(x_k))$
+                for $j\ne k$, then remove it from the sub-cover as
+                it is superfluous. We now have a set of points
+                $a=z_0<z_1<...<z_{N-1}<z_N=b$ such that
+                $A\subset\cup_{i=0}^{N} (z_i-\delta(z_i),z_i+\delta(z_i))$.
+                Let
+                $\delta%
+                 =\min\{\delta(z_0),...,\delta(z_N),\delta(b),%
+                        \frac{(a+\delta(a))-(z_1-\delta(z_1))}{2},%
+                        ...,%
+                        \frac{(z_{N-1}+\delta(z_{N-1}))-(b-\delta(b))}{2}\}$.
+                That is, $\delta$ is the smallest of the $\delta(z_i)$,
+                or half of the smallest intersection of two consecutive
+                intervals. Let $x\in A$ be arbitrary. If $(x-\delta,x+\delta)$
+                is contained entirely in one of the
+                $(z_i-\delta(z_i),z_i+\delta(z_i))$ sets, then we have
+                that $|x-x_0|<\delta \Rightarrow |x-x_0| <\delta(z_i) \Rightarrow |f_n(x)-f_n(x_0)|<\frac{\varepsilon}{2}$ for all $n\in\mathbb{N}$.
+                Suppose that $(x-\delta,x+\delta)$ is contained in two of
+                the $(x-\delta(z_i),x+\delta(z_i))$ sets. Note, it cannot
+                be in three or more as we have refined the sub-cover in
+                such a manner as to prevent this. Let $y$ be the center
+                of the intersection of these two sets. Then we have that
+                for $|x-x_0|<\delta$, then
+                $|f_n(x)-f_n(x_0)|%
+                 =|f_n(x)-f_n(y)+f_n(y)-f_n(x_0)|%
+                 \leq|f_n(x)-f_n(y)|+|f_n(y)-f_n(x_0)|$.
+                But $|x-y|$ and $|x_0-y|$ are less than
+                $\frac{(z_i + \delta(z_i))-(z_{i+1}-\delta(z_{i+1}))}{2}$
+                apart, and therefore $|f_n(x)-f_n(y)|<\frac{\varepsilon}{2}$,
+                and $|f_n(y)-f_n(x_0)|<\frac{\varepsilon}{2}$.
+                Therefore, $|f_n(x)-f_n(x_0)|<\varepsilon$.
+                And as $x$ is arbitrary,
+                $f_n(x)$ is uniformly equicontinuous.
             \end{proof}
             \begin{theorem}
                 If a sequence of point-wise equicontinuous functions converge, then the limit is point-wise continuous.
