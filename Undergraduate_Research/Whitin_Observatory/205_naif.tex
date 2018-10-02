@@ -8,747 +8,674 @@
 %--------------Title Page-----------%
 \begin{document}
 \chapter{Miscellaneous Materials}
-\section{Naif Toolkit}
-\subsection{Tutorials}
-\subsubsection{Tutorial 1: Introduction}
-The objective of this tutorial is to provide an overview of the SPICE system. Information on Fortran, C, IDL, and MATLAB will also be included throughout. The topics of Kernel production and Archiving SPICE data is not addressed in much detail. Math skills, an innate sense of spatial orientation, and familiarity with your computer's OS, a code editor, and a compiler will help. 
-\subsubsection{Tutorial 2: Motivation}
-Scientists would like to use common tools and methods throughout a project's lifecycle and understand the calculations and transformations used to produce observation geometry data. They'd also like to produce custom geometry calculations themselves. Prior to SPICE was SEDR (Supplemental Experiment Data Record). This was built and operated at JPL. Late or post-launch updates were difficult and expensive to accommodate. Thus, scientists can't get better ancillary data if/when better inputs (Spacecraft trajectory/orientation) are determined. Then came SPICE. SPICE has greater flexibility in deciding what observation geometry parameters are computed, at what times or what frequency for what time span these parameters are computed, and when to re-do parameter computations using new inputs. The downside is there are non-trivial programming requirements needed to read SPICE data and compute whatever is needed. 
-\subsubsection{Tutorial 3: Overview}
-The original focus of SPICE was on ancillary data needed by planetary scientists for initial science data analysis, science archive preparation, and post-mission data analysis. SPICE now covers the full mission lifecycle and archive uses. It is also used in Heliophysics, Earth Science, observations from terrestrial observatories, and national defense. Ancillary data includes reference frames, positions, orientations, sizes/shapes, pointing, and time conversions. These help determine where the spacecraft is located, and what was the location, size, shape, and orientation of the target being observed. Ancillary data comes from the spacecraft, from the mission control center, from spacecraft and instrument builders, and from science organizations. SPICE is used to organize and package these data in a collection of stable file types called 'Kernels.' Knowing observation geometry and events is an important element of space mission design, selection of observation opportunities, analysis of returned science data from the instruments, mission engineering activities, and preparation o science data archives. SPICE is comprised of the following components:
-\begin{enumerate}
-\begin{multicols}{3}
-    \item Ancillary data files
-    \item Software
-    \item Documentation
-    \item Tutorials
-    \item Programming Lessons
-    \item Training Classes
-    \item User consultation
-\end{multicols}
-\end{enumerate}
-SPICE stands for Spacecraft Planet Instrument C-matrix (Camera matrix) Events. SPICE Data consists of the folowing:
-\begin{enumerate}
-    \item SPK files deal with the spacecraft and the planets involved. This includes the ephemerides.
-    \item PcK files detail the target bodies size, shape, and orientation.
-    \item IK files have the instrument field-of-view size, shape, and orientation.
-    \item CK files contain the orientation of the space vehicle or any articulating structure on it.
-    \item EK (ESP, ESQ, ENB) files contain event information (Science plan, sequence, experiment's notebook).
-    \item FK files have reference frame specifications.
-    \item LSK is leap seconds tabulation.
-    \item SCLK has spacecraft clock coefficients.
-    \item DSK has digital shape models.
-\end{enumerate}
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[b]{0.49\textwidth}
-	    \includegraphics[width=\textwidth]{NAIF_1}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_2}
-    \end{subfigure}
-	\begin{subfigure}[b]{0.49\textwidth}
-	    \includegraphics[width=\textwidth]{NAIF_3}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_4}
-    \end{subfigure}
-        \caption{Figures from NAIF}
-        \label{fig:first_naif_image_more_stuff_4}
-\end{figure}
-The SPK files contain the space vehicle ephemeris, or trajectory. It also contains the ephemerides of the target planet, satellites, comets, and asteroids. More generally it contains the position of something relative to something else. The PcK files have planet, satellite, comet, and asteroid orientations, shapes, and sizes. Other similar constants such as parameters for gravitational models, atmospheric models, or ring models may also be contained in these. IK files have the instrument field-of-view size, shape, and orientation. Additional information such as internal timing may also exist. CK files have the instrument platform attitude (Or spacecraft attitude). More generally, the orientation of something relative to a specified reference frame. EK files have events broke into three components: ESP, science observation plans; ESQ, spacecraft and instrument commands; ENB, experiment notebooks and ground data system logs. FK files contain the frames. These are definitions and specifications of relationships between reference frames. Both fixed and dynamics frames are available. LSK files contain leap seconds tabulation. Used for converting between UTC and TDB (ET). SCLK files contain spacecraft clock coefficients. Used for converting from SCLK to TDB (ET). DSK files have shape models (Digital elevation model and tesselated planet model). SPICE is available in Fortran 77, C, IDL, MATLAB, and Python. It is also available for Linux, Windows, OSX, and Solaris. An example of using SPICE is as follows: The kernels are selected and incorporated into the User's own modules and SPICE Toolkit library modules. The end result may be an evaluation of a planned orbit, instrument pointing plane, observation geometry visualization, and analysis of expected communications link performance. Instrument data, derived observation geometry, and instrument calibration data may then be analyzed by the user and lead to wonderful science results. SPICE can be used for:
-\begin{enumerate}
-    \item Evaluation of a planned trajectory
-    \item Mission engineering analysis
-    \item Planning an instrument pointing profile
-    \item Observation geometry visualization
-    \item science data archiving and analysis
-\end{enumerate}
-Many observation geometry parameters at selected times may be computed such as positions, velocities, size, shape, and orientation of planets, satellites, comets, asteroids, and spacecraft. The instrument field-of-view location on a planet's surface or atmosphere may also be computed. Times when a certain geometric event or condition occurs may be found such as eclipses, occultations, conjunctions, and oppositions.
-\subsubsection{Tutorial 4: Fundamental Concepts}
-\begin{definition}
-An Epoch is an instant in time specified by some singular event.
-\end{definition}
-\begin{example}
-Passage of a star across one's zenith meridian.
-\end{example}
-\begin{example}
-Eclipse of a spacecraft signal as it passes behind a solid body.
-\end{example}
-\begin{remark}
-Clocks count epochs specified by events such as "Regular," osciallation of a pendulum, quartz crystal, or electromagnetic radiation from a specified source, measured from an agreed upon reference epoch.
-\end{remark}
-\begin{definition}
-Time Systems are agreed upon standards for naming epochs, measuring time, and synchronizing clocks.
-\end{definition}
-\begin{definition}
-International Atomic Time (TAI) is a statistical time scale based on data from $\sim200$ atomic clocks in over $50$ national laboratories. The unit of a second is the duration of 9,192,631,770 periods of the radiation corresponding to the transition between two hyperfine levels of the ground state of the Cesium $133$ atom. TAI is expressed as a count of atomic seconds past the astronomically determined instant of midnight January 1, 1958 00:00:00.
-\end{definition}
-\begin{definition}
-Coordinate Universal Time (UTC) is the civil time in Greenwich, England ($\sim$GMT).
-\end{definition}
-\begin{equation}
-TAI=UTC+10\ \textrm{seconds}+\textrm{number of leap seconds}
-\end{equation}
-\begin{remark}
-This equation is only valid after January 1, 1972.
-\end{remark}
-\begin{definition}
-Astronomical Time (UT1) is an hour representation of the angle between the plane containing the Greenwich Zenith Meridian (The Prime Meridian) and the plane containing the computed mean sun.
-\end{definition}
-\begin{remark}
-UTC noon and UT1 noon should occur simultaneously. The Earth's rotation is not uniform, and eventually UTC noon and UT1 noon become out of sync. When the mismatch is greater than $0.9$ atomic seconds, a leap second is added or removed from the end of a designated UTC day. Normally June 30 or December 31. The variations in the Earth's rotation that cause this are not predictable.
-\end{remark}
-\begin{definition}
-Barycentric Dynamical Time (TDB) is a mathematical idea used in the equations of motion and is used as the independent time variable for many SPICE subroutine interfaces. It is related to Barycentric Coordinated Time (TCB) by an offset and a scale factor. 
-\end{definition}
-\begin{definition}
-Terrestrial Dynamical Time is the ideal time (Proper time) on Earth at sea level. The IAU calls this Terrestrial Time (TT).
-\end{definition}
-\begin{equation}
-TDT=TAI+32.184\ \textrm{seconds}
-\end{equation}
-\begin{remark}
-TDB and TDT have the same reference epoch, but advance at different rates. Variations are small ($\sim 1.6$ ms) and are almost periodic with a period of 1 sidereal year (To first order). Below describes the variations due to relativistic effects:
-\begin{equation}
-TDB=TDT+0.001657\sin\big(E+0.01671\sin(E)\big)
-\end{equation}
-\end{remark} 
-Spacecraft have onboard clocks to control scheduling of observations, maneuvers, and attitude adjustments and are used to time stamp data. The fundamental unit of time for these is the tick, which is the smallect increment possible for a spacecraft clock. Nominal tick duration is spacecraft clock dependent. SCLK string formats vary for different spacecraft. 
-\begin{definition}
-A reference frame is an ordered set of three mutually orthogonal, and possibly time dependent, unit direction vectors, coupled with a location called the frame's origin.
-\end{definition}
-\begin{definition}
-The ordered set of axes of a reference frame is called a basis.
-\end{definition}
-\begin{definition}
-A coordinate system is the method of locating points in a given reference frame.
-\end{definition}
-\begin{example}
-Cartersian coordinate systems and Spherical coordinate systems are very common for $\mathbb{R}^3$ (3-dimensions).
-\end{example}
-\begin{remark}
-A reference frame's center is an ephemeris object whose location is coincident with the origin of the frame. The center of the a body is the center of mass of the body. The center of any inertial frame is the solar system barycenter (In SPICE).
-\end{remark}
-The origin cancels in vector arithmetic, so choice of center is somewhat unimportant. Choice of axes is more important. The center is used in computing light time to centers of non-inertial frames.
-\begin{definition}
-An inertial reference frame is a reference frame that satisfies the following conditions:
-\begin{enumerate}
-    \item It is non-rotating with respect to fixed stars.
-    \item The origin is non-accelerating.
-\end{enumerate}
-\end{definition}
-\begin{remark}
-The velocity of the origin is typically non-zero, and the actual acceleration is negligible.
-\end{remark}
-\begin{example}
-J2000 (Also called ICRF) and B1950 are inertial reference frames.
-\end{example}
-\begin{definition}
-A non-inertial reference frame is a reference frame that is not an inertial reference frame.
-\end{definition}
-\begin{example}
-Body-fixed reference frames, those centered at a body center or topocentric, are non-inertial (Unless the body is the Sun or the galactic center, etc.) The reference frame of an instrument is non-inertial. Dynamic frames (Frames defined by time-dependent vectors) are non-inertial as well.
-\end{example}
-\begin{definition}[\textbf{J2000 Frame}]
-The J2000 frame is defined by the Earth's equator and equinox, determined from observations of planetary motions and other data. 
-\begin{enumerate}
-    \item The $x-$axis is the line of intersection between Earth's mea equatorial plane and the ecliptic plane on January 1, 2000 12:00:00 TDB, or JD 2451545.0 TDB.
-    \item The $z-$axis is the line normal to the mean equatorial plane which contains the Earth's core on January 1, 2000 12:00:00 TDB. It is approximately equal to the Earth's spin axis orientation at that epoch.
-    \item The $y-$axis is defined as the line that contains the intersection of the $x$ and $z$ axis and is parallel to $\hat{\mathbf{z}}\times \hat{\mathbf{x}}$, where $\hat{\mathbf{z}}$ and $\hat{\mathbf{x}}$ are unit vectors for the $z$ and $x$ axes, respectively.
-\end{enumerate}
-\end{definition}
-\begin{figure}
-    \centering
-    \includegraphics[width = \textwidth]{NAIF_5}
-    \caption{Example of the J2000 Frame}
-    \label{fig:naif_j200_figure}
-\end{figure}
-Body-fixed frames are tied to a named body and rotate with it. The most common bodies are hard-coded in SPICE "IAU\_Body Name"
-\begin{example}
-IAU\_MARS, IAU\_SATURN
-\end{example}
-The rotation state (Orientation at time T) is determined using a SPICE text PCK. 
-\begin{remark}
-IAU\_EARTH and IAU\_MOON exist, but should NOT be used. See "lunar-earth\_pck-fk" for the best frames for these bodies.
-\end{remark}
-\begin{definition}
-Topocentric frames are reference frames attached to the surface of a body. The $z-$axis lies parallel to the gravity gradient. That is, it points "Up."
-\end{definition}
-\begin{example}
-We can take a point on Earth's surface and say that $\hat{\mathbf{z}}$ points to the zenith, $\hat{\mathbf{x}}$ points North, and thus $\hat{\mathbf{y}}$ points West.
-\end{example}
-\begin{definition}
-Planetocentric coordinate systems are systems such that the origin lies at the center of a given body. $\hat{\mathbf{z}}$ lies parallel to the North Pole.
-\end{definition}
-\begin{remark}
-Dwarf Planets (Pluto, Ceres, Eris, Haumea, Makemake) and other small objects spin in the right hand sense about their "North Pole."
-\end{remark}
-\begin{definition}
-The state of an object is its position and velocity relative to a given object.
-\end{definition}
-\begin{remark}
-In SPICE, these objects are referred to as target and observer. In the SPK subsystem, a state is a six dimensional vector. A state is specified relative to a reference frame.
-\end{remark}
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{NAIF_6}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{NAIF_7}
-    \end{subfigure}
-    \caption{Aberration Corrections}
-    \label{fig:naif_aberration_corrections}
-\end{figure}
-To perform algebraic operations on states, they must be in the same reference frame. If two reference frames are both right-handed, we may convert between the two via a rotation matrix:
-\begin{equation}
-P_{B}(t)=R(t)P_{A}(t)
-\end{equation}
-As both references frames may be time dependent, the rotation matrix may be time dependent. The velocity frame transformation is the time derivative:
-\begin{equation}
-\frac{dP_{B}(t)}{dt}=\frac{dR(t)}{dt}P_{A}(t)+R(t)\frac{dP_{A}(t)}{dt}
-\end{equation}
-We have the following transformation between states:
-\begin{equation}
-\begin{pmatrix}P_{B_{x}}(t)\\P_{B_{y}}(t)\\P_{B_{z}}(t)\\ \frac{dP_{B_{x}}(t)}{dt}\\ \frac{dP_{B_{y}}(t)}{dt}\\ \frac{dP_{B_{z}}(t)}{dt}\end{pmatrix}=
-\begin{pmatrix}R_{11}(t)&R_{12}(t)&R_{13}(t)&0&0&0\\R_{21}(t)&R_{22}(t)&R_{23}(t)&0&0&0\\R_{31}(t)&R_{32}(t)&R_{33}(t)&0&0&0\\\frac{dR_{11}(t)}{dt}&\frac{dR_{12}(t)}{dt}&\frac{dtR_{13}}{dt}&R_{11}(t)&R_{12}(t)&R_{13}(t)\\\frac{dR_{21}(t)}{dt}&\frac{dR_{22}(t)}{dt}&\frac{dtR_{23}}{dt}&R_{21}(t)&R_{22}(t)&R_{23}(t)\\
-\frac{dR_{31}(t)}{dt}&\frac{dR_{32}(t)}{dt}&\frac{dtR_{33}}{dt}&R_{31}(t)&R_{32}(t)&R_{33}(t)\end{pmatrix}
-\begin{pmatrix}P_{A_{x}}(t)\\P_{A_{y}}(t)\\P_{A_{z}}(t)\\ \frac{dP_{A_{x}}(t)}{dt}\\ \frac{dP_{A_{y}}(t)}{dt}\\ \frac{dP_{A_{z}}(t)}{dt}\end{pmatrix} 
-\end{equation}
-Where $R_{ij}(t)$ is the $i^{th}$ row $j^{th}$ column of the rotation matrix $R(t)$. The SPICELIB routine SXFORM and PXFORM return state transformation and position transformation matrices, respectively. Within the SPICE System, Aberration Corrections are adjustments made to state vectors and time-dependent reference frames to accurately reflect the apparent (As opposed to actual) state and attitude of a target object as seen from a specified observer at a specified time. Actual uncorrected states from an ephemeris are called geometric states. Aberration corrections are need to accurately answer the following:
-\begin{enumerate}
-    \item Which direction must a remote sensing instrument point to observe a target of interest?
-    \item For a given pointing direction and observation time, what target body surface location would be observed by a remote sensing instrument?
-    \item Which direction must an antenna be pointed to transmit a signal to a specified target?
-\end{enumerate}
-\subsubsection{Tutorial 5: Conventions}
-\begin{enumerate}
-    \item SPICE - The name of this ancillary information system.
-    \item NAIF - The name of the team of people at KPL who lead development of the SPICE system.
-    \item SPICE Toolkit - The principal collection of software produced by NAIF as part of the SPICE information system.
-    \item Toolkit - The Fortran 77 version of the SPICE Toolkit.
-    \item Kernel - A SPICE data file.
-    \item SPICELIB - The principal user library found within the Fortran versions of the SPICE Toolkit.
-    \item CSPICE - The C Toolkit, and the principal user library within C versions of the SPICE Toolkit.
-    \item Icy - An IDL interface to CSPICE.
-    \item Mice - A MATLAB interface to CSPICE.
-    \item Text Kernel - Kernels consisting entirely of ASCII information, each line terminated using the local OS convention.
-    \item Binary Kernel - Any kernel type using a binary file format. Binary types are SPK, binary PcK, CK, DBK, and DSK.
-    \item Transfer format kernel - A hexadecimal (ASCII) version of a binary kernel.
-    \item Command File - An input file containing program directives, and sometimes input data.
-    \item Found Flag - Boolean output that informs your program whether or not data were found that match your request.
-    \item Database Kernel (DBK) - A kernel that provides a self-contained SQL-like database capability.
-    \item Coverage - The period of time for which a time-based kernel contains data.
-    \item Deprecated software - Code that has been superseded with a new and presumably better version.
-    \item Toolkit Version Naming -``Nxxxx", e.g. N0065 is Version 65.
-    \item Satellite - A natural satellite, never a spacecraft.
-    \item Run-time - Occurs when you execute a program.
-\end{enumerate}
-SPICE imposes some restrictions on kernel files names. No white space allowed and a maximum of 255 characters. NAIF suggests names conform to PDF standard: "36.3." Below lists common SPICE Kernel File Name Extensions. All reference frames used within SPICE are right-handed systems. That is, $\hat{\mathbf{x}} = \hat{\mathbf{y}}\times \hat{\mathbf{z}}$. SPICE also uses quaternions in C-kernels. There are different definitions of quaternions based on the order of the quaternion elements, the multiplication formula, and the convention for associating quaternions with rotation matrices. The two commonly used styles are SPICE, which is Hamilton's original formulation, and MSOP, which is used in attitude control and other aerospace applications.
-\begin{table}[H]
-    \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tabular}{|ccl|ccl|ccl|}
-        \hline
-        SPK&&&SCLK&&&PcK&&\\
-        \hline
-        &.bsp&Binary SPK file.&&.tsc&Text SCLK file.&&.tpc&Text PcK file.\\
-        &.xsp&Transfer format SPK file.&&&&&.bpc&Binary PcK file.\\
-        &&&&&&&.xpc&Transfer format PcK file.\\
-        \hline
-        MK&&&IK&&&DSK&&\\
-        \hline
-        &.tm&Text meta-kernel file.&&.ti&Text IK file.&&.bds&Binary DSK file.\\
-        \hline
-        FK&&&LSK&&&CK&&\\
-        \hline
-        &.tf&Text FK file.&&.tls&Text LSK file.&&.bc&Binary CK file.\\
-        &&&&&&&.xc&Transfer format CK file.\\
-        \hline
-        ESP&&&ESQ&&&ENB&&\\
-        &.bep&Binary science plan EK file.&&.bes&Binary sequence component EK file.&&.ten&Text experimenter's notebook EK file.\\
-        &.xep&Transfer format science plan EK file.&&.xes&Transfer format sequence component EK file.&&&\\
-        \hline
-        DBK&&&DBK&&&&&\\
-        &.bdb&Binary database kernel.&&.xdb&Transfer format database kernel.&&&\\
-        \hline
-    \end{tabular}}
-    \caption{List of Kernel File Types}
-    \label{tab:naif_list_of_kernel_file_types}
-\end{table}
-\begin{remark}
-Pluto is a special case. Pluto is treated as a planet when speaking about ephemerides (SPK). Pluto is treated as a dwarf planet when speaking about orientation and rotational state (PCK).
-\end{remark}
-\subsubsection{Tutorial 6: IDs}
-SPICE uses IDs and names to identify physical objects and reference frames. An ID is an integer number and a name is a string. Names are used primarily as input and output arguments in SPICE software interfaces (APIs). User's deal mostly with names. Physical object IDS are used in kernels as data identifies. Physical object names are used in the high-level user APIs as input and/or output arguments. 
-\begin{enumerate}
-    \item Spacecraft are negative numbers.
-    \begin{itemize}
-    \begin{multicols}{3}
-        \item $-6$ is PIONEER 6
-        \item $-64$ is OSIRIS-REX
-        \item $-82$ is Cassini
-    \end{multicols}
-    \end{itemize}
-    \item DSN Ground Stations are $399000+\textrm{Station Number}$
-    \begin{itemize}
-    \begin{multicols}{2}
-        \item $399005$ is DSS-05
-        \item $399066$ is DSS-66
-    \end{multicols}
-    \end{itemize}
-    \item Non\_DSN stations are $39800+$ an integer between $0$ and $999$: $398990$ is New Norcia
-    \item The sun is $10$ and the Solar System Barycenter is $0$.
-    \item The planet barycenters are $1-9$
-    \begin{itemize}
-    \begin{multicols}{3}
-        \item[] $1$ - Mercury Barycenter
-        \item[] $2$ - Venus Barycenter
-        \item[] $3$ - Earth-Moon Barycenter
-        \item[] $4$ - Mars Barycenter
-        \item[] $8$ - Neptune Barycenter
-        \item[] $9$ - Pluto Barycenter
-    \end{multicols}
-    \end{itemize}
-    \item Satellites are the planet barycenter number multiplied by a number between $1$ and $98$.
-    \begin{itemize}
-    \begin{multicols}{4}
-        \item $301$ - The Moon
-        \item $401$ - Phobos
-        \item $402$ - Deimos
-        \item $501$ - Io
-    \end{multicols}
-    \end{itemize}
-    \item Periodic comets are $1000000 +$ sequence number.
-    \begin{itemize}
-    \begin{multicols}{2}
-        \item $1000001$ - Arend
-        \item $1000002$ - Agen-Regaux
-        \item $100036$ - Halley
-        \item $100132$ - Hale-Bopp
-    \end{multicols}
-    \end{itemize}
-    \item Numbered Asteroids are $2000000+$ IAU asteroid number.
-    \begin{itemize}
-    \begin{multicols}{3}
-        \item $2000001$ - Ceres
-        \item $2000004$ - Vesta
-        \item $2009969$ - Braille
-    \end{multicols}
-    \end{itemize}
-    \item Science instruments are the spacecraft number times $1000$, minus the instrument number.
-    \begin{itemize}
-    \begin{multicols}{2}
-        \item $-82760$ - Cassini MIMI CHEMS
-        \item $-82001$ - Cassini SRU-A
-    \end{multicols}
-    \end{itemize}
-\end{enumerate}
-\subsubsection{Tutorial 8: Introduction to the Family of SPICE Toolkits}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{NAIF_9}
-    \caption{Methods of using the toolkit}
-    \label{fig:naif_toolkit_and_wrappers}
-\end{figure}
-``Toolkit," is the Fortran 77 toolkit. Developed first and in use since February 1990. $CSPICE$ is the C-language Toolkit. Designed to duplicate the functionality of the Fortran Toolkit. Icy is the IDL Toolkit. Provides and IDL-callable ``Wrapper," interface for many CSPICE wrapper routines. Mice is the Matlab Toolkit. Mice provides a MATLAB-callable ``Wrapper," interface for many CSPICE wrapper routines. Computations are identical in all languages. 
-\subsubsection{Tutorial 9: Icy}
-Icy operates as an extension to the IDL language regime and supports more than 300 CSPICE routines. Icy also has some capability not available in CSPICE such as vectorization. The IDL environment includes an intrinsic capability to use external routines. Icy functions as an IDL Dynamically Loadable Module (DLM). A DLM consists of a shared object library (icy.so/.dll) and a DLM text definition file. Using Icy from IDL requires you to register the Icy DLM with IDL to access interface routines. The next question is how does it work. IDL calls the interface routine in the shared object library, linked against CSPICE, which performs its function and returns the result to IDL. A user may occasional encounter an IDL math exception:
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-% Program caused arithmetic error: Floating underflow
-\end{lstlisting}
-This warning occurs most often as a consequence of CSPICE math operations. CSPICE assumed numeric underflow as zero, so in all known cases this can be ignored.
-\begin{remark}
-There is a possible irritant in loading kernels using the cspice\_furnsh function. Kernels are loaded into your IDL session, not into your IDL scripts. This means loaded binary kernels remains accessible (Active). Data from loaded text kernels remain in the kernel pool throughout your IDL session. A consequence is that some kernel data may be available to one of your scripts even though it was not intended to be so. You could get incorrect results. There are two fixes for this:
-\begin{enumerate}
-    \item Load all needed SPICE kernels for your IDL session at the beginning, paying careful attention to the files loaded and the loading order.
-    \item At the end of every IDL script, write cspice\_kclear to remove all kernel data from the kernel pool.
-\end{enumerate}
-\end{remark}
-\subsubsection{Tutorial 12: Introduction to Kernels}
-\begin{definition}
-A kernel is a file that contains ancillary data. Specifically, low level ancillary data that may be used to determine higher level observation geometry parameters.
-\end{definition}
-\begin{table}[H]
-    \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tabular}{|cl|cl|cl|}
-        \hline
-        SPK&&FK&&IK&\\
-        &Spacecraft and Planetary Ephemeris&&Reference frame specifications&&Instrument\\
-        \hline
-        SCLK&&LSK&&CK&\\
-        &Spacecraft clock correlation data&&Leapseconds&&Points (C-Matrix)\\
-        \hline
-        PCK&&DSK&&DBK&\\
-        &Planetary constants (orientation, size, shape)&&Digital shape kernel (Tesselated plate, digital elevation models)&&Database mechanism\\
-        \hline
-        EK&&EK&&EK&\\
-        &ESP: Science Plan&&ESQ: Sequence&&ENB: Experimenter's Notebook\\
-        \hline
-        MK&&MK&&&\\
-        &Meta-Kernel&&Mechanism for loading kernel files&&\\
-        \hline
-    \end{tabular}}
-    \caption{Caption}
-    \label{tab:my_label}
-\end{table}
-\begin{definition}
-A text kernel is a plain text file of ASCII data, containing assignments of the form $variable=value$
-\end{definition}
-\subsubsection*{Text Kernel Formatting}
-\begin{enumerate}
-    \item[]KPL/$<$kernel type$>$
-    \begin{enumerate}
-        \item[] Tells SPICE what kind of kernel it is.
-    \end{enumerate}
-    \item[] \textbackslash begindata and \textbackslash begintext
-    \begin{enumerate}
-        \item[] Markers which set off the beginning of data and meta-data blocks, respectively.
-    \end{enumerate}
-    \item[] $<$LF$>$ for Unix/Linux/Mac, $<$CR$><$LF$>$ for Windows.
-    \begin{enumerate}
-        \item[] End of line marker. Must be present on EVERY line in the text kernel.
-    \end{enumerate}
-    \item[] Max line length, including white space, is 132 characters.
-\end{enumerate}
-Text kernels may be produced using any text editor. Text kernels must contain human-readable text only. TAB characters are allowed but HIGHLY DISCOURAGED. Text kernels must have each line terminated with the end-of-line indicator (See above). Binary kernels are made using Toolkit utility programs, or by using Toolkit APIs built into your own application program.
-\subsubsection{Using Kernels}
-To make kernels available to a program they must be loaded. When you load a text kernel, the file is opened, the kernel contents are read into memory, and then the file is closed. When you load a binary kernel, the file is opened, for SPK, CK, and binary PCK, no data are read until a read request is made by Toolkit software. For ESQ files, the schema description is read, checked, and stored in memory at load time, but no data are read until a query/fetch is made. For all practical purposes the binary file remains open unless specifically unloaded by you. Use the FURNSH routine to load all kernels (Text and binary).
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-IDL> cspice_furnsh, 'name.ext'
-\end{lstlisting}
-Best practice: Don't hard code filenames, list these in a meta-kernel and load the meta-kernel using FURNSH. Binary kernels, whether or not in native binary format, may be read by any of the toolkits. Text kernels may be read by any of the C, IDL, and MATLAB toolkits.
-\subsubsection{Meta-Kernels}
-\begin{definition}
-A meta-kernel is a file that lists names and locations of a collection of SPICE kernels that are to be used together in a SPICE-based application.
-\end{definition}
-\begin{remark}
-You can simply load the meta-kernel, causing of the kernels listed in it to load.
-\end{remark}
-Using a metal-kernel makes it easy to manage which SPICE files are loaded into your program. A meta-kernel is implemented using the SPICE text kernel standards.
-\begin{example}
-Example of a meta-kernel
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-KPL/MK
- \begindata
-  KERNELS_TO_LOAD = (
-   '/home/mydir/kernels/lowest_priority.bsp',
-   '/home/mydir/kernels/next_priority.bsp',
-   '/home/mydir/kernels/highest_priority.bsp',
-   '/home/mydir/kernels/leapseconds.tls',
-   '/home/mydir/kernels/sclk.tsc',
-   '/home/mydir/kernels/c-kernel.bc',
-   '/home/mydir/kernels+?,
-   '/custom/kernel_data/p_constants.tpc?,
-                     )
-\end{lstlisting}
-Example of a meta-kernel using the PATH\_VALUES and PATH\_SYMBOLS.
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-KPL/MK
-\begindata  
-        PATH_VALUES     = ( '/home/mydir/kernels' )
-        PATH_SYMBOLS    = ( 'KERNELS'             )
-        KERNELS_TO_LOAD = (                       )
-            '$KERNELS/lowest+priority.bsp',
-            '$KERNELS/next_priority/bsp',
-            '$KERNELS/leapseconds.tls',
-            '$KERNELS/sclk.tsc',
-            '$KERNELS/c-kernel.bc',
-            '$KERNELS/custom/kernel_data/p_constants.tpc'
-                            )
-\end{lstlisting}
-\end{example}
-The order in which SPICE kernels are loaded at run-time determines their priority when requests for data are made. For binary kernels, data from a higher priority file will be used in the case when two or more files contain data overlapping in time for a given object. For SPKs, CKs, and binary PCKs , the file loaded last takes precedence and has highest priority. Priority doesn't apply to ESQ files. If two or more text kernels assign values to a single keyword using $=$, the data value associated with the last loaded occurrence of the keyword are used. Orientation data from a binary PCK always supersedes orientation data obtained from a text PCK, no matter the order in which the kernels are loaded. The unloading of kernels is essential for Icy and Mice scripts. Because of the way IDL and MATLAB interact with external shared object libraries, any kernels loaded during an IDL or MATLAB session will stay loaded until the end of the session unless they are specifically unloaded. The routines KCLEAR and UNLOAD may be used to unload kernels containing data you wish to be no longer available in your program. KCLEAR unloads all kernels and clears the kernel pool. UNLOAD unloads specified kernels.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth]{NAIF_13}
-    \caption{Data structure hierarchy}
-    \label{fig:naif_data_structure_hierarchy}
-\end{figure}
-\subsubsection{Tutorial 13: Comments in SPICE Kernels}
-\begin{definition}
-Kernel comments, also called meta-data, are information that describe the context of kernel data.
-\end{definition}
-Comments are provided inside kernels as plain text. Binary kernels have a reserved comment area to hold comments. Text kernels have comments interleaved with the data. Comments may be inserted between blocks of data as follows:
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-\begintext
-	Some Comments
-\begindata
-	Some data
-\end{lstlisting}
-To view comments in binary kernels, use either $commnt$ or $spacit$ utility program. To view text kernels, use any text file utility such as more, cat, vi, emacs, Notepad, TextEdit, BBEdit, Word, etc.
-\begin{example}
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-;An example for a binary kernel.
-IDL> commnt -r de421.bsp | more
-;An example for a text kernel.
-IDL> more naif0008.tls
-\end{lstlisting}
-\end{example}
-\subsubsection{Tutorial 14: Using Module Headers}
-NAIF uses module headers to provide detailed information describing how to use the module. In FORTRAN, C, and MATLAB, the headers are comment blocks in the source code. For IDL, the headers are independent files. All distributions include plain text and HTML versions. (HTML version is hyperlinked with other NAIF documentation). 
-\subsubsection{Tutorial 15: Time Conversions and Time Formats}
-Time inputs to and outputs from a user's programs are usually strings representing epochs in the following time systems:
-\begin{enumerate}
-    \item Ephemeris Time (ET)
-    \item Coordinated Universal Time (UTC)
-    \item Spacecraft Clock (SCLK)
-\end{enumerate}
-Time stamps in kernel files, time inputs to SPICE routines, and time outputs from SPICE routines are double precision numbers representing epochs in the following time systems:
-\begin{enumerate}
-    \item Numeric Ephemeris Time (TDB), expressed as ephemeris seconds past J2000.
-    \item Encoded Spacecraft Clock, expressed as clock ticks since the clock start.
-\end{enumerate}
-SPICE provides routines to convert between these string and numeric representations.
-\begin{enumerate}
-    \item Convert UTC, TDB, or TDT to ET (Requires LSK kernel): STR2ET(string, ET)
-    \item Spacecraft clock string to ET (Requires SLK and :SL kernel): SCS2E(scid,string,ET)
-    \item ET to local solar time string (SPK kernel): ET2LST(et,body,long,type,HR,MN,SC,Time,AMPM)
-    \item ET to planetocentric longitude of the Sun (SPK, PCK kernel): LSPCN(body,et,abcorr)
-    \item ET to Calendar, DOY, Julian, TDB, or TDT string (LSK kernel): TIMOUT(et,fmtpic,STRING)
-    \item ET to spacecraft clock string (LSK, SCLK kernel): SCE2S(scid,et,SCLKCH)
-\end{enumerate}
-\subsubsection{Tutorial 16: Leapseconds and Spacecraft Clock Kernels}
-LSK is the leapseconds kernel which is used in conversions between ephemeris time and coordinated universal time. SCLK is the spacecraft clock kernel and is used in conversions between spacecraft clock time and ephemeris time. The leapseconds kernel contains a tabulation of all of the leapseconds that have occured, plus additional terms. It is used in $ET\Leftrightarrow UTC$ and $ET\Leftrightarrow SCLK$ conversions. Use FURNSH to load it. NAIF updates the LSK when a new leap second is announced by the International Earth Rotation Service.
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-KPL/LSK
-...<comments>...
-\begindata
-
-DELTET/DELTA_T_A    =   32.184
-DELTET/K            =    1.657D-3
-DELTET/EB           =    1.671D-2
-DELTET/M            = (  6.239996D0  1.99096871D-7 )
-
-DELTET/DELTA_AT     = ( 10,    @1972-JAN-1
-                        11,    @1972-JUL-1
-                        12,    @1973-JAN-1
-                        13,    @1974-JAN-1
-                        14,    @1975-JAN-1
-
-                    ...<more leapsecond records>...
-
-                        35,    @2012-JUL-1
-                        36,    @2015-JUL-1
-                        37,    @2017-JAN-1  )
-\begintext
-\end{lstlisting}
-To the left is an example of an LSK File. The spacecraft clock kernel contains data used in conversions by Toolkit utilities and routines that utilize SCLK time. Use FURNSH to load it. This kernel may be updated frequently, so make sure you have the correct one. On the right is an example of an SCLK File. SCLK time is represented in two ways: A character string, or a double precision number called ticks. A character string is composed of one or more cascading integer numbers, similar to a digital clock. An SCLK value encoded as a double precision number is used within SPICE because it's easy to convert this to other time systems, such as ET.
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-KPL/LSK
-...<comments>...
-\begindata
-
-SCLK_KERNEL_ID          =   (   @2009-12-07/18:03:04.00 )
-SCLK_DATA_TYPE_74       =   (   1   )
-SCLK01_TIME_SYSTEM_74   =   (   2   )
-SCLK01_N_FIELDS_74      =   (   2   )
-SCLK01_MODULI_74        =   (   4294967296  )
-SCLK01_OFFSETS_74       =   (   0   0   )
-SCLK01_OUTPUT_DELIM_74  =   (   1   )
-
-SCLK_PARTITION_START_74 =   (   0.0000000000000E+00
-                        ...<more partition start records>...
-                                1.0995116277750E+12 )
-
-SCLK_PARTITION_END_74       (   2.0692822929300E+11
-                        ...<more partition end records>...
-                                1.0995116277750E+12 )
-
-SCLK01_COEFFICIENTS_74  =   (
-    0.0000000000000E+10    -6.3119514881600E+08    1.0000000000000E+10
-    1.2098765056000E+10    -5.8393434781600E+08    1.0000000000000E+10
-                    ...<more coefficient records>...
-    2.4179319365000E+11     3.1330950356800E+08    9.9999997500000E+-01 )
-\begintext
-\end{lstlisting}
-\begin{example}
-The Cassini Orbiter SCLK time string consists of three fields separated by delimiters. For example: $1/1609504792.123$. The partition (The $/$ symbol) accounts for clock resets or counter roll-over. The Most significant clock field (The values between $/$ and $.$) range from $0$ to $2^{32}-1$. Nominally, 1 second increment. The dot is the clock field delimiter, and is not a decimal point. This ranges from $0$ to $255$, nomially $1/256^{th}$ of a second increment.
-\end{example}
-\subsubsection{Tutorial 17: Frames and Coordinate Systems}
-One of the largest challenges to documenting and understanding observation geometry is understanding reference frames and coordinate systems. Differences in definitions, lack of concise definitions, evolution of the frames subsystem within SPICE, and the substantial frame management capabilities contribute to this. 
-\begin{definition}
-A reference frame is an ordered set of three mutually orthogonal, possibly time dependent, unit-length direction vectors.
-\end{definition}
-\begin{definition}
-A coordinate system for a given reference frame is a mechanism for specifying the location of points in that frame.
-\end{definition}
-All reference frames used in SPICE are right handed, so $\hat{\mathbf{x}}\times \hat{\mathbf{y}} = \hat{\mathbf{z}}$. A reference frame's center must be a SPICE ephemeris object whose location is coincident with the origin $(0,0,0)$ of the frame. The center of any inertial frame is always the solar system barycenter. The center of a body-fixed frame is always the center of the body. The center of a topocentric, spacecraft, or instrument frame is also specified by an SPK file. The location of the origin cancels when doing vector arithmetic, but the center is used in computing light time to the center of any non-inertial frame being used.
-\begin{definition}
-An inertial reference frame is a reference frame that is non-rotating with respect to stars and has a non-accelerating origin.
-\end{definition}
-\begin{example}
-J2000, ECLIPJ2000.
-\end{example}
-\begin{definition}
-A non-inertial reference frame is a reference frame that is not an inertial reference frame.
-\end{definition}
-\begin{example}
-Accelerating or rotating frames, body-fixed (Other than the sun), topocentric, spacecraft, instrument, and dynamic frames are all non-inertial. 
-\end{example}
-\begin{definition}[\textbf{J2000 Frame}]
-The J2000 frame is defined by the Earth's equator and equinox, determined from observations of planetary motions and other data. 
-\begin{enumerate}
-    \item The $x-$axis is the line of intersection between Earth's mea equatorial plane and the ecliptic plane on January 1, 2000 12:00:00 TDB, or JD 2451545.0 TDB.
-    \item The $z-$axis is the line normal to the mean equatorial plane which contains the Earth's core on January 1, 2000 12:00:00 TDB. It is approximately equal to the Earth's spin axis orientation at that epoch.
-    \item The $y-$axis is defined as the line that contains the intersection of the $x$ and $z$ axis and is parallel to $\hat{\mathbf{z}}\times \hat{\mathbf{x}}$, where $\hat{\mathbf{z}}$ and $\hat{\mathbf{x}}$ are unit vectors for the $z$ and $x$ axes, respectively.
-\end{enumerate}
-\end{definition}
-Body-fixed frames are tied to a named body and rotate with it. The rotation state is usually determined using a SPICE text PCK containing data published by the IAU. Spacecraft and instrument frames are defined for spacecraft and items attached to a spacecraft, such as antennas, solar arrays, scan platforms, instruments, and moving parts of an instrument. For frames that are time varying, the frame name is usually defined in an FK and the orientation is provided by a CK. For frames that are not moving (Fixed offset), both the frame name and the actual data defining the fixed orientation of the frame are in an FK. Topocentric frames are located at or near to a surface of a body. One axis is normal to the reference spheroid (Or normal to the gradient of the gravitational field.) Examples of these are frames used for telecommunication stations, or for landers/rovers. In a dynamic frame, the orientation changes with time.
-\begin{enumerate}
-    \item[] Families: Two-vector, Euler, and Of-date.
-    \item[] Dynamic frames exclude frames for which the orientation is determined by a PCK or CK.
-\end{enumerate}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.8\textwidth]{NAIF_20}
-    \caption{Geocentric Solar Ecliptic}
-    \label{fig:naif_geocentric_solar_ecliptic}
-\end{figure}
-\subsubsection{Coordinate Systems}
-A coordinate system specifies the method used to locate a point in a particular reference frame. Cartesian and Spherical Coordinates are two common systems. In the planetary science discipline there are many coordinate systems in use. Some of these have well accepted standard definitions, while others do not. For planets and their satellites, the positive $z$ axis is always taken to be the north side of the invariable plane. For the solar system, this is the plane whose normal vector is the angular momentum vector for the solar system. Planetocentric longitude increases positively eastward $(-\pi, \pi)$ and positively northward $(-\frac{\pi}{2},\frac{\pi}{2})$. Dwarf planets (Ceres, Eris, Haumea, Makemake, Pluto) spin in the right hand sense about their positive pole. The relevant APIs are LATRC, RECLAT, DRDLAT, and DLATDR. Planetodetic longitude is the same as planetocentric longitude. Increases positively eastward. Planetodetic latitude is tied to a reference ellipsoid. For a point $P$ or a reference ellopsoid, angle is measured from the $xy-$plane to the surface normal at the point of interest. Increases positively northward. Toolkit planetodetic APIs are GEOREC, RECGEO, DRDGEO, and DGEODR. For planet and satellite planetographic coordinate systems, planetographic longitude is usually defined such that the sub-observer longitude increases with time as seen by a distant, fixed observer. The Earth, Moon, and Sun are exceptions to this, however. Planetographic latidude is planetodetic latidude. Toolkits planetographic APIs are PGRREC, RECPGR, DRDPGR, and DPGRDR. For dwarf planets, asteroids, and comets there are multiple, inconsistent standards (USNO, IAU, PDS). NAIF strongly suggests only using planetocentric or planetodetic coordinates for these objects. 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{NAIF_23}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{NAIF_24}
-    \end{subfigure}
-    \caption{Examples of Coordinate Systems}
-    \label{fig:naif_coordinate_stuff}
-\end{figure}
-\begin{enumerate}
-    \item Using RA-DEC as intermediary: convert rectangular to RA-DEC using RECRAD, where the range for RA is $[0,2\pi]$. Then map RA-DEC to whatever is the AZ-EL convention you are using.
-    \item Using LAT-LON as intermediary: Convert rectangular to LAT-LON using RECLAT, where the range for LON is $[-\pi,\pi]$. Then map LAT-LON to whatever is the AZ-EL convention you are using.
-    \item Using full state vector transformation API: Transform velocities from rectangular to spherical coordinates using the SPICE Jacobian matrix routines. The SPICE calls are:
-    \begin{enumerate}
-        \item CALL SPKEZR( TARG, ET, REF, CORR, OBS, STATE, LT )
-        \item CALL XFMSTA( STATE, 'RECTANGULAR', SPHERICAL', '', OUTSTATE )
-    \end{enumerate}
-    \item Using velocity-only (Jacobian) APIs:
-    \begin{enumerate}
-        \item CALL SPKEZR( TARG, ET, REF, CORR, OBS, STATE, LT )
-        \item CALL DSPHDR( STATE(1), STATE(2), STATE(3), JACOBI )
-        \item CALL MXV( JACOBI, STATE(4), SPHVEL )
-    \end{enumerate}
-    After these calls, the vector SPHVEL contains the velocity in the spherical coordinates: specifically the derivatives: (d(r)/dt, d(colatitude)/dt, d(longitude)/dt)
-\end{enumerate}
-\begin{table}[H]
-    \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-        Coordinate Systems&APIs for Position Transformation&APIs for Velocity Transformation&Notes\\
-        \hline
-        Latitudinal to/from Rectangular&LATREC, RECLAT&DRDLAT, DLATDR&More commonly called planetocentric. Use for Azimuth/Elevation as well.\\
-        \hline
-        R.A./Dec to/from Rectangular&RADREC, RECRAD&DRDLAT,DLATDR&Same as for latitudinal except for range of LON and RA when converting.\\
-        \hline
-        Planetographic to/from Rectangular&PGRREC, RECPGR&DRDPGR, DPGRDR&Best restricted to plantes, satellites and the sun. Uses PCK.\\
-        \hline
-        Geodetic to/from Rectangular&GEOREC, RECGEO&DRDGEO,DGEODR&\\
-        \hline
-        Cylindrical to/from Rectangular&CYLREC, RECCYL&DRDCYL, DCYLDR&\\
-        \hline
-        Spherical to/from Rectangular&SPHREC, RECSPH&DRDSPH, DSPHDR&Shape must be a true sphere.\\
-        \hline
-        AZ-EL to/from Rectangular&none&none&See earlier chart.\\
-        \hline
-    \end{tabular}}
-    \caption{List of Coordinate Systems and Conversion Methods}
-    \label{tab:naif_list_of_coordinate_systems}
-\end{table}
-\subsubsection{Tutorial 18: Ephemeris Subsystem SPK}
-An SPK file contains ephemeris (Trajectory) data for ephemeris objects. Ephemeris means position and velocity as a function of time.
-\begin{definition}
-The $6-$tuple $(p_{x},p_{y},p_{z},\dot{p}_{x},\dot{p}_{y},\dot{p}_{z})$, where $p_{i}$ and $\dot{p}_{i}$ are the position and velocity components in the $i^{th}$ direction, is referred to as a state of an object.
-\end{definition}
-\begin{definition}
-Ephemeris objects are spacecraft, planets, satellites, comets, and asteroids, as well as the solar system barycenter, a planetary barycenter, a rover on the surface of a body, a camera on top of a mast on a lander, a transmitter cone on a spacecraft, and a DSN antenna on Earth.
-\end{definition}
-An SPK file can contain data for many ephemeris objects.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_28}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_34}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_35}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_36}
-    \end{subfigure}
-    \caption{Various Information from the NAIF Tutorials}
-    \label{fig:naif_information_stuff}
-\end{figure}
-The following meta-data is attached to complete the segment: What is the object the ephemeris is for (The target), what is the ID of the reference frame in which the data is given, what is the center of motion of the target (The observer), and what are the start and stop times $(epoch_1, epoch_2)$. Each segment can contain a different type of ephemeris data. For example, discrete state vectors, Chebyshev polynomials, and Difference Lines. Each segment has the SPK type stored in its meta-dat record. SPICE Toolkit software knows how to evaluate each type. See below for some examples. The segments in an SPK file need not be ordered according to time or body, but segment order does imply priority. If using two or more SPK files, segments from SPK files loaded later have higher priority. 
-\begin{definition}
-The time period over which an SPK file provides data for an ephemeris object is called the time coverage for that object.
-\end{definition}
-All ephemeris data have an associated reference frame. The frame specification is provided by the SPK producer. There are many SPK data types. Below are the widely used one:
-\begin{enumerate}
-    \item Type 1 - Modified Divided Difference Arrays
-    \item Type 2 - Chebyshev Polynomials for Position.
-    \item Type 3 - Chebyshev Polynomials for Position and Velocity.
-    \item Type 5 - Weighted Two-Body Extrapolation.
-    \item Type 10 - Space Command Two-Line Elements.
-    \item Type 9 and 13 - Sliding-Window Lagrange and Hermite Interpolation of Unequally-Space States.
-    \item Type 18 and 19 - Sliding Window Hermite or Lagrange Interpolation.
-\end{enumerate}
-A planet and its satellites orbit the system's barycenter. Mercury and Venus have no satellites, so their barycenters coincide with their centers of mass. Mars has Phobos and Deimos, but since they are so small the barycenter is taken to be the center of mass of Mars. (Starting in 2013, the JPL ephemeris DE430 has the actual Barycenter which is 20 cm different). Planet system barycenters and the sun orbit the solar system barycenter. Below is an example of generic SPK file contents.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_37}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{NAIF_38}
-    \end{subfigure}
-    \caption{More Things from the NAIF Tutorials}
-    \label{fig:naif_more_things}
-\end{figure}
-An SPK file may contain positions of tracking stations, observatories, rovers, etc. The object may be stationary or moving. These SPKs usually contain ephemeris data given in the body-fixed reference frame. To retrieve position or state vectors of ephemeris objects one normally needs two kinds of SPICE kernels, an SPK and an LSK (Ephemeris and Leap second). LSK is used to convert between UTC and TDB or ET. State vectors retrieved from an SPK file are of the form $(x,y,z,dx,dy,dz)$, position vectors are $(x,y,z)$.
-\begin{enumerate}
-    \item Tell your program which SPICE files to use:
-    \begin{enumerate}
-        \item cspice\_furnsh 'SPK\_FILE\_NAME'
-        \item cpsice\_furnsh 'LSK\_FILE\_NAME'
-    \end{enumerate}
-    \item Convert UTC to ET
-    \begin{enumerate}
-        \item cspice\_str2et 'UTC\_STRING', tdb
-    \end{enumerate}
-    \item Retrieve state vector from the SPK file at your requested time.
-    \begin{enumerate}
-        \item cspice\_spkezr (target, tdb, 'frame', 'correction' observer, state, light time)
-    \end{enumerate}
-\end{enumerate}
-We now go over the arguments of SPKEZR
-\begin{enumerate}
-    \item Target and Observer: Character names of NAIF IDs for the end point and origin of the state vector to be returned.
-    \item TDP: The time at the observer at which the state vector is to be computed.
-    \item FRAME: The SPICE name for the reference frame in which the output state vector is to be given.
-    \item CORRECTION: Specification of what kind of aberration corrections to apply in computing the output state vector.
-    \item STATE: This is the Cartesian state vector that is outputted. It is in the form $(x,y,z,dx,dy,dz)$. 
-    \item LIGHT TIME: The one-way light time between the position of target and the observer at the specified epoch.
-\end{enumerate}
-\begin{example}
-\
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-IDL> cspice_furnsh, 'NAIF0010.TLS'
-IDL> cspice_furnsh, 'CASSINI_MERGED.BSP'
-IDL> cspice_str2et, '2004 NOV 21 02:40:21.3', TDB
-IDL> cspice_spkezr, 'Titan', TDB, 'J2000', 'LT+S', 'CASSINI', STATE, LT
-\end{lstlisting}
-\end{example}
+    \section{Naif Toolkit}
+        \subsection{Tutorials}
+            \subsubsection{Tutorial 1: Introduction}
+                The objective of this tutorial is to
+                provide an overview of the SPICE system.
+                Information on Fortran, C, IDL, and MATLAB
+                will also be included throughout.
+                The topics of Kernel production and
+                Archiving SPICE data is not addressed in
+                much detail. Math skills, an innate sense
+                of spatial orientation, and familiarity with
+                your computer's OS, a code editor,
+                and a compiler will help. 
+            \subsubsection{Tutorial 2: Motivation}
+                Scientists would like to use common tools and
+                methods throughout a project's lifecycle and
+                understand the calculations and transformations
+                used to produce observation geometry data. They'd
+                also like to produce custom geometry calculations
+                themselves. Prior to SPICE was SEDR
+                (Supplemental Experiment Data Record). This was
+                built and operated at JPL. Late or post-launch
+                updates were difficult and expensive to accommodate.
+                Thus, scientists can't get better ancillary data
+                if/when better inputs
+                (Spacecraft trajectory/orientation) are determined. Then came SPICE. SPICE has greater flexibility in deciding what observation geometry parameters are computed, at what times or what frequency for what time span these parameters are computed, and when to re-do parameter computations using new inputs. The downside is there are non-trivial programming requirements needed to read SPICE data and compute whatever is needed. 
+            \subsubsection{Tutorial 3: Overview}
+            The original focus of SPICE was on ancillary data needed by planetary scientists for initial science data analysis, science archive preparation, and post-mission data analysis. SPICE now covers the full mission lifecycle and archive uses. It is also used in Heliophysics, Earth Science, observations from terrestrial observatories, and national defense. Ancillary data includes reference frames, positions, orientations, sizes/shapes, pointing, and time conversions. These help determine where the spacecraft is located, and what was the location, size, shape, and orientation of the target being observed. Ancillary data comes from the spacecraft, from the mission control center, from spacecraft and instrument builders, and from science organizations. SPICE is used to organize and package these data in a collection of stable file types called 'Kernels.' Knowing observation geometry and events is an important element of space mission design, selection of observation opportunities, analysis of returned science data from the instruments, mission engineering activities, and preparation o science data archives. SPICE is comprised of the following components:
+            \begin{enumerate}
+            \begin{multicols}{3}
+                \item Ancillary data files
+                \item Software
+                \item Documentation
+                \item Tutorials
+                \item Programming Lessons
+                \item Training Classes
+                \item User consultation
+            \end{multicols}
+            \end{enumerate}
+            SPICE stands for Spacecraft Planet Instrument C-matrix (Camera matrix) Events. SPICE Data consists of the folowing:
+            \begin{enumerate}
+                \item SPK files deal with the spacecraft and the planets involved. This includes the ephemerides.
+                \item PcK files detail the target bodies size, shape, and orientation.
+                \item IK files have the instrument field-of-view size, shape, and orientation.
+                \item CK files contain the orientation of the space vehicle or any articulating structure on it.
+                \item EK (ESP, ESQ, ENB) files contain event information (Science plan, sequence, experiment's notebook).
+                \item FK files have reference frame specifications.
+                \item LSK is leap seconds tabulation.
+                \item SCLK has spacecraft clock coefficients.
+                \item DSK has digital shape models.
+            \end{enumerate}
+            The SPK files contain the space vehicle ephemeris, or trajectory. It also contains the ephemerides of the target planet, satellites, comets, and asteroids. More generally it contains the position of something relative to something else. The PcK files have planet, satellite, comet, and asteroid orientations, shapes, and sizes. Other similar constants such as parameters for gravitational models, atmospheric models, or ring models may also be contained in these. IK files have the instrument field-of-view size, shape, and orientation. Additional information such as internal timing may also exist. CK files have the instrument platform attitude (Or spacecraft attitude). More generally, the orientation of something relative to a specified reference frame. EK files have events broke into three components: ESP, science observation plans; ESQ, spacecraft and instrument commands; ENB, experiment notebooks and ground data system logs. FK files contain the frames. These are definitions and specifications of relationships between reference frames. Both fixed and dynamics frames are available. LSK files contain leap seconds tabulation. Used for converting between UTC and TDB (ET). SCLK files contain spacecraft clock coefficients. Used for converting from SCLK to TDB (ET). DSK files have shape models (Digital elevation model and tesselated planet model). SPICE is available in Fortran 77, C, IDL, MATLAB, and Python. It is also available for Linux, Windows, OSX, and Solaris. An example of using SPICE is as follows: The kernels are selected and incorporated into the User's own modules and SPICE Toolkit library modules. The end result may be an evaluation of a planned orbit, instrument pointing plane, observation geometry visualization, and analysis of expected communications link performance. Instrument data, derived observation geometry, and instrument calibration data may then be analyzed by the user and lead to wonderful science results. SPICE can be used for:
+            \begin{enumerate}
+                \item Evaluation of a planned trajectory
+                \item Mission engineering analysis
+                \item Planning an instrument pointing profile
+                \item Observation geometry visualization
+                \item science data archiving and analysis
+            \end{enumerate}
+            Many observation geometry parameters at selected times may be computed such as positions, velocities, size, shape, and orientation of planets, satellites, comets, asteroids, and spacecraft. The instrument field-of-view location on a planet's surface or atmosphere may also be computed. Times when a certain geometric event or condition occurs may be found such as eclipses, occultations, conjunctions, and oppositions.
+            \subsubsection{Tutorial 4: Fundamental Concepts}
+            \begin{definition}
+            An Epoch is an instant in time specified by some singular event.
+            \end{definition}
+            \begin{example}
+            Passage of a star across one's zenith meridian.
+            \end{example}
+            \begin{example}
+            Eclipse of a spacecraft signal as it passes behind a solid body.
+            \end{example}
+            \begin{remark}
+            Clocks count epochs specified by events such as "Regular," osciallation of a pendulum, quartz crystal, or electromagnetic radiation from a specified source, measured from an agreed upon reference epoch.
+            \end{remark}
+            \begin{definition}
+            Time Systems are agreed upon standards for naming epochs, measuring time, and synchronizing clocks.
+            \end{definition}
+            \begin{definition}
+            International Atomic Time (TAI) is a statistical time scale based on data from $\sim200$ atomic clocks in over $50$ national laboratories. The unit of a second is the duration of 9,192,631,770 periods of the radiation corresponding to the transition between two hyperfine levels of the ground state of the Cesium $133$ atom. TAI is expressed as a count of atomic seconds past the astronomically determined instant of midnight January 1, 1958 00:00:00.
+            \end{definition}
+            \begin{definition}
+            Coordinate Universal Time (UTC) is the civil time in Greenwich, England ($\sim$GMT).
+            \end{definition}
+            \begin{equation}
+            TAI=UTC+10\ \textrm{seconds}+\textrm{number of leap seconds}
+            \end{equation}
+            \begin{remark}
+            This equation is only valid after January 1, 1972.
+            \end{remark}
+            \begin{definition}
+            Astronomical Time (UT1) is an hour representation of the angle between the plane containing the Greenwich Zenith Meridian (The Prime Meridian) and the plane containing the computed mean sun.
+            \end{definition}
+            \begin{remark}
+            UTC noon and UT1 noon should occur simultaneously. The Earth's rotation is not uniform, and eventually UTC noon and UT1 noon become out of sync. When the mismatch is greater than $0.9$ atomic seconds, a leap second is added or removed from the end of a designated UTC day. Normally June 30 or December 31. The variations in the Earth's rotation that cause this are not predictable.
+            \end{remark}
+            \begin{definition}
+            Barycentric Dynamical Time (TDB) is a mathematical idea used in the equations of motion and is used as the independent time variable for many SPICE subroutine interfaces. It is related to Barycentric Coordinated Time (TCB) by an offset and a scale factor. 
+            \end{definition}
+            \begin{definition}
+            Terrestrial Dynamical Time is the ideal time (Proper time) on Earth at sea level. The IAU calls this Terrestrial Time (TT).
+            \end{definition}
+            \begin{equation}
+            TDT=TAI+32.184\ \textrm{seconds}
+            \end{equation}
+            \begin{remark}
+            TDB and TDT have the same reference epoch, but advance at different rates. Variations are small ($\sim 1.6$ ms) and are almost periodic with a period of 1 sidereal year (To first order). Below describes the variations due to relativistic effects:
+            \begin{equation}
+            TDB=TDT+0.001657\sin\big(E+0.01671\sin(E)\big)
+            \end{equation}
+            \end{remark} 
+            Spacecraft have onboard clocks to control scheduling of observations, maneuvers, and attitude adjustments and are used to time stamp data. The fundamental unit of time for these is the tick, which is the smallect increment possible for a spacecraft clock. Nominal tick duration is spacecraft clock dependent. SCLK string formats vary for different spacecraft. 
+            \begin{definition}
+            A reference frame is an ordered set of three mutually orthogonal, and possibly time dependent, unit direction vectors, coupled with a location called the frame's origin.
+            \end{definition}
+            \begin{definition}
+            The ordered set of axes of a reference frame is called a basis.
+            \end{definition}
+            \begin{definition}
+            A coordinate system is the method of locating points in a given reference frame.
+            \end{definition}
+            \begin{example}
+            Cartersian coordinate systems and Spherical coordinate systems are very common for $\mathbb{R}^3$ (3-dimensions).
+            \end{example}
+            \begin{remark}
+            A reference frame's center is an ephemeris object whose location is coincident with the origin of the frame. The center of the a body is the center of mass of the body. The center of any inertial frame is the solar system barycenter (In SPICE).
+            \end{remark}
+            The origin cancels in vector arithmetic, so choice of center is somewhat unimportant. Choice of axes is more important. The center is used in computing light time to centers of non-inertial frames.
+            \begin{definition}
+            An inertial reference frame is a reference frame that satisfies the following conditions:
+            \begin{enumerate}
+                \item It is non-rotating with respect to fixed stars.
+                \item The origin is non-accelerating.
+            \end{enumerate}
+            \end{definition}
+            \begin{remark}
+            The velocity of the origin is typically non-zero, and the actual acceleration is negligible.
+            \end{remark}
+            \begin{example}
+            J2000 (Also called ICRF) and B1950 are inertial reference frames.
+            \end{example}
+            \begin{definition}
+            A non-inertial reference frame is a reference frame that is not an inertial reference frame.
+            \end{definition}
+            \begin{example}
+            Body-fixed reference frames, those centered at a body center or topocentric, are non-inertial (Unless the body is the Sun or the galactic center, etc.) The reference frame of an instrument is non-inertial. Dynamic frames (Frames defined by time-dependent vectors) are non-inertial as well.
+            \end{example}
+            \begin{definition}[\textbf{J2000 Frame}]
+            The J2000 frame is defined by the Earth's equator and equinox, determined from observations of planetary motions and other data. 
+            \begin{enumerate}
+                \item The $x-$axis is the line of intersection between Earth's mea equatorial plane and the ecliptic plane on January 1, 2000 12:00:00 TDB, or JD 2451545.0 TDB.
+                \item The $z-$axis is the line normal to the mean equatorial plane which contains the Earth's core on January 1, 2000 12:00:00 TDB. It is approximately equal to the Earth's spin axis orientation at that epoch.
+                \item The $y-$axis is defined as the line that contains the intersection of the $x$ and $z$ axis and is parallel to $\hat{\mathbf{z}}\times \hat{\mathbf{x}}$, where $\hat{\mathbf{z}}$ and $\hat{\mathbf{x}}$ are unit vectors for the $z$ and $x$ axes, respectively.
+            \end{enumerate}
+            \end{definition}
+            Body-fixed frames are tied to a named body and rotate with it. The most common bodies are hard-coded in SPICE "IAU\_Body Name"
+            \begin{example}
+            IAU\_MARS, IAU\_SATURN
+            \end{example}
+            The rotation state (Orientation at time T) is determined using a SPICE text PCK. 
+            \begin{remark}
+            IAU\_EARTH and IAU\_MOON exist, but should NOT be used. See "lunar-earth\_pck-fk" for the best frames for these bodies.
+            \end{remark}
+            \begin{definition}
+            Topocentric frames are reference frames attached to the surface of a body. The $z-$axis lies parallel to the gravity gradient. That is, it points "Up."
+            \end{definition}
+            \begin{example}
+            We can take a point on Earth's surface and say that $\hat{\mathbf{z}}$ points to the zenith, $\hat{\mathbf{x}}$ points North, and thus $\hat{\mathbf{y}}$ points West.
+            \end{example}
+            \begin{definition}
+            Planetocentric coordinate systems are systems such that the origin lies at the center of a given body. $\hat{\mathbf{z}}$ lies parallel to the North Pole.
+            \end{definition}
+            \begin{remark}
+            Dwarf Planets (Pluto, Ceres, Eris, Haumea, Makemake) and other small objects spin in the right hand sense about their "North Pole."
+            \end{remark}
+            \begin{definition}
+            The state of an object is its position and velocity relative to a given object.
+            \end{definition}
+            \begin{remark}
+            In SPICE, these objects are referred to as target and observer. In the SPK subsystem, a state is a six dimensional vector. A state is specified relative to a reference frame.
+            \end{remark}
+            To perform algebraic operations on states, they must be in the same reference frame. If two reference frames are both right-handed, we may convert between the two via a rotation matrix:
+            \begin{equation}
+            P_{B}(t)=R(t)P_{A}(t)
+            \end{equation}
+            As both references frames may be time dependent, the rotation matrix may be time dependent. The velocity frame transformation is the time derivative:
+            \begin{equation}
+            \frac{dP_{B}(t)}{dt}=\frac{dR(t)}{dt}P_{A}(t)+R(t)\frac{dP_{A}(t)}{dt}
+            \end{equation}
+            We have the following transformation between states:
+            \begin{equation}
+            \begin{pmatrix}P_{B_{x}}(t)\\P_{B_{y}}(t)\\P_{B_{z}}(t)\\ \frac{dP_{B_{x}}(t)}{dt}\\ \frac{dP_{B_{y}}(t)}{dt}\\ \frac{dP_{B_{z}}(t)}{dt}\end{pmatrix}=
+            \begin{pmatrix}R_{11}(t)&R_{12}(t)&R_{13}(t)&0&0&0\\R_{21}(t)&R_{22}(t)&R_{23}(t)&0&0&0\\R_{31}(t)&R_{32}(t)&R_{33}(t)&0&0&0\\\frac{dR_{11}(t)}{dt}&\frac{dR_{12}(t)}{dt}&\frac{dtR_{13}}{dt}&R_{11}(t)&R_{12}(t)&R_{13}(t)\\\frac{dR_{21}(t)}{dt}&\frac{dR_{22}(t)}{dt}&\frac{dtR_{23}}{dt}&R_{21}(t)&R_{22}(t)&R_{23}(t)\\
+            \frac{dR_{31}(t)}{dt}&\frac{dR_{32}(t)}{dt}&\frac{dtR_{33}}{dt}&R_{31}(t)&R_{32}(t)&R_{33}(t)\end{pmatrix}
+            \begin{pmatrix}P_{A_{x}}(t)\\P_{A_{y}}(t)\\P_{A_{z}}(t)\\ \frac{dP_{A_{x}}(t)}{dt}\\ \frac{dP_{A_{y}}(t)}{dt}\\ \frac{dP_{A_{z}}(t)}{dt}\end{pmatrix} 
+            \end{equation}
+            Where $R_{ij}(t)$ is the $i^{th}$ row $j^{th}$ column of the rotation matrix $R(t)$. The SPICELIB routine SXFORM and PXFORM return state transformation and position transformation matrices, respectively. Within the SPICE System, Aberration Corrections are adjustments made to state vectors and time-dependent reference frames to accurately reflect the apparent (As opposed to actual) state and attitude of a target object as seen from a specified observer at a specified time. Actual uncorrected states from an ephemeris are called geometric states. Aberration corrections are need to accurately answer the following:
+            \begin{enumerate}
+                \item Which direction must a remote sensing instrument point to observe a target of interest?
+                \item For a given pointing direction and observation time, what target body surface location would be observed by a remote sensing instrument?
+                \item Which direction must an antenna be pointed to transmit a signal to a specified target?
+            \end{enumerate}
+            \subsubsection{Tutorial 5: Conventions}
+            \begin{enumerate}
+                \item SPICE - The name of this ancillary information system.
+                \item NAIF - The name of the team of people at KPL who lead development of the SPICE system.
+                \item SPICE Toolkit - The principal collection of software produced by NAIF as part of the SPICE information system.
+                \item Toolkit - The Fortran 77 version of the SPICE Toolkit.
+                \item Kernel - A SPICE data file.
+                \item SPICELIB - The principal user library found within the Fortran versions of the SPICE Toolkit.
+                \item CSPICE - The C Toolkit, and the principal user library within C versions of the SPICE Toolkit.
+                \item Icy - An IDL interface to CSPICE.
+                \item Mice - A MATLAB interface to CSPICE.
+                \item Text Kernel - Kernels consisting entirely of ASCII information, each line terminated using the local OS convention.
+                \item Binary Kernel - Any kernel type using a binary file format. Binary types are SPK, binary PcK, CK, DBK, and DSK.
+                \item Transfer format kernel - A hexadecimal (ASCII) version of a binary kernel.
+                \item Command File - An input file containing program directives, and sometimes input data.
+                \item Found Flag - Boolean output that informs your program whether or not data were found that match your request.
+                \item Database Kernel (DBK) - A kernel that provides a self-contained SQL-like database capability.
+                \item Coverage - The period of time for which a time-based kernel contains data.
+                \item Deprecated software - Code that has been superseded with a new and presumably better version.
+                \item Toolkit Version Naming -``Nxxxx", e.g. N0065 is Version 65.
+                \item Satellite - A natural satellite, never a spacecraft.
+                \item Run-time - Occurs when you execute a program.
+            \end{enumerate}
+            SPICE imposes some restrictions on kernel files names. No white space allowed and a maximum of 255 characters. NAIF suggests names conform to PDF standard: "36.3." Below lists common SPICE Kernel File Name Extensions. All reference frames used within SPICE are right-handed systems. That is, $\hat{\mathbf{x}} = \hat{\mathbf{y}}\times \hat{\mathbf{z}}$. SPICE also uses quaternions in C-kernels. There are different definitions of quaternions based on the order of the quaternion elements, the multiplication formula, and the convention for associating quaternions with rotation matrices. The two commonly used styles are SPICE, which is Hamilton's original formulation, and MSOP, which is used in attitude control and other aerospace applications.
+            \begin{table}[H]
+                \centering
+                \resizebox{\textwidth}{!}{
+                \begin{tabular}{|ccl|ccl|ccl|}
+                    \hline
+                    SPK&&&SCLK&&&PcK&&\\
+                    \hline
+                    &.bsp&Binary SPK file.&&.tsc&Text SCLK file.&&.tpc&Text PcK file.\\
+                    &.xsp&Transfer format SPK file.&&&&&.bpc&Binary PcK file.\\
+                    &&&&&&&.xpc&Transfer format PcK file.\\
+                    \hline
+                    MK&&&IK&&&DSK&&\\
+                    \hline
+                    &.tm&Text meta-kernel file.&&.ti&Text IK file.&&.bds&Binary DSK file.\\
+                    \hline
+                    FK&&&LSK&&&CK&&\\
+                    \hline
+                    &.tf&Text FK file.&&.tls&Text LSK file.&&.bc&Binary CK file.\\
+                    &&&&&&&.xc&Transfer format CK file.\\
+                    \hline
+                    ESP&&&ESQ&&&ENB&&\\
+                    &.bep&Binary science plan EK file.&&.bes&Binary sequence component EK file.&&.ten&Text experimenter's notebook EK file.\\
+                    &.xep&Transfer format science plan EK file.&&.xes&Transfer format sequence component EK file.&&&\\
+                    \hline
+                    DBK&&&DBK&&&&&\\
+                    &.bdb&Binary database kernel.&&.xdb&Transfer format database kernel.&&&\\
+                    \hline
+                \end{tabular}}
+                \caption{List of Kernel File Types}
+                \label{tab:naif_list_of_kernel_file_types}
+            \end{table}
+            \begin{remark}
+            Pluto is a special case. Pluto is treated as a planet when speaking about ephemerides (SPK). Pluto is treated as a dwarf planet when speaking about orientation and rotational state (PCK).
+            \end{remark}
+            \subsubsection{Tutorial 6: IDs}
+            SPICE uses IDs and names to identify physical objects and reference frames. An ID is an integer number and a name is a string. Names are used primarily as input and output arguments in SPICE software interfaces (APIs). User's deal mostly with names. Physical object IDS are used in kernels as data identifies. Physical object names are used in the high-level user APIs as input and/or output arguments. 
+            \begin{enumerate}
+                \item Spacecraft are negative numbers.
+                \begin{itemize}
+                \begin{multicols}{3}
+                    \item $-6$ is PIONEER 6
+                    \item $-64$ is OSIRIS-REX
+                    \item $-82$ is Cassini
+                \end{multicols}
+                \end{itemize}
+                \item DSN Ground Stations are $399000+\textrm{Station Number}$
+                \begin{itemize}
+                \begin{multicols}{2}
+                    \item $399005$ is DSS-05
+                    \item $399066$ is DSS-66
+                \end{multicols}
+                \end{itemize}
+                \item Non\_DSN stations are $39800+$ an integer between $0$ and $999$: $398990$ is New Norcia
+                \item The sun is $10$ and the Solar System Barycenter is $0$.
+                \item The planet barycenters are $1-9$
+                \begin{itemize}
+                \begin{multicols}{3}
+                    \item[] $1$ - Mercury Barycenter
+                    \item[] $2$ - Venus Barycenter
+                    \item[] $3$ - Earth-Moon Barycenter
+                    \item[] $4$ - Mars Barycenter
+                    \item[] $8$ - Neptune Barycenter
+                    \item[] $9$ - Pluto Barycenter
+                \end{multicols}
+                \end{itemize}
+                \item Satellites are the planet barycenter number multiplied by a number between $1$ and $98$.
+                \begin{itemize}
+                \begin{multicols}{4}
+                    \item $301$ - The Moon
+                    \item $401$ - Phobos
+                    \item $402$ - Deimos
+                    \item $501$ - Io
+                \end{multicols}
+                \end{itemize}
+                \item Periodic comets are $1000000 +$ sequence number.
+                \begin{itemize}
+                \begin{multicols}{2}
+                    \item $1000001$ - Arend
+                    \item $1000002$ - Agen-Regaux
+                    \item $100036$ - Halley
+                    \item $100132$ - Hale-Bopp
+                \end{multicols}
+                \end{itemize}
+                \item Numbered Asteroids are $2000000+$ IAU asteroid number.
+                \begin{itemize}
+                \begin{multicols}{3}
+                    \item $2000001$ - Ceres
+                    \item $2000004$ - Vesta
+                    \item $2009969$ - Braille
+                \end{multicols}
+                \end{itemize}
+                \item Science instruments are the spacecraft number times $1000$, minus the instrument number.
+                \begin{itemize}
+                \begin{multicols}{2}
+                    \item $-82760$ - Cassini MIMI CHEMS
+                    \item $-82001$ - Cassini SRU-A
+                \end{multicols}
+                \end{itemize}
+            \end{enumerate}
+            \subsubsection{Tutorial 8: Introduction to the Family of SPICE Toolkits}
+            ``Toolkit," is the Fortran 77 toolkit. Developed first and in use since February 1990. $CSPICE$ is the C-language Toolkit. Designed to duplicate the functionality of the Fortran Toolkit. Icy is the IDL Toolkit. Provides and IDL-callable ``Wrapper," interface for many CSPICE wrapper routines. Mice is the Matlab Toolkit. Mice provides a MATLAB-callable ``Wrapper," interface for many CSPICE wrapper routines. Computations are identical in all languages. 
+            \subsubsection{Tutorial 9: Icy}
+            Icy operates as an extension to the IDL language regime and supports more than 300 CSPICE routines. Icy also has some capability not available in CSPICE such as vectorization. The IDL environment includes an intrinsic capability to use external routines. Icy functions as an IDL Dynamically Loadable Module (DLM). A DLM consists of a shared object library (icy.so/.dll) and a DLM text definition file. Using Icy from IDL requires you to register the Icy DLM with IDL to access interface routines. The next question is how does it work. IDL calls the interface routine in the shared object library, linked against CSPICE, which performs its function and returns the result to IDL. A user may occasional encounter an IDL math exception:
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            % Program caused arithmetic error: Floating underflow
+            \end{lstlisting}
+            This warning occurs most often as a consequence of CSPICE math operations. CSPICE assumed numeric underflow as zero, so in all known cases this can be ignored.
+            \begin{remark}
+            There is a possible irritant in loading kernels using the cspice\_furnsh function. Kernels are loaded into your IDL session, not into your IDL scripts. This means loaded binary kernels remains accessible (Active). Data from loaded text kernels remain in the kernel pool throughout your IDL session. A consequence is that some kernel data may be available to one of your scripts even though it was not intended to be so. You could get incorrect results. There are two fixes for this:
+            \begin{enumerate}
+                \item Load all needed SPICE kernels for your IDL session at the beginning, paying careful attention to the files loaded and the loading order.
+                \item At the end of every IDL script, write cspice\_kclear to remove all kernel data from the kernel pool.
+            \end{enumerate}
+            \end{remark}
+            \subsubsection{Tutorial 12: Introduction to Kernels}
+            \begin{definition}
+            A kernel is a file that contains ancillary data. Specifically, low level ancillary data that may be used to determine higher level observation geometry parameters.
+            \end{definition}
+            \begin{table}[H]
+                \centering
+                \resizebox{\textwidth}{!}{
+                \begin{tabular}{|cl|cl|cl|}
+                    \hline
+                    SPK&&FK&&IK&\\
+                    &Spacecraft and Planetary Ephemeris&&Reference frame specifications&&Instrument\\
+                    \hline
+                    SCLK&&LSK&&CK&\\
+                    &Spacecraft clock correlation data&&Leapseconds&&Points (C-Matrix)\\
+                    \hline
+                    PCK&&DSK&&DBK&\\
+                    &Planetary constants (orientation, size, shape)&&Digital shape kernel (Tesselated plate, digital elevation models)&&Database mechanism\\
+                    \hline
+                    EK&&EK&&EK&\\
+                    &ESP: Science Plan&&ESQ: Sequence&&ENB: Experimenter's Notebook\\
+                    \hline
+                    MK&&MK&&&\\
+                    &Meta-Kernel&&Mechanism for loading kernel files&&\\
+                    \hline
+                \end{tabular}}
+                \caption{Caption}
+                \label{tab:my_label}
+            \end{table}
+            \begin{definition}
+            A text kernel is a plain text file of ASCII data, containing assignments of the form $variable=value$
+            \end{definition}
+            \subsubsection*{Text Kernel Formatting}
+            \begin{enumerate}
+                \item[]KPL/$<$kernel type$>$
+                \begin{enumerate}
+                    \item[] Tells SPICE what kind of kernel it is.
+                \end{enumerate}
+                \item[] \textbackslash begindata and \textbackslash begintext
+                \begin{enumerate}
+                    \item[] Markers which set off the beginning of data and meta-data blocks, respectively.
+                \end{enumerate}
+                \item[] $<$LF$>$ for Unix/Linux/Mac, $<$CR$><$LF$>$ for Windows.
+                \begin{enumerate}
+                    \item[] End of line marker. Must be present on EVERY line in the text kernel.
+                \end{enumerate}
+                \item[] Max line length, including white space, is 132 characters.
+            \end{enumerate}
+            Text kernels may be produced using any text editor. Text kernels must contain human-readable text only. TAB characters are allowed but HIGHLY DISCOURAGED. Text kernels must have each line terminated with the end-of-line indicator (See above). Binary kernels are made using Toolkit utility programs, or by using Toolkit APIs built into your own application program.
+            \subsubsection{Using Kernels}
+            To make kernels available to a program they must be loaded. When you load a text kernel, the file is opened, the kernel contents are read into memory, and then the file is closed. When you load a binary kernel, the file is opened, for SPK, CK, and binary PCK, no data are read until a read request is made by Toolkit software. For ESQ files, the schema description is read, checked, and stored in memory at load time, but no data are read until a query/fetch is made. For all practical purposes the binary file remains open unless specifically unloaded by you. Use the FURNSH routine to load all kernels (Text and binary).
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            IDL> cspice_furnsh, 'name.ext'
+            \end{lstlisting}
+            Best practice: Don't hard code filenames, list these in a meta-kernel and load the meta-kernel using FURNSH. Binary kernels, whether or not in native binary format, may be read by any of the toolkits. Text kernels may be read by any of the C, IDL, and MATLAB toolkits.
+            \subsubsection{Meta-Kernels}
+            \begin{definition}
+            A meta-kernel is a file that lists names and locations of a collection of SPICE kernels that are to be used together in a SPICE-based application.
+            \end{definition}
+            \begin{remark}
+            You can simply load the meta-kernel, causing of the kernels listed in it to load.
+            \end{remark}
+            Using a metal-kernel makes it easy to manage which SPICE files are loaded into your program. A meta-kernel is implemented using the SPICE text kernel standards.
+            \begin{example}
+            Example of a meta-kernel
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            KPL/MK
+             \begindata
+              KERNELS_TO_LOAD = (
+               '/home/mydir/kernels/lowest_priority.bsp',
+               '/home/mydir/kernels/next_priority.bsp',
+               '/home/mydir/kernels/highest_priority.bsp',
+               '/home/mydir/kernels/leapseconds.tls',
+               '/home/mydir/kernels/sclk.tsc',
+               '/home/mydir/kernels/c-kernel.bc',
+               '/home/mydir/kernels+?,
+               '/custom/kernel_data/p_constants.tpc?,
+                                 )
+            \end{lstlisting}
+            Example of a meta-kernel using the PATH\_VALUES and PATH\_SYMBOLS.
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            KPL/MK
+            \begindata  
+                    PATH_VALUES     = ( '/home/mydir/kernels' )
+                    PATH_SYMBOLS    = ( 'KERNELS'             )
+                    KERNELS_TO_LOAD = (                       )
+                        '$KERNELS/lowest+priority.bsp',
+                        '$KERNELS/next_priority/bsp',
+                        '$KERNELS/leapseconds.tls',
+                        '$KERNELS/sclk.tsc',
+                        '$KERNELS/c-kernel.bc',
+                        '$KERNELS/custom/kernel_data/p_constants.tpc'
+                                        )
+            \end{lstlisting}
+            \end{example}
+            The order in which SPICE kernels are loaded at run-time determines their priority when requests for data are made. For binary kernels, data from a higher priority file will be used in the case when two or more files contain data overlapping in time for a given object. For SPKs, CKs, and binary PCKs , the file loaded last takes precedence and has highest priority. Priority doesn't apply to ESQ files. If two or more text kernels assign values to a single keyword using $=$, the data value associated with the last loaded occurrence of the keyword are used. Orientation data from a binary PCK always supersedes orientation data obtained from a text PCK, no matter the order in which the kernels are loaded. The unloading of kernels is essential for Icy and Mice scripts. Because of the way IDL and MATLAB interact with external shared object libraries, any kernels loaded during an IDL or MATLAB session will stay loaded until the end of the session unless they are specifically unloaded. The routines KCLEAR and UNLOAD may be used to unload kernels containing data you wish to be no longer available in your program. KCLEAR unloads all kernels and clears the kernel pool. UNLOAD unloads specified kernels.
+            \subsubsection{Tutorial 13: Comments in SPICE Kernels}
+            \begin{definition}
+            Kernel comments, also called meta-data, are information that describe the context of kernel data.
+            \end{definition}
+            Comments are provided inside kernels as plain text. Binary kernels have a reserved comment area to hold comments. Text kernels have comments interleaved with the data. Comments may be inserted between blocks of data as follows:
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            \begintext
+            	Some Comments
+            \begindata
+            	Some data
+            \end{lstlisting}
+            To view comments in binary kernels, use either $commnt$ or $spacit$ utility program. To view text kernels, use any text file utility such as more, cat, vi, emacs, Notepad, TextEdit, BBEdit, Word, etc.
+            \begin{example}
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            ;An example for a binary kernel.
+            IDL> commnt -r de421.bsp | more
+            ;An example for a text kernel.
+            IDL> more naif0008.tls
+            \end{lstlisting}
+            \end{example}
+            \subsubsection{Tutorial 14: Using Module Headers}
+            NAIF uses module headers to provide detailed information describing how to use the module. In FORTRAN, C, and MATLAB, the headers are comment blocks in the source code. For IDL, the headers are independent files. All distributions include plain text and HTML versions. (HTML version is hyperlinked with other NAIF documentation). 
+            \subsubsection{Tutorial 15: Time Conversions and Time Formats}
+            Time inputs to and outputs from a user's programs are usually strings representing epochs in the following time systems:
+            \begin{enumerate}
+                \item Ephemeris Time (ET)
+                \item Coordinated Universal Time (UTC)
+                \item Spacecraft Clock (SCLK)
+            \end{enumerate}
+            Time stamps in kernel files, time inputs to SPICE routines, and time outputs from SPICE routines are double precision numbers representing epochs in the following time systems:
+            \begin{enumerate}
+                \item Numeric Ephemeris Time (TDB), expressed as ephemeris seconds past J2000.
+                \item Encoded Spacecraft Clock, expressed as clock ticks since the clock start.
+            \end{enumerate}
+            SPICE provides routines to convert between these string and numeric representations.
+            \begin{enumerate}
+                \item Convert UTC, TDB, or TDT to ET (Requires LSK kernel): STR2ET(string, ET)
+                \item Spacecraft clock string to ET (Requires SLK and :SL kernel): SCS2E(scid,string,ET)
+                \item ET to local solar time string (SPK kernel): ET2LST(et,body,long,type,HR,MN,SC,Time,AMPM)
+                \item ET to planetocentric longitude of the Sun (SPK, PCK kernel): LSPCN(body,et,abcorr)
+                \item ET to Calendar, DOY, Julian, TDB, or TDT string (LSK kernel): TIMOUT(et,fmtpic,STRING)
+                \item ET to spacecraft clock string (LSK, SCLK kernel): SCE2S(scid,et,SCLKCH)
+            \end{enumerate}
+            \subsubsection{Tutorial 16: Leapseconds and Spacecraft Clock Kernels}
+            LSK is the leapseconds kernel which is used in conversions between ephemeris time and coordinated universal time. SCLK is the spacecraft clock kernel and is used in conversions between spacecraft clock time and ephemeris time. The leapseconds kernel contains a tabulation of all of the leapseconds that have occured, plus additional terms. It is used in $ET\Leftrightarrow UTC$ and $ET\Leftrightarrow SCLK$ conversions. Use FURNSH to load it. NAIF updates the LSK when a new leap second is announced by the International Earth Rotation Service.
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            KPL/LSK
+            ...<comments>...
+            \begindata
+            
+            DELTET/DELTA_T_A    =   32.184
+            DELTET/K            =    1.657D-3
+            DELTET/EB           =    1.671D-2
+            DELTET/M            = (  6.239996D0  1.99096871D-7 )
+            
+            DELTET/DELTA_AT     = ( 10,    @1972-JAN-1
+                                    11,    @1972-JUL-1
+                                    12,    @1973-JAN-1
+                                    13,    @1974-JAN-1
+                                    14,    @1975-JAN-1
+            
+                                ...<more leapsecond records>...
+            
+                                    35,    @2012-JUL-1
+                                    36,    @2015-JUL-1
+                                    37,    @2017-JAN-1  )
+            \begintext
+            \end{lstlisting}
+            To the left is an example of an LSK File. The spacecraft clock kernel contains data used in conversions by Toolkit utilities and routines that utilize SCLK time. Use FURNSH to load it. This kernel may be updated frequently, so make sure you have the correct one. On the right is an example of an SCLK File. SCLK time is represented in two ways: A character string, or a double precision number called ticks. A character string is composed of one or more cascading integer numbers, similar to a digital clock. An SCLK value encoded as a double precision number is used within SPICE because it's easy to convert this to other time systems, such as ET.
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            KPL/LSK
+            ...<comments>...
+            \begindata
+            
+            SCLK_KERNEL_ID          =   (   @2009-12-07/18:03:04.00 )
+            SCLK_DATA_TYPE_74       =   (   1   )
+            SCLK01_TIME_SYSTEM_74   =   (   2   )
+            SCLK01_N_FIELDS_74      =   (   2   )
+            SCLK01_MODULI_74        =   (   4294967296  )
+            SCLK01_OFFSETS_74       =   (   0   0   )
+            SCLK01_OUTPUT_DELIM_74  =   (   1   )
+            
+            SCLK_PARTITION_START_74 =   (   0.0000000000000E+00
+                                    ...<more partition start records>...
+                                            1.0995116277750E+12 )
+            
+            SCLK_PARTITION_END_74       (   2.0692822929300E+11
+                                    ...<more partition end records>...
+                                            1.0995116277750E+12 )
+            
+            SCLK01_COEFFICIENTS_74  =   (
+                0.0000000000000E+10    -6.3119514881600E+08    1.0000000000000E+10
+                1.2098765056000E+10    -5.8393434781600E+08    1.0000000000000E+10
+                                ...<more coefficient records>...
+                2.4179319365000E+11     3.1330950356800E+08    9.9999997500000E+-01 )
+            \begintext
+            \end{lstlisting}
+            \begin{example}
+            The Cassini Orbiter SCLK time string consists of three fields separated by delimiters. For example: $1/1609504792.123$. The partition (The $/$ symbol) accounts for clock resets or counter roll-over. The Most significant clock field (The values between $/$ and $.$) range from $0$ to $2^{32}-1$. Nominally, 1 second increment. The dot is the clock field delimiter, and is not a decimal point. This ranges from $0$ to $255$, nomially $1/256^{th}$ of a second increment.
+            \end{example}
+            \subsubsection{Tutorial 17: Frames and Coordinate Systems}
+            One of the largest challenges to documenting and understanding observation geometry is understanding reference frames and coordinate systems. Differences in definitions, lack of concise definitions, evolution of the frames subsystem within SPICE, and the substantial frame management capabilities contribute to this. 
+            \begin{definition}
+            A reference frame is an ordered set of three mutually orthogonal, possibly time dependent, unit-length direction vectors.
+            \end{definition}
+            \begin{definition}
+            A coordinate system for a given reference frame is a mechanism for specifying the location of points in that frame.
+            \end{definition}
+            All reference frames used in SPICE are right handed, so $\hat{\mathbf{x}}\times \hat{\mathbf{y}} = \hat{\mathbf{z}}$. A reference frame's center must be a SPICE ephemeris object whose location is coincident with the origin $(0,0,0)$ of the frame. The center of any inertial frame is always the solar system barycenter. The center of a body-fixed frame is always the center of the body. The center of a topocentric, spacecraft, or instrument frame is also specified by an SPK file. The location of the origin cancels when doing vector arithmetic, but the center is used in computing light time to the center of any non-inertial frame being used.
+            \begin{definition}
+            An inertial reference frame is a reference frame that is non-rotating with respect to stars and has a non-accelerating origin.
+            \end{definition}
+            \begin{example}
+            J2000, ECLIPJ2000.
+            \end{example}
+            \begin{definition}
+            A non-inertial reference frame is a reference frame that is not an inertial reference frame.
+            \end{definition}
+            \begin{example}
+            Accelerating or rotating frames, body-fixed (Other than the sun), topocentric, spacecraft, instrument, and dynamic frames are all non-inertial. 
+            \end{example}
+            \begin{definition}[\textbf{J2000 Frame}]
+            The J2000 frame is defined by the Earth's equator and equinox, determined from observations of planetary motions and other data. 
+            \begin{enumerate}
+                \item The $x-$axis is the line of intersection between Earth's mea equatorial plane and the ecliptic plane on January 1, 2000 12:00:00 TDB, or JD 2451545.0 TDB.
+                \item The $z-$axis is the line normal to the mean equatorial plane which contains the Earth's core on January 1, 2000 12:00:00 TDB. It is approximately equal to the Earth's spin axis orientation at that epoch.
+                \item The $y-$axis is defined as the line that contains the intersection of the $x$ and $z$ axis and is parallel to $\hat{\mathbf{z}}\times \hat{\mathbf{x}}$, where $\hat{\mathbf{z}}$ and $\hat{\mathbf{x}}$ are unit vectors for the $z$ and $x$ axes, respectively.
+            \end{enumerate}
+            \end{definition}
+            Body-fixed frames are tied to a named body and rotate with it. The rotation state is usually determined using a SPICE text PCK containing data published by the IAU. Spacecraft and instrument frames are defined for spacecraft and items attached to a spacecraft, such as antennas, solar arrays, scan platforms, instruments, and moving parts of an instrument. For frames that are time varying, the frame name is usually defined in an FK and the orientation is provided by a CK. For frames that are not moving (Fixed offset), both the frame name and the actual data defining the fixed orientation of the frame are in an FK. Topocentric frames are located at or near to a surface of a body. One axis is normal to the reference spheroid (Or normal to the gradient of the gravitational field.) Examples of these are frames used for telecommunication stations, or for landers/rovers. In a dynamic frame, the orientation changes with time.
+            \begin{enumerate}
+                \item[] Families: Two-vector, Euler, and Of-date.
+                \item[] Dynamic frames exclude frames for which the orientation is determined by a PCK or CK.
+            \end{enumerate}
+            \subsubsection{Coordinate Systems}
+            A coordinate system specifies the method used to locate a point in a particular reference frame. Cartesian and Spherical Coordinates are two common systems. In the planetary science discipline there are many coordinate systems in use. Some of these have well accepted standard definitions, while others do not. For planets and their satellites, the positive $z$ axis is always taken to be the north side of the invariable plane. For the solar system, this is the plane whose normal vector is the angular momentum vector for the solar system. Planetocentric longitude increases positively eastward $(-\pi, \pi)$ and positively northward $(-\frac{\pi}{2},\frac{\pi}{2})$. Dwarf planets (Ceres, Eris, Haumea, Makemake, Pluto) spin in the right hand sense about their positive pole. The relevant APIs are LATRC, RECLAT, DRDLAT, and DLATDR. Planetodetic longitude is the same as planetocentric longitude. Increases positively eastward. Planetodetic latitude is tied to a reference ellipsoid. For a point $P$ or a reference ellopsoid, angle is measured from the $xy-$plane to the surface normal at the point of interest. Increases positively northward. Toolkit planetodetic APIs are GEOREC, RECGEO, DRDGEO, and DGEODR. For planet and satellite planetographic coordinate systems, planetographic longitude is usually defined such that the sub-observer longitude increases with time as seen by a distant, fixed observer. The Earth, Moon, and Sun are exceptions to this, however. Planetographic latidude is planetodetic latidude. Toolkits planetographic APIs are PGRREC, RECPGR, DRDPGR, and DPGRDR. For dwarf planets, asteroids, and comets there are multiple, inconsistent standards (USNO, IAU, PDS). NAIF strongly suggests only using planetocentric or planetodetic coordinates for these objects. 
+            \begin{enumerate}
+                \item Using RA-DEC as intermediary: convert rectangular to RA-DEC using RECRAD, where the range for RA is $[0,2\pi]$. Then map RA-DEC to whatever is the AZ-EL convention you are using.
+                \item Using LAT-LON as intermediary: Convert rectangular to LAT-LON using RECLAT, where the range for LON is $[-\pi,\pi]$. Then map LAT-LON to whatever is the AZ-EL convention you are using.
+                \item Using full state vector transformation API: Transform velocities from rectangular to spherical coordinates using the SPICE Jacobian matrix routines. The SPICE calls are:
+                \begin{enumerate}
+                    \item CALL SPKEZR( TARG, ET, REF, CORR, OBS, STATE, LT )
+                    \item CALL XFMSTA( STATE, 'RECTANGULAR', SPHERICAL', '', OUTSTATE )
+                \end{enumerate}
+                \item Using velocity-only (Jacobian) APIs:
+                \begin{enumerate}
+                    \item CALL SPKEZR( TARG, ET, REF, CORR, OBS, STATE, LT )
+                    \item CALL DSPHDR( STATE(1), STATE(2), STATE(3), JACOBI )
+                    \item CALL MXV( JACOBI, STATE(4), SPHVEL )
+                \end{enumerate}
+                After these calls, the vector SPHVEL contains the velocity in the spherical coordinates: specifically the derivatives: (d(r)/dt, d(colatitude)/dt, d(longitude)/dt)
+            \end{enumerate}
+            \begin{table}[H]
+                \centering
+                \resizebox{\textwidth}{!}{
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    Coordinate Systems&APIs for Position Transformation&APIs for Velocity Transformation&Notes\\
+                    \hline
+                    Latitudinal to/from Rectangular&LATREC, RECLAT&DRDLAT, DLATDR&More commonly called planetocentric. Use for Azimuth/Elevation as well.\\
+                    \hline
+                    R.A./Dec to/from Rectangular&RADREC, RECRAD&DRDLAT,DLATDR&Same as for latitudinal except for range of LON and RA when converting.\\
+                    \hline
+                    Planetographic to/from Rectangular&PGRREC, RECPGR&DRDPGR, DPGRDR&Best restricted to plantes, satellites and the sun. Uses PCK.\\
+                    \hline
+                    Geodetic to/from Rectangular&GEOREC, RECGEO&DRDGEO,DGEODR&\\
+                    \hline
+                    Cylindrical to/from Rectangular&CYLREC, RECCYL&DRDCYL, DCYLDR&\\
+                    \hline
+                    Spherical to/from Rectangular&SPHREC, RECSPH&DRDSPH, DSPHDR&Shape must be a true sphere.\\
+                    \hline
+                    AZ-EL to/from Rectangular&none&none&See earlier chart.\\
+                    \hline
+                \end{tabular}}
+                \caption{List of Coordinate Systems and Conversion Methods}
+                \label{tab:naif_list_of_coordinate_systems}
+            \end{table}
+            \subsubsection{Tutorial 18: Ephemeris Subsystem SPK}
+            An SPK file contains ephemeris (Trajectory) data for ephemeris objects. Ephemeris means position and velocity as a function of time.
+            \begin{definition}
+            The $6-$tuple $(p_{x},p_{y},p_{z},\dot{p}_{x},\dot{p}_{y},\dot{p}_{z})$, where $p_{i}$ and $\dot{p}_{i}$ are the position and velocity components in the $i^{th}$ direction, is referred to as a state of an object.
+            \end{definition}
+            \begin{definition}
+            Ephemeris objects are spacecraft, planets, satellites, comets, and asteroids, as well as the solar system barycenter, a planetary barycenter, a rover on the surface of a body, a camera on top of a mast on a lander, a transmitter cone on a spacecraft, and a DSN antenna on Earth.
+            \end{definition}
+            An SPK file can contain data for many ephemeris objects.
+            The following meta-data is attached to complete the segment: What is the object the ephemeris is for (The target), what is the ID of the reference frame in which the data is given, what is the center of motion of the target (The observer), and what are the start and stop times $(epoch_1, epoch_2)$. Each segment can contain a different type of ephemeris data. For example, discrete state vectors, Chebyshev polynomials, and Difference Lines. Each segment has the SPK type stored in its meta-dat record. SPICE Toolkit software knows how to evaluate each type. See below for some examples. The segments in an SPK file need not be ordered according to time or body, but segment order does imply priority. If using two or more SPK files, segments from SPK files loaded later have higher priority. 
+            \begin{definition}
+            The time period over which an SPK file provides data for an ephemeris object is called the time coverage for that object.
+            \end{definition}
+            All ephemeris data have an associated reference frame. The frame specification is provided by the SPK producer. There are many SPK data types. Below are the widely used one:
+            \begin{enumerate}
+                \item Type 1 - Modified Divided Difference Arrays
+                \item Type 2 - Chebyshev Polynomials for Position.
+                \item Type 3 - Chebyshev Polynomials for Position and Velocity.
+                \item Type 5 - Weighted Two-Body Extrapolation.
+                \item Type 10 - Space Command Two-Line Elements.
+                \item Type 9 and 13 - Sliding-Window Lagrange and Hermite Interpolation of Unequally-Space States.
+                \item Type 18 and 19 - Sliding Window Hermite or Lagrange Interpolation.
+            \end{enumerate}
+            A planet and its satellites orbit the system's barycenter. Mercury and Venus have no satellites, so their barycenters coincide with their centers of mass. Mars has Phobos and Deimos, but since they are so small the barycenter is taken to be the center of mass of Mars. (Starting in 2013, the JPL ephemeris DE430 has the actual Barycenter which is 20 cm different). Planet system barycenters and the sun orbit the solar system barycenter. Below is an example of generic SPK file contents.
+            An SPK file may contain positions of tracking stations, observatories, rovers, etc. The object may be stationary or moving. These SPKs usually contain ephemeris data given in the body-fixed reference frame. To retrieve position or state vectors of ephemeris objects one normally needs two kinds of SPICE kernels, an SPK and an LSK (Ephemeris and Leap second). LSK is used to convert between UTC and TDB or ET. State vectors retrieved from an SPK file are of the form $(x,y,z,dx,dy,dz)$, position vectors are $(x,y,z)$.
+            \begin{enumerate}
+                \item Tell your program which SPICE files to use:
+                \begin{enumerate}
+                    \item cspice\_furnsh 'SPK\_FILE\_NAME'
+                    \item cpsice\_furnsh 'LSK\_FILE\_NAME'
+                \end{enumerate}
+                \item Convert UTC to ET
+                \begin{enumerate}
+                    \item cspice\_str2et 'UTC\_STRING', tdb
+                \end{enumerate}
+                \item Retrieve state vector from the SPK file at your requested time.
+                \begin{enumerate}
+                    \item cspice\_spkezr (target, tdb, 'frame', 'correction' observer, state, light time)
+                \end{enumerate}
+            \end{enumerate}
+            We now go over the arguments of SPKEZR
+            \begin{enumerate}
+                \item Target and Observer: Character names of NAIF IDs for the end point and origin of the state vector to be returned.
+                \item TDP: The time at the observer at which the state vector is to be computed.
+                \item FRAME: The SPICE name for the reference frame in which the output state vector is to be given.
+                \item CORRECTION: Specification of what kind of aberration corrections to apply in computing the output state vector.
+                \item STATE: This is the Cartesian state vector that is outputted. It is in the form $(x,y,z,dx,dy,dz)$. 
+                \item LIGHT TIME: The one-way light time between the position of target and the observer at the specified epoch.
+            \end{enumerate}
+            \begin{example}
+            \
+            \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
+            IDL> cspice_furnsh, 'NAIF0010.TLS'
+            IDL> cspice_furnsh, 'CASSINI_MERGED.BSP'
+            IDL> cspice_str2et, '2004 NOV 21 02:40:21.3', TDB
+            IDL> cspice_spkezr, 'Titan', TDB, 'J2000', 'LT+S', 'CASSINI', STATE, LT
+            \end{lstlisting}
+            \end{example}
 \section{Notes}
 \subsection{Mathematics Seminar}
 Wolfram Alpha uses the same technologies as siri, little fun fact. Mathematica can use wolfram alpha. This allows for standard english input that can be translated into the wolfram languages.
