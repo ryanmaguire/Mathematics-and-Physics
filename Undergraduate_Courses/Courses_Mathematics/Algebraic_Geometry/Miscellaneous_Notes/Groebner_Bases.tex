@@ -3,127 +3,202 @@
 \input{../../../../preamble.tex}
 %--------------------------Main Document----------------------------%
 \begin{document}
-    \ifx\ifgeoalg\undefined
+    \ifx\ifsub\undefined
         \section*{Algebraic Geometry}
         \setcounter{section}{1}
     \fi
-\subsection{Groebner Bases}
-    \begin{definition}
-    If ring is a set $R$ with two binary operations $+$ and $\cdot$, called addition and multiplication, such that the following are true:
-    \begin{enumerate}
-        \item $(R,+)$ is an Abelian Group.
-        \item $\forall_{a,b,c\in R}, (a\cdot b)\cdot c = a\cdot(b\cdot c)$
-        \item $a\cdot(b+c) = (a\cdot b)+(a\cdot c)$
-    \end{enumerate}
-    \end{definition}
-    \begin{definition}
-    A commutative ring is a ring $R$ such that $\forall_{a,b\in R}, a\cdot b=b\cdot a$
-    \end{definition}
-    \begin{definition}
-    A ring with identity is a ring $R$ such that $\exists_{1_{R}\in R}:\forall_{a\in R}, 1_{R}\cdot a=a\cdot 1_{R}=a$
-    \end{definition}
-    \begin{definition}
-    A subring of a ring with identity $R$ is a set $S\subset R$ such that $1_{R}\in S$, and $S$ is closed under the ring operations.
-    \end{definition}
-    \begin{remark}
-    Any field is a ring.
-    \end{remark}
-    \begin{definition}
-    A monomial in variables $x_1,\hdots, x_n$ over a ring $R$ is a product $x^\alpha = \prod_{k=1}^{n} x_1^{\alpha_1}$, where $(\alpha_1,\hdots, \alpha_n)\in \mathbb{N}^n$.
-    \end{definition}
-    \begin{notation}
-    The set of monomials in $n$ variables over $R$ is denoted $\Mon_{R}(x_1,\hdots, x_n)$
-    \end{notation}
-    \begin{definition}
-    If $\alpha,\beta \in \mathbb{N}^n$ such that $\alpha_i \leq \beta_i$, then $x^{\alpha}$ is said to divide $x^\beta$, denoted $x^\alpha \vert x^\beta$, if $x^\beta = x^\alpha \cdot x^\gamma$ for some $\gamma \in \mathbb{N}^n$.
-    \end{definition}
-    \begin{definition}
-    A term is a monomial multiplied by a coefficient in $R$.
-    \end{definition}
-    \begin{definition}
-    A polnyomial over $R$ is a finite $R-$linear combination of monomials, $f=\sum_{\alpha} a_{\alpha} \cdot x^{\alpha}$.
-    \end{definition}
-    \begin{notation}
-    The set of all polynomials in $n$ variables over a ring $R$ is denoted $R[x_1,\hdots, x_n]$.
-    \end{notation}
-    \begin{theorem}
-    If $R$ is a commutative ring with identity, then $R[x_1,\hdots, x_n]$ is a commutative ring with identity.
-    \end{theorem}
-    \begin{definition}
-    A polynomial $f\in R[x_1,\hdots, x_n]$ is called a constant polynomial if $f\in R$.
-    \end{definition}
-    \begin{definition}
-    A field $k$ is a commutative ring with identity such that for all $a\in k$, $a\ne 0$, there is a $b\in k$ such that $a\cdot b=1$
-    \end{definition}
-    \begin{remark}
-    We usually work with fields and consider polynomial rings of the form $k[x_1,\hdots ,x_n]$.
-    \end{remark}
-    \begin{definition}
-    A total ordering on a set $A$ is a relation $>$ such that $\forall_{a,b\in A}$, precisely one of the following truee:
-    \begin{enumerate}
-        \begin{multicols}{3}
-        \item $a<b$
-        \item $a=b$
-        \item $b<a$
-        \end{multicols}
-    \end{enumerate}
-    \end{definition}
-    \begin{definition}
-    A relation $\sim$ on a set $A$ is said to be transitive if for all $a,b,c\in A$, if $a\sim b$ and $b\sim c$, then $a\sim c$.
-    \end{definition}
-    \begin{definition}
-    A well ordering on a set $A$ is a relation $<$ such that for every subset $E\subset A$, there is an element $x\in E$ such that for all $y\in E$, $y\ne x$, we have $x<y$.
-    \end{definition}
-    \begin{remark}
-    Equivalently, a well ordering on a set $A$ is relation $<$ such that for every monotonically decreasing sequence $\alpha_n$, there is an $N\in \mathbb{N}$ such that for all $n>N$, $\alpha_n = \alpha_N$. That is, decreasing sequences terminate.
-    \end{remark}
-    \begin{definition}
-    A monomial ordering on $\mathbb{N}^n$ is a relation $>$ such that $>$ is total, transitive, well ordering. A well ordering on $k[x_1,\hdots ,x_n]$ is a well ordering on $\alpha = (\alpha_1,\hdots, \alpha_n) \in \mathbb{N}^n$.
-    \end{definition}
-    \begin{definition}
-    The lexicographic ordering on $\mathbb{N}^n$ is defined as $(\alpha_1,\hdots, \alpha_n) \underset{Lex}{>} (\beta_1,\hdots, \beta_n)$ if the left-most non-zero entry of $(\alpha_1-\beta_1,\hdots, \alpha_n-\beta_n)$ is positive.
-    \end{definition}
-    \begin{theorem}
-    The lexicographic ordering is a monomial ordering.
-    \end{theorem}
-    \begin{definition}
-    The graded lexicographic ordering is defined as $(\alpha_1,\hdots, \alpha_n) \underset{GrLex}{>}(\beta_1,\hdots, \beta_n)$ if $|\alpha|>|\beta|$ or $|\alpha| = |\beta|$ and $\alpha \underset{Lex}{>}\beta$.
-    \end{definition}
-    \begin{theorem}
-    The graded lexicographic ordering is a monomial ordering.
-    \end{theorem}
-    \begin{theorem}[The Division Algorithm]
-    If $f_1,\hdots, f_s\in k[x_1,\hdots ,x_n]$ are non-zero polynomials and if $>$ is a monomial ordering, then there are $r,q_1,\hdots, q_n\in k[x_1,\hdots ,x_n]$ such that the following are true:
-    \begin{enumerate}
-    \item $f=q_1f_1+\hdots + q_sf_s + r$
-    \item No term of $r$ is divisible by any of $\LT(f_1),\hdots, \LT(f_s)$.
-    \item $\LT(f) = \max_{>}\{\LT(q_i)\cdot \LT(f_i):q_i \ne 0\}$
-    \end{enumerate}
-    \end{theorem}
-    \begin{definition}
-    An ideal $I = \langle x^{\alpha}: \alpha \in A\rangle = \{\sum_{\alpha} h_{\alpha} x^\alpha, h_{\alpha} \in k[x_1,\hdots ,x_n]\}$ is called a monomial ideal.
-    \end{definition}
-    \begin{theorem}
-    If $I = \langle x^\alpha: \alpha \in A\rangle$ is a monomial ideal, $\beta \in \mathbb{N}^n$, then $x^\beta \in I$ if and only if there is an $\alpha \in A$ such that $x^\alpha$ divides $x^\beta$.
-    \end{theorem}
-    \begin{theorem}
-    If $I$ is a monomial ideal, $f\in k[x_1,\hdots ,x_n]$, then the following are equivalent:
-    \begin{enumerate}
-        \item $f\in I$
-        \item Every term of $f$ lies in $I$.
-        \item $f$ is a $k-$linear combination of monomials in $I$.
-    \end{enumerate}
-    \end{theorem}
-    \begin{theorem}[Dickson's Lemma]
-    Every monomial ideal of $k[x_1,\hdots ,x_n]$ is finitely generated.
-    \end{theorem}
-    \begin{theorem}[Hilbert's Basis Theorem]
-    Every ideal $I\subset k[x_1,\hdots ,x_n]$ is finitely generated.
-    \end{theorem}
-    \begin{definition}
-    If $>$ is a monomial ordering on $k[x_1,\hdots ,x_n]$, then a Groebner Basis of $I\subset k[x_1,\hdots ,x_n]$ is a set $G = \{g_1,\hdots, g_s\}$ such that $\langle \LT(I)\rangle = \langle \LT(g_1),\hdots, \LT(g_s)\rangle$
-    \end{definition}
-    \begin{theorem}
-    Every non-zero ideal $I\subset k[x_1,\hdots ,x_n]$ has a Groebner Basis.
-    \end{theorem}
+    \subsection{Groebner Bases}
+        \begin{definition}
+            A ring is a set $R$ with two binary operations $+$
+            and $\cdot$, called addition and multiplication,
+            such that the following are true:
+            \begin{enumerate}
+                \begin{multicols}{3}
+                    \item $(R,+)$ is an Abelian Group
+                    \item $(a\cdot{b})\cdot{c}=a\cdot(b\cdot{c})$
+                    \item $a\cdot(b+c)=(a\cdot b)+(a\cdot c)$
+                \end{multicols}
+            \end{enumerate}
+        \end{definition}
+        \begin{definition}
+            A commutative ring is a ring $R$ such that
+            $\forall_{a,b\in R},a\cdot{b}=b\cdot{a}$
+        \end{definition}
+        \begin{definition}
+            A ring with identity is a ring $R$ such that
+            $\exists_{1_{R}\in R}:\forall_{a\in R}, 1_{R}\cdot a=a\cdot 1_{R}=a$
+        \end{definition}
+        \begin{definition}
+            A subring of a ring with identity $R$ is a set
+            $S\subset R$ such that $1_{R}\in S$, and $S$ is
+            closed under the ring operations.
+        \end{definition}
+        \begin{remark}
+            Any field is a ring.
+        \end{remark}
+        \begin{definition}
+            A monomial in variables $x_1,\hdots, x_n$ over a
+            ring $R$ is a product
+            $x^\alpha=\prod_{k=1}^{n} x_1^{\alpha_1}$,
+            where $(\alpha_1,\hdots,\alpha_n)\in \mathbb{N}^n$.
+        \end{definition}
+        \begin{notation}
+            The set of monomials in $n$ variables over
+            $R$ is denoted $\Mon_{R}(x_1,\hdots, x_n)$
+        \end{notation}
+        \begin{definition}
+            If $\alpha,\beta \in \mathbb{N}^n$ such that
+            $\alpha_i \leq \beta_i$, then $x^{\alpha}$ is said
+            to divide $x^\beta$, denoted $x^\alpha \vert x^\beta$,
+            if $x^\beta = x^\alpha \cdot x^\gamma$ for some
+            $\gamma\in\mathbb{N}^n$.
+        \end{definition}
+        \begin{definition}
+            A term is a monomial multiplied by a coefficient in $R$.
+        \end{definition}
+        \begin{definition}
+            A polnyomial over $R$ is a finite $R-$linear
+            combination of monomials,
+            $f=\sum_{\alpha} a_{\alpha}\cdot x^{\alpha}$.
+        \end{definition}
+        \begin{notation}
+            The set of all polynomials in $n$ variables over
+            a ring $R$ is denoted $R[x_1,\hdots, x_n]$.
+        \end{notation}
+        \begin{theorem}
+            If $R$ is a commutative ring with identity,
+            then $R[x_1,\hdots, x_n]$ is a commutative
+            ring with identity.
+        \end{theorem}
+        \begin{definition}
+            A polynomial $f\in R[x_1,\hdots, x_n]$ is
+            called a constant polynomial if $f\in R$.
+        \end{definition}
+        \begin{definition}
+            A field $k$ is a commutative ring with identity
+            such that for all $a\in k$, $a\ne 0$, there is a
+            $b\in k$ such that $a\cdot b=1$
+        \end{definition}
+        \begin{remark}
+            We usually work with fields and consider
+            polynomial rings of the form $k[x_1,\hdots ,x_n]$.
+        \end{remark}
+        \begin{definition}
+            A total ordering on a set $A$ is a relation
+            $>$ such that $\forall_{a,b\in A}$, precisely one
+            of the following truee:
+            \begin{enumerate}
+                \begin{multicols}{3}
+                    \item $a<b$
+                    \item $a=b$
+                    \item $b<a$
+                \end{multicols}
+            \end{enumerate}
+        \end{definition}
+        \begin{definition}
+            A relation $\sim$ on a set $A$ is said to be
+            transitive if for all $a,b,c\in A$, if $a\sim b$ and
+            $b\sim c$, then $a\sim c$.
+        \end{definition}
+        \begin{definition}
+            A well ordering on a set $A$ is a relation $<$
+            such that for every subset $E\subset A$, there is an
+            element $x\in E$ such that for all $y\in E$, $y\ne x$,
+            we have $x<y$.
+        \end{definition}
+        \begin{remark}
+            Equivalently, a well ordering on a set $A$
+            is a relation $<$ such that for every monotonically
+            decreasing sequence $\alpha_n$, there is an
+            $N\in \mathbb{N}$ such that for all $n>N$,
+            $\alpha_n = \alpha_N$. That is,
+            decreasing sequences terminate.
+        \end{remark}
+        \begin{definition}
+            A monomial ordering on $\mathbb{N}^n$ is a relation
+            $>$ such that $>$ is total, transitive, well
+            ordering. A well ordering on $k[x_1,\hdots ,x_n]$
+            is a well ordering on
+            $\alpha=(\alpha_1,\hdots,\alpha_n)\in\mathbb{N}^n$.
+        \end{definition}
+        \begin{definition}
+            The lexicographic ordering on $\mathbb{N}^n$ is
+            defined as
+            $(\alpha_1,\hdots,\alpha_n)\underset{Lex}{>}%
+             (\beta_1,\hdots,\beta_n)$
+            if the left-most non-zero entry of
+            $(\alpha_1-\beta_1,\hdots, \alpha_n-\beta_n)$
+            is positive.
+        \end{definition}
+        \begin{theorem}
+            The lexicographic ordering is a monomial ordering.
+        \end{theorem}
+        \begin{definition}
+            The graded lexicographic ordering is defined as
+            $(\alpha_1,\hdots,\alpha_n)\underset{GrLex}{>}%
+             (\beta_1,\hdots, \beta_n)$
+            if $|\alpha|>|\beta|$ or $|\alpha|=|\beta|$
+            and $\alpha\underset{Lex}{>}\beta$.
+        \end{definition}
+        \begin{theorem}
+            The graded lexicographic ordering is a monomial ordering.
+        \end{theorem}
+        \begin{theorem}[The Division Algorithm]
+            If $f_1,\hdots, f_s\in k[x_1,\hdots ,x_n]$ are
+            non-zero polynomials and if $>$ is a monomial ordering,
+            then there are $r,q_1,\hdots, q_n\in k[x_1,\hdots ,x_n]$
+            such that the following are true:
+            \begin{enumerate}
+                \item $f=q_{1}f_{1}+\hdots+q_{s}f_{s}+r$
+                \item No term of $r$ is divisible by
+                      any of $\LT(f_{1}),\hdots,\LT(f_{s})$.
+                \item $\LT(f)=\max_{>}\{\LT(q_{i})%
+                       \cdot\LT(f_i):q_i\ne{0}\}$
+            \end{enumerate}
+        \end{theorem}
+        \begin{definition}
+            An ideal
+            $I=\langle{x}^{\alpha}:\alpha\in{A}\rangle%
+              =\{\sum_{\alpha}h_{\alpha}x^\alpha,h_{\alpha}%
+               \in k[x_1,\hdots ,x_n]\}$
+            is called a monomial ideal.
+        \end{definition}
+        \begin{theorem}
+            If $I=\langle{x}^\alpha:\alpha\in{A}\rangle$
+            is a monomial ideal,
+            $\beta\in\mathbb{N}^n$, then $x^\beta\in{I}$
+            if and only if there is an $\alpha\in{A}$
+            such that $x^{\alpha}$ divides $x^{\beta}$.
+        \end{theorem}
+        \begin{theorem}
+            If $I$ is a monomial ideal,
+            $f\in{k}[x_1,\hdots ,x_n]$,
+            then the following are equivalent:
+            \begin{enumerate}
+                \item $f\in I$
+                \item Every term of $f$ lies in $I$.
+                \item $f$ is a $k-$linear combination of
+                      monomials in $I$.
+            \end{enumerate}
+        \end{theorem}
+        \begin{theorem}[Dickson's Lemma]
+            Every monomial ideal of $k[x_{1},\hdots,x_{n}]$
+            is finitely generated.
+        \end{theorem}
+        \begin{theorem}[Hilbert's Basis Theorem]
+            Every ideal $I\subset{k}[x_{1},\hdots,x_{n}]$
+            is finitely generated.
+        \end{theorem}
+        \begin{definition}
+            If $>$ is a monomial ordering on $k[x_{1},\hdots,x_{n}]$,
+            then a Groebner Basis of $I\subset k[x_{1},\hdots,x_{n}]$
+            is a set $G=\{g_{1},\hdots,g_{s}\}$ such that
+            $\langle\LT(I)\rangle%
+             =\langle \LT(g_1),\hdots,\LT(g_s)\rangle$
+        \end{definition}
+        \begin{theorem}
+            Every non-zero ideal
+            $I\subset{k}[x_{1},\hdots,x_{n}]$
+            has a Groebner Basis.
+        \end{theorem}
 \end{document}
