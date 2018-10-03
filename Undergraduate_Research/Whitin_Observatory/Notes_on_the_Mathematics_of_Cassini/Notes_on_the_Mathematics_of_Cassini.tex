@@ -20,34 +20,12 @@
     \section{Atmospheric Occultations}
         \subimport{./Atmospheric_Occultations/}{Titan_Geometry}
     \section{Ring Occultation}
-        \subsection{Shannon's Sampling Theorem}
-            \begin{theorem}
-            If $f(t)$ is a function such that its spectrum $F(\omega)$ is zero outside the interval $[-W,W]$, then $f(t)$ is determined uniquely by the points $f(\frac{n}{2W}), n\in \mathbb{N}$.
-            \end{theorem}
-            \begin{proof}
-            For let $f(t)$ be a function and $F(\omega)$ its spectrum. That is,
-            \begin{equation*}
-            f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty} F(\omega)e^{-i\omega t}d\omega
-            \end{equation*}
-            But $F(\omega) = 0$ for $|\omega| > W$. Thus we have:
-            \begin{equation*}
-            f(t) = \frac{1}{2\pi}\int_{-2\pi W}^{2\pi W}F(\omega)e^{-i\omega t}d\omega
-            \end{equation*}
-            Then for $n\in \mathbb{N}$, we have:
-            \begin{equation*}
-            f\big(\frac{n}{2W}\big) = \frac{1}{2\pi}\int_{-2\pi W}^{2\pi W}F(\omega) e^{-i\frac{n}{2W}\omega}d\omega
-            \end{equation*}
-            But:
-            \begin{align*}
-            F(\omega) &= \sum_{n=-\infty}^{\infty}e^{in\omega}\frac{1}{2\pi}\int_{-2\pi W}^{2\pi W}F(\tau)e^{-i\frac{n}{2W}\tau}d\tau\\
-            &= \sum_{n=-\infty}^{\infty}f\big(\frac{n}{2W}\big)e^{in\omega}
-            \end{align*}
-            Therefore $f(\frac{n}{2W}), n\in \mathbb{N}$ uniquely determines $F(\omega)$. But the spectrum $F(\omega)$ uniquely determines $f(t)$. Therefore $f(t)$ is uniquely determined and:
-            \begin{equation*}
-            f(t) = \frac{1}{4\pi^2}\sum_{n=-\infty}^{\infty}\int_{-2\pi W}^{2\pi W}\int_{-2\pi W}^{2\pi W}f\big(\frac{n}{2W}\big)e^{in(\omega-\frac{\tau}{2W})}e^{-i\omega t}d\tau d\omega
-            \end{equation*}
-            
-            \end{proof}
+        \subimport{./Ring_Occultations/}
+                  {Ring_Geometry}
+        \subimport{./Ring_Occultations/}
+                  {Derivations_of_Equations_in_MTR86}
+        \subimport{./Ring_Occultations/}
+                  {Shannons_Sampling_Theorem}
         \subsection{Diffraction Through a Square Well}
             We wish to solve for $\hat{T}(\rho_{0})$. We have that:
             \begin{equation*}
@@ -524,7 +502,8 @@
                 \frac{\partial\xi}
                      {\partial\phi}_{\phi=\phi_{0}}
                 &=-\cos(B)\frac{\rho\sin(\phi_{0})}{D}\\
-                \frac{\partial^{2}\eta}{\partial\phi^{2}}
+                \frac{\partial^{2}\eta}
+                     {\partial\phi^{2}}_{\phi=\phi_{0}}
                 &=\frac{2\rho\rho_{0}}{D^{2}}
                 &
                 \frac{\partial^{2}\xi}
@@ -567,22 +546,23 @@
             Where $P_{n}(\alpha)$ is the $n^{th}$
             Legendre polynomial. That is, this is
             the \textit{generating function} for the
-            legendre polynomials. Using this we can
+            Legendre polynomials. Using this we can
             easily compute the Taylor series expansions
             for $\psi$ and $\psi_{\phi}$ about $x=0$.
             $\psi_{\phi\phi}$ is a nastier type of monster.
             Using this, we obtain the following equations:
             \begin{align*}
                 \psi_{\phi=\phi_{0}}
-                &=\frac{1-a^{2}}{2}x^{2}
-                 +\frac{a(1-a^{2})}{3}x^{3}
-                 +\frac{-5a^{4}+6a^{2}-1}{8}x^{4}+\hdots\\
+                &=\frac{1-\alpha^{2}}{2}x^{2}
+                 +\frac{\alpha(1-\alpha^{2})}{3}x^{3}
+                 +\frac{-5\alpha^{4}+6\alpha^{2}-1}{8}x^{4}+
+                 \hdots\\
                   \frac{\partial\psi}
                        {\partial\phi}_{\phi=\phi_{0}}
                 &=\cos(B)\sin(\phi_{0})\frac{\rho}{D}
                   \bigg(
-                      ax+\frac{3a^{2}-1}{2}x^{2}
-                      +\frac{35a^{4}-30a^{2}+3}{8}x^{4}
+                      \alpha{x}+\frac{3\alpha^{2}-1}{2}x^{2}
+                      +\frac{35\alpha^{4}-30\alpha^{2}+3}{8}x^{4}
                       +\hdots
                   \bigg)
             \end{align*}
@@ -599,7 +579,7 @@
                     +\hdots
             \end{equation*}
             Where all derivatives are taken with respect to
-            $\phi$, and $\psi_{s}$ denoted the derivatives
+            $\phi$, and $\psi_{s}$ denotes the derivatives
             evaluated at $\phi=\phi_{s}$.
             We may form a sequence of points and
             functions defined by
@@ -707,25 +687,26 @@
             10,000 kilometer windows the ratio is bounded
             by 1.14. The appoximation can thus be
             generalized to:
-            \begin{align*}
+            \begin{equation*}
                 \psi\approx
                 \sum_{k=0}^{N-1}b_{k}x^{k+2}
                 -\frac{1}{2}
                 \frac{\cos^{2}(B)\sin^{2}(\phi_{0})}
-                     {1-\cos^{2}(B)\sin^{2}(B)}
+                     {1-\cos^{2}(B)\sin^{2}(\phi_{0})}
                 \Big(\sum_{k=1}^{N}P_{k}(\alpha)x^{n}\Big)^{2}
-            \end{align*}
+            \end{equation*}
             Where $b_{k}$ is the $k^{th}$ term of the expansion
             for $\psi$, and $P_{n}$ is the $n^{th}$
             Legendre Polynomial. When $N=1$, we obtain
             the Fresnel approximation we previously
             derived. It would be convenient if we could
             write the $b_{k}$ in terms of the
-            $P_{k}(\alpha)$.
+            $P_{k}(\alpha)$. We can do this by solving the
+            following simple differential equation.
             \begin{align*}
                 \frac{d}{dx}
                 \Big(\sqrt{1+x^{2}-\alpha{x}}\Big)
-                &=\frac{x-2\alpha}{\sqrt{1+x^{2}-\alpha{x}}}\\
+                &=\frac{x-\alpha}{\sqrt{1+x^{2}-\alpha{x}}}\\
                 &=(x-\alpha)
                   \sum_{k=0}^{\infty}P_{k}(\alpha)x^{k}\\
                 &=\sum_{k=0}^{\infty}P_{k}(\alpha)x^{k+1}
@@ -744,8 +725,24 @@
                     \Big)
                     \frac{x^{k+2}}{k+2}
             \end{align*}
-            And this gives us our formula:
+            Where we used a shift of index to obtain the last
+            equation. This gives us our formula:
             \begin{equation*}
                 b_{k}=\frac{P_{k}(\alpha)-\alpha{P}_{k+1}}{k+2}
+            \end{equation*}
+            We have the following first order approximation
+            for $\psi$. Higher order approximations can be
+            computed by evaluating
+            $\psi_{n}-\psi_{n}'^{2}/\psi_{n}''$ at
+            at better approximations obtained by the
+            Newton-Raphson method for $\phi$.
+            \begin{equation*}
+                \psi\approx
+                \sum_{k=0}^{N-1}
+                \frac{P_{k}(\alpha)-\alpha{P}_{k+1}}{k+2}x^{k+2}
+                -\frac{1}{2}
+                \frac{\cos^{2}(B)\sin^{2}(\phi_{0})}
+                     {1-\cos^{2}(B)\sin^{2}(\phi_{0})}
+                \Big(\sum_{k=1}^{N}P_{k}(\alpha)x^{n}\Big)^{2}
             \end{equation*}
 \end{document}
