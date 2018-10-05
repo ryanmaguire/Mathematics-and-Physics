@@ -987,12 +987,7 @@ Here are the numbers for the typical stability of the USO at various integration
     \item $2.603035874178\times 10^{-13}$\hfill [1000 Second Integration Time]
 \end{itemize}
 \subsubsection{\footnotesize RE: rev7I reconstruction}
-Redid the processing for rev7I and found that the portspectrum file that gave us phase somehow got corrupted. There’s still the halfbin radial offset problem that we saw in rev7E, and also a vertical scaling in the reconstructed power (which may be due to normalization).
-\begin{figure}[H]
-    \centering
-    \includegraphics[trim = {1cm 1cm 2cm 2cm},clip,width = 6in]{re_rev7I_reconstruction.pdf}
-    \caption{Graphic attached to the e-mail '\textnormal{RE: rev7I reconstruction}'}
-\end{figure}
+Redid the processing for rev7I and found that the portspectrum file that gave us phase somehow got corrupted. There's still the halfbin radial offset problem that we saw in rev7E, and also a vertical scaling in the reconstructed power (which may be due to normalization).
 \subsubsection{\footnotesize RE: RE: rev7I reconstruction}
 The portspectrum file may have been partially overwritten. Check to see if the radius scale is off by exactly one half bin or by some other amount. One possibility is that Essam used the CORRECTED radius scale for the reconstruction, rather than the raw radius scale. Look into the size of the radius correction in the vicinity of the Maxwell ringlet for Rev 07I and 07E.
 \subsubsection{\footnotesize RE: RSR Power and Phase Extraction Comparison}
@@ -1193,13 +1188,6 @@ Hi, Paul - What are the conversion factors for Ka and S band, given an X band fr
 \end{itemize}
 \subsubsection{\footnotesize RE: phase wrapping - one more suggestion - and a math problem for Ryan}
 Another quick idea to help solidify our understanding of the origin/solution of the phase wrapping problem. You might try running some intermediate cases of the number of points in the FFT: 2048, 4096, and 8192 come to mind as obvious possibilities. I expect that you'd see a trend in the magnitude of the difference in the phase shifts with the degree of averaging. I'm struck by the large DC phase shift, in addition to the slope that you demonstrate in the middle panel of plots - I would expect that this would increase rapidly with the amount of averaging, and it would be interesting to plot just that DC offset as a function of the number of points in the FFT divided by 1024, your base case. It might have some interesting curvature, and this is something that you could relate to the magnitude of the error in Simpson's rule, which is the method you are using for integration. Ryan would probably have some interest in predicting the error in Simpson's rule as you increase the step size, and seeing if your results agree. Similarly, if my hunch about the origin of the problem is right, you should find improvement as you successively increase the number of sub-points in your spline interpolation of the 16384 case from 2 to 16 (or perhaps even more). If all of this works, I think we will have a more robust solution of the frequency offset problem, but we'll just have to see! -Richard French
-\subsubsection{\footnotesize RE: Residual Frequency and Frequency offset plots}
-Here’s the residual frequency plot (top panel) and frequency offset plot (bottom panel).
-\begin{figure}[H]
-    \centering
-    \includegraphics[trim={2cm 2cm 2cm 2cm},clip,width=0.75\textwidth]{idl.pdf}
-    \caption{Attachment from Glenn Steranka}
-\end{figure}
 \subsubsection{\footnotesize Goals for the Week (October 23, 2017)}
 \begin{enumerate}
     \item Ryan - document the differences between inversions of Maxwell ringlet when using a variety of Glenn's power savefiles and Essam's phase
@@ -1262,15 +1250,6 @@ Is our main goal to replicate the EASYDATA PDF and data files exactly the way th
 I finally spent some time reading the MTR86 section about threshold optical depth and I think I finally understand the $\dot{\rho}_{0}$ dependence. Quick request - could you write a quick routine to compute the threshold optical depth for Rev007E under the assumption that $\textrm{SNR}_{0} = 50.2 dB (10^5.2$, taking account of the actual rho-dot across the occultation, and plot the optical depth threshold as a function of ring plane radius? Essam gets a concave-upward plot with a minimum of about 5.025 threshold optical depth for a radius of about $95000 km$, increasing to $5.030$ at $\rho=140,000 km$. For this case, assume that $\Delta rho_{0} = 10km$ (This is using the Voyager $SNR_{0}$). Then tweak the $SNR_{0}$ to get the best match you can find between Essam's actual plot in the TAU\_10KM.TAB file for Rev007E and your calculations. What I'm hoping is that the functional form of your calculation and Essam's will be identical, and the only difference will be in the actual value of $SNR_{0}$ used for the calculation. If that is not the case, then we'll have to explore the possible explanations.
 \subsubsection{\footnotesize RE: Allen Deviation for 1 Second Integration (USO Presentation}
 \href{https://websites.isae-supaero.fr/IMG/pdf/uso-toulouse.pdf}{Here} is a presentation about the USO and Allen Deviations.
-\subsubsection{\footnotesize RE: C Ring Ripples}
-\begin{wrapfigure}[14]{l}{0.4\textwidth}
-    \centering
-    \includegraphics[trim={2cm 4cm 2cm 2cm},clip,width=0.4\textwidth]{CringRipples.pdf}
-    \caption{Attachment from Richard French}
-\end{wrapfigure}
-Here is a slide that shows the ripples and the beat phenomenon you described, along with a toy model I put together to try to match the data for a cycle or two. It will be interesting to see how close it is to your VIMS results. - Richard French
-\subsubsection{\footnotesize RE: Github Repository}
-Our GitHub repository is \href{https://github.com/NASA-Planetary-Science/rss_ringoccs}{here}. I've to set up a local version of rss\_ringoccs on cosmos under TC2017/GitHub/rss\_ringoccs.
 \subsubsection{\footnotesize RE: Phase Calculation to Try}
 I don't think we've yet tried an idea I had for computing the phase that might be more accurate than what we are doing now. Instead of using $phase = atan(\langle Q \rangle,\langle I \rangle)$, where the $\langle \rangle$ represents an average of measurements straight from the RSR (which I think is what we are doing now), the idea is that we use an analogous method to what we are doing when we compute power. 
 \begin{enumerate}
@@ -1434,7 +1413,7 @@ A quick update:
 \subsubsection{\footnotesize RE: Maxwell Up and Running}
 You should be able to login to maxwell from off-campus using:
 \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-ssh -Y -p 54322 myusername@149.130.136.244
+ssh -Y -p 54322 myusername@xxx.xxx.xxx.xxx
 \end{lstlisting}
 Give it a try and let me know if it works. 
 You should also be able to rsync. On your local external disk
@@ -1443,8 +1422,8 @@ add a file like this, changing the name of the file to yours and changing all rf
 \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
 cat rsync_maxwell_to_rfrench001.sh
 echo 'This command updates the rfrench version of TC2017 from maxwell'
-rsync -e "ssh -p 54322" -avuhW --progress \
-rfrench@149.130.136.244:/Volumes/dione_raid2/Research/TC2017 \
+rsync -e "ssh -p xxxxx" -avuhW --progress \
+rfrench@xxx.xxx.xxx.xxx:/Volumes/dione_raid2/Research/TC2017 \
 /Volumes/rfrench001/Research
 \end{lstlisting}
 To make it executable, be sure to type
@@ -1455,9 +1434,9 @@ This will let you rsync UP to maxwell. To go in the other direction:
 \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
 cat rsync_rfrench001_to_maxwell.sh
 echo 'This command updates the maxwell version of TC2017 from rfrench001'
-rsync -e "ssh -p 54322" -avuhW --progress \
+rsync -e "ssh -p xxxxx" -avuhW --progress \
 /Volumes/rfrench001/Research/TC2017 \
-rfrench@149.130.136.244:/Volumes/dione_raid2/Research
+rfrench@xxx.xxx.xxx.xxx:/Volumes/dione_raid2/Research
 \end{lstlisting}
 Your passwords for Maxwell are the same as on Cosmos and Uranus.
 \subsubsection{RE: Save files for Rev133 X-43 and K-25 Diffraction Correction}
@@ -1771,48 +1750,6 @@ Final update for the night: I ran res\_char with v5, and using the optimal resol
     \end{subfigure}
 \end{figure}
 Great - I'll be interested to find out what scale factor you applied to W. By the way, I think we discussed the possibility that this scale factor might be variable across the rings -- or not. Either one would help us diagnose the difference between Essam's approach and ours in defining $\Delta R_{\rm eff}$ -Dick
-\subsubsection{\footnotesize RE: Comparison of Rev007 E Save Files}
-I've made comparisons of all 4 save files, using the v4.1 reconstruction code, and have overplotted Essam's results as well.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_v4_1_Code_v0_Save_File}
-        \caption{v0 Oct 30 08:24 rev007\_E\_X.sav}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth,trim={0.4in 0 0.4in 0},clip]{Maxwell_v4_1_Code_v1_Save_File}
-        \caption{v1 Jan 3 13:02 Rev007\_E\_X43\_struct\_input.sav}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_v4_1_Code_v2_Save_File}
-        \caption{v2 Jan 11 23:33 Rev007\_E\_X43\_struct\_input\_v2.sav}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth,trim={0.3in 0 0.3in 0},clip]{Maxwell_v4_1_Code_v3_Save_File}
-        \caption{v3 Jan 21 23:44 Rev007\_E\_X43\_struct\_input\_v3.sav}
-    \end{subfigure}
-\end{figure}
-Directory containing those files:
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-/Volumes/rmaguire001/Research/TC2017/rmaguire/v4/v4_1/outfiles
-2018_01_24_rev007_E_X43_samp_250_range_70000_145000_res_1000m_input_v2.sav
-2018_01_24_rev007_E_X43_samp_250_range_70000_145000_res_1000m_input_v3.sav
-2018_01_24_rev007_E_X43_samp_250_range_70000_145000_res_1000m_input_v1.sav
-2018_01_24_rev007_E_X43_samp_250_range_70000_145000_res_1000m_input_v0.sav
-\end{lstlisting}
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_v4_1_vs_Essam}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth,trim={0.3in 0 0.3in 0},clip]{Maxwell_v4_1_Minus_Essam}
-    \end{subfigure}
-\end{figure}
-To make this I modified and commented out some parts of the following code:\\
-/Volumes/rmaguire001/Research/TC2017/rmaguire/v4/v4\_1/resolution\_characterization/rjm\_func\_inverse\_resolution.pro\\
-I've made a dedicated code to reproduce this plot:\\
-/Volumes/rmaguire001/Research/TC2017/rmaguire/v5/compare/rjm\_diff\_corr\_compare.pro
 \subsubsection{\footnotesize RE: Titan Ringlet Plots}
 Hi, Ryan - When you have a chance would you send me a plot (and location of plotting program) that does your best reproduce Essam's Titan ringlet plots for Rev007E from the User's Guide (100m, 1 km, and 10 km resolution)? 
 Also, could you process the F ring profiles Glenn did (rev 123 or rev 125, S, X, Ka) at 100-m resolution? He may need to supply you with 50-m resolution files. -Dick\\
