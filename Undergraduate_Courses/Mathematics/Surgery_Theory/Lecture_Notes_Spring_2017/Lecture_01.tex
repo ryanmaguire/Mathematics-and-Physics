@@ -17,74 +17,7 @@
         \begin{wrapfigure}[8]{l}{0.35\textwidth}
             \centering
             \captionsetup{type=figure}
-            \begin{tikzpicture}[%
-                line width=1pt,%
-                line cap=round,>={Stealth[black]},%
-                every edge/.style={draw=black,very thick},%
-                smalldot/.style={%
-                    circle,%
-                    fill=black,%
-                    inner sep=0pt,%
-                    outer sep=0%
-                }
-            ]
-                \begin{scope}[every node/.style=smalldot]
-                    % Set points defining the leftmost blob.
-                    \node at (0,0) (a) {};
-                    \node at (-0.5,0.2) (b) {};
-                    \node at (-1,1) (c) {};
-                    \node at (-0.4,2) (d) {};
-                    \node at (0, 1.8) (e) {};
-                    \node at (0.5, 1.7) (f) {};
-                    \node at (1,1) (g) {};
-                    \node at (0.7,0.4) (h) {};
-
-                    % Set points defining the rightmost blob.
-                    \node at (3,0) (a1) {};
-                    \node at (2.5,0.4) (b1) {};
-                    \node at (2,1.2) (c1) {};
-                    \node at (2.6,2.1) (d1) {};
-                    \node at (3, 2.2) (e1) {};
-                    \node at (3.5, 1.7) (f1) {};
-                    \node at (4,1) (g1) {};
-                    \node at (3.7,0.4) (h1) {};
-                \end{scope}
-
-                % Labels for the blobs X and Y.
-                \node at (0,1) (i) {$X$};
-                \node at (3,1) (i1) {$Y$};
-
-                % Node indicating this is a homotopy.
-                \node at (1.5,1) (ho) {$H$};
-
-                % Nodes for drawing arrows between curves.
-                \node at (1.1,0.15) (t1) {};
-                \node at (1.1,1.85) (t2) {};
-                \node at (1.9,0.15) (t3) {};
-                \node at (1.9,1.85) (t4) {};
-
-                % Draw a Hobby curve creating leftmost blob.
-                \path[draw,use Hobby shortcut,closed=true]
-                    (a)..(b)..(c)..(d)..(e)..(f)..(g)..(h);
-
-                % Draw Hobby curve creating rightmost blob.
-                \path[draw,use Hobby shortcut,closed=true]
-                    (a1)..(b1)..(c1)..(d1)..(e1)..(f1)..(g1)..(h1);
-
-                \path[shorten >=0.2cm,shorten <=0.2cm,->]
-                    (i) edge[bend left=40] node[above] {$f$} (i1);
-
-                \path[shorten >=0.2cm,shorten <=0.2cm,->]
-                    (i) edge[bend right=40] node[below] {$g$} (i1);
-
-                % Draw first arrow connecting f and g.
-                \path[draw=black,dashed,<->]
-                    (t1) edge[bend right =10,semithick] (t2);
-
-                % Draw second arrow connecting f and g.
-                \path[draw=black,dashed,<->]
-                    (t3) edge[bend left =10,semithick] (t4);
-            \end{tikzpicture}
+            \subimport{../../../../tikz/}{Homotopy_Example}
             \caption[Homotopy Diagram]{%
                 Diagram for a homotopy between two functions
                 $f,g:X\rightarrow Y$.%
@@ -138,88 +71,7 @@
             \centering
             \captionsetup{type=figure}
             \vspace{-1ex}
-            \begin{tikzpicture}[%
-                line width=1pt,%
-                line cap=round,%
-                >={Stealth[black]},%
-                every edge/.style={draw=black,very thick},%
-                smalldot/.style={%
-                    circle,%
-                    fill=black,%
-                    inner sep=0pt,%
-                    outer sep=0%
-                },
-                dashcurve/.style={%
-                    draw=black,%
-                    dashed,%
-                    <->%
-                }
-            ]
-                \begin{scope}[every node/.style=smalldot]
-                    % Set points for upper curve.
-                    \node at (2.5,1.3) (a0) {};
-                    \node at (2.7,1.4) (b0) {};
-                    \node at (2.9,1.7) (c0) {};
-                    \node at (3.2,1.8) (d0) {};
-                    \node at (3.4,1.9) (e0) {};
-
-                    % Set points for lower curve.
-                    \node at (2.8,0.6) (a1) {};
-                    \node at (3,0.6) (b1) {};
-                    \node at (3.3,0.5) (c1) {};
-                    \node at (3.5,0.9) (d1) {};
-                    \node at (3.7,1.2) (e1) {};
-
-                    % Points for the outer blob.
-                    \node at (3,0) (a2) {};
-                    \node at (2.5,0.4) (b2) {};
-                    \node at (2,1.2) (c2) {};
-                    \node at (2.6,2.1) (d2) {};
-                    \node at (4.2, 2.4) (e2) {};
-                    \node at (4.5, 2) (f2) {};
-                    \node at (4,1) (g2) {};
-                    \node at (3.7,0.4) (h2) {};
-                \end{scope}
-
-                % Nodes labelling the domain and co-domain.
-                \node at (0,1) (i) {$[0,1]$};
-                \node at (4,1.9) (i1) {$Y$};
-
-                % Draw upper curve.
-                \draw (a0) to
-                    [quick curve through={(b0)..(c0)..(d0)}] (e0);
-
-                % Draw lower curve.
-                \draw (a1) to
-                    [quick curve through={(b1)..(c1)..(d1)}] (e1);
-
-                \begin{scope}[%
-                    every path/.style=dashcurve,
-                    every edge/.style=semithick
-                ]
-                    % Draw dashed lines connecting curves.
-                    \path (a0) edge (a1);
-                    \path (b0) edge (b1);
-                    \path (c0) edge
-                        node[inner sep=0pt,outer sep=0pt,fill=white]
-                        {\scriptsize{\textit{H}}} (c1);
-                    \path (d0) edge (d1);
-                    \path (e0) edge (e1);
-                \end{scope}
-
-                % Draw curve defining the blob.
-                \path[draw,use Hobby shortcut,closed=true]
-                    (a2)..(b2)..(c2)..(d2)..%
-                    (e2)..(f2)..(g2)..(h2);
-
-                % Draw curves representing maps f and g.
-                \path[shorten >=0.2cm,shorten <=0.2cm,->]
-                    (i) edge[bend left=40]
-                    node[above] {$f$} (c0);
-                \path[shorten >=0.2cm,shorten <=0.2cm,->]
-                    (i) edge[bend right=40]
-                    node[below] {$g$} (c1);
-            \end{tikzpicture}
+            \subimport{../../../../tikz/}{Homotopy_on_Unit_Interval}
             \caption[Another Homotopy Diagram]{%
                 Straight-line homotopy%
             }
@@ -465,10 +317,10 @@
             If $A_{1},\hdots,A_{n}$ are compact,
             then $A_{1}\times\hdots\times{A_{n}}$ is compact.
         \end{theorem}
-        The amazing fact about Thm.~\ref{%
+        The finiteness of the product in Thm.~\ref{%
             theorem:surgery_theory_finite_%
             product_of_compact_is_compact%
-        } is that the finiteness of the product is
+        } is
         unnecessary (But it makes the proof easier). There
         is a result called Tychonoff's Theorem, which is
         actually equivalent to the axiom of choice, which
@@ -572,48 +424,8 @@
             \captionsetup{type=figure}
             \begin{subfigure}[b]{0.33\textwidth}
                 \captionsetup{type=figure}
-                \begin{tikzpicture}[%
-                    line width=1pt,
-                    line cap=round,
-                    >={Stealth[black]},
-                    every edge/.style={%
-                        draw=black,
-                        very thick
-                    },
-                    grayarrow/.style={%
-                        >=stealth,
-                        fill=gray,
-                        draw=gray,
-                        line width=0.7mm,
-                        ->
-                    }
-                ]
-                    \filldraw[%
-                        even odd rule,
-                        inner color=gray,
-                        outer color=white,
-                        draw=white
-                    ] (0,0) circle (2);
-                    \draw[thick, <->] (-1.5,0)--(1.5,0);
-                    \draw[thick, <->] (0,-1.5)--(0,1.5);
-                    \draw[grayarrow] (1,1)--(0.5,0.5);
-                    \draw[grayarrow] (-1,-1)--(-0.5,-0.5);
-                    \draw[grayarrow] (1,-1)--(0.5,-0.5);
-                    \draw[grayarrow] (-1,1)--(-0.5,0.5);
-                    \node[%
-                        fill=white,
-                        circle,
-                        thick,
-                        draw,
-                        inner sep=2pt,
-                        outer sep=3pt
-                    ]
-                        at (0,0) (O) {};
-                    \node at (1.4,0) [below] {$x$};
-                    \node at (0,1.4) [right] {$y$};
-                    \node at (0,-2) {};
-                    \node at (-2.5,0) {};
-                \end{tikzpicture}
+                \centering
+                \subimport{../../../../tikz/}{Retraction_of_Plane_to_Point}
                 \subcaption{%
                     Retraction of $\mathbb{R}^{2}$ to $(0,0)$
                 }
@@ -624,64 +436,9 @@
             \end{subfigure}
             \begin{subfigure}[b]{0.66\textwidth}
                 \captionsetup{type=figure}
-                \begin{tikzpicture}[%
-                    line width=1pt,
-                    line cap=round,
-                    >={Stealth[black]},
-                    every edge/.style={%
-                        draw=black,
-                        very thick
-                    },
-                    grayarrow/.style={%
-                        >=stealth,
-                        fill=gray,
-                        draw=gray,
-                        line width=0.7mm,
-                        ->
-                    }
-                ]
-                    \filldraw[%
-                        even odd rule,
-                        inner color=gray,
-                        outer color=white,
-                        draw=white
-                    ]
-                        (0,0) circle (2);
-                    \draw[thick, <->] (-1.5,0) -- (1.5,0);
-                    \draw[thick, <->] (0,-1.5) -- (0,1.5);
-                    \draw[grayarrow](1.1,1.1)--(0.75,0.75);
-                    \draw[grayarrow](-1.1,-1.1)--(-0.75,-0.75);
-                    \draw[grayarrow](1.1,-1.1)--(0.75,-0.75);
-                    \draw[grayarrow](-1.1,1.1)--(-0.75,0.75);
-                    \draw[grayarrow](0.2,0.2)--(0.6,0.6);
-                    \draw[grayarrow](-0.2,-0.2)--(-0.6,-0.6);
-                    \draw[grayarrow](0.2,-0.2)--(0.6,-0.6);
-                    \draw[grayarrow](-0.2,0.2)--(-0.6,0.6);
-                    \draw[dashed,draw=black,semithick]
-                        (0,0) circle (1);
-                    \node[%
-                        fill=white,%
-                        circle,%
-                        thick,%
-                        draw,%
-                        inner sep=2pt,%
-                        outer sep=3pt%
-                    ]
-                        at (0,0) (O) {};
-                    \node at (1.4,0) [below] {$x$};
-                    \node at (0,1.4) [right] {$y$};
-                    \node at (1.5,1.5)
-                        {$\mathbb{R}^{2}\setminus\{(0,0)\}$};
-                    \draw[>=triangle 45,draw=blue,->]
-                        (2.4,0) -- (3.6,0);
-                    \draw[thick, <->] (4,0)--(7,0);
-                    \draw[thick, <->] (5.5,-1.5)--(5.5,1.5);
-                    \draw[draw=black,semithick]
-                        (5.5,0) circle (1);
-                    \node at (6.9,0) [below] {$x$};
-                    \node at (5.5,1.4) [right] {$y$};
-                    \node at (6.5,1.2) {$S^{1}$};
-                \end{tikzpicture}
+                \centering
+                \subimport{../../../../tikz/}
+                          {HE_Plane_Without_Point_to_Circle}
                 \subcaption{%
                         Homotopy Equivalence of
                         $\mathbb{R}^{2}\setminus\{(0,0)\}$
@@ -867,57 +624,9 @@
             which is continuous. $f$ is a homeomorphism.
         \end{proof}
         \begin{figure}[H]
-            \centering
             \captionsetup{type=figure}
-            \resizebox{!}{0.35\textheight}{
-            \begin{tikzpicture}[scale=5, >=triangle 45]
-                % Draw the main coordinate system axes
-                \draw[thick,->] (0,0,0)--(1.7,0,0)
-                    node[right] {$y$};
-                \draw[thick,->] (0,0,0)--(0,1.3,0)
-                    node[above]{$z$};
-                \draw[thick,->] (0,0,0)--(0,0,1.7)
-                    node[below left]{$x$};
-                
-                % Draw dashed arcs.
-                \draw[dashed] (1cm,0) arc (0:-180:1cm and 5mm)
-                    arc (180:0:1cm and 1cm);
-                \coordinate (A) at
-                    (0.577350269,0.577350269,0.577350269);
-                \node[circle, inner sep=0pt, outer sep=1mm]
-                    (B) at 
-                    (1.3660254,0,1.3660254) {};
-                \draw[draw=blue,semithick] (0,1,0) -- (A);
-                \draw[dashed]
-                    (0,0,0)--(1.3660254,0,1.3660254);
-                \shade[ball color=gray, opacity=0.6]
-                    (1cm,0) arc (0:-180:1cm and 5mm)
-                    arc (180:0:1cm and 1cm);
-                \draw[draw=blue, semithick, >=stealth, ->]
-                    (A)--(B);
-                \draw[dashed, thin]
-                    (0,0,1.3660254037844)--
-                    (1.3660254,0,1.3660254);
-                \draw[dashed,thin]
-                    (1.3660254,0,0)--(1.3660254,0,1.3660254);
-                \draw[dashed,semithick]
-                    (0,0,0)--
-                    (0.57735,0.57735,0.57735);
-                \draw[dashed,thin]
-                    (0,0,0.57735)--(0.57735,0,0.57735);
-                \draw[dashed,thin]
-                    (0.57735,0,0)--(0.57735,0,0.57735);
-                \draw[dashed,thin]
-                    (0.57735,0,0.57735)--(0.57735,0.57735,0.57735);
-                \draw[dashed,thin]
-                    (0,0,0.57735)--(0.57735,0,0.57735);
-                \filldraw[black]
-                    (0.57735,0.57735,0.57735) circle (0.2mm);
-                \filldraw[red]
-                    (1.3660254,0,1.3660254) circle (0.2mm);
-                \node at (A) [above right] {$(x,y,z)$};
-                \node at (B) [below right] {$(X,Y)$};
-            \end{tikzpicture}}
+            \centering
+            \subimport{../../../../tikz/}{Stereographic_Projection}
             \caption[%
                 Stereographic Projection%
             ]{%
@@ -1005,72 +714,7 @@
         \begin{figure}[H]
             \centering
             \captionsetup{type=figure}
-            \resizebox{\textwidth}{!}{%
-            \begin{tikzpicture}[%
-                scale=2,
-                line width=1pt,
-                line cap=round,
-                >={Stealth[black]},
-                every edge/.style={draw=black, very thick}
-            ]
-                \begin{scope}[%
-                    every node/.style={%
-                        inner sep=0pt,
-                        outer sep=0pt
-                    }
-                ]
-                    % Points for the Second Blob.
-                    \node at (-1,-0.95) (a) {};
-                    \node at (-2,0.8) (b) {};
-                    \node at (0, 0.8) (c) {};
-
-                    % Points for the Third Blob.
-                    \node at (2,-0.5) (d) {};
-                    \node at (1,0) (e) {};
-                    \node at (3,0) (f) {};
-                \end{scope}
-
-                % First blob (Sphere).
-                \filldraw[%
-                    ball color=gray!60!white,
-                    draw=black,
-                    shading angle=240
-                ] (-4,0) circle (1);
-
-                % North pole of the sphere is missing.
-                \filldraw[white, draw=black, thick]
-                    (-4,1) circle (0.3mm);
-
-                % Draw the second blob
-                \draw[ball color=gray!60!white,shading angle=250]
-                    (a) to [out=180,in=-100] (b) 
-                        to [out=-15,in=-165] (c)
-                        to [out=-80,in=0] cycle;
-                \draw[left color=white!90!gray,right color=black]
-                    (b) to [out=-15,in=-165] (c)
-                        to [out=165,in=15] cycle;
-
-                % Draw the third blob
-                \draw[fill=black!20!gray]
-                    (d) to [out=180,in=-60] (e) 
-                        to [out=-30,in=-150] (f)
-                        to [out=-120,in=0] cycle;
-                \draw[
-                    left color=white,
-                    right color=white!50!black,
-                    shading angle=330
-                ]
-                    (e) to [out=-30,in=-150] (f)
-                        to [out=150,in=30] cycle;
-
-                % Draw the fourth blob (Circle)
-                \filldraw[%
-                    draw=black,
-                    right color=white,
-                    left color=white!50!black,
-                    shading angle=155
-                ] (5,0) circle (1);
-            \end{tikzpicture}}
+            \subimport{../../../../tikz/}{Turning_Sphere_Into_Plane}
             \caption[%
                 Homeomorphism From
                 $S^{2}\setminus\{(0,0,1)\}$ and $D^{2}$%
@@ -1106,323 +750,8 @@
         \begin{figure}[H]
             \centering
             \captionsetup{type=figure}
-            \begin{tikzpicture}
-                \draw[%
-                    postaction={decorate},
-                    decoration={%
-                        markings,
-                        mark=at position .145 with
-                            {\arrow{latex}},
-                        mark=at position .375 with
-                            {\arrow{latex}},
-                        mark=at position .395 with
-                            {\arrow{latex}},
-                        mark=at position .615 with
-                            {\arrowreversed{latex}},
-                        mark=at position .855 with
-                            {\arrowreversed{latex}},
-                        mark=at position .875 with
-                        {\arrowreversed{latex}}
-                    }
-                ]   (0,-1)--+(2,0)--+(2,2)--+(0,2)--cycle;
-                \begin{scope}[xshift=4.7cm]
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,.25) -- ++(2,0);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,-.25) -- ++(2,0);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .55 with
-                                {\arrow{latex}}
-                        }
-                    ]
-                        (0,-.25) to[out=-120,in=0]
-                        (-.35,-.75) to[out=180,in=180]
-                        (-.35,.75) to[out=0,in=120] (0,.25);
-                    \draw (2,.25) to[out=120,in=0]
-                          (1.65,.75) -- (-.35,.75)
-                          (-.35,-.75) --  (1.65,-.75)
-                          to[out=0,in=-120] (2,-.25);
-                    \clip (0,.25) rectangle (2,-.25);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .58 with
-                                {\arrow{latex}}
-                        }
-                    ]
-                        (1.65,.75) to[out=180,in=180]
-                        (1.65,-.75);
-                \end{scope}
-                \begin{scope}[xshift=9.7cm]
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,0) -- (2,0);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .55 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,0)
-                        arc[%
-                            start angle=0,
-                            delta angle=-360,
-                            x radius=.35,
-                            y radius=.75
-                        ];
-                    \draw   (2,0)
-                            arc[%
-                                start angle=0,
-                                delta angle=-90,
-                                x radius=.35,
-                                y radius=.75
-                            ] -- ++(-2,0);
-                    \draw   (2,0)
-                            arc[%
-                                start angle=0,
-                                delta angle=90,
-                                x radius=.35,
-                                y radius=.75
-                            ] -- ++(-2,0);
-                \end{scope}
-                \begin{scope}[yshift=-3cm]
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,0) -- (3,0);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .6 with
-                                {\arrow{latex}}
-                        }
-                    ]   (0,0)
-                        arc[%
-                            start angle=0,
-                            delta angle=-360,
-                            x radius=.15,
-                            y radius=.35
-                        ];
-                    \draw   (3,0)
-                            arc[%
-                                start angle=0,
-                                delta angle=-90,
-                                x radius=.15,
-                                y radius=.35
-                            ] -- ++(-3,0);
-                    \draw   (3,0)
-                            arc[%
-                                start angle=0,
-                                delta angle=90,
-                                x radius=.15,
-                                y radius=.35
-                            ] -- ++(-3,0);
-                \end{scope}
-                \begin{scope}[xshift=4cm, yshift=-3cm]
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .6 with
-                                {\arrow{latex}}
-                        }
-                    ]   (1,0)
-                        arc[%
-                            start angle=0,
-                            delta angle=-360,
-                            x radius=.15,
-                            y radius=.35
-                        ];
-                    \draw   (1,0)++(-.15,-.35)..
-                            controls +(170:1) and +(-90:.5) 
-                            ..++(-1.5,1)..
-                            controls +(90:.5) and +(180:1)
-                            ..++(2,1)..
-                            controls +(0:1) and +(90:.5)
-                            ..++(2,-1)..
-                            controls +(-90:.5) and +(10:1)
-                            ..++(-1.5,-1) coordinate (a);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .6 with
-                                {\arrow{latex}}
-                        }
-                    ]
-                        (a) ++(-.15,.35)
-                        arc[%
-                            start angle=0,
-                            delta angle=-360,
-                            x radius=-.15,
-                            y radius=.35
-                        ];
-                    \draw   (1,0) ++(-.15,.35)..
-                            controls +(170:.5) and +(-60:.25)
-                            ..++(-.9,.5) coordinate (b);
-                    \draw   (a) ++(0,.7)..
-                            controls +(10:.5) and +(240:.25)
-                            ..++(.9,.5) coordinate (c);
-                \end{scope}
-                \begin{scope}[xshift=4cm, yshift=-3cm]
-                    \clip   (1,0) ++(-.15,.35)..
-                            controls +(170:.5) and +(-60:.25)
-                            ..++(-.9,.5) -- ++(0,2) -| (c) ..
-                            controls +(240:.25) and +(10:.5)
-                            ..++(-.9,-.5);
-                    \draw   (1,0) ++(-.15,-.35) ++(0,-.7)..
-                            controls +(170:1) and +(-90:.5)
-                            ..++(-1.5,.8) ..
-                            controls +(90:.5) and +(180:1)
-                            ..++(2,1.2)..
-                            controls +(0:1) and +(90:.5)
-                            ..++(2,-1.2) ..
-                            controls +(-90:.5) and +(10:1)
-                            ..++(-1.5,-.8);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                        }
-                    ]   (1,0) ++(-.15,-.35) ++(0,-.8)..
-                        controls +(170:1) and +(-90:.5)
-                        ..++(-1.5,.8) ..
-                        controls +(90:.5) and +(180:1.2)
-                        ..++(2,1.5) .. controls +(0:1.2) and
-                        +(90:.5) .. ++(2,-1.5) ..
-                        controls +(-90:.5) and +(10:1)
-                        ..++(-1.5,-.8);
-                \end{scope}
-                \begin{scope}[xshift=4cm, yshift=-3cm]
-                    \clip   (a) ++(-.15,.35)
-                            arc[%
-                                start angle=0,
-                                delta angle=-360,
-                                x radius=-.15,
-                                y radius=.35
-                            ];
-                    \draw   (a) ++(-.15,.35)..
-                            controls +(10:1) and +(-90:.5)
-                            ..++(1.5,.8);
-                \end{scope}
-                \begin{scope}[xshift=4cm, yshift=-3cm]
-                    \clip   (1,0)
-                            arc[%
-                                start angle=0,
-                                delta angle=-360,
-                                x radius=.15,
-                                y radius=.35
-                            ];
-                    \draw   (1,0)..
-                            controls +(170:1) and +(-90:.5)
-                            ..++(-1.5,.8);
-                \end{scope}
-                \begin{scope}[xshift=9cm, yshift=-3cm]
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .6 with
-                                {\arrow{latex}},}]
-                            (1.5,.35)
-                            arc[%
-                                start angle=90,
-                                end angle=-90,
-                                y radius=.35,
-                                x radius=.1
-                            ];
-                    \draw   (1.5,-.35)..
-                            controls +(180:1) and +(-90:.65)
-                            ..++(-2,1)..
-                            controls +(90:.65) and +(180:1)
-                            ..++(2,1)..
-                            controls +(0:1) and +(90:.65)
-                            ..++(2,-1)..
-                            controls +(-90:.65) and +(0:1)
-                            ..++(-2,-1);
-                    \draw   (1.5,.35) ..
-                            controls +(180:.5) and +(-50:.25)
-                            ..++(-1.3,.35) coordinate (b);
-                    \draw   (1.5,.35)..
-                            controls +(0:.5) and +(230:.25)
-                            ..++(1.3,.35) coordinate (c);
-                \end{scope}
-                \begin{scope}[xshift=9cm, yshift=-3cm]
-                    \clip   (1.5,.35)..
-                            controls +(180:.5) and +(-50:.25)
-                            ..++(-1.3,.35) -- ++(0,2) -| (c) ..
-                            controls +(230:.25) and +(0:.5)
-                            ..++(-1.3,-.35);
-                    \draw   (1.5,-.35) ++(0,-.7)..
-                            controls +(180:1) and +(-90:.65)
-                            ..++(-1.5,1)..
-                            controls +(90:.65) and +(180:1)
-                            ..++(1.5,1)..
-                            controls +(0:1) and +(90:.65)
-                            ..++(1.5,-1)..
-                            controls +(-90:.65) and +(0:1)
-                            ..++(-1.5,-1);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}}
-                            }
-                    ]   (1.5,-.35) ++(0,-.6)..
-                        controls +(180:1) and +(-90:.65)
-                        ..++(-1.5,1)..
-                        controls +(90:.65) and +(180:1)
-                        ..++(1.5,1)..
-                        controls +(0:1) and +(90:.65)
-                        ..++(1.5,-1)..
-                        controls +(-90:.65) and +(0:1)
-                        ..++(-1.5,-1);
-                \end{scope}
-            \end{tikzpicture}
+            \subimport{../../../../tikz/}
+                      {Plane_Representation_of_Torus}
             \caption[Plane Representation of a Torus]{%
                 The unit square with a particular
                 equivalence relation on it can be
@@ -1462,6 +791,21 @@
             sphere with $3$ points removed is not homeomorphic
             to a torus with $1$ point removed.
         \end{proof}
+        \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \subimport{../../../../tikz/}{Figure_8_HE}
+                \caption{%
+                    Equivalency of $S^{2}\setminus\{a,b,c\}$,
+                    $T^{2}\setminus\{\alpha\}$,
+                    and a figure-8.%
+                }
+                \label{%
+                    fig:surgery_theory_homotopy_%
+                    equivalence_sphere_with_3_%
+                    holes_torus_with_1_hole%
+                }
+        \end{figure} 
         Fig.~\ref{%
             fig:surgery_theory_homotopy_equivalence_%
             sphere_with_3_holes_torus_with_1_hole%
@@ -1496,122 +840,10 @@
             for all homotopy equivalent closed manifolds $Y$,
             $X$ is homeomorphic to $Y$.
         \end{definition}
-        \begin{figure}[H]
-                \centering
-                \captionsetup{type=figure}
-                \resizebox{!}{0.3\textheight}{
-                \begin{tikzpicture}
-                    \shade[ball color=gray!40, opacity=0.4]
-                        (0,0) circle (1cm);
-                    \draw (0,0) circle (1cm);
-                    \draw (-1,0) arc (180:360:1 and 0.3);
-                    \draw[dashed] (1,0) arc (0:180:1 and 0.3);
-                    \fill[fill=white, draw=black]
-                        (0.55,0.55) circle (0.75pt);
-                    \fill[fill=white, draw=black]
-                        (0.65,0.65) circle (0.75pt);
-                    \fill[fill=white, draw=black]
-                        (0.5,0.72)  circle (0.75pt);
-                    \draw[>=latex, draw=black, ->]
-                        (1.3cm,0) -- (2.3cm,0);
-                    \shade[fill=gray, shading angle=215]
-                        (2.5cm,-0.5cm)--(3.2cm,0.5cm)--
-                        (5.5cm,0.5cm)--(4.8cm,-0.5cm)--cycle;
-                    \draw (2.5cm,-0.5cm)--(3.2cm,0.5cm)--
-                          (5.5cm,0.5cm)--(4.8cm,-0.5cm)--cycle;
-                    \draw[draw=black, densely dashed]
-                        (3.7cm,0) circle (0.295cm);
-                    \draw[draw=black, densely dashed]
-                        (4.3cm,0) circle (0.295cm);
-                    \fill[fill=white, draw=black]
-                        (3.7cm,0) circle (0.75pt);
-                    \fill[fill=white, draw=black]
-                        (4.3cm,0) circle (0.75pt);
-                    \draw[>=latex, draw=black, ->]
-                        (5.7cm,0) to [in=90, out=0] (7cm,-1cm);
-                    \draw[>=latex, draw=black, ->]
-                        (1.2cm,-2.3cm) -- (2cm,-2.3cm);
-                    \shade[fill=gray, shading angle=215]
-                        (-0.75,-3cm)--+(1.5cm,0)--+(1.5cm,1.5cm)
-                        --+(0,1.5cm)--cycle;
-                    \fill[fill=white, draw=black]
-                        (0,-2.3cm) circle (0.75pt);
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .145 with
-                                {\arrow{latex}},
-                            mark=at position .375 with
-                                {\arrow{latex}},
-                            mark=at position .395 with
-                                {\arrow{latex}},
-                            mark=at position .615 with
-                                {\arrowreversed{latex}},
-                            mark=at position .855 with
-                                {\arrowreversed{latex}},
-                            mark=at position .875 with
-                                {\arrowreversed{latex}}
-                        }
-                    ]   (-0.75,-3cm)--+(1.5cm,0)--+(1.5cm,1.5cm)
-                        --+(0,1.5cm)--cycle;
-                    \draw[%
-                        postaction={decorate},
-                        decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .55 with
-                                {\arrow{latex}}}]
-                            (3.1cm,-2.3cm)
-                            arc[%
-                                start angle=0,
-                                delta angle=-360,
-                                x radius=.35,
-                                y radius=.75
-                            ];
-                        \draw (2.75cm,-1.55cm) -- ++(2cm,0);
-                        \draw[%
-                            postaction={decorate},
-                            decoration={%
-                            markings,
-                            mark=at position .5 with
-                                {\arrow{latex}},
-                            mark=at position .55 with
-                                {\arrow{latex}}
-                            }
-                        ]   (5.1cm,-2.3cm)
-                            arc[%
-                                start angle=0,
-                                delta angle=-360,
-                                x radius=.35,
-                                y radius=.75
-                            ];
-                    \draw[>=latex, draw=black, ->]
-                        (5.4cm,-2.3cm)--(6.3cm,-2.3cm);
-                    \draw[draw = black] (7cm,-1.8cm) circle (0.5cm);
-                    \draw[draw = black] (7cm,-2.8cm) circle (0.5cm);
-                \end{tikzpicture}}
-                \caption[%
-                    Equivalency of
-                    $S^{2}\setminus\{a,b,c\}$,
-                    $T^{2}\setminus\{\alpha\}$,
-                    and a figure-8%
-                ]{%
-                    Equivalency of $S^{2}\setminus\{a,b,c\}$,
-                    $T^{2}\setminus\{\alpha\}$,
-                    and a figure-8.%
-                }
-                \label{%
-                    fig:surgery_theory_homotopy_%
-                    equivalence_sphere_with_3_%
-                    holes_torus_with_1_hole%
-                }
-            \end{figure}
         The question then becomes
         ``Which manifolds are rigid, and which are not?''
         From the Poincare theorem, $S^{n}$ is rigid for all
-        $n\in \mathbb{N}$. The first example of a non-rigid
+        $n\in\mathbb{N}$. The first example of a non-rigid
         manifold came in the 1930's from Franz, Reidemeister,
         and de Rham, and is called a Lens Space.
         Let $p$ and $q$ be coprime positive integers.
@@ -1625,8 +857,8 @@
         process until all slices are done. The is called
         the Lens Space $L(p,q)$. $L(1,1)$ is simply the
         sphere. $L(2,1)$ is the real projective plane
-        $\mathbb{RP}^{2}$. See
-        Fig.~\ref{%
+        $\mathbb{RP}^{2}$.
+        See Fig.~\ref{%
             fig:surgery_theory_lens_space_drawing%
         }
         to see how this construction occurs.
@@ -1636,80 +868,8 @@
         \begin{figure}[H]
             \centering
             \captionsetup{type=figure}
-            \begin{tikzpicture}
-                \def\tilt{45}
-                \def\azimuth{30}
-                \begin{axis}[%
-                    axis equal,
-                    width=14cm,
-                    height=14cm,
-                    hide axis,
-                    enlargelimits=0.3,
-                    view/h=\tilt,
-                    view/v=\azimuth,
-                    scale uniformly strategy=units only,
-                    colormap={bluewhite}{%
-                        color=(blue) color=(white)%
-                    }
-                ]
-                    \coordinate (X) at (axis cs: 1,0,0);
-                    \coordinate (-X) at (axis cs: -1,0,0);
-                    \coordinate (Y) at (axis cs: 0,1,0);
-                    \coordinate (-Y) at (axis cs: 0,-1,0);
-                    \coordinate (Z) at (axis cs: 0,0,1);
-                    \coordinate (-Z) at (axis cs: 0,0,-1);
-                    \filldraw[ball color=white]
-                        (axis cs: 0,0,0) circle (2.47cm);
-                    \pgfplotsinvokeforeach {0}{%
-                        \pgfplotsextra{%
-                            \pgfmathsetmacro\sinVis{%
-                                sin(#1)/cos(#1)*sin(\azimuth)/%
-                                cos(\azimuth)%
-                            }
-                        
-                            % angle of "visibility"
-                            \pgfmathsetmacro\angVis{%
-                                asin(min(1,max(\sinVis,-1)))%
-                            }
-                            \coordinate (X) at
-                                (axis cs:%
-                                 {cos(#1)},0,{sin(#1)});
-                            \draw (X) arc
-                                (0:\tilt+\angVis:%
-                                 {100*cos(#1)})
-                                (X) arc
-                                (0:-180+\tilt-\angVis:%
-                                 {100*cos(#1)});
-                        }
-                    }
-                    \foreach\a in {0,20,...,359}{%
-                        \pgfmathsetmacro{\Bound}{-60*cos(\a+45)}
-                        \addplot3[%
-                            domain=\Bound:90,
-                            samples=45,
-                            samples y=0%
-                        ] ({cos(\a)*cos(x)},%
-                           {sin(\a)*cos(x)},%
-                           {sin(x)});
-                        \addplot3[%
-                            domain=-90:\Bound,
-                            samples=45,
-                            samples y=0,
-                            densely dashed%
-                        ]   ({cos(\a)*cos(x)},%
-                             {sin(\a)*cos(x)},%
-                             {sin(x)});
-                    }
-                    \draw[draw=blue, >={stealth[blue]} ,->,thick]
-                        (3.2cm,3.5cm,3.5cm) to [in=330, out=0]
-                        node [below] {$q$} (2.0cm,6.6cm,5cm);
-                \end{axis}
-            \end{tikzpicture}
-            \caption[%
-                How to construct $L(p,q)$%
-            ]{%
-                How to construct $L(p,q)$.%
-            }
+            \subimport{../../../../tikz/}{Lens_Space}
+            \caption{How to construct $L(p,q)$.}
             \label{fig:surgery_theory_lens_space_drawing}
         \end{figure}
         We move on to the structure set of topological spaces,
