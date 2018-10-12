@@ -6,6 +6,9 @@
     \ifx\ifphysicscourseselectromagnetismI\undefined
         \section*{Electromagnetism I}
         \setcounter{section}{6}
+        \renewcommand\thefigure{%
+            \arabic{section}.\arabic{figure}%
+        }
         \renewcommand\thesubfigure{%
             \arabic{section}.\arabic{figure}.\arabic{subfigure}%
         }
@@ -16,8 +19,8 @@
         $\mathbf{E}%
          =(yz-2x)\hat{\mathbf{x}}%
          +xz\hat{\mathbf{y}}%
-         +xy\hat{\mathbf{z}}$.
-        Be a possible electrostatic field? If so,
+         +xy\hat{\mathbf{z}}$
+        be a possible electrostatic field? If so,
         find a possible potential function $\phi$.
     \end{problem}
     \begin{proof}[Solution]
@@ -47,7 +50,10 @@
         The reason $g$ is a function of $y$ and $z$ is because
         we are taking partial derivatives, and thus the
         ``constants'' of integration can be functions of
-        the other variables. So, we have:
+        the other variables. Thus we must verify what $g(y,z)$
+        is. Taking partial derivatives with respect to
+        $y$ and $z$ revealed to us that $g$ is indeed just
+        a constant. So, we have:
         \begin{equation*}
             \phi(x,y,z)=-xyz+x^{2}+C    
         \end{equation*}
@@ -55,9 +61,21 @@
         so let $C=0$ to make things easy. The path integral
         from the origin to a point $(x,y,z)$ is independent
         of path and may be computed by using the fundamental
-        theorem of gradients. That is:
+        theorem of gradients. This theorem says that,
+        if $\phi$ is differentiable
+        (All of its partial derivatives exists), then:
+        \begin{equation*}
+            \int_{P_{1}}^{P_{2}}
+            \nabla(\phi)\cdot\boldsymbol{\diff{\ell}}
+            =\phi(P_{2})-\phi(P_{1})
+        \end{equation*}
+        That is, the path integral of the gradient of
+        $\phi$ is independent of the path. It only depends
+        on the endpoints.
+        This is \textit{multivariate} form of the
+        Fundamental Theorem of Calculus. Using this, we have:
         \begin{align*}
-            \int\mathbf{E}\cdot\boldsymbol{\diff{\ell}}
+            \int_{C}\mathbf{E}\cdot\boldsymbol{\diff{\ell}}
             =-\int _{(0,0,0)}^{(x,y,z)}
             \nabla(\phi)\cdot\boldsymbol{\diff{\ell}}
             =\phi(0,0,0)-\phi(x,y,z)
@@ -65,7 +83,8 @@
         \end{align*}
     \end{proof}
     \begin{problem}[Wangsness 5-3]
-        Give two points charges $q$ and $-q$ on the
+        \label{problem:EMAG_Wangsness_5_3}
+        Give two point charges $q$ and $-q$ on the
         $z$ axis at $z=a$ and $z=-a$, respectively,
         Find $\phi$ everywhere. Show that the
         $xy$ plane is an equipotential surface.
@@ -100,10 +119,11 @@
         equipotential surface with $\phi=0$.
     \end{proof}
     \begin{problem}[Wangsness 5-4]
+        \label{problem:EMAG_Wangsness_5_4}
         Consider the charge distribution show in
         Fig.~\subref{fig:EMAG_Wangsness_5_4}.
         Find $\phi$ at the center of the square.
-        Why can't you $\mathbf{E}$ at this
+        Why can't you compute $\mathbf{E}$ at this
         point from your result?
     \end{problem}
     \begin{proof}[Solution]
@@ -136,14 +156,20 @@
             \centering
             \subimport{../../../../tikz/}{Wangsness_5_3}
             \caption{Drawing for Wangsness 5-3}
+            \label{fig:EMAG_Wangsness_5_3}
         \end{subfigure}
         \begin{subfigure}[b]{0.49\textwidth}
             \centering
             \subimport{../../../../tikz/}{Wangsness_5_4}
-            \label{fig:EMAG_Wangsness_5_4}
             \caption{Drawing for Wangsness 5-4}
+            \label{fig:EMAG_Wangsness_5_4}
         \end{subfigure}
-        \caption{Drawing for Wangsness 5-3}
+        \caption{%
+            Drawings for problems
+            \ref{problem:EMAG_Wangsness_5_3}
+            and
+            \ref{problem:EMAG_Wangsness_5_4}
+        }
     \end{figure}
     \begin{problem}[Wangsness 5-10]
         Given a sphere with radius $a$ which has
@@ -230,7 +256,7 @@
         into three regions and compute:
         \begin{equation*}
             \Delta\phi
-            =\int\mathbf{E}\cdot\mathbf{d\ell}
+            =\int\mathbf{E}\cdot\boldsymbol{\diff{\ell}}
             =\int_{0}^{a}\mathbf{E}\cdot\mathbf{dr}
             +\int_{a}^{b}\mathbf{E}\cdot\mathbf{dr}
             +\int_{b}^{\infty}\mathbf{E}\cdot \mathbf{dr}    
