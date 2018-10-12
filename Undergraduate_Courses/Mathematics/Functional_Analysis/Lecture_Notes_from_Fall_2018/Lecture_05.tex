@@ -1,0 +1,360 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../../preamble.tex}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcoursesfunctional\undefined
+        \section*{Functional Analysis}
+        \setcounter{section}{1}
+    \fi
+    \subsection{Lecture 5: October 11, 2018}
+        \subsubsection{Banach Fixed Point Theorem}
+            If $(X,d)$ is a complete metric space,
+            and if $T:X\rightarrow{X}$ satisfies
+            the property that, for all $x$ and $y$
+            in $X$, $d(T(x),T(y))<kd(x,y)$ for
+            some $k<1$, then $T$ has a unique
+            point $x$, called a fixed point,
+            such that $T(x)=x$.
+            \begin{definition}
+                A contraction of a metric
+                space $(X,d)$ is a function
+                $T:{X}\rightarrow{X}$ such that there
+                exists a $k\in(0,1)$ such that
+                for all $x,y\in{X}$,
+                $d(T(x),T(y))<kd(x,y)$.
+            \end{definition}
+            \begin{definition}
+                A fixed point of a function
+                $f:X\rightarrow{X}$ is a point
+                $x\in{X}$ such that
+                $f(x)=x$.
+            \end{definition}
+            \begin{theorem}[%
+                Banach's Fixed Point Theorem%
+            ]
+                If $(X,d)$ is a complete
+                metric space and $T:X\rightarrow{X}$
+                is a contraction, then there is
+                a unique fixed point $x\in{X}$
+                with respect to $T$.
+            \end{theorem}
+            \begin{definition}
+                A Lipschitz continuous function is a
+                function $f:[a,b]\rightarrow\mathbb{R}$
+                such that there is an $L\in\mathbb{R}$
+                such that
+                $|f(x)-f(y)|<L|x-y|$ for all
+                $x,y\in[a,b]$.
+            \end{definition}
+            This says that the slopes of the
+            secant lines of the
+            function are bounded. The square root
+            function $y=\sqrt{x}$ is an example
+            of a function that is not Lipschitz. The
+            slopes of secant lines go to infinity
+            as the points tend towards the origin.
+            \begin{theorem}[Picard's Theorem]
+                If $f:[a,b]\times\mathbb{R}%
+                    \rightarrow\mathbb{R}$
+                is Lipschitz continuous,
+                Then there is a unique function
+                $x:[a,b]\rightarrow\mathbb{R}$
+                such that
+                $\frac{dx}{dt}=f(t,x(t))$ and $x(a)=a$.
+            \end{theorem}
+            \begin{proof}
+                We prove Picard by using the
+                Banach Fixed Point Theorem. First
+                we write the problem as an integral
+                equation.
+                If $\dot{x}=f(t,x(t))$, then:
+                \begin{equation*}
+                    x(t)
+                    =\int_{a}^{t}\frac{dx}{dt}dt
+                    =x_{0}+\int_{a}^{t}f(t,x(t))dt
+                \end{equation*}
+                Let $(X,d)$ be $C[a,b]$ with the
+                supremum norm $d_{\infty}$. Then
+                $(x,d)$ is a complete metric space.
+                Let $T:{X}\rightarrow{X}$ be defined
+                by:
+                \begin{equation*}
+                    Tx=x_{0}+\int_{a}^{t}f(t,x(t))dt
+                \end{equation*}
+                All we need to do is show that $T$ is
+                a contraction. Applying the
+                Banach Fixed Point theorem then
+                shows that there is a unique
+                fixed point of $T$, thus showing
+                that there is a unique solution
+                to our original initial value problem.
+                If $x,y\in{X}$, then:
+                \begin{align*}
+                    d(Tx,Ty)
+                    &=\sup\{|Tx(t)-Ty(t)|\}\\
+                    &=\sup\{
+                        (x_{0}+
+                         \int_{a}^{t}f(t,x(t))dt)
+                       -(x_{0}+
+                         \int_{a}^{t}f(t,y(t))dt)
+                    \}\\
+                    =&\sup\{
+                        \int_{a}^{t}f(t,x(t))dt)-
+                        \int_{a}^{t}f(t,y(t))dt)
+                    \}\\
+                    &\leq\int_{a}^{t}|
+                        f(t,x(t))-f(t,y(t))|dt
+                \end{align*}
+                But from the Lipschitz continuity
+                of $f$, we have:
+                \begin{align*}
+                    d(Tx,Ty)&\leq
+                    L\int_{a}^{t}|x(t)-y(t)|dt\\
+                    &\leq{L}(t-a)d(x,y)\\
+                    &\leq{L}(b-a)d(x,y)
+                \end{align*}
+                So $T$ is a contraction for
+                $L(b-a)<1$. Usually we can
+                extend this solution by taking
+                $b$ as the initial condition and
+                stepping forward one interval
+                at a time. We'll take a different
+                approach. We have that
+                $d(Tx,Ty)\leq{L}(b-a)d(x,y)$. From
+                this, we obtain:
+                \begin{align*}
+                    d(T^{2}x,T^{2}y)
+                    &\leq{L}\int_{a}^{b}d(Tx,Ty)dt\\
+                    &\leq{L}\int_{a}^{t}
+                        L(t-a)d(x,t)dt\\
+                    &=\frac{L^{2}}{2}(t-a)^{2}d(x,y)\\
+                    &\leq
+                    \frac{L^{2}}{2}(b-a)^{2}d(x,y)
+                \end{align*}
+                Applying induction, we have:
+                \begin{equation*}
+                    d(T^{n}x,T^{n}y)
+                    \leq\frac{L^{n}}{n!}(b-a)^{n}
+                \end{equation*}
+                But this tends to zero, and thus
+                there is an $N$ such that,
+                for all $n>N$, $T^{n}$ is a
+                contraction. But then, by the
+                Banach Fixed Point Theorem, there
+                is a unique point $x$ such that
+                $T^{n}x=x$. But then
+                $Tx=T^{n}(Tx)$, and thus
+                $Tx$ is a fixed point of
+                $T^{n}$. But the fixed point of
+                $T^{n}$ is unique, and $x$ is a
+                fixed point. Therefore
+                $Tx=x$. Therefore, etc.
+            \end{proof}
+            Without Lipschitz continuous you may
+            lose uniqueness, but you still have
+            existence. This is Peano's theorem.
+            An example is $\dot{x}=\sqrt{x}$
+            with $x(0)=0$.
+            This has solutions $x(t)=0$ and
+            $(t)=t^{2}/4$. Now back to compactness.
+            \subsubsection{Compactness}
+                \begin{definition}
+                    A metric space $(X,d)$ is
+                    sequentially compact if every
+                    sequence in $X$ has a convergent
+                    subsequence.
+                \end{definition}
+                In topology there is a difference
+                between sequential compactness
+                and regular compactness, but in
+                metric spaces they turn out
+                to be the same.
+                A subset of $S$ of $X$ is
+                compact if every sequence in
+                $S$ has a subsequence which converges.
+                That is, $(S,d)$ is compact.
+                \begin{theorem}
+                    A subset $S$ of a compact
+                    metric space $(X,d)$ is compact
+                    if and only if $S$ is closed.
+                \end{theorem}
+                \begin{proof}
+                    For let $x_{n}$ be a sequence
+                    in $S$. Then $x_{n}$ is a
+                    sequence in $X$ and thus there
+                    is a convergent subsequence
+                    $x_{k_{n}}$ with a limit $x$.
+                    But $x_{k_{n}}$ is in $S$ and
+                    $S$ is closed, and therefore
+                    $x$ is in $S$. Thus, $S$
+                    is compact. Conversely, if
+                    $S$ is compact, suppose it is
+                    not closed. Then there is a point
+                    $y\in{X}$ such that $y$ is a
+                    limit point of $S$ but not
+                    contained in $S$. Let
+                    $x_{n}$ be a sequence that
+                    converges to $y$. Then, as
+                    $S$ is compact, there is
+                    a convergent subsequence. But
+                    the limit of this subsequence
+                    is $y$, a contradiction as
+                    $y\notin{S}$. Therefore $S$
+                    is closed.
+                \end{proof}
+                \begin{theorem}
+                    If $(X,d)$ is a compact metric
+                    space, then
+                    $(X,d)$ is complete.
+                \end{theorem}
+                \begin{proof}
+                    If $x_{n}$ is Cauchy in $X$,
+                    then there is a convergent
+                    subsequence $x_{k_{n}}$
+                    in $X$. But if $x_{k_{n}}$
+                    converges to $x$, then
+                    $x_{n}$ converges to $x$ as
+                    well, as $x_{n}$ is Cauchy.
+                    Therefore, $(X,d)$ is complete.
+                \end{proof}
+                \begin{theorem}[Heine-Borel Theorem]
+                    A subset of
+                    $\mathbb{R}^{n}$ is
+                    compact if and only if
+                    it is closed and bounded.
+                \end{theorem}
+                \begin{example}
+                    The closed unit ball
+                    of $\ell^{p}$ is not compact,
+                    if $1\leq{p}\leq{\infty}$.
+                    Let $x_{n}(m)$ be the sequence
+                    (of sequences) such that
+                    $x_{n}(m)=1$ if $n=m$, and
+                    zero otherwise. Then
+                    $d_{p}(x_{n},x_{m})=2^{1/p}$,
+                    so $x_{n}$ has no subsequence
+                    which is Cauchy. But then there
+                    is no convergent subsequence
+                    either, and therefore
+                    $\ell^{p}$ is not compact.
+                \end{example}
+                \begin{example}
+                    The closed unit ball in
+                    $(C[0,1],d_{\infty})$ is
+                    not compact. For let
+                    $x_{n}(t)=t^{2^{n}}$. Then
+                    (Do some calculus) the maximum of
+                    $d(x_{n},x_{n+1})$ is always
+                    $1/4$. So this has no subsequence
+                    which is Cauchy, and thus no
+                    convergent subsequence exists.
+                \end{example}
+                \begin{definition}
+                    A metric space $X$ is totally
+                    bounded if for all
+                    $\varepsilon>0$ there is a finite
+                    number of points $x_{n}$ such
+                    that $B_{\varepsilon}(x_{n})$
+                    covers the entirety of $X$.
+                \end{definition}
+                \begin{theorem}
+                    A compact metric space is
+                    totally bounded.
+                \end{theorem}
+                \begin{proof}
+                    Suppose not. Then there is an
+                    $\varepsilon>0$ such that
+                    no finite collection
+                    $B_{\varepsilon}(x_{n})$
+                    is a covering of $X$. Let
+                    $x_{1}\in{X}$. Then
+                    $B_{\varepsilon}(x_{1})$ is not
+                    $X$. Thus there is an $x_{2}$
+                    such that
+                    $x_{2}\notin%
+                     B_{\varepsilon}(x_{1})$.
+                    But also
+                    $B_{\varepsilon}(x_{1})\cup%
+                     B_{\varepsilon}(x_{2})$ is
+                    not the entirety of $X$.
+                    Continuing we have that there
+                    is a sequence $x_{n}$ such that,
+                    for all $n\ne{m}$,
+                    $d(x_{n},x_{m})\geq{\varepsilon}$.
+                    So there is no convergent
+                    subsequence. But $X$ is
+                    compact, a contradiction.
+                    Therefore, etc.
+                \end{proof}
+                There are metric spaces that are
+                bounded but not totally bounded.
+                For let
+                $X=\mathbb{R}$ and $d$ be the
+                discrete metric. Then, for
+                $\varepsilon=1/2$, the is no
+                finite covering. Every point needs
+                it's own ball, so the covering is
+                uncountable.
+                \begin{theorem}
+                    If $(X,d)$ is complete and
+                    totally bounded, then it
+                    is compact.
+                \end{theorem}
+                \begin{proof}
+                    Let $x_{n}$ be a sequence
+                    in $X$. Let $\varepsilon=1$. Then
+                    there are finitely many points
+                    $y_{k}$ such that
+                    $B_{\varepsilon}(y_{k})$ covers
+                    $X$. Then one of these
+                    balls has infinitely many of
+                    the $x_{n}$. Similarly, for
+                    $\varepsilon=\frac{1}{n}$, there
+                    is a finite number of points
+                    $y_{k}$ such that
+                    $B_{\frac{1}{n}}(y_{k})$ covers
+                    $X$. Thus there is a point with
+                    infinitely many of the $x_{n}$
+                    in it. So, we can find a
+                    subsequence such that, for
+                    $n,m>N$,
+                    $d(x_{k_{n}},x_{k_{m}})<%
+                     \frac{1}{N}$. But $(X,d)$ is
+                    complete, and therefore
+                    $x_{k_{n}}$ converges. Therefore
+                    $x_{n}$ has a convergent
+                    subsequence. Thus, $(X,d)$ is
+                    compact.
+                \end{proof}
+                \begin{theorem}
+                    Compact spaces are separable.
+                \end{theorem}
+                \begin{proof}
+                    If $X$ is compact, then
+                    it is totally bounded. But
+                    then, for $\varepsilon=1/n$
+                    there is a finite covering of
+                    $X$ with balls of radius
+                    $\varepsilon$. Then,
+                    taking all of the
+                    centers of all of the points
+                    for all $n$ (Countable union
+                    of finite points is countable),
+                    we obtain a countable dense
+                    subset.
+                \end{proof}
+                \begin{example}
+                    There are ``infinite dimension''
+                    sets that are also compact. Two
+                    in particular worth mentioning.
+                    The first is the hilbert Cube.
+                    It's a subset of $\ell^{2}$
+                    whose elements are such that
+                    $|x_{n}|<1/n$. That is, elements
+                    are sequences whose $n^{th}$
+                    elements are less than
+                    $1/n$. This is compact.
+                    Arzela-Ascoli. Peano.
+                \end{example}
+\end{document}
