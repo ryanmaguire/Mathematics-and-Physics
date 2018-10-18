@@ -275,7 +275,76 @@
             \item Learn how to read RSR files and calc sky freq.
             \item Learn to read and write PDS3 files.
             \item Look into Rev123. Try to find F ring.
+            \item Document problems with 10km reconstruction.
+                  250m spacing input, 2.5km spacing. etc.
+            \item Document radial shift from phase. Document
+                  sign of phase problem.
+            \item Learn to retrieve phase. Look into high-pass filtering
+                  to remove linear phase shifts. Look into poly fitting.
+            \item Learn how to retrieve frequencies from noisy data.
+                  Take sum of a few sines, add noise, and try to remove
+                  noise with FFT's.
+            \item Document conversion factors:
+                  $S=\frac{3}{11}X$, $Ka=\frac{19}{5}X$
+            \item Learn how to use co-added FFT's to get power.
+            \item Learn to use FFT's to compute phase.
+            \item Document Loss of Signal.
+            \item Try running JG\_rss\_occs\_v3.pro.
+            \item Look for F-Ring in Rev133.
+            \item Document swap of $\rho$ with $\rho_{0}$, how this fixes
+                  the cubic, and the solution found to fix integration.
+            \item Write forward modelling code for square well, and delta.
+            \item Read through Chebyshev document.
+            \item Document why $\psi$ can not, in general, be
+                  approximated by a sum of Chebyshev functions.
+                  That is, not that the coefficients will indeed be
+                  functions. Convolution doesn't apply.
         \end{enumerate}
+To be objective about when a signal was lost, we adopted the criterion that a signal is lost if its level permanently falls below 3-sigma (99\% confidence level).
+\par
+Loss of Signal data sets:
+The data are on the SOPC in:
+/data/RS\_Share/s101-rev293-SA-data/OCC/RSR. The data are on the rodan cluster in: /rssg/data/CAS/2017\_258/OCC/RSR. The filenames (on casrss2 and rodan cluster are):
+\begin{itemize}
+\begin{multicols}{2}
+    \item 43X: SC1SAOI2017258\_0302XMMX43RD.2A1
+    \item 43S: SC1SAOI2017258\_0302XMMS43RD.2B1
+    \item 35X: SC1SAOI2017258\_0330XMMX35RV.1N1
+    \item 35K: SC1SAOI2017258\_0330XMMK35RV.1N1
+    \item 74X: SC1SAOI2017258\_0459XMMX74RP.3A1
+\end{multicols}
+\end{itemize}
+\begin{table}[H]
+    \centering
+    \caption{Essam LOS Times}
+    \begin{tabular}{c c c} 
+        \hline
+         & SPM      & ERT (UTC)    \\ 
+        \hline
+        S43: & 42942.85 & 11:55:42.85  \\
+        X43: & 42934.70 & 11:55:34.70  \\
+        K35: & 42931.81 & 11:55:31.81  \\
+        X35: & 42931.12 & 11:55:31.12  \\
+        X74: & 42930.06 & 11:55:30.06  \\
+        \hline
+    \end{tabular}
+\end{table}
+\begin{table}[H]
+    \centering
+    \caption{Loss of Signal Times}
+    \begin{tabular}{c c c} 
+        \hline
+        & SPM      & Difference (Seconds)    \\ 
+        \hline
+        S43: & 42942.355 & -0.496    \\
+        X43: & 42934.517 & -0.184    \\
+        K35: & 42932.106 & +0.297    \\
+        X35: & 42930.832 & -0.289    \\
+        X74: & 42929.897 & -0.160    \\
+        \hline
+    \end{tabular}
+\end{table}
+Starting at about 11:40 we see systematic increase in the signal frequency with the residual from its value away from LOS reaching a peak value of about 24 Hz at Ka-band close to LOS (see attached figure).  It’s also clearly detectable at X-band with peak residual of about 6 Hz. The peak frequency residual is hardly detectable at S-band. The frequency change is definitely not due to the ionosphere. The frequency scaling appears to be proportional to frequency (inversely proportional to wavelength) hence is likely due to neutral media or deviation of spacecraft velocity from trajectory prediction.  The frequency increase appears to eliminates the latter since atmospheric drag is expected to slightly slow down Cassini, hence decreasing not increasing the received Doppler shifted frequency. If true, it would appear that Cassini signals began to sense the upper neutral  atmosphere, but I’m not sure since Cassini altitude was too high.
 
 \subsubsection{\footnotesize RE: Source of Computation Time}
 Commenting out the entire FFT section did almost nothing to time, commenting out the computation for psi (And using a constant parabola function) made the code finish in a minute (It takes about 17 hours usually). An exact example is: Parabola Computation of C-Ring Ripples (Using pure FFT's): 1.65 seconds. Exact Psi Computation of C-Ring Ripples (Using pure FFT's): 106.4 seconds. So, psi is the culprit. I have a few ideas to fix this that I'll try tonight. -Ryan\\

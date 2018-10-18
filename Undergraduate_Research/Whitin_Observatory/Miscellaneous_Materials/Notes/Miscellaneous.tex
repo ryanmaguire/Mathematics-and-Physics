@@ -36,7 +36,7 @@
             be used to teach math. C and Python can be run
             from inside of Mathematica.
         \subsubsection{Some Useful References}
-            \begin{itemize}
+            \begin{itemize}[itemsep=0pt]
                 \item \href{https://nssdc.gsfc.nasa.gov/nmc/%
                             datasetDisplay.do?id=PSPA-00411}
                            {Raw Radio Science Data from Voyager.}
@@ -175,54 +175,6 @@
                 \item Incorporate the results of our team's work in
                       revised RSS Data User's Guide for ring analysis.
             \end{enumerate}
-        \subsubsection{Dick Simpson's RSR-Reading Program}
-            The goal of this is to be able to run Dick Simpson's code
-            that reads RSR files and generates plots of the results
-            using MATLAB. Try the following:
-            \begin{enumerate}
-                \item Download the attached rsr.tar file into
-                      your Downloads folder.
-                \item Double click the rsr.tar to produce a
-                      folder called rsr/
-                \item Copy this folder to your personal TC2017
-                      folder on your external hard disk:
-                \subitem cd $\sim$/Downloads
-                \subitem mv rsr
-                         /Volumes/rmaguire001/Research/TC2017/rmaguire
-                \item Examine Contents:
-                \subitem cd
-                        /Volume/rmaguire001/Research/TC2017/rmaguire/rsr
-                \subitem ls -l
-                \item Make sure you have MS Word and type:
-                \subitem open aareadme.docx
-                \item Do NOT recompile the software and do NOT
-                      type \texttt{make program\_name} for anything, yet.
-                \item Try running the sample programs as described in 
-                      the aareadme.docx file.
-                \item Run the MATLAB codes to produce plots and create
-                      a one-page PDF of results by inserting figures
-                      in the MS-word template file.
-                \item Next, try to compile the Fortran programs by performing the following steps:
-                \begin{enumerate}
-                    \item[] rsr/src
-                    \item[] which make
-                    \item[] \#This should respond /usr/bin/make. If it responds make: Command not found, you need to install XCode developter tools.
-                    \item[] which gfortran
-                    \item[] \# If this responds with gfortran: Command Not Found, see Professor French.
-                    \item[] make clean
-                    \item[] make all
-                \end{enumerate}
-                \item Look at the Fortran code that does all of this work:
-                \begin{enumerate}
-                    \item[] more *.f
-                    \item[] \# Look at rsrhpr.f and get\_rsrhdr.f and compare with IDL code.
-                \end{enumerate}
-                \item Take a look at the MATLAB routines in the rsr/src directory:
-                \begin{enumerate}
-                    \item[] rsr\_hist.m, rsr\_look.m, rsr\_powr.m
-                \end{enumerate}
-                \item Try using these for the RSR data for Rev-7E in the User's Guide.
-            \end{enumerate}
         \subsubsection{Conversation with Paul Schinder}
             \begin{enumerate}
                 \item Uses Hanning (Not Hamming) filter.
@@ -284,8 +236,6 @@ When you have a chance, would you compare your results with my tabulated and plo
 Hi Dick, I did my homework during the PSG and generated the attached plot. The only difference is that the top panel is raw data at 1KHz, the bottom panel is compressed at 10Hz (0.1s). I think they seem pretty similar to yours, I don’t expect any processing to do better than what you got already. Is this what you were expecting from us? -Paolo Tortora
 \par\hfill\par
 Hi Dick, I attach three things:  a plot of my estimated amplitude and phase, a plot with my estimates superimposed on the ones you sent in file “Case22.tab”, and a list of the points in my plot (SPM, amplitude (linear), and phase (cycles)).  The original data file was S56SROE2009360\_0145NNNX63RD.2A1 (X-band; DSS63; 1kHz). I ran my PLL (with, for my reference: fbw = 20; delt = 0.025, tagc = 0.025). I did a linear fit to the frequency +/- 1 minute from the ring and subtracted the fit, then integrated the result to get phase.  I subsequently smoothed the estimated amplitude and phase.  The smoothing is slightly different in each case because the PLL parameters can’t be adjusted to give exactly the same Fourier content at each output (due to the historical way the program was written, since I did not care about amplitude except to stabilize the input to the phase detector).   The intent was to get approximately the same Fourier content in the phase and amplitude in the final file. The output is at 0.025 second intervals in the attached file. My disclaimer is:  The procedures that Essam and you use are clearly far superior to what I did here.  I am using my code in a way that was not intended in the design and am concerned (in particular, relevant for your application) that the group delay in the processing for the phase and amplitude estimates may not (quite) be the same.  I offer the attached if this level of processing might be useful for the comparison you mentioned in your original e-mail. -John Armstrong
-\subsubsection{\footnotesize RE: Removing Long-Term Residual Trends From Phase}
-We have two issues to resolve in the retrieval of phase. One is the SIGN of the phase, and the other is how best to remove residual long-term trends. We've already seen that there can be a radial shift in the retrieved ring profile if we have uncorrected slopes, and as I mentioned to Glenn today, that can really wreck our goal of decoding some of the wave features in the C and B ring based on lining up the phase of the waves, which need to be accurately registered to better than 100 meters. Ryan, it would be helpful if you could write up a simple equation to relate the magnitude of the uncorrected slope in phase (say in radians per 100 km) to the radial displacement of the retrieved power. Also, Glenn and I chatted about using high-pass filtering to remove the long-term drifts in the phase, after one first unwraps the phase. A good project will be for both of you to work together to explore how well our phase matches Essam, before and after you remove long-term drifts, and how the drift-removal affects the retrieved power (in shape and in radial location). At some point, you'll find that you have overdone it and have started to remove the real signature of diffraction, and the retrieved profile will begin to be distorted. It will be interesting to see if high-pass filtering works better than polynomial fitting in removing the background. Tuck away in the back of your head the question of how the S and Ka band phase drifts will look, compared to the X band, and the extent to which we can simply use the X band results and scale them to S and Ka bands. It's worth looking up some examples on the web for high-pass filtering using FFTs. It can be tricky if you fail to take into account the symmetry properties of FFTs. In some circumstances, you can't simply zero out the Fourier coefficients near the origin, but will also need to zap the symmetric ones at the other end of the FFT. You'll probably see a reference to this online. I suggest that you start with some synthetic data with noise - say, the sum of just a few sine and cosines with added random noise - and see how well your high-pass filter does in removing the low-frequency periodic signatures. Once you've done this to your satisfaction, you can try using the actual phase data.
 \subsubsection{\footnotesize RE: Question About Time Tags for RSR Files}
 In the process of developing a software pipeline for RSS ring data, a question has arisen about the exact meaning of time tags for RSR files. For simplicity, consider a 1 kHz file, starting at $1000$ SPM (seconds past minute) with $\Delta t$ between samples being $0.001$ sec. Three questions:
 \begin{itemize}
@@ -295,61 +245,6 @@ In the process of developing a software pipeline for RSS ring data, a question h
 \end{itemize}
 As a practical matter, this is not important, since the spacecraft location is not known to this level of precision, but when we document our code in detail, I'd like to know what the official answer is, and not just dismiss it as unimportant. -Richard French\par
 The time tags are given by that RSR at the beginning of every second. What follows is all the samples at whatever sample rate. So the first time tag in your example should be $1000.000$, and this sample represents the first millisecond from $1000.000$ to $1000.001$. In order to make your own computations and time tag in the middle of an interval, you need to add half that interval, in this case $0.0005$. For example, one thousand milliseconds tagged by the RSR from 1000.000 to 1000.999: 1000.000, 1000.001,..., 1000.998, 1000.999, each covers one millisecond centered at 0.0005: 1000.0005, 1000.0015,..., 1000.9985, 1000.9995. The average works out to $1000.5$, which covers the second which began at $1000.000$. The time tag for the first second of data is placed at $1000.5$. -Danny Kahan
-\subsubsection{RE: Power Profiles for Final Cassini Data}
-Glenn, Would you run Dick Simpson's and Paul Schinder's codes on the final RSS data files and plot the results in dB to compare to Essam's? My simple RSR reader is not doing very well in matching the drop in signal level in dB. This is a really good test case for our RSR readers. Also see Essam's Ka-band frequency plot, which I hope we can compare to as well. -Richard French
-\subsubsection{RE: Loss of Signal}
-Dear Aseel, Many thanks for posting the Cassini EOM files on the SOPC.  We examined all of the files this afternoon. The results are consistent with the plots you emailed. In all cases, the signals continued to be detectable through the sidelobe(s) of the HGA after they  drifted out of the main lobe.  Attached are plots of signal power normalized to its free-space value versus time (top panel), and signal frequency versus time (bottom panel). To be objective about when a signal was lost, we adopted the criterion that a signal is lost if its level permanently falls below 3-sigma (99\% confidence level) the random fluctuations of the noise baseline following the signal disappearance (the horizontal red line in the attached S-band plot).  The corresponding LOS time (in SPM) is identified by the value listed next to the vertical red line. As Julie Webster correctly stated, Radio Science was the instrument that last heard from Cassini. LOS for the S-band signal (with 99\% confidence) is 42942.85 SPM, or 11:55:42.85 ERT UTC (2017-258). Here are LOS estimates for signals observed at DSS-43 and DSS-35 (the dynamic range, or Pc/No, were different for different stations, as your and the plots attached show ):
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c c c} 
-    \hline
-     & SPM      & ERT (UTC)    \\ 
-    \hline
-    S43: & 42942.85 & 11:55:42.85  \\
-    X43: & 42934.70 & 11:55:34.70  \\
-    K35: & 42931.81 & 11:55:31.81  \\
-    X35: & 42931.12 & 11:55:31.12  \\
-    X74: & 42930.06 & 11:55:30.06  \\
-    \hline
-\end{tabular}
-\end{table}
--Essam Marouf\par
-You may have seen the email exchanges between instrument teams competing for who got the last second of data, and then Julie Webster telling everyone that it was Radio Science! But before that started, I looked at the open-loop 1 KHz data. The times that I got for LOS were a few seconds earlier than the project's reported LOS times, which was expected based on what I saw in real-time. According to the ACE log, DSS-43 closed-loop X-band LOS was 258/11:55:39, which is surprising because it's after the open-loop LOS.  Their S-band LOS was a second earlier at 258/11:55:38.  There was a lot going on when these times were recorded in the log so it's possible there's a typo. Can you please look at the open-loop data and let me know what you get for LOS? DSS-43, DSS-35 and DSS-74 tracked end of mission. The data are on the SOPC in:
-/data/RS\_Share/s101-rev293-SA-data/OCC/RSR. The data are on the rodan cluster in: /rssg/data/CAS/2017\_258/OCC/RSR. The filenames (on casrss2 and rodan cluster are):
-\begin{itemize}
-\begin{multicols}{2}
-    \item 43X: SC1SAOI2017258\_0302XMMX43RD.2A1
-    \item 43S: SC1SAOI2017258\_0302XMMS43RD.2B1
-    \item 35X: SC1SAOI2017258\_0330XMMX35RV.1N1
-    \item 35K: SC1SAOI2017258\_0330XMMK35RV.1N1
-    \item 74X: SC1SAOI2017258\_0459XMMX74RP.3A1
-\end{multicols}
-\end{itemize}
-My plots are attached. I think the official RSS LOS times should come from you, but I would check with Julie before distributing them since she called the project's times. -Aseel Amabtawi\par
-Dear Aseel, I should have also added that starting at about 11:40, we see systematic increase in the signal frequency with the residual from its value away from LOS reaching a peak value of about 24 Hz at Ka-band close to LOS (see attached figure).  It’s also clearly detectable at X-band with peak residual of about 6 Hz. The peak frequency residual is hardly detectable at S-band. The frequency change is definitely not due to the ionosphere. The frequency scaling appears to be proportional to frequency (inversely proportional to wavelength) hence is likely due to neutral media or deviation of spacecraft velocity from trajectory prediction.  The frequency increase appears to eliminates the latter since atmospheric drag is expected to slightly slow down Cassini, hence decreasing not increasing the received Doppler shifted frequency. If true, it would appear that Cassini signals began to sense the upper neutral  atmosphere, but I’m not sure since Cassini altitude was too high.  Paul? -Essam Marouf\par
-Let's see what we get for the final time for the loss of signal from our RSS data! High priority! I'll grab the data from the JPL computers as soon as I can. -Richard French
-\subsubsection{\footnotesize RE: RSS LOS times}
-For fun, our team computed the LOS times from the RSR files for Cassini's final dives. In all cases, our times agree with Essam's to better than 0.5 seconds. On the attached plot, the vertical magenta line is Essam's LOS time, nearly coincident with our vertical line. The dotted horizontal line is the 3-sigma noise level that defined our LOS detection limit.
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c c c} 
-        \hline
-        & SPM      & Difference (Seconds)    \\ 
-        \hline
-        S43: & 42942.355 & -0.496    \\
-        X43: & 42934.517 & -0.184    \\
-        K35: & 42932.106 & +0.297    \\
-        X35: & 42930.832 & -0.289    \\
-        X74: & 42929.897 & -0.160    \\
-        \hline
-    \end{tabular}
-\end{table}
-\begin{figure}[H]
-    \centering
-    \captionsetup{type=figure}
-    \includegraphics[page=1,trim={2.5cm 2cm 2.5cm 2cm},clip,width=6in]{EOM_profiles_212_v2_rgf.pdf}
-    \caption{Attachment from Richard French}
-\end{figure}
 \subsubsection{\footnotesize RE: Padding - RSR to Power/Frequency}
 Thanks again, Paul, for all your help with this. I've been reading through your codes and doing a bit of reading about signal processing as well, so I am now in a position to ask some sensible questions. As a starting point, it would be helpful to go over with you - by phone or email:
 \begin{enumerate}
@@ -463,38 +358,11 @@ Thanks, Paul - we'll play around with this and see if we can make sense of it al
         \item When rms of phase exceeds 0.1 cycle, this is a practical limit to the reliability of the phase evaluation and thus to the details of the ring structure at this resolution.
     \end{itemize}
 \end{enumerate}
-\subsubsection{\footnotesize Phase Determination - Experiment to Try}
-Glenn has shown that using co-added FFTs seems to give a good match to Essam's estimated power. I believe that what is happening here is that we zoom in on the power spectrum of the data and measure only the power near the peak. This helps to reduce the effect of noise away from the actual measured frequency of the data. However, we don't take advantage of this fact when we compute the phase. For the phase, we are simply averaging I and Q and then taking phase = atan(Q,I). I've been wondering if there is a way to improve our phase determination by the following approach:
-\begin{enumerate}
-    \item Compute the FFT of the data and find the peak power
-    \item Within some range of the peak, set the FFT values to zero
-    \item invert the FFT to retrieve a complex input, which can be converted to I', Q', where I' and Q' are a reconstructed phase that should be compared to I and Q
-    \item Compute phase' = atan(Q', I') and see how well it agrees with phase.
-\end{enumerate}
-When performing this experiment, it will probably be useful to plot the coarse spectrum obtained by the FFT to see how sharply peaked it is and how far above the noise floor it is. I don't have high hopes for this approach, but it seems worth investigating for thoroughness, or any related approach to improving the phase from the simple result from averaging over I and Q.
-\subsubsection{\footnotesize RE: Ratios for X, Ka, and S Band Frequences}
-Conversion factors for Ka and S band, given an X band frequency or wavelength: $S=\frac{3}{11}X$, $Ka=\frac{19}{5}X$
 \subsubsection{\footnotesize RE: phase wrapping - one more suggestion - and a math problem for Ryan}
 Another quick idea to help solidify our understanding of the origin/solution of the phase wrapping problem. You might try running some intermediate cases of the number of points in the FFT: 2048, 4096, and 8192 come to mind as obvious possibilities. I expect that you'd see a trend in the magnitude of the difference in the phase shifts with the degree of averaging. I'm struck by the large DC phase shift, in addition to the slope that you demonstrate in the middle panel of plots - I would expect that this would increase rapidly with the amount of averaging, and it would be interesting to plot just that DC offset as a function of the number of points in the FFT divided by 1024, your base case. It might have some interesting curvature, and this is something that you could relate to the magnitude of the error in Simpson's rule, which is the method you are using for integration. Ryan would probably have some interest in predicting the error in Simpson's rule as you increase the step size, and seeing if your results agree. Similarly, if my hunch about the origin of the problem is right, you should find improvement as you successively increase the number of sub-points in your spline interpolation of the 16384 case from 2 to 16 (or perhaps even more). If all of this works, I think we will have a more robust solution of the frequency offset problem, but we'll just have to see! -Richard French
-\subsubsection{\footnotesize Goals for the Week (October 23, 2017)}
-\begin{enumerate}
-    \item Ryan - document the differences between inversions of Maxwell ringlet when using a variety of Glenn's power savefiles and Essam's phase
-    \item Ryan - Set up generalized version of Fig 4 to be able to use Cassini events instead of Voyager events, to see how important cubic and quartic terms are
-    \item Ryan - Generalize program to plot Fig 3 for Cassini events instead of Voyager so that we can decide when we'll need to use cubic and quartic terms
-    \item Ryan - Perform definitive comparison of using FFT in numerator vs denominator in a case when we know that the cubic and quartic terms matter (e.g., for Voyager)
-    \item Do an end-to-end test of current pipeline for Rev 007E and Rev 007I X band at 1 km resolution, making detailed plots of comparisons between Essam's results and ours for both the diffraction power and phase, and the post-corrected optical depth and residual phase. 
-    \item Summarize the differences and document all of the runs so that they can be completed in a "push button" fashion with all specific parameters included near the top of any calling programs. 
-    \item Document the sequence of steps, and ideally write a script that can automate the process from start to finish. 
-    \item Identify which programs in C and Fortran will need to be translated to IDL and then Python (we'll want to have both IDL and Python pipelines on GitHub and be able to show that they give the same results)
-    \item Make a PDF of the final results
-    \item Summarize the steps to be taken in the proposed new data pipeline, including reading the geometry files when needed rather than relying on savefiles for these results.
-    \item Test the new data pipeline with other 007I and 007E RSR files from other DSN stations and wavelengths (S and Ka)
-    \item Make overplots of ring structure derived from other Rev 007I/E stations at X band to see how well we can reproduce structure from redundant observations.
-    \item Think about the kind of overview plots of elevation vs time and sky view of the occultation would be useful as documentation on the PDS.
-\end{enumerate}
 \subsubsection{\footnotesize RE: How to Read Geometry Files}
-In IDL:
 \begin{lstlisting}[language=IDL]
+; In IDL
 tc_geo = rdcol(geofile_tc, 1, 99999999, [1:18])
 t_OET_spm_tc            = tc_geo[0,*]
 t_RET_spm_tc            = tc_geo[1,*]
@@ -611,22 +479,6 @@ Boris and Duane, I've been trying without success to find a table that lists a c
 \begin{itemize}
     \item Such a table is provided \href{https://naif.jpl.nasa.gov/pub/naif/pds/data/co-s_j_e_v-spice-6-v1.0/cosp_1000/data/pck/pckinfo.txt}{here} in the PCKINFO.TXT file in the CASSINI SPICE archive. -Boris Semenov
 \end{itemize}
-\subsubsection{\footnotesize RE: Fudge Factor for Titan}
-The fudge factor for the Titan ringlet is 0.7213, whereas for Maxwell it was 0.705. The difference is a resolution of 1.02km as opposed to 1.0km. Both of these resolutions gave less than ideal matches to tau in the Titan ringlet. For Titan, tau ~ -4 which is probably why the match isn't close.  Also, at 10km resolution, ours still seems to have structure whereas Essam's looks Gaussian-like. He may be smoothing here. I put nsum=5 and it looked pretty close. -Ryan Maguire\par
-Could you send me plots to show what the current version of things looks like?
-I agree - high tau is likely the source of the problem. I don't know if Essam subtracts a noise floor from the data, for example. -Richard French
-\subsubsection{\footnotesize RE: Titan Ringlet}
-We can discuss the Titan results once you have produced some comparison plots to compare with the RSS User's guide. Here are some questions, though:
-\begin{enumerate}
-    \item Did you start with 2.5 km sampled data and process at 10 km resolution?
-    \item What happens if you start with 250m sampled data and process at 10 km resolution? How would you expect the results to differ?
-    \item What radial resolution does the RSS Users Guide plot look like it is plotted at?
-    \item What sampled resolution is the EASYDATA 10 km resolution *tau file? We should use that same resolution for our processing, under the assumption that this is what Essam did.
-\end{enumerate}
-\subsubsection{\footnotesize RE: Rev133 Debugging}
-When Glenn shows up, would you please work with him to be sure that all of the inputs to the diffraction reconstruction for Rev 133 are valid: geometry, Fresnel scale, resolution calculation and window width, etc? I think there must be something fundamental missing in the diffraction reconstruction of the C ring ripples  at 250 m resolution. it might be worth starting at 1 km resolution to see if this gives a reasonable result for the entire C ring region before going to higher resolution. Perhaps the window width needs to extend beyond the available data. Are you sure that the input phase is the RAW phase and not the post-reconstruction phase? -Richard French
-\subsubsection{\footnotesize RE: Good Test for C Ring Ripples}
-I suggest that you try inverting the Ka band data for Rev 133 to see if you get the same structure in the optical depth profile as with the X band data. At the moment, we have a mystery where our power and phase give the same reconstructed optical depth as using Essam's power and phase, but not the same as Essam's retrieved optical depth. Don't forget to use the correct multiplicative factor to compute the Fresnel scale for Ka band compared to X band - Jolene can help track that down from the *.CAL  label file, I think. Let me know how it works out.
 \subsubsection{\footnotesize RE: Rev133 and More (November 29, 2017)}
 Goals for the week.
 \begin{enumerate}
@@ -731,46 +583,6 @@ See you soon! I'm looking forward to the next phase of this project, where we'll
 \subsubsection{\footnotesize RE: Notes on S Band}
 The rev125 S-Band file has 9000km windows. Even with all the optimization in v4, this will still take a very long time. v3, skipping 10 points, optimal resolution, had 16,000 points from 72,000-86,000 km and took about 30 minutes to run 100 points (I stopped it at that point), so about 3 days for just 72,000-86,000km. I'm finishing up the bugs for v4 right now, but it'll probably be a whole day for the entire data set. -Ryan\par
 Right - we won't be able to do S band at 100 meter resolution - it will end up being pretty noisy at that resolution. My advice is to zoom in on a restricted radial range for S band and try a variety of resolutions until you find that it is too noisy to get information at higher resolution. I realize that this means that the pre-processing step from Glenn may need to be redone several times, but this is a good object lesson for our pipeline - what you are doing is something that a ring scientist might want to do - figure out what the highest realistic resolution is for a given wavelength and ring region. -Dick
-\subsubsection{\footnotesize RE: Validity of Psi Approximation}
-Hi, Ryan - Check out this nice attachment that discusses Chebychev polynomial approximations of a continuous function, computable with FFT's. If we normalize the range of (rho-rho0) to be [-1,1], then would you agree that we can approximate our (nearly quadratic) Psi() as a sum of Ch. polynomials to very high precision? If so, doesn't that validate our convolution approach using FFTs to computing the inverse transform? We could always determine the coefficients of the leading Ch. polynomials and express Psi() in those terms, as a test, but we would not need to make the assumption that MTR made of estimating the coefficients of the 2,3,4th order polynomial terms by taking sums and differences of segments of Psi - we could do tests where we use the full range of [-1,1] at the actual spacing of the function in drho.
-(It would be fun, and not to hard, to compare the actual computation of Psi with various orders of Ch. Polynomials - would you like to give that a try after the interim report is in?) -Dick
-\subsubsection{\footnotesize RE: List of Tasks}
-\begin{itemize}
-    \item Add your version of Figs 6 and 8 to the interim report, matching the layout and style of Essam's plots as closely as possible (aspect ratio, labeling, color of lines, etc.) as we've done for other User's Guide figs.
-    \item Contact Glenn and Jolene about the appropriate input files for you to use for the final Rev007 1 km reconstructions for Jolene to post in our prototype PDS directories, crank out those reconstructions using the best assumed resolution to match Essam's.
-    \item Do the same for the Rev 133, and send files to Glenn so that he can produce diffraction-corrected profiles for Fig. 12 of the interim report. 
-    \item I don't think Essam detected the F ring on Rev 133, but take a look anyway at your reconstruction in the expected vicinity of the F ring (+/- about 300 km of 140219 km)
-    \item Try your idea of improving your 10 km resolution model for the Titan ringlet, to compare with the User's Guide version. 
-    \item Write a paragraph or two for the Interim Report about the envisioned structure of our software contribution to GitHub, and the two levels of documentation we'll provide -- a "just enough information" to get started, with examples, and a much more detailed version that will take us from start to finish.
-    \item Have you succeeded in doing a direct integration, without FFTs, for the inversion process? This would be good to have working, and to know the time it takes.
-    \item Update your time test of how long an inversion takes using FFTs that are $2^n$ vs random length FFTs, and document the results.
-    \item You'd worked on a 'forward' code that would produce a synthetic diffraction pattern for a given occultation geometry and assumed radial profile of normal optical depth. This would be a great addition to our software package and would provide a nice test of our inversion code, to be able to retrieve the input optical depth profile by inverting the synthetic diffraction pattern.
-    \item Start thinking about the organization of our pipeline processing - a flow chart, if not actual program and procedure names - and especially about how and where users could enter the process mid-stream to perform diffraction corrections to snippets of data at requested resolutions without having to go through the entire preprocessing procedure for an entire RSR file.
-    \item I'd like to get our outlined pipeline process agreed on before we start translating code into Python in earnest, but if you want to do some early investigation into getting FFTW working in Python, that would be helpful.
-    \item We still need to understand how to compute SNR0, ideally within the next month or so.
-\end{itemize}
-\subsubsection{\footnotesize RE: Things to do}
-Hi, all! I'll be in at the Obs later today - this is Phil's last day before he heads home tomorrow. If you've had a chance to process any of the Rev 125-133 data, we'd like to take a look at some of the waves we've been able to identify. Ryan and Jolene, I'll have a chance to get together with you today to answer any questions you have - Glenn is away until Wednesday.\par
-I propose that we have our weekly meeting on Wed Jan 10 at about 2:30PM, assuming all three of you will be there. As usual, please put together a meeting notes document in advance of our meeting.
-\begin{itemize}
-    \item Our main focus for the coming week will be to get to work in earnest on our interim report
-    \item We also need to document our proposed PDS directory structure and send that to the PDS for comment and possible revision. Once that's done, we can begin to populate our sample PDS submissions. 
-    \item Jolene and I came up with a list of tutorials that need to be written, so we should start thinking about what each of those will look like.
-    \item Once we have a PDS file structure that has been approved, we can move on to thinking through the organization of the processing pipeline in more detail, based on our recent experience of trying to process snippets of data at high resolution.
-    \item We should then make a detailed list of programs/functions/procedures we'll need, and begin writing them in Python, using a uniform team style sheet for variable names, loop indices, documentation style, and even program layout, so that even though each of you will be contributing your own routines, we'll have a uniform team style that will be helpful to users.
-\end{itemize}
-I'm looking forward to having time to work with you on a regular basis for the next three weeks - I think we'll make a lot of good progress this month!
-\subsubsection{\footnotesize RE: Occ Plot}
-\begin{lstlisting}[language=bash,basicstyle=\footnotesize]
-programs to make plots of occultation are in TC2017/programs/IDL
--rw-rw-r--  1 rfrench    staff        2733 Nov 13 15:28 rss_occs_v3_SM3.ker
-
--rw-rw-r--  1 rfrench    staff       10271 Nov 13 15:28 rss_occs_v3.pro
-
--rw-rw-r--  1 rfrench    staff        6464 Nov 13 15:27 JG_rss_occs_v3.pro
-Try running JG_rss_occs_v3.pro
-\end{lstlisting}
-You'll be able to see what needs adjusting to change !P.multi and the events being logged. I have a few 'TO DO' items at the top. Rename this as your program and hack away!
 \subsubsection{\footnotesize RE: Rev133E K-25 C-Ring Ripples: MATLab Resample vs. IDL Interpolate}
 I've attached the comparison between using the resample function in Matlab and using our interpolate/averaging routine in IDL, along with Essam's profile. The black curve is IDL, green is Matlab, and pink is Essam's. The top panel is the input profile, and the bottom panel is the output profile. Both of our diffraction corrections (black and green) are at 350m resolution, and all 3 curves are at 100m spacing. In the input profile (top panel), using Matlab's resample function definitely does a much better job eliminating noise than our IDL routine. It also matches Essam's far better than our IDL routine. The output profile also looks much closer to Essam's. I also attached a figure of the differences between our profiles and Essam’s profile - in that figure, the top panel is the difference in the input to diffraction correction, and the bottom panel is the difference in the output from diffraction correction. It’s also pretty clear here that the differences you get from using Matlab’s resample (green curve) are noticeably lower than what you get using our IDL routines. -Glenn
 \begin{figure}[H]
