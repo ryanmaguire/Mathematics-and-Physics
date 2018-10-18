@@ -470,14 +470,6 @@ Hi, all - I'd like you to work together to design a routine (and the appropriate
     \end{enumerate}
 \end{enumerate}
 My hope is that this can be done in such a way that a user could say, for example: ``Here is a list of ring features and ring plane radius over which I'd like to obtain diffraction-corrected profiles at a given radial resolution (and perhaps a default uniform radial spacing that is some reasonable spacing smaller than the radial resolution by at least a factor of 2). Don't bother me with the details - compute the power/phase/optical depth you get from this inversion. I don't want to know about SPM or frequency drifts - just do it so that I can plot up my results!" This will require, of course, that all of you produce calibration files for power and frequency and time and radius that can be quickly read in and interpolated as needed. -Dick
-\subsubsection{\footnotesize RE: Time Test and Questions}
-I ran S-Band at 250m resolution to see what would happen, and I found something interesting.
-One would expect the time to compute a point would decrease with window size, and to some extent that happens. But for rev-125, w(r) does decrease yet the computation time per point varied almost sinusoidally. The entire computation took 22 hours, and had computation times per point ranging from 1 point per 5 seconds to 1000 points per second, again this varying happening periodically. I'm wondering if this is a memory thing. -Ryan\\
-One point per five seconds probably means that some disk swapping is happening, which would be an indication of a memory issue. Two things to do:
-\begin{enumerate}
-    \item In IDL, type help,/mem and let me know what it says for this rev-125 job
-    \item In a separate maxwell terminal window, type: ps au
-\end{enumerate}
 \subsubsection{\footnotesize RE: Updates 01/23/2018}
 v4.1 is done, it's v4 but with little bugs removed. I found out max(a,b) does nothing, and it needs to be max([a,b]), so that's been fixed everywhere. In the inversion page, about 10 variables that are a few thousand points long are defined inside the for loop everytime, this is a leftover of v1/v2 that was never corrected for. A time comparison of v4 vs v4.1 on rev007 E is 78 seconds to 76 seconds. I'm wondering if it'll be a bigger difference for revs that need larger windows, as this loading into memory is no longer included. A v5 is also done now. It uses an integral, rather than the convolution theorem/FFTs, and also includes the corrections from v4.1. Interestingly enough, it ran the fastest at 71 seconds. Note: Neither v4 nor v4.1 use powers of 2 in the FFT. This may be why v5 is fastest (3 FFT's versus 1 Total command). Below is the Encke Gap, Maxwell Ringlet, and v4-v5 of the Maxwell gap. v4 is white, v5 is red. For some reason, that completely eludes me right now, v4 is lagging behind v5 by a single point. I've made save files for rev007\_E for the interim report, but there was some error in the normalization so I don't think these should be used. I believe Jolene is making a new save file to be run. -Ryan
 \begin{figure}[H]
@@ -553,44 +545,6 @@ tau\_tc, power\_tc, power\_vals\_EAM, tau\_norm\_vals\_EAM are now saved at:\\
 Jolene made modifications so that our v2 savefile is used with v5 reconstruction, and then compares with Essam:\\
 /Volumes/dione\_raid2/Research/TC2017/rmaguire/v5/compare/rjm\_diff\_corr\_compare.pro\\
 I haven't looked over the code, but she showed me the plots for the Maxwell ringlet and they looked very good. Yesterday I discovered that, due to large window sizes, the Riemann sum that is used in v5 cannot adequately capture the nature of the rapid oscillations that exp(ipsi) has. So rev-133 and rev-123 should use v4.1. For rev007, even at 100m resolution, the windows are small enough that the Riemann sum captures the same amount of detail as the FFT. I'm actually curious to find out what form of integration FFT uses. Last night I tried Simpson and Newton-Cotes integration, rather than just TOTAL, but both seemed rather poor for rev133. Also note, a quadratic fit to psi for the c-ring ripples is horrible. Indeed, a quartic fit was pretty bad ass well. A 6th degree polynomial fit incredibly well, however. The fact that psi can still be fit very well by a polynomial demonstrates why FFT works so well. I will make a v4.1 version of this compare program now. Should be done soon.
-\subsubsection{\footnotesize RE: Updates 01/26/2018}
-I'm going to make an updated version of that compare program and add the figures to the interim report now (I think I've got the hang of the plotting routine). If you don't like the figures I add, just let me know. Here's the google doc that I've updated. Let me know if there's anything more pressing to do today. (I intend to do the paragraph about Github once the figures are up). I'm also going to do a run through of the entire .tex file and get rid of the errors (We have 7).
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{F-Ring}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{F-Ring_Zoomed_In}
-    \end{subfigure}
-\end{figure}
-Ryan - Blue means done. Red means description.
-\begin{itemize}
-    \item \textcolor{blue}{Create your version of Figs 6 and 8 to be included in the interim report (send primitive version of plot program to Dick, who can reformat this to mimic Essam’s style and add it to the interim report) - rjm\_diff\_corr\_compare.pro}
-    \item \textcolor{blue}{Contact Glenn and Jolene about the appropriate input files for you to use for the final Rev007 1 km reconstructions for Jolene to post in our prototype PDS directories, crank out those reconstructions using the best assumed resolution to match Essam's.} - \textcolor{red}{Use Rev007\_E\_X43\_struct\_input\_v2.sav for rev 7.}
-    \begin{itemize}
-        \item \textcolor{red}{Compare rev007 E phase with Essams - rmaguire/v5/compare/rjm\_diff\_corr\_compare.pro uses Essam’s data, and compares the TC reconstruction to Essam’s reconstruction. V5 has 0.3\% error in power. Phase matches up very well.}
-    \end{itemize}
-    \item \textcolor{blue}{Do the same for the Rev 133, and send files to Glenn so that he can produce diffraction-corrected profiles for Fig. 12 of the interim report.}
-    \begin{itemize}
-        \item \textcolor{blue}{Make reconstruction fro rev-123 S, X, Ka for F-ring. Replace Dick’s figures in interim report. - Half done. Have not added figures to report.}
-        \item \textcolor{blue}{Use Essam’s data for rev-133 and compare reconstructions.}
-        \begin{itemize}
-            \item \textcolor{red}{Error in doing so for rev-133 with v5. The Riemann sum method for the massive windows that rev-133 has is insufficient in capturing the details of the rapidly oscillating exp(ipsi). Use v4.1 or v4 for rev-133 and rev-123.}
-        \end{itemize}
-    \end{itemize}
-    \item \textcolor{blue}{I don't think Essam detected the F ring on Rev 133, but take a look anyway at your reconstruction in the expected vicinity of the F ring ($\pm$ about 300 km of 140219 km)}
-    \begin{itemize}
-        \item \textcolor{blue}{F-Ring is 1km in width, roughly. Use appropriate resolutions. - S-Band at 500m resolution detected it.}
-    \end{itemize}
-    \item \textcolor{blue}{Try your idea of improving your 10 km resolution model for the Titan ringlet, to compare with the User's Guide version. Use 250m resolution for this.} - \textcolor{red}{If I cheat and multiply by about 5, and smooth a wee bit, it looks great...}
-    \item \textcolor{blue}{Have you succeeded in doing a direct integration, without FFTs, for the inversion process? This would be good to have working, and to know the time it takes.} - \textcolor{red}{v5 is done. For rev007 E it matches better to Essam’s reconstruction than v4.1, and also is computed in a shorter amount of time. For rev-133 the integral is insufficient. Need to look into better numerical integration techniques.}
-    \item You'd worked on a 'forward' code that would produce a synthetic diffraction pattern for a given occultation geometry and assumed radial profile of normal optical depth. This would be a great addition to our software package and would provide a nice test of our inversion code, to be able to retrieve the input optical depth profile by inverting the synthetic diffraction pattern.
-    \item Start thinking about the organization of our pipeline processing - a flow chart, if not actual program and procedure names - and especially about how and where users could enter the process mid-stream to perform diffraction corrections to snippets of data at requested resolutions without having to go through the entire preprocessing procedure for an entire RSR file. - Ryan will use LaTex to format what we wrote on the board
-\end{itemize}
-\subsubsection{\footnotesize RE: Good Plots}
-IDL\_pipeline\_v2/gjs\_progress\_report/rjm\_fig\_3-12/gjs\_rev7E\_X43\_huygens\_1km.pro\\
-For legends, you can make actual legends using the plot function. However, the plot function’s pretty janky so nobody uses it. In the plot procedure (which all the cool cats use), you can just add text to the plot using “xyouts”. For making arrows, there’s an arrow procedure in IDL where you can just specify the start and end points of the arrow. I have a weird problem where I don’t actually have a procedure named arrow, but instead I have one named “arrow\_internal”. If you end up having the same problem where you only have this “arrow\_internal” thing, then you can still use all the same syntax and everything that’s online for the arrow procedure - you just have to say “arrow\_internal” for every time they say “arrow”.
 \subsubsection{\footnotesize RE: A Though on Phase}
 While looking through the v5 code, I noticed something. A while back I made psi positive, just because it matched Marouf, and then filed this under `Deal with later.' Psi is a purely geometrical factor. The integral is:
 \begin{equation*}
