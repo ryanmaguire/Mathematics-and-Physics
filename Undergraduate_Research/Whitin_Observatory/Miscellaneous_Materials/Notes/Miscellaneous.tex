@@ -422,17 +422,6 @@ SPICE_FILE_NAME = {"050606R_SCPSE_05114_05132.bsp", "cpck26Feb2009.tpc",
                    "naif0009.tls", "earthstns_itrf93_050714.bsp",
                    "earth_000101_090604_090313.bpc"}
 \end{lstlisting}
-\subsubsection{\footnotesize RE: 1 kHz File Question}
-Dear Elias, As you know, only the 16 kHz RSR files are on the official PDS archive at the moment, but for many purposes, the 1 kHz versions are adequate and are easier to use. In looking on the SOPC for 1 kHz files for some of the occultations, I find that some of them seem to be truncated. I'm not sure how this happened. Here is an example:
-\begin{lstlisting}[language=bash]
-/data/RS_Share/s10-rev07-rsr-data
-S10EAOE2005_123_0740NNNK34S.1B1
-has only 1029 bytes.
-\end{lstlisting}
-(in fact, all of the S-band 1kHz files in this directory are short)
-Is there a place on the SOPC that has all of the 1 kHz files for all of the ring occultations? I've tried to gather many of them, but I don't know of an authoritative location. The specific question for now is whether there exist complete versions of these short RSR files for S-band from Rev 007E. -Dick\\
-Elias can continue to look into this in more detail, but I did a quick check and I'm not sure why the files are truncated! The filename (NNNK) indicates that it's Ka-band data, not S-band, but I don't know what the "S" at the end of the filename refers to.  Unfortunately, we did not include readme files at the time, so I don't know if this was intentional or an error during the file transfer process. The good thing is that all the data are archived internally on our machines.  I looked at the Rev 007 files and the filenames are as expected.  The file sizes seem reasonable too. We don't have one location for all the 1 KHz files.  Each experiment has its own directory with its own data files.  We'd be happy to provide you with whatever files you need. -Aseel\\
-I checked my email from May, 2005.  It appears that we started out with a naming convention that was inconsistent with the PDS naming convention, so we changed it (see attached).  I don't recall what the "S" stood for.  I wondered if it was for VSR data, except we did not record DSS-34 VSR data (only DSS-14 and DSS-43). We changed the naming convention again for Rev 8 so that the last two characters before the period refer to the polarization (R or L) and receiver (RSR, VSR, WVSR, PRSR). We'll continue to look into this, but it would be easiest and fastest to provide you with a copy of the files that are archived on our machines. -Aseel
 \subsubsection{\footnotesize RE: Organization of RSS Ring Profiles}
 Hi, Mitch - We're preparing a sample submission to the PDS of reduced Cassini RSS ring profile results, as an example of the data we plan to submit for the entire set of RSS ring occultations, if we can do this with our current level of effort. There are some high-level decisions PDS needs to make about how to organize the data and how to interleave them with (or isolate them from) Essam's contributions. As you know, we won't have my preferred solution of a single set of submissions using the equivalent of Essam's code, since he does not want to share his algorithms or code with me, so we are going our own way in developing a best-effort open-source software data pipeline that will do the best we can (and, we think, may be very close to Essam's but not bit for bit the same, and without his vetting) - we'd like to archive representative results from this open-source pipeline, including results at higher resolution than the 1 km profiles Essam has promised to provide. (He's also indicated that he might archive higher-resolution products, but only after he has published the results, and he has not identified either a target date for that task, or the specific results he'd plan to include.) In this situation, I think it might make sense for our PDS archive to be separate from Essam's, rather than intermingled. We would provide some high-level summary at the top to users that says:
 \begin{enumerate}
@@ -481,27 +470,6 @@ Hi, all - I'd like you to work together to design a routine (and the appropriate
     \end{enumerate}
 \end{enumerate}
 My hope is that this can be done in such a way that a user could say, for example: ``Here is a list of ring features and ring plane radius over which I'd like to obtain diffraction-corrected profiles at a given radial resolution (and perhaps a default uniform radial spacing that is some reasonable spacing smaller than the radial resolution by at least a factor of 2). Don't bother me with the details - compute the power/phase/optical depth you get from this inversion. I don't want to know about SPM or frequency drifts - just do it so that I can plot up my results!" This will require, of course, that all of you produce calibration files for power and frequency and time and radius that can be quickly read in and interpolated as needed. -Dick
-\subsubsection{\footnotesize RE: Something Fishy in C-Ring Ripples}
-Hi, all - I just plotted tau vs r for 
-\begin{lstlisting}[language=bash]
-2018_1_18_gjs_rev133_E_K25_77700_77500_350m_res.sav 
-2018_1_18_gjs_rev133_E_X43_77700_77750_350_res.sav
-\end{lstlisting}
-See the attached fig. Qualitatively, they look pretty similar, but the X and Ka ripples quickly get out of phase, which makes me suspicious that something is wrong with the reconstruction or with the radius scale used for the two inversions. Our physical interpretation of the ripples is that they are due to corrugations in the surface of the rings, which should appear nearly similar at X and Ka bands (although we are looking at them from different earthbased stations, which makes things slightly different - do we have any ripple observations at X and Ka band from the SAME DSN complex? Glenn, when you compared Essam's X and Ka band retrievals, did you find this big a difference? (Red is X band; white is Ka band). One good test would be to overplot retrievals of the same data at different resolutions to confirm that the radii agree. Some further thoughts:
-\begin{enumerate}
-    \item Could one of you plot larger extents of the data to find sharp-edged rings, and see if they line up in radius for these two data sets? That would be a good test of the radius scale
-    \item Can you look to see if there are ANY C ring ripple observations made from the same DSN complex but at different wavelengths? It's possible that the differences are due to the slightly different viewing geometry of the waves from the two observatories, but to explore that quantitatively, we need to know the difference the azimuth angle between the two data sets - can one of you track that down?
-\end{enumerate}
-If we can show:
-\begin{enumerate}
-    \item That the data sets have good radius scales by showing that the other rings line up fine
-    \item That, when viewed from the same DSN, different wavelengths show the same features then there is a fun geometry problem that we can do to try to predict what a rippled ring should look like when viewed from slightly different angles - what we are interpreting as a difference in radius may have a different explanation that would be fun to try to model.
-\end{enumerate}
-If the data sets DON'T match up in radius, then we need to understand that, since it could be a sign that our reconstructions have a problem, so this is a high priority thing to explore. For completeness, I think we should run the inversions for all of the C ring ripples this spring, once we get our pipeline working efficiently! -Dick
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{CringX43-red-vs-K25Rev133_350m_res}
-\end{figure}
 \subsubsection{\footnotesize RE: Time Test and Questions}
 I ran S-Band at 250m resolution to see what would happen, and I found something interesting.
 One would expect the time to compute a point would decrease with window size, and to some extent that happens. But for rev-125, w(r) does decrease yet the computation time per point varied almost sinusoidally. The entire computation took 22 hours, and had computation times per point ranging from 1 point per 5 seconds to 1000 points per second, again this varying happening periodically. I'm wondering if this is a memory thing. -Ryan\\
