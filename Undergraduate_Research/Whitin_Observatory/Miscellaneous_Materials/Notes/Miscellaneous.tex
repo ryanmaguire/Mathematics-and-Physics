@@ -37,9 +37,6 @@
             from inside of Mathematica.
         \subsubsection{Some Useful References}
             \begin{itemize}[itemsep=0pt]
-                \item \href{https://nssdc.gsfc.nasa.gov/nmc/%
-                            datasetDisplay.do?id=PSPA-00411}
-                           {Raw Radio Science Data from Voyager.}
                 \item \href{https://pds-rings.seti.org/%
                             voyager/rss/index.html}
                            {Processed Data from Voyager.}
@@ -111,13 +108,6 @@
                 \item Interesting story:
                       \url{http://www.openculture.com/%
                            2015/03/the-story-of-lorem-ipsum.html}
-                \item \href{http://lasp.colorado.edu/media/%
-                            projects/cassini/docs/%
-                            Cassini_Science_Symposium_2018_%
-                            Program-LowResForWeb.pdf}
-                           {Abstracts from 2018 Boulder Symposium.}
-                \item GNU License:
-                      \url{https://www.gnu.org/licenses/gpl.txt}
                 \item Notes on Multiprocessing:
                 \begin{itemize}
                     \item \href{https://stsievert.com/blog/2014/07/30/%
@@ -128,8 +118,6 @@
                                 parallelism-in-one-line/}
                                {Parallelism in One Line.}
                 \end{itemize}
-                \item Example of a nice Use Guide:
-                      \url{https://github.com/nasa/ominas}
                 \item \href{https://www.youtube.com/%
                             watch?time_continue=2&v=s-Xw6i61N9o}
                            {Here}
@@ -141,45 +129,7 @@
                 \item \href{http://spiceypy.readthedocs.io/en/%
                             master/exampleone.html}
                            {More spiceypy.}
-                \item \href{http://www.wellesley.edu/lts/%
-                            office365\#38MbQkK5QQom6URk.97}
-                           {Microsoft Word for Wellesley.}
-                \item \href{http://www.wellesley.edu/lts/%
-                            techsupport/macs\#OyZifeYOQ4rso8ep.97}
-                           {MATLAB Download for Wellesley.}
             \end{itemize}
-        \subsubsection{RE: Planning Ahead!}
-            Glenn:
-            \begin{enumerate}
-                \item Start with RSS Data User's Guide:
-                \begin{enumerate}
-                    \item Read RSS data from RSR to extract phase and
-                          intensity, comparing several approaches
-                          (Paul Schinder code, phase-locked loop, etc.).
-                    \item Estimate noise properties of each data set
-                          and specify appropriate averaging to be
-                          performed in each ring region.
-                \end{enumerate}
-            \end{enumerate}
-            Jolene:
-            \begin{enumerate}
-                \item Design and populate a data base of all of
-                      the Cassini RSS raw data, including:
-                    \begin{enumerate}
-                        \item Tables and example plots summarizing
-                              the each of the RSS occultations.
-                        \item Incorporate diffraction-corrected ring
-                              profiles as they become available from TC17.
-                        \item Incorporate RSS operations-team-produced
-                              documentation for each event.
-                        \item Compare TC17-produced diffraction-corrected
-                              profiles with those on PDS.
-                    \end{enumerate}
-                \item Work with NASA PDS Rings Node to submit selected
-                      high-resolution profiles of ring regions.
-                \item Incorporate the results of our team's work in
-                      revised RSS Data User's Guide for ring analysis.
-            \end{enumerate}
         \subsubsection{Conversation with Paul Schinder}
             \begin{enumerate}
                 \item Uses Hanning (Not Hamming) filter.
@@ -365,28 +315,6 @@ Thanks, Paul - we'll play around with this and see if we can make sense of it al
 \end{enumerate}
 \subsubsection{\footnotesize RE: phase wrapping - one more suggestion - and a math problem for Ryan}
 Another quick idea to help solidify our understanding of the origin/solution of the phase wrapping problem. You might try running some intermediate cases of the number of points in the FFT: 2048, 4096, and 8192 come to mind as obvious possibilities. I expect that you'd see a trend in the magnitude of the difference in the phase shifts with the degree of averaging. I'm struck by the large DC phase shift, in addition to the slope that you demonstrate in the middle panel of plots - I would expect that this would increase rapidly with the amount of averaging, and it would be interesting to plot just that DC offset as a function of the number of points in the FFT divided by 1024, your base case. It might have some interesting curvature, and this is something that you could relate to the magnitude of the error in Simpson's rule, which is the method you are using for integration. Ryan would probably have some interest in predicting the error in Simpson's rule as you increase the step size, and seeing if your results agree. Similarly, if my hunch about the origin of the problem is right, you should find improvement as you successively increase the number of sub-points in your spline interpolation of the 16384 case from 2 to 16 (or perhaps even more). If all of this works, I think we will have a more robust solution of the frequency offset problem, but we'll just have to see! -Richard French
-\subsubsection{\footnotesize RE: How to Read Geometry Files in IDL}
-\begin{lstlisting}[language=IDL]
-tc_geo = rdcol(geofile_tc, 1, 99999999, [1:18])
-t_OET_spm_tc            = tc_geo[0,*]
-t_RET_spm_tc            = tc_geo[1,*]
-t_SET_spm_tc            = tc_geo[2,*]
-rho0_km_tc              = tc_geo[3,*]
-phi_RL_deg_tc           = tc_geo[4,*]
-phi_ORA_deg_tc          = tc_geo[5,*]
-B_deg_tc                = tc_geo[6,*]
-D_km_tc                 = tc_geo[7,*]
-rho0_dot_kms_tc         = tc_geo[8,*]
-phi_RL_dot_kms_tc       = tc_geo[9,*]
-F_km_tc                 = tc_geo[10,*]
-R_imp_km_tc             = tc_geo[11,*]
-R_sc_x_km_tc            = tc_geo[12,*]
-R_sc_y_km_tc            = tc_geo[13,*]
-R_sc_z_km_tc            = tc_geo[14,*]
-R_sc_dot_x_kms_tc       = tc_geo[15,*]
-R_sc_dot_y_kms_tc       = tc_geo[16,*]
-R_sc_dot_z_kms_tc       = tc_geo[17,*]
-\end{lstlisting}
 \subsubsection{\footnotesize RE: Phase Calculation to Try}
 I don't think we've yet tried an idea I had for computing the phase that might be more accurate than what we are doing now. Instead of using $phase = atan(\langle Q \rangle,\langle I \rangle)$, where the $\langle \rangle$ represents an average of measurements straight from the RSR (which I think is what we are doing now), the idea is that we use an analogous method to what we are doing when we compute power. 
 \begin{enumerate}
@@ -400,22 +328,6 @@ I don't think we've yet tried an idea I had for computing the phase that might b
     \item Try this for a variety of m neighbors.
 \end{enumerate}
 Ideally, this would give good agreement where the signal is strong, but give improved results where the signal is weaker, as in the center of an opaque ring. Would you make a plot of the results for the Maxwell Ringlet and Huygens Ringlet, to see if this works at all? (For starters, you can do this just for the I and Q without having to apply the frequency offset part, unless it's just as easy to do the entire process to compute the final phase.) Compare the results to our previous method for both phase and power, and to Essam's from the savefile that gives the pre-Fresnel-inversion phase and power. Then make a final set of plots to compare the methods and make a decision about which method is best for computing the phase. If so, then let's use this method to compute the phase for the full. Rev007E to confirm that it works.
-\subsubsection{\footnotesize RE: Calculating the Noise Power}
-MTR86 claims that the RSR data have Gaussian, uncorrelated thermal noise - a reasonable assumption - but it remains to be seen that the actual noise in the data is dominated by thermal noise, and the time periods over which this is a valid approximation. MTR86 compute the normalized noise power as:
-\begin{equation}
-\langle P \rangle_{\textrm{MTR86}} = \frac{\sigma^2(\langle I \rangle) + \sigma^2(\langle Q\rangle )}{(\langle I \rangle^2 + \langle Q \rangle^2)}
-\end{equation}
-where $\langle \rangle$ represents a time average of the data. I would instead compute the normalized noise as
-\begin{equation*}
-\frac{\sigma(\langle P \rangle)}{\langle P \rangle}
-\end{equation*}
-Where $\langle P \rangle = \langle I^2 + Q^2 \rangle$ .The difference is that Essam takes averages of I's and Q's before squaring, whereas I compute the power for EACH data point, and then average those to get the power. I think these would give the same answer if I and Q had only thermal noise added and successive data points were uncorrelated, but the RAW RSR data don't satisfy this assumption, because there is a frequency drift of about 10-12 Hz that should be visible as a sine wave in I and Q, which would result in an overestimate the actual thermal noise using Essam's expression because most of the variation in I and Q would be due to the frequency drift. It may be that implicitly Essam assumes that the frequency drift has been removed prior to using his equation. A related issue that we should test is whether the noise power scales with the integration time in the fashion that Essam predicts. Here is a set of tasks to help sort this out: (do these for BOTH the 1 kHz and 16 kHz files)
-\begin{enumerate}
-    \item Select a range of data in time corresponding to a range of ring plane radius prior to or after the main rings, where the signal level is smooth and not affected by the atmospheric occultation or is especially noisy due to low elevation angle. Choose about 2 minutes of data, for starters.
-    \item Use the equations above to compare and plot $\langle P\rangle_{\textrm{MTR86}}$ and $\langle P \rangle$ as a function of the averaging time for both the raw I and Q values, and separately for the frequency-offset-corrected I and Q, but still at high time resolution, where for the 1 kHz file you should let the averaging times vary between 0.01 to 10 seconds (they don't need to be equally-spaced intervals across this span). $\langle P \rangle$ should be expressed in dB (or you can just plot $\langle P \rangle$ on a log-y axis).
-    \item Plot I and Q from the raw RSR data over a few-second interval from both 1 kHz and 16 kHz files, for a variety of nsum values, increased until (I hope) you can see a sinusoidal signature in the raw I and Q, uncorrected for the frequency drift.
-    \item Interpret the results - compare the results of the two equations - are there domains when both are in agreement? Over what time intervals? Does the trend of <P> with averaging time match Essam's equation? is SNR0 (1/<P>) for 1-second time averages about 53 dB, as Essam found for Voyager?
-\end{enumerate}
 \subsubsection{\footnotesize RE: Rev7E kernels from easy data that were used for figures in interim report}
 \begin{lstlisting}[language=bash,basicstyle=\footnotesize]
 SPICE_FILE_NAME = {"050606R_SCPSE_05114_05132.bsp", "cpck26Feb2009.tpc",
@@ -430,46 +342,6 @@ Hi, Mitch - We're preparing a sample submission to the PDS of reduced Cassini RS
 \end{enumerate}
 Once we have some of Essam's high-resolution profiles, we'll be able to compare how the two sets agree. I fervently wish that we had a single set of data to submit, but I am firmly committed to producing open-source software, and I don't think it makes sense to archive the software without also archiving the results that come out of using the software. Would you and Mark give some thought to your preferred way of ingesting these two different sets of ring profiles (Essam's and mine), both in terms of organization and target audience? Our proposed directory structure is similar to the existing one, but we intend to include additional columns in many of the existing data files, and to add a new data file type that contains the normalized diffraction pattern (power and phase) that goes into the Fresnel inversion routine. Finally, we will also provide a comprehensive data catalog, images of occultation geometry as viewed from the earth, elevation plots that show which data files are best for each individual occultation, etc. - these will need a home in our data archive as well. Thanks, Mitch - no immediate rush, but I would like to chat with you about this once you've had a chance to digest this message and consult with Mark. -Dick\\
 Hi Dick, I just wanted to let you know I did get your email. Mark and I have been completely out of synch this week. We’ve identified an intersecting gap in our schedules Thursday afternoon when he and I can discuss our responses. I should be ready to chat with you on this Friday if you have some time. I should be available from about 9:00am until sometime early afternoon. -Mitch
-\subsubsection{\footnotesize RE: Radial Locations of Waves and Features for Revs 125-133}
-Would you write a short IDL procedure to enable you to make plots of the following regions, so that you can easily tweak the plot scales and reproduce the plots without difficulty? Use the recent low-inclination reconstructions and perhaps overplot different retrievals in different colors so that we can see by eye which is best. In the c ring: +/- 50 km relative to the radii shown here, then zoom in to see the structure of the waves:
-\begin{itemize}
-    \item Mi 4:1 m=2  74890 km  1.1$\pm$0.5 g/$\textrm{cm}^2$  0.16$\pm$0.09  0.18$\pm$0.13 g/$\textrm{cm}^2$
-    \item W74.66 m=-7 74666 km  0.7$\pm$0.2 g/$\textrm{cm}^2$  0.09$\pm$0.03  0.15$\pm$0.09 g/$\textrm{cm}^2$
-    \item W74.93 m=-4 74936 km  0.3$\pm$0.1 g/$\textrm{cm}^2$  0.05$\pm$0.02  0.21$\pm$0.17 g/$\textrm{cm}^2$
-    \item W74.94 m=-9 74941km,  1.3$\pm$0.5 g/$\textrm{cm}^2$, 0.17$\pm$0.07  0.14$\pm$0.07 g$\textrm{cm}^2$
-    \item W76.02 m=-9 76018km,  1.3$\pm$0.7 g/$\textrm{cm}^2$, 0.05$\pm$0.04  0.05$\pm$0.05 g$\textrm{cm}^2$
-    \item W76.23 m=-8 76237.5km 1.6$\pm$1.0 g/$\textrm{cm}^2$, 0.17$\pm$0.06  0.15$\pm$0.09 g$\textrm{cm}^2$
-    \item W76.44 m=-2 76435.5km 1.0$\pm$1.4 g/$\textrm{cm}^2$, 0.04$\pm$0.02  0.07$\pm$0.05 g$\textrm{cm}^2$
-\end{itemize}
-Also - find the best profiles for the C ring ripples. In the Cassini Division (Plot optical depth):
-\begin{itemize}
-\begin{multicols}{3}
-    \item Kuiper Gap 119400 $\pm$30km
-    \item Jeffreys Gap 118950 $\pm$40km
-    \item Russell gap 118610 $\pm$40km
-    \item Bessel-Barnard 120270 $\pm$50km
-    \item Strange Ringlet 117910 $\pm$30km
-    \item Herschel Gap 118240 $\pm$140km
-\end{multicols}
-\end{itemize}
-\subsubsection{\footnotesize RE: Routine needed for inversion}
-Hi, all - I'd like you to work together to design a routine (and the appropriate calls to each other's routines) to be able to do the following:
-\begin{enumerate}
-    \item User selects an RSR file
-    \item User specifies a radial range over which to obtain diffraction-corrected profile for a given resolution (in km) and a given uniform radial spacing (in km), where the latter is always less by at least a factor of 2 of the former.
-    \item Pipeline process does this:
-    \begin{enumerate}
-        \item Ryan writes a routine to determine actual min/max of radius range of data required to perform inversion at the desired resolution.
-        \item Glenn takes these requested radial boundaries, rounds them "outward" to fall on an integer km bin for the minimum radius, and an integer number of radial spacing bins that need not end up exactly on an exact integer boundary.
-        \item Jolene's geometry files enable Glenn to determine SPM data to grab from the RSR.
-        \item Glenn reads the RSR file data at full resolution but only for the requested interval.
-        \item Jolene and Glenn decide on when the normalization of the power will take place, and the correction of phase - after or before interpolation and filtering?
-        \item Glenn reads Jolene's power normalization curve, and his frequency drift curve (need to be sure not to have phase wrapping if we are interpolating phase) at, say, 1 sec time resolution.
-        \item In some order TBD, Glenn interpolates and filters the data from the time domain to the uniform radius domain, and normalizes and frequency-corrects the phase, to produce a diffraction pattern.
-        \item This normalized and phase-corrected diffraction pattern is supplied to Ryan's routine to produce retrieved power/phase/optical depth profiles. Diffraction pattern should be returned as well.
-    \end{enumerate}
-\end{enumerate}
-My hope is that this can be done in such a way that a user could say, for example: ``Here is a list of ring features and ring plane radius over which I'd like to obtain diffraction-corrected profiles at a given radial resolution (and perhaps a default uniform radial spacing that is some reasonable spacing smaller than the radial resolution by at least a factor of 2). Don't bother me with the details - compute the power/phase/optical depth you get from this inversion. I don't want to know about SPM or frequency drifts - just do it so that I can plot up my results!" This will require, of course, that all of you produce calibration files for power and frequency and time and radius that can be quickly read in and interpolated as needed. -Dick
 \subsubsection{\footnotesize RE: Updates 01/23/2018}
 v4.1 is done, it's v4 but with little bugs removed. I found out max(a,b) does nothing, and it needs to be max([a,b]), so that's been fixed everywhere. In the inversion page, about 10 variables that are a few thousand points long are defined inside the for loop everytime, this is a leftover of v1/v2 that was never corrected for. A time comparison of v4 vs v4.1 on rev007 E is 78 seconds to 76 seconds. I'm wondering if it'll be a bigger difference for revs that need larger windows, as this loading into memory is no longer included. A v5 is also done now. It uses an integral, rather than the convolution theorem/FFTs, and also includes the corrections from v4.1. Interestingly enough, it ran the fastest at 71 seconds. Note: Neither v4 nor v4.1 use powers of 2 in the FFT. This may be why v5 is fastest (3 FFT's versus 1 Total command). Below is the Encke Gap, Maxwell Ringlet, and v4-v5 of the Maxwell gap. v4 is white, v5 is red. For some reason, that completely eludes me right now, v4 is lagging behind v5 by a single point. I've made save files for rev007\_E for the interim report, but there was some error in the normalization so I don't think these should be used. I believe Jolene is making a new save file to be run. -Ryan
 \begin{figure}[H]
@@ -515,50 +387,6 @@ Final update for the night: I ran res\_char with v5, and using the optimal resol
         \includegraphics[width=\textwidth]{images/Maxwell_v4_1.png}
     \end{subfigure}
 \end{figure}
-Great - I'll be interested to find out what scale factor you applied to W. By the way, I think we discussed the possibility that this scale factor might be variable across the rings -- or not. Either one would help us diagnose the difference between Essam's approach and ours in defining $\Delta R_{\rm eff}$ -Dick
-\subsubsection{\footnotesize RE: Titan Ringlet Plots}
-Hi, Ryan - When you have a chance would you send me a plot (and location of plotting program) that does your best reproduce Essam's Titan ringlet plots for Rev007E from the User's Guide (100m, 1 km, and 10 km resolution)? 
-Also, could you process the F ring profiles Glenn did (rev 123 or rev 125, S, X, Ka) at 100-m resolution? He may need to supply you with 50-m resolution files. -Dick\\
-There is a code that uses v5 to make plots and compare with Essam, using Essam's data:\\
-/Volumes/dione\_raid2/Research/TC2017/rmaguire/v5/compare/rjm\_diff\_corr\_compare.pro
-The inputs are at the top of the code:
-\begin{itemize}
-    \item WType - Only 'kb25' or 'kbmod' are allowed for simplicity.
-    \item range = [start,end]
-    \item res\_km - a double for resolution, in kilometers.
-\end{itemize}
-At the bottom of the code is the filename you wish to save the output as:\\
-save, r, tau\_tc, power\_tc, power\_vals\_EAM, tau\_norm\_vals\_EAM,\$\\
-filename = 'comparisons/2018\_01\_24\_rev007\_E\_X43\_Essam\_Comparison\_Maxwell\_Ringlet\_res\_1000m\_v5\_code\_2.sav'
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_v5}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Titan_v5}
-    \end{subfigure}
-\end{figure}
-tau\_tc, power\_tc, power\_vals\_EAM, tau\_norm\_vals\_EAM are now saved at:\\
-/TC2017/rmaguire/v5/compare/comparisons/2018\_01\_25\_rev007\_E\_X43\_Essam\_Comparison\_Maxwell\_Ringlet\_res\_1000m\_v5\_code\_2.sav\\
-/TC2017/rmaguire/v5/compare/comparisons/2018\_01\_25\_rev007\_E\_X43\_Essam\_Comparison\_Titan\_Ringlet\_res\_1000m\_v5\_code\_1.sav\\
-Jolene made modifications so that our v2 savefile is used with v5 reconstruction, and then compares with Essam:\\
-/Volumes/dione\_raid2/Research/TC2017/rmaguire/v5/compare/rjm\_diff\_corr\_compare.pro\\
-I haven't looked over the code, but she showed me the plots for the Maxwell ringlet and they looked very good. Yesterday I discovered that, due to large window sizes, the Riemann sum that is used in v5 cannot adequately capture the nature of the rapid oscillations that exp(ipsi) has. So rev-133 and rev-123 should use v4.1. For rev007, even at 100m resolution, the windows are small enough that the Riemann sum captures the same amount of detail as the FFT. I'm actually curious to find out what form of integration FFT uses. Last night I tried Simpson and Newton-Cotes integration, rather than just TOTAL, but both seemed rather poor for rev133. Also note, a quadratic fit to psi for the c-ring ripples is horrible. Indeed, a quartic fit was pretty bad ass well. A 6th degree polynomial fit incredibly well, however. The fact that psi can still be fit very well by a polynomial demonstrates why FFT works so well. I will make a v4.1 version of this compare program now. Should be done soon.
-\subsubsection{\footnotesize RE: A Though on Phase}
-While looking through the v5 code, I noticed something. A while back I made psi positive, just because it matched Marouf, and then filed this under `Deal with later.' Psi is a purely geometrical factor. The integral is:
-\begin{equation*}
-    \int|\hat{T}|w(\rho-\rho_{0})e^{i(\theta-\psi)}d\rho
-\end{equation*}
-What is written is:
-\begin{equation*}
-    \int|\hat{T}|w(\rho-\rho_{0})e^{i(\theta+\psi)}d\rho
-\end{equation*}
-Now, if the phase is negative, this `almost' swaps things back to normal (But it doesn’t exactly, which is really weird as to why it worked to begin with. This is actually quite amazing). But what if, rather than the phase being negative, T runs clockwise. That is $\hat{T}=|\hat{T}|e^{-i\theta}$. This would fix the integral equation, and would also explain why, in order to get reconstructed phase to match essam, we need to do $\arctan(\frac{\Re(T)}{\Im(T)}$. Essam never specifies a clockwise or counter-clockwise preference. A way to test this is with a forward code. If the forward diffraction of the reconstructed T has real and imaginary parts swapped, then we'll know his phase runs clockwise. I ran reconstruction with this new mathematical scheme, and got 0.05\% error on Maxwell, using Essam's data. I think I should keep this scheme, perhaps as a v5.1 or something like that, just in case we need to go back to the old one. Comparison can be found here:\\
-rmaguire/v5/compare/comparisons/2018\_01\_25\_rev007\_E\_X43\_Essam\_Comparison\_Titan\_Ringlet\_res\_1000m\_v5\_code\_1.sav\\
--Ryan\\
-I agree that changing the sign of theta is the same as assuming that the phase in the complex plane rotates clockwise rather than CCW. Eq 15 in the User's Guide looks to me like it is a CCW rotation, though. But is it that case that you get something different from a 0.05\% error on Maxwell when you change the sign and use the opposite sense of rotation? -Dick\\
-The two different codes are: v5 $\hat{T}=|\hat{T}|e^{i\theta}$, $ker=we^{i\psi}$, v5.1 $\hat{T}=|\hat{T}|e^{-i\theta}$, $ker=we^{-i\psi}$. They both produce about 0.05\% errors. Also, I don't think a simply rotation would fix the phase. A rotation of pi/2 would give phase = atan(real / -imaginary). A rotation, and then a reflection, would give phase = atan(real/imaginary), which is what we're seeing, and which is what the clockwise phase would do. As to why the code that has a positive i psi in the exponential works, I have no idea. -Ryan
 \subsubsection{\footnotesize RE: Cassini Radio Ring Occultations During the Finale}
 I have not done this, but I think you would be safe if you simply left out the data some 100s of km outside of the rings. There are diffraction affects that modify the phase of the signal at high spatial frequencies that you presumably average over. If you have a specific orbital pass you'd like me to look into in more detail. I'd also check with Luciano and Paolo to see what they do about ring occultation data. -Dick\\
 Dick, We are struggling mightily to get a gravity field for Saturn to use in the final reconstruction. It appears that the rings are affecting the radio signal during the 5 gravity passes and are corrupting the gravity fit. We find that deleting the data during the ring occultations really helps the fit. However, we are basing our occultation deletes on the assumed ring radii and the associated ring occultation model. Do you know if there has been a determination of the actual times that the radio signal was significantly affected by the rings? -Bob\\
