@@ -1,23 +1,114 @@
-\documentclass[crop=false,class=book]{standalone}
-%---------------PREAMBLE------------%
-\input{../../preamble.tex}
-%---------------GLOSSARY------------%
+
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
 \makeglossaries
-\loadglsentries{../../glossary}
-\loadglsentries{../../acronym}
-%--------------Title Page-----------%
+\loadglsentries{../../../glossary}
+\loadglsentries{../../../acronym}
+%--------------------------Main Document----------------------------%
 \begin{document}
-\chapter{Cassini Interim January 2018 Report}
-\section*{\centering Executive Summary}
-This report is the combined Cassini RSS team response to Mission Closeout tasks RSS-14 and RSS-15, and includes a comprehensive interim report on the progress achieved to date in developing a software analysis data pipeline to obtain high-resolution diffraction-corrected radial profiles of Saturn's rings from RSS ring occultation observations. Detailed comparisons of the results of the processing pipeline with independently-produced examples in the Cassini Radio Science User's Guide and with previously-archived Cassini RSS profiles on the PDS show excellent agreement, validating the analysis methods. Additional examples of high-resolution (sub-km) diffraction correction are provided of rippled structure in the C ring and of the F ring, at three wavelengths, illustrating the ability of the code to produce accurate optical depth profiles of the rings. A proposed directory structure for new submissions to the PDS is presented, including overview results for the full set of RSS observations, intermediate event-by-event results such as the normalized diffraction pattern, and a detailed user's guide for the open-source processing software (written in Python 3) that will be hosted on GitHub. A schedule of future milestones and project goals is presented, including peer review by the PDS of the archive plan and software, and submission of 0.5 and 1.0 km resolution diffraction-corrected ring profiles to the PDS before the end of the closeout period (August 31, 2018).
-\clearpage
-\section{Introduction}
-\label{section:introduction}
-Over the course of the Cassini mission, the \gls{rss} Team planned, observed, and recorded dozens of ring \gls{occultation} experiments at up to three radio wavelengths ($0.9$, $3.6$, and $13$ cm, or \gls{ka-band}, \gls{x-band}, and \gls{s-band} band, respectively), providing high-resolution profiles of Saturn's rings at km-scale or better. Although the raw data for these observations are available from the \gls{pds}, as well as selected diffraction corrected \gls{x-band} observations of the rings at $1$ and $10$ km resolution, the processing steps required to convert the raw data to diffraction corrected profiles are complex, and considerable effort is required to accomplish these tasks. The \gls{rss} Team agreed to develop, test, and document open-source software, along with example products, to illustrate the \gls{diffraction reconstruction} process from start to finish. This interim report documents our progress to date and describes our proposed schedule to complete our agreed-upon tasks as part of the Cassini mission closeout effort.\par
-We begin in Section \ref{section:general approach and analysis methods} by describing our general approach and analysis methods. In Section \ref{section:critical tests of processing methods and codes} we document critical tests of our processing methods and codes by comparing our results with examples provided in the \gls{crsug}, with a representative independently processed Cassini \gls{rss} ring \gls{occultation} experiment already on the \gls{pds}, and with additional unarchived results provided by \gls{rss} team member Essam Marouf. In Section \ref{section:proposed pds organization and contents} we describe in outline form the proposed organization and contents of our planned submissions to the \gls{pds}. Section \ref{section:data pipeline} describes our current progress in converting our existing processing software to freely available Python 3 code, to be hosted on GitHub. Finally, Section \ref{section:future milestones and delivery shedule} describes future milestones and our currently-envisioned delivery schedule.
-\section{General Approach and Analysis Methods}
-\label{section:general approach and analysis methods}
-We have based our analysis methods on two primary documents: the definitive paper ``Profiling Saturn's Rings by Radio Occultation" \citealt{Marouf1986}, henceforth MTR86, which describes the theory of the \gls{diffraction reconstruction} technique at the heart of the analysis, and the more recent and Cassini-specific \gls{crsug} that provides additional information about the calibration steps required to produce a calibrated diffraction pattern that is the input to the \gls{fresnel transform} inversion process. We test our procedures by comparing our intermediate and final products with those that have been independently obtained by \gls{rss} team member Essam Marouf, the originator of the diffraction correction technique and the producer of the Cassini \gls{rss} ring profiles that are currently archived on the \gls{pds}. All of our analysis has been done independently, with no shared information, algorithms, or software. While not ideal, this approach has had the salutary effect of enabling us to identify critical information that is currently absent from the Cassini \gls{rss} archived products on the \gls{pds}, which we recommend be added. \par
+    \newif\ifresearchcassiniinterimreport
+    \ifx\ifresearchwhitinobservatory\undefined
+        \title{Cassini Interim January 2018 Report}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \chapter*{Cassini Interim January 2018 Report}
+        \addcontentsline{toc}{chapter}{Cassini Interim January 2018 Report}
+        \markboth{}{CASSINI INTERIM JANUARY 2018 REPORT}
+        \setcounter{chapter}{1}
+        \graphicspath{{../../../images/}}
+    \else
+        \chapter{Cassini Interim January 2018 Report}
+    \fi
+    \section*{\centering Executive Summary}
+        This report is the combined Cassini RSS team response to
+        Mission Closeout tasks RSS-14 and RSS-15, and includes a comprehensive
+        interim report on the progress achieved to date in developing a
+        software analysis data pipeline to obtain high-resolution
+        diffraction-corrected radial profiles of Saturn's rings from RSS ring
+        occultation observations. Detailed comparisons of the results of the
+        processing pipeline with independently-produced examples in the
+        Cassini Radio Science User's Guide and with previously-archived
+        Cassini RSS profiles on the PDS show excellent agreement, validating
+        the analysis methods. Additional examples of high-resolution (sub-km)
+        diffraction correction are provided of rippled structure in the C
+        ring and of the F ring, at three wavelengths, illustrating the ability
+        of the code to produce accurate optical depth profiles of the rings.
+        A proposed directory structure for new submissions to the PDS is
+        presented, including overview results for the full set of RSS
+        observations, intermediate event-by-event results such as the
+        normalized diffraction pattern, and a detailed user's guide for
+        the open-source processing software (written in Python 3) that will
+        be hosted on GitHub. A schedule of future milestones and project
+        goals is presented, including peer review by the PDS of the archive
+        plan and software, and submission of 0.5 and 1.0 km resolution
+        diffraction-corrected ring profiles to the PDS before the end of
+        the closeout period (August 31, 2018).
+        \clearpage
+        \section{Introduction}
+            \label{section:introduction}
+            Over the course of the Cassini mission, the \gls{rss} Team
+            planned, observed, and recorded dozens of ring \gls{occultation}
+            experiments at up to three radio wavelengths ($0.9$, $3.6$,
+            and $13$ cm, or \gls{ka-band}, \gls{x-band}, and \gls{s-band}
+            band, respectively), providing high-resolution profiles of
+            Saturn's rings at km-scale or better. Although the raw data
+            for these observations are available from the \gls{pds}, as
+            well as selected diffraction corrected \gls{x-band} observations
+            of the rings at $1$ and $10$ km resolution, the processing steps
+            required to convert the raw data to diffraction corrected profiles
+            are complex, and considerable effort is required to accomplish
+            these tasks. The \gls{rss} Team agreed to develop, test, and
+            document open-source software, along with example products, to
+            illustrate the \gls{diffraction reconstruction} process from
+            start to finish. This interim report documents our progress
+            to date and describes our proposed schedule to complete our
+            agreed-upon tasks as part of the Cassini mission closeout effort.
+            \par\hfill\par
+            We begin in Section
+            \ref{section:general approach and analysis methods} by describing
+            our general approach and analysis methods. In Section
+            \ref{section:critical tests of processing methods and codes} we
+            document critical tests of our processing methods and codes by
+            comparing our results with examples provided in the \gls{crsug},
+            with a representative independently processed Cassini \gls{rss}
+            ring \gls{occultation} experiment already on the \gls{pds}, and
+            with additional unarchived results provided by \gls{rss} team
+            member Essam Marouf. In Section
+            \ref{section:proposed pds organization and contents} we describe
+            in outline form the proposed organization and contents of our
+            planned submissions to the \gls{pds}. Section
+            \ref{section:data pipeline} describes our current progress in
+            converting our existing processing software to freely available
+            Python 3 code, to be hosted on GitHub. Finally, Section
+            \ref{section:future milestones and delivery shedule} describes
+            future milestones and our currently-envisioned delivery schedule.
+        \section{General Approach and Analysis Methods}
+            \label{section:general approach and analysis methods}
+            We have based our analysis methods on two primary documents:
+            the definitive paper
+            ``Profiling Saturn's Rings by Radio Occultation"
+            \citealt{Marouf1986}, henceforth MTR86, which describes the
+            theory of the \gls{diffraction reconstruction} technique at
+            the heart of the analysis, and the more recent and
+            Cassini-specific \gls{crsug} that provides additional information
+            about the calibration steps required to produce a calibrated
+            diffraction pattern that is the input to the
+            \gls{fresnel transform} inversion process. We test our procedures
+            by comparing our intermediate and final products with those that
+            have been independently obtained by \gls{rss} team member
+            Essam Marouf, the originator of the diffraction correction
+            technique and the producer of the Cassini \gls{rss} ring profiles
+            åthat are currently archived on the \gls{pds}. All of our analysis
+            has been done independently, with no shared information,
+            algorithms, or software. While not ideal, this approach has had
+            the salutary effect of enabling us to identify critical
+            information that is currently absent from the Cassini \gls{rss}
+            archived products on the \gls{pds}, which we recommend be added.
+            \par\hfill\par
 A key objective of our work is to provide a practical guide to Cassini \gls{rss} ring \gls{occultation} analysis, from start to finish, beginning with an overview of all of the ring occultation experiments, including key information that will enable future users to decide which of the many occultation observations are of most interest for a given science analysis. We will provide tutorials and specific examples, making use of our open-source software package, so that users can reproduce our results at each stage. \par
 Our emphasis has been on clarity, sometimes at the expense of sophistication, and we recognize that there are more advanced signal analysis and \gls{diffraction reconstruction} techniques that can be employed to improve the quality of our results. Thus, we regard our work as an extensively documented starting point for others, rather than a definitive representation of the current state of the art. Nevertheless, as we will show, our analysis methods compare quite well with existing results that have been independently produced by Essam Marouf.\par
 We have developed our software primarily using IDL and Matlab, two commercial products that are widely used in the astronomical and general scientific communities. Except where otherwise indicated, the results we show in this interim report have all been produced using these tools. As we describe below, we have begun to develop a simple and flexible data pipeline, written in Python 3, that incorporates the methods and algorithms we have used during our software development. We will complete the process of translating our codes and procedures to Python 3, and hosting the software on \href{https://github.com/NASA-Planetary-Science/rss_ringoccs}{GitHub}, once we have finalized the contents and organization of our proposed \gls{pds} submissions with the \gls{pds} Ring-Moon Systems Node. We plan to test our final code on both Linux and Macintosh systems, using two freely-available Python 3 distributions: \href{https://www.anaconda.com/distribution/}{Anaconda} and \href{https://www.enthought.com/product/enthought-python-distribution/}{Enthought}. \par
@@ -44,7 +135,13 @@ The first step in this process is to estimate the frequency offset of the direct
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth,page = 1,trim = {0.0in 1.45in 0in 1.65in},clip]{user_guide_fig_3-9.pdf}
+        \captionsetup{type=figure}
+        \includegraphics[%
+            width=\textwidth,
+            page=1,
+            trim={0.0in 1.45in 0in 1.65in},
+            clip
+        ]{user_guide_fig_3-9.pdf}
         \caption{CRSUG Fig. 3-9}
         \label{fig:UGfig3-9_1}
     \end{subfigure}
