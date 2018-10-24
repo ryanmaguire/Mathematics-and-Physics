@@ -1,0 +1,152 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../../preamble.tex}
+\graphicspath{{../../../../images/}}    % Path to Image Folder.
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourseschaostheory\undefined
+        \section*{Chaos Theory}
+        \setcounter{section}{1}
+        \renewcommand\thefigure{\arabic{section}.\arabic{figure}}
+        \renewcommand\thesubfigure{%
+            \arabic{section}.\arabic{figure}.\arabic{subfigure}}
+    \else
+        \section{Lecture Notes from Fall 2016 (UML)}
+    \fi
+    \subsection{First Order Equations}
+        The first differential equation that is often studied
+        is $\dot{x}(t)=ax(t)$, where $\dot{x}$ denotes the
+        derivative of $x$ with respect to $t$. In this equation
+        $a$ is some fixed constant parameter, and each real
+        value $a$ defines a different differential equation.
+        We can solve this by integrating and invoking the
+        fundamental theorem of calculus. In general, a
+        differential equation is an equation that relates
+        a differentiable functions to its derivatives.
+        The general solution to a differential equation is
+        the set of all functions that satisfy the
+        differential equation.
+        \begin{frametheorem}{}{thm:CHAOS:SIMPLE_DIFF_EQ}
+            If $x(t)$ is a differentiable function such
+            that $x(0)=x_{0}$ and there is a $k\in\mathbb{R}$
+            such that for all $t\in\mathbb{R}$, $\dot{x}(t)=kx(t)$,
+            then $x(t)=x_{0}\exp(kt)$.
+        \end{frametheorem}
+        \begin{proof}
+            Let $y(t)=\exp(kt)$. Then $\dot{y}(t)=ky(t)$,
+            and $y(t)\ne{0}$ for all $t\in\mathbb{R}$.
+            Let $F(t)=x(t)/y(t)$. Then:
+            \begin{equation*}
+                \dot{F}(t)=
+                \frac{y(t)\dot{x}(t)-\dot{y}(t)x(t)}{y^{2}(t)}
+                =\frac{y(t)\big(\dot{x}(t)-kx(t)\big)}{y^{2}(t)}
+                =\frac{1}{y(t)}\big(\dot{x}(t)-kx(t)\big)
+            \end{equation*}
+            But $\dot{x}(t)-kx(t)=0$, and thus $\dot{F}(t)=0$ for
+            all $t\in\mathbb{R}$. But then $F(t)$ is a constant
+            function. Thus there is a $C\in\mathbb{R}$ such
+            that $x(t)=Cy(t)$. But $x(0)=x_{0}$, and therefore
+            $C=x_{0}$. Thus, $x(t)=x_{0}\exp(kt)$.
+        \end{proof}
+        The proof shows that the solution to $\dot{x}(t)=kx(t)$
+        is uniquely determined if $x(0)$ is known. This can
+        be replaced by knowledge of $x(t_{0})$ for any point
+        $t_{0}\in\mathbb{R}$.
+        Such restraints are called initial conditions to a
+        differential equation. Initial conditions are
+        requirements that a solution to the differential
+        equation must satisfy. Such requirements can be
+        the value of $x(t_{0})$ at a certain point
+        $t_{0}$, or a requirement on $\dot{x}(t)$.
+        \begin{frameexample}{}{}
+            Consider the following initial value problem:
+            \begin{align*}
+                \dot{x}(t)&=ax(t)
+                &
+                x(t_{0})&=x_{0}
+            \end{align*}
+            Using the previous theorem, we can translate the
+            problem by $\exp(-kt_{0})$ to create the initial
+            value problem $\dot{y}(t)=ky(t)$, $y(0)=x_{0}$.
+            We know the solution to this is
+            $y(t)=x_{0}\exp(kt)$. Thus, the solution to the
+            original initial value problem is:
+            \begin{equation*}
+                x(t)=x_{0}\exp(k(t-t_{0}))
+            \end{equation*}
+        \end{frameexample}
+        An important class of solutions to differential
+        equations are \textit{equilibrium solutions}.
+        \begin{framedefinition}{Equilibrium Solution}{}
+            An equilibrium solution to a differential
+            equation is a solution $x(t)$ such that
+            $\dot{x}(t)=0$ for all $t\in\mathbb{R}$.
+            That is, a constant solution $x(t)=c$.
+        \end{framedefinition}
+        Studying our first problem $\dot{x}(t)=kx(t)$,
+        we see that the only equilibrium solution
+        occurs when $x_{0}=0$. Another important concept
+        is the limiting behavior of the solution to a
+        differential equation. The limiting behavior
+        is often dependent on the various parameters that
+        may be present in a given differential equation.
+        We can see this by further studying $\dot{x}(t)=kx(t)$.
+        If $k=0$ we see that $x(t)$ is a constant function. That
+        is, $x(t)=x_{0}$ for all $t\in\mathbb{R}$. For $k>0$,
+        solutions diverges monotonically to $\infty$
+        ($x_{0}>0$) or $-\infty$ ($x_{0}<0$).
+        Finally, if $k<0$ then $x(t)$ converges to $0$
+        for all values of $x_{0}$.
+        \subsubsection{Notes on the Jordan Normal Form}
+            Every square matrix $A$ is similar to an upper
+            triangular matrix $J$ in
+            \textit{Jordan normal form} whose diagonal entries
+            are the eigenvalues of $A$. That is, there exists
+            an invertible matrix $P$ such that $P^{-1}AP=J$.
+            The trace of $A$ is equal to the trace of $J$:
+            \begin{equation*}
+                \Tr(J)
+                =\Tr(P^{-1}AP)
+                =\Tr(P^{-1}PA)
+                =\Tr(IA)=\Tr(A)
+            \end{equation*}
+        \subsubsection{Notes on Conjugacy}
+            \begin{minipage}[t]{0.49\textwidth}
+                We have:
+                \begin{align*}
+                    X'(t)&=AX(t),\quad
+                    X(0)=X_{0}\\
+                    \Rightarrow
+                    X(t)&=e^{tA}X_{0}\\
+                    \Rightarrow
+                    \phi^{A}(t,X_{0})
+                    &=e^{tA}X_{0}
+                \end{align*}
+            \end{minipage}
+            \vline
+            \hfill
+            \begin{minipage}[t]{0.49\textwidth}
+                If $B=T^{-1}AT$, for some matrix $T$, then:
+                \begin{align*}
+                    Y'(t)&=BY(t),\quad
+                    Y(0)=Y_{0}\\
+                    &=T^{-1}ATY(t)\\
+                    \Rightarrow
+                    Y(t)
+                    &=e^{tT^{-1}AT}Y_{0}\\
+                    &=T^{-1}e^{tA}TY_{0}\\
+                    \Rightarrow
+                    \phi^{B}(t,Y_{0})
+                    &=T^{-1}e^{tA}TY_{0}
+                \end{align*}
+            \end{minipage}
+            Thus, the homeomorphism is $h(X)=T^{-1}X$,
+            and we have:
+            \begin{equation*}
+                \phi^{B}(t,h(X_{0}))
+                =\phi^{B}(t,T^{-1}X_{0})
+                =T^{-1}e^{tA}T(T^{-1}X_{0})
+                =T^{-1}e^{tA}X_{0}
+                =h(\phi^{A}(t,X_{0}))
+            \end{equation*}
+\end{document}
