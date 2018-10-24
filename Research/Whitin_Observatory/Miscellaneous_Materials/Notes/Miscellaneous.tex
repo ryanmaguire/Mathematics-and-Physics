@@ -1,6 +1,7 @@
 \documentclass[crop=false,class=article,oneside]{standalone}
 %----------------------------Preamble-------------------------------%
 \input{../../../../preamble.tex}
+\graphicspath{{../../../../images/}}    % Path to Image Folder.
 %--------------------------Main Document----------------------------%
 \begin{document}
     \ifx\ifphysicscourseselectromagnetismI\undefined
@@ -8,33 +9,6 @@
         \setcounter{section}{1}
     \fi
     \subsection{Other Notes}
-        \subsubsection{Notes from the Mathematica Seminar}
-            Wolfram Alpha uses the same technologies as siri,
-            little fun fact. Mathematica can use wolfram alpha.
-            This allows for standard english input that can be
-            translated into the wolfram languages.
-            Non-mathematical inputs can also be used, such as
-            'Current stock price of Google.'
-            Mathematica notebook has a classroom assistant
-            that allows for easy input of mathematical
-            expressions. There is also extensive documentation
-            in the Help drop menu. There are three rules to
-            the Wolfram language:
-            \begin{enumerate}
-                \item Functions in Mathematica are capitalized.
-                \item Use [] around function arguments.
-                \item Use \{\} to denote lists and ranges.
-            \end{enumerate}
-            Manipulate is useful for making models interactive:
-            Manipulate[Plot[Sin[yx],\{x,0,2$\pi$\}],\{y,0,2\}]
-            Other examples such as Pascal's triangle are also
-            possible. Image processing is also possible within
-            the manipulate function. Manipulates can be nested
-            inside of each other to create large and complex
-            models. The wolfram demonstration project has 11,000
-            premade models for demonstration. Wolframalpha can
-            be used to teach math. C and Python can be run
-            from inside of Mathematica.
         \subsubsection{Some Useful References}
             \begin{itemize}[itemsep=0pt]
                 \item \href{https://pds-rings.seti.org/%
@@ -131,37 +105,22 @@
                            {More spiceypy.}
             \end{itemize}
         \subsubsection{Conversation with Paul Schinder}
-            \begin{enumerate}
-                \item Uses Hanning (Not Hamming) filter.
-                \item Does not use $I$ and $Q$ for phase.
-                \item Pads by $x20$, takes $FFT$, apply Hanning filter,
-                      and identifies frequency max.
-                \item Does CFT to find location of peak.
-                \item Uses information in RSR header to convert
-                      to sky frequency.
-                \item This is the Earth received frequency.
-                      Use Doppler equation and reconstructed trajectory
-                      to compute USO frequency.
-            \end{enumerate}
-\subsubsection{\footnotesize RE: interpolation/averaging code to convert RSR data in SPM to averaged data in uniform radius}
-Please look at TC2017/programs/IDL/rgf\_spm2uniform\_rho\_km.pro. This function returns an array averaged over evenly spaced bins in radius, given an input data array evenly spaced in time and input arrays of evenly-spaced SPM, the data array evaluated at those SPM, an array of rho\_km evaluated at those SPM, and an array of the desired evenly-spaced radius bins. A typical calling sequence might be:
-\begin{lstlisting}[language=IDL]
-I_corr_vals=rgf_spm2uniform_rho_km(I_corr_SPM_vals,SPM_vals,rho_km_SPM_vals,rho_km_vals)
-\end{lstlisting}
-where:
-\begin{itemize}
-    \item SPM\_vals the array of SPMs corresponding the raw input RSR data
-    \item I\_corr\_SPM\_vals would be the phase-corrected array of I values at these SPM\_vals
-    \item rho\_km\_SPM\_vals would be the radii corresponding to these SPM\_vals,
-    rho\_km\_vals would be the radii of the desired averaged input data (spaced evenly in radius)
-\end{itemize}
-This routine accounts for fractional time bins and assumes the input radial resolution is higher than the output radial resolution. Give it a try. Be aware that when computing phases you do NOT want to average over the input phases, but instead average separately over the individual I and Q values  and THEN compute the average phase from atan (avgQ,avgI). You might want to compare the results of averaging over the phase instead of averaging over I and Q to see if my conjecture is correct. Similarly, you can either compute the average power by averaging over the individual power values, or instead compute the average I and the average Q and form the average power from (avgI\textsuperscript{2} + avgQ\textsuperscript{2}).
+            Uses Hanning (Not Hamming) filter.
+            Do not use $I$ and $Q$ for phase.
+            Pads by $x20$, takes $FFT$, apply Hanning filter,
+            and identifies frequency max.
+            Does CFT to find location of peak.
+            Uses information in RSR header to convert
+            to sky frequency.
+            This is the Earth received frequency.
+            Use Doppler equation and reconstructed trajectory
+            to compute USO frequency.
 \subsubsection{\footnotesize RE: RSR Power and Phase Extraction Comparison}
 \begin{figure}[H]
     \centering
     \captionsetup{type=figure}
     \includegraphics[page=1,trim={2cm 0 2cm 0},clip,width=6in]{RingletPhase2009.pdf}
-    \caption{Attachment from Paulo Tortora}
+    \caption{Attachment 1}
 \end{figure}
 \begin{figure}[H]
     \centering
@@ -169,11 +128,39 @@ This routine accounts for fractional time bins and assumes the input radial reso
     \includegraphics[page=1,trim={2cm 0 2cm 0},clip,width=0.49\textwidth]{plot_amp_phase_jwa.pdf}
     \hfill
     \includegraphics[page=1,trim={2cm 0 1.5cm 0},clip,width=0.49\textwidth]{plot_amp_phase_compare.pdf}
-    \caption{Attachments from John Armstrong}
+    \caption{Attachment 2}
 \end{figure}
-I'd like to compare our team's approaches to estimating power and phase from RSS RSR recordings of ring occultations, so that we can optimize the retrieval of high-resolution diffraction-corrected ring profiles. To that end, I've provided examples for observations of the F ring - a narrow ringlet isolated in free space. Given the complex signal (power and phase), the diffraction-corrected radial profile can be obtained by performing a Fresnel transform, but the quality of the retrieved profile depends strongly on the quality of the received signal as extracted from the RSR. I'd be very grateful if you would use your own algorithms to extract power and phase, and compare them to the results I've obtained. I estimate the power from the sum of the signal in the vicinity of the maximum signal in the power spectrum. This can probably be improved by performing a fit to the peak power rather than just adding adjacent samples, but I have not explored this part of things yet. I'm more concerned about extracting the phase. In this example, I've determined the phase simply by taking atan(<Q>,<I>), where <I> and <Q> are the time-averaged I and Q values directly from the RSR, and the final phase is computed by unwrapping the phase and removing the local drift. That is, I do NOT use any frequency information directly, and I suspect that the phase retrieval can be made more robust and require less fiddling if I use another approach. This folder contains the results of attempts to retrieve the power and phase of the RSS X-band signal in the vicinity of the F ring from the Rev 123E X63 observations. 16 KHz data on the PDS Atmosphere node can be found \href{https://pds-atmospheres.nmsu.edu/cgi-bin/getdir.pl?volume=cors_0302&dir=SROC10_359/RSR}{here}, S56SROE2009360\_0145NNNX63RD.2A2
-1 KHz is on the SOPC: /data/RS\_Share/s56-rev123-rsr-data/S56SROE2009360\_0145NNNX63RD.2A1
-I've centered on the data interval 50 to 70 sec after 17047 sec past midnight on the day of the event. Contents of this folder:
+I'd like to compare our team's approaches to estimating power and
+phase from RSS RSR recordings of ring occultations, so that we can
+optimize the retrieval of high-resolution diffraction-corrected ring
+profiles. To that end, I've provided examples for observations of the
+F ring - a narrow ringlet isolated in free space. Given the complex
+signal (power and phase), the diffraction-corrected radial profile can
+be obtained by performing a Fresnel transform, but the quality of the
+retrieved profile depends strongly on the quality of the received
+signal as extracted from the RSR. I'd be very grateful if you would
+use your own algorithms to extract power and phase, and compare them
+to the results I've obtained. I estimate the power from the sum of the
+signal in the vicinity of the maximum signal in the power spectrum.
+This can probably be improved by performing a fit to the peak power
+rather than just adding adjacent samples, but I have not explored this
+part of things yet. I'm more concerned about extracting the phase. In
+this example, I've determined the phase simply by taking
+atan(<Q>,<I>), where <I> and <Q> are the time-averaged I and Q values
+directly from the RSR, and the final phase is computed by unwrapping
+the phase and removing the local drift. That is, I do NOT use any
+frequency information directly, and I suspect that the phase retrieval
+can be made more robust and require less fiddling if I use another
+approach. This folder contains the results of attempts to retrieve the
+power and phase of the RSS X-band signal in the vicinity of the F ring
+from the Rev 123E X63 observations. 16 KHz data on the PDS Atmosphere
+node can be found \href{https://pds-atmospheres.nmsu.edu/cgi-bin/getd
+ir.pl?volume=cors_0302&dir=SROC10_359/RSR}{here},
+S56SROE2009360\_0145NNNX63RD.2A2
+1 KHz is on the SOPC:
+/data/RS\_Share/s56-rev123-rsr-data/S56SROE2009360\_0145NNNX63RD.2A1
+I've centered on the data interval 50 to 70 sec after 17047 sec past
+midnight on the day of the event. Contents of this folder:
 \begin{itemize}
     \item README.txt - this file
     \item rsr\_info\_v3a\_20170518a.pdf - plot of Dick's retrieval, averaged to 0.02 sec res
@@ -186,22 +173,13 @@ I've centered on the data interval 50 to 70 sec after 17047 sec past midnight on
     \end{itemize}
     \item ringlet\_closeup.pdf - John Armstrong's retrieval using the 1 KHz file ringlet\_2min.pdf - John Armstrong's regional retrieval using the 1 KHz file.
 \end{itemize}
-When you have a chance, would you compare your results with my tabulated and plotted results, and describe the technique you used to estimate both power and phase? -Richard French
+When you have a chance, would you compare your results with my tabulated and plotted results, and describe the technique you used to estimate both power and phase?
 \par\hfill\par
-Hi Dick, I did my homework during the PSG and generated the attached plot. The only difference is that the top panel is raw data at 1KHz, the bottom panel is compressed at 10Hz (0.1s). I think they seem pretty similar to yours, I don’t expect any processing to do better than what you got already. Is this what you were expecting from us? -Paolo Tortora
+I did my homework during the PSG and generated the attached plot. The only difference is that the top panel is raw data at 1KHz, the bottom panel is compressed at 10Hz (0.1s). I think they seem pretty similar to yours, I don’t expect any processing to do better than what you got already. Is this what you were expecting from us?
 \par\hfill\par
-Hi Dick, I attach three things:  a plot of my estimated amplitude and phase, a plot with my estimates superimposed on the ones you sent in file “Case22.tab”, and a list of the points in my plot (SPM, amplitude (linear), and phase (cycles)).  The original data file was S56SROE2009360\_0145NNNX63RD.2A1 (X-band; DSS63; 1kHz). I ran my PLL (with, for my reference: fbw = 20; delt = 0.025, tagc = 0.025). I did a linear fit to the frequency +/- 1 minute from the ring and subtracted the fit, then integrated the result to get phase.  I subsequently smoothed the estimated amplitude and phase.  The smoothing is slightly different in each case because the PLL parameters can’t be adjusted to give exactly the same Fourier content at each output (due to the historical way the program was written, since I did not care about amplitude except to stabilize the input to the phase detector).   The intent was to get approximately the same Fourier content in the phase and amplitude in the final file. The output is at 0.025 second intervals in the attached file. My disclaimer is:  The procedures that Essam and you use are clearly far superior to what I did here.  I am using my code in a way that was not intended in the design and am concerned (in particular, relevant for your application) that the group delay in the processing for the phase and amplitude estimates may not (quite) be the same.  I offer the attached if this level of processing might be useful for the comparison you mentioned in your original e-mail. -John Armstrong
-\subsubsection{\footnotesize RE: Question About Time Tags for RSR Files}
-In the process of developing a software pipeline for RSS ring data, a question has arisen about the exact meaning of time tags for RSR files. For simplicity, consider a 1 kHz file, starting at $1000$ SPM (seconds past minute) with $\Delta t$ between samples being $0.001$ sec. Three questions:
-\begin{itemize}
-    \item Does each sample     represent an average over $0.001$ sec, or some kind of instantaneous measurement?
-    \item In the either case, should the time tag for the first bin be CENTERED  on the first bin - that is, between $1000.0000$ and $1000.0010$ (and thus be $1000.0005$)? or should it be $10000.0000$, or even $999.9995$ (in which case it would represent the average of the previous $0.001$ sec and be written out at $1000.0000$)?
-    \item What do you gravity folks assume, Paolo and Luciano?
-\end{itemize}
-As a practical matter, this is not important, since the spacecraft location is not known to this level of precision, but when we document our code in detail, I'd like to know what the official answer is, and not just dismiss it as unimportant. -Richard French\par
-The time tags are given by that RSR at the beginning of every second. What follows is all the samples at whatever sample rate. So the first time tag in your example should be $1000.000$, and this sample represents the first millisecond from $1000.000$ to $1000.001$. In order to make your own computations and time tag in the middle of an interval, you need to add half that interval, in this case $0.0005$. For example, one thousand milliseconds tagged by the RSR from 1000.000 to 1000.999: 1000.000, 1000.001,..., 1000.998, 1000.999, each covers one millisecond centered at 0.0005: 1000.0005, 1000.0015,..., 1000.9985, 1000.9995. The average works out to $1000.5$, which covers the second which began at $1000.000$. The time tag for the first second of data is placed at $1000.5$. -Danny Kahan
+I attach three things:  a plot of my estimated amplitude and phase, a plot with my estimates superimposed on the ones you sent in file “Case22.tab”, and a list of the points in my plot (SPM, amplitude (linear), and phase (cycles)).  The original data file was S56SROE2009360\_0145NNNX63RD.2A1 (X-band; DSS63; 1kHz). I ran my PLL (with, for my reference: fbw = 20; delt = 0.025, tagc = 0.025). I did a linear fit to the frequency +/- 1 minute from the ring and subtracted the fit, then integrated the result to get phase.  I subsequently smoothed the estimated amplitude and phase.  The smoothing is slightly different in each case because the PLL parameters can’t be adjusted to give exactly the same Fourier content at each output (due to the historical way the program was written, since I did not care about amplitude except to stabilize the input to the phase detector).   The intent was to get approximately the same Fourier content in the phase and amplitude in the final file. The output is at 0.025 second intervals in the attached file. My disclaimer is:  The procedures that Essam and you use are clearly far superior to what I did here.  I am using my code in a way that was not intended in the design and am concerned (in particular, relevant for your application) that the group delay in the processing for the phase and amplitude estimates may not (quite) be the same.  I offer the attached if this level of processing might be useful for the comparison you mentioned in your original e-mail. 
 \subsubsection{\footnotesize RE: Padding - RSR to Power/Frequency}
-Thanks again, Paul, for all your help with this. I've been reading through your codes and doing a bit of reading about signal processing as well, so I am now in a position to ask some sensible questions. As a starting point, it would be helpful to go over with you - by phone or email:
+I've been reading through your codes and doing a bit of reading about signal processing as well, so I am now in a position to ask some sensible questions. As a starting point, it would be helpful to go over with you - by phone or email:
 \begin{enumerate}
     \item your recommended standard settings for the port.input file for 16kHz RSR data
     \begin{itemize}
@@ -313,8 +291,8 @@ Thanks, Paul - we'll play around with this and see if we can make sense of it al
         \item When rms of phase exceeds 0.1 cycle, this is a practical limit to the reliability of the phase evaluation and thus to the details of the ring structure at this resolution.
     \end{itemize}
 \end{enumerate}
-\subsubsection{\footnotesize RE: phase wrapping - one more suggestion - and a math problem for Ryan}
-Another quick idea to help solidify our understanding of the origin/solution of the phase wrapping problem. You might try running some intermediate cases of the number of points in the FFT: 2048, 4096, and 8192 come to mind as obvious possibilities. I expect that you'd see a trend in the magnitude of the difference in the phase shifts with the degree of averaging. I'm struck by the large DC phase shift, in addition to the slope that you demonstrate in the middle panel of plots - I would expect that this would increase rapidly with the amount of averaging, and it would be interesting to plot just that DC offset as a function of the number of points in the FFT divided by 1024, your base case. It might have some interesting curvature, and this is something that you could relate to the magnitude of the error in Simpson's rule, which is the method you are using for integration. Ryan would probably have some interest in predicting the error in Simpson's rule as you increase the step size, and seeing if your results agree. Similarly, if my hunch about the origin of the problem is right, you should find improvement as you successively increase the number of sub-points in your spline interpolation of the 16384 case from 2 to 16 (or perhaps even more). If all of this works, I think we will have a more robust solution of the frequency offset problem, but we'll just have to see! -Richard French
+\subsubsection{\footnotesize RE: phase wrapping}
+Try running some intermediate cases of the number of points in the FFT: 2048, 4096, and 8192 come to mind as obvious possibilities. I expect that you'd see a trend in the magnitude of the difference in the phase shifts with the degree of averaging. I'm struck by the large DC phase shift, in addition to the slope that you demonstrate in the middle panel of plots - I would expect that this would increase rapidly with the amount of averaging, and it would be interesting to plot just that DC offset as a function of the number of points in the FFT divided by 1024, your base case. It might have some interesting curvature, and this is something that you could relate to the magnitude of the error in Simpson's rule, which is the method you are using for integration. Ryan would probably have some interest in predicting the error in Simpson's rule as you increase the step size, and seeing if your results agree. Similarly, if my hunch about the origin of the problem is right, you should find improvement as you successively increase the number of sub-points in your spline interpolation of the 16384 case from 2 to 16 (or perhaps even more).
 \subsubsection{\footnotesize RE: Phase Calculation to Try}
 I don't think we've yet tried an idea I had for computing the phase that might be more accurate than what we are doing now. Instead of using $phase = atan(\langle Q \rangle,\langle I \rangle)$, where the $\langle \rangle$ represents an average of measurements straight from the RSR (which I think is what we are doing now), the idea is that we use an analogous method to what we are doing when we compute power. 
 \begin{enumerate}
@@ -342,53 +320,4 @@ Hi, Mitch - We're preparing a sample submission to the PDS of reduced Cassini RS
 \end{enumerate}
 Once we have some of Essam's high-resolution profiles, we'll be able to compare how the two sets agree. I fervently wish that we had a single set of data to submit, but I am firmly committed to producing open-source software, and I don't think it makes sense to archive the software without also archiving the results that come out of using the software. Would you and Mark give some thought to your preferred way of ingesting these two different sets of ring profiles (Essam's and mine), both in terms of organization and target audience? Our proposed directory structure is similar to the existing one, but we intend to include additional columns in many of the existing data files, and to add a new data file type that contains the normalized diffraction pattern (power and phase) that goes into the Fresnel inversion routine. Finally, we will also provide a comprehensive data catalog, images of occultation geometry as viewed from the earth, elevation plots that show which data files are best for each individual occultation, etc. - these will need a home in our data archive as well. Thanks, Mitch - no immediate rush, but I would like to chat with you about this once you've had a chance to digest this message and consult with Mark. -Dick\\
 Hi Dick, I just wanted to let you know I did get your email. Mark and I have been completely out of synch this week. We’ve identified an intersecting gap in our schedules Thursday afternoon when he and I can discuss our responses. I should be ready to chat with you on this Friday if you have some time. I should be available from about 9:00am until sometime early afternoon. -Mitch
-\subsubsection{\footnotesize RE: Updates 01/23/2018}
-v4.1 is done, it's v4 but with little bugs removed. I found out max(a,b) does nothing, and it needs to be max([a,b]), so that's been fixed everywhere. In the inversion page, about 10 variables that are a few thousand points long are defined inside the for loop everytime, this is a leftover of v1/v2 that was never corrected for. A time comparison of v4 vs v4.1 on rev007 E is 78 seconds to 76 seconds. I'm wondering if it'll be a bigger difference for revs that need larger windows, as this loading into memory is no longer included. A v5 is also done now. It uses an integral, rather than the convolution theorem/FFTs, and also includes the corrections from v4.1. Interestingly enough, it ran the fastest at 71 seconds. Note: Neither v4 nor v4.1 use powers of 2 in the FFT. This may be why v5 is fastest (3 FFT's versus 1 Total command). Below is the Encke Gap, Maxwell Ringlet, and v4-v5 of the Maxwell gap. v4 is white, v5 is red. For some reason, that completely eludes me right now, v4 is lagging behind v5 by a single point. I've made save files for rev007\_E for the interim report, but there was some error in the normalization so I don't think these should be used. I believe Jolene is making a new save file to be run. -Ryan
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{Encke_Gap}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_v4-v5}
-    \end{subfigure}
-\end{figure}
-Thanks for this promising update. Could you plot the difference between v4.1 and v5 after you shift by one bin? I'd like to see how big the difference is at that point. I'm sure it will be possible to track down the off-by-one error at some point. 
-All of this suggests that the FFT part of the code is very fast compared to the computation of Psi, which probably accounts for the TOTAL version being comparably fast or even faster - in a way, that's really good news, since it means that we can simplify the production code by using the Matched Filter everywhere. PS Jolene is going back to the old Rev7 inversions for the interim report, since that is what gave the best agreement with Essam before changes to the normalization. You should check with her to see what versions she's using. The Titan ringlet is a special case, since Essam is using 100 m and 1 km  and 10 km inversions - whatever you have in hand that gives the best match to his is what we should use for the report, but we need to include in our ISSUES AND CONCERNS notes on our team meeting notes pages that we'll need to resolve all of this eventually. Glenn is working on a Python spline routine, and I think we should defer until we are in the Python coding stage our final choices of normalizations. -Dick
-Below is v4.1 vs v5 with a 250 meter shift. They are practically identical. Below that is the difference of v4.1 and v5 with a 250m shift (1 bin). -Ryan
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_1_Bin_Shift}
-    \end{subfigure}
-        \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_250m}
-    \end{subfigure}
-\end{figure}
-Thanks, Ryan - They do indeed look very similar! Once the off by a bin origin gets identified, I think we might want to continue to use the straightforward integration version - do you agree? It will be easiest to document, and we won't need users to install FFTW. By the way, what is the window width compared to the width of the ring? What do you make of the inverse symmetry about the midpoint of the lower plot - if you invert the RHS and fold it about the middle, the two curves look almost identical. I'd like to understand the origin of that pattern, if possible, even though it is below the level of practical significance. Could it be related to a slightly different way in which the window is centered in the two calculations? If you use Essam's savefile for Rev007E and his normalized diffraction pattern, how well do your two methods (V4.1 and V5) compare to his diffraction-corrected profile? Could you plot up that difference? I'd like to include that in our interim report in some fashion. -Dick\\
-My guess is that the shift is not quite 1 bin, but 1.1 bin or something like that. That up-spike down-spike seems reminiscent of the offset we had back in November. -Ryan\\
-One possible way to resolve this would be to do a forward and inverse problem for a translucent ring of a given optical depth and to compare the V4.1 and V5 results with the expected results from an analytic solution. That's how I usually try to track down finicky offsets like this - to try to reproduce a result with an analytic solution. (The one you did using Fresel integrals.) -Dick\\
-v4.1 is doing the shifting, not v5. I compared the two with Essams files:
-\begin{lstlisting}[language=bash]
-../../../../data/RSSringoccs/savefiles/RSS_007E_X43_23MAR09.sav
-\end{lstlisting}
--Ryan
-Ok, that's good to know. Does that mean that V4.0 was shifting as well? Could you send me plots of the V5 comparison with Essam's result? -Dick\\
-Final update for the night: I ran res\_char with v5, and using the optimal resolution gave a max error of 0.3\%. If you recall, v3 had a 2\% maximum error (The L\_infinity norm). The error is now on the same order of magnitude as the v4.1 vs v5 max error, which is also promising. The optimization code ran at 50m intervals, I'll use a finer interval to try and home in on sqrt(2), see where the best one is. I'll Have finalized plots ready for tomorrow morning, and you can do the IDL plotting magic. Just got your message, I'll make the plot comparison for v4.1 and v5 now. v4 used and even number of points per window, and v4.1 uses an odd number of points, so I believe this shifts the bin over, explaining the discrepancy between v4 and v4.1. v4.1 and v5 both use odd, so I don't know where the shift comes from there. Here you are. The first one is v5, and the second v4.1. Once v4.1 is shifted, the max error is 0.38\%, still better than before. -Ryan
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Maxwell_Our_Geo_Essam_Data}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{images/Maxwell_v4_1.png}
-    \end{subfigure}
-\end{figure}
-\subsubsection{\footnotesize RE: Cassini Radio Ring Occultations During the Finale}
-I have not done this, but I think you would be safe if you simply left out the data some 100s of km outside of the rings. There are diffraction affects that modify the phase of the signal at high spatial frequencies that you presumably average over. If you have a specific orbital pass you'd like me to look into in more detail. I'd also check with Luciano and Paolo to see what they do about ring occultation data. -Dick\\
-Dick, We are struggling mightily to get a gravity field for Saturn to use in the final reconstruction. It appears that the rings are affecting the radio signal during the 5 gravity passes and are corrupting the gravity fit. We find that deleting the data during the ring occultations really helps the fit. However, we are basing our occultation deletes on the assumed ring radii and the associated ring occultation model. Do you know if there has been a determination of the actual times that the radio signal was significantly affected by the rings? -Bob\\
-HI, All - Here is a request from a JPL colleague - would you take a look at the X band data for the rev with 23 June 2017 periapse? This is one of the ones with strange geometry, where the rings are occulted several times. It will be a good test of our software and we'll be able to tell Bob whether we see strange effects due to the rings. Add this to your list for when you want to do something different. A starting point would be for Jolene to identify the filename and to compute the occultation geometry over the course of the RSS file - plotting R(t) will look strange, I think! I'd still like to keep on schedule to get our interim report working. Ryan, let's start defining phase in a way that will match Essam's and the inversion code -- let Glenn know how to change his codes to do this. This will make our phase plots agree with Essam's without changing anything, and we'll just report that to get a match, we use the definition of phase that corresponds to a clockwise rotation in the complex plane - is that what you concluded, Ryan? -DF
 \end{document}
