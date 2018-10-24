@@ -5,7 +5,7 @@
 \usepackage{graphicx, float}            % Graphics/Images.
 \usepackage{natbib}                     % For bibliographies.
 \bibliographystyle{agsm}                % Bibliography style.
-\usepackage[francais, english]{babel}   % Language typesetting.
+\usepackage[french, english]{babel}     % Language typesetting.
 \usepackage[dvipsnames]{xcolor}         % Color names.
 \usepackage{listings, lstlinebgrd}      % Verbatim-Like Tools.
 \usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
@@ -23,53 +23,88 @@
 \usepackage{import}                     % Import external files.
 \usepackage{pgfplots, tikz}             % Drawing/graphing tools.
 \usetikzlibrary{
-    calc,
+    calc,                   % Calculating right angles and more.
+    angles,                 % Drawing angles within triangles.
+    arrows.meta,            % Latex and Stealth arrows.
+    quotes,                 % Adding labels to angles.
+    positioning,            % Relative positioning of nodes.
+    decorations.markings,   % Adding arrows in the middle of a line.
     patterns,
-    angles,
-    quotes,
     arrows,
-    arrows.meta,            % Latex, Stealth, and Triangle arrows.
     shapes,
     shapes.geometric,
     cd,
     hobby,
-    positioning,            % Relative positioning of nodes.
-    decorations.markings,   % Adding arrows in middle of a line.
     babel
-}                           % Libraries for tikz.
-\pgfplotsset{compat=1.9}    % Version of pgfplots.
-\usepackage[%
-    font=scriptsize,
-    labelformat=simple,
-    labelsep=colon%
-]{subcaption}               % Subfigure captions.
-\usepackage[
-    font={scriptsize},
-    hypcap=true,
-    labelsep=colon
-]{caption}                  % Figure captions.
-\usepackage{hyperref}       % Allows for hyperlinks.
+}                                       % Libraries for tikz.
+\pgfplotsset{compat=1.9}                % Version of pgfplots.
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}                   % Allows for hyperlinks.
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
     filecolor=magenta,
     urlcolor=Cerulean,
     citecolor=SkyBlue
-}                                                % Colors for hyperref.
+}                           % Colors for hyperref.
 \usepackage[toc,acronym,nogroupskip]{glossaries} % Glossaries and acronyms.
 \usepackage[subpreambles=false]{standalone}      % Complileable sub files.
-%-------------------------Tikz Presets--------------------------%
-% Define ring shading (Used for atmospheres around planets).
-\pgfdeclareradialshading{myring}
-    {\pgfpointorigin}
-    {
-        color(0cm)=(transparent!0);
-        color(5mm)=(pgftransparent!50);
-        color(1cm)=(pgftransparent!100)
-    }
-% Define shading name for myring shading.
-\pgfdeclarefading{ringo}
-    {\pgfuseshading{myring}}
+
+% Various font stuff from kiwi.
+% Use this for Times text and Computer Modern math
+%\usepackage{times}
+
+% Quite nice
+%\usepackage[charter, greekfamily=, greekuppercase=italicized]{mathdesign}
+%\usepackage[utopia, greekuppercase=italicized]{mathdesign}    % Math is narrower
+
+% Use this for Times text and math
+%\usepackage{newtxtext}
+%\usepackage[libertine,cmintegrals]{newtxmath}
+%\usepackage{fix-cm}
+
+%\usepackage{txfontsb}
+% or
+%\usepackage{mathptmx}
+
+%\usepackage[scaled=0.92]{helvet}
+%\renewcommand{\rmdefault}{ptm}
+
+%\usepackage{mathpazo}    % add possibly `sc` and `osf` options
+%\usepackage{eulervm}
+
+%\usepackage{fourier}
+%\renewcommand{\rmdefault}{ptm}
+%\usepackage{mathptm}
+
+%\usepackage{fontspec}
+%\setmainfont{lmodern}
+
+%\usepackage[varg]{txfonts}
+%\usepackage{fouriernc}
+%\usepackage{mathpazo}
+
+%\usepackage{bookman}
+%\usepackage[scaled]{uarial}
+%\usepackage[scaled]{helvet}
+%\renewcommand*\familydefault{\sfdefault}
+%\usepackage[math]{anttor}
+
+%\newcommand\fgeorgia{\fontfamily{jvn}\selectfont}
+%\newcommand\ftimes{\fontfamily{ptm}\selectfont}
+%\newcommand\fhelvetica{\fontfamily{phv}\selectfont}
+%\newcommand\fcourier{\fontfamily{pcr}\selectfont}
+%\newcommand\fbookman{\fontfamily{pbk}\selectfont}
+%\newcommand\fnewcentury{\fontfamily{pnc}\selectfont}
+%\newcommand\fpalatino{\fontfamily{ppl}\selectfont}
+%\newcommand\favantgarde{\fontfamily{pag}\selectfont}
+%\newcommand\fnormal{\normalfont}
+%\newcommand\fsize[1]{\ifnum#1>0\fontsize{#1}{#1}\selectfont\else\normalsize\fi}
 %------------------------Theorem Styles-------------------------%
 % Define theorem style for default spacing and normal font.
 \newtheoremstyle{normal}
@@ -100,7 +135,7 @@
 % Define environments with italic headers.
 \theoremstyle{thmit}
 \newtheorem*{solution}{Solution}
-\newtheorem*{framesolution}{Solution}
+\newtheorem*{fsolution}{Solution}
 
 % Define default environments.
 \theoremstyle{normal}
@@ -119,21 +154,27 @@
 
 % Define framed environment.
 \tcbuselibrary{most}
-\newtcbtheorem[use counter*=theorem]{frametheorem}{Theorem}%
+\newtcbtheorem[use counter*=theorem]{ftheorem}{Theorem}%
     {colback=green!5,colframe=green!35!black,
      fonttitle=\bfseries\upshape}{th}
-\newtcbtheorem[number within=section]{framedefinition}{Definition}%
+
+\newtcbtheorem[use counter*=example]{fdefinition}{Definition}%
     {fonttitle=\bfseries\upshape,
      colback=blue!5!white,colframe=blue!75!black}{def}
-\newtcbtheorem[number within=section]{frameexample}{Example}%
+
+\newtcbtheorem[use counter*=example]{fexample}{Example}%
     {fonttitle=\bfseries\upshape,
      colback=red!5!white,colframe=red!75!black}{ex}
+
+\newtcbtheorem[use counter*=notation]{fnotation}{Notation}%
+    {fonttitle=\bfseries\upshape,
+     colback=SeaGreen!5!white,colframe=SeaGreen!75!black}{ex}
 
 \newenvironment{bproof}{\textit{Proof.}}{\hfill$\square$}
 \tcolorboxenvironment{bproof}{blanker,breakable,left=5mm,
                              before skip=10pt,after skip=10pt,
                              borderline west={1mm}{0pt}{red}}
-\tcolorboxenvironment{framesolution}
+\tcolorboxenvironment{fsolution}
     {enhanced jigsaw,colframe=cyan,interior hidden,breakable}
 
 %--------------------Declared Math Operators--------------------%
@@ -271,15 +312,11 @@
     {\partname\ \thecontentslabel: \quad}
     {}
     {\hfill\contentspage}
-\newcommand{\MarkRightAngle}
-    [4]
-    [.3cm]% #1=size (optional), #2-#4 three points: \angle #2#3#4
-    {
-        \coordinate (tempa) at ($(#3)!#1!(#2)$);
-        \coordinate (tempb) at ($(#3)!#1!(#4)$);
-        \coordinate (tempc) at ($(tempa)!0.5!(tempb)$);%midpoint
-        \draw (tempa) -- ($(#3)!2!(tempc)$) -- (tempb);
-    }
+\newcommand{\MarkRightAngle}[4][.3cm]
+    {\coordinate (tempa) at ($(#3)!#1!(#2)$);
+     \coordinate (tempb) at ($(#3)!#1!(#4)$);
+     \coordinate (tempc) at ($(tempa)!0.5!(tempb)$);%midpoint
+     \draw (tempa) -- ($(#3)!2!(tempc)$) -- (tempb);}
 %--------------------------LENGTHS------------------------------%
 % Spacings for the Table of Contents.
 \addtolength{\cftsecnumwidth}{1ex}
