@@ -1,0 +1,2088 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../preamble.tex}
+\graphicspath{{../../../images/}}       % Path to Image Folder.
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../../glossary}
+\loadglsentries{../../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifcoursesother\undefined
+        \pagenumbering{roman}
+        \title{Programming Tutorials}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Programming Tutorials}
+        \addcontentsline{toc}{chapter}{Programming Tutorials}
+        \markboth{}{PROGRAMMING TUTORIALS}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Programming Tutorials}
+    \fi
+    \section{Bash}
+        \subsection{Test Codes}
+            \subsubsection{How to Use READ}
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=Using the READ command to request input,
+                        gobble=24
+                    ]
+                        #!/bin/bash
+                        echo 'What is 2+2?'
+                        read VAR
+                        if [ "$VAR" = "4" ]; then
+                                echo 'Correct!'
+                        else
+                                echo 'Well, you tried!'
+                        fi
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=24
+                    ]
+                        Ryans-iMac: ryan$ ./shell_test.sh 
+                        What is 2+2?
+                        4
+                        Correct!
+                        Ryans-iMac: ryan$ ./shell_test.sh 
+                        What is 2+2?
+                        5
+                        Well, you tried!
+                    \end{lstlisting}
+                \end{minipage}
+            \newpage
+        \subsection{Beta Version of RSSCONFIG Script}
+            Below is the beta version of the rssconfig shell script
+            that is used to setup Anaconda3 on the user's computer,
+            install a few python modules/packages, and then run updates.
+            This is used to ensure all of the dependencies for the
+            rss\_ringoccs package are installed. This has been tested on
+            an iMac and on a macbook pro, both running MacOSX 10.13.4
+            High Sierra, as well as Ubuntu 16. The script works for both
+            Linux and Mac operating system's without the user needing
+            to specify anything.
+            \begin{lstlisting}[%
+                language=bash,
+                frame=single,
+                caption=rssconfig.sh shell script,
+                gobble=16
+            ]
+                #!/bin/bash
+                if [ ! "$BASH_VERSION" ] ; then
+                        echo "Please use BASH to run this script ($0)" 1>&2
+                        exit 1
+                fi
+                osstring=`uname`
+                
+                if [ osstring = "Darwin" ]; then
+                        fil="Anaconda3-5.1.0-MacOSX-x86_64.sh"
+                elif [ osstring = "Linux" ];
+                        fil="Anaconda3-5.1.0-Linux-x86_64.sh"
+                else
+                        echo "Operating System not recognized"
+                        echo "Only MacOSX and Linux supported"
+                        echo "Exiting script"
+                        exit 1
+                fi
+                
+                web="https://repo.continuum.io/archive/"
+                webfil="$web$fil"
+                
+                if [ ! -e "~/anaconda3" ]; then
+                        echo "Anaconda3 does not currently exist on your computer."
+                        echo "Running setup scripts now..."
+                        # Go to your home directory
+                        cd ~
+                
+                        # Use cURL to download Anaconda 5.1.0.
+                        curl -Ok "$webfil"
+                
+                        # Run the Anaconda installer.
+                        bash "filename" -b -p ~/anaconda3
+                
+                        # Remove the shell script from your home directory.
+                        rm Anaconda3-5.1.0-MacOSX-x86_64.sh
+                
+                        # Add Anaconda to your path.
+                        echo 'export PATH="~/anaconda3/bin:$PATH"' >> ~/.bash_profile
+                
+                        # Update bash_profile.
+                        source .bash_profile
+                else
+                        echo "You already have Anaconda on your computer."
+                        echo "Running updates..."
+                fi
+                
+                # Update conda and install Spiceypy
+                conda update conda
+                conda install -c https://conda.anaconda.org/andrewannex spiceypy
+            \end{lstlisting}
+        \subsection{Using wget}
+            On MacOSX High Sierra (10.13.6), the following commands
+            were successfully able to get wget up and running.
+            This was tested on a 2012 MacBookPro.
+    \section{The C Programming Language}
+        \subsection{Tutorials from learn-c.org}
+            \subsubsection{Introduction}
+                C is a general purpose programming language used for the
+                Python interpreter, Git, etc. It is a compiled language,
+                meaning a compiler takes the code and creates an
+                executable file. C programs use libraries to allow
+                execution of necessary functions. For example, printf,
+                which prints to the screen, is defined in the stdio.h
+                header file.
+                \lstinline[language=C]{#include <stdio.h>}
+                is how one accesses this
+                file in their code.
+                \par\hfill\par
+                In C, the type of variables and functions must be
+                declared before it is used, unlike Python. For the
+                example below, the main function returns 0, which has
+                the int type, to the function must be declared as int.
+                Every line in C must end with a semi-colon ``;''
+                which tells the compiler that a new line has started.
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=C,
+                        basicstyle=\small,
+                        frame=single,
+                        caption=hello.c,
+                        gobble=20
+                    ]
+                        #include <stdio.h>
+                        
+                        int main() {
+                            printf("Hello World!\n");
+                            return(0);
+                        }
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        literate={~}{$\sim$}{1},
+                        gobble=20
+                    ]
+                        Ryans-iMac:~ ryan$ gcc hello.c -o hello
+                        Ryans-iMac:~ ryan$ ./hello
+                        Hello World!
+                    \end{lstlisting}
+                \end{minipage}
+                \newline
+                The spaces in the function are unnecessary.
+                They only make reading the code easier or more aesthetic.
+                \begin{lstlisting}[%
+                    language=C,
+                    basicstyle=\footnotesize,
+                    frame=single,
+                    caption=add.c,
+                    gobble=16
+                ]
+                    #include <stdio.h>
+                    int main() {printf("Hello World!\n");return(0);}
+                \end{lstlisting}
+            \subsubsection{Variables and Types}
+                C has several variable types. Here are a few basic ones:
+                \begin{enumerate}
+                    \item Integers: Whole numbers that are either
+                        positive or negative. int, short, long,
+                        long long, char
+                    \item Unsigned integers: Whole numbers that are
+                        strictly positive. unsigned char,
+                        unsigned int, unsigned short, unsigned long,
+                        unsigned long long
+                    \item Floating point numbers: Real numbers.
+                        float, double
+                \end{enumerate}
+                There are also structure types. The different types of
+                variables define their bounds.
+                \begin{itemize}
+                    \begin{multicols}{2}
+                        \item char: -128 to 127
+                        \item unsigned char: 0 to 255
+                        \item int: -32,768 to 32,767
+                        \item long: -2,147,483,648 to 2,147,483,647
+                        \item float: 1.2e-38 to 3.4e38 (6 decimals)
+                        \item double: 2.3e-308 to 1.7e308 (15 decimals)
+                    \end{multicols}
+                \end{itemize}
+                C does not have a built-in Boolean type. This can be
+                defined by doing the following:
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=C,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=bool.c,
+                        gobble=20
+                    ]
+                        #include <stdio.h>
+                        #define BOOL char
+                        #define FALSE 0
+                        #define TRUE 1
+                        
+                        int main(){
+                                BOOL x, y;
+                                x = FALSE;
+                                y = TRUE;
+                                printf("False: %d\n",x);
+                                printf("True: %d\n",y);
+                                return 0;
+                        }
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=Output,
+                        gobble=20
+                    ]
+                        Ryans-iMac:~ ryan$ gcc bool.c -o bool
+                        Ryans-iMac:~ ryan$ ./bool
+                        False: 0
+                        True: 0
+                    \end{lstlisting}
+                \end{minipage}
+                Integer types can be added to integer types,
+                and similarly for floating point numbers.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=C,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=add.c,
+                        gobble=20
+                    ]
+                        //Add 2 numbers - int and floats
+                        #include <stdio.h>
+                        
+                        int add_int(int, int);
+                        float add_float(float, float);
+                        
+                        int add_int(int x, int y){
+                            return x + y;
+                        }
+                        float add_float(float x, float y){
+                            return x + y;
+                        }
+                        int main() {
+                            int n;
+                            float r;
+                            n = add_int(1,2);
+                            r = add_float(1.2,2.4);
+                            printf("Int: %d Float: %f\n",n,r);
+                            return(0);
+                        }
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        gobble=16
+                    ]
+                    Ryans-iMac:~ ryan$ gcc add.c -o add
+                    Ryans-iMac:~ ryan$ ./add
+                    Int: 3 Float: 3.600000
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Arrays}
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=C,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        #include <stdio.h>
+                        
+                        int main() {
+                            int myarray[7];
+                            int i;
+                            for (i=0; i<7; ++i){
+                                myarray[i] = 10*(i+1);
+                                printf("myarray[%d] = %d\n",\
+                                       i, myarray[i]);
+                            }
+                            printf("Have a Great Day!");
+                            return 0;
+                        }
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        frame=single,
+                        gobble=20
+                    ]
+                        myarray[0] = 10
+                        myarray[1] = 20
+                        myarray[2] = 30
+                        myarray[3] = 40
+                        myarray[4] = 50
+                        myarray[5] = 60
+                        myarray[6] = 70
+                        Have a Great Day!
+                \end{lstlisting}
+            \end{minipage}
+                \newpage
+                Arrays are variables that can hold more than one value
+                under the same variable name, organized by an index. The
+                index for arrays starts at zero. Arrays are
+                homogeneous, meaning they can only store values of the
+                same type. This is because they are implemented as a
+                sequence of values in the computer's memory. Accessing
+                an array cell is thus very efficient. The example above
+                shows a 1-dimensional array, but arrays can be
+                multidimensional.
+        \subsection{The FizzBuzz Test}
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\small,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=20
+            ]
+                #include <stdio.h>
+
+                int main(){
+                    int n=100;
+                    int i;
+                    int imod3, imod5, check;
+                    for (i=1; i<=n; ++i){
+                        imod3 = (i % 3);
+                        imod5 = (i % 5);
+                        if (imod3 == 0){printf("Fizz");}
+                        if (imod5 == 0){printf("Buzz");}
+                        if ((imod3 != 0) && (imod5 != 0)){
+                            printf("%d", i);
+                        }
+                        printf("\n");
+                    }
+                    return 0;
+                }
+            \end{lstlisting}
+    \section{IDL}
+        \subsection{Tutorials}
+            \subsubsection{Introduction}
+                Summing down an $n\times{m}$ matrix into an $m$ element
+                long vector is quicker using total(a,2), rather than using
+                a for loop over total(a).
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=IDL,
+                        basicstyle=\small,
+                        frame=single,
+                        gobble=20
+                    ]
+                        a = DBLARR(25600,25600)
+                        b = DBLARR(25600)
+                        t1 = SYSTIME(/seconds)
+                        FOR i=0,25600-1 DO b[i]=TOTAL(a[i,*])
+                        t2 = SYSTIME(/seconds)
+        
+                        t3 = SYSTIME(/seconds)
+                        b = TOTAL(a,2)
+                        t4 = SYSTIME(/seconds)
+        
+                        PRINT, t2-t1, t4-t3
+                        END
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        IDL> .run test.pro
+                                26.816771   12.986878
+                    \end{lstlisting}
+                \end{minipage}
+        \subsubsection{NAIF ICY Examples}
+                \textbf{Converting Between B1950 and J2000}
+                \begin{lstlisting}[%
+                    language=IDL,
+                    basicstyle=\small,
+                    frame=single,
+                    escapechar=",
+                    gobble=16
+                ]
+                    ; Import NAIF Leap Second counter.
+                    CSPICE_furnsh, 'naif0012.tls'
+    
+                    ; Create Transformation matrix from B2950 to J2000
+                    CSPICE_pxform, 'B1950', 'J2000', 0., matrix
+    
+                    ; Saturn's Pole in 1981 had RA=38.409 and DEC=83.324,"%
+                    " in the B1950 system.
+                    ; Create a unit vector pointing in the direction,"%
+                    "of Saturn's pole.
+                    CSPICE_radrec, 1.d0, 38.409d0*CSPICE_rpd(),"%
+                        " 83.324d0*CSPICE_rpd(), nhat
+    
+                    ; Get unit vector in the J2000 coordinates.
+                    nhat2 = matrix##nhat
+    
+                    ; Make nhat2 into a vector.
+                    nhat2 = reform(nhat2)
+    
+                    ; Convert unit vector to RA and DEC in J2000.
+                    CSPICE_recrad, nhat2, r, RA, DEC
+                    END
+                \end{lstlisting}
+                \textbf{Retrieving State Vectors and Light Time Values}
+                \begin{lstlisting}[%
+                    language=bash,
+                    basicstyle=\small,
+                    frame=single,
+                    caption=output,
+                    gobble=16,
+                    escapechar="
+                ]
+                    ; Create array of 1000 ephemeris times with step size
+                    ; of 10 hours, starting July 1, 2005.
+                    cspice_str2et, 'July 1, 2005', start
+                    et = dindgen( 1000 )*36000.d + start
+    
+                    ; Retrieve the state vectors and corresponding light"%
+                      " times for Mars to Earth
+                    ; at each ET in the J2000 frame using"%
+                      " the LT+S aberration correction.
+                    cspice_spkezr, 'Earth', et, 'J2000', 'LT+S',"%
+                    " 'MARS', state, ltime
+        
+                    ; access the ith state 6-vector corresponding to"%
+                      " the ith et.
+                    state_i = state[*,i]
+    
+                    ; Convert the et vector from the previous example to"%
+                      " UTC calendar strings.
+                    format = 'C'
+                    prec = 3
+                    cspice_et2utc, et, format, prec, utcstr
+    
+                    ; Access the ith string of utcstr.
+                    utcstr_i = utcstr[i]
+    
+                    ; Convert position components of the N state vectors to"%
+                      " latitudinal coordinates.
+                    cspice_reclat, state[0:2,*], radius, latitude, longitude
+                    ; This returns three double precision variables: radius, latitude, longitude.
+                \end{lstlisting}
+                \textbf{Calculate and Plot the Trajectory of Cassini in J2000}
+                \begin{lstlisting}[%
+                    language=bash,
+                    basicstyle=\small,
+                    gobble=16
+                ]
+                    ;Load the following kernels.
+                    IDL> cspice_furnsh, 'naif0012.tls'
+                    IDL> cspice_furnsh, 'de421.bsp'
+                    IDL> cspice_furnsh, 'pck00010.tpc'
+                    IDL> cspice_furnsh, '030201AP_SK_SM546_T45.bsp' 
+                    ;Define the number of divisions of the time interval and the time interval.
+                    IDL> STEP = 10000
+                    IDL> utc = [ 'Jun 20, 2004', 'Dec 1, 2005' ]
+                    IDL> cspice_str2et, utc, et
+                    IDL> times = dindgen(STEP)*(et[1]-et[0])/STEP + et[0]
+                    IDL> cspice_spkpos, 'Cassini', times, 'J2000', 'NONE', 'SATURN BARYCENTER', pos, ltime
+                    ;Plot the resulting trajectory.
+                    IDL> x = pos[0,*]
+                    IDL> y = pos[1,*]
+                    IDL> z = pos[2,*]
+                    IDL> iplot, x, y, z
+                    IDL> cspice_kclear
+                \end{lstlisting}
+                \begin{lstlisting}[%
+                    language=bash,
+                    basicstyle=\small,
+                    gobble=16
+                ]
+                    tc_geo = rdcol(geofile_tc, 1, 99999999, [1:18])
+                    t_OET_spm_tc            = tc_geo[0,*]
+                    t_RET_spm_tc            = tc_geo[1,*]
+                    t_SET_spm_tc            = tc_geo[2,*]
+                    rho0_km_tc              = tc_geo[3,*]
+                    phi_RL_deg_tc           = tc_geo[4,*]
+                    phi_ORA_deg_tc          = tc_geo[5,*]
+                    B_deg_tc                = tc_geo[6,*]
+                    D_km_tc                 = tc_geo[7,*]
+                    rho0_dot_kms_tc         = tc_geo[8,*]
+                    phi_RL_dot_kms_tc       = tc_geo[9,*]
+                    F_km_tc                 = tc_geo[10,*]
+                    R_imp_km_tc             = tc_geo[11,*]
+                    R_sc_x_km_tc            = tc_geo[12,*]
+                    R_sc_y_km_tc            = tc_geo[13,*]
+                    R_sc_z_km_tc            = tc_geo[14,*]
+                    R_sc_dot_x_kms_tc       = tc_geo[15,*]
+                    R_sc_dot_y_kms_tc       = tc_geo[16,*]
+                    R_sc_dot_z_kms_tc       = tc_geo[17,*]
+                \end{lstlisting}
+    \section{Python}
+        \subsection{Tutorials from LearnPython.org}
+            \subsubsection{Introduction}
+                Python uses indents for blocks, rather than braces.
+                Tabs and spaces are supported, by standard indentation
+                requires Python code to use four spaces.
+                To print a string in Python 3, do:
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        print("This line will be printed.")
+                        x = 1
+                        if x == 1:
+                            print("x is 1.")
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        This line will be printed.
+                        x is 1.
+                    \end{lstlisting}
+                \end{minipage}
+                And now, for the quintessential coding problem:
+                Print "Hello, World!"\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        print("Hello, World!")
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Hello, World!
+                \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Variables and Types}
+                Python is an object oriented language.
+                Variables do not need to be declared before using them,
+                nor do their types need to be declared.
+                Every variable in Python is an object.
+                Python supports three types of numbers: Integers,
+                floating point numbers, and complex numbers.
+                To define an integer, do the following:\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        myint = 7
+                        print(myint)
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        7
+                    \end{lstlisting}
+                \end{minipage}\newline
+                To define a floating point number, use one of the
+                following notations:
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        myfloat = 7.0
+                        print(myfloat)
+                        myfloat = float(7)
+                        print(myfloat)
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        7.0
+                        7.0
+                    \end{lstlisting}
+                \end{minipage}
+                Strings are defined with either " or ' quotations.
+                Using " allows apostrophe's to be included
+                in a string, whereas using ' means an apostrophe
+                would terminate the string.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        mystring = 'hello'
+                        print(mystring)
+                        mystring = "hello"
+                        print(mystring)
+                        mystring = "Don't worry"
+                        print(mystring)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        hello
+                        hello
+                        Don't worry
+                    \end{lstlisting}
+                \end{minipage}
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        mystring = 'Don't worry'
+                        print(mystring)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        SyntaxError: invalid syntax
+                    \end{lstlisting}
+                \end{minipage}
+                Strings can be defined to include things like
+                carriage returns, backslashes and Unicode characters.
+                Simple operations like addition can be performed on
+                numbers and strings. Also, multiple variables can be
+                assigned simultaneously on the same line.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        one = 1
+                        two = 2
+                        three = one + two
+                        print(three)
+                        hello = "hello"
+                        world = "world"
+                        helloworld = hello + " " + world
+                        print(helloworld)
+                        a, b = 3, 4
+                        print(a,b)
+                    \end{lstlisting}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        3
+                        hello world
+                        3, 4
+                    \end{lstlisting}
+                \end{minipage}
+                Mixing strings and numbers results in
+                an error.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        # This will not work!
+                        one = 1
+                        two = 2
+                        hello = "hello"
+                        print(one + two + hello)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Traceback (most recent call last):
+                          File "<stdin>", line 6, in <module>
+                            print(one + two + hello)
+                        TypeError: unsupported operand type(s)
+                            for +: 'int' and 'str'
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Lists}
+                Lists can contain any type of variable and as many
+                variables as desired. They can be iterated over as
+                well.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        mylist = []
+                        mylist.append(1)
+                        mylist.append(2)
+                        mylist.append(3)
+                        print(mylist[0]) # prints 1
+                        print(mylist[1]) # prints 2
+                        print(mylist[2]) # prints 3
+                        # prints out 1,2,3
+                        for x in mylist:
+                            print(x)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        1
+                        2
+                        3
+                        1
+                        2
+                        3
+                    \end{lstlisting}
+                \end{minipage}
+                Accessing an index which does not exist in a
+                list produces an error.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        mylist = [1,2,3]
+                        print(mylist[10])
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Traceback (most recent call last):
+                          File "<stdin>", line 2, in <module>
+                            print(mylist[10])
+                        IndexError: list index out of range
+                    \end{lstlisting}
+                \end{minipage}
+                Both \%s and \% are borrowed from C. It acts as a
+                placeholder in a string, so that other values can be
+                added to replace this later. Verbatim from the Python
+                Documentation:\newline
+                \textcolor{blue}{%
+                    Python supports formatting values into strings.
+                    Although this can include very complicated
+                    expressions, the most basic usage is to insert
+                    values into a string with the \%s placeholder.
+                }.\newline
+                For example:\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        print("Hello %s, my name is\
+                              %s" % ('john', 'mike'))
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                    Hello john, my name is mike
+                    \end{lstlisting}
+                \end{minipage}
+                The \textbackslash\ character is used to continue a line
+                of code onto the next line. That is, the computer sees
+                the two lines in the previous example as one long line.
+                Here is a brief tutorial on how to append variables to
+                different lists.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=bash,
+                        basicstyle=\small\ttfamily,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        numbers = []
+                        strings = []
+                        names = ["John", "Eric", "Jessica"]
+                        numbers.append(1)
+                        numbers.append(2)
+                        numbers.append(3)
+                        strings.append("hello")
+                        strings.append("world")
+                        second_name = names[1]
+                        print(numbers)
+                        print(strings)
+                        print("Second name in name list is %s"
+                              % second_name)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        [1, 2, 3]
+                        ['hello', 'world']
+                        Second name in name list is Eric
+                    \end{lstlisting}
+                \end{minipage}
+                \newpage
+            \subsubsection{Basic Operators}
+                \textbf{Arithmetic Operators}
+                    The four basic operations can be used with numbers
+                    inside of Python. Addition $(+)$, subtraction $(-)$,
+                    multiplication $(*)$ and division $(/)$ are all
+                    supported. Python also follows the standard
+                    \gls{pemdas} order of operations. Another useful
+                    operator is the modulo operator $(\%)$. This returns
+                    the integer remainder of division. Exponents $(**)$
+                    are also allowed.\newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=20
+                        ]
+                            number = 1 + 2 * 3 / 4.0
+                            print(number)
+                            remainder = 11 % 3
+                            print(remainder)
+                            squared = 7 ** 2
+                            print(squared)
+                            cubed = 2 ** 3
+                            print(cubed)
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        ]
+                            2.5
+                            2
+                            49
+                            8
+                        \end{lstlisting}
+                    \end{minipage}
+                \textbf{String Operators}
+                    String can be concatenated by using $+$ with two
+                    strings. Multiplying a string by an integer $n$
+                    produces a string that is $n$ multiples of the
+                    original.\newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            greetings = "hello" + " " + "world"
+                            print(greetings)
+                            lotsofhellos = "hello" * 7
+                            print(lotsofhellos)
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            hello world
+                            hellohellohellohellohellohellohello
+                        \end{lstlisting}
+                    \end{minipage}
+                \textbf{Using Operators with Lists}
+                    List can be concatenated with the $+$ operator.
+                    Similar to how $\%s$ is used as a placeholder for
+                    strings, $\%d$ is used as a placeholder for integer
+                    numbers.\newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            even_nums = [2,4,6,8]
+                            odd_nums = [1,3,5,7]
+                            all_nums = odd_nums + even_nums
+                            print(all_nums)
+                            print([1,2,3] * 3)
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=bash,
+                            basicstyle=\small\ttfamily,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            [1, 3, 5, 7, 2, 4, 6, 8]
+                            [1, 2, 3, 1, 2, 3, 1, 2, 3]
+                        \end{lstlisting}
+                    \end{minipage}
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            name, number = 'Bob Guy', 42
+                            print('%s %d' % (name, number))
+                            x, y     = object(),object()
+                            x_list   = [x] * 10
+                            y_list   = [y] * 10
+                            big_list = x_list + y_list
+                            nx, ny   = len(x_list), len(y_list)
+                            nz       = len(big_list)
+                            print("x_list: %d objects" % nx)
+                            print("y_list: %d objects" % ny)
+                            print("big_list: %d objects" % z)
+                            if x_list.count(x) == 10:
+                                print("Almost there...")
+                            if y_list.count(y) == 10:
+                                print("Almost there...")
+                             if big_list.count(x) == 10:
+                                 print("Nearly done...")
+                             if big_list.count(y) == 10:
+                                 print("Great!")
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{0.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            Bob Guy 42
+                            x_list contains 10 objects
+                            y_list contains 10 objects
+                            big_list contains 20 objects
+                            Almost there...
+                            Great!
+                        \end{lstlisting}
+                    \end{minipage}
+                    \newpage
+            \subsubsection{String Formatting}
+                Python uses C-style string formatting to create new
+                formatted strings. The $\%$ operator (Which is also the
+                modulo operator) is used to fomrat a set of variables
+                enclosed in an n-tupyle, which is a fixed size list of
+                $n$ items, together with a format string, which contains
+                normal text and argument specifiers. Argument specifiers
+                are the characters like $\%s$ and $\%d$ that we've
+                already seen. Objectes that are not strings can be
+                formatted as strings using the $\%s$ operator as well.
+                Here are the basic argument specifiers:
+                \begin{itemize}
+                    \begin{multicols}{2}
+                        \item $\%s$ - String
+                        \item $\%d$ - Integers
+                        \item $\%f$ - Floating point numbers
+                        \item $\%.nf$ - Float with n decimals
+                        \item $\%x$ - Int in hex representation
+                            (lowercase)
+                        \item $\%X$ - Int in hex representation
+                            (uppercase)
+                    \end{multicols}
+                \end{itemize}
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=input,
+                        gobble=20
+                    ]
+                        # This prints out "Hello, John!"
+                        name = "John"
+                        print("Hello, %s!" % name)
+                        # This prints out "John is 23 years old."
+                        name = "John"
+                        age = 23
+                        print("%s is %d years old." % (name, age))
+                        # This prints out: A list: [1, 2, 3]
+                        mylist = [1,2,3]
+                        print("A list: %s" % mylist)
+                        # Example exercise
+                        data = ("John", "Doe", 53.44)
+                        format_string = "Hello %s %s.\ 
+                            Your balance is $%s."
+                        print(format_string % data)
+    
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Hello, John!
+                        John is 23 years old.
+                        A list: [1, 2, 3]
+                        Hello John Doe. Your balance is $53.44.
+    
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Conditions}
+                Python uses Boolean variables to evaluate conditions.
+                True or False are returned when an expression is
+                compared or evaluated. Variable assignment is done
+                using the equals sign $(=)$, but comparisons between
+                two variables are done using double equal signs
+                $(==)$. The 'not equals' operators is an exclamation
+                point an an equals sign $(!=)$.
+                \textbf{Boolean Operators}
+                    The ``and" and ``or" Boolean operators allowing
+                    building Boolean expressions. $A$ and $B$ only
+                    returns True if both $A$ and $B$ are true. $A$ or
+                    $B$ returns True if either of $A$ or $B$ are
+                    true. The ``in" operator allows one to check if a
+                    specified object exists within an iterable object
+                    container, such as a list. This is very similar
+                    to the symbol $\in$ that is used in
+                    mathematics.\newline
+                    \begin{minipage}[t]{0.48\textwidth}
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            x = 2
+                            print(x == 2) # prints out True
+                            print(x == 3) # prints out False
+                            print(x < 3)  # prints out True
+                            name = "John"
+                            age = 23
+                            if name == "John" and age == 23:
+                                print("You're John and you are 23")
+                            if name == "John" or name == "Joe":
+                                print("You're either John or Joe")
+                            if name in ["John", "Bob"]:
+                                print("You're either John or Bob")
+                    \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{0.48\textwidth}
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            True
+                            False
+                            True
+                            You're John and you are 23
+                            You're either John or Joe
+                            You're either John or Bob
+                        \end{lstlisting}
+                    \end{minipage}
+                    Python uses indendation to define code blocks.
+                    Standard indent is 4 spaces, although tabs and other
+                    spacings work as long as its consistent. Code blocks
+                    do not need any termination either.
+                    \newpage
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            x = 2
+                            if x == 2:
+                                print("x equals two!")
+                            else:
+                               print("x does not equal two.")
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            x equals two!
+                        \end{lstlisting}
+                    \end{minipage}\newline
+                    A statement is considered true if one of the
+                    following holds:
+                    \begin{enumerate}
+                        \item The True Boolean variable is given or
+                            calculated using an expression.
+                        \item An object which is not considered empty is
+                            passed. Empty objects are those such as the
+                            following:
+                        \begin{enumerate}
+                            \begin{multicols}{2}
+                                \item An empty string: ` ' or `` ''
+                                \item An empty list: [ ]
+                                \item The number zero: 0
+                                \item The false Boolean variable: False
+                            \end{multicols}
+                        \end{enumerate}
+                    \end{enumerate}
+                \textbf{More Operators}
+                    The ``is" operators is different from the equals
+                    operator $(==)$. Instead of comparing the values of
+                    the variables, the ``is" operator compares the
+                    instances themselves. Using the ``not" operator on a
+                    Boolean expression simply inverts it.\newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            x = [1,2,3]
+                            y = [1,2,3]
+                            z = x
+                            print(x == y) # Prints out True
+                            print(x is y) # Prints out False
+                            print(x is z) # Prints out True
+                            print(not False)
+                            print((not False) == (False))
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=bash,
+                            basicstyle=\small\ttfamily,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            True
+                            False
+                            True
+                            True
+                            False
+                        \end{lstlisting}
+                    \end{minipage}
+            \subsubsection{Loops}
+                \textbf{For Loops}
+                    For loops iterator over a sequence of numbers using
+                    the ``range'' and ``xrange'' functions. In Python 3
+                    there is only ``range,'' which is a direct descendant
+                    of the Python 2 ``xrange.'' While loops repeat so
+                    long as a certain Boolean condition is True. \newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            # Prints out the numbers 0,1,2,3,4
+                            for x in range(5):
+                                print(x)
+                            # Prints out 3,4,5
+                            for x in range(3, 6):
+                                print(x)
+                            # Prints out 3,5,7
+                            for x in range(3, 8, 2):
+                                print(x)
+                            # Prints out 0,1,2,3,4
+                            count = 0
+                            while count < 5:
+                                print(count)
+                                count += 1 # count = count + 1
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            0
+                            1
+                            2
+                            3
+                            4
+                            3
+                            4
+                            5
+                            3
+                            5
+                            7
+                            0
+                            1
+                            2
+                            3
+                            4
+                            0
+                            1
+                            2
+                            3
+                            4
+                        \end{lstlisting}
+                    \end{minipage}
+                    The ``break" command is used to exit a for loop or a
+                    while loop. The ``continue" command is used to skip
+                    the current block and to return to the for loop or
+                    while loop.
+                    \newpage
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            count = 0
+                            while True:
+                                print(count)
+                                count += 1
+                                if count >= 5:
+                                    break
+                            for x in range(10):
+                               # Check if x is even
+                                if x % 2 == 0:
+                                    continue # Odd numbers only
+                                print(x)
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            0
+                            1
+                            2
+                            3
+                            4
+                            1
+                            3
+                            5
+                            7
+                            9
+                        \end{lstlisting}
+                    \end{minipage}
+                    Unlike in C and C++, else can be used in for
+                    loops.\newline
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=input,
+                            gobble=24
+                        ]
+                            count=0
+                            while(count<5):
+                                print(count)
+                                count +=1
+                            else:
+                                print("value: %d" %(count))
+                            # Prints out 1,2,3,4
+                            for i in range(1, 10):
+                                if(i%5==0):
+                                    break
+                                print(i)
+                            else:
+                                print("this is not printed")
+                        \end{lstlisting}
+                    \end{minipage}\hfill
+                    \begin{minipage}[t]{.48\textwidth}
+                        \centering
+                        \begin{lstlisting}[%
+                            language=python,
+                            frame=single,
+                            basicstyle=\footnotesize,
+                            frame=single,
+                            caption=output,
+                            gobble=24
+                        ]
+                            0
+                            1
+                            2
+                            3
+                            4
+                            value: 5
+                            1
+                            2
+                            3
+                            4
+                        \end{lstlisting}
+                    \end{minipage}
+            \subsubsection{Functions}
+                Functions allow one to divide code into blocks, order
+                code, and make it more readable and easier to reuse. They
+                also provide a means of sharing code. Python makes use of
+                blocks. Functions can recieve arguments, which are
+                variables passed from the caller to the function. In
+                addition, functions can return values to the caller using
+                the ``return" keyword.
+                \begin{lstlisting}[%
+                    language=python,
+                    frame=single,
+                    basicstyle=\footnotesize,
+                    frame=single,
+                    caption=Block Example,
+                    gobble=16
+                ]
+                    block_head:
+                        1st block line
+                        2nd block line
+                        ...
+                \end{lstlisting}
+                A block line is more Python code, including another
+                block, and the block head contains keywords like ``if",
+                ``or", ``for", and ``while," and also something like
+                block\_name(argument1,...,argumentn). Functions in Python
+                are defined using the block keyword ``def" followed with
+                the function's name as the block's name.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=input,
+                        gobble=20
+                    ]
+                        def my_function():
+                            print("Hello From My Function!")
+                        def my_function_with_args(name, greeting):
+                            print("Hello, %s! I wish you %s"\
+                                  % (name, greeting))
+                        def sum_two_numbers(a, b):
+                            return a + b
+                        # print(a simple greeting)
+                        my_function()
+                        my_function_with_args("John Doe",
+                                              "a great year!")
+                        x = sum_two_numbers(1,2)
+                        print(x)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                    Hello From My Function!
+                    Hello, John Doe! I wish you a great year!
+                    3
+                    \end{lstlisting}
+                \end{minipage}
+                \newpage
+                An example of many functions being used together:
+                \newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=input,
+                        gobble=20
+                    ]
+                        def list_benefits():
+                            return "Organized code",\
+                            "Readable code",\ 
+                            "Code reuse",\
+                            "Sharing code"
+                        def build_sentence(benefit):
+                            return "%s is a benefit!" % benefit
+                        def name_the_benefits_of_functions():
+                            list_of_benefits = list_benefits()
+                            for benefit in list_of_benefits:
+                                print(build_sentence(benefit))
+                            name_the_benefits_of_functions()
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Organized code is a benefit!
+                        Readable code is a benefit!
+                        Code reuse is a benefit!
+                        Sharing code is a benefit!
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Classes and Objects}
+                Objects are a combination of variables and functions into
+                a single entity. Objects get these things from classes,
+                which are essentially templates for creating objects.
+                When a variable holds a class, it holds all of the
+                objects within it. You can create multiple different
+                objects that are of the same class and have the same
+                variables and functions defined, but each object will
+                contain independent copies of the variables in the class.
+                Here's an example of a class:\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=input,
+                        gobble=20
+                    ]
+                        class MyClass:
+                            variable = "blah"
+                            def function(self):
+                                print("Message Inside Class.")
+                        myobjectx = MyClass()
+                        myobjecty = MyClass()
+                        myobjecty.variable = "yackity"
+                        # Then print out both values
+                        print(myobjectx.variable)
+                        print(myobjecty.variable)
+                        myobjectx.function()
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        gobble=20
+                    ]
+                        blah
+                        yackity
+                        Message Inside Class.
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Dictionaries}
+                A dictionary is a data type that works with keys and
+                values, rather than indexes. A key is any type of object,
+                a string, a number, a list, etc.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=input,
+                        gobble=24
+                    ]
+                            phonebook = {}
+                            phonebook["John"] = 7566
+                            phonebook["Jack"] = 7264
+                            phonebook["Jill"] = 2781
+                            print(phonebook)
+                            phonebook1 = {
+                                "John" : 7566,
+                                "Jack" : 7264,
+                                "Jill" : 2781
+                            }
+                            print(phonebook1)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        frame=single,
+                        caption=output,
+                        gobble=24
+                    ]
+                            {'Jill': 2781, 'Jack': 7264, 'John': 7566}
+                            {'Jill': 2781, 'Jack': 7264, 'John': 7566}
+                    \end{lstlisting}
+                \end{minipage}
+                Dictionaries can be iterated over as well. Dictionaries
+                do not keep the order of the values stored in it, so
+                iterating is a little different.
+                \newpage
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                        phonebook = {
+                            "John": 938477566,
+                            "Jack": 938377264,
+                            "Jill": 947662781
+                        }
+                        for name, number in phonebook.items():
+                            print("Phone number of %s is %d"
+                                  % (name, number))
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                        Phone number of Jill is 947662781
+                        Phone number of Jack is 938377264
+                        Phone number of John is 938477566
+                    \end{lstlisting}
+                \end{minipage}
+                There are two ways to remove items from a
+                dictionary.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                        phonebook = {
+                           "John" : 938477566,
+                           "Jack" : 938377264,
+                           "Jill" : 947662781
+                        }
+                        del phonebook["John"]
+                        print(phonebook)
+                        phonebook.pop("Jack")
+                        print(phonebook)
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=output,
+                        gobble=20
+                    ]
+                        {'Jill': 947662781, 'Jack': 938377264}
+                        {'Jill': 947662781}
+                    \end{lstlisting}
+                \end{minipage}
+            \subsubsection{Modules and Packages}
+            A module is a piece of software that has a specific
+            functionality. Each module is a different file which can be
+            edited separately. Modules in Python are Python files with a
+            .py extension. The name of the module is the name of the
+            file. A Python module can have functions, classes, or
+            variables defined and implemented. To import from other
+            modules use the ``import" command.
+        \subsection{Miscellaneous Tests}
+            \subsubsection{Time Test for Squaring an Array}
+                Running MacOSX 10.13.4 High Sierra on an iMac with a 3.4
+                GHz intel quad-core i5 processor, it has been shown that,
+                while running Python 3.6.3 and Numpy 1.14.1, the squaring
+                is much slower than multiplying a variable by
+                itself.\newline
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=Python Code Located in `test.py',
+                        gobble=20
+                    ]
+                        import time
+                        def square(x):
+                            t1       = time.time()
+                            for i in range(10000000): y = x**2
+                            t2       = time.time()
+                            t        = t2-t1
+                            return t
+                        def square2(x):
+                            t1       = time.time()
+                            for i in range(10000000): y = x*x
+                            t2       = time.time()
+                            t        = t2-t1
+                            return t
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=Inside iPython,
+                        gobble=20
+                    ]
+                        In [1]: import test
+                        In [2]: test.square(10)
+                        Out[2]: 2.5573959350585938
+                        In [3]: test.square2(10)
+                        Out[3]: 0.3849520683288574
+                        In [4]: x = np.arange(100)
+                        In [5]: test.square(x)
+                        Out[5]: 6.9455132484436035
+                        In [6]: test.square2(x)
+                        Out[6]: 4.55057692527771
+                    \end{lstlisting}
+                \end{minipage}\newline
+                A similar test for multiplication versus adding.
+                \newpage
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=Contents of test.py,
+                        gobble=20
+                    ]
+                        import time
+                
+                        def mult(x):
+                            t1       = time.time()
+                            for i in range(10000000): y = 2*x
+                            t2       = time.time()
+                            t        = t2-t1
+                            return t
+                        
+                        def add(x):
+                            t1       = time.time()
+                            for i in range(10000000): y = x+x
+                            t2       = time.time()
+                            t        = t2-t1
+                            return t
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=Inside iPython,
+                        gobble=20
+                    ]
+                        In [1]: from test import *
+                        In [2]: mult(100)
+                        Out[2]: 0.44980788230895996
+                        In [3]: add(100)
+                        Out[3]: 0.3794879913330078
+                        In [4]: mult(10000000)
+                        Out[4]: 0.5141329765319824
+                        In [5]: add(10000000)
+                        Out[5]: 0.4880061149597168
+                    \end{lstlisting}
+                \end{minipage}\newline
+                A test for how long it takes to pass arguments into
+                functions.
+                \newline
+                \begin{lstlisting}[%
+                    language=python,
+                    frame=single,
+                    basicstyle=\footnotesize,
+                    caption=Inside iPython,
+                    gobble=16
+                ]
+                    import time
+                    
+                    def func1(x):
+                    	t1 = time.time()
+                    	for i in range(1000000):
+                    		y = x
+                    	t2 = time.time()
+                    	print(t2-t1)
+                    
+                    def func2(x):
+                    	t1 = time.time()
+                    	for i in range(1000000):
+                    		y = x
+                    		y *= 1
+                    	t2 = time.time()
+                    	print(t2-t1)
+                    
+                    def func3(x):
+                        t1 = time.time()
+                        for i in range(1000000):
+                            y  = x*1
+                        t2 = time.time()
+                        print(t2-t1)
+                    
+                    def func4(i,n_used,nw,loop):
+                        mes = "Pt: %d  Tot: %d  Width: %d  Psi Iters: %d  Fast Inversion"
+                        print(mes % (i,n_used,nw,loop),end="\r")
+                    
+                    def func5(i,n_used,nw,loop):
+                    	pass
+                    
+                    def func6(x,y):
+                    	t1 = time.time()
+                    	if x:
+                    		for i in range(y): func4(i,y,3,4)
+                    	else:
+                    		for i in range(y): func5(i,y,3,4)
+                    	t2 = time.time()
+                    	print(t2-t1)
+                \end{lstlisting}
+                Demonstrating the superiority of C over Python.
+                The following is written in C. This time test was
+                performed on a 13 inch Mid-2012 Macbook Pro running macOS
+                High Sierra 10.13.6 with a 2.9GHz duo-core intel i7
+                processor and 8GB of 1600 MHz DDR3 memory.
+                \newpage
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=C,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=test.c,
+                        gobble=20
+                    ]
+                        #include <stdio.h>
+                        
+                        int add(int n){
+                                int x, i;
+                                x = 0;
+                                for (i=0; i<n; ++i){
+                                        x += 1;
+                                }
+                                return x;
+                        }
+                    \end{lstlisting}
+                \end{minipage}\hfill
+                \begin{minipage}[t]{.48\textwidth}
+                    \centering
+                    \begin{lstlisting}[%
+                        language=Python,
+                        frame=single,
+                        basicstyle=\footnotesize,
+                        caption=ctest.py,
+                        gobble=20
+                    ]
+                        import ctypes
+                        import time
+                        lib = ctypes.cdll.LoadLibrary("./test.so")
+                        fun = lib.add
+                        n = 1000000000
+                        t1 = time.time()
+                        y = fun(n)
+                        t2 = time.time()
+                        t3 = time.time()
+                        x = 0
+                        for i in range(n):
+                                x += 1
+                        t4 = time.time()
+                        tc = t2-t1
+                        tp = t4-t2
+                        print("C Computation Time: %f" % tc)
+                        print("Python Computation Time: %f" % tp)
+                        print("C For-Loop Size: %d" % y)
+                        print("Python For-Loop Size: %d" % x)
+                    \end{lstlisting}
+                \end{minipage}
+                \begin{lstlisting}[%
+                    language=Python,
+                    frame=single,
+                    basicstyle=\footnotesize,
+                    caption=Compile and Compare,
+                    gobble=16
+                ]
+                    Ryans-MacBookPro:~ ryan$ gcc -fPIC -shared -o test.so test.c
+                    Ryans-MacBookPro:~ ryan$ ipython
+                    
+                    In [1]: %run ctest.py
+                    C Computation Time: 1.849072
+                    Python Computation Time: 123.264628
+                    C For-Loop Size: 1000000000
+                    Python For-Loop Size: 1000000000
+                    
+                    In [2]: %run ctest.py  # I closed out of all background processes and tried again.
+                    C Computation Time: 1.771411
+                    Python Computation Time: 110.674400
+                    C For-Loop Size: 1000000000
+                    Python For-Loop Size: 1000000000
+                    
+                    In [3]: 110.674400/1.771411  # Time ratio of second test.
+                    Out[3]: 62.47810361344713
+                    
+                    In [4]: 123.264628/1.849072  # Time ratio of first test.
+                    Out[4]: 66.66296823487674
+                \end{lstlisting}
+                So we see that C is over 60 times faster at computing even a simple program, such as this ``Add 1" routine.
+                Running this purely in C (Using the gcc compiler) has no
+                noticeable affect in computation time.
+                \begin{lstlisting}[%
+                    language=C,
+                    frame=single,
+                    basicstyle=\footnotesize,
+                    caption=test.c,
+                    gobble=12
+                ]
+                    #include <stdio.h>
+                    #include <time.h>
+                    
+                    int add(int n){
+                            int x, i;
+                            x = 0;
+                            for (i=0; i<n; ++i){
+                                    x += 1;
+                            }
+                            return x;
+                    }
+                    
+                    int main(){
+                            clock_t begin = clock();
+                            add(1000000000);
+                            clock_t end = clock();
+                            double time_spent = (double)(end - begin)/\
+                            CLOCKS_PER_SEC;
+                            printf("Computation Time: %f\n", time_spent);
+                            return 0;
+                    }
+                \end{lstlisting}
+                \newpage
+                \begin{lstlisting}[%
+                    language=Bash,
+                    frame=single,
+                    basicstyle=\footnotesize,
+                    caption=Compile and Run,
+                    gobble=12
+                ]
+                    Ryans-MacBookPro:Desktop ryan$ gcc test.c -o test
+                    Ryans-MacBookPro:Desktop ryan$ ./test
+                    Computation Time: 1.869245
+                    Ryans-MacBookPro:Desktop ryan$ ./test
+                    Computation Time: 1.778661
+                    Ryans-MacBookPro:Desktop ryan$ ./test
+                    Computation Time: 1.781933
+                \end{lstlisting}
+\end{document}
