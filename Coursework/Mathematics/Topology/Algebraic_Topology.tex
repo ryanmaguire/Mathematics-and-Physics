@@ -1,0 +1,281 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../preamble.tex}
+\graphicspath{{../../../images/}}   % Path to Image Folder.
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Algebraic Topology}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \listoffigures
+        \clearpage
+        \chapter{Algebraic Topology}
+        %\markboth{}{ALGEBRAIC TOPOLOGY}
+        %\setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Algebraic Topology}
+    \fi
+    \section{A Review of Algebra}
+        A \textbf{Group} is a set $G$ and a
+        binary operation $*$ such
+        that the following are true:
+        \begin{enumerate}
+            \item[G1] $\forall_{a,b,c\in{G}},%
+                       a*(b*c)=(a*b)*c$
+                      \hfill[Associativity]
+            \item[G2] $\exists_{e\in{G}}\forall_{a\in{G}}:a*e=a$
+                      \hfill[Existence of Right Identity]
+            \item[G3] $\forall_{a\in{G}}\exists_{a^{-1}\in{G}}:%
+                       a*a^{-1}=e$
+                      \hfill[Existence of Right Inverse]
+        \end{enumerate}
+        Usually one sees $a*e=e*a=a$ and
+        $a*a^{-1}=a^{-1}*a=e$, but this can be relaxed to just
+        left or right and then one can prove they are both
+        equivalent. We often write $(G,*)$ to denote a group.
+        An \textit{Abelian Group} is a group $(G,*)$ such that:
+        \begin{enumerate}
+            \item[G4] $\forall_{a,b\in{G}},a*b=b*a$
+                      \hfill[Commutativity]
+        \end{enumerate}
+        A \textbf{Ring} is a set $R$ with
+        two operations $+$ and $\cdot$, usually called
+        addition and multiplication, respectively,
+        with the following properties:
+        \begin{enumerate}
+            \item[R1] $(R,+)$ is an Abelian Group.
+            \item[R2] $\forall_{a,b,c\in{R}},%
+                       a\cdot(b\cdot{c})=(a\cdot{b})\cdot{c}$
+                      \hfill[Associativity of Multiplication]
+            \item[R3] $\forall_{a,b,c\in{R}},%
+                       a\cdot(b+c)=(a\cdot{b})+(a\cdot{c})$
+                      \hfill[Left-Distributive Law]
+            \item[R4] $\forall_{a,b,c\in{R}}%
+                       (b+c)\cdot{a}=(b\cdot{a})+(c\cdot{a})$
+                      \hfill[Right-Distributive Law]
+        \end{enumerate}
+        We write $(R,+,\cdot)$ to denote a ring.
+        A \textbf{Ring with Identity}, or a ring with unity, is
+        a ring $(R,+,\cdot)$ such that:
+        \begin{enumerate}
+            \item[R5] $\exists_{1\in{R}}\forall_{a\in{R}}:%
+                       1\cdot{a}=a\cdot{1}=a$
+                      \hfill[Multiplicative Identity]
+        \end{enumerate}
+        A \textbf{Commutative Ring} is a ring $(R,+,\cdot)$
+        such that:
+        \begin{enumerate}
+            \item[R6] $\forall_{a,b\in{R}},a\cdot{b}=b\cdot{a}$
+                      \hfill[Commutativity of Multiplication]
+        \end{enumerate}
+        In a commutative ring, one can replace the
+        Left-Distributive Law and the Right-Distributive Law with
+        simply one Distributive Law. Commutativity implying
+        they're equivalent. A $\textbf{Field}$ is a
+        commutative ring with identity $(F,+,\cdot)$ such that:
+        \begin{enumerate}
+            \item[F1] $\forall_{a\in{F}, a\ne{0}}%
+                       \exists_{a^{-1}\in{F}}:a\cdot{a^{-1}}=1$
+                      \hfill[Multiplicative Inverse]
+        \end{enumerate}
+        One can prove some very intuitive results about the
+        additive identity of a ring $R$.
+        \begin{theorem}
+            If $(R,+,\cdot)$ is a ring and $0$ is the additive
+            identity of $R$, then for all $a\in{R}$,
+            $a\cdot{0}=0$.
+        \end{theorem}
+        \begin{proof}
+            For:
+            \begin{align*}
+                0&=a\cdot{0}-a\cdot{0}
+                &
+                &=a\cdot{0}+(a\cdot{0}-a\cdot{0})\\
+                &=a\cdot(0+0)-a\cdot{0}
+                &
+                &=a\cdot{0}+0\\
+                &=(a\cdot{0}+a\cdot{0})-a\cdot{0}
+                &
+                &=a\cdot{0}
+            \end{align*}
+        \end{proof}
+        Thus, if one has a field $(F,+,\cdot)$, and if
+        $0$ has a multiplicative inverse, then every element of
+        $F$ is equal to $0$.
+        \begin{theorem}
+            If $(F,+,\cdot)$ is a field, $0$ is the additive
+            identity, and if $0$ has a multiplicative inverse,
+            then $F=\{0\}$.
+        \end{theorem}
+        \begin{proof}
+            For $1=0\cdot{0}^{-1}$, but
+            $0\cdot{0}^{-1}=0$, and thus $1=0$. But for all
+            $a\in{F}$, $a=a\cdot{1}=a\cdot{0}=0$.
+        \end{proof}
+        Because of this, some require that $0\ne{1}$ in the
+        definition of a field, and others call
+        $F=\{0\}$ the trivial field.
+        \begin{definition}
+            A left module of a ring with identity $(R,+,\cdot)$
+            is an abelian group $(M,+_{M})$ and a function
+            $*:R\times{M}\rightarrow{M}$ such that:
+            \begin{enumerate}
+                \item $r*(a+_{M}b)=(r*a)+(r*b)$
+                      \hfill[Left Scalar Distribution]
+                \item $(r\cdot{s})*a=r*(s*a)$
+                      \hfill[Scalar Associativity]
+                \item $(r+s)*a=(r*a)+_{M}(s*a)$
+                      \hfill[Right Module Distribution]
+                \item $1*a=a$
+                      \hfill[Identity Element]
+            \end{enumerate}
+        \end{definition}
+        An attempt has been made to preserve the differences
+        between the various operations in a left module.
+        $+$ and $\cdot$ are binary operations that act on
+        elements of $R$. That is, for $a,b\in{R}$, $a+b$
+        gives another element of $R$, as does $a\cdot{b}$.
+        However, $+_{M}$ is a binary operation over
+        $M$. If $a,b\in{R}$, $a+_{M}b$ has no meaning.
+        For $a,b\in{M}$, $a+_{M}b$ is well defined, and returns
+        another element of $M$. The ``function,'' $*$
+        takes an ordered pair $(r,a)$, where $r\in{R}$ and
+        $a\in{M}$, and returns another element in $M$. For
+        convenience we write $r*a$. If $a,b\in{R}$, then
+        $a*b$ has no meaning, and if $a,b\in{M}$ then
+        $a*b$ also has no meaning. Usually this is very
+        unimportant, and $+$ and $+_{M}$ are given the same
+        symbol, as are $\cdot$ and $*$. We can then more loosely
+        rewrite the definition as, for all $r,s\in{R}$, and
+        all $a,b\in{M}$:
+        \begin{enumerate}
+            \begin{multicols}{2}
+                \item $r(a+b)=ra+rb$
+                \item $(rs)(a)=r(sa)$
+                \item $(r+s)(a)=(ra)+(rs)$
+                \item $1a=a$
+            \end{multicols}
+        \end{enumerate}
+        This is the more natural notation one finds when defining
+        vector spaces. A module is analogous to a vector space:
+        In a vector space one has a set $V$ and a
+        \textit{field} $K$, whereas in a module one has a set
+        $M$ and a \textit{ring with identity} $R$.
+        \begin{theorem}
+            If $(G,+)$ is an Abelian group, then there is a
+            function $*:\mathbb{Z}\times{G}\rightarrow{G}$
+            such that $(G,+_{G})$ is a left module of
+            $(\mathbb{Z},+,\cdot)$, where $+$ and $\cdot$ are
+            the standard arithmetic operations over $\mathbb{Z}$.
+        \end{theorem}
+        \begin{proof}
+            For define $0*a=e$ and $1*a=a$ for all $a\in{G}$,
+            and for all
+            $n\in\mathbb{Z}$, $n>1$ inductively define
+            $(n+1)*a=n*a+_{G}a$. For $n<0$ define
+            $n*a=((-n)*a)^{-1}$, where the inverse is taken
+            with respect to the group $G$. Then $*$ is a function
+            $*:\mathbb{Z}\times{G}\rightarrow{G}$. If $n>0$, we
+            have the following:
+            \begin{align*}
+                (n*a)+_{G}(n*b)
+                &=\underset{n}{\underbrace{(a+_{G}\cdots+_{G}a)}}
+                +_{G}
+                \underset{n}{\underbrace{(b+_{G}\cdots+_{G}b)}}\\
+                &=\underset{n}
+                    {\underbrace{(a+b)+_{G}\cdots+_{G}(a+b)}}\\
+                &=n*(a+b)
+            \end{align*}
+            If $n,m>0$, we have:
+            \begin{equation*}
+                n*a+_{G}m*a
+                =\underset{n+m}{\underbrace{a+_{G}\cdots+_{G}a}}
+                =(n+m)*a
+            \end{equation*}
+            And finally:
+            \begin{equation*}
+                (n\cdot{m})*a=
+                \underset{n\cdot{m}}
+                    {\underbrace{a+_{G}\cdots+_{G}a}}
+                =n*(\underset{m}{\underbrace{a+_{G}\cdots+_{G}a}})
+                =n*(m*a)
+            \end{equation*}
+            Similarly for when $n,m<0$, $n<0<m$, or $m<0<n$.
+        \end{proof}
+        Thus, every Abelian group $(G,+_{G})$ can be seen
+        as a left module over $(R,+,\cdot)$. Moreover the
+        function $*$ is unique, so this correspondence is
+        unique as well. As another example, every vector space
+        $V$ over a field $K$ is a left module over $K$, since
+        any field $K$ is also a ring with identity.
+        A \textbf{Left Ideal} of a ring $(R,+,*)$ is a subset
+        $I\subseteq{R}$ such that:
+        \begin{enumerate}
+            \item $\forall_{a,b\in{I}},a+b\in{I}$
+            \item $\forall_{r\in{R}}\forall_{a\in{I}},%
+                   r\cdot{a}\in{I}$
+        \end{enumerate}
+        This can be rephrased by saying that $(I,+)$ is a subgroup
+        of $(R,+)$, and $I$ absorbs left-multiplication. A
+        \textbf{Right Ideal} replaces $r\cdot{a}$ with
+        $a\cdot{r}$. An \textbf{Ideal} or \textbf{Two-Sided Ideal}
+        is a subset that is both a left and a right ideal.
+        \begin{theorem}
+            If $(R,+,\cdot)$ is a ring with identity
+            and $(I,+)$ is a left ideal
+            of $R$, then there is a function
+            $*:R\times{I}\rightarrow{I}$ such that
+            $(I,+)$ is a left module over $R$.
+        \end{theorem}
+        \begin{proof}
+            For let $*$ be the restriction of $\cdot$ to
+            $R\times{I}$. Then, for all $a\in{I}$,
+            $1\cdot{a}=a$. If $a,b\in{I}$ and $r\in{R}$, then:
+            \begin{equation*}
+                r*(a+b)
+                =r\cdot(a+b)
+                =(r\cdot{a})+(r\cdot{b})
+            \end{equation*}
+            If $r,s\in{R}$ and $a\in{I}$, then:
+            \begin{gather*}
+                (r\cdot{s})*a
+                =(r\cdot{s})\cdot{a}
+                =r\cdot(s\cdot{a})\\
+                (r+s)*(a)
+                =(r+s)\cdot{a}
+                =(r\cdot{a})+(s\cdot{a})
+            \end{gather*}
+        \end{proof}
+        \begin{definition}
+            The Annihilator of a Left Module $(M,+_{M})$ over
+            a ring with identity $(R,+,\cdot)$ is the set:
+            \begin{equation*}
+                I=\{r\in{R}:\forall_{m\in{M}},r*m=0\}
+            \end{equation*}
+        \end{definition}
+        \begin{theorem}
+            If $(M,+_{M})$ is a Left Module over a ring with
+            identity $(R,+,\cdot)$, and if $I$ is the
+            annihilator of $M$, then $I$ is a two-sided
+            ideal of $R$.
+        \end{theorem}
+        \begin{proof}
+            For if $r,s\in{I}$, then for all $m\in{M}$,
+            $r*m=0$ and $s*m=0$. But $(r+s)*m=(r*m)+_{M}(s*m)=0$.
+            Therefore $r+s\in{I}$. If $r\in{R}$ and $s\in{I}$,
+            then $(r\cdot{s})*m=r*(s*m)=r*0=0$, and therefore
+            $r\cdot{s}\in{I}$. Furthermore,
+            $(s\cdot{r})*m=s*(r*m)=0$, and thus $s\cdot{r}\in{I}$.
+            Therefore $I$ is a two-sided ideal.
+        \end{proof}
+        
+    \section{The Fundamental Group}
+    \section{Homology}
+    \section{Cohomology}
+    \section{Homotopy}
+\end{document}
