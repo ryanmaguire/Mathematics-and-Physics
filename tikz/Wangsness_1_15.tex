@@ -1,9 +1,14 @@
 \documentclass[crop,class=article]{standalone}
 %----------------------------Preamble-------------------------------%
-\input{../preamble.tex}
+\usepackage{tikz}           % Drawing/graphing tools.
+\usetikzlibrary{
+    arrows.meta,            % Latex and Stealth arrows.
+    decorations.markings,   % Adding arrows in the middle of a line.
+}
 %--------------------------Main Document----------------------------%
 \begin{document}
     \begin{tikzpicture}[%
+        >=Latex,
         line cap=round,
         ->-/.style={%
             decoration={%
@@ -11,28 +16,29 @@
                 mark=at position .55 with \arrow{Latex}
             },
             postaction={decorate}
+        },
+        -<-/.style={%
+            decoration={%
+                markings,
+                mark=at position .45 with \arrowreversed{Latex}
+            },
+            postaction={decorate}
         }
     ]
-        \begin{axis}[%
-            width=0.5\textwidth,
-            axis lines=center,
-            axis lines=middle,
-            xlabel = $x$,
-            xmin=-0.1,
-            xmax=2.3,
-            xtick distance=1,
-            ylabel=$y$,
-            ymin=-0.1,
-            ymax=2.5,
-            ytick distance=2,
-            yticklabel={$\sqrt{\pgfmathprintnumber{\tick}k}$},
-            line width=0.3mm
-        ]
-            \draw[->-,blue] (axis cs:0,0) -- (axis cs:0,2);
-            \draw[->-,blue] (axis cs:0,2) -- (axis cs:2,2);
-            \addplot[->-, samples=25,domain=1.414214:0,draw=blue]
-                (x*x,1.4142*x);
-            \node at (axis cs:1,0.75) {$y^2=kx$};
-        \end{axis}
+        \begin{scope}[line width=0.2pt]
+            \draw (1in, 0.03in) -- (1in, -0.03in) node[below] {1};
+            \draw (2in, 0.03in) -- (2in, -0.03in) node[below] {2};
+            \draw (0.03in, 2in) -- (-0.03in, 2in)
+                node[left] {$\sqrt{2k}$};
+        \end{scope}
+        \draw[->] (-0.1in, 0in) to (2.3in, 0in);
+        \draw[->] (0in, -0.1in) to (0in, 2.5in);
+        \draw[->-, draw=blue] (0in, 0in) to (0in, 2in);
+        \draw[->-, draw=blue] (0in, 2in) to (2in, 2in);
+        \draw[rotate=90, -<-, draw=blue]
+            (0in, 0in) parabola (2in, -2in);
+        \node at (1in, 1in) {$y^{2}=kx$};
+        \node at (2.2in, 0.1in) {$x$};
+        \node at (0.1in, 2.4in) {$y$};
     \end{tikzpicture}
 \end{document}
