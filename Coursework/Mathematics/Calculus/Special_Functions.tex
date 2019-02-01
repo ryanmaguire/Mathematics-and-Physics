@@ -1,0 +1,625 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../preamble.tex}
+\graphicspath{{../../../images/}}   % Path to Image Folder.
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Special Functions}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \setcounter{chapter}{6}
+        \chapter{Special Functions}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Special Functions}
+    \fi
+    \section{The Error Function}
+        There are algebraic functions, square roots, polynomials,
+        logarithms, exponential, and trigonometric functions.
+        The latter three are elementary transcendental functions,
+        and special functions covers the rest. These are often
+        defined by integrals, or as solutions to strange
+        differential equations that arise from modelling. For
+        example, the following arises when one models heat:
+        \begin{align}
+            \ddot{y}(x)+2x\dot{y}(x)&=0\\
+            x\ddot{y}(x)+\dot{y}(x)&=0
+        \end{align}
+        The solutions to these are, respectively:
+        \begin{align}
+            y(x)&=C_{1}+C_{2}\Erf(x)\\
+            y(x)&=C_{1}+C_{2}\ln(x)
+        \end{align}
+        The logarithmic function is usually studied in
+        calculus in detail, and thus knowing this gives us a
+        good idea as to what the graph of the solution looks like.
+        However, much about logarithms is also glossed over.
+        We may first see this when studying the power rule for
+        integral powers:
+        \begin{equation}
+            \int{x}^{n}\diff{x}=\frac{1}{n+1}x^{n+1}+C
+        \end{equation}
+        And this fails for $n=-1$. However, we \textit{know}
+        from Calculus that when $n=-1$ we obtain the natural
+        logarithm. This is somewhat circular, since we actually
+        \textit{define} logarithm as follows:
+        \begin{equation}
+            \ln(x)=\int_{1}^{x}t^{-1}\diff{t}
+        \end{equation}
+        This is somewhat cheating, as we really haven't obtained
+        any knew information, we just have something to write
+        when $n=-1$. Similarly, we can define $\Erf$ as:
+        \begin{equation}
+            \Erf(x)=\int_{0}^{x}\exp(-t^{2})\diff{t}
+        \end{equation}
+        In calculus, we are very happy with writing the integral
+        of $x^{-1}$ is $\ln(x)$, but we are probably uncomfortable
+        with writing $\Erf$ as the integral of $\exp(-x^{2})$,
+        since one may very reasonably ask
+        \textit{What the hell if Erf?}. But we can ask the same
+        question for $ln(x)$. Thus, to know more about this function
+        we can apply some of the basics from calculus and use the
+        integral definition to learn the properties of $\ln$.
+        We can come up with a few properties almost immediately:
+        \begin{equation}
+            \ln(1)=\int_{1}^{1}t^{-1}\diff{t}=0
+        \end{equation}
+        Using the fundamental theorem of calculus, we obtain:
+        \begin{equation}
+            \frac{\diff}{\diff{x}}\big(\ln(x)\big)
+            =x^{-1}
+        \end{equation}
+        We can also study the integral, using integration by parts:
+        \begin{equation}
+            \int\ln(x)\diff{x}
+            =x\ln(x)-\int\diff{x}
+            =x\ln(x)-x+C
+        \end{equation}
+        It may be the case that we are unable to solve for the
+        integral in terms of other elementary functions, in which
+        case we may have had to define the integral of $\ln(x)$
+        as another special function. Fortunately, we did not have
+        to do this here. What about the most important properties
+        of logarithms, such as the product rule?
+        \begin{subequations}
+            \begin{align}
+                \ln(xy)&=\int_{1}^{xy}t^{-1}\diff{t}\\
+                &=\int_{1}^{x}t^{-1}\diff{t}
+                +\int_{x}^{xy}t^{-1}\diff{t}\\
+                &=\ln(x)+\int_{1}^{y}(xu)^{-1}x\diff{u}\\
+                &=\ln(x)+\int_{1}^{y}u^{-1}\diff{u}\\
+                &=\ln(x)+\ln(y)
+            \end{align}
+        \end{subequations}
+        This now gives us the power rule:
+        \begin{equation}
+            \ln(x^{2})=\ln(x\cdot{x})=\ln(x)+\ln(x)=2\ln(x)
+        \end{equation}
+        By induction:
+        \begin{subequations}
+            \begin{align}
+                \ln(x^{n+1})&=\ln(x^{n}\cdot{x})\\
+                &=\ln(x^{n})+\ln(x)\\
+                &=n\ln(x^{n})+\ln(x)\\
+                &=(n+1)\ln(x)
+            \end{align}
+        \end{subequations}
+        By studying the definition of $\ln(x)$, we know that
+        $\ln(2)>0$. We can thus determine the limiting behavior:
+        \begin{equation}
+            \ln(2^{n})=n\ln(2)\rightarrow{+\infty}
+        \end{equation}
+        The derivative is $x^{-1}$, which is always positive
+        for $x>0$, and thus the function is monotonic. Moreover,
+        the second derivative is $-x^{-2}$, which is always
+        negative for $x>0$, and thus $\ln(x)$ is concave down.
+        We can also determine the behavior as $x$ tends to
+        zero from the right. We have the following:
+        \begin{equation}
+            \ln(1)=\ln(x\cdot{x}^{-1})=\ln(x)+\ln(x^{-1})
+        \end{equation}
+        But $\ln(1)=0$, and thus we have:
+        \begin{equation}
+            \ln(x)+\ln(x^{-1})=0
+        \end{equation}
+        Therefore:
+        \begin{equation}
+            \ln(2^{-n})=-n\ln(2)\rightarrow{-\infty}
+        \end{equation}
+        Monotonicity gives us that $\ln(x)\rightarrow{-\infty}$
+        as $x\rightarrow{0^{+}}$. Finally, we can compute the
+        Taylor series about $x=1$. Equivalently, let's compute
+        the MacLaurin series for $\ln(x+1)$:
+        \begin{align}
+            \ln(1+x)&=\int_{1}^{1+x}t^{-1}\diff{t}\\
+            &=\int_{0}^{u}\frac{1}{1+u}\diff{u}\\
+            &=\int_{0}^{x}\sum_{n=0}^{\infty}(-u)^{n}\diff{u}\\
+            &=\sum_{n=0}^{\infty}(-1)^{n}\int_{0}^{x}u^{n}\diff{u}\\
+            &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n+1}x^{n+1}
+        \end{align}
+        The radius of convergence of the integral of a power
+        series does not change. The \textit{interval} may.
+        Indeed, for the original series evaluating at
+        $u=1$ is invalid, however for the integral, the series at
+        $x=1$ is well define and evaluates to $\ln(2)$. We can
+        use this series expansion for the purpose of computation
+        for when $|x|<1$.
+        \par\hfill\par
+        We now have that the natural logarithm is well defined on
+        $(0,\infty)$, the range of the function is
+        $\mathbb{R}$, and that $\ln(x)$ is strictly monotonically
+        increasing. Therefore there is an inverse. We call the
+        inverse the \textit{exponential} function. Let's see
+        if we can determine some properties of it:
+        \begin{align}
+            y&=\exp(x)\\
+            x&=\ln(y)\\
+            \Rightarrow\frac{\diff{x}}{\diff{x}}
+            &=\frac{\diff}{\diff{x}}\ln(y)\\
+            \Rightarrow\frac{1}{y}\frac{\diff{y}}{\diff{x}}&=1\\
+            \Rightarrow\frac{\diff{y}}{\diff{x}}&=y
+        \end{align}
+        From this, we obtain almost all of the familiar rules for
+        $\exp(x)$. Since $\ln(1)=0$, we have that $\exp(0)=1$.
+        Using the derivative obtained, have have that, for all
+        $n$, $y^{(n)}(0)=1$, and thus the Taylor series is:
+        \begin{equation}
+            \exp(x)=\sum_{n=0}^{\infty}\frac{x^{n}}{n!}
+        \end{equation}
+        Now let's return to the original differential equation,
+        for which we wrote the solution as $C_{1}+C_{2}\Erf(x)$.
+        \begin{equation}
+            \ddot{y}(x)+2x\dot{y}(x)=0
+        \end{equation}
+        Let $u(x)=\dot{y}(x)$, so $\dot{u}(x)=\ddot{y}(x)$.
+        Then we obtain:
+        \begin{equation}
+            \dot{u}(x)+2xu(x)=0
+        \end{equation}
+        This is separable, so we can solve for $u$ as follows:
+        \begin{align}
+            \int{u}^{-1}\diff{u}
+            &=-2\int{2x}\diff{x}\\
+            \Rightarrow\ln(u)&=-x^{2}+\ln(C_{1})\\
+            \Rightarrow{u}&=C_{1}\exp(-x)^{2}
+        \end{align}
+        But $u(x)=\dot{y}(x)$, so we can solve for $y$ now:
+        \begin{equation}
+            y(x)=C_{1}\int\exp(-x^{2})\diff{x}+C_{2}
+        \end{equation}
+        What can we learn from this? Let's define the following:
+        \begin{equation}
+            \Erf(x)=\int_{0}^{x}\exp(-t^{2})\diff{t}
+        \end{equation}
+        From this, we obtain $\Erf(0)=0$, and for all
+        $x$, $\Erf(-x)=-\Erf(x)$, since $\exp(-t^{2})$ is an
+        even function. Looking at the derivative, we see that
+        $\Erf'(x)=\exp(-x^{2})$, which is always positive, and
+        thus $\Erf(x)$ is strictly monotonically increasing.
+        The second derivative is $-2x\exp(-x^{2})$, which is
+        negative for $x>0$ and positive for $x<0$. Thus $\Erf(x)$
+        is concave up when $x<0$ and concave down when $x>0$.
+        What happens as $x\rightarrow\infty$? We can use a
+        familiar trick from Gauss to evaluate this. Consider
+        the square of $\Erf(z)$:
+        \begin{align}
+            \Erf(z)^{2}
+            &=\Big(\int_{0}^{z}\exp(-x^{2})\diff{x}\Big)
+            \Big(\int_{0}^{z}\exp(-y^{-2})\diff{y}\Big)\\
+            &=\int_{0}^{z}
+                \Big(\int_{0}^{z}\exp(-x^{2})\diff{x}\Big)
+                \exp(-y^{2})\diff{y}\\
+            &=\int_{0}^{z}\int_{0}^{z}\exp(-(x^{2}+y^{2})
+                \diff{x}\diff{y}
+        \end{align}
+        This is a square $A$ in the plane. From the positivity of
+        $\exp(-(x^{2}+y^{2})$, the integral over $A$ is greater
+        than or equal to integral over the circle that fits
+        inside the square $A$, and less than or equal to the
+        integral over the circle that contains the square $A$.
+        Using this, we swap to polar coordinates. The radius
+        of the inner circle is $z$, and the radius of the
+        outer circle is $\sqrt{2}z$. So we have:
+        \begin{align}
+            \int_{0}^{\pi/2}\int_{0}^{z}r\exp(-r^{2})
+                \diff{r}\diff{\theta}
+            &\leq\int_{0}^{z}\int_{0}^{z}\exp(-(x^{2}+y^{2}))
+                \diff{x}\diff{y}\\
+            &\leq\int_{0}^{\pi/2}\int_{0}^{\sqrt{2}z}r\exp(-r^{2})
+                \diff{r}\diff{\theta}
+        \end{align}
+        The left and right integrals can be evaluated, and we
+        have:
+        \begin{equation}
+            \frac{\pi}{4}\Big[1-\exp(-z^{2})\Big]
+            \leq\Erf(z)^{2}
+            \leq\frac{\pi}{4}\Big[1-\exp(-2z^{2})\Big]
+        \end{equation}
+        From the squeeze theorem, we obtain:
+        \begin{equation}
+            \underset{x\rightarrow\infty}{\lim}
+            \Erf(x)=\frac{\sqrt{\pi}}{2}
+        \end{equation}
+        We now redefine $\Erf$, and give it a name.
+        \begin{definition}
+            The Error Function is the function
+            $\Erf:\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+            \begin{equation}
+                \Erf(x)=\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{x}\exp(-t^{2})\diff{t}
+            \end{equation}
+        \end{definition}
+        The coefficient out in front of the integral is to make
+        $\Erf(x)$ asymptotic to $\pm{1}$ as $x\rightarrow\pm\infty$.
+        The integral can also be evaluated in similar manner to
+        how we evaluated the integral of $\ln(x)$:
+        \begin{align}
+            \int\Erf(x)\diff{x}
+            &=x\Erf(x)-\frac{2}{\sqrt{\pi}}
+                \int{x}\exp(-x^{2})\diff{x}\\
+            &=x\Erf(x)+\frac{1}{\sqrt{\pi}}\exp(-x^{2}+C
+        \end{align}
+        Talking about the weirdness of Taylor series, look at
+        $\exp(-1000)$. Taylor says that:
+        \begin{equation}
+            \exp(-1000)=1-1000+\frac{1000^{2}}{2!}-\hdots
+        \end{equation}
+        The first term is 1, second term is 1000, third term
+        is 500,000, and this goes on. What the largest term?
+        We see that the terms get bigger and bigger up until
+        the $1000^{th}$ term. Using Sterling's approximation,
+        we can see that this term is monumental in size,
+        over 400 digits long. After this the terms get smaller
+        and smaller, cancelling, until we have have
+        something on the order of $10^{-400}$, meaning over
+        800 digits cancelled. Woah. Ignoring that, we can
+        continue and obtain the power series for $\Erf$:
+        \begin{align}
+            \Erf(x)&=\frac{2}{\sqrt{\pi}}
+                \int_{0}^{x}\exp(-t^{2})\diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}\int_{0}^{\infty}
+                \sum_{n=0}^{\infty}\frac{(-t^{2})^{n}}{n!}
+                \diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}
+                \sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                \int_{0}^{x}t^{2n}\diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{n!}\frac{x^{2n+1}}{2n+1}
+        \end{align}
+        This confirms our suspicion that $\Erf(x)$ is an
+        odd function. The alternating series test tells us how
+        accurate any partial sum is, since the error in the
+        approximation will be less than the magnitude of the
+        last term. For example, if we want to know $\Erf(1)$,
+        we have:
+        \begin{equation}
+            \Erf(1)\approx
+                \sum_{n=0}^{N}\frac{(-1)^{n}}{n!(2n+1)}
+        \end{equation}
+        The error $E$ will be:
+        \begin{equation}
+            E<\Big|\frac{1}{(N+1)!(2N+3)}\Big|
+        \end{equation}
+        To obtain $\Erf(1)$ to high precision does not require
+        using a substantial amount of terms. For large $x$,
+        we also may use the inequality we obtained before:
+        \begin{equation}
+            1-\exp(-x^{2})\leq\Erf(x)\leq1-\exp(-2x^{2})
+        \end{equation}
+        So $\Erf(x)\approx{1}$, with error $\exp(-x^{2})$.
+        More often in probability and in statistics one defines
+        the \textit{complementary error function}
+        $\Erfc(x)=1-\Erf(x)$. This is used when studying the
+        tail of the normal distribution. We can obtain another
+        series as well by using integration by parts:
+        \begin{align}
+            \frac{\sqrt{\pi}}{2}\Erf(x)
+            &=\int_{0}^{x}\exp(-t^{2})\diff{t}\\
+            &=x\exp(-x^{2})+\int_{0}^{x}2t\exp(-t^{2})\diff{t}\\
+            &=\exp(-x^{2})\sum_{n=0}^{N}
+                \frac{2^{n}}{(2n+1)!!}x^{2n+1}
+            +\frac{2^{N+1}}{(2N+1)!!}
+            \int_{0}^{x}t^{2n+2}\exp(-t^{2})\diff{t}
+        \end{align}
+        The double factorial sign means skip every other point.
+        So $5!!=5\cdot{3}\cdot{1}$. For even numbers, we have:
+        \begin{equation}
+            (2n)!!=(2n)\cdot(2n-2)\cdots{2}
+            =2^{n}n!
+        \end{equation}
+        Thus, for odd numbers, we can write:
+        \begin{equation}
+            (2n-1)!!=\frac{(2n)!}{(2n)!!}
+            =\frac{(2n)!}{2^{n}n!}
+        \end{equation}
+        And thus the notation is redundant. We can also obtain a
+        series expansion for $\Erfc(x)$.
+        \begin{subequations}
+            \begin{align}
+                \Erfc(x)&=1-\Erf(x)\\
+                &=1-\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{x}\exp(-t^{2})\diff{t}\\
+                &=\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                    +\frac{2}{\sqrt{\pi}}\int_{0}^{x}
+                    \exp(-t^{2})\diff{t}\\
+                &=\frac{2}{\sqrt{\pi}}\int_{x}^{\infty}
+                    \exp(-t^{2})\diff{t}
+            \end{align}
+        \end{subequations}
+        Using this, we obtain a series:
+        \begin{subequations}
+            \begin{align}
+                \frac{\sqrt{\pi}}{2}\Erfc(x)&=
+                \int_{x}^{\infty}\exp(-t^{2})\diff{t}\\
+                &=\frac{1}{2x}\exp(-x^{2})+
+                \int_{x}^{\infty}\frac{1}{2t^{2}}\frac{1}{2t}
+                \frac{\diff}{\diff{t}}
+                    \Big(\exp(-t^{2})\Big)\diff{t}\\
+                &=\frac{\exp(-t^{2})}{2}
+                \sum_{n=0}^{N}(-1)^{n}\frac{(2n-1)!!}{(2x^{2})^{n}}
+                +R_{N}
+            \end{align}
+            Where $R_{N}$ is the remainder term:
+            \begin{equation}
+                R_{N}=(-1)^{N}\frac{(2N-1)!!}{2^{N+3}}
+                \int_{x}^{\infty}\frac{1}{t^{2N+2}}\exp(-t^{2})
+                \diff{t}
+            \end{equation}
+        \end{subequations}
+        $R_{N}$ diverges for any $x$. This series is useful
+        for large $x$, however, since the factorial term that
+        cause $R_{N}$ to diverge take a while to get large.
+        Thus, $R_{N}$ decreasing for a while, and then eventually,
+        once the factorial term is larger than the exponential
+        terms, $R_{N}$ starts to decrease. Choosing the $N$ that
+        minimizes $R_{N}$, we obtain a series that can very
+        accurately approximate the nature of $\Erfc(x)$ for
+        large $x$. This is similar to $\exp(-1000)$ where the
+        terms got bigger and bigger, until the eventually cancel.
+        We now have the opposite, where the terms get smaller
+        and smaller, until $R_{N}$ starts to diverse of to
+        infinity. If terms past the ``good'' $N$ are added,
+        the series will fail to accurate represent $\Erfc(x)$.
+        \par\hfill\par
+        Make graph of $R_{N}$ vs $N$ for $\Erf$ and $\Erfc$.
+        \par\hfill\par
+        This type of series is an example of an asymptotic series.
+        We can't write $f(x)=\sum{a}_{n}x^{n}$ since the
+        series diverges, so we write
+        $f(x)\sim\sum{a}_{n}(x)$ as $x\rightarrow\infty$.
+        Taylor series say that the series approximation works
+        well every as $n$ gets large. Asymptoptic series say
+        that the approximation works well as the argument of
+        $f$ gets large, rather than the number of terms.
+        More precisely:
+        \begin{equation}
+            \underset{x\rightarrow\infty}{\lim}
+            \frac{f(x)-\sum_{n=0}^{N}a_{n}(x)}{a_{N}(x)}=0
+        \end{equation}
+        As such, there are divergent as convergent asymptotic
+        series. For example, consider the following:
+        \begin{align}
+            \frac{1}{1+x^{2}}
+            &=\frac{1}{x^{2}}\frac{1}{1+\frac{1}{x^{2}}}\\
+            &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{x^{n+2}}\\
+            &=\sum_{n=0}^{\infty}(-1)^{n}x^{2n}
+        \end{align}
+        The third equation is an asymptotic series and the
+        fourth equation is the Taylor series. The Taylor
+        series has a radius of convergence of 1, and thus for
+        all $x>1$, the Taylor series will fail. For
+        $x>1$, however, the asymptotic expansion does a very
+        good job
+    \section{Lecture 2}
+        We can approximate the error in the power series and
+        asymptotic series expansions by looking at the largest
+        and smallest terms, respectively. For the power series:
+        \begin{align}
+            \Big|\frac{a_{n+1}}{a_{n}}\Big|
+            &=\frac{x^{2}}{n+1}\frac{2n+3}{2n+1}\\
+            &\approx\frac{x^{2}}{n+1}
+        \end{align}
+        And this is largest when $n\sim{x}^{2}$.
+        Using Stirling's Formula, the term is then:
+        \begin{align}
+            \frac{x^{2n+1}}{n!(2n+1)}
+            &\approx\frac{x^{2n+1}}{(x^{2})!(2x^{2}+1)}\\
+            &\approx\frac{x^{2x^{2}-1}}{2}
+            \frac{1}{2\pi{x}^{2}(x^{2})^{(x^{2})}\exp(-x^{2})}\\
+            &=\frac{1}{2}\frac{\exp(x^{2})}{x^{2}\sqrt{2\pi}}
+        \end{align}
+        Similarly, the lowest term in the asymptotic series
+        can be obtained.
+        \begin{align}
+            \Big|\frac{a_{n+1}}{a_{n}}\Big|
+            &=\frac{(2n+2)(2n+1)}{4(n+1)x^{2n+1}}\\
+            &=\frac{2n+1}{2x^{2n+1}}\\
+            &\approx\frac{n}{x^{2}}
+        \end{align}
+        So again, the smallest term occurs when
+        $n\sim{x}^{2}$. The smallest term is approximately:
+        \begin{align}
+            \frac{(2x^{2})!}{2^{2x^{2}}(x^{2})!x^{2x^{2}+1}}
+            &\approx
+            \frac{\sqrt{2\pi{x}^{2}}(2x^{2})^{2x^{2}}\exp(-2x^{2}}
+                 {2^{2x^{2}}\sqrt{2\pi{x}^{2}}(x^{2})^{x^{2}}
+                  \exp(-x^{2})x^{2x^{2}+1}}\\
+            &=\frac{\sqrt{2}\exp(-x^{2})}{x}
+        \end{align}
+        \subsection{Watson's Lemma}
+            The Laplace transform of an integrable function $f$
+            is defined as:
+            \begin{equation}
+                \mathscr{L}(f)_{s}=\int_{0}^{\infty}
+                    f(t)\exp(-st)\diff{t}
+            \end{equation}
+            Watson's lemma says to substitute the MacLaurin
+            series for $f$ and integrate term by term. For example,
+            letting $f(x)=\Erfc(x)$, we have:
+            \begin{align}
+                \Erfc(x)&=\int_{x}^{\infty}\exp(-t^{2})\diff{t}\\
+                &=\int_{0}^{\infty}\exp\big(-(s+x)^{2}\big)\diff{s}\\
+                &=\exp(-x^{2})\int_{0}^{\infty}
+                    \exp(-2sx)\exp(-s^{2})\diff{s}\\
+                &\sim
+                \exp(-x^{2})\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                    \int_{0}^{\infty}s^{2n}\exp(-2sx)\diff{s}\\
+                &=\exp(-x^{2})\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}(2n)!}{2^{2n+1}n!x^{2n+1}}
+            \end{align}
+        \subsection{The Exponential Integral}
+            The indefinite integral of the function
+            $\exp(-x)/x$ can not be expressed in terms of
+            elementary functions that one sees in a calculus course.
+            Similar to how $\Erf$ was define, the exponential
+            integral is defined as the \textit{solution} to this
+            problem.
+            \begin{equation}
+                E_{1}(x)=\int_{x}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+            \end{equation}
+            $E_{1}(x)$ is defined by an improper integral, and
+            as such we must show that this is well defined for
+            various values. That is, we must show the following
+            limit is well defined:
+            \begin{equation}
+                E_{1}(x)=\underset{b\rightarrow\infty}{\lim}
+                \int_{x}^{b}\frac{\exp(-t)}{t}\diff{t}
+            \end{equation}
+            Since $\exp(-t)/t$ is positive for all
+            $t>0$, the area under the curve increases as $b$
+            increases. That is, we have monotonicity. Also, for
+            all $t\geq{x}$, $\exp(-t)/t\leq\exp(-t)/x$, and thus
+            we obtain:
+            \begin{equation}
+                \int_{x}^{b}\frac{\exp(-t)}{t}\diff{t}
+                \leq\int_{x}^{b}\frac{\exp(-t)}{x}\diff{t}
+                =\frac{1}{x}\Big[\exp(-x)-\exp(-b)\Big]
+            \end{equation}
+            Taking the limit as $b\rightarrow\infty$, we see
+            that the integral converges and thus $E_{1}(x)$ is
+            well defined for all positive $x$. This is a combination
+            of the comparison test and the fact that, if
+            $f(b)$ is a monotonic bounded function, then it
+            converges. Taking $f(b)$ to be the integral of
+            $\exp(-t)/t$ over the interval $(x,b)$ gives us the
+            result. From the integral definition, we can obtain
+            many properties of $E_{1}(x)$. As $x$ increases, there
+            is less area, and thus $E_{1}(x)$ is decreasing.
+            We can also show this by taking the derivative, and
+            observing that $-\exp(-x)/x$ is negative for all
+            $x>0$. Looking at the second derivative, we get:
+            \begin{equation}
+                E_{1}''(x)=\exp(-x)\frac{x+1}{x^{2}}
+            \end{equation}
+            And this is positive for all $x>0$, and thus
+            $E_{1}(x)$ is concave up. We can obtain a series for
+            $E_{1}$ as follows:
+            \begin{align}
+                E_{1}'(x)&=-\frac{\exp(-x)}{x}\\
+                &=-\frac{1}{x}\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}x^{n}}{n!}\\
+                \Rightarrow
+                E_{1}(x)&=-\ln(x)-\sum_{n=1}^{\infty}
+                    \frac{(-1)^{n}x^{n}}{nn!}+C
+            \end{align}
+            Where the $C$ comes out as a constant of integration.
+            Evaluating $E_{1}(1)$ gives us this constant.
+            We can't evaluate at zero since the log function is
+            undefined there, and similarly for infinity.
+            \begin{equation}
+                C=\int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}
+            \end{equation}
+            Using integration by parts, we have:
+            \begin{equation}
+                \int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                =\int_{1}^{\infty}\ln(t)\exp(-t)\diff{t}
+            \end{equation}
+            Note that this does not say that $t^{-1}$ and
+            $\ln(t)$ are the same function, but rather the
+            area under $\exp(-t)t^{-1}$ and $\ln(t)\exp(-t)$
+            are the same on the interval $(1,\infty)$.
+            Let's look at the following function on $(0,1]$:
+            \begin{equation}
+                f(b)=\int_{b}^{1}\ln(x)\exp(-x)\diff{x}
+            \end{equation}
+            We can show this is well defined when
+            $b\rightarrow{0}^{+}$ since:
+            \begin{equation}
+                \int_{b}^{1}\ln(t)\diff{t}
+                \leq\int_{b}^{1}\ln(t)\exp(-t)\diff{t}
+                \leq{0}
+            \end{equation}
+            And thus, we have:
+            \begin{equation}
+                -1+b(1-\ln(b))\leq{f}(b)\leq{0}
+            \end{equation}
+            Since $f$ is monotonic, the limit exists as
+            $b\rightarrow{0}^{+}$. This again uses the comparison
+            test for integrals. Getting back to our computation
+            of $C$, we obtain a series for integrand of the function
+            used in the definition of $f(b)$:
+            \begin{align}
+                \int_{0}^{1}\ln(t)\exp(-t)\diff{t}
+                &=\int_{0}^{1}\ln(t)\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}}{n!}t^{n}\diff{t}\\
+                &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                \int_{0}^{\infty}t^{n}\ln(t)\diff{t}
+            \end{align}
+            Examining that last integral, we get:
+            \begin{equation}
+                \int_{0}^{1}\ln(t)t^{n}\diff{t}
+                =\int_{0}^{1}\ln(t)\frac{\diff}{\diff{t}}
+                    \Big(\frac{t^{n+1}}{n+1}\Big)\diff{t}
+            \end{equation}
+            Applying integration by parts and L'H\"{o}pital's rule,
+            we see that this simplifies to:
+            \begin{equation}
+                -\int_{0}^{1}\frac{1}{n+1}t^{n}\diff{t}
+                =-\frac{1}{(n+1)^{2}}
+            \end{equation}
+            Thus, this original integral is:
+            \begin{equation}
+                \int_{0}^{1}\exp(-t)\ln(t)\diff{t}
+                =\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}
+            \end{equation}
+            But from how $C$ was defined, we obtain:
+            \begin{align}
+                C&=\int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}\\
+                &=\int_{0}^{1}\ln(t)\exp(-t)\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}\\
+                &=\int_{0}^{\infty}\exp(-t)\ln(t)\diff{t}
+            \end{align}
+            This constant appears in many different areas of
+            mathematics, and is given a symbol and a name.
+            It's called the
+            \textit{Euler-Mascheroni Constant}, and is
+            denoted $\gamma$. It's also called the Euler Gamma
+            constant. It's value is approximately $0.57721$. It is
+            unknown whether this is an irrational number or not
+            (As of January, 2019). With this we obtain our series
+            for $E_{i}(x)$:
+            \begin{equation}
+                E_{i}(x)=-\gamma-\ln(x)
+                -\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}x^{n}
+            \end{equation}
+            We can also examine the indefinite integral by using
+            integration by parts:
+            \begin{equation}
+                \int{E}_{1}(x)\diff{x}=
+                xE_{1}(x)+\exp(-x)+C
+            \end{equation}
+            Where $C$ is a (different) constant of integration.
+            What happens as $x\rightarrow\infty$? We saw earlier
+            that $E_{1}(x)$ is bounded by
+            $\exp(-x)/x$, and thus the indefinite integral is well
+            behaved in this limit. We could, however, continue
+            using integration by parts and obtain an asymptotic
+            series.
+\end{document}
