@@ -9,7 +9,7 @@
 \usepackage[dvipsnames]{xcolor}         % Color names.
 \usepackage{listings, lstlinebgrd}      % Verbatim-Like Tools.
 \usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
-\usepackage{amsthm, amsfonts}           % Fonts and theorems.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
 \usepackage{tabularx}
 \usepackage{tcolorbox}                  % Frames around theorems.
 \usepackage{upgreek}                    % Non-Italic Greek.
@@ -161,36 +161,105 @@
 
 % Define framed environment.
 \tcbuselibrary{most}
-\newtcbtheorem[use counter*=theorem]{ftheorem}{Theorem}%
-    {colback=green!5,colframe=green!35!black,
-     fonttitle=\bfseries\upshape}{th}
+\newtcbtheorem[use counter*=theorem]{ftheorem}{Theorem}{%
+    colback=green!5,
+    colframe=green!35!black,
+    fonttitle=\bfseries\upshape}{th}
 
-\newtcbtheorem[use counter*=definition]{fdefinition}{Definition}%
-    {fonttitle=\bfseries\upshape,
-     colback=blue!5!white,colframe=blue!75!black}{def}
+\newtcbtheorem[use counter*=definition]{fdefinition}{Definition}{%
+    fonttitle=\bfseries\upshape,
+    colback=blue!5!white,
+    colframe=blue!75!black}{def}
 
-\newtcbtheorem[use counter*=example]{fexample}{Example}%
-    {fonttitle=\bfseries\upshape,
-     colback=red!5!white,colframe=red!75!black}{ex}
+\newtcbtheorem[use counter*=example]{fexample}{Example}{%
+    fonttitle=\bfseries\upshape,
+    colback=red!5!white,
+    colframe=red!75!black}{ex}
 
-\newtcbtheorem[use counter*=notation]{fnotation}{Notation}%
-    {fonttitle=\bfseries\upshape,
-     colback=SeaGreen!5!white,colframe=SeaGreen!75!black}{not}
+\newtcbtheorem[use counter*=notation]{fnotation}{Notation}{%
+    fonttitle=\bfseries\upshape,
+    colback=SeaGreen!5!white,
+    colframe=SeaGreen!75!black}{not}
 
-\newtcbtheorem[use counter*=corollary]{fcorollary}{Corollary}%
-    {fonttitle=\bfseries\upshape,
-     colback=Orchid!5!white,colframe=Orchid!75!black}{ex}
+\newtcbtheorem[use counter*=corollary]{fcorollary}{Corollary}{%
+    fonttitle=\bfseries\upshape,
+    colback=Orchid!5!white,
+    colframe=Orchid!75!black}{ex}
 
-\newtcbtheorem[use counter*=remark]{fremark}{Remark}%
-    {fonttitle=\bfseries\upshape,
-     colback=Goldenrod!5!white,colframe=Goldenrod!75!black}{ex}
+\newtcbtheorem[use counter*=remark]{fremark}{Remark}{%
+    fonttitle=\bfseries\upshape,
+    colback=Goldenrod!5!white,
+    colframe=Goldenrod!75!black}{ex}
 
-\newenvironment{bproof}{\textit{Proof.}}{\hfill$\square$}
+\newenvironment{bproof}{\textit{Proof.}}{\hfill$\blacksquare$}
 \tcolorboxenvironment{bproof}{blanker,breakable,left=5mm,
-                             before skip=10pt,after skip=10pt,
-                             borderline west={1mm}{0pt}{red}}
+                              before skip=10pt,after skip=10pt,
+                              borderline west={1mm}{0pt}{red}}
 \tcolorboxenvironment{fsolution}
     {enhanced jigsaw,colframe=cyan,interior hidden,breakable}
+
+\AtEndEnvironment{lexample}{$\hfill\textcolor{red}{\blacksquare}$}
+\newtcolorbox[use counter*=example]{lexample}{%
+    empty,
+    title={Example~\theexample},
+    attach boxed title to top left,
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=red,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    left=0pt,
+    right=0pt,
+    top=2.2ex,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[red, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay first={%
+        \draw[red, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}
+
+\AtEndEnvironment{ldefinition}{$\hfill\textcolor{Blue}{\blacksquare}$}
+\newtcolorbox[use counter*=definition]{ldefinition}[1]{%
+    empty,
+    title={Definition~\thedefinition:~{#1}},
+    attach boxed title to top left,
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=Blue,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    left=0pt,
+    right=0pt,
+    top=2.2ex,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[Blue, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay={%
+        \draw[Blue, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);}}
+
 
 %--------------------Declared Math Operators--------------------%
 \DeclareMathOperator{\Refl}{Refl}           % Reflection operator.
