@@ -398,6 +398,300 @@
                     return 0;
                 }
             \end{lstlisting}
+        \subsection{Fibonacci Numbers}
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\small,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=16
+            ]
+                /*  Slow function for computing the nth Fibonacci number.
+                    This iterates F_n = F_{n-1} + F_{n-2}.  */
+    
+                unsigned long long _fibb(int n){
+                    if (n < 2)
+                        return (unsigned long long)n;
+                    else
+                        return _fibb(n-1) + _fibb(n-2);
+                }
+            \end{lstlisting}
+            You can run this from Python by doing the following:
+            \newpage
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\small,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=16
+            ]
+                /*  Python function for running the _fibb C function.   */
+                #include "../include/Python.h"
+                static PyObject* fibb(PyObject* self, PyObject* args){
+                    int n;
+                
+                    if (!PyArg_ParseTuple(args, "i", &n))
+                        return NULL;
+                
+                    return Py_BuildValue("K", _fibb(n));
+                }
+            \end{lstlisting}
+            You can also combine Numpy and C.
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\scriptsize,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=16
+            ]
+                #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+                #include "../include/Python.h"
+                #include "../include/arrayobject.h"
+                #include <math.h>
+
+                static PyObject* MaxValue(PyObject* self, PyObject* args)
+                {
+                    PyArrayObject *arr;
+                    int i;
+                
+                    /*  parse single numpy array argument */
+                    if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &arr)){
+                        PyErr_Format(PyExc_RuntimeError, "You done messed up.");
+                        return NULL;
+                    }
+                
+                    // Useful metadata about the data
+                    npy_intp* dims = PyArray_DIMS(arr);
+                    int typenum    = PyArray_TYPE(arr);
+                    if( typenum != NPY_DOUBLE ){
+                        PyArrayObject* arr2 = (PyArrayObject*)PyArray_FromArray(
+                            arr, PyArray_DescrFromType(NPY_DOUBLE), NPY_ARRAY_ALIGNED
+                        );
+                        Py_DECREF(arr);
+                        arr = arr2;
+                    }
+                
+                    void* data0 = PyArray_DATA(arr);
+                    int n = dims[0];
+                
+                    double (*data1)[n] = (double (*)[n])data0;
+                    double max = (*data1)[0];
+                
+                    for (i=0; i<n; ++i){
+                        if ((*data1)[i] > max){
+                            max = (*data1)[i];
+                        }
+                    }
+                
+                    /*
+                     *  Another way to do it:
+                     *      void* data0 = PyArray_DATA(arr);
+                     *      npy_intp *strides = PyArray_STRIDES (arr);
+                     *      double test, max = *(double *)&data0[0];
+                     *
+                     *      for (i=0; i<n; ++i){
+                     *          test = *(double *)&data0[i*strides[0]];
+                     *          if (test > max){
+                     *              max = test;
+                     *          }
+                     *      }
+                    */
+                
+                    return Py_BuildValue("d", max);
+                }
+
+
+                static PyObject* cos_func(PyObject* self, PyObject* args)
+                {
+                    PyArrayObject           *in_array;
+                    PyObject                *out_array;
+                    NpyIter                 *in_iter, *out_iter;
+                    NpyIter_IterNextFunc    *in_iternext, *out_iternext;
+                
+                    /*  parse single numpy array argument then construct out array. */
+                    if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &in_array))
+                        return NULL;
+                    out_array = PyArray_NewLikeArray(in_array, NPY_ANYORDER, NULL, 0);
+                    if (out_array == NULL)
+                        return NULL;
+                
+                    /*  create the iterators */
+                    in_iter = NpyIter_New(in_array, NPY_ITER_READONLY, NPY_KEEPORDER,
+                                             NPY_NO_CASTING, NULL);
+                    if (in_iter == NULL)
+                        goto fail;
+                
+                    out_iter = NpyIter_New((PyArrayObject *)out_array, NPY_ITER_READWRITE,
+                                          NPY_KEEPORDER, NPY_NO_CASTING, NULL);
+                    if (out_iter == NULL) {
+                        NpyIter_Deallocate(in_iter);
+                        goto fail;
+                    }
+                
+                    in_iternext = NpyIter_GetIterNext(in_iter, NULL);
+                    out_iternext = NpyIter_GetIterNext(out_iter, NULL);
+                    if (in_iternext == NULL || out_iternext == NULL) {
+                        NpyIter_Deallocate(in_iter);
+                        NpyIter_Deallocate(out_iter);
+                        goto fail;
+                    }
+                    double ** in_dataptr = (double **) NpyIter_GetDataPtrArray(in_iter);
+                    double ** out_dataptr = (double **) NpyIter_GetDataPtrArray(out_iter);
+                
+                    /*  iterate over the arrays */
+                    do {
+                        **out_dataptr = cos(**in_dataptr);
+                    } while(in_iternext(in_iter) && out_iternext(out_iter));
+                
+                    /*  clean up and return the result */
+                    NpyIter_Deallocate(in_iter);
+                    NpyIter_Deallocate(out_iter);
+                    Py_INCREF(out_array);
+                    return out_array;
+                
+                    /*  in case bad things happen */
+                    fail:
+                        Py_XDECREF(out_array);
+                        return NULL;
+                }
+                
+                
+                /*  define functions in module */
+                static PyMethodDef DiffMethods[] =
+                {
+                    {
+                        "cos_func",
+                        cos_func,
+                        METH_VARARGS,
+                        "Evaluate the cosine of a numpy array"
+                    },
+                    {
+                        NULL,
+                        NULL,
+                        0,
+                        NULL
+                    }
+                };
+                
+                static struct PyModuleDef cModPyDem =
+                {
+                    PyModuleDef_HEAD_INIT,
+                    "cosmodule", /* name of module */
+                    "",
+                    -1,
+                    DiffMethods
+                };
+                
+                /* module initialization */
+                PyMODINIT_FUNC PyInit_cosmodule(void)
+                {
+                    /* IMPORTANT: this must be called */
+                    import_array();
+                    return PyModule_Create(&cModPyDem);
+                }
+            \end{lstlisting}
+            Another example of Fibonacci number stuff.
+            \newpage
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\scriptsize,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=16
+            ]
+                #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+                #include "../include/Python.h"
+
+                double FIBO_A = -0.618033988749894848204587;
+                double FIBO_B = 1.618033988749894848204587;
+                double FIBO_C = 0.723606797749978969640917;
+                double FIBO_D = 0.2763932022500210303590826;
+                
+                unsigned long long _fiba(int n){
+                    int i = 0;
+                    unsigned long long fibo;
+                    double fibo_a = FIBO_A;
+                    double fibo_b = FIBO_B;
+                    if (n < 2){
+                        return n;
+                    }
+                    else{
+                        while (i < n){
+                            fibo_a *= FIBO_A;
+                            fibo_b *= FIBO_B;
+                            i += 1;
+                        }
+                        fibo_a = fibo_a*FIBO_C + fibo_b*FIBO_D;
+                        fibo = (unsigned long long)fibo_a;
+                        if (fibo_a - 0.5 > fibo){
+                            fibo += 1;
+                        }
+                        return fibo;
+                    }
+                }
+                
+                //  Python function for running the _fib C function.
+                static PyObject* fiba(PyObject* self, PyObject* args)
+                {
+                    int n;
+                
+                    if (!PyArg_ParseTuple(args, "i", &n))
+                        return NULL;
+                
+                    return Py_BuildValue("K", _fiba(n));
+                }
+                
+                /*  define functions in module */
+                static PyMethodDef DiffMethods[] =
+                {
+                    {
+                        "fiba",
+                        fiba,
+                        METH_VARARGS,
+                        "Calculate the Fibonacci numbers the fast way."
+                    },
+                    {NULL, NULL, 0, NULL}
+                };
+                
+                static struct PyModuleDef cModPyDem =
+                {
+                    PyModuleDef_HEAD_INIT,
+                    "__fmodule", /* name of module */
+                    "",
+                    -1,
+                    DiffMethods
+                };
+                
+                /* module initialization */
+                PyMODINIT_FUNC PyInit___fmodule(void)
+                {
+                    return PyModule_Create(&cModPyDem);
+                }
+            \end{lstlisting}
+            Run the python install script:
+            \begin{lstlisting}[%
+                language=C,
+                basicstyle=\scriptsize,
+                frame=single,
+                caption=FizzBuzz.c,
+                gobble=16
+            ]
+                #build the modules
+                import numpy
+                from distutils.core import setup, Extension
+                
+                # define the extension module
+                __fmodule = Extension('__fmodule', sources=['__fmodule.c'],
+                                      include_dirs=[numpy.get_include()])
+                
+                setup(
+                    name = 'PackageName',
+                    version = '1.0',
+                    description = 'This is a demo package',
+                    include_dirs = [numpy.get_include()],
+                    ext_modules = [__fmodule]
+                )
+        \end{lstlisting}
     \section{IDL}
         \subsection{Tutorials}
             \subsubsection{Introduction}
