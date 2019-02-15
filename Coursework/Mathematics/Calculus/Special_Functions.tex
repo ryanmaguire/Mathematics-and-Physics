@@ -622,4 +622,555 @@
             behaved in this limit. We could, however, continue
             using integration by parts and obtain an asymptotic
             series.
+    \section{Lecture 3}
+        \subsection{Fresnel Integrals}
+            The Fresnel Integrals are defined as:
+            \begin{align}
+                S(x)&=\int_{0}^{x}\sin(t^{2})\diff{t}\\
+                C(x)&=\int_{0}^{x}\cos(t^{2})\diff{t}
+            \end{align}
+            Occasionally there is a $\pi/2$ inside the sine and
+            cosine functions. These functions appear in optics.
+            It's not obvious that these integrals converge as
+            $x\rightarrow\infty$, but they do:
+            \begin{align}
+                \underset{x\rightarrow\infty}{\lim}S(x)
+                &=\frac{\sqrt{\pi}}{8}\\
+                \underset{x\rightarrow\infty}{\lim}C(x)
+                &=\frac{\sqrt{\pi}}{8}\\
+            \end{align}
+            The problem is that the integrands do not tend to
+            zero, but rapidly oscillate between -1 and 1. If this
+            was a series, we'd be done since the sequence being
+            summed over must converge to zero if the series
+            converges. For integrals it's slightly trickier and
+            rapid cancellations can occur.
+            \begin{align}
+                \int_{1}^{\infty}\sin(t^{2})\diff{t}
+                &=\underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\sin(t^{2})\diff{t}\\
+                &=\underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}-\frac{1}{2t}\frac{\diff}{\diff{t}}
+                \big[\cos(t^{2})\big]\diff{t}\\
+                &=\underset{b\rightarrow\infty}{\lim}
+                \Big(\Big[-\frac{1}{2t}\cos(t^{2})\Big]_{1}^{b}
+                -\int_{1}^{b}\frac{1}{2t^{2}}\cos(t^{2})\diff{t}
+                \Big)\\
+                &=\frac{1}{2}\cos(1)-
+                \underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\frac{1}{2t^{2}}\cos(t^{2})\diff{t}
+            \end{align}
+            So we need to show that this final integral converges.
+            We can use the comparison test. For $t\geq{1}$, we have:
+            \begin{align}
+                \Big|\frac{1}{2t^{2}}\cos(t^{2})\Big|&\leq
+                \frac{1}{2t^{2}}\\
+                \underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\frac{1}{2t^{2}}\diff{t}\\
+                &=\frac{1}{2}
+            \end{align}
+            It follows that the limit exists. From this, we obtain
+            the convergence of $S(x)$ as well. Similarly, $C(x)$
+            converges. We can also evaluate these limits. We will
+            need a simple result from complex variables known as
+            \textit{Euler's Formula}:
+            \begin{equation}
+                \exp(ix)=\cos(x)+i\sin(x)
+            \end{equation}
+            This can be derived by showing that both sides of the
+            equation satisfy $\dot{z}(t)=iz(t)$, $z(0)=1$. Since
+            solutions to such differential equations are unique,
+            we thus obtain Euler's Formula. As a side fact:
+            \begin{align}
+                \exp(ix)^{2}&=\exp(2ix)\\
+                &=\big(\cos(x)+i\sin(x)\big)^{2}\\
+                &=\big(\cos^{2}(x)-\sin^{2}(x)\big)+
+                i\big(2\sin(x)\cos(x)\big)\\
+                &=\cos(2x)+i\sin(2x)
+            \end{align}
+            All of the trig identities learned simply come from
+            the exponent rules, and then applying Euler's formula.
+            Now:
+            \begin{equation}
+                \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                =\frac{\sqrt{\pi}}{2}
+            \end{equation}
+            et $t=\exp(i\pi/2)u$, and secretly using some complex
+            variables, we obtain:
+            \begin{align}
+                \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                &=\int_{0}^{\infty}
+                \exp\Big(-i\frac{\pi}{2}u^{2}\Big)
+                \exp\Big(i\frac{\pi}{4}\Big)\diff{u}\\
+                &=\exp\Big(-i\frac{\pi}{4}\Big)
+                \int_{0}^{\infty}\exp(iu^{2})\Big)\\
+                &=\frac{1-i}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\cos(u^{2})+i\sin(u^{2})\big)\diff{u}\\
+                &=\frac{1}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\cos(u^{2})+\sin(u^{2})\big)\diff{u}
+                +\frac{i}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\sin(u^{2})-\cos(u^{2})\big)\diff{u}\\
+                &=\frac{\sqrt{\pi}}{2}
+            \end{align}
+            Equating real and imaginary parts obtains the limits.
+            We can obtain the power series for $S(x)$ by integrating
+            the power series for $\sin(x^{2})$ term by term:
+            \begin{align}
+                S(x)&=\int_{0}^{x}\sin(t^{2})\diff{t}\\
+                &=\int_{0}^{x}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n+1)!}t^{4n+2}\diff{t}\\
+                &=\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n+1)!}\frac{1}{4n+3}x^{4n+3}
+            \end{align}
+            For the asymptotic series, we note that:
+            \begin{equation}
+                S(x)=\frac{\sqrt{\pi}}{8}-
+                \int_{x}^{\infty}\sin(t^{2})\diff{t}
+            \end{equation}
+            We use integration by parts to obtain the following
+            series:
+            \begin{equation}
+                S(x)=
+                \frac{\sqrt{\pi}}{8}-\frac{1}{2x}\cos(x^{2})+\cdots
+            \end{equation}
+        \subsection{Bernouli Polynomials}
+            One question that is often avoided in a calculus course
+            is the Taylor series for $\tan$. The sine, cosine,
+            exponential, etc., functions are usually done, but
+            $\tan$ and $\sec$ are often avoided. It turns out to be
+            tricky, and we'll develop some methods to evaluate this.
+            Recall the following from a calculus course:
+            \begin{align}
+                \sum_{k=0}^{n}k&=\frac{n(n+1)}{2}\\
+                \sum_{k=0}^{n}k^{2}&=
+                \frac{n(n+1)(2n+1)}{6}\\
+                \sum_{k=0}^{n}k^{3}&=\frac{n^{2}(n+1)^{2}}{4}
+            \end{align}
+            There are different ways to show this, usually via
+            induction. One way for the first equation is to count
+            this twice:
+            \begin{table}[]
+                \centering
+                \begin{tabular}{cc|c|c|c|c}
+                    &1&2&$\cdots$&$n-1$&$n$\\
+                    &$n$&$n-1$&$\cdots$&2&1\\
+                    \hline
+                    +&$n+1$&$n+1$&$\cdots$&$n+1$&$n+1$
+                \end{tabular}
+            \end{table}
+            Noting that we double counted, we divide by 2 and
+            obtain the formula.
+            Jacques Beroulli evaluated, apparently in half of a
+            quarter of an hour, the following sum:
+            \begin{equation}
+                N=\sum_{k=1}^{100}k^{10}
+            \end{equation}
+            First we need to find a polynonial $P_{n}(x)$ such that:
+            \begin{equation}
+                P_{n}(x+1)-P_{n}(x)=x^{n}
+            \end{equation}
+            For all $n\in\mathbb{N}$. Let's try this with a
+            quadratic. Letting $P_{2}(x)=ax^{2}+bx+c$:
+            \begin{align}
+                x^{2}&\overset{\textrm{?}}{=}
+                \big(a(x+1)^{2}+b(x+1)+c\big)-
+                \big(ax^{2}+bx+c\big)\\
+                &=2ax+a+b
+            \end{align}
+            So this is impossible since the quadratic term will
+            cancel. So instead we try a cubic term:
+            \begin{align}
+                x^{2}&=
+                \big(a(x+1)^{3}+b(x+1)^{2}+c(x+1)+d)-
+                \big(ax^{3}+bx^{2}+cx+d)\\
+                &=a(3x^{2}+3x+1)+b(2x+1)+c
+            \end{align}
+            So we obtain the following:
+            \begin{align}
+                a&=\frac{1}{3}\\
+                b&=-\frac{1}{2}\\
+                c&=\frac{1}{6}
+            \end{align}
+            The reason this property is so nice is because we can
+            obtain a telescoping series with it.
+            \begin{equation}
+                1^{n}+\cdots+N^{n}
+                =\big(P_{n}(2)-P_{n}(1)\big)+\cdots+
+                \big(P_{n}(N+1)-P_{n}(N)\big)
+            \end{equation}
+            Combining this, we obtain:
+            \begin{equation}
+                P_{n}(N+1)-P_{n}(1)=\sum_{k=0}^{N}k^{n}
+            \end{equation}
+            Other than evaluating directly, we can calculate the
+            polynomial $P_{n}$ in a more efficient manner. First,
+            we differentiate:
+            \begin{align}
+                P_{n}'(x+1)-P_{n}'(x)&=nx^{n-1}\\
+                &=n\big[P_{n-1}(x+1)-P_{n-1}(x)\big]
+            \end{align}
+            We then obtain:
+            \begin{equation}
+                P_{n}'(x+1)-nP_{n-1}(x+1)=P_{n}'(x)-nP_{n-1}(x)
+            \end{equation}
+            But the derivative of a polynomial is another
+            polynomial, and thus we have that the polynomial
+            $F(x)=P_{n}'(x)-nP_{n-1}(x)$ is such that
+            $F(0)=F(1)=\cdots=F(n)=\cdots$. But the only polynomial
+            that is constant on all of the integers is a constant
+            polynomial. For any polynomial that is not constant
+            must diverge. Thus $F(x)=c$. Another way to see this
+            is to note that if two polynomials of degree $n$
+            agree on $n+1$ points, then they are the same
+            polynomial. This again means that $F(x)$ is a constant.
+            So, we have:
+            \begin{equation}
+                P_{n}'(x)-nP_{n-1}(x)=c
+            \end{equation}
+            Note that the defining property of $P_{n}$ is that
+            $P_{n}(x+1)-P_{n}(x)=x^{n}$. Adding any constant to
+            $P_{n}$ will yield the same property. So we can define
+            our polynomials to be the ones such that
+            $P_{n}'(x)-nP_{n-1}(x)=0$. There is only one polynomial
+            of degree $n$ that will do this, so we define this as
+            the $n^{\textrm{th}}$ Bernouli polynomial $B_{n}(x)$.
+            This is not the only \textit{function} that will do
+            this, since $B_{n}(x)+\sin(k\pi{x})$ will also have
+            all of this property.
+            \begin{ldefinition}{Bernouli Polynomial}
+                The $n^{th}$ Bernouli polynomial is the polynomial
+                of degree $n$ such that:
+                \begin{equation}
+                    \int_{x}^{x+1}B_{n}'(t)\diff{t}=x^{n}
+                \end{equation}
+            \end{ldefinition}
+            Several properties arise immediately from this:
+            \begin{align}
+                \int_{0}^{1}B_{n}(t)\diff{t}&=0\\
+                B_{n}'(x)&=nB_{n-1}(x)
+            \end{align}
+            The first few polynomials are:
+            \begin{table}[H]
+                \captionsetup{type=table}
+                \centering
+                \begin{tabular}{l|l}
+                    $n$&$B_{n}(x)$\\
+                    \hline
+                    0&1\\
+                    1&$x-\frac{1}{2}$\\
+                    2&$x^{2}-x+\frac{1}{6}$\\
+                    3&$x^{3}-\frac{3}{2}x^{2}+\frac{1}{2}x$
+                \end{tabular}
+                \caption{Bernouli Polynomials}
+                \label{tab:Special_Functions_BERNOULI_POLY}
+            \end{table}
+            \begin{theorem}
+                The $n^{th}$ Bernouli polynomial
+                is a monic polynomial of degree $n$.
+            \end{theorem}
+            \begin{proof}
+                We prove by induction. The base case is true since
+                $B_{0}(x)=1$. Suppose it is true for $B_{n}(x)$.
+                Then $B_{n}(x)=x^{n}+p_{n-1}(x)$, where
+                $p_{n-1}(x)$ is a polynomial of degree $n-1$.
+                But then:
+                \begin{equation}
+                    B_{n+1}'(x)=n\big(x^{n}+p_{n-1}(x)\big)
+                \end{equation}
+                Integrating, we get that $B_{n+1}(x)$ is a monic
+                polynomial of degree $n+1$.
+            \end{proof}
+            \begin{theorem}
+                If $B_{n}(x)$ is the $n^{th}$ Bernouli polynomial,
+                then the coefficient of the degree $n-1$ term is
+                $-n/2$.
+            \end{theorem}
+            \begin{proof}
+                Again, by induction. The base case is true from
+                Tab.~\ref{tab:Special_Functions_BERNOULI_POLY}.
+                Suppose it is true for $B_{n}(x)$. Then:
+                \begin{align*}
+                    B_{n+1}(x)&=
+                    \int(n+1)B_{n}(x)\diff{x}\\
+                    &=\int(n+1)
+                    \big[x^{n}-\frac{n}{2}x^{n-1}+\cdots\big]
+                    \diff{x}\\
+                    &=x^{n+1}-\frac{n+1}{2}x^{n}+\cdots
+                \end{align*}
+            \end{proof}
+    \section{Lecture 4}
+        \subsection{Bernoulli Polynomials}
+            So far we know that $B_{0}(x)=1$, 
+            $B_{n}'(x)=nB_{n-1}(x)$, for $n\in\mathbb{N}$.
+            Sequences like this are called Appell sequences.
+            The definining property is
+            $B_{n}(x+1)-B_{n}(x)=nx^{n-1}$. From this, we obtain:
+            \begin{equation}
+                \sum_{k=1}^{n}k^{m}=
+                \frac{1}{n+1}\Big[B_{n+1}(m+1)-B_{n}(1)\Big]
+            \end{equation}
+            For $n\geq{2}$:
+            \begin{equation}
+                B_{n}(1)-B_{n}(0)=0
+            \end{equation}
+        \subsection{Bernoulli Numbers}
+            The $n^{th}$ Bernoulli number is defined
+            as $b_{n}=B_{n}(0)$, where $B_{n}$ is the
+            $n^{th}$ Bernoulli polynomial. These appear in
+            the expanion of the Bernoulli polynomials as well.
+            For let:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}C_{n}^{k}x^{k}
+            \end{equation}
+            Taking the derivative, we have:
+            \begin{subequations}
+                \begin{align}
+                    B_{n}'(x)
+                    &=\sum_{k=1}^{n}C_{n}^{k}kx^{k-1}\\
+                    &=nB_{n-1}(c)\\
+                    &=n\sum_{k=0}^{n-1}C_{n-1}^{k}x^{k}\\
+                    &=n\sum_{k=1}^{n}C_{n-1}^{k-1}x^{k-1}
+                \end{align}
+            \end{subequations}
+            So we have a recurrance relation for the coefficients:
+            \begin{equation}
+                kC_{k}^{n}=nC_{k-1}^{n-1}
+            \end{equation}
+            We can keep applying this to obtain:
+            \begin{equation}
+                C_{k}^{n}=\frac{n}{k}C_{k-1}^{n-1}
+                =\frac{n(n-1)}{k(k-1)}C_{k-2}^{n-2}=\cdots
+                =\frac{n(n-1)\cdot(n-(k-1))}{k(k-1)\cdots(k-(k-1))}
+                C_{0}^{n-k}
+            \end{equation}
+            This coefficient is the \textit{binomial coefficient}
+            $\binom{n}{k}$, read as $n$ choose $k$. So we have:
+            \begin{equation}
+                C_{k}^{n}=\binom{n}{k}C_{0}^{n-k}
+            \end{equation}
+            Therefore:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}
+                \binom{n}{k}C_{0}^{n-k}x^{k}
+            \end{equation}
+            Evaluating at $x=0$, we get:
+            \begin{equation}
+                C_{0}^{n}=b_{n}
+            \end{equation}
+            Where $b_{n}$ is the $n^{th}$ Bernoulli number.
+            But from this, we obtain:
+            \begin{equation}
+                C_{k}^{n}=\binom{n}{k}b_{n-k}
+            \end{equation}
+            Thus, putting this all together, we have:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}
+                \binom{n}{k}B_{n-k}x^{k}
+            \end{equation}
+            We can then flip the indexing to obtain the following:
+            \begin{align}
+                B_{n}(x)&=
+                \sum_{k=0}^{n}\binom{n}{k}B_{n-k}x^{k}\\
+                &=\sum_{k=0}^{n}\binom{n}{n-k}
+                B_{n-(n-k)}x^{n-k}\\
+                &=\sum_{k=0}^{n}\binom{n}{n}B_{k}x^{n-k}
+            \end{align}
+            This then gives us a recurrence relation that can be
+            used to define the Bernoulli numbers, without first
+            defining the Bernoulli polynomials. Let
+            $B_{0}=1$, $B_{1}=-\frac{1}{2}$, and then for
+            $n\geq{2}$, define:
+            \begin{equation}
+                B_{n}=\sum_{k=0}^{n}
+                \binom{n}{k}B_{k}
+            \end{equation}
+            Replacing $n$ with $n+1$, we get:
+            \begin{equation}
+                B_{n+1}=\sum_{k=0}^{n+1}
+                \binom{n}{k}B_{k}
+                =\sum_{k=0}^{n}
+                \binom{n}{k}B_{k}+B_{n+1}
+            \end{equation}
+            From this we can conclude:
+            \begin{equation}
+                \sum_{k=0}^{n}\binom{n+1}{k}B_{k}=0
+            \end{equation}
+            So, finally:
+            \begin{equation}
+                B_{n}=-\frac{1}{n+1}\sum_{k=0}^{n-1}
+                \binom{n+1}{k}B_{k}
+            \end{equation}
+        \subsection{Generating Functions}
+            A generating function for a sequence is a function
+            whose power series has the terms of the sequence
+            for its coefficients.
+            \begin{equation}
+                \frac{1}{1-x}=1+x+x^{2}+\cdots
+            \end{equation}
+            The coefficients of this power series are all one,
+            and so this is a generating function for the sequence
+            $a:\mathbb{N}\rightarrow\mathbb{R}$ defined by
+            $a_{n}=1$. We can differentiate this:
+            \begin{equation}
+                \frac{1}{(1-x)^{2}}=1+2x+3x^{2}+\cdots
+            \end{equation}
+            So this is a generating function for
+            $1,2,3,4,\dots$. As another example:
+            \begin{equation}
+                \exp(2x)=1+2x+\frac{2^{2}}{2!}x^{2}
+                +\frac{2^{3}}{3!}x^{3}+\cdots
+            \end{equation}
+            And so $\exp(2x)$ is a generating function for the
+            sequence $a:\mathbb{N}\rightarrow\mathbb{R}$ defined by
+            $a_{n}=\frac{2^{n}}{n!}$. Moreover, since the
+            coefficients of Taylor series for a function are
+            uniquely defined by the function:
+            \begin{equation}
+                \exp(2x)=\sum_{n=0}^{\infty}a_{n}x^{n}
+                \Leftrightarrow{a}_{n}=\frac{2^{n}}{n!}
+            \end{equation}
+            Using this, we can obtain:
+            \begin{align}
+                \frac{\diff}{\diff{x}}\Big(\exp(2x)\Big)
+                &=2\exp(2x)\\
+                &=\sum_{n=1}^{\infty}na_{n}x^{n-1}\\
+                &=\sum_{n=0}^{\infty}(n+1)a_{n+1}x^{n}\\
+                &=2\sum_{n=0}^{\infty}a_{n}x^{n}
+            \end{align}
+            Since two power series are equal if and only if there
+            coefficients are equal, we obtain the following:
+            \begin{equation}
+                a_{n+1}=\frac{2}{n+1}a_{n}
+            \end{equation}
+            Recurrence relations like this are often why it is
+            useful to study generating functions. We now study
+            the generating functions of the Bernoulli Polynomial.
+            \begin{equation}
+                F(x,t)=\sum_{n=0}^{\infty}
+                \frac{B_{n}(x)}{n!}t^{n}
+            \end{equation}
+            Let's now derive what $F$ is. Differentiating with
+            respect to $x$, we get:
+            \begin{align}
+                \frac{\partial{F}}{\partial{x}}
+                &=\sum_{n=1}^{\infty}
+                \frac{B_{n}'(x)}{n!}t^{n}\\
+                &=\sum_{n=1}^{\infty}
+                    \frac{nB_{n-1}(x)}{n!}t^{n}\\
+                &=t\sum_{n=1}^{\infty}
+                    \frac{B_{n-1}(x)}{(n-1)!}t^{n-1}
+                &=t\sum_{n=0}^{\infty}
+                    \frac{B_{n}(x)}{n!}t^{n}\\
+                &=tF(x,t)
+            \end{align}
+            So $F$ satisfies the equation $F_{x}(x,t)=tF(x,t)$.
+            Thus there is some function $C(t)$ such that:
+            \begin{equation}
+                F(x,t)=C(t)\exp(xt)
+            \end{equation}
+            Where the $C(t)$ is obtained as a \textit{function}
+            of integration, rather than a constant of integration,
+            since we are taking partial derivatives. Integrating,
+            we have:
+            \begin{align}
+                \int_{0}^{1}F(x,t)\diff{x}
+                &=\int_{0}^{1}\sum_{n=0}^{\infty}
+                    \frac{B_{n}(x)}{n!}t^{n}\diff{x}\\
+                &=\sum_{n=0}^{\infty}\frac{t^{n}}{n!}
+                \int_{0}^{1}B_{n}(x)\diff{x}\\
+                &=1
+            \end{align}
+            This is because, for $n\geq{1}$,
+            $\int_{0}^{1}B_{n}(x)\diff{x}=1$. Thus, we have:
+            \begin{align}
+                \int_{0}^{1}C(t)\exp(xt)\diff{x}&=
+                C(t)\Big[\frac{1}{t}\exp(xt)\Big]_{x=0}^{1}\\
+                &=\frac{C(t)}{t}\Big[\exp(t)-1\Big]\\
+                &=1
+            \end{align}
+            And therefore:
+            \begin{equation}
+                C(t)=\frac{t}{\exp(t)-1}
+            \end{equation}
+            Thus, the generating function for the Bernoulli
+            polynomials is:
+            \begin{equation}
+                \sum_{n=0}^{\infty}
+                \frac{B_{n}(x)}{n!}t^{n}
+                =\frac{t}{\exp(t)-1}\exp(xt)
+            \end{equation}
+            This can be used to show the following:
+            \begin{align}
+                \frac{t}{\exp(t)-1}
+                \exp\big((1-x)t\big)
+                &=\sum_{n=0}^{\infty}
+                    \frac{B_{n}(1-x)}{n!}t^{}\\
+                &=\frac{t}{\exp(t)-1}\exp(t)\exp(-xt)\\
+                &=\frac{t}{1-\exp(-t)}\exp(-xt)\\
+                &=\frac{(-t)}{\exp(-t)-1}\exp(x(-t))\\
+                &=\sum_{n=0}^{\infty}(-1)^{n}
+                \frac{B_{n}(1-x)}{n!}t^{n}
+            \end{align}
+            Comparing coefficients, we get:
+            \begin{equation}
+                B_{n}(x)=(-1)^{n}B_{n}(1-x)
+            \end{equation}
+            From this we see that, for $n\geq{0}$, and for all
+            odd $n$, $b_{n}=0$, where $b_{n}$ is the
+            $n^{th}$ Bernoulli number. We can use this to simplify
+            the recurrence relation for $b_{n}$:
+            \begin{align}
+                b_{n}&=\frac{-1}{n+1}
+                \sum_{k=0}^{n-1}\binom{n+1}{k}b_{k}\\
+                b_{2n}&=\frac{-1}{2n+1}
+                \sum_{k=0}^{2n-1}\binom{2n+1}{k}b_{k}\\
+                &=\frac{-1}{2n+1}\sum_{k=0}^{n-1}
+                    \binom{2n+1}{2k}b_{2k}
+                    -\frac{1}{2n+1}\binom{2n+1}{1}B_{1}\\
+                    &=\frac{1}{2}-\frac{1}{2n+1}
+                    \sum_{k=0}^{n-1}\binom{2n+1}{2k}b_{2k}
+            \end{align}
+            Returning to the generating function, evaluate
+            $F(x,t)$ at $x=1$. We get:
+            \begin{align}
+                \sum_{n=1}^{\infty}\frac{B_{n}(1)}{n!}t^{n}\\
+                &=\frac{1}{2}t+\sum_{n=0}^{\infty}
+                \frac{B_{2n}}{(2n)!}t^{2n}\\
+                &=\frac{t\exp(t)}{\exp(t)-1)}
+            \end{align}
+            From this, we get:
+            \begin{equation}
+                \sum_{n=0}^{\infty}\frac{B_{2n}}{(2n)!}t^{2n}
+                =-\frac{t}{2}+\frac{t\exp(t)}{\exp(t)-1}
+            \end{equation}
+            Which is an even function, quite bizarrely.
+            We can use this to get:
+            \begin{equation}
+                \sum_{n=0}^{\infty}
+                \frac{2^{2n}b_{2n}}{(2n)!}i^{2n}t^{2n}
+                =-it\frac{\exp(it)+\exp(-it)}{\exp(it)-\exp(-it)}
+            \end{equation}
+            Using Euler's Formula, this last part becomes
+            $t\cot(t)$. So, we have:
+            \begin{equation}
+                t\cot(t)=\sum_{n=0}^{\infty}
+                (-1)^{n}\frac{2^{2n}b_{2n}}{(2n)!}t^{2n}
+            \end{equation}
+            From this, we obtain:
+            \begin{equation}
+                \cot(t)=\frac{1}{t}+\sum_{n=0}^{\infty}
+                (-1)^{n}\frac{2^{2n}b_{2n}}{(2n)!}t^{2n-1}
+            \end{equation}
+            But noting that $\cot(t)-2\cot(t)=\tan(t)$, we can
+            obtain the Taylor series for $\tan$:
+            \begin{equation}
+                \tan(t)=\sum_{n=0}^{\infty}
+                (-1)^{n+1}\frac{2^{2n}b_{2n}}{(2n)!}(2^{n}-1)t^{2n-1}
+            \end{equation}
+            But the coefficients of the Taylor series of $\tan$
+            are the derivatives of $\tan$ evaluated at the origin,
+            and divided by $n!$. And this is always positive. From
+            this we conclude that $b_{2n}$ oscillates from positive
+            to negative as $n$ increasing to cancel out the
+            $(-1)^{n+1}$ term.
 \end{document}
