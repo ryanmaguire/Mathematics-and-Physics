@@ -1,7 +1,11 @@
 \documentclass[crop=false,class=book,oneside]{standalone}
 %----------------------------Preamble-------------------------------%
-\input{../../../preamble.tex}
-\graphicspath{{../../../images/}}   % Path to Image Folder.
+\input{../preamble.tex}
+\graphicspath{{../images/}}   % Path to Image Folder.
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../glossary}
+\loadglsentries{../acronym}
 %--------------------------Main Document----------------------------%
 \begin{document}
     \ifx\ifmathcourses\undefined
@@ -1173,4 +1177,184 @@
             this we conclude that $b_{2n}$ oscillates from positive
             to negative as $n$ increasing to cancel out the
             $(-1)^{n+1}$ term.
+    \section{Lecture 5}
+        \begin{align}
+            \int{Ci(x)}\diff{x}&=xCi(x)-\sin(x)+c\\
+            \int_{0}^{\infty}Ci(x)\diff{x}
+            &=\big[xCi(x)-\sin(x)\big]_{0}^{\infty}\\
+            &=\underset{b\rightarrow\infty}{\lim}
+                \big(xCi(x)-\sin(x)\big)-
+                \underset{a\rightarrow{0}}{\lim}
+                \big(xCi(x)-\sin(x)\big)
+        \end{align}
+        But:
+        \begin{align}
+            Ci'(x)&=\frac{\cos(x)}{x}\\
+                &=\frac{1}{x}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n)!}x^{2n}\\
+            Ci(x)&=\ln(x)+\sum_{n=1}^{\infty}
+            \frac{(-1)^{n}}{2n(2n)!}x^{2n}+\gamma\\
+            \underset{a\rightarrow{0}}{\lim}(xCi(x)-\sin(x))&=0\\
+        \end{align}
+        Using the asymptotic expansion:
+        \begin{equation}
+            Ci(x)=\frac{1}{x}\sin(x)-\frac{1}{x^{2}}\cos(x)+\cdots
+        \end{equation}
+        Back to Bernoulli Polynomials.
+        \begin{align}
+            B_{0}(x)&=1\\
+            B_{n}'(x)&=nB_{n-1}(x)\\
+            \int_{0}^{1}B_{n}(x)\diff{x}&=0
+        \end{align}
+        \subsection{Half-Range Fourier Series}
+            On the interval $(0, L)$, and if $g$ is piece-wise smooth
+            and with bounded derivative, then:
+            \begin{align}
+                f(x)&=\sum_{n=1}^{\infty}b_{n}\sin(\frac{n\pi}{L}x)\\
+                &=\frac{a_{0}}{2}+\sum_{n=1}^{\infty}
+                    a_{n}\cos(\frac{n\pi}{L}x)
+            \end{align}
+            Where the constant's $a_{n}$ and $b_{n}$ are determinded by:
+            \begin{align}
+                a_{n}&=\frac{2}{L}
+                    \int_{0}^{L}f(x)\cos(\frac{n\pi}{L}x)\diff{x}\\
+                b_{n}&=
+                    \int_{0}^{L}f(x)\sin(\frac{n\pi}{L}x)\diff{x}
+            \end{align}
+            The Fourier series converges to $f$ everywhere except at the
+            jumps, where it converges to the middle of the jumps.
+            \begin{lexample}
+                Find the Fourier Sine Series for $f(x)=x-1/2$ on $(0,1)$.
+                \begin{align}
+                    f(x)&=\sum_{n=1}^{\infty}b_{n}\sin(n\pi{x})\\
+                    b_{n}&=2\int_{0}^{1}f(x)\sin(n\pi{x})\diff{x}\\
+                    &=2\int_{0}^{1}(x-\frac{1}{2})\sin(n\pi{x})\diff{x}\\
+                    &=\Big[
+                        \minus{2}\frac{x-\frac{1}{2}}{n\pi}\cos(n\pi{x}
+                    \Big]_{0}^{1}+
+                    \int_{0}^{1}\frac{1}{n\pi}\cos(n\pi{x})\diff{x}\\
+                    &=\Big[
+                        \frac{1-2x}{n\pi}\cos(n\pi{x})+
+                        \frac{1}{n^{2}\pi^{2}}\sin(n\pi{x})
+                    ]_{0}^{1}\\
+                    &=\minus\frac{1}{n\pi}(1+\cos(n\pi))\\
+                    &==\minus\frac{1}{n\pi}(1+(-1)^{n})
+                \end{align}
+                If we plot this we will see some overshoot at the endpoints.
+                This is a result of something called Gibb's Phenomenon.
+            \end{lexample}
+            Find the Fourier Cosine Series of $f(x)=\cos(ax)$ on
+            $(0,\pi)$, where $a\in(0,1)$.
+            \begin{align}
+                \cos(ax)&=\frac{a_{0}}{2}+
+                    \sum_{n=1}^{\infty}a_{n}\cos(nx)\\
+                a_{n}&=\frac{2}{\pi}
+                    \int_{0}^{\pi}\cos(ax)\cos(n\pi{x})\diff{x}\\
+                    &=\frac{2}{\pi}
+                        \frac{a(-1)^{n}}{a^{2}-n^{2}}\sin(\pi{a})
+            \end{align}
+            Dividing off by the $\sin(a\pi)$, we get:
+            \begin{align}
+                \frac{\cos(ax)}{\sin(a\pi)}
+                &=\frac{1}{a\pi}+\frac{2a}{\pi}
+                    \sum_{n=1}^{\infty}\frac{(-1)^{n}}{a^{2}-n^{2}}
+                    \cos(nx)\\
+                \cot(a\pi)&=
+                    \frac{1}{a\pi}+\frac{2a}{\pi}
+                    \sum_{n=1}^{\infty}\frac{1}{a^{2}-n^{2}}
+            \end{align}
+            Bringing the first term over to the left and then integrating,
+            we get:
+            \begin{align}
+                \int_{0}^{x}\big(\cos(a\pi)-\frac{1}{a\pi}\big)\diff{a}
+                &=\int_{0}^{x}\frac{2a}{\pi}\sum_{n=1}^{\infty}
+                    \frac{1}{a^{2}-n^{2}}\\
+                &=\frac{2}{\pi}\sum_{n=1}^{\infty}\int_{0}^{x}
+                    \frac{a}{a^{2}-n^{2}}\diff{a}\\
+                &=\frac{1}{\pi}\sum_{n=1}^{\infty}
+                    \ln\Big[n^{2}-a^{2}\Big]_{0}^{x}\\
+                &=\frac{1}{\pi}\sum_{n=1}^{\infty}
+                    \ln\Big(\frac{n^{2}-x^{2}}{n^{2}}\Big)\\
+                \int_{0}^{x}\big(\cos(a\pi)-\frac{1}{a\pi}\big)\diff{a}
+                &=\frac{1}{\pi}\Big[
+                    \ln\big(\sin(\pi{a})\big)-\ln(a)
+                \Big]_{0}^{x}\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{x}\Big)-
+                    \underset{a\rightarrow{0}^{+}}{\lim}
+                    \ln\Big(\frac{\sin(\pi{a})}{a}\Big)\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{x}\Big)-
+                    \frac{1}{\pi}\ln(\pi)\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{\pi{x}}\Big)
+            \end{align}
+            Thus, we have:
+            \begin{align}
+                \ln\Big(\frac{\sin(\pi{x})}{\pi{x}}\Big)
+                &=\sum_{n=1}^{\infty}
+                    \ln\Big(\frac{n^{2}-x^{2}}{n^{2}}\Big)\\
+                \frac{\sin(\pi{x})}{\pi{x}}
+                &=\prod_{n=1}^{\infty}\Big(1-\frac{x^{2}}{n^{2}}\Big)\\
+                &=1-x^{2}\sum_{n=1}^{\infty}\frac{1}{n^{2}}+\cdots
+            \end{align}
+            We can use the Taylor expansion for $\sin(\pi{x})$ as:
+            \begin{align}
+                \frac{\sin(\pi{x})}{\pi{x}}&=
+                \frac{1}{\pi{x}}\Big(\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}}{(2n+1)!}x^{2n+1}\Big)\\
+                &=1-\frac{\pi^{2}}{6}x^{2}+\cdots
+            \end{align}
+            Subtracting 1 and dividing by $x^{2}$, we get:
+            \begin{equation}
+                \frac{\pi^{2}}{6}+\cdots
+                =\sum_{n=1}^{\infty}\frac{1}{n^{2}}+\cdots
+            \end{equation}
+            Evaluating at $x=0$, we get:
+            \begin{equation}
+                \sum_{n=1}^{\infty}\frac{1}{n^{2}}=\frac{\pi^{2}}{6}
+            \end{equation}
+            Now, to get the Fourier Sine series of the Bernoulli polynomials.
+            We have the first one:
+            \begin{equation}
+                B_{1}(x)=\minus\sum_{n=1}^{\infty}\frac{1}{n\pi}\sin(2n\pi{x})
+            \end{equation}
+            Using the fact that $B_{n}'(x)=nB_{n-1}(x)$ we can obtain the
+            Fourier Sine series for the other polynomials by induction.
+            Integrating across, we get:
+            \begin{equation}
+                B_{2}(x)=\sum_{n=1}^{\infty}\frac{4}{(2\pi{n})^{2}}
+                    \cos(2n\pi{x})
+            \end{equation}
+            This is only true on the interval $x\in(0,1)$. Since 
+            $B_{n}$ is a polynomial it must diverge as
+            $x\rightarrow\pm\infty$, and thus cannot be periodic. By
+            induction, we obtain the rest:
+            \begin{align}
+                B_{2k}(x)&=
+                    2\sum_{n=1}^{\infty}
+                        \frac{(-1)^{n}(2k)!}{(2\pi{n})^{2k}}\cos(2n\pi{x})\\
+                B_{2k+1}(x)&=
+                    2\sum_{n=1}^{\infty}
+                        \frac{(-1)^{n}(2k+1)!}{(2\pi{n})^{2k+1}}
+                            \sin(2n\pi{x})\\
+            \end{align}
+            We can use this for the even Bernoulli numbers:
+            \begin{equation}
+                |b_{2k}|=2(2k)!\sum_{n=1}^{\infty}
+                    \frac{1}{(2\pi)^{2k}}\frac{1}{n^{2k}}
+            \end{equation}
+            From this, we have:
+            \begin{equation}
+                \sum_{n=1}^{\infty}\frac{1}{n^{2k}}
+                =\frac{(2\pi)^{2k}|B_{2k}|}{2(2k)!}
+            \end{equation}
+            Stuff about the Riemann Zeta function. Critical strip,
+            trivial zeros, prime number theorem.
+            \begin{align}
+                |B_{2k}(x)|&=
+                    \Big|2(-1)^{k+1}(2k)!\sum_{n=1}^{\infty}
+                    \frac{\cos(2n\pi{x})}{(2n\pi)^{2k}}\Big|\\
+                    &\leq2(2k)!\sum_{n=1}^{\infty}\frac{1}{(2\pi{n})^{2k}}\\
+                    &=|b_{2k}|
+            \end{align}
+            So the Bernoulli polynomials attain their maximum or minimum
+            at the origin.
 \end{document}
