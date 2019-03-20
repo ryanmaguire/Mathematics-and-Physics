@@ -1,0 +1,458 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Chaos Theory}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Chaos Theory}
+        \addcontentsline{toc}{chapter}{Chaos Theory}
+        \markboth{}{CHAOS THEORY}
+        \vspace{10ex}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Chaos Theory}
+    \fi
+    \section{A Review of Differential Equations}
+        \subsection{First Order Equations}
+            The first differential equation that is often studied
+            is $\dot{x}(t)=ax(t)$, where $\dot{x}$ denotes the
+            derivative of $x$ with respect to $t$. In this equation
+            $a$ is some fixed constant parameter, and each real
+            value $a$ defines a different differential equation.
+            We can solve this by integrating and invoking the
+            fundamental theorem of calculus. In general, a
+            differential equation is an equation that relates
+            a differentiable functions to its derivatives.
+            The general solution to a differential equation is
+            the set of all functions that satisfy the
+            differential equation.
+            \begin{ftheorem}{}{thm:CHAOS:SIMPLE_DIFF_EQ}
+                If $x(t)$ is a differentiable function such
+                that $x(0)=x_{0}$ and there is a $k\in\mathbb{R}$
+                such that for all $t\in\mathbb{R}$, $\dot{x}(t)=kx(t)$,
+                then $x(t)=x_{0}\exp(kt)$.
+            \end{ftheorem}
+            \begin{bproof}
+                Let $y(t)=\exp(kt)$. Then $\dot{y}(t)=ky(t)$,
+                and $y(t)\ne{0}$ for all $t\in\mathbb{R}$.
+                Let $F(t)=x(t)/y(t)$. Then:
+                \begin{equation*}
+                    \dot{F}(t)=
+                    \frac{y(t)\dot{x}(t)-\dot{y}(t)x(t)}{y^{2}(t)}
+                    =\frac{y(t)\big(\dot{x}(t)-kx(t)\big)}{y^{2}(t)}
+                    =\frac{1}{y(t)}\big(\dot{x}(t)-kx(t)\big)
+                \end{equation*}
+                But $\dot{x}(t)-kx(t)=0$, and thus $\dot{F}(t)=0$ for
+                all $t\in\mathbb{R}$. But then $F(t)$ is a constant
+                function. Thus there is a $C\in\mathbb{R}$ such
+                that $x(t)=Cy(t)$. But $x(0)=x_{0}$, and therefore
+                $C=x_{0}$. Thus, $x(t)=x_{0}\exp(kt)$.
+            \end{bproof}
+            The proof shows that the solution to $\dot{x}(t)=kx(t)$
+            is uniquely determined if $x(0)$ is known. This can
+            be replaced by knowledge of $x(t_{0})$ for any point
+            $t_{0}\in\mathbb{R}$.
+            Such restraints are called initial conditions to a
+            differential equation. Initial conditions are
+            requirements that a solution to the differential
+            equation must satisfy. Such requirements can be
+            the value of $x(t_{0})$ at a certain point
+            $t_{0}$, or a requirement on $\dot{x}(t)$.
+            \begin{fexample}{}{}
+                Consider the following initial value problem:
+                \begin{align}
+                    \dot{x}(t)&=ax(t)
+                    &
+                    x(t_{0})&=x_{0}
+                \end{align}
+                Using the previous theorem, we can translate the
+                problem by $\exp(-kt_{0})$ to create the initial
+                value problem $\dot{y}(t)=ky(t)$, $y(0)=x_{0}$.
+                We know the solution to this is
+                $y(t)=x_{0}\exp(kt)$. Thus, the solution to the
+                original initial value problem is:
+                \begin{equation}
+                    x(t)=x_{0}\exp(k(t-t_{0}))
+                \end{equation}
+            \end{fexample}
+            An important class of solutions to differential
+            equations are \textit{equilibrium solutions}.
+            \begin{fdefinition}{Equilibrium Solution}{}
+                An equilibrium solution to a differential
+                equation is a solution $x(t)$ such that
+                $\dot{x}(t)=0$ for all $t\in\mathbb{R}$.
+                That is, a constant solution $x(t)=c$.
+            \end{fdefinition}
+            Studying our first problem $\dot{x}(t)=kx(t)$,
+            we see that the only equilibrium solution
+            occurs when $x_{0}=0$. Another important concept
+            is the limiting behavior of the solution to a
+            differential equation. The limiting behavior
+            is often dependent on the various parameters that
+            may be present in a given differential equation.
+            We can see this by further studying $\dot{x}(t)=kx(t)$.
+            If $k=0$ we see that $x(t)$ is a constant function. That
+            is, $x(t)=x_{0}$ for all $t\in\mathbb{R}$. For $k>0$,
+            solutions diverges monotonically to $\infty$
+            ($x_{0}>0$) or $-\infty$ ($x_{0}<0$).
+            Finally, if $k<0$ then $x(t)$ converges to $0$
+            for all values of $x_{0}$. This notion can be represented
+            by a \textit{phase line}. A phase line is a one
+            dimensional plot of the independent variable $t$ where
+            equilibrium solutions are marked and arrows indicating
+            convergence or divergence to the equilibrium solutions
+            are drawn. Consider again the example
+            we've been studying:
+            $\dot{x}(t)=kx(t)$. Suppose $k<0$. We know that, for any
+            $x_{0}$, the solution $x(t)$ tends to zero as $t$ tends
+            to infinity. We can represent this with a phase line:
+            \begin{figure}
+                \captionsetup{type=figure}
+                \centering
+                \begin{tikzpicture}
+                    \draw[%
+                        postaction={decorate},
+                        decoration={%
+                            markings,
+                            mark=at position .0 with
+                                \arrowreversed{latex},
+                            mark=at position .25 with
+                                \arrow{stealth},
+                            mark=at position .3 with \arrow{stealth},
+                            mark=at position .5 with
+                                {\draw[thin] (0,-1mm) -- (0,1mm)
+                                 node[below=2mm] {0};},
+                            mark=at position .75 with
+                                \arrowreversed{stealth},
+                            mark=at position .7 with
+                                \arrowreversed{stealth},
+                            mark=at position 1. with
+                                \arrow{latex},
+                        },
+                    ]   (-2,0) to (2,0) node[below] {$x_{0}$};
+                \end{tikzpicture}
+                \caption{Phase line for $\dot{x}(t)=kx(t)$
+                         when $k<0$.}
+                \label{fig:CHAOS:Phase_Line_Example}
+            \end{figure}
+            The initial condition $x_{0}=0$ thus gives rise to a
+            \textit{stable} solution to this differential equation.
+            \begin{fdefinition}{Stable Equilibrium Solution}   
+                {diffeq:Stable_Equilibrium_Solution}
+                A stable equilibrium solution to a differential
+                equation $\dot{x}(t)=f(t,x(t))$, is
+                an equilibrium solution $x(t)=x_{0}$
+                such that there exists a
+                $\delta>0$ such that for all
+                $x_{1}\in(x_{0}-\delta,x_{0}+\delta)$, the solution
+                to the initial value problem
+                $\dot{x}(t)=f(t,x(t))$, $x(t_{0})=x_{1}$ converges to
+                $x_{0}$ as $t\rightarrow\infty$
+            \end{fdefinition}
+            Being purely stable can be replaced with stable from above
+            or stable from below. An equilibrium solution is called
+            semi-stable if it is either stable from above or stable
+            from below, but not totally stable. An unstable equilibrium
+            solution is an equilibrium solution that is neither stable
+            nor semi-stable. The stability of solutions often depends
+            on the parameters involved in the differential equation.
+            In the case of $\dot{x}(t)=kx(t)$ we saw that as
+            $k$ cross zero the solutions drastically change. The
+            value $k=0$ is said to be a \textit{bifurcation} value
+            of the differential equation. Bifurcations are values that
+            a parameter can have that alter the limiting behavior of
+            solutions. $k=0$ is a bifurcation since, for all $k>0$
+            we have that $x(t)$ diverges monotonically, for all
+            $k<0$ we see that $x(t)$ converges to zero monotonically,
+            and for $k=0$ all solutions are constants. Because of this,
+            we say that there is a bifurcation at $k=0$.
+            \subsubsection{The Logistics Population Model}
+                First order differential equations have many
+                applications in both the physical and the life
+                sciences. Population modeling is a common such
+                application. The growth rate of a population can
+                be modelled based on two simple assumptions. The
+                first is that, if the population is small, the
+                growth rate is roughly proportional to the population.
+                The second is that, if the population is too large,
+                the growth rate is negative. For example, if the
+                population is too large then there is not enough food
+                and thus the population will start to decrease.
+                To bridge the gap between these two assumptions
+                we could make the rather reasonable assumption
+                that the ratio of the population growth to the
+                population is linear. Thus:
+                \begin{equation}
+                    \label{diffeq:Simple_Logistic_Population_Model}
+                    \frac{\dot{x}(t)}{x(t)}=ax(t)+b
+                \end{equation}
+                Since the growth rate is negative for large
+                $x_{0}$ and positive for small $x_{0}$, there
+                must be a value $N$, called the
+                \textit{ideal population}, such that
+                $\dot{x}(t)=0$ for all $t$. If we let $\alpha$ be
+                the \textit{growth factor} of the population,
+                Eqn.~\ref{diffeq:Simple_Logistic_Population_Model}
+                becomes:
+                \begin{equation}
+                    \label{diffeq:Logistics_Population_Model_DE}
+                    \dot{x}(t)=\alpha{x}(t)\big(1-\frac{x(t)}{N}\big)
+                \end{equation}
+                By hypothesis, $\alpha$ must be positive. For
+                if $x(t)>N$ and if $\alpha<0$, then
+                $\dot{x}(t)>0$. This would be quite strange as
+                large populations would increase rapidly to infinity.
+                From physical considerations we also require that
+                $N$ be positive. Otherwise we'd be speaking of
+                \textit{negative population}, which is nonsense.
+                For the sake of easing the mathematics, we may
+                normalize the problem so that the ideal population
+                is $N=1$. Let $k$ be the normalized growth factor.
+                This gives us the following normalized
+                logistics population model:
+                \begin{equation}
+                    \label{diffeq:Normalized_Log_Pop_Model_DE}
+                    \dot{x}(t)=kx(t)\big(1-x(t)\big)
+                \end{equation}
+                The logistics population model is another example
+                of a first order differential equation. In general,
+                a first order differential equation is of the form
+                $x(t)=f(t,x(t))$. An $n^{th}$ order differential
+                equation is one of the form:
+                \begin{equation*}
+                    x^{(n)}(t)
+                    =f(t,x(t),\dot{x}(t),\ddot{x}(t),
+                       x^{(3)}(t),\hdots,x^{(n-1)}(t))
+                \end{equation*}
+                Here we have used the notation
+                $x^{(n)}(t)$ to represent the $n^{th}$ deritative
+                of $x$ with respect to $t$. A special subset of the
+                general $n^{th}$ order differential equation is that
+                of the autonomous $n^{th}$ order differential
+                equations. These are differential equations where
+                $f$ is solely a function of $x$ and its derivatives.
+                \begin{fdefinition}{Autonomous Differential Equation}
+                    {diffeq:Autonomous_DE}
+                    An autonomous $n^{th}$ order differential
+                    equation is a differential equation of the
+                    form:
+                    \begin{equation}
+                        x^{(n)}(t)=f(x(t),\hdots,x^{(n-1)}(t))
+                    \end{equation}
+                \end{fdefinition}
+                \begin{fexample}{First Order Autonomous 
+                                 Differential Equations}{}
+                    Consider the case of first order autonomous
+                    differential equations. Here we'd have:
+                    \begin{equation}
+                        \dot{x}(t)=f(x(t))
+                    \end{equation}
+                    If $f$ is continuous then we can integrate this
+                    and obtain a solution for $x$:
+                    \begin{equation}
+                        F(x)\equiv\int\frac{1}{f(x)}\diff{x}
+                        =\int\diff{t}
+                    \end{equation}
+                    If the integral on the left hand side produces
+                    an invertible function, then we can solve the
+                    differential equation and obtain
+                    $x(t)=F^{-1}(t+C)$, where $C$ is a constant
+                    of integration. An equation like this is
+                    also called \textit{separable}. That is, we
+                    can separate the $x$ and $y$ terms to create
+                    an expression on the left hand side which is
+                    written purely in $x$, and an expression on
+                    the right which is written purely in $t$.
+                \end{fexample}
+                The logistics population model is therefore a
+                nonlinear first order autonomous differential
+                equation. Nonlinear differential equations are
+                usually very difficult to solve. When we have
+                autonomy, however, the problem can become much
+                easier. In the case of the logistics model,
+                we solve for $x(t)$ using standard techniques
+                from Calculus.
+                \begin{equation}
+                    \int\frac{1}{x(1-x)}\diff{x}=k\int\diff{t}
+                \end{equation}
+                Recalling from elementary algebra
+                the method of partial fraction decomposition,
+                we have:
+                \begin{equation}
+                    \frac{1}{x(1-x)}=\frac{1}{x}+\frac{1}{1-x}
+                \end{equation}
+                This simplifies the integral, and so we obtain:
+                \begin{equation}
+                    \int\Big(\frac{1}{x}+\frac{1}{1-x}\Big)\diff{x}
+                    =\ln(x)-\ln(1-x)
+                    =\ln\big(\frac{x}{1-x}\big)
+                \end{equation}
+                Evaluating the right-hand side and exponentiating,
+                we get:
+                \begin{equation}
+                    \frac{x}{1-x}=A\exp(kt)
+                \end{equation}
+                Where $A$ is the exponential of the constant of
+                integration. The left-hand side is and invertible
+                function and its inverse is $x/(1+x)$. From this we
+                obtain the solution to the logistics population model:
+                \begin{equation}
+                    x(t)=\frac{1}{1+C\exp(-kt)}
+                \end{equation}
+                By studying Eqn.~\ref{diffeq:Normalized_Log_Pop_Model_DE}
+                we can find two equilibrium solution: $x(t)=0$ and
+                $x(t)=1$. This makes physical sense, for if $x(t)=0$
+                then the population is extinct and nothing more can be
+                done, and if $x(t)=1$ then the population has reached its
+                ideal value. From intuition it would seem that $x(t)=0$
+                is either unstable or semistable (But since we ignore
+                negative populations, this would simply be unstable) and
+                that $x(t)=1$ would be stable. And indeed, if
+                $0<x(t)<1$, the from
+                Eqn.~\ref{diffeq:Normalized_Log_Pop_Model_DE} we have
+                $\dot{x}(t)>0$, so the population is increasing
+                (To the ideal value). If $x(t)>1$, then $\dot{x}(t)<0$
+                and thus the population is decreasing
+                (Again, towards its ideal value). We can summarize this
+                more generally for first-order autonomous differential
+                equations. First we prove a helpful intermediate step.
+                \begin{theorem}
+                    If $x(t)$ is a differentiable function such that
+                    $x(t)\rightarrow{a}$ as $t\rightarrow\infty$, then
+                    there is a strictly increasing monotonic sequence
+                    $c_{n}$ such that $\dot{x}(c_{n})\rightarrow{0}$.
+                \end{theorem}
+                \begin{proof}
+                    For let $t_{n}=n$ for all $n\in\mathbb{N}$. Then
+                    $x(t_{n})\rightarrow{a}$ as $t_{n}\rightarrow\infty$.
+                    But convegent sequences are Cauchy sequences, and
+                    therefore $x(t_{n+1})-x(t_{n})\rightarrow{0}$.
+                    And by the mean value theorem, for all
+                    $n\in\mathbb{N}$ there is a
+                    $c_{n}\in(t_{n},t_{n+1})$ such that:
+                    \begin{equation*}
+                        \dot{x}(c_{n})
+                        =\frac{x(t_{n+1})-x(t_{n})}{t_{n+1}-t_{n}}
+                    \end{equation*}
+                    But $t_{n+1}-t_{n}=1$, and thus
+                    $\dot{x}(c_{n})=x(t_{n+1})-x(t_{n})$. But
+                    $x(t_{n+1})-x(t_{n})\rightarrow{0}$ and therefore
+                    $\dot{x}(c_{n})\rightarrow{0}$.
+                \end{proof}
+                \begin{theorem}
+                    If $f:\mathbb{R}\rightarrow\mathbb{R}$ is differentiable,
+                    and given the differential equation
+                    $\dot{x}(t)=f(x(t))$, if $x_{0}$ is an equilibrium
+                    solution and $f'(x_{0})>0$, then $x_{0}$ is
+                    an unstable equilibrium solution.
+                \end{theorem}
+                \begin{proof}
+                    If $f(x_{0})=0$ and $f'(x_{0})>0$, then there is a
+                    $\delta>0$ such that, for all
+                    $x\in(x_{0}-\delta,x_{0}+\delta)$, we have:
+                    \begin{equation*}
+                        \frac{f(x)-f(x_{0})}{x-x_{0}}>0
+                    \end{equation*}
+                    But $f(x_{0})=0$. Therefore, if $x_{1}>x_{0}$, we have:
+                    \begin{equation*}
+                        \frac{f(x_{1})-f(x_{0})}{x_{1}-x_{0}}>0
+                        \Rightarrow
+                        f(x_{1})-f(x_{0})>0
+                        \Rightarrow
+                        f(x_{1})>0
+                    \end{equation*}
+                    Thus, for all $x_{1}$ such that
+                    $0<x_{1}-x_{0}<\delta$, the limit of
+                    the solution $x(t)$ to the initial value problem
+                    $\dot{x}(t)=f(x(t))$, $x(0)=x_{1}$ can't converge to
+                    $x_{0}$. For if it did there would be a point
+                    $t_{0}$ such that $\dot{x}(t_{0})<0$ and
+                    $0<x(t_{0})-x_{0}<\delta$, a contradiction. Similarly
+                    for if $x_{1}<x_{0}$. Therefore, $x_{0}$ is unstable.
+                \end{proof}
+                \begin{theorem}
+                    If $f:\mathbb{R}\rightarrow\mathbb{R}$ is differentiable,
+                    and given the differential equation
+                    $\dot{x}(t)=f(x(t))$, if $x_{0}$ is an equilibrium
+                    solution and $f'(x_{0})<0$, then $x_{0}$ is
+                    a stable equilibrium solution.
+                \end{theorem}
+                \begin{proof}
+                    If $f'(x_{0})<0$ then there is a $\delta>0$ such
+                    that for all $x_{1}\in(x_{0}-\delta,x_{0}+\delta)$,
+                    $f'(x_{1})<0$. Then for all $x_{1}$ such that
+                    $0<x_{1}-x_{0}<\delta$, we have:
+                    \begin{equation*}
+                        \frac{f(x_{1})-f(x_{0})}{x_{1}-x_{0}}<0
+                        \Rightarrow
+                        f(x_{1})-f(x_{0})<0
+                        \Rightarrow
+                        f(x_{1})<0
+                    \end{equation*}
+                    
+                \end{proof}
+        \subsubsection{Notes on the Jordan Normal Form}
+            Every square matrix $A$ is similar to an upper
+            triangular matrix $J$ in
+            \textit{Jordan normal form} whose diagonal entries
+            are the eigenvalues of $A$. That is, there exists
+            an invertible matrix $P$ such that $P^{-1}AP=J$.
+            The trace of $A$ is equal to the trace of $J$:
+            \begin{equation*}
+                \Tr(J)
+                =\Tr(P^{-1}AP)
+                =\Tr(P^{-1}PA)
+                =\Tr(IA)=\Tr(A)
+            \end{equation*}
+        \subsubsection{Notes on Conjugacy}
+            \begin{minipage}[t]{0.49\textwidth}
+                We have:
+                \begin{align*}
+                    X'(t)&=AX(t),\quad
+                    X(0)=X_{0}\\
+                    \Rightarrow
+                    X(t)&=e^{tA}X_{0}\\
+                    \Rightarrow
+                    \phi^{A}(t,X_{0})
+                    &=e^{tA}X_{0}
+                \end{align*}
+            \end{minipage}
+            \vline
+            \hfill
+            \begin{minipage}[t]{0.49\textwidth}
+                If $B=T^{-1}AT$, for some matrix $T$, then:
+                \begin{align*}
+                    Y'(t)&=BY(t),\quad
+                    Y(0)=Y_{0}\\
+                    &=T^{-1}ATY(t)\\
+                    \Rightarrow
+                    Y(t)
+                    &=e^{tT^{-1}AT}Y_{0}\\
+                    &=T^{-1}e^{tA}TY_{0}\\
+                    \Rightarrow
+                    \phi^{B}(t,Y_{0})
+                    &=T^{-1}e^{tA}TY_{0}
+                \end{align*}
+            \end{minipage}
+            Thus, the homeomorphism is $h(X)=T^{-1}X$,
+            and we have:
+            \begin{equation*}
+                \phi^{B}(t,h(X_{0}))
+                =\phi^{B}(t,T^{-1}X_{0})
+                =T^{-1}e^{tA}T(T^{-1}X_{0})
+                =T^{-1}e^{tA}X_{0}
+                =h(\phi^{A}(t,X_{0}))
+            \end{equation*}
+\end{document}

@@ -186,7 +186,7 @@
     blanker,
     breakable,
     left=3mm,
-    before skip=10pt,
+    before skip=5pt,
     after skip=10pt,
     borderline west={0.6mm}{0pt}{green!80!black}
 }
@@ -253,10 +253,45 @@
         \draw[Blue, line width=2pt]
             ([yshift=-1.2ex]frame.north-|frame.west) to 
             ([yshift=-1.2ex]title.south-|frame.east);},
-    overlay={%
+    overlay first={%
         \draw[Blue, line width=2pt]
             ([yshift=-1.2ex]frame.north-|frame.west) to 
-            ([yshift=-1.2ex]title.south-|frame.east);}}
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}
+
+\AtEndEnvironment{ltheorem}{$\hfill\textcolor{Green}{\blacksquare}$}
+\newtcolorbox[use counter*=theorem]{ltheorem}[1]{%
+    empty,
+    title={Theorem~\thetheorem:~{#1}},
+    attach boxed title to top left,
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=Green,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    left=0pt,
+    right=0pt,
+    top=2.2ex,
+    bottom=-5.0pt,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[Green, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay first={%
+        \draw[Green, line width=2pt]
+            ([yshift=-1.2ex]frame.north-|frame.west) to 
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}
 
 %--------------------Declared Math Operators--------------------%
 \DeclareMathOperator{\Refl}{Refl}           % Reflection operator.
@@ -283,6 +318,7 @@
 \DeclareMathOperator{\Prin}{Prin}           % Principal value.
 \DeclareMathOperator{\Mod}{mod}             % Modulus.
 \DeclareMathOperator{\Int}{Int}             % Interior of set.
+\DeclareMathOperator{\Ext}{Ext}             % Exterior of set.
 \DeclareMathOperator{\Erf}{Erf}             % Error Functions
 \DeclareMathOperator{\Erfc}{Erfc}           % Complementary Error Function.
 %--------------------Declared Math Symbols--------------------%
@@ -324,30 +360,22 @@
     \secdef\@book\@sbook
 }
 \def\@book[#1]#2{%
-    \ifnum \c@secnumdepth >-3\relax
-        \refstepcounter{book}%
-        \addcontentsline{toc}{book}{
-            \bookname\ \thebook:\hspace{1em}#1
-        }
-    \else
-        \addcontentsline{toc}{book}{#1}%
-    \fi
-    \markboth{}{}%
+    \refstepcounter{book}
+    \addcontentsline{toc}{book}{\bookname\ \thebook:\hspace{1em}#1}
+    \markboth{}{}
     {\centering
-     \interlinepenalty \@M
+     \interlinepenalty\@M
      \normalfont
-     \ifnum \c@secnumdepth >-2\relax
-       \huge\bfseries \bookname\nobreakspace\thebook
-       \par
-       \vskip 20\p@
-     \fi
-     \Huge \bfseries #2\par}%
+     \huge\bfseries\bookname\nobreakspace\thebook
+     \par
+     \vskip 20\p@
+     \Huge\bfseries#2\par}%
     \@endbook}
 \def\@sbook#1{%
     {\centering
      \interlinepenalty \@M
      \normalfont
-     \Huge \bfseries #1\par}%
+     \Huge\bfseries#1\par}%
     \@endbook}
 \def\@endbook{
     \vfil\newpage
@@ -363,18 +391,16 @@
         \fi
 }
 \newcommand*\l@book[2]{%
-    \ifnum \c@tocdepth >-2\relax
+    \ifnum\c@tocdepth >-3\relax
         \addpenalty{-\@highpenalty}%
-        \addvspace{2.25em \@plus\p@}%
+        \addvspace{2.25em\@plus\p@}%
         \setlength\@tempdima{3em}%
         \begingroup
-            \parindent \z@ \rightskip \@pnumwidth
+            \parindent\z@\rightskip\@pnumwidth
             \parfillskip -\@pnumwidth
             {
                 \leavevmode
-                \Large \bfseries #1\hfil \hb@xt@\@pnumwidth{
-                    \hss #2
-                }
+                \Large\bfseries#1\hfill\hb@xt@\@pnumwidth{\hss#2}
             }
             \par
             \nobreak
@@ -386,26 +412,21 @@
 \renewcommand{\thebook}{\texorpdfstring{\Numberstring{book}}{book}}
 \providecommand*{\toclevel@book}{-2}
 \makeatother
-\titlecontents{chapter}[0pt]
-    {\bfseries}
-    {\chaptername\ \thecontentslabel:\quad}
-    {}
-    {\hfill\contentspage}
 \titleformat{\part}[display]
     {\Large\bfseries}
     {\partname\nobreakspace\thepart}
     {0mm}
     {\Huge\bfseries}
-    \titlecontents{part}[0pt]
+\titlecontents{part}[0pt]
     {\large\bfseries}
     {\partname\ \thecontentslabel: \quad}
     {}
     {\hfill\contentspage}
-\newcommand{\MarkRightAngle}[4][.3cm]
-    {\coordinate (tempa) at ($(#3)!#1!(#2)$);
-     \coordinate (tempb) at ($(#3)!#1!(#4)$);
-     \coordinate (tempc) at ($(tempa)!0.5!(tempb)$);%midpoint
-     \draw (tempa) -- ($(#3)!2!(tempc)$) -- (tempb);}
+\titlecontents{chapter}[0pt]
+    {\bfseries}
+    {\chaptername\ \thecontentslabel:\quad}
+    {}
+    {\hfill\contentspage}
 %--------------------------LENGTHS------------------------------%
 % Spacings for the Table of Contents.
 \addtolength{\cftsecnumwidth}{1ex}
