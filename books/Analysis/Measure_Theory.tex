@@ -1,0 +1,3190 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Measure Theory}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Measure Theory}
+        \addcontentsline{toc}{chapter}{Measure Theory}
+        \markboth{}{MEASURE THEORY}
+        \vspace{10ex}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Measure Theory}
+    \fi
+    \section{A Review of Set Theory}
+        \subsection{Cardinality}
+            We begin by talking about cardinality. This is the
+            \textit{size} of a set. For an infinite set it
+            doesn't make sense to talk about the \textit{number}
+            of elements, but we can specify what it means two sets
+            to have the same size. Sets $A$ and $B$ are equivalent
+            if there exists a bijection $f:A\rightarrow{B}$.
+            We then say that $A$ and $B$ have the same cardinality.
+            The notation is written as $|A|=|B|$ or
+            $\Card(A)=\Card(B)$. A finite set is a set $A$ such that
+            there is a bijection between $A$ and $\mathbb{Z}_{n}$.
+            We can then view the elements of $A$ as
+            $A=\{a_{1},\hdots,a_{n}\}$. A countable set is a set
+            $A$ such that there is a bijection between $A$ and
+            $\mathbb{N}$. Here, $\mathbb{N}$ is the set of all
+            natural numbers, or positive integers.
+            \begin{lexample}
+                There are many commonly discussed sets that are
+                countably infinite. $\mathbb{N}$ is a trivial
+                such example, but also $\mathbb{N}_{e}$ and
+                $\mathbb{N}_{o}$, the sets of even and odd positive
+                integers, respectively. For consider as bijections
+                the following functions:
+                \par
+                \begin{subequations}
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            f_{e}(n)=2n
+                        \end{equation}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            f_{0}(n)=2n-1
+                        \end{equation}
+                    \end{minipage}
+                    \par\hfill\par
+                    $\mathbb{Z}$ is also countable, as shown in
+                    Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Z}.
+                    An explicit bijection for $\mathbb{Z}$ is:
+                    \begin{equation}
+                        f(n)=
+                        \begin{cases}
+                            \frac{n}{2},&n\mod{2}=0\\
+                            \frac{1-n}{2},&n\mod{2}=1
+                        \end{cases}
+                    \end{equation}
+                \end{subequations}
+            \end{lexample}
+            $\mathbb{Q}$ is also countable. We may intuitively think of
+            $\mathbb{N}$ as being smaller than $\mathbb{Q}$, since there
+            are simple \textit{surjections} that can be constructed
+            from $\mathbb{Q}$ to $\mathbb{N}$. There is also a
+            surjection from $\mathbb{N}$ onto $\mathbb{Q}^{+}$, as is
+            shown in
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}.
+            \newpage
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \subimport{../../tikz/}{Surjection_From_N_to_Z}
+                \caption{Diagram of a Bijection Between
+                         $\mathbb{N}$ and $\mathbb{Z}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Z}
+            \end{figure}
+            To construct such a surjection, write out all of the
+            positive rational numbers in a grid so that $a_{nm}$ is
+            the number $n/m$. Then zig-zag along the diagonals
+            to construct the function. Thus there is a surjection
+            $f:\mathbb{Q}^{+}\rightarrow\mathbb{N}$
+            and a surjection $g:\mathbb{N}\rightarrow\mathbb{Q}^{+}$. The
+            Cantor-Schr\"{o}eder-Bernstein theorem says that if there
+            is surjection from $A$ to $B$ and a surjection from $B$
+            to $A$, then there is a bijection between $A$ and $B$.
+            Therefore there is a bijection between $\mathbb{N}$ and
+            $\mathbb{Q}^{+}$, and $\mathbb{Q}^{+}$ is countable.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \resizebox{0.7\textwidth}{!}{%
+                    \subimport{../../tikz/}
+                              {Surjection_From_N_to_Q_Plus.tex}
+                }
+                \caption{Diagram of a Surjection from
+                         $\mathbb{N}$ onto $\mathbb{Q}^{+}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}
+            \end{figure}
+            We can modify
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}
+            slightly to create a surjection between $\mathbb{N}$ and
+            $\mathbb{Q}$, see
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q}.
+            It is important to note that this bijection will not
+            preserve the order of the rational numbers. The bijection
+            will have to jump around back and forth. Any such
+            bijection will be forced to do this, as the rationals are
+            everywhere dense on $\mathbb{R}$. Any monotonic sequence of
+            $\mathbb{Q}$ cannot possibly be a bijection.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \resizebox{\textwidth}{!}{%
+                    \subimport{../../tikz/}
+                              {Surjection_From_N_to_Q.tex}
+                }
+                \caption{Diagram of a Surjection from
+                         $\mathbb{N}$ onto $\mathbb{Q}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Q}
+            \end{figure}
+            \begin{theorem}
+                If $A$ is a countable infinite set and
+                $B\subseteq{A}$, then either $B$ is finite or
+                $B$ is countable.
+            \end{theorem}
+            \begin{proof}
+                As $A$ is countable, there is a bijection
+                $a:\mathbb{N}\rightarrow{A}$. Define the following:
+                \begin{equation}
+                    K=\{n\in\mathbb{N}:a_{n}\in{B}\}
+                \end{equation}
+                As $B\subseteq{A}$,
+                this set contains a subsequence of points in
+                $\mathbb{N}$ that get mapped into $B$. If $K$ is finite,
+                then $B$ is finite, and if not then $K$ is countably
+                infinite, and thus $B$ is countably infinite.
+            \end{proof}
+            \begin{theorem}
+                If $A$ is an infinite set, then there exists a
+                countable subset $B\subseteq{A}$.
+            \end{theorem}
+            \begin{proof}
+                If $A$ is infinite then there is an
+                $a_{1}\in{A}$. But, as $A$ is infinite,
+                $A\setminus\{a_{1}\}$ is infinite, and there
+                is an $a_{2}\in{A}\setminus\{a_{1}\}$. Continuing
+                we obtain a sequence of distinct elements in $A$.
+                Let $B=\{a_{n}:n\in\mathbb{N}\}$. Then
+                $B\subseteq{A}$, and $B$ is countable.
+            \end{proof}
+            \begin{lexample}
+                Suppose we have a collection of disjoint intervals
+                of $\mathbb{R}$. This collection is either finite
+                or countable. For in every interval, choose a
+                rational number $q_{n}$. Let
+                $A=\{q_{1},q_{2},\hdots\}$. Then
+                $A\subseteq\mathbb{Q}$, and thus $A$ is either
+                finite or countable. But this is also an enumeration
+                of the intervals in the collection, and thus the
+                collection is either finite or countable.
+            \end{lexample}
+            Given a countable collection of sets
+            $A=\{\mathcal{A}_{1},\mathcal{A}_{2},\hdots\}$ such
+            that, for all $n\in\mathbb{N}$, $\mathcal{A}_{n}$ is
+            also a countable set, then the union is countable. That is:
+            \begin{equation}
+                B=\bigcup_{n=1}^{\infty}\mathcal{A}_{n}
+            \end{equation}
+            is a countable set. The proof of this is a mimicry of
+            the proof of the countability of $\mathbb{Q}$. Not
+            every set is either finite or countable. The real numbers,
+            $\mathbb{R}$, is an example of an \textit{uncountable}
+            set. First, some notes on the power set of a set.
+            \begin{ldefinition}{Power Set}
+                The power set of a set $\Omega$, denoted
+                $\mathcal{P}(\Omega)$, is the set of all subsets of
+                $\Omega$:
+                \begin{equation}
+                    \mathcal{P}(\Omega)=
+                    \{A:A\subseteq\Omega\}
+                \end{equation}
+            \end{ldefinition}
+            \begin{lexample}
+                \begin{subequations}
+                    If $\Omega=\{1,2\}$, then the power set is:
+                    \begin{equation}
+                        \mathcal{P}(\Omega)=
+                        \big\{\emptyset,\{1\},\{2\},\{1,2\}\big\}
+                    \end{equation}
+                    We must consider the empty set, since for any set
+                    $A$, $\emptyset\subseteq{A}$.
+                    If $\Omega=\{1,2,3\}$, then:
+                    \begin{equation}
+                        \mathcal{P}(\Omega)=
+                        \big\{\emptyset,\{1\},\{2\},\{3\},\{1,2\},
+                          \{1,3\},\{2,3\},\{1,2,3\}\big\}
+                    \end{equation}
+                    We see that, in the first example, a set with
+                    2 elements has a power set with 4 elements. In the
+                    second example we see that a set with 3 elements has
+                    a power set with 8 elements. This pattern continues
+                    for finite sets. If $A$ has $n$ elements, then
+                    $\mathcal{P}(A)$ has $2^{n}$ elements. If
+                    $A$ is an infinite set, then $\mathcal{P}(A)$ is
+                    uncountable. Indeed:
+                    \begin{equation}
+                        \Card\big(\mathcal{P}(\mathbb{N})\big)=
+                        \Card(\mathbb{R})
+                    \end{equation}
+                    We can show this by using the binary representation
+                    of real numbers. We construct a bijection as
+                    follows: If $A\subseteq\mathbb{N}$, then
+                    let $r_{A}=0.n_{1}n_{2}\hdots$ where:
+                    \begin{equation}
+                        n_{i}=
+                        \begin{cases}
+                            0,&i\notin{A}\\
+                            1,&i\in{A}
+                        \end{cases}
+                    \end{equation}
+                    The function
+                    $f:\mathcal{P}(\mathbb{N})\rightarrow[0,1]$
+                    defined by $f(A)=r_{A}$ is thus a bijection.
+                    That is, every element of $[0,1]$ gets mapped to in
+                    a one-to-one manner. The potentially tricky numbers are
+                    0 and 1, but $f(\emptyset)=0$, and $f(\mathbb{N})=1$.
+                    Thus $\mathcal{P}(\mathbb{N})$ and $[0,1]$ are of the
+                    same cardinality. But $(0,1)$ and $\mathbb{R}$
+                    are of the same cardinality. To see this, consider
+                    the graph of the function
+                    $g:(0,1)\rightarrow\mathbb{R}$ defined as:
+                    \begin{equation}
+                        g(x)=\frac{2x-1}{x(1-x)}
+                    \end{equation}
+                    This is a bijection between the unit interval
+                    $(0,1)$ and $\mathbb{R}$. One can also use the
+                    \textit{stereographic projection} to show this.
+                    But also $[0,1]$ and $(0,1)$ have the same cardinality.
+                    For this, consider the following function:
+                    \begin{equation}
+                        f(x)=
+                        \begin{cases}
+                            \frac{1}{2},&x=0\\
+                            \frac{1}{2^{n+2}},&x=\frac{1}{2^{n}}\\
+                            x,&\textrm{Otherwise}
+                        \end{cases}
+                    \end{equation}
+                    A graph of this is shown in
+                    Fig.~\ref{fig:MEASURE_THEORY:Bijection_Closed_Interval_to_Open}.
+                    Therefore, $\mathbb{R}$ and
+                    $\mathcal{P}(\mathbb{N})$ have the same cardinality.
+                    This can then be used to show that $\mathbb{R}$ is
+                    uncountable.
+                \end{subequations}
+            \end{lexample}
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \subimport{../../tikz/}{Bijction_Closed_to_Open_Interval}
+                \caption{Bijection from $[0,1]$ to $(0,1)$.}
+                \label{fig:MEASURE_THEORY:Bijection_Closed_Interval_to_Open}
+            \end{figure}
+            The power set of any set is strictly larger than the
+            original set. If $\Omega$ is finite with $n$ elements, it
+            can be shown that $\mathcal{P}(\Omega)$ has $2^{n}$
+            elements. For infinite sets, there is a trivial surjection
+            from $\mathcal{P}(\Omega)$ onto $\Omega$: for any element
+            $x$, let $f(\{x\})=x$. This shows that
+            $\Card(\Omega)\leq\Card(\mathcal{P}(\Omega))$. We now show
+            that the inequality is strict.
+            \begin{theorem}
+                If $\Omega$ is a set, then there is no bijection
+                $f:\Omega\rightarrow\mathcal{P}(\Omega)$
+            \end{theorem}
+            \begin{proof}
+                For suppose not, and let
+                $f:\Omega\rightarrow\mathcal{P}(\Omega)$ be such a
+                bijection. Define:
+                \begin{equation}
+                    A=\{x\in\Omega:x\in{f}(x)\}
+                \end{equation}
+                Then $A\subseteq\Omega$, and thus
+                $A\in\mathcal{P}(\Omega)$. But then the complement of
+                $A$ is also an element of $\mathcal{P}(\Omega)$. But
+                $f$ is a bijection and thus there is an $x\in\Omega$
+                such that $f(x)=A^{C}$. If $x\in{f}(x)$, then
+                $x\in{A}$, a contradiction as $f(x)=A^{C}$, and thus
+                $x\in{A}^{C}$ as well. Therefore $x\notin{f}(x)$. But
+                then $x\in{A}^{C}$. But, from the definition of $A$,
+                since $x\in{A}^{C}$ and $f(x)=A^{C}$, $x\in{f}(x)$
+                and thus $x\in{A}$, a contradiction. Thus there is no
+                $x$ such that $f(x)=A^{C}$. Therefore, $f$ is not a
+                bijection.
+            \end{proof}
+            From this we conclude that $\mathcal{P}(\mathbb{N})$
+            is an uncountable infinite set. But since $\mathbb{R}$
+            and $\mathcal{P}(\mathbb{N})$ have the same cardinality,
+            $\mathbb{R}$ is also uncountable.
+            If a set $A$ has the same cardinality as $\mathbb{R}$,
+            we say that $A$ has the cardinality of the continuum.
+            \begin{lexample}
+                There is a bijection between the open unit
+                square $(0,1)\times(0,1)$ and the open unit interval
+                $(0,1)$. For an element $(x,y)\in(0,1)\times(0,1)$,
+                let $z\in(0,1)$ be defined as
+                $z=0.x_{1}y_{1}x_{2}y_{2}x_{3}y_{3}\dots$ This is
+                a bijection, for all $(x,y)$ in the square there is
+                a corresponding $z\in(0,1)$, and for all
+                $z\in(0,1)$ there is a corresponding element of
+                $(0,1)\times(0,1)$. We can say that $(x,y)$ can
+                be coded into $z$, and $z$ can be decoded into
+                $(x,y)$. Hence, $(0,1)\times(0,1)$ has the cardinality
+                of the continuum. By stereographic projection and induction
+                we obtain:
+                \par\hfill\par
+                \begin{subequations}
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \begin{equation}
+                            \Card(\mathbb{R}^{2})=\Card(\mathbb{R})
+                        \end{equation}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \begin{equation}
+                            \Card(\mathbb{R}^{n})=\Card(\mathbb{R})
+                        \end{equation}
+                    \end{minipage}
+                    \par
+                \end{subequations}
+            \end{lexample}
+            \begin{lexample}
+                Consider the set of all real-valued sequences. We've seen
+                that any real number can be represented as a function
+                $f:\mathbb{N}\rightarrow\{0,1\}$. A real-valued sequence
+                is a function $a:\mathbb{N}\rightarrow\mathbb{R}$, and
+                thus the set of real-valued sequences can be seen as the
+                set of functions whose domain is $\mathbb{N}$ and whose
+                range is the set of all functions
+                $f:\mathbb{N}\rightarrow\{0,1\}$. So given a sequence
+                $a$, the image of $a_{n}$, for $n\in\mathbb{N}$, is a
+                function $f_{n}:\mathbb{N}\rightarrow\{0,1\}$. Therefore
+                the set of all real-valued sequences can be represented
+                as the set of all functions
+                $g:\mathbb{N}\times\mathbb{N}\rightarrow\{0,1\}$, where
+                $g(n,m)=f_{n}(m)$. But $\mathbb{N}\times\mathbb{N}$ is
+                countable, and thus the set of all functions of the form
+                $g:\mathbb{N}\times\mathbb{N}\rightarrow\{0,1\}$ has the
+                same cardinality as the set of all functions of the form
+                $f:\mathbb{N}\rightarrow\{0,1\}$. But this has the
+                cardinality of the continuum. Therefore, the set of all
+                real-valued sequences has the cardinality of the continuum.
+            \end{lexample}
+        \subsection{Set Operations}
+            There are several operations that can be performed on sets,
+            most notable are union, intersection, difference, and symmetric
+            difference.
+            \begin{ldefinition}{Set Union and Intersection}
+                \begin{subequations}
+                    The union of two sets $A$ and $B$, denoted
+                    $A\cup{B}$, is the set:
+                    \begin{equation}
+                        A\cup{B}=\{x:x\in{A}\textrm{ or }x\in{B}\}
+                    \end{equation}
+                    The intersction of two sets $A$ and $B$, denoted
+                    $A\cap{B}$, is the set:
+                    \begin{equation}
+                        A\cap{B}=\{x:x\in{A}\textrm{ and }x\in{B}\}
+                    \end{equation}
+                \end{subequations}
+            \end{ldefinition}
+            These two concepts can be visualized with Venn diagrams, as shown in
+            Fig.~\ref{fig:MEASURE_THEORY_union_intersection_venn_diagram}.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../tikz/}{Venn_Diagram_Union}
+                    \subcaption{Set Union}
+                \end{subfigure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../tikz/}{Venn_Diagram_Intersection}
+                    \subcaption{Set Intersection}
+                \end{subfigure}
+                \caption{Venn Diagrams Depicting the Union and Intersection
+                         of the Sets $A$ and $B$.}
+                \label{fig:MEASURE_THEORY_union_intersection_venn_diagram}
+            \end{figure}
+            \begin{ftheorem}{Laws of Union and Intersection}
+                            {MEASURE_THEORY_UNION_LAWS_UNION_INTERSECTION}
+                If $A$, $B$, and $C$ are sets, then the following are true:
+                \par\hfill\par
+                \begin{subequations}
+                    \underline{Commutative Laws:}
+                    \begin{align}
+                        A\cup{B}&=B\cup{A}\\
+                        A\cap{B}&=B\cap{A}
+                    \end{align}
+                    \underline{Associative Laws:}
+                    \begin{align}
+                        A\cup(B\cup{C})&=(A\cup{B})\cup{C}\\
+                        A\cap(B\cap{B})&=(A\cap{B})\cap{C}
+                    \end{align}
+                    \underline{Distributive Laws:}
+                    \begin{align}
+                        A\cup(B\cap{C})&=(A\cup{B})\cap(A\cup{C})\\
+                        A\cap(B\cup{C})&=(A\cap{B})\cup(A\cap{C})
+                    \end{align}
+                \end{subequations}
+            \end{ftheorem}
+            \begin{bproof}
+                If $x\in{A}\cup{B}$, then either $x\in{A}$ or $x\in{B}$,
+                or both. But then either $x\in{B}$ or $x\in{A}$, or both,
+                and thus $x\in{B}\cup{A}$. Thus $A\cup{B}\subseteq{B}\cup{A}$.
+                Similarly, $B\cup{A}\subseteq{A}\cup{B}$, and thus
+                $A\cup{B}=B\cup{A}$. By a similar argument,
+                $A\cap{B}=B\cap{A}$.
+                \par\hfill\par
+                If $x\in{A}\cup(B\cup{C})$, then either
+                $x\in{A}$ or $x\in{B}\cup{C}$, or both.
+                If $x\in{A}$, then $x\in{A}\cup{B}$, and
+                therefore $x\in(A\cup{B})\cup{C}$. If not,
+                then $x\in{B}\cup{C}$, and thus either
+                $x\in{B}$ or $x\in{C}$, or both.
+                If $x\in{B}$, then $x\in{A}\cup{B}$, and
+                thus $x\in(A\cup{B})\cup{C}$. If not
+                then $x\in{C}$, and therefore
+                $x\in(A\cup{B})\cup{C}$. Therefore
+                $A\cup(B\cup{C})\subseteq(A\cup{B})\cup{C}$.
+                Similarly, $(A\cup{B})\cup{C}\subseteq{A}\cup(B\cup{C})$.
+                Thus, $A\cup(B\cup{C})=(A\cup{B})\cup{C}$. By a similar
+                argument, $A\cap(B\cap{C})=(A\cap{B})\cap{C}$.
+                \par\hfill\par
+                If $x\in{A}\cup(B\cap{C})$, then either $x\in{A}$
+                or $x\in{B}\cap{C}$, or both. If $x\in{A}$, then
+                $x\in{A}\cup{B}$ and $x\in{A}\cup{C}$, and therefore
+                $x\in(A\cup{B})\cap(A\cup{C})$. If $x\in{B}\cap{C}$,
+                then $x\in{B}$ and $x\in{C}$, and therefore
+                $x\in(A\cup{B})\cap(A\cup{C})$. Thus,
+                $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$.
+                Similarly,
+                $(A\cup{B})\cap(A\cup{C})\subseteq{A}\cup(B\cap{C})$.
+            \end{bproof}
+            If $A$ and $B$ are sets, and if $C\subseteq{A}\cup{B}$, then
+            either $C\subseteq{A}$ or $C\subseteq{B}$, or both. It is
+            possible that $C\subseteq{A}\cup{B}$ and yet $C$ and $B$ have no
+            elements in common, as long as $C\subseteq{A}$. As an example,
+            take $A$ and $B$ to be disjoint sets. Then $A\subseteq{A}\cup{B}$,
+            yet $A$ and $B$ have no elements in common. If
+            $C\subseteq{A}\cap{B}$, then it must be true that
+            $C\subseteq{A}$ and $C\subseteq{B}$.
+            \begin{ldefinition}{Set Difference and Symmetric Difference}
+                The set difference of a set $A$ with respect to a set $B$,
+                denoted $B\setminus{A}$, is the set:
+                \begin{equation}
+                    B\setminus{A}=\{x\in{B}:x\notin{A}\}
+                \end{equation}
+                The symmetric difference of $A$ and $B$, denoted
+                $A\ominus{B}$, is the set:
+                \begin{equation}
+                    A\ominus{B}=(A\cup{B})\setminus(A\cap{B})
+                \end{equation}
+            \end{ldefinition}
+            As with the notions of unions and intersections, set differences and
+            symmetric differences can be visualized using Venn diagrams.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../tikz/}{Venn_Diagram_Set_Difference}
+                    \subcaption{Set Difference}
+                \end{subfigure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../tikz/}{Venn_Diagram_Symmetric_Difference}
+                    \subcaption{Symmetric Difference}
+                \end{subfigure}
+                \caption{Venn Diagrams Depicting the Set Difference and
+                         Symmetric Difference of the Sets $A$ and $B$.}
+                \label{fig:MEASURE_THEORY_Difference_sym_venn_diagram}
+            \end{figure}
+            \begin{theorem}
+                \label{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION}
+                If $A$, $B$, and $C$ are sets, and if $A\subseteq{C}$
+                and $B\subseteq{C}$, then:
+                \begin{equation}
+                    B\setminus{A}=B\cap(C\setminus{A})
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For if $x\in{B}\setminus{A}$, then
+                $x\in{B}$ and $x\notin{A}$. But
+                $B\subseteq{C}$, and thus if $x\in{B}$, then $x\in{C}$.
+                But if $x\notin{A}$, then $x\in{C}\setminus{A}$. Therefore
+                $B\setminus{A}\subseteq{B}\cap(C\setminus{A})$.
+                Similarly, $B\cap(C\setminus{A})\subseteq{B}\setminus{A}$,
+                and therefore $B\setminus{A}={B}\cap(C\setminus{A})$.
+            \end{proof}
+            While set difference appears similar to subtraction that one finds in
+            basic arithmetic, the two have their differences. For any two real
+            numbers $a$ and $b$, $b=a-(a-b)$. For sets this is not true. For let
+            $A$ be the empty set, and let $B$ be non-empty. Then
+            $A\setminus(A\setminus{B})=\emptyset$, which is not $B$.
+            Also, while it may seems convincing that
+            $A\setminus(B\setminus{A})=A\setminus{B}$, this is not true. For
+            let $A$ be a non-empty set and let $B=A$. Then
+            $A\setminus(B\setminus{A})=A$, but $A\setminus{B}=\emptyset$.
+            The concept of set difference can then be used to define the
+            concept of complement.
+            \begin{ldefinition}{Complement}
+                The complement of a set $A$ with respect to a set
+                $\Omega$, denoted $A^{C}$, is the set:
+                \begin{equation}
+                    A^{C}=\Omega\setminus{A}
+                \end{equation}
+            \end{ldefinition}
+            Thm.~\ref{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION} can then
+            be translated into the notation of complements as follows:
+            \begin{theorem}
+                If $A$, $B$, and $\Omega$ are sets, $A,B\subseteq\Omega$,
+                and if $A^{C}$ is the complement of $A$ with respect
+                to $\Omega$, then:
+                \begin{equation}
+                    B\setminus{A}=B\cap{A}^{C}
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                By the definition of complement, $A^{C}=\Omega\setminus{A}$.
+                As $A\subseteq\Omega$ and $B\subseteq\Omega$, by
+                Thm.~\ref{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION},
+                $B\setminus{A}=B\cap(\Omega\setminus{A})$, and therefore
+                $B\setminus{A}=B\cap{A}^{C}$.
+            \end{proof}
+            \begin{ftheorem}{DeMorgan's Laws}{MEASURE_DEMORGAN}
+                If $A$ and $B$ are sets, then:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B}\big)^{C}
+                        &=A^{C}\cup{B}^{C}\\
+                        \big(A\cup{B}\big)^{C}
+                        &=A^{C}\cap{B}^{C}
+                    \end{align}
+                \end{subequations}
+            \end{ftheorem}
+            With this, we can prove some results about set differences.
+            \begin{theorem}
+                If $A$ and $B$ are sets, then:
+                \begin{equation}
+                    A=\big(A\cap{B}\big)\cup\big(A\setminus{B}\big)
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B})\cup\big(A\setminus{B}\big)
+                        &=\big(A\cap{B}\big)\cup\big(A\cap{B}^{C}\big)\\
+                        &=A\cap(B\cup{B}^{C})\\
+                        &=A\cap\Omega\\
+                        &=A
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            \begin{theorem}
+                If $A$, $B$, and $C$ are sets, then:
+                \begin{equation}
+                    A\cap\big(B\setminus{C}\big)
+                    =\big(A\cap{B}\big)\cap\big(A\setminus{C}\big)
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        A\cap\big(B\setminus{C}\big)
+                        &=A\cap\big(B\cap{C}^{C}\big)\\
+                        &=\big(A\cap{A}\big)\cap\big(B\cap{C}^{C}\big)\\
+                        &=\big(A\cap{B}\big)\cap\big(A\cap{C}^{C}\big)\\
+                        &=\big(A\cap{B}\big)\cap\big(A\setminus{C}\big)
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            Intersections do distribute over set differences.
+            \begin{theorem}
+                If $A$, $B$, and $C$ are sets, then:
+                \begin{equation}
+                    A\cap(B\setminus{C})=
+                    (A\cap{B})\setminus(A\cap{C})
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B}\big)\setminus\big(A\cap{C}\big)
+                        &=\big(A\cap{B}\big)\cap\big(A\cap{C}\big)^{C}\\
+                        &=\big(A\cap{B}\big)\cap\big(A^{C}\cup{C}^{C}\big)\\
+                        &=\Big(\big(A\cap{B}\big)\cap{A}^{C}\Big)
+                            \cup\Big(\big({A}\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\Big(\big(A\cap{A}^{C}\big)\cap{B}\Big)\cup
+                            \Big(\big(A\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\emptyset\cup
+                            \Big(\big(A\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\big(A\cap{B}\big)\cap{C}^{C}\\
+                        &=A\cap\big(B\cap{C}^{C}\big)\\
+                        &=A\cap\big(B\setminus{C}\big)
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            Unions do not, however. For let $A$ be non-empty and let
+            $A=B=C$. Then $A\cup(B\setminus{C})=A$, but
+            $(A\cup{B})\setminus(A\cup{C})=\emptyset$.
+            \begin{enumerate}
+                \item DeMorgan's Laws:
+                      \subitem $(A\cup{B})^{C}=A^{C}\cap{B}^{C}$
+                      \subitem $(A\cap{B})^{C}=A^{C}\cup{B}^{C}$
+            \end{enumerate}
+            DeMorgan's Laws hold for arbitrary collections
+            of set. If $I$ is some indexing set:
+            \begin{align}
+                \Big(\bigcup_{\alpha\in{I}}A_{\alpha}\Big)^{C}
+                &=\bigcap_{\alpha\in{I}}A_{\alpha}^{C}\\
+                \Big(\bigcap_{\alpha\in{I}}A_{\alpha}\Big)^{C}
+                &=\bigcup_{\alpha\in{I}}A_{\alpha}^{C}
+            \end{align}
+            The set operations thus define binary operations
+            on the power set of a set $\Omega$. It's important
+            to note the notation. An element of $\Omega$ may
+            be anything, while an element of
+            $\mathcal{P}(\Omega)$ is a subset of $\Omega$.
+            That is, the \textit{points} of $\mathcal{P}(\Omega)$
+            are themselves sets. Thus, union, intersection,
+            etc., define binary operations on
+            $\mathcal{P}(\Omega)$. Given two subsets of
+            $\Omega$, $A$ and $B$, $A\cup{B}$ is another
+            subset of $\Omega$, as is $A\cap{B}$, and so on.
+            The complement can also be seen as a unary operator
+            on $\mathcal{P}(\Omega)$. From the various theorems
+            presented, we have the following:
+            \begin{enumerate}
+                \item Union is commutative and associative.
+                \item Intersection is commutative and
+                      associative.
+                \item Union distributes over intersection.
+                \item Intersection distributes over union.
+                \item DeMorgan's Laws hold.
+                \item Set difference is not commutative,
+                      nor is it associative.
+            \end{enumerate}
+    \section{\texorpdfstring{$\sigma$}{Sigma}-Algebras}
+        \subsection{Set Rings}
+            Given a set $\Omega$, $\mathcal{P}(\Omega)$ is the
+            set of all subsets of $\Omega$. Often this is too
+            much, and too difficult to handle. Indeed, even
+            $\mathcal{P}(\mathbb{R})$ is quite large and hard
+            to get a grasp on. We wish to speak of collections
+            of sets that have some structure on them.
+            The first thing we will talk about is a set ring.
+            \begin{ldefinition}{Set Ring}
+                A set ring of a set $\Omega$ is a nonempty subset
+                $\mathcal{R}\subseteq\mathcal{P}(\Omega)$ such that:
+                \begin{enumerate}
+                    \item For all $A,B\in\mathcal{R}$,
+                          $A\cup{B}\in\mathcal{R}$
+                    \item For all $A,B\in\mathcal{R}$,
+                          $A\setminus{B}\in\mathcal{R}$
+                \end{enumerate}
+            \end{ldefinition}
+            \begin{example}{Set Ring}
+                If $\Omega$ is a set, then
+                $\mathcal{P}(\Omega)$ is a set ring of
+                $\Omega$. So is the set $R=\{\emptyset$.
+                For any $A\subset\Omega$, the set
+                $R=\{A\}$ is also a set ring. If
+                $\Omega=\{1,2,3\}$, then
+                $R=\{\emptyset,\{1\},\{2,3\},\{1,2,3\}\}$ is
+                a set ring on $\Omega$.
+            \end{example}
+            \begin{lexample}
+                If $\Omega$ is an infinite set, and if
+                $\mathcal{E}=\big\{\{x\}:x\in\Omega\big\}$, then the
+                smallest set ring that contains $\mathcal{E}$ is the set of
+                all finite subsets of $\Omega$. For the union of two finite
+                sets is finite, as is the set difference of two finite sets,
+                and thus this satisfies a set ring. Moreover, if $\mathcal{R}$
+                is a set ring that contains $\mathcal{E}$ then it contains the
+                union of any finite collection of elements in $\mathcal{E}$.
+                But $\mathcal{E}$ is the set of all of the singletons of
+                $\Omega$, and any finite subset of $\Omega$ can be written
+                as the union of finitely many singletons. Thus, $\mathcal{R}$
+                is the smallest set ring that contains $\mathcal{E}$.
+            \end{lexample}
+            \begin{theorem}
+                If $\Omega$ is a set, if $R$ is a set ring
+                on $\Omega$, and if $A$ is a finite subset of
+                $R$, then $\cup_{\alpha\in{A}}\alpha$ is an
+                element of $R$.
+            \end{theorem}
+            \begin{proof}
+                Apply induction to the closure of unions.
+            \end{proof}
+            \begin{theorem}
+                If $\Omega$ is a set, if $R$ is a set ring on
+                $\Omega$, and if $A,B\in{R}$, then
+                $A\cup{B}\in{R}$.
+            \end{theorem}
+            \begin{proof}
+                For $A\cap{B}=A\setminus(A\setminus{B})$, and
+                from the closure of set difference,
+                $A\cap{B}\in{R}$.
+            \end{proof}
+            \begin{theorem}
+                If $\Omega$ is a set, if $R$ is a set ring
+                on $\Omega$, and if $A$ is a finite subset of
+                $R$, then $\cap_{\alpha\in{A}}\alpha$ is an
+                element of $R$.
+            \end{theorem}
+            \begin{proof}
+                Apply induction to the closure of intersections.
+            \end{proof}
+            \begin{theorem}
+                If $\Omega$ is a set, if $R$ is a set ring on
+                $\Omega$, if $A,B\subset\Omega$, and if
+                $A\setminus{B}$, $B\setminus{A}$, and
+                $A\cap{B}$ are elements of $R$, then
+                $A,B\in{R}$.
+            \end{theorem}
+            Thus, the set ring generated by the set $\{A,B\}$ and
+            the set ring generated by
+            $\{A\setminus{B},B\setminus{A},A\cap{B}\}$ are the
+            same.
+            \begin{theorem}
+                If $\Omega$ is a set and $R$ is a set ring
+                of $\Omega$, then $\emptyset\in{R}$.
+            \end{theorem}
+            \begin{proof}
+                For as $R$ is non-empty, there is an element
+                $A\in{R}$. If $A=\emptyset$, then we are done.
+                If not, as $R$ is closed under set difference,
+                $A\setminus{A}\in{R}$. But
+                $A\setminus{A}=\emptyset$.
+            \end{proof}
+            From this, if we have a collection $R$ of subsets of
+            $\Omega$ and we wish to check if $R$ is a set ring
+            of $\Omega$, there are several redundant operations
+            we don't need to check. Since, for any set $A$,
+            we have:
+            \begin{align}
+                A\setminus\emptyset&=A\\
+                A\setminus{A}&=\emptyset\\
+                \emptyset\setminus{A}&=\emptyset\\
+                A\cup{A}&=A\\
+                A\cup\emptyset&=A\\
+                \emptyset\cup\emptyset&=\emptyset
+            \end{align}
+            Using our previous example $\Omega=\{1,2,3\}$,
+            we can check laboriously that
+            $R=\{\emptyset,\{1\},\{2,3\},\{1,2,3\}\}$ is a
+            set ring on $\Omega$. The set
+            $\{\emptyset,\{1\},\{2\},\{1,2,3\}\}$ is not
+            a set ring, for $\{1,2\}=\{1\}\cup\{2\}$ is not
+            an element.
+            \begin{theorem}
+                If $\Omega$ is a set, and if $A$ and $B$ are
+                disjoint subsets of $\Omega$, then
+                $R=\{\emptyset,A,B,A\cup{B}\}$ is a set ring
+                on $\Omega$.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set, if $A$ and $B$ are
+                disjoint subsets of $\Omega$, and if
+                $R$ is a set ring such that $A,B\in{R}$,
+                then $\{emptyset,A,B,A\cup{B}\}\subset{R}$.
+            \end{theorem}
+            As such, the set ring $\{\emptyset,A,B,A\cup{B}\}$
+            is called the set ring generated by $A$ and $B$. We
+            can continue and consider the case of three mutually
+            disjoint subsets.
+            \begin{theorem}
+                If $\Omega$ is a set, and $A_{1},A_{2},A_{3}$ are
+                mutually disjoint subsets of $\Omega$, then:
+                \begin{equation}
+                    R=\{\emptyset,A_{1},A_{2},A_{3},
+                        A_{1}\cup{A}_{2},A_{1}\cup{A}_{3},
+                        A_{2}\cup{A}_{3},
+                        A_{1}\cup{A}_{2}\cup{A}_{3}\}
+                \end{equation}
+                is a set ring on $\Omega$.
+            \end{theorem}
+            Indeed, we may generalize further.
+            \begin{theorem}
+                If $\Omega$ is a set and if
+                $A$ is a subset of $\mathcal{P}(\Omega)$ of
+                $n$ elements such that, for all
+                $a,b\in{A}$, $a\cap{B}=\emptyset$, then:
+                \begin{equation}
+                    R=\{\cup_{i\in{I}}A_{i}:
+                    I\in\mathcal{P}(\mathbb{Z}_{n})\}
+                \end{equation}
+                Is a set ring on $\Omega$.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set, then the set of all
+                finite subsets of $\Omega$ is a set ring on
+                $\Omega$.
+            \end{theorem}
+            A left semi-interval of $\mathbb{R}$ is an interval
+            of the form $[a,b)$ where $a\leq{b}$. If $a=b$, this
+            is the empty set. The set of all left semi-intervals
+            is not a set ring on $\mathbb{R}$ since the union
+            of two semi-intervals need not be a semi-interval.
+            We need to add more sets to allow this to be a
+            set ring. The collection of all finite unions of
+            semi-intervals of $\mathbb{R}$ is a set ring.
+            First, note the following:
+            \begin{equation}
+                \Big(\bigcup_{n=1}^{N}[a_{n},b_{n})\Big)
+                \setminus[c,d)=\bigcup_{n=1}^{N}
+                \Big([a_{n},b_{n})\setminus[c,d)]
+            \end{equation}
+            This is again the finite union of intervals. By
+            induction we see that this collection is a ring on
+            $\mathbb{R}$. We have seen that a set ring is
+            closed to unions and set differences, and this
+            implies that rings are closed under intersections and
+            closed under symmetric differences. As it turns out,
+            this is an equivalent definition of a set ring.
+            \begin{theorem}
+                If $\Omega$ is a set and
+                $R\subset\mathcal{P}(\Omega)$, then $R$ is
+                a set ring of $\Omega$ if and only if $R$ is
+                closed under symmetric differences and
+                intersections.
+            \end{theorem}
+            If $R$ is a set ring on $\Omega$, and if
+            $A\in{R}$, let $\chi_{A}:\Omega\rightarrow[0,1]$ be
+            the indicator function defined as follows:
+            \begin{equation}
+                \chi_{A}(\omega)=
+                \begin{cases}
+                    0,&\omega\notin{A}\\
+                    1,&\omega\in{A}
+                \end{cases}
+            \end{equation}
+            Then we have:
+            \begin{align}
+                \chi_{A\cap{B}}(\omega)
+                &=\chi_{A}(\omega)\chi_{B}(\omega)\\
+                \chi_{A\ominus{B}}&=
+                \big(\chi_{A}(\omega)+\chi_{B}(\omega)\big)
+                \mod{2}
+            \end{align}
+            These two operations satisfy the axioms of a ring.
+            That is, a ring in the algebraic sense of the word:
+            A set with two operations that behave certain
+            properties. It is because of this that set rings
+            have earned their name.
+        \subsection{Set Algebras}
+            \begin{definition}
+                A set algebra on a set $\Omega$ is a set ring
+                on $\Omega$ such that $\Omega\in\mathcal{A}$.
+            \end{definition}
+            \begin{example}
+                Let $\Omega=\{1,2,3,4\}$ and
+                $R=\{\emptyset,\{1\},\{2,3\}\}$. Then $R$
+                is a set ring, but it is not a set algebra
+                since $\Omega\notin{R}$.
+            \end{example}
+            \begin{lexample}
+                If $\Omega$ is an infinite set, and if
+                $\mathcal{E}=\big\{\{x\}:x\in\Omega\big\}$, then
+                the smallest set algebra that contains $\mathcal{E}$
+                is the set of all finite and co-finite subsets of
+                $\Omega$. There are a few cases to check. The finite
+                union of finite subsets is finite, the finite union of
+                co-finite subsets is co-finite, and the finite union
+                of finite and co-finite is again co-finite. For set
+                difference, the difference of finite with finite is
+                again finite, and the difference of co-finite with
+                co-finite is either co-finite or finite. The
+                difference of co-finite with finite is co-finite,
+                and the difference of finite with co-finite is finite.
+                Thus, this set is a set algebra on $\Omega$. Moreoever
+                it is the smallest set algebra that will contain $\mathcal{E}$.
+            \end{lexample}
+            From the definition, we see that a set algebra
+            is closed under complements. indeed, this creates
+            and equivalent definition for set algebras.
+            \begin{theorem}
+                If $\Omega$ is a set and
+                $\mathcal{A}\subseteq\mathcal{P}(\Omega)$,
+                then $\mathcal{A}$ is a set algebra on $\Omega$
+                if and only if $\Omega\in\mathcal{A}$, and
+                $\mathcal{A}$ is closed under union and
+                complement.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set and $R$ is a set ring
+                on $\Omega$, and if $\mathcal{A}$ is a set
+                algebra on $\Omega$ such that
+                $R\subset\mathcal{A}$, then for all $A\in{R}$,
+                $A\in\mathcal{A}$ and $A^{C}\in\mathcal{A}$.
+            \end{theorem}
+            This then defines the \textit{smallest} set algebra
+            that contains a set ring.
+            \begin{theorem}
+                If $\Omega$ is a set and $R$ is a set ring on
+                $\Omega$, then:
+                \begin{equation}
+                    \mathcal{A}=\{A,A^{C}:A\in{R}\}
+                \end{equation}
+                Is a set algebra on $\Omega$.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set and $A$ and $B$ are
+                disjoint subset of $A$, then:
+                \begin{equation}
+                    \mathcal{A}=
+                        \{\emptyset,A,B,A\cup{B},
+                          \Omega,A^{C},B^{C},A^{C}\cap{B}^{C}\}
+                \end{equation}
+                is a set algebra on $\Omega$.
+            \end{theorem}
+            For non-disjoint $A$ and $B$, the smallest
+            set algebra becomes more complicated. We saw that
+            the collection of all finite subsets of a set is
+            a set ring on the set. The collection of all finite
+            subsets, and their complements, is a set algebra.
+        \subsection{\texorpdfstring{$\sigma$}{Sigma}-Rings}
+            If $\Omega$ is a set, then $R\subset\mathcal{P}(\Omega)$
+            is called a set ring on $\Omega$ if, for all
+            $A,B\in{R}$, $A\cup{B}\in{R}$ and
+            $A\setminus{B}\in{R}$. From this, given a ring $R$ on
+            $\Omega$, the empty set is included, that is
+            $\emptyset\in{R}$, and if $A,B\in{R}$, then
+            $A\cap{B}\in{R}$. By induction, for any finite collection
+            of elements in $R$, the union of these subsets is also
+            contained in $R$, as well as the intersection. A set
+            algebra on $\Omega$ is a ring $\mathcal{A}$
+            on $\Omega$ such that $\Omega\in\mathcal{A}$. That is,
+            $\mathcal{A}\subset\mathcal{P}(\Omega)$, and
+            $\mathcal{A}$ is closed under union, set difference, and
+            $\Omega\in\mathcal{A}$. There is an equivalent definition:
+            $\Omega\in\mathcal{A}$, for all $A\in\mathcal{A}$,
+            $A^{C}\in\mathcal{A}$, and for all $A,B\in\mathcal{A}$,
+            $A\cup{B}\in\mathcal{A}$. The complement of $A$,
+            $A^{C}$, is defined as $\Omega\setminus{A}$. The
+            equivalence of the two definitions comes from DeMorgan's
+            laws, since
+            $A\setminus{B}=A\cap{B}^{C}=(A^{C}\cup{B})^{C}$. We now
+            talk about $\sigma$-Ring.
+            \begin{definition}
+                A $\sigma$-Ring on a set $\Omega$ is a set
+                $\sigma\subset\mathcal{P}(\Omega)$ such that,
+                for all countable subsets of $\sigma$, the union
+                $\bigcup_{i=1}^{\infty}A_{i}\in\sigma$, and for all
+                $A,B\in\sigma$, $A\setminus{B}\in\sigma$.
+            \end{definition}
+            The requirement that the collections be countable is
+            important to note. A \textit{topology} is a subset
+            of $\mathcal{P}(\Omega)$ with the property that it is
+            closed under arbitrary unions. $\sigma$-Rings need only
+            be closed under countable unions.
+            \begin{example}
+                Every $\sigma$-Ring is a set ring, but not every
+                set ring is a $\sigma$-ring. Let $\Omega$ be
+                uncountable, and let $R$ be the set of all finite
+                subsets of $\Omega$. Then $R$ is a ring, but it is
+                not a $\sigma$-ring. For, as $\Omega$ is uncountably
+                infinite, it has a countable subset $A$, and we
+                may subscript the elements as $a_{n}$. But
+                $\bigcup_{n=1}^{\infty}\{a_{n}\}$ is not a finite
+                subset of $\Omega$, and is therefore not contained
+                in $R$. Thus, $R$ is not closed under countable unions
+                and $R$ is not a $\sigma$-ring. However, if we let
+                $\sigma$ be the set of all \textit{countable} subsets
+                of $\Omega$, the $\sigma$ is indeed a $\sigma$-ring.
+            \end{example}
+            \begin{example}
+                The collection of all semi-intervals and finite
+                unions of semi-intervals defines a ring on
+                $\mathbb{R}$. It is tempting to think tha the
+                collection of all countable unions of semi-intervals
+                is a $\sigma$-ring on $\mathbb{R}$, but this is not
+                the case. The Cantor set is an example of a subset
+                that can be constructed by a countable number of
+                steps of removing intervals from a given interval,
+                but the resulting set is not the countable union of
+                semi-intervals. To construct the Cantor set, consider
+                the interval $[0,1]$. From this, remove
+                $(\frac{1}{3},\frac{2}{3})$. Continuing removing the
+                middle third from each sub-interval obtained. The
+                resulting set contains no interval as a subset, and
+                thus cannot be the union of countably many intervals,
+                or semi-intervals.
+            \end{example}
+        \subsection{Dynkin System}
+            A Dynkin system on a set $\Omega$ is a subset
+            $\mathcal{D}\subset\mathcal{P}(\Omega)$ such that
+            $\Omega\in\mathcal{D}$, if $A,B\in\Omega$ and if
+            $A\subseteq{B}$, then $A\setminus{B}\in\mathcal{D}$,
+            and for all countable collections of elements of
+            $\mathcal{D}$ such that
+            $A_{1}\subset{A}_{2}\subset\hdots$,
+            $\cup_{n=1}^{\infty}A_{n}\in\mathcal{D}$. There is
+            an equivalent defintion for Dynkin Systems.
+            $\Omega\in\mathcal{D}$, $A\in\mathcal{D}$ implies
+            $A^{C}\in\mathcal{D}$, and for all countable disjoint
+            collections of elements in $\mathcal{D}$, the union
+            is also contained in $\mathcal{D}$. These requirements
+            are weaker than those of a $\sigma$-algebra. Any
+            $\sigma$-algebra is a Dynkin system, but not every
+            Dynkin system is a $\sigma$-algebra.
+            \begin{ldefinition}{Dynkin System}
+                A Dynkin System on a set $\Omega$ is a subset
+                $\mathcal{D}\subseteq\mathcal{P}(\Omega)$ such that:
+                \begin{enumerate}
+                    \item $\Omega\in\mathcal{D}$.
+                    \item For all $A,B\in\mathcal{D}$ such that $A\subseteq{B}$,
+                          $B\setminus{A}\in\mathcal{D}$.
+                    \item For any sequence $A_{n}\in\mathcal{D}$ such that
+                          $A_{n}\subseteq{A}_{n+1}$,
+                          $\cup_{n=1}^{\infty}A_{n}\in\mathcal{D}$
+                \end{enumerate}
+            \end{ldefinition}
+            \begin{theorem}
+                If $\Omega$ is a set and $\mathcal{D}\subseteq\mathcal{P}(\Omega)$
+                is such that $\Omega\in\mathcal{D}$, for all $A\in\mathcal{D}$,
+                $A^{C}\in\mathcal{D}$, and if for all sequences $A_{n}\in\mathcal{D}$
+                such that $A_{n}\cap{A}_{m}=\emptyset$ for all $n\ne{m}$,
+                $\cup_{n=1}^{\infty}A_{n}\in\mathcal{D}$, then
+                $\mathcal{D}$ is a Dynkin System on $\Omega$.
+            \end{theorem}
+            \begin{theorem}
+                If $\mathcal{D}$ is a Dynkin system on a set
+                $\Omega$, and if $\mathcal{D}$ is closed with
+                respect to intersections, then $\mathcal{D}$
+                is a $\sigma$-algebra on $\Omega$.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set, if
+                $\mathcal{E}\subset\mathcal{P}(\Omega)$ is closed
+                to intersections, and if $\mathcal{D}$ is the
+                Dynkin System generated by $\mathcal{E}$, then
+                $\mathcal{D}$ is a $\sigma$-algebra.
+            \end{theorem}
+            \begin{theorem}[Dynkin's Theorem]
+                If $\Omega$ is a set, $\mathcal{C}\subseteq\mathcal{P}(\Omega)$
+                is intersection-stable, and if $\mathcal{D}$ is the smallest
+                Dynkin system that contains $\mathcal{C}$, then $\mathcal{D}$
+                is also intersection-stable.
+            \end{theorem}
+            \begin{proof}
+                For let:
+                \begin{equation}
+                    \mathcal{D}_{1}=
+                    \{D\in\mathcal{D}:\forall_{C\in\mathcal{C}},D\cap{D}\in\mathcal{D}\}
+                \end{equation}
+                Then $\mathcal{D}_{1}$ is a Dynkin system, and thus
+                $\mathcal{D}_{1}=\mathcal{D}$. Now define:
+                \begin{equation}
+                    \mathcal{D}_{2}=\{
+                        D\in\mathcal{D}:\forall_{A\in\mathcal{D}},D\cap{A}\in\mathcal{D}
+                    \}
+                \end{equation}
+                Then $\mathcal{C}\subseteq\mathcal{D}_{2}$ and $\mathcal{D}_{2}$ is a
+                Dynkin System, and thus $\mathcal{D}_{2}=\mathcal{D}$.
+            \end{proof}
+            \begin{theorem}
+                If $\Omega$ is a set, $\mathcal{C}\subseteq\mathcal{P}(\Omega)$
+                is intersection-stable, and if $\mathcal{D}$ is the smallest
+                Dynkin system that contains $\mathcal{C}$, then $\mathcal{D}$
+                is a $\sigma\textrm{-Algebra}$ on $\Omega$.
+            \end{theorem}
+            Since semi-intervals are closed to intersections,
+            the Borel $\sigma$-algebra is equivalently the
+            Dynkin system generated by semi-intervals.
+        \subsection{\texorpdfstring{$\sigma$}{Sigma}-Algebras}
+            In an analogous manner to how set rings and set algebras
+            were defined, there is something called a $\sigma$-algebra.
+            This notion will be one of the central themes of measure
+            theory.
+            \begin{definition}
+                A $\sigma$-algebra on a set $\Omega$ is a
+                $\sigma$-ring on $\Omega$ such that
+                $\Omega\in\mathcal{A}$
+            \end{definition}
+            That is, given any countable collection of elements in
+            $\mathcal{A}$, the union is also contained in
+            $\mathcal{A}$. In addition, $\mathcal{A}$ is closed under
+            set differences and $\Omega\in\mathcal{A}$.
+            \begin{example}
+                The first trivial example is the power set
+                $\mathcal{P}(\Omega)$. Also the set
+                $\{\emptyset,\Omega\}$ defines a $\sigma$-algebra on
+                $\Omega$. The set of all countable subsets defines
+                a $\sigma$-ring, and the set of all countable and
+                co-countable (Sets whose complement is countable)
+                will define a $\sigma$-algebra.
+            \end{example}
+            We can equivalently define a $\sigma$-algebra to be a
+            collection of sets $\mathcal{A}$ such that
+            $\Omega\in\mathcal{A}$, for all $A\in\mathcal{A}$,
+            $A^{C}\in\mathcal{A}$, and $\mathcal{A}$ is closed under
+            countable unions. Being closed under countable unions
+            implies that it is closed under finite unions as well.
+            For let $A_{1}=A$, and for all $n>1$, let $A_{n}=B$.
+            Then $\bigcup_{n=1}^{\infty}A_{n}=A\cup{B}$. By induction,
+            a $\sigma$-algebra is closed under any finite union.
+        \subsection{Borel \texorpdfstring{$\sigma$}{Sigma}-Algebra}
+            One of the most important types of $\sigma$-algebras
+            is the Borel $\sigma$-algebra. We first define the
+            Borel $\sigma$-algebra on $\mathbb{R}$.
+            \begin{definition}
+                The Borel $\sigma$-algebra on $\mathbb{R}$, denoted
+                $\mathcal{B}$, is the $\sigma$-algebra generated
+                by the set $\{[a,b):a,b\in\mathbb{R}\}$.
+            \end{definition}
+            That is, the Borel $\sigma$-algebra on $\mathbb{R}$ is
+            the \textit{smallest} $\sigma$-algebra that contains
+            all of the semi-intervals. We can equivalently say that
+            $\mathcal{B}$ is the $\sigma$-algebra generated by all
+            \textit{open} intervals. If we know that every open
+            subset of $\mathbb{R}$ is the countable union of open
+            subsets, than we can equivalently say that
+            $\mathcal{B}$ is the $\sigma$-algebra generated by all
+            \textit{open subsets} of $\mathbb{R}$. Writing $[a,b)$
+            as the countable intersection of open intervals, or
+            $(a,b)$ as the countable union of semi-intervals comes
+            from the Archimedean property of the real numbers.
+            Thus, the smallest $\sigma$-algebra that contains all
+            semi-intervals is the smallest $\sigma$-algebra that
+            contains all open intervals, which
+            is the smallest $\sigma$-algebra that contains all open
+            subsets of $\mathbb{R}$. Similarly, this will contain all
+            of the \textit{closed} intervals, intervals of the form
+            $[a,b]$. We say that a set $\mathcal{U}\subset\mathbb{R}$
+            is open if, for all $x\in\mathcal{U}$, there is an $r>0$
+            such that $(x-r,x+r)\subset\mathcal{U}$. That is, every
+            point in $\mathcal{U}$ can be surrounded by an interval
+            that is entirely contained in $\mathcal{U}$. Thus, any
+            open set can be written as:
+            \begin{equation}
+                \mathcal{U}=
+                    \bigcup_{x\in\mathcal{U}}(\alpha_{x},\beta_{x})
+            \end{equation}
+            This union is not countable, for any open set must
+            contain an interval, an intervals are uncountable large.
+            This is simply because $(a,b)$ is equivalent to $(0,1)$.
+            By adjusting the size of $\alpha_{x}$ and $\beta_{x}$ to
+            be rational numbers, we can written $\mathcal{U}$ as the
+            union of intervals with rational endpoints. But there are
+            only countably many such intervals, and thus
+            $\mathcal{U}$ is the union of countably many open
+            intervals. Thus, any open set is the union of countably
+            many open intervals. From this, the smallest
+            $\sigma$-algebra that contains open intervals will contain
+            all open sets, since $\sigma$-algebras are closed under
+            countable unions. Borel sets are elements of the
+            Borel $\sigma$-algebra $\mathcal{B}$. Since all open
+            sets are Borel sets, and as $\sigma$-algebras are closed
+            under complenents, all closed sets are also Borel sets.
+            This is because the complement of an open set is a closed
+            set, and vice versa. Thus, equivalently, $\mathcal{B}$ is
+            the smallest $\sigma$-algebra containing all closed sets.
+            A $G_{\delta}$ sets is a subset that is the countable
+            intersection of open sets. As open sets are not
+            necessarily closed under countable intersections, not
+            all $G_{\delta}$ sets are open. There is another notion,
+    \section{Measures}
+        \subsection{A Review Infinite Series}
+            Given a sequence of real numbers,
+            $a:\mathbb{N}\rightarrow\mathbb{R}$, the sum of this
+            sequence is defined as the limit of
+            finite partial sums. That is:
+            \begin{equation}
+                \sum_{n=1}^{\infty}a_{n}=
+                \underset{N\rightarrow\infty}{\lim}
+                    \sum_{n=1}^{N}a_{n}
+            \end{equation}
+            In general, this limit may not in general exists. If it
+            does, we say the series converges. If the limit does
+            not exists, we do not define the sum and instead just
+            have a meaningless combination of symbols. If the
+            sequence is positive, then the sequence of partial sums
+            will be increasing. If this sequence is bounded, then
+            the limit exists. This comes from the fact that bounded
+            monotonic sequences converge, a result that stems from
+            the least upper bound property of $\mathbb{R}$.
+            Moreover, if $a:\mathbb{N}\rightarrow\mathbb{R}$ is a
+            sequence of positive real numbers, and if
+            $f:\mathbb{N}\rightarrow\mathbb{N}$ is any bijective
+            function, then the following is true:
+            \begin{equation}
+                \sum_{n=1}^{\infty}a_{n}
+                =\sum_{n=1}^{\infty}a_{f(n)}
+            \end{equation}
+            We can also split the sequence into a grid,
+            and take the
+            double sum, obtaining the same result. If
+            $A_{1},A_{2},\hdots$ are disjoint sets whose union is
+            $\mathbb{N}$, and if $b_{nm}$ is the $n^{th}$ element
+            of $A_{m}$, then:
+            \begin{equation}
+                \sum_{i=1}^{\infty}a_{i}=
+                \sum_{n=1}^{\infty}\sum_{m=1}^{\infty}b_{nm}
+            \end{equation}
+            We should be precise in what we mean. The double
+            sum is the \textit{limit of a limit}.
+            \begin{equation}
+                \sum_{n=1}^{\infty}\sum_{m=1}^{\infty}a_{nm}
+                =\underset{N\rightarrow\infty}{\lim}\sum_{n=1}^{N}
+                \Big(\underset{M\rightarrow\infty}{\lim}
+                \sum_{m=1}^{M}a_{nm}\Big)
+            \end{equation}
+            We use infinite series to define \textit{measures} on
+            $\sigma$-algebra.
+        \subsection{Measure Functions}
+            A set function on a collection of sets $\mathcal{E}$
+            is a function $\mu:\mathcal{E}\rightarrow\mathbb{R}$.
+            For example, if we consider the set of all
+            semi-intervals of the form $[a,b)$, where
+            $a,b\in\mathbb{R}$ and $a\leq{b}$, then we can define
+            $\mu([a,b))=b-a$. This gives rise to the notion of
+            a measure function.
+            A measure function on a collection of set
+            $\mathcal{E}$ is a function
+            $\mu:\mathcal{E}\rightarrow\mathbb{R}$ such that:
+            \begin{enumerate}
+                \item If $\emptyset\in\mathcal{E}$, then
+                      $\mu(\emptyset)=0$
+                \item For all $A\in\mathcal{E}$, $\mu(A)\geq{0}$
+                \item For any countable collection of pair-wise
+                      disjoint sets whose
+                      union also lies in $\mathcal{E}$,
+                      $\mu(\cup_{n=1}^{\infty}A_{n})=%
+                       \sum_{n=1}^{\infty}\mu(A_{n})$
+            \end{enumerate}
+            It helps if we don't have to consider the case where
+            $\mu(\emptyset)$ is undefined, or where we don't have
+            closure under countable unions, so we discuss measure
+            functions on $\sigma$-algebras.
+            \begin{definition}
+                A measure on a $\sigma$-algebra
+                $\mathcal{A}$ is a function
+                $\mu:\mathcal{A}\rightarrow\mathbb{R}$ such that:
+                \begin{enumerate}
+                    \item $\mu(\emptyset)=0$
+                    \item For all $A\in\mathcal{A}$,
+                          $\mu(A)\geq{0}$
+                    \item For any countable collection of pairwise
+                          disjoint elements of $\mathcal{A}$,
+                          $\mu(\cup_{n=1}^{\infty}A_{n})=%
+                           \sum_{n=1}^{\infty}\mu(A_{n})$
+                \end{enumerate}
+            \end{definition}
+            \begin{example}
+                Let $\Omega$ be a set, and let
+                $\mathcal{A}=\mathcal{P}(\Omega)$. Then
+                $\mathcal{A}$ is a $\sigma$-algebra on $\Omega$.
+                If $\omega_{1},\hdots,\omega_{n}\in\Omega$ and if
+                $p_{1},\hdots,p_{n}\in\mathbb{R}^{+}$, then:
+                \begin{equation}
+                    \mu(A)=\sum_{k=1}^{n}p_{k}\chi_{A}(\omega_{k})
+                \end{equation}
+                Where $\xi_{A}$ is the indicator function:
+                \begin{equation}
+                    \chi_{A}(\omega)=
+                    \begin{cases}
+                        0,&\omega\notin{A}\\
+                        1,&\omega\in{A}
+                    \end{cases}
+                \end{equation}
+                This is an example of a \textit{point measure}
+                on $\mathcal{A}$. It defines a measure function.
+            \end{example}
+    \section{Lecture 3}
+        A $\sigma\text{-Algebra}$ on a set $\Omega$ is a subset
+        $\mathcal{A}$ of $\mathcal{P}(\Omega)$ such that
+        $\Omega\in\mathcal{A}$ and for any countable collection of
+        elements $A_{i}\in\mathcal{A}$, the union
+        $\bigcup_{i=1}^{\infty}A_{i}$ is also contained in
+        $\mathcal{A}$. $\mathcal{A}$ does not have to consist of
+        countably many elements. The sequence of subset $A_{i}$ does
+        not have to exhaust the entirety of $\mathcal{A}$, much the
+        way that any sequence of real numbers will not exhaust the
+        entire of $\mathbb{R}$. Going in the other direction,
+        $\sigma\text{-Algebras}$ can be finite. If $\Omega$ is a
+        set, and if $A\subset\Omega$ is non-empty, then
+        $\mathcal{A}=\{\emptyset,A,A^{C},\Omega\}$ defines a
+        $\sigma\text{-algebra}$ on $\Omega$. A measure on a
+        $\sigma\text{-Algebra}$ $\mathcal{A}$ is a function
+        $\mu:\mathcal{A}\rightarrow\mathbb{R}$ such that, for all
+        $A\in\mathcal{A}$, $\mu(A)\geq{0}$, $\mu(\emptyset)=0$, and
+        given a mutually disjoint countable collection of elements of
+        $\mathcal{A}$, the following holds:
+        \begin{equation}
+            \mu\Big(\bigcup_{i=1}^{\infty}A_{i}\Big)
+            =\sum_{n=1}^{\infty}\mu(A_{i})
+        \end{equation}
+        \begin{example}
+            A pure point measure is a measure that assigns to a
+            collection of elements $\omega_{j}\in\Omega$ a positive
+            real number $p_{j}$, and then the measure of any set
+            $A$ is:
+            \begin{equation}
+                \mu(A)=\sum_{j:\omega_{j}\in{A}}p_{j}
+            \end{equation}
+        \end{example}
+        \subsection{Properties of Measure}
+            \subsubsection{Monotonicity}
+                If $A$ and $B$ are elements of a $\sigma\text{-Algebra}$
+                $\mathcal{A}$, if $\mu$ is a measure on
+                $\mathcal{A}$, and if $A\subseteq{B}$, then
+                $\mu(A)\leq\mu(B)$. This is the monotonic property
+                of measures.
+                \begin{theorem}
+                    If $\Omega$ is a set, $\mathcal{A}$ is a
+                    $\sigma\text{-Algebra}$ on $\Omega$, if
+                    $\mu$ is a measure on $\mathcal{A}$, and if
+                    $A,B$ are elements of $\mathcal{A}$ such that
+                    $A\subseteq{B}$, then $\mu(A)\leq\mu(B)$.
+                \end{theorem}
+                \begin{proof}
+                    For as $\mathcal{A}$ is a $\sigma\text{-Algebra}$
+                    on $\Omega$, and as $A,B\in\mathcal{A}$,
+                    $B\setminus{A}\in\mathcal{A}$. But, as
+                    $A\subseteq{B}$, $B=(B\setminus{A})\cup{A}$.
+                    But then, as measures are additive and positive:
+                    \begin{align}
+                        \mu(B)&=\mu\big((B\setminus{A})\cup{A}\big)\\
+                        &=\mu(B\setminus{A})+\mu(A)\\
+                        &\geq\mu(A)
+                    \end{align}
+                \end{proof}
+                \begin{theorem}
+                    If $\Omega$ is a set, $\mathcal{A}$ is a
+                    $\sigma\text{-Algebra}$ on $\Omega$, if
+                    $\mu$ is a measure on $\mathcal{A}$, and if
+                    $A,B$ are elements of $\mathcal{A}$ such that
+                    $A\subseteq{B}$ and $\mu(A),\mu(B)<\infty$,
+                    then $\mu\big(B\setminus{A}\big)=\mu(B)-\mu(A)$.
+                \end{theorem}
+            \subsubsection{Continuity Theorems}
+                \begin{theorem}[Continuity from Below]
+                    If $\Omega$ is a set, $\mathcal{A}$ is a
+                    $\sigma\text{-Algebra}$ on $\Omega$, if
+                    $\mu$ is a measure on $\mathcal{A}$, and if
+                    $A_{i}$ is a sequence of elements in $\mathcal{A}$
+                    such that, for all $i\in\mathbb{N}$,
+                    $A_{i}\subseteq{A}_{i+1}$, then:
+                    \begin{equation}
+                        \mu\Big(\bigcup_{i=1}^{\infty}A_{i}\Big)
+                        =\underset{N\rightarrow\infty}{\lim}
+                        \mu(A_{N})
+                    \end{equation}
+                \end{theorem}
+                \begin{proof}
+                    For let $A=\cup_{n=1}^{\infty}A_{n}$ and let
+                    $B_{n}=A_{n+1}\setminus{A}_{n}$. Then, as
+                    $A_{n}\subseteq{A}_{n+1}$, for all
+                    $i,j\in\mathbb{N}$, $B_{i}\cap{B}_{j}=\emptyset$.
+                    But $A=A_{1}\cup\Big(\cup_{n=1}^{\infty}B_{n}\Big)$
+                    and this is the countable union of mutually
+                    disjoint sets, and therefore, using the
+                    telescoping series:
+                    \begin{align}
+                        \mu(A)&=\mu(A_{1})+
+                        \sum_{n=1}^{\infty}\mu(B_{n})\\
+                        &=\mu(A_{1})+\sum_{n=1}^{\infty}
+                        \Big(\mu(A_{n+1})-\mu(A_{n})\Big)\\
+                        &=\mu(A_{1})+
+                        \underset{N\rightarrow\infty}{\lim}
+                        \Big(\mu(A_{N})-\mu(A_{1})\Big)\\
+                        &=\underset{N\rightarrow\infty}{\lim}
+                        \mu(A_{N})
+                    \end{align}
+                \end{proof}
+                \begin{theorem}[Continuity from Above]
+                    If $\Omega$ is a set, $\mathcal{A}$ is a
+                    $\sigma\text{-Algebra}$ on $\Omega$, if
+                    $\mu$ is a measure on $\mathcal{A}$, and if
+                    $A_{i}$ is a sequence of elements in $\mathcal{A}$
+                    such that, for all $i\in\mathbb{N}$,
+                    $A_{i+1}\subseteq{A}_{i}$ and there exists an
+                    $n\in\mathbb{N}$ such that $\mu(A_{n})$ is finite,
+                    then:
+                    \begin{equation}
+                        \mu\Big(\bigcap_{n=1}^{\infty}A_{n}\Big)
+                        =\underset{N\rightarrow\infty}{\lim}
+                        \mu(A_{N})
+                    \end{equation}
+                \end{theorem}
+                \begin{proof}
+                    For let $A=\cap_{n=1}^{\infty}A_{n}$ and let
+                    $B_{n}=A_{n}\setminus{A}_{n+1}$. Then:
+                    \begin{equation}
+                        A_{1}=
+                        A\cup\big(\bigcup_{n=1}^{\infty}B_{n}\Big)
+                    \end{equation}
+                    And this is the union of countably many disjoint
+                    sets. Therefore:
+                    \begin{align}
+                        \mu(A_{1})&=
+                        \mu(A)+\sum_{n=1}^{\infty}\mu(B_{n})\\
+                        &=\mu(A)+\sum_{n=1}^{\infty}
+                        \Big(\mu(A_{n}-\mu(A_{n+1})\Big)\\
+                        &=\mu(A)+\mu(A_{1})-
+                        \underset{N\rightarrow\infty}{\lim}\mu(A_{N})
+                    \end{align}
+                    Subtracting by $\mu(A_{1})$ obtains the result.
+                \end{proof}
+                If $\mu(A_{i})=\infty$ for all $i\in\mathbb{N}$, then
+                the above theorem may not be true. For consider
+                the collection of sets $A_{n}=[n,\infty)$. The
+                measure of each $A_{n}$ is infinite, but the
+                intersection of the entire collection is empty.
+                Thus the measure of the intersection is zero.
+                \begin{theorem}[Countable Sub-Additivity]
+                    If $\Omega$ is a set, $\mathcal{A}$ a
+                    $\sigma\text{-Algebra}$ on $\mathcal{A}$, and
+                    if $A_{i}$ is a countable collection of elements
+                    of $\mathcal{A}$, then:
+                    \begin{equation}
+                        \mu\Big(\bigcup_{n=1}^{\infty}A_{n}\Big)
+                        \leq\sum_{n=1}^{\infty}\mu(A_{n})
+                    \end{equation}
+                \end{theorem}
+                \begin{proof}
+                    For if $A_{1},A_{2}\in\mathcal{A}$, then:
+                    \begin{equation}
+                        \mu(A_{1}\cup{A}_{2})=
+                        \mu(A_{1}\setminus{A}_{2})+
+                        \mu(A_{2}\setminus{A}_{1})+
+                        \mu(A_{1}\cap{A}_{2})
+                    \end{equation}
+                    But also:
+                    \begin{align}
+                        \mu(A_{1})&=
+                        \mu(A_{1}\setminus{A}_{2})+
+                        \mu(A_{1}\cap{A}_{2})\\
+                        \mu(A_{2})&=
+                        \mu(A_{2}\setminus{A}_{1})+
+                        \mu(A_{1}\cap{A}_{2})
+                    \end{align}
+                    And therefore:
+                    \begin{equation}
+                        \mu(A_{1})+\mu(A_{2})=
+                        \mu(A_{1}\cup{A}_{2})+\mu(A_{1}\cap{A}_{2})
+                    \end{equation}
+                    We now prove by induction. Suppose this is true
+                    of a collection of $N$ elements. Given a collection
+                    $A_{i}$ of $N+1$ elements, let
+                    $B=\cup_{n=1}^{N}A_{i}$. But then:
+                    \begin{align}
+                        \mu(A_{N+1}\cup{B})&
+                        \leq\mu(A_{N+1})+\mu(B)\\
+                        &\leq\mu(A_{N+1})+\sum_{n=1}^{N}A_{n}\\
+                        &=\sum_{n=1}^{N+1}\mu(A_{n})
+                    \end{align}
+                \end{proof}
+    \section{Lebesgue-Stieltjes Measures}
+        A Lebesgue-Stieltjes measure is any measure on the
+        Borel $\sigma\text{-Algebra}$ $\mathcal{B}$ such that,
+        for any finite semi-interval $[a,b)$,
+        $\mu\big(\mu[a,b)\big)<\infty$. $\mu(\mathbb{R})$ may
+        be infinite. Recall that the Borel $\sigma\text{-Algebra}$
+        is the smallest $\sigma\text{-Algebra}$ on $\mathbb{R}$
+        that contains all semi-intervals $[a,b)$. A pure point
+        measure on $\mathbb{R}$, indexing over the rational
+        numbers, would be such a measure. If we have a
+        Lebesgue-Stieltjes measure, we wish to find a function
+        $F_{\mu}:\mathbb{R}\rightarrow\mathbb{R}$ such that, for
+        all semi-intervals $[a,b)$,
+        $\mu([a,b))=F_{\mu}(b)-F_{\mu}(a)$. In probability, this
+        is called the cummulative probability function. For now
+        we wish to show that there is indeed such a function that
+        does this. Consider the case when $\mu(\mathbb{R})<\infty$.
+        Let $F_{\mu}(x)=\mu(-\infty,x)$. Then:
+        \begin{align}
+            \mu([a,b))
+            &=\mu((-\infty,b)\setminus(-\infty,a))\\
+            &=\mu((-\infty,b))-\mu((-\infty,a))\\
+            &=F_{\mu}(b)-F_{\mu}(a)
+        \end{align}
+        In the more general case when that measure of the entire
+        real line is infinite we still want to find a function
+        such that:
+        \begin{align}
+            \mu\big([0,x)\big)&=F_{\mu}(x)-F_{\mu}(0)&x>0\\
+            \mu\big([x,0)\big)&=F_{\mu}(0)-F_{\mu}(x)&x<0
+        \end{align}
+        We can define the following:
+        \begin{equation}
+            F_{\mu}(x)=
+            \begin{cases}
+                \mu\big([0,x)\big)+C,&x>0\\
+                -\mu\big([x,0)\big)+C,&x<0\\
+                C,&x=0
+            \end{cases}
+        \end{equation}
+        Then $F_{\mu}$ is a function that satisfies our criterion.
+        Indeed, $F_{\mu}$ is defined uniquely up to an additive
+        constant. Any such function is non-decreasing since, for
+        any $x<y$, $F_{\mu}(y)-F_{\mu}(x)=\mu([x,y))\geq{0}$.
+        In addition, $F_{\mu}$ is left-continuous. That is,
+        for all $a\in\mathbb{R}$:
+        \begin{equation}
+            \underset{x\rightarrow{a}^{-}}{\lim}F_{\mu}(x)
+            =F_{\mu}(a)
+        \end{equation}
+        \begin{theorem}
+            If $\mu$ is a Lebesgue-Stieltjes measure on the
+            Borel $\sigma\text{-Algebra}$ of $\mathbb{R}$, and if
+            $F_{\mu}$ is the function thing, then $F_{\mu}$ is
+            left-continuous.
+        \end{theorem}
+        \begin{proof}
+            For let $a\in\mathbb{R}$ and let
+            $x:\mathbb{N}\rightarrow\mathbb{R}$ be a monotonic
+            increasing sequence such that $x_{n}\rightarrow{a}$.
+            But then, for all $n\in\mathbb{N}$,
+            $[x_{n+1},a)\subset[x_{n},a)$. But then:
+            \begin{equation}
+                \mu\Big(\bigcap_{n=1}^{\infty}[x_{n},a)\Big)
+                =\underset{N\rightarrow\infty}{\lim}
+                \mu\big([x_{N},a)\big)
+            \end{equation}
+            But $\cap_{n=1}^{\infty}[x_{n},a)=\emptyset$ as
+            $x_{n}\rightarrow{a}$. Therefore:
+            \begin{equation}
+                \underset{N\rightarrow\infty}{\lim}
+                \mu\big([x_{n},a)\big)=0
+            \end{equation}
+            But from the definition of $F_{\mu}$,
+            \begin{equation}
+                \mu\big([x_{n},a)\big)=F_{\mu}(a)-F_{\mu}(x_{n})
+            \end{equation}
+            Thus, $F_{\mu}(x_{n})\rightarrow{F}_{\mu}(a)$.
+        \end{proof}
+        Such a function may not be right-continuous. The requirement
+        that the sequence $x$ be increasing was necessary for the
+        proof. Howver, the right-hand limit does exists.
+        \begin{theorem}
+            If blah blah, right hand limit exists.
+        \end{theorem}
+        \begin{proof}
+            For:
+            \begin{equation}
+                \{a\}=\bigcap_{n=1}^{\infty}[a,a+\frac{1}{n})
+            \end{equation}
+            And thus, as $\mu$ is a Lebesgue-Stieltjes measure,
+            and thus $\mu([a,b))<\infty$ for all finite semi-intervals,
+            we may apply continuity from above and obtain:
+            \begin{align}
+                \mu(\{a\})&=
+                \underset{N\rightarrow\infty}{\lim}
+                \mu\big([a,a+\frac{1}{n}\big)\\
+                &=\underset{x\rightarrow{a}^{+}}{\lim}
+                F_{\mu}(x)-F_{\mu}(a)
+            \end{align}
+        \end{proof}
+        If $\mu$ has no points of positive measure, then
+        $F_{\mu}$ will be continuous.
+        \begin{ftheorem}{Carath\'{e}odory Extension Theorem}{}
+            If $F:\mathbb{R}\rightarrow\mathbb{R}$ is a non-decreasing
+            left-continuous function then there exists a unique
+            Lebesgue-Stieltjes measure $\mu$ such that, for all
+            $a,b\in\mathbb{R}$, $a<b$:
+            \begin{equation}
+                \mu\big([a,b)\big)=F(b)-F(a)
+            \end{equation}
+        \end{ftheorem}
+        In particular, using $F(x)=x$, we see that there is a unique
+        measure on the Borel $\sigma\text{-Algebra}$ such that
+        $\mu([a,b))=b-a$. This measure is called the Lebesgue measure
+        on $\mathbb{R}$. We define $\mu^{*}$ on a set
+        $A\subseteq\mathbb{R}$ to be:
+        \begin{equation}
+            \mu^{*}(A)=
+            \inf\Bigg\{\sum_{i=1}^{\infty}(b_{i}-a_{i}):
+            A\subseteq\bigcup_{i=1}^{\infty}[a_{i},b_{i})\Bigg\}
+        \end{equation}
+        If $A$ is countable, then $\mu^{*}(A)$ is zero. For let
+        $a:\mathbb{N}\rightarrow{A}$ be bijection, and let
+        $\varepsilon>0$. Then:
+        \begin{align}
+            \mu^{*}(A)&\leq
+            \sum_{n=1}^{\infty}
+            \Big((a_{n}+\frac{\varepsilon}{2^{n+1}})-
+            (a_{n}-\frac{\varepsilon}{2^{n+1}})\Big)\\
+            &=\sum_{n=1}^{\infty}\frac{\varepsilon}{2^{n}}\\
+            &=\varepsilon
+        \end{align}
+        Taking the infininum, we see that $\mu^{*}(A)=0$. This
+        function is defined on all of $\mathcal{P}(\mathbb{R})$,
+        however it is not a measure. The restriction of
+        $\mu^{*}$ to the Borel $\sigma\text{-Algebra}$ is
+        a measure.
+    \section{Measurable Functions}
+        We wish to eventually talk about what it means for a
+        function to be \textit{measurable}. First we do a quick review
+        of function. If $f:X\rightarrow{Y}$ is a function and if
+        $A\subseteq{X}$, the imsge of $A$ under $f$ is the set
+        $f(A)=\{f(x):x\in{A}\}$. The notation is a little strange, but
+        it has become the standard. For a subset $B\subseteq{Y}$, the
+        \textit{pre-image} of $B$ is the set
+        $f^{-1}(B)=\{x\in{X}:f(x)\in{B}\}$.
+        \begin{lexample}
+            If we let $f:\mathbb{R}\rightarrow\mathbb{R}$ be defined
+            by $f(x)=x^{2}$, then $f([1,2])=[1,4]$, and
+            $f^{-1}([1,4])=[1,2]\cup[-2,-1]$. As another example we
+            can consider $f(x)=\sin(x)$. Then
+            $f^{-1}(\{0\})=\{n\pi:n\in\mathbb{N}\}$ and
+            $f^{-1}([-1,1])=\mathbb{R}$.
+        \end{lexample}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, $f:X\rightarrow{Y}$,
+            and if $A,B\subset{X}$, then:
+            \begin{equation}
+                f(A\cup{B})=f(A)\cup{f}(B)
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, $f:X\rightarrow{Y}$,
+            and if $A,B\subset{X}$, then:
+            \begin{equation}
+                f(A\cap{B})\subseteq{f(A)\cap{f}(B)}
+            \end{equation}
+        \end{theorem}
+        For pre-images, we get equality:
+        \begin{theorem}
+            If $X$ and $Y$ are sets, $f:X\rightarrow{Y}$,
+            and if $A,B\subset{X}$, then:
+            \begin{equation}
+                f^{-1}(A\cup{B})=f^{-1}(A)\cup{f}^{-1}(B)
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, $f:X\rightarrow{Y}$,
+            and if $A,B\subset{X}$, then:
+            \begin{equation}
+                f^{-1}(A\cap{B})=f^{-1}(A)\cap{f}^{-1}(B)
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, $f:X\rightarrow{Y}$,
+            and if $A\subset{X}$, then:
+            \begin{equation}
+                f^{-1}(A^{C})=f^{-1}(A)^{C}
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $X$ and $Y$ are sets,if
+            $f:X\rightarrow{Y}$ is a function, and if
+            $A\subseteq{X}$, then:
+            \begin{equation}
+                A\subseteq{f^{-1}\Big(f\big(A\big)\Big)}
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, if
+            $f:X\rightarrow{Y}$ is an injective function,
+            and if $A\subseteq{X}$, then:
+            \begin{equation}
+                A=f^{-1}\Big(f\big(A\big)\Big)
+            \end{equation}
+        \end{theorem}
+    \section{Lecture 4}
+        Recalling some definitions, a measure on a $\sigma\textrm{-Algebra}$
+        $\mathcal{A}$ is a function
+        $\mu:\mathcal{A}\rightarrow\mathbb{R}$ such that
+        $\mu(A)\geq{0}$, $\mu(\emptyset)=0$, and given a countable
+        collection of disjoint sets $A_{i}\in\mathcal{A}$,
+        $\mu(\cup_{i=1}^{\infty}A_{i})=\sum_{n=1}^{\infty}\mu(A_{i})$.
+        \begin{theorem}
+            If $\Omega$ is a set and $\mathcal{A}$ is a
+            $\sigma\text{-Algebra}$ on $\Omega$, and if
+            $\mu:\mathcal{A}\rightarrow\mathbb{R}$ is a function such that:
+            \begin{enumerate}
+                \item $\mu(A)\geq{0}$
+                \item $\mu(\emptyset)=0$
+                \item $\mu$ is finitely additive
+                \item $\mu$ is continuous from below
+            \end{enumerate}
+            Then $\mu$ is a measure.
+        \end{theorem}
+        \begin{proof}
+            All that is necessary to show is countable additivity.
+            Let $A_{n}$ be a countable collection of disjoint elements
+            of $\mathcal{A}$, and let $B_{n}=\cup_{k=1}^{n}A_{k}$.
+            Then:
+            \begin{align}
+                \mu(B_{n})&=\mu(\cup_{n=1}^{n}A_{k})\\
+                &=\sum_{k=1}^{n}\mu(A_{k})
+            \end{align}
+            But by definition, for all $n\in\mathbb{N}$,
+            $B_{n}\subseteq{B_{n+1}}$, and therefore by continuity from
+            below, we have:
+            \begin{equation}
+                \mu(\cup_{n=1}^{\infty}B_{k})
+                =\lim_{n\rightarrow\infty}\mu(\cup_{k=1}^{n}B_{k})
+            \end{equation}
+            And therefore
+            \begin{equation}
+                \mu(\cup_{n=1}^{\infty}A_{k})=
+                \sum_{k=1}^{\infty}\mu(A_{k})
+            \end{equation}
+        \end{proof}
+        \subsection{A Review of Continuous Functions}
+            Consider a function $f:\mathbb{R}\rightarrow\mathbb{R}$.
+            Such a function is continuous at a point
+            $x_{0}\in\mathbb{R}$ if, for all $\varepsilon>0$ there exists
+            $\delta>0$ such that, for all $x\in\mathbb{R}$ such that
+            $|x-x_{0}|>\delta$, we have that
+            $|f(x)-f(x_{0})|<\varepsilon$. We can write this
+            equivalently by saying that for all
+            $x\in(x_{0}-\delta,x_{0}+\delta)$, it is true that
+            $f(x)\in(f(x_{0})-\varepsilon,f(x_{0})+\varepsilon)$.
+            We can also write the following:
+            \begin{equation}
+                f\Big((x_{0}-\delta,x_{0}+\delta)\Big)\subseteq
+                \Big((f(x_{0}-\varepsilon,f(x_{0})+\varepsilon)\Big)
+            \end{equation}
+            And finally, from this we can write:
+            \begin{equation}
+                (x_{0}-\delta,x_{0}+\delta)\subseteq
+                f^{-1}\Big(
+                    \big(f(x_{0})-\varepsilon,f(x_{0})+\varepsilon\big)
+                \Big)
+            \end{equation}
+            This gives us the following theorem about continuous
+            functions.
+            \begin{theorem}
+                A function $f:\mathbb{R}\rightarrow\mathbb{R}$ is
+                continuous at every point $x\in\mathbb{R}$ if and only
+                if for every open set $\mathcal{U}\subseteq\mathbb{R}$,
+                the pre-image $f^{-1}(\mathcal{U})$ is an open subset
+                of $\mathbb{R}$.
+            \end{theorem}
+            \begin{proof}
+                Going one way, every open interval is an open set.
+                Thus, if $f$ is such that for every open set
+                $\mathcal{U}\subseteq\mathbb{R}$, the pre-image of
+                $\mathcal{U}$ is also open, then the pre-image of every
+                open interval is open. Thus, let $\varepsilon>0$ be
+                given. Then
+                $f^{-1}(f(x_{0}-\varepsilon,f(x_{0})+\varepsilon)$ is
+                open. But as $x_{0}$ is contained in this set, and as
+                this set is open, there is a $\delta>0$ such that:
+                \begin{equation}
+                    (x_{0}-\delta,x_{0}+\delta)\subseteq
+                    f^{-1}\big(
+                        f(x_{0}-\varepsilon,f(x_{0})+\varepsilon\big)
+                \end{equation}
+                Thus, for all $x$ such that
+                $|x-x_{0}|<\delta$, $|f(x)-f(x_{0})|<\varepsilon$.
+                Now for the other direction. Suppose
+                $f:\mathbb{R}\rightarrow\mathbb{R}$ is continuous at
+                every point $x\in\mathbb{R}$ and let
+                $\mathcal{U}\subseteq\mathbb{R}$ be an open set, and
+                let $\mathcal{V}=f^{-1}(\mathcal{U})$. Then, for all
+                $x\in\mathcal{V}$, $f(x)\in\mathcal{U}$. But, as
+                $\mathcal{U}$ is open, there is a $\varepsilon>0$
+                such that
+                $(f(x)-\varepsilon,f(x)+\varepsilon)\subseteq\mathcal{U}$.
+                But, as $f$ is continuous, there is a $\delta>0$ such
+                that, for for all $|x-x_{0}|<\delta$,
+                $|f(x)-f(x_{0})|<\varepsilon$. But then
+                $(x-\delta,x+\delta)\subseteq\mathcal{V}$, and thus
+                $\mathcal{V}$ is open.
+            \end{proof}
+            In a course on topology, one takes this as the definition of
+            continuity.
+            \newpage
+            \begin{ldefinition}{Topology}
+                A topology on a set $X$ is a subset
+                $\tau\subseteq\mathcal{P}(X)$ such that:
+                \begin{enumerate}
+                    \item $\emptyset\in\tau$
+                    \item $X\in\tau$
+                    \item For any arbitrary collection of elements of
+                          $\tau$, the union is an element of $\tau$.
+                    \item For any finite collection of elements in
+                          $\tau$, the intersection is an element of
+                          $\tau$.
+                \end{enumerate}
+            \end{ldefinition}
+            \begin{ldefinition}
+                  {Continuous Functions Between Topological Spaces}
+                A continuous function from a topological space
+                $(X,\tau_{X})$ to a topological space
+                $(Y,\tau_{Y})$ is a function $f:X\rightarrow{Y}$ such that
+                for all $\mathcal{U}\in\tau_{Y}$,
+                $f^{-1}(\mathcal{U})\in\tau_{X}$.
+            \end{ldefinition}
+            The Borel $\sigma\text{-Algebra}$ on $\mathbb{R}$ is the
+            smallest set that makes open sets, elements of the standard
+            topology on $\mathbb{R}$, measurable. In an analogous manner
+            to how continuous functions are defined for topological
+            spaces, measurable functions can also be defined.
+        \subsection{Measurable Functions}
+            \begin{ldefinition}{Measurable Functions}
+                A measure function from a measurable space
+                $(A,\mathcal{A})$ to a measurable space
+                $(B,\mathcal{B})$ is a function $f:A\rightarrow{B}$
+                such that, for all $\mathcal{U}\in\mathcal{A}$,
+                $f^{-1}(\mathcal{U})\in\mathcal{B}$.
+            \end{ldefinition}
+            That is, the pre-image of measurable sets is measurable.
+            This is similar to continuous functions where the pre-image
+            of open sets is open. Such functions are also called
+            $\mathcal{A}-\mathcal{B}$ measurable.
+            \begin{lexample}
+                If $\mathcal{A}$ is a $\sigma\text{-Algebra}$ on $\Omega$,
+                $\Omega$ and if $\mathcal{B}=\{\emptyset,\Omega\}$,
+                then any function $f:\omega\rightarrow\Omega$ will be
+                $\mathcal{A}-\mathcal{B}$ measurable. If
+                $\mathcal{A}=\mathcal{P}(\Omega)$ and if
+                $\mathcal{B}$ is a $\sigma\text{-Algebra}$ on $\Omega$,
+                then again any function $f:\Omega\rightarrow\Omega$ will
+                be $\mathcal{A}-\mathcal{B}$ measurable. There are similar
+                notions in topology called the discrete and chaotic
+                topologies which make all functions continuous.
+            \end{lexample}
+            \begin{theorem}
+                If $A$ and $B$ are sets, if $\mathcal{B}$ is a
+                $\sigma\text{-Algebra}$ on $B$, and if $f:A\rightarrow{B}$
+                is a function, then the set $\mathcal{A}$ defined by:
+                \begin{equation}
+                    \mathcal{A}=
+                    \{f^{-1}(\mathcal{U}):\mathcal{U}\in\mathcal{B}\}
+                \end{equation}
+                Is a $\sigma\text{-Algebra}$ on $A$.
+            \end{theorem}
+            \begin{proof}
+                It is true that $\emptyset\in\mathcal{A}$, since
+                $\empty\in\mathcal{B}$ and $f^{-1}(\emptyset)=\emptyset$.
+                Also, $B\in\mathcal{B}$, and $A=f^{-1}(B)$, and therefore
+                $A\in\mathcal{A}$. If $A\in\mathcal{A}$, then
+                there is a $B\in\mathcal{B}$ such that
+                $A=f^{-1}(B)$, and thus:
+                \begin{equation}
+                    A^{C}=f^{-1}(B)^{C}=f^{-1}(B^{C})
+                \end{equation}
+                But if $B\in\mathcal{B}$, then $B^{C}\in\mathcal{B}$,
+                and thus $A^{C}\in\mathcal{A}$. Finally, for any
+                countable collection of sets $A_{n}\in\mathcal{A}$,
+                there is a countable collection of sets $B_{n}$ such that
+                $A_{n}=f^{-1}(B_{n})$ But then:
+                \begin{equation}
+                    \cup_{n=1}^{\infty}A_{n}=
+                    \cup_{n=1}^{\infty}f^{-1}(B_{n})
+                    =f^{-1}(\cup_{n=1}^{\infty}B_{n})
+                \end{equation}
+                But $\mathcal{B}$ is a $\sigma\text{-Algebra}$, and
+                thus $\cup_{n=1}^{\infty}B_{n}\in\mathcal{B}$. Therefore
+                $\cup_{n=1}^{\infty}A_{n}\in\mathcal{A}$.
+            \end{proof}
+            It's worth noting that $\mathcal{A}$ is the smallest
+            $\sigma\text{-Algebra}$ on $A$ that will make
+            $f$ $\mathcal{A}-\mathcal{B}$ measurable. Removing any set
+            from $\mathcal{A}$ will result in $f:A\rightarrow{B}$ being
+            non-measurable with respect to $\mathcal{A}$ and
+            $\mathcal{B}$.
+            \begin{theorem}
+                If $A$ and $B$ are sets, $f:A\rightarrow{B}$ a function,
+                and if $\mathcal{A}$ is a $\sigma\text{-Algebra}$ on
+                $A$, then the set $\mathcal{B}$ defined by:
+                \begin{equation}
+                    \mathcal{B}=
+                    \{B\subset{B}:f^{-1}(B)\in\mathcal{A}\}
+                \end{equation}
+                Is a $\sigma\text{-Algebra}$ on $B$.
+            \end{theorem}
+            \begin{proof}
+                $\emptyset$ and $B$ are elements since
+                $f^{-1}(\emptyset)=\emptyset\in\mathcal{A}$, and
+                $f^{-1}(B)=A\in\mathcal{A}$.
+            \end{proof}
+            \begin{theorem}
+                If $f:\Omega\rightarrow\mathbb{R}$, if $a\in\mathbb{R}$,
+                if $\mathcal{B}$ is the Borel $\sigma\text{-Algebra}$ on
+                $\mathbb{R}$, and if $\mathcal{A}$ is defined by:
+                \begin{equation}
+                    \mathcal{A}=\{\omega\in\Omega:f(\omega)<a\}
+                \end{equation}
+                then $f$ is $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set, and if $\mathcal{A}$ is a
+                $\sigma\text{-Algebra}$ on $\Omega$, and if
+                $f:\Omega\rightarrow\mathbb{R}$ is a function such that,
+                for all $a\in\mathbb{R}$,
+                $\{\omega\in\Omega:f(\omega)<a\}\in\mathcal{A}$, then
+                $f$ is $\mathcal{A}-\mathcal{B}$ measurable, where
+                $\mathcal{B}$ is the Borel $\sigma\text{-Algebra}$.
+            \end{theorem}
+            \begin{theorem}
+                If $f:\mathbb{R}\rightarrow\mathbb{R}$ is continuous,
+                then it is Borel measurable.
+            \end{theorem}
+            \begin{theorem}
+                If $\Omega$ is a set, $\mathcal{A}$ is a
+                $\sigma\text{-Algebra}$ on $\Omega$, and if
+                $f:\Omega\rightarrow\mathbb{R}$ is
+                $\mathcal{A}-\mathcal{B}$ measurable, where
+                $\mathcal{B}$ is the Borel $\sigma\text{-Algebra}$, and
+                if $g:\mathbb{R}\rightarrow\mathbb{R}$ is
+                $\mathcal{B}-\mathcal{B}$ measurable, then
+                $g\circ{f}:\Omega\rightarrow\mathbb{R}$ is
+                $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{theorem}
+            \begin{proof}
+                For if $B\in\mathcal{B}$, then
+                $g^{-1}(B)\in\mathcal{B}$, for $g$ is
+                $\mathcal{B}-\mathcal{B}$ measurable. but then,
+                as $f$ is $\mathcal{A}-\mathcal{B}$ measurable,
+                $f^{-1}(g^{-1}(B))\in\mathcal{A}$. Therefore,
+                $g\circ{f}$ is $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{proof}
+            In particular, if we have two measurable functions on
+            $\mathbb{R}$, then the composition of these two functions
+            is also measurable. This is analogous to the fact that the
+            composition of continuous functions is continuous. The sum,
+            difference, and product of measurable functions is also
+            measurable. We now define the Borel $\sigma\text{-Algebra}$ for
+            $\mathbb{R}^{2}$. This is denoted $\mathcal{B}_{2}$. It is
+            defined similarly to $\mathcal{B}$: It is the smallest
+            $\sigma\text{-Algebra}$ that contains all open subsets of
+            $\mathbb{R}^{2}$. We can also limit this to all open rectangles
+            in the plane, or all open discs.
+            \begin{theorem}
+                If $\Omega$ is a set, $\mathcal{A}$ a $\sigma\text{-Algebra}$
+                on $\Omega$, if $f,g:\Omega\rightarrow\mathbb{R}$ are
+                $\mathcal{A}-\mathcal{B}$ measurable functions, and if
+                $\vec{h}:\Omega\rightarrow\mathbb{R}^{2}$ is defined by
+                $\vec{h}(\boldsymbol{\omega})=(f(\omega),g(\omega))$,
+                then $\vec{h}$ is $\mathcal{A}-\mathcal{B}_{2}$ measurable.
+            \end{theorem}
+            This theorem goes the other way as well. $\vec(h)$ is
+            measurable if and only if $f$ and $g$ are measurable.
+            \begin{theorem}
+                If $\Omega$ is a set, $\mathcal{A}$ a $\sigma\text{-Algebra}$
+                on $\Omega$, if $\mathcal{B}$ is the Borel
+                $\sigma\text{-Algebra}$ on $\mathbb{R}$, and if
+                $f,g:\Omega\rightarrow\mathbb{R}$ are
+                $\mathcal{A}-\mathcal{B}$ measurable functions, then
+                $f+g$ is $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{theorem}
+            \begin{proof}
+                For let $\varphi:\mathbb{R}^{2}\rightarrow\mathbb{R}$
+                be defined by $\varphi(x,y)=x+y$. Then
+                $\varphi$ is continuous, and is therefore
+                $\mathcal{B}_{2}-\mathcal{B}$ measurable. Let
+                $h:\Omega\rightarrow\mathbb{R}^{2}$ be defined by
+                $h(\omega)=(f(\omega),g(\omega))$. Then $h$ is
+                $\mathcal{A}-\mathcal{B}_{2}$ measurable. But by taking
+                the composition, we have that
+                $f+g=\varphi\circ{h}$ is $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{proof}
+            We can do the same thing with multiplication by defining
+            $\varphi(x,y)=x\cdot{y}$.
+            \begin{theorem}
+                If $f,g:\Omega\rightarrow\mathbb{R}$ are
+                $\mathcal{A}-\mathcal{B}$ measurable, and if:
+                \begin{equation}
+                    A=\{\omega\in\Omega:f(\omega)<g(\omega)\}
+                \end{equation}
+                $\Pi$ open set (Half plane along diagonal. Draw this).
+                Do the same thing with the line $L$. They're measurable,
+                yadda yadda.
+            \end{theorem}
+        \subsection{Sequences of Measurable Functions}
+            If $f_{n}:\omega\rightarrow\mathbb{R}$ is a sequence of
+            $\mathcal{A}-\mathcal{B}$ measurable functions, and if
+            $f_{n}\rightarrow{f}$, then $f$ is $\mathcal{A}-\mathcal{B}$
+            measurable. 
+            \begin{theorem}
+                Let $F(\omega)=\sup\{f_{n}(\omega):n\in\mathbb{N}\}$.
+                Then $F$ is measurable.
+            \end{theorem}
+            \begin{proof}
+                For let $a\in\mathbb{R}$. Then:
+                \begin{equation}
+                    \{\omega:F(\omega)\leq{a}\}=
+                    \bigcap_{n=1}^{\infty}\{\omega:f_{n}(\omega)\leq{a}\}
+                \end{equation}
+                Then $F(\omega)\leq{a}$ if and only if
+                $f_{n}(\omega)\leq{a}$ for all $n\in\mathbb{N}$.
+            \end{proof}
+            Similarly, $F(\omega)=\inf\{f_{n}(\omega)\}$ is measurable.
+            \begin{theorem}
+                If $f_{n}:\Omega\rightarrow\mathbb{R}$ are
+                $\mathcal{A}-\mathcal{B}$ functions, then
+                $\underset{n\rightarrow{\infty}}{\overline{\lim}}f_{n}$ and
+                $\underset{n\rightarrow{\infty}}{\underline{\lim}}f_{n}$
+                are $\mathcal{A}-\mathcal{B}$ measurable.
+            \end{theorem}
+    \section{Convergence of Measurable Functions}
+        \begin{ldefinition}{Measure Space}
+            A Measure Space on a set $\Omega$, denoted
+            $(\Omega,\mathcal{A},\mu)$, is a
+            $\sigma\textrm{-Algebra}$ on $\Omega$ and a
+            measure $\mu:\Omega\rightarrow\mathbb{R}$.
+        \end{ldefinition}
+        A function $f:\Omega\rightarrow\mathbb{R}$ is
+        $\mathcal{A}-\mathcal{B}$ measurable, or simply
+        measurable, if for all $B\in\mathcal{B}$, the
+        pre-image is in $\mathcal{A}$. That is,
+        $f^{-1}(B)\in\mathcal{A}$.
+        \begin{theorem}
+            If $f,g:\Omega\rightarrow\mathbb{R}$ are
+            measurable functions, and if
+            $A=\{\omega\in\Omega:f(\omega)\ne{g}(\omega)\}$,
+            then $A\in\mathcal{A}$.
+        \end{theorem}
+        \begin{definition}
+            Two functions are equal $\mu$-Almost everywhere
+            if the following is true:
+            \begin{equation}
+                \mu(\omega\in\Omega:f(\omega)\ne{g}(\omega))
+                =0
+            \end{equation}
+        \end{definition}
+        \begin{definition}
+            A sequence of measurable functions
+            $f_{n}:\mathbb{R}\rightarrow\mathbb{R}$ converges
+            to a function $f:\Omega\rightarrow\mathbb{R}$
+            if there is a set $E$ such that $\mu(E^{C})=0$,
+            and $f_{n}(\omega)\rightarrow{f}(\omega)$ for all
+            $\omega\in{E}$.
+        \end{definition}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ almost every and
+            $f_{n}\rightarrow{g}$ almost everywhere, then
+            $f=g$ almost everywher.
+        \end{theorem}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ almost everywhere, and
+            if $f=g$ almost everywhere, then
+            $f_{n}\rightarrow{g}$ almost everywhere.
+        \end{theorem}
+        \begin{definition}
+            A function $f:\Omega\rightarrow\mathbb{R}$
+            converges to $f:\Omega\rightarrow\mathbb{R}$
+            uniformly if for all $\varepsilon>0$ there is
+            an $N\in\mathbb{N}$ such that, for all
+            $\omega\in\Omega$,
+            $|f(\omega)-f_{n}(\omega)|<\varepsilon$.
+        \end{definition}
+        \begin{example}
+            Consider $f_{n}(\omega)=\omega^{n}$ for
+            $\omega\in[0,a]$, where $a<1$. Then this
+            converges uniformly to zero since, all all
+            $\omega\in[0,a]$:
+            \begin{equation}
+                |\omega^{n}-0|=\omega^{n}\leq{a}^{n}
+            \end{equation}
+            But since $0\leq{a}<1$, $a^{n}$ converges to
+            zero. Thus $f_{n}\rightarrow{0}$ uniformly.
+        \end{example}
+        We can define non-uniform converges by considering
+        the logical negation of the definition for
+        uniform convergence, but we can simplify this as
+        well.
+        \begin{theorem}
+            A sequence of functions $f_{n}$ converges
+            non-uniformly to a function $f$ if
+            $f_{n}\rightarrow{f}$ point-wise, and there
+            exists a $\delta>0$, a strictly increasing
+            sequence $n_{k}$, and a sequence $\omega_{k}$
+            such that
+            $|f_{n_{k}}(\omega_{k})-f(\omega_{k})|>\delta$
+        \end{theorem}
+        \begin{example}
+            If we define $f_{n}(\omega)=\omega^{n}$ on the
+            interval $[0,1]$, then the convergence is no
+            longer uniform. Indeed, the limit is
+            discontinuous.
+        \end{example}
+        \begin{definition}
+            A sequence $f_{n}$ converges to $f$ almost
+            uniformly if, for all $\varepsilon>0$ there is
+            a set $E$ such that $\mu(E^{C})<\varepsilon$,
+            and $f_{n}$ converges to $f$ uniformly on
+            $E$.
+        \end{definition}
+        \begin{example}
+            If we again let $f_{n}(\omega)=\omega^{n}$ on
+            $[0,1]$, then $f_{n}\rightarrow{0}$
+            almost uniformly. For let $\varepsilon>0$. Then
+            $f_{n}\rightarrow{0}$ uniformly on the set
+            $[0,1-\varepsilon]$, and the measure of the
+            compliment of this is less than$ \varepsilon$.
+        \end{example}
+        There is a difference between convergence almost
+        everywhere and convergence almost uniformly. For
+        convergence almost everywhere, we may remove a set
+        of measure zero and expect that there is point-wise
+        convergence on the remaining set. For almost uniform
+        convergence we may remove a set of arbitrarily small
+        measure, but not necessarily measure zero, and expect
+        uniform convergence on the remaining set.
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ almost uniformly,
+            then $f_{n}\rightarrow{f}$ almost everywhere.
+        \end{theorem}
+        \begin{proof}
+            For all $n\in\mathbb{N}$ there is a set
+            $E_{n}$ such that $\mu(E_{n}^{C})<1/n$, and
+            $f_{n}\rightarrow{f}$ uniformly on $E_{n}$.
+            But then $f_{n}\rightarrow{f}$ on
+            $\cup_{n=1}^{\infty}E_{n}$. But the complement
+            of this set has measure zero. Therefore, etc.
+        \end{proof}
+        The converse is not true, in general. For let
+        $f_{n}(\omega)$ be defined as follows:
+        \begin{equation}
+            f_{n}(\omega)=
+            \begin{cases}
+                0,&\omega\leq{n}\\
+                1,&\omega>n
+            \end{cases}
+        \end{equation}
+        The $f_{n}\rightarrow{0}$ almost everywhere, and
+        indeed $f_{n}\rightarrow{0}$ point-wise. But
+        the convergence is not uniform, nor is it
+        almost uniform. There is no way to remove a set of
+        finite measure and have uniform convergence on the
+        resulting set. Similar to where continuity from above
+        failed, the fact that $\mu(\mathbb{R})$ is infinite
+        is why this failed. If we can limit the measure on
+        the set, then convergence almost everywhere implies
+        almost uniform convergence.
+        \begin{ftheorem}{Egorov's Theorem}
+                        {Measure_Theory_Egorov_Theorem}
+            If $(\Omega,\mathcal{A},\mu)$ is a measure
+            space and if $\mu(\Omega)<\infty$, then
+            convergence $\mu$-almost everywhere implies
+            $\mu$-almost uniform convergence.
+        \end{ftheorem}
+        \begin{bproof}
+            For if $f_{n}(\omega)\rightarrow{f(\omega)}$
+            $\mu$-almost everywhere, then there is a set
+            $E$ such that $\mu(E^{C})=0$ and
+            $f_{n}(\omega)\rightarrow{f(\omega)}$ for all
+            $\omega\in{E}$. This means that for all
+            $\delta>0$ and for all $\omega\in{E}$ there is
+            an $N\in\mathbb{N}$ such that for all $n>N$,
+            $|f_{n}(\omega)-f(\omega)|<\delta$. Let $A_{nm}$
+            be defined as:
+            \begin{equation}
+                A_{Nm}=\bigcup_{n=N}^{\infty}\Big\{
+                    \omega\in\Omega:
+                    |f_{n}(\omega)-f(\omega)|\geq\frac{1}{m}|
+                    \Big\}
+            \end{equation}
+            Define $B_{m}$ as:
+            \begin{equation}
+                B_{m}=\bigcap_{N=1}^{\infty}A_{Nm}
+            \end{equation}
+            But since $\mu(\Omega)<\infty$, the measure
+            $\mu$ is continuous from above. Therefore:
+            \begin{equation}
+                \mu(B_{m})
+                    =\underset{N\rightarrow\infty}{\lim}
+                    \mu(A_{Nm})
+            \end{equation}
+            But $B_{m}\subseteq{E^{c}}$, and thus
+            $\mu(B_{m})=0$. But then
+            $\mu(A_{Nm})\rightarrow{0}$.
+        \end{bproof}
+        So we have shown that, even though convergence
+        almost everywhere and almost uniform convergence
+        are diferent concepts, on sets of finite measure
+        they are equivalent. In probably the total measure
+        of the entire set if 1, and so finite. Thus, in
+        probabability spaces, almost everywhere convergence
+        and almost uniform convergence will always be
+        equivalent. Thus it is common to use the term
+        convergence almost surely, and forgot the differences
+        between the two properties. There is a third type of
+        convergence called convergence in measure.
+        \begin{ldefinition}{Convergence in Measure}
+            A sequence of functions $f_{n}$ convergence
+            in measure to $f$ is, for all $\delta>0$, the
+            following is true:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}
+                \mu\Big(
+                    \big\{
+                        \omega:|f_{n}(\omega)-f(\omega)|
+                        <\delta
+                    \big\}
+                \Big)=0
+            \end{equation}
+        \end{ldefinition}
+        \begin{example}
+            Let $\Omega=[0,1]$, and let $\mathcal{B}$ be
+            the Borel $\sigma-\textrm{Algebra}$ on
+            $[0,1]$. Finally, let $\mu$ be the standard
+            Lebesgue-Measure. Define the following:
+            \begin{equation}
+                f_{1}=
+                \begin{cases}
+                    1,&x<\frac{1}{2}\\
+                    0,&x\geq\frac{1}{2}
+                \end{cases}
+            \end{equation}
+            Define $f_{2}=1-f_{1}$. The split the
+            interval into fourths and define
+            $f_{3}$ as 1 in $[0,1/4)$ and zero otherwise,
+            and continue the pattern for $f_{4}$, $f_{5}$,
+            $f_{6}$, and $f_{7}$. This sequence of functions
+            converges nowhere since there will be 1's and
+            0's oscillating back and forth, and thus there
+            is no limit. However, $f_{n}$ converges in
+            measure to 0.
+        \end{example}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ in measure $\mu$,
+            and if $g=f$ almost everywhere, then
+            $f_{n}\rightarrow{g}$ in measure $\mu$.
+        \end{theorem}
+        \begin{proof}
+            For all $\delta>0$,
+            $\mu(\{\omega:|f_{n}(\omega)-f(\omega)|>\delta\}$
+            tends to zero as $n\rightarrow\infty$. But:
+            \begin{equation}
+                \{\omega:|f_{n}(\omega)-f(\omega)|>\delta\}
+                =\Big(
+                    \{\omega:|f_{n}(\omega)-f(\omega)|>\delta\}
+                    \bigcap
+                    \{\omega:f(\omega)=g(\omega)\}
+                \Big)\bigcup\Big(
+                    \{\omega:|f_{n}(\omega)-f(\omega)|>\delta\}
+                    \bigcap
+                    \{\omega:f(\omega)\ne{g}(\omega)\}
+                \Big)
+            \end{equation}
+        \end{proof}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ in measure $\mu$ and if
+            $f_{n}\rightarrow{g}$ in measure $\mu$, and
+            $f=g$ $\mu$ almost everywhre.
+        \end{theorem}
+        \begin{proof}
+            For let $A=\{\omega:f(\omega)\ne{g}(\omega)\}$.
+            Then $A=\{\omega:|f(\omega)-g(\omega)|>0\}$.
+            Thus we may write:
+            \begin{equation}
+                A=\bigcup_{n=1}^{\infty}
+                \Big\{\omega:|f(\omega)-g(\omega)|>\frac{1}{n}
+                \Big\}
+            \end{equation}
+            We now show that
+            $\{\omega:|f(\omega)-g(\omega)|>\frac{1}{n}\}$
+            has measure zero for all $n\in\mathbb{N}$. By
+            subadditivity, this will imply $A$ has measure zero.
+            From the triangle inequality:
+            \begin{equation}
+                |f(\omega)-g(\omega)|\leq
+                |f(\omega)-f_{n}(\omega)|+
+                |g(\omega)-f_{n}(\omega)|
+            \end{equation}
+            If $|f(\omega)-g(\omega)|\geq{1/m}$, then at
+            least one of the two numbers here must be greater
+            than $1/2m$. Thus, either
+            $|f(\omega)-f_{n}(\omega)|\geq\frac{1}{2m}$ or
+            $|g(\omega)-f_{n}(\omega)|\geq\frac{1}{2m}$, or
+            both. Therefore:
+            \begin{equation}
+                \{\omega:|f(\omega)-g(\omega)|>\frac{1}{n}\}
+                \subseteq
+                \{\omega:|f(\omega)-f_{n}(\omega)|>\frac{1}{2n}
+                \}\bigcup
+                \{\omega:|g(\omega)-f_{n}(\omega)|>\frac{1}{2n}
+                \}
+            \end{equation}
+            But the two sets on the left have measures that
+            tend to zero as $n\rightarrow\infty$, and thus
+            the set on the left has measure zero. Thus, by
+            subadditivity their union has measure zero, and
+            therefore $\mu(A)=0$. Thus, $f=g$ $\mu$ almost
+            everywhere.
+        \end{proof}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ in measure $\mu$ and
+            $g_{n}\rightarrow{g}$ in measure $\mu$, then
+            $f_{n}+g_{n}\rightarrow{f+g}$ in measure $\mu$.
+        \end{theorem}
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ in measure $\mu$, then
+            there exists a subsequence of $f_{n}$ that converges
+            to $f$ almost uniformly.
+        \end{theorem}
+        \begin{proof}
+            For all $\delta>0$ the limit of
+            $\mu(\{|f_{n}-f|\geq\delta\})$ tends to zero
+            as $n\rightarrow\infty$. Thus, there is an
+            index $n_{1}$ such that
+            $\mu(\{|f_{n_{1}}-f|\geq{1}\})<1$. Choosing
+            $\delta=1/2$, we find an index $n_{2}$ such that
+            $\mu(\{|f_{n_{2}}-f|\geq1/2\})<1/2$.
+            Carrying on, we obtain a sequence $n_{k}$ such
+            that, for all $k\in\mathbb{N}$,
+            $\mu(\{|f_{n_{k}}-f|\geq1/k\})<1/2^{k}$.
+            Let $E_{k}=\{|f_{n_{k}}-f|\geq1/k\}^{C}$.
+            $\mu(E_{k}^{C})<1/2^{k}$, and thus for all
+            $\varepsilon>0$ there is an $N\in\mathbb{N}$
+            such that, for all $n>N$,
+            $\mu(E_{n}^{C})<\varepsilon$.
+        \end{proof}
+    \section{Lecture 6}
+        The $\sigma-\textrm{Algebra}$ generated by
+        a set $\mathcal{E}$ is the intersection of all
+        possible $\sigma-\textrm{Algebra's}$ that contain
+        all elements of $\mathcal{E}$. Given a function
+        $f:\Omega\rightarrow\mathbb{R}$ and a
+        $\sigma-\textrm{Algebra}$ $\mathcal{A}$ on
+        $\Omega$, it is often a good strategy to look at
+        the set:
+        \begin{equation}
+            \mathcal{B}_{f,\mathcal{A}}=
+                \big\{
+                    B\subseteq\mathbb{R}:
+                    f^{-1}(B)\in\mathcal{A}
+                \big\}
+        \end{equation}
+        And then show that all intervals of the form
+        $(a,b)$ are contained within
+        $\mathcal{B}_{f,\mathcal{A}}$, thus implying
+        that $f$ is $\mathcal{A}-\mathcal{B}$ measurable,
+        where $\mathcal{B}$ is the Borel
+        $\sigma-\textrm{Algebra}$ on $\mathbb{R}$.
+        Recapping, we have now discussed three different
+        types of convergence: Almost uniform convergence,
+        convergence almost everywhere, and convergence in
+        measure.
+        \begin{theorem}
+            If $f_{n}\rightarrow{f}$ almost uniformly,
+            then $f_{n}\rightarrow{f}$ in measure.
+        \end{theorem}
+    \section{Integration}
+        The integral of a constant function on an interval
+        $[a,b]$ is defined by the signed area under the
+        rectangle formed by the function. That is, if
+        $f(x)=C$, we define the integral on $[a,b]$ to
+        be $C(b-a)$. Given a piece-wise constant function,
+        we can define the integral as the sum over the
+        various regions. Given an arbitrary function, the
+        only reasonable way to define the integral is to
+        take a limit of approximations using piece-wise
+        constant functions. This is how the Riemann integral
+        is defined. The Riemann integral makes sense if
+        the given function is continuous. By making the
+        partition small enough, approximating a continuous
+        function on a small interval by a constant can be
+        reasonable. But consider the function:
+        \begin{equation}
+            f(x)=
+            \begin{cases}
+                0,&x\notin\mathbb{Q}\\
+                1,&x\in\mathbb{Q}
+            \end{cases}
+        \end{equation}
+        Given any interval $(a,b)$, $f$ takes on the values
+        0 and 1 and thus it is not reasonable to approximate
+        this function by a constant anywhere. However,
+        the measure, or length, of $\mathbb{Q}$ is zero, and
+        the height of the function on $\mathbb{Q}$ is 1.
+        Thus it may be reasonable to define the area under
+        this function as zero. While the Riemann integral
+        cannot handle such function, the Lebesgue integral
+        can. Given a measurable space
+        $(\Omega,\mathcal{A},\mu)$, and a measurable
+        function $f:\Omega\rightarrow\mathbb{R}$, where
+        $f$ is $\mathcal{A}-\mathcal{B}$ measurable,
+        $\mathcal{B}$ being the Borel
+        $\sigma-\textrm{Algebra}$, it is possible to define
+        the integral of $f$.
+        \begin{ldefinition}
+              {Support of a Real Valued Function}
+            The support of a real-valued function
+            $f:\Omega\rightarrow\mathbb{R}$ is the set:
+            \begin{equation}
+                supp(f)=\{\omega\in\Omega:f(\omega)\ne{0}\}
+            \end{equation}
+        \end{ldefinition}
+        \begin{ldefinition}{Simple Function}
+            A simple function from a measurable space
+            $(\Omega,\mathcal{A},\mu)$ to the real line
+            $\mathbb{R}$ is a function
+            $f:\Omega\rightarrow\mathbb{R}$ such that
+            $f$ is $\mathcal{A}-\mathcal{B}$ measurable,
+            where $\mathcal{B}$ is the Borel
+            $\sigma-\textrm{Algebra}$, the range of $f$,
+            $f(\Omega)$, is finite, and the measure of the
+            support of $f$ is finite.
+        \end{ldefinition}
+        \begin{lexample}
+            Let $(\Omega,\mathcal{A},\mu)$ be a measurable
+            space, and let $E\subseteq\Omega$ be measurable
+            and of finite measure. Define the following:
+            \begin{equation}
+                \chi_{E}(\omega)=
+                \begin{cases}
+                    0,&\omega\notin{E}\\
+                    1,&\omega\in{E}
+                \end{cases}
+            \end{equation}
+            This is called the indicator function of
+            $E$. It is a simple function on the measurable
+            space $(\Omega,\mathcal{A},\mu)$ since
+            $\mu(E)<\infty$. To see that it is measurable,
+            note that the pre-image is either
+            $\emptyset$, $E$, $E^{C}$, or $\Omega$, and thus
+            $\chi_{E}$ is measurable. Finally, it takes on
+            only two values and thus it's range is finite.
+        \end{lexample}
+        \begin{lexample}
+            Let $(\Omega,\mathcal{A},\mu)$ be a measurable
+            space, and let $B_{1},\dots,B_{n}$ be measurable
+            subsets of $\Omega$. Furthermore, let
+            $a_{1},\dots,a_{n}$ be real numbers. If we let
+            $\chi_{B_{i}}$ denote that indicator
+            function of $B_{i}$, then we see that their sum
+            is also a simple function. That is, define the
+            following:
+            \begin{equation}
+                f(\omega)=\sum_{k=1}^{n}
+                    a_{k}\chi_{B_{k}}(\omega)
+            \end{equation}
+            THen $f:\Omega\rightarrow\mathbb{R}$ is a simple
+            function. Since the sum of measurable functions
+            is measurable, we see that $f$ is measurable.
+            We also have that the support is finite since:
+            \begin{equation}
+                supp(f)\subseteq\bigcup_{k=1}^{n}B_{k}
+            \end{equation}
+            Finally, there are $2^{n}$ ways, at most, to
+            combine the various real numbers
+            $a_{1},\dots,a_{n}$, and thus the range of
+            $f$ has, at most, $2^{n}$ elements. Therefore
+            $f$ is simple.
+        \end{lexample}
+        Now, let $(\Omega,\mathcal{A},\mu)$ be a
+        measurable space, and let
+        $f:\Omega\rightarrow\mathbb{R}$ be a simple function.
+        If $f$ is simple than it's range is finite. Let
+        $a_{1},\cdots,a_{n}$ be the distinct elements of
+        $f(\Omega)$ and define the following:
+        \begin{equation}
+            E_{k}=f^{-1}\big(\{a_{k}\}\big)
+        \end{equation}
+        Since $f$ is simple, it is measurable, and thus
+        $E_{k}\in\mathcal{A}$ for all $k\in\mathbb{Z}_{n}$.
+        Moreover, for $i\ne{j}$,
+        $E_{i}\cap{E}_{j}=\emptyset$. But, since $f$ is
+        simple, the measure of its support is finite, and
+        thus for all $k\in\mathbb{Z}_{n}$,
+        the masure of $E_{k}$ is also finite.
+        We can thus obtain the following for $f$:
+        \begin{equation}
+            f(\omega)=
+                \sum_{k=1}^{n}a_{k}\chi_{E_{k}}(\omega)
+        \end{equation}
+        This is called the \textrm{Canonical Representation}
+        of $f$.
+        \begin{ldefinition}{Integral of a Simple Function}
+            The integral of a simple function
+            $f:\Omega\rightarrow\mathbb{R}$ on a measurable
+            space $(\Omega,\mathcal{A},\mu)$ with canonical
+            form:
+            \begin{equation}
+                f(\omega)=\sum_{k=1}^{n}
+                    a_{k}\chi_{E_{k}}(\omega)
+            \end{equation}
+            Is the real number $\int_{\Omega}f\diff{\mu}$
+            define by:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=
+                    \sum_{k=1}^{n}a_{k}\mu(E_{k})
+            \end{equation}
+        \end{ldefinition}
+        The first thing to check to ensure that this is
+        a good definition of integration is that the
+        sum of two integrals is the integral of the sum
+        of the two functions. We first prove a result that
+        will make this definition more flexible.
+        \begin{theorem}
+            If $(\Omega,\mathcal{A},\mu)$ is a measurable
+            space, and if $B_{1},\dots,B_{n}$ are measurable
+            subsets of $\Omega$ that are pairwise disjoint
+            and such that, for all $k\in\mathbb{Z}_{n}$,
+            $\mu(B_{k})<\infty$, if
+            $\lambda_{1},\dots,\lambda_{n}$ are real
+            numbers, and if $f:\Omega\rightarrow\mathbb{R}$
+            is defined by:
+            \begin{equation}
+                f(\omega)=\sum_{k=1}^{n}
+                    \lambda_{k}\chi_{B_{k}}(\omega)
+            \end{equation}
+            Then the integral of $f$ is given by:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}
+                    =\sum_{k=1}^{n}\lambda_{k}
+                    \mu(B_{k})
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For every $\omega\in\Omega$ falls in only
+            one of the $B_{k}$. But if $\omega\in{B}_{k}$,
+            then $f(\omega)=\lambda_{k}$. Let
+            $a_{1},\hdots,a_{n}$ be the distinct values of
+            $f$ and defin $\mathcal{J}_{k}$ as:
+            \begin{equation}
+                \mathcal{J}_{k}=\{j:\lambda_{j}=a_{k}\}
+            \end{equation}
+            Also, let $\mathcal{J}_{0}$ be defined as:
+            \begin{equation}
+                \mathcal{J}_{0}=\{j:\lambda_{j}=0\}
+            \end{equation}
+            If $E_{k}=f^{-1}(\{a_{k}\}$, then:
+            \begin{equation}
+                E_{k}=\bigcup_{j\in\mathcal{J}_{k}}B_{j}
+            \end{equation}
+            But since the $B_{j}$ are pair-wise disjoint,
+            we have that:
+            \begin{equation}
+                \mu(E_{k})=\sum_{j\in\mathcal{J}_{k}}
+                    \mu(B_{j})
+            \end{equation}
+            But then:
+            \begin{align}
+                \int_{\Omega}f\diff{\mu}
+                &=\sum_{k=1}^{n}a_{k}\mu(E_{k})\\
+                &=\sum_{k=1}^{n}a_{k}\Big(
+                        \sum_{j\in\mathcal{J}_{k}}\mu(B_{j})
+                    \Big)\\
+                &=\sum_{k=1}^{n}\sum_{j\in\mathcal{J}_{k}}
+                    a_{k}\mu(B_{j})\\
+                &=\sum_{k=1}^{n}\sum_{j\in\mathcal{J}_{k}}
+                    \lambda_{j}\mu(B_{j})\\
+                &=\sum_{k=1}^{m}\lambda_{k}\mu(B_{k})
+            \end{align}
+        \end{proof}
+        This theorem will make it easier to prove the
+        additive property of integrals. We are still only
+        talking about the integral of simple functions.
+        \begin{theorem}
+            If $(\Omega,\mathcal{A},\mu)$ is a measurable
+            space and $f:\Omega\rightarrow\mathbb{R}$ and
+            $g:\Omega\rightarrow\mathbb{R}$ are simple
+            functions, then:
+            \begin{equation}
+                \int_{\Omega}(f+g)\diff{\mu}
+                =\int_{\Omega}f\diff{\mu}
+                +\int_{\Omega}g\diff{\mu}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For let $f$ and $g$ have the following
+            canonical representations:
+            \begin{align}
+                f(\omega)&=\sum_{k=1}^{n}\alpha_{k}
+                    \chi_{A_{k}}(\omega)\\
+                g(\omega)&=\sum_{k=1}^{m}\beta_{k}
+                    \chi_{B_{k}}(\omega)
+            \end{align}
+            Define the following:
+            \begin{align}
+                A_{n+1}
+                =\Big(\bigcup_{k=1}^{m}B_{k}\Big)\setminus
+                    \Big(\bigcup_{j=1}^{n}A_{j}\Big)\\
+                B_{m+1}
+                =\Big(\bigcup_{k=1}^{n}A_{k}\Big)\setminus
+                    \Big(\bigcup_{j=1}^{m}B_{j}\Big)
+            \end{align}
+            From this, we have the following:
+            \begin{equation}
+                \bigcup_{k=1}^{n+1}A_{k}=
+                \bigcup_{j=1}^{m+1}B_{j}
+            \end{equation}
+            Let $\alpha_{n+1}=\beta_{m+1}=0$. Then we have:
+            \begin{align}
+                f(\omega)&=\sum_{k=1}^{n+1}\alpha_{k}
+                    \chi_{A_{k}}(\omega)\\
+                g(\omega)&=\sum_{k=1}^{m+1}\beta_{k}
+                    \chi_{B_{k}}(\omega)
+            \end{align}
+            Then, for all $i$, we have:
+            \begin{align}
+                A_{i}&=A_{i}\bigcap
+                    \Big(\bigcup_{j=1}^{m+1}B_{j}\Big)\\
+                &=\bigcup_{j=1}^{m+1}
+                    \Big(A_{i}\cap{B}_{j}\Big)\\
+                B_{i}&=B_{i}\bigcap
+                    \Big(\bigcup_{k=1}^{n+1}A_{k}\Big)\\
+                &=\bigcup_{k=1}^{n+1}
+                    \Big(A_{k}\cap{B}_{i}\Big)
+            \end{align}
+            And these are all pair-wise disjoint sets.
+            So, we have:
+            \begin{align}
+                f(\omega)&=
+                \sum_{i=1}^{n+1}\sum_{j=1}^{m+1}\alpha_{i}
+                    \chi_{A_{i}\cap{B}_{j}}(\Omega)\\
+                g(\omega)&=
+                \sum_{i=1}^{n+1}\sum_{j=1}^{m+1}\beta_{j}
+                    \chi_{A_{i}\cap{B}_{j}}(\Omega)
+            \end{align}
+            Summing these two functions, we get:
+            \begin{equation}
+                f(\omega)+g(\omega)=
+                \sum_{i=1}^{n+1}\sum_{j=1}^{m+1}
+                    (\alpha_{i}+\beta_{j})
+                    \chi_{A_{i}\cap{B}_{j}}(\Omega)
+            \end{equation}
+            But by the previous theorem:
+            \begin{align}
+                \int_{\Omega}(f+g)\diff{\mu}
+                &=\sum_{i=1}^{n+1}\sum_{j=1}^{m+1}
+                    (\alpha_{i}+\beta_{j})
+                    \mu(A_{i}\cap{B}_{j})\\
+                &=\sum_{i=1}^{n+1}\sum_{j=1}^{m+1}
+                    \alpha_{i}\mu(A_{i}\cap{B}_{j})+
+                    \sum_{i=1}^{n+1}\sum_{j=1}^{m+1}
+                    \beta_{j}\mu(A_{i}\cap{B}_{j})\\
+                &=\sum_{i=1}^{n+1}\alpha_{i}\mu(A_{i})+
+                    \sum_{j=1}^{m+1}\beta_{j}\mu(B_{j})\\
+                &=\int_{\Omega}f\diff{\mu}+
+                    \int_{\Omega}g\diff{\mu}
+            \end{align}
+        \end{proof}
+        The integrals of simple functions also have the
+        property of homogeneity.
+        \begin{theorem}
+            If $(\Omega,\mathcal{A},\mu)$ is a measurable
+            space, $f:\Omega\rightarrow\mathbb{R}$ is
+            a simple function, and if $c\in\mathbb{R}$,
+            then:
+            \begin{equation}
+                \int_{\Omega}cf\diff{\mu}=
+                c\int_{\Omega}f\diff{\mu}
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $(\Omega,\mathcal{A},\mu)$ is a measurable
+            space, $f:\omega\rightarrow\mathbb{R}$ is
+            a simple function, if $A_{1},\dots,A_{n}$
+            are measurable subsets of $\Omega$ with
+            finite measure, and if $f$ is such that:
+            \begin{equation}
+                f(\omega)=\sum_{k=1}^{n}a_{k}
+                    \chi_(A_{k})(\omega)
+            \end{equation}
+            Then:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=
+                \sum_{k=1}^{n}a_{k}\mu(A_{k})
+            \end{equation}
+        \end{theorem}
+        \subsection{Further Properties of the Integral}
+            So far we have defined the integral of a simple
+            function over the entire of a given space
+            $\Omega$. We often wish to evaluate the integral
+            of a function on a subset of $\Omega$, rather
+            than the entire of it. We can do this by defining
+            the following:
+            \begin{equation}
+                f_{E}(\omega)=
+                \begin{cases}
+                    f(\omega),&\omega\in{E}\\
+                    0,&\omega\notin{E}
+                \end{cases}
+            \end{equation}
+            We need some properties of $f_{E}$.
+            $f_{E}$ is measurable, has finite range, and
+            has support of finite measure, and is therefore
+            simple. $f_{E}$ can have only one more value
+            (That is, zero) than $f$. Finally,
+            $supp(f_{E})\subseteq{supp(f)}$. We define
+            the integral on $E\in\mathcal{A}$ as follows:
+            \begin{equation}
+                \int_{E}f\diff{\mu}=
+                \int_{\Omega}f_{E}\diff{\mu}
+            \end{equation}
+            Since $f_{E}$ is also simple, the right hand
+            side of this equation is well defined.
+            \begin{theorem}
+                If $(\Omega,\mathcal{A},\mu)$ is a measurable
+                space, if $E_{1},E_{2}$ are disjoint
+                measurable subsets of $\Omega$, and if
+                $f:\Omega\rightarrow\mathbb{R}$ is a simple
+                function, then:
+                \begin{equation}
+                    \int_{E_{1}\cup{E}_{2}}f\diff{\mu}=
+                    \int_{E_{1}}f\diff{\mu}+
+                    \int_{E_{2}}f\diff{\mu}
+                \end{equation}
+            \end{theorem}
+            This is similar to a notion that is found when
+            studying the Riemann integral. That is:
+            \begin{equation}
+                \int_{a}^{b}f(x)\diff{x}=
+                \int_{a}^{c}f(x)\diff(x)+
+                \int_{c}^{b}f(x)\diff{x}
+            \end{equation}
+            \begin{theorem}
+                If if $f:\omega\rightarrow\mathbb{R}$
+                is a simple function, and if
+                $f(\omega)\geq{0}$ for all $\omega\in\Omega$,
+                then:
+                \begin{equation}
+                    \int_{\Omega}f\diff{\mu}\geq{0}
+                \end{equation}
+            \end{theorem}
+            \begin{theorem}
+                If $f:\Omega\rightarrow\mathbb{R}$ is
+                simple, then:
+                \begin{equation}
+                    \int_{\Omega}f\diff{\mu}=0
+                \end{equation}
+                If and only if $f=0$ $\mu$ almost everywhere.
+            \end{theorem}
+            \begin{ftheorem}
+                  {Triangle Inequality
+                   for Simple Functions}{}
+                If $f$ is a simple function, then:
+                \begin{equation}
+                    \Big|\int_{\Omega}f\diff{\mu}\Big|
+                    \leq\int_{\Omega}|f|\diff{\mu}
+                \end{equation}
+            \end{ftheorem}
+        \subsection{Limit Theorems for Simple Functions}
+            \begin{theorem}
+                If $f_{n}:\Omega\rightarrow\mathbb{R}$ is
+                a sequence of simple functions such that
+                $f_{n}\rightarrow{f}$ uniformly,
+                where $f$ is a simple function,
+                and if there is a measurable set $E$
+                such that $supp(f_{n})\subseteq{E}$ and
+                $supp(f)\subseteq{E}$, and if
+                $\mu(E)<\infty$, then:
+                \begin{equation}
+                    \underset{n\rightarrow\infty}{\lim}
+                    \int_{\Omega}f_{n}\diff{\mu}
+                    =\int_{\Omega}f\diff{\mu}
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{align}
+                    \Big|
+                        \int_{\Omega}f_{n}\diff{\mu}-
+                        \int_{\Omega}f\diff{\mu}
+                    \Big|
+                    &=\Big|\int_{\Omega}(f_{n}-f)\diff{\mu}
+                        \Big|\\
+                    &\leq\int_{\Omega}|f_{n}-f|\diff{\mu}\\
+                    &=\int_{E}|f_{n}-f|\diff{\mu}\\
+                    &\leq\int_{E}\varepsilon\diff{\mu}\\
+                    &=\varepsilon\int_{E}\diff{\mu}\\
+                    &=\varepsilon\mu(E)
+                \end{align}
+                Since $\mu(E)<\infty$, this can be made
+                arbitrarily small.
+            \end{proof}
+            \begin{theorem}
+                If $f_{n}\rightarrow{f}$ uniformly, and if
+                $f_{n}$ and $f$ are simple, then
+                $f_{n}$ is uniformly bounded.
+            \end{theorem}
+            \begin{theorem}[Bounded Convergence Theorem]
+                If $f_{n}\rightarrow{f}$, $f_{n}$ are
+                simple and $f$ is simple, if
+                $f_{n}$ are uniformly bounded, and if
+                there is a measurable set $E$ of finite
+                measure such that $supp(f_{n})\subseteq{E}$
+                and $supp(f)\subseteq{E}$, then:
+                \begin{equation}
+                    \underset{n\rightarrow\infty}{\lim}
+                    \int_{\Omega}f_{n}\diff{\mu}
+                    =\int_{\Omega}f\diff{\mu}
+                \end{equation}
+            \end{theorem}
+            \begin{lexample}
+                The additional assumptions are indeed
+                necessary, and without them these results
+                may not hold. For let $f_{n}$ be defined as:
+                \begin{equation}
+                    f_{n}(\omega)=
+                    \begin{cases}
+                        n,&0\leq\omega\leq\frac{1}{n}\\
+                        0,&\textrm{Otherwise}
+                    \end{cases}
+                \end{equation}
+                Then $\int_{\mathbb{R}}f_{n}\diff{\mu}=1$
+                for all $n$, but the limit function is
+                $f=0$, and this has integral zero. It is
+                also not guarenteed that the results
+                fail, for let:
+                \begin{equation}
+                    f_{n}(\omega)=
+                    \begin{cases}
+                        n,&0\leq\omega\leq\frac{1}{n^{2}}\\
+                        0,&\textrm{Otherwise}
+                    \end{cases}
+                \end{equation}
+                Then the limit function is zero, and the
+                integral is $\frac{1}{n}$, which does indeed
+                converge to zero. For the requirement that
+                $supp(f_{n})$ and $supp(f)$ be contained in
+                one set, consider the following function:
+                \begin{equation}
+                    f_{n}(\omega)=
+                    \begin{cases}
+                        1,&n\leq\omega\leq{n+1}\\
+                        0,&\textrm{Otherwise}
+                    \end{cases}
+                \end{equation}
+                Then $f_{n}$ is uniformly bounded,
+                converges to $0$, but the integral is
+                1 for all $n$.
+            \end{lexample}
+            \begin{theorem}[Monotone Convergence Theorem]
+                If $f_{n}$, $f$ are simple functions, if
+                $f_{n}\rightarrow{f}$, if $f_{n}\leq{f}_{n+1}$,
+                then:
+                \begin{equation}
+                    \int_{\Omega}f_{n}\diff{\mu}
+                    \rightarrow\int_{\Omega}f\diff{\mu}
+                \end{equation}
+            \end{theorem}
+            \begin{theorem}
+                \label{thm:MEASURE_THEORY_LIM_INT_MONO_SIMPLE_FUNCS}
+                If $f_{n}$ and $g_{n}$ are simple and monotonically
+                increasing, and if:
+                \begin{equation}
+                    \underset{n\rightarrow\infty}{\lim}f_{n}(\omega)
+                    =\underset{n\rightarrow\infty}{\lim}g_{n}(\omega)
+                \end{equation}
+                Then:
+                \begin{equation}
+                    \underset{n\rightarrow\infty}{\lim}
+                    \int_{\Omega}f_{n}\diff\mu
+                    =\underset{n\rightarrow\infty}{\lim}
+                    \int_{\Omega}g_{n}\diff\mu
+                \end{equation}
+            \end{theorem}
+            This theorem will allow us to extend the definition
+            of the integral to a more general class of functions.
+        \subsection{Integration of Non-Negative Measurable Functions}
+            Consider a measure space $(\Omega,\mathcal{A},\mu)$ and
+            let $f:\Omega\rightarrow\mathbb{R}$ be an
+            $\mathcal{A}-\mathcal{B}$ measurable function, where
+            $\mathcal{B}$ is the Borel $\sigma\textrm{-Algebra}$ on
+            $\mathbb{R}$. If there exist a sequence of simple
+            functions $f_{n}$ that are monotonically increasing
+            and such that $f_{n}\rightarrow{f}$, then we define the
+            integral of $f$ as follows:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=
+                \underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}
+            \end{equation}
+            Because of
+            Thm.~\ref{thm:MEASURE_THEORY_LIM_INT_MONO_SIMPLE_FUNCS}
+            this is a well defined concept, since for any
+            two sequences of simples functions that are monotonically
+            increasing and converge to $f$, the limit of the
+            integrals is the same, thus giving a consitent definition
+            to the integral of $f$. The first question that then
+            arises is which measurable functions can be approximated
+            arbitrarily well by a sequence of monotonically
+            increasing simple functions? From the definition we will
+            need that $f$ is bounded below. For now we will discuss
+            measurable functions that are non-negative. Let
+            $f:\Omega\rightarrow\mathbb{R}$ be any non-negative
+            function, it need not be measurable. We wish to construct
+            a sequence of simple functions $f_{n}$ such that
+            $f_{n}$ is monotonically increasing, and for all
+            $\omega\in\Omega$, $f_{n}(\omega)\rightarrow{f}(\omega)$.
+            We construct such a sequence as follows, dividing
+            the $[0,n)$ into $n2^{n}-1$ parts
+            $[\frac{i}{2^{n}},\frac{i+1}{2^{n}})$ and define the
+            following sets:
+            \begin{align}
+                E_{n}^{C}
+                &=\{\omega\in\Omega:f(\omega)\geq{n}\}\\
+                E_{n,i}
+                &=\{\omega:\frac{i}{2^{n}}\leq{f}(\omega)
+                    \leq\frac{i+1}{2^{n}}\}\\
+                &=f^{-1}\big([\frac{i}{2^{n}},\frac{i+1}{2^{n}})\big)
+            \end{align}
+            Then, for every fixed $n\in\mathbb{N}$, the sets
+            $E_{n,i}$ are pairwise disjoint. Defined $f_{n}$ as
+            follows:
+            \begin{equation}
+                f_{n}(\omega)=
+                \begin{cases}
+                    n,&f(\omega)\geq{n}\\
+                    \frac{i}{2^{n}},&\frac{i}{2^{n}}
+                        \leq{f}(\omega)
+                        \leq\frac{i+1}{2^{n}}
+                \end{cases}
+            \end{equation}
+            Then, using the sets $E_{n,i}$ and $E_{n}^{C}$, we
+            can rewrite $f_{n}$ as follows:
+            \begin{equation}
+                f_{n}(\omega)=
+                n\chi_{E_{n}^{C}}(\omega)+
+                \sum_{i=0}^{n2^{n}-1}
+                    \frac{i}{2^{n}}\chi_{E_{n,i}}(\omega)
+            \end{equation}
+            We now have that $f_{n}$ is monotonically increasing
+            and tends to $f$. For is $f(\omega)=\infty$, then:
+            \begin{equation}
+                w\in\cap_{n=1}^{\infty}E_{n}^{C}
+                \Rightarrow
+                f_{n}(\omega)=n\rightarrow\infty
+            \end{equation}
+            If $f(\omega)\in\mathbb{R}$, then there is an
+            $N\in\mathbb{N}$ such that $f(\omega)<N$. But then, for
+            all $n>N$, $f(\omega)<n$ and thus there is an
+            $i\in\mathbb{Z}_{n2^{n}-1}$ such that:
+            \begin{equation}
+                \frac{i}{2^{n}}\leq{f}(\omega)\leq\frac{i+1}{2^{n}}
+            \end{equation}
+            But $f_{n}(\omega)=\frac{i}{2^{n}}$ and thus:
+            \begin{equation}
+                0\leq{f}(\omega)-f_{n}(\omega)\leq\frac{1}{2^{n}}
+            \end{equation}
+            And therefore $f_{n}\rightarrow{f}$. Finally,
+            $f_{n}$ is monotonically increasing. Now let's see what
+            we can add to this if we know that $f$ is measurable.
+            Since $f$ is measurable, the pre-image
+            $f^{-1}([n,\infty))\in\mathcal{A}$, since
+            $[n,\infty)$ is a Borel set for all $n\in\mathbb{N}$.
+            Moreover, for all $n$ and $i$, $E_{n,i}\in\mathcal{A}$.
+            Then all of the indicator functions $\chi_{E_{n,i}}$ are
+            measurable, and thus $f_{n}$ is measurable for all
+            $n$. However, the support of the $f_{n}$ may not be
+            finite. Simply take $f(\omega)=1$ for all $\omega$, and
+            let $\Omega=\mathbb{R}$. If the $\mu(\Omega)<\infty$,
+            then $\mu(supp(f_{n}))<\infty$. This case is particularly
+            important when studying probability theory.
+            \begin{ldefinition}{$\sigma\textrm{-Finite}$}
+                A $\sigma\textrm{-Finite}$ measure on a
+                $\sigma\textrm{-Algebra}$ $\mathcal{A}$ of a set
+                $\Omega$ is a measure $\mu$ such that there is a
+                sequence of sets $\Omega_{n}$ such that
+                $\Omega_{n}\subseteq\Omega_{n+1}$,
+                $\Omega=\cup_{n=1}^{\infty}\Omega_{n}$, and for all
+                $n\in\mathbb{N}$, $\mu(\Omega_{n})<\infty$.
+            \end{ldefinition}
+            \begin{lexample}
+                Let $\Omega=\mathbb{R}$ and consider the Borel
+                $\sigma\textrm{-Algebra}$ $\mathcal{B}$ on
+                $\mathbb{R}$. Then the standard Lebesgue-Measure
+                is $\sigma\textrm{-finite}$ since we can write:
+                \begin{equation}
+                    \mathbb{R}=\cup_{n=1}^{\infty}[-n,n]
+                \end{equation}
+                And $\mu([-n,n])=2n$, which is finite.
+            \end{lexample}
+            Define $\tilde{f}_{n}$ as follows:
+            \begin{equation}
+                f_{n}(\omega)
+                =f_{n}(\omega)\cdot\chi_{\Omega_{n}}(\omega)
+            \end{equation}
+            Then we have that $\tilde{f}_{n}$ is simple, measurable,
+            takes on finitely many values, and the measure of it's
+            support is finite. Thus we have that if
+            $(\Omega,\mathcal{A},\mu)$ is a measure space and if
+            $\mu$ is $\sigma\textrm{-Finite}$, then for any
+            non-negative measurable function
+            $f:\Omega\rightarrow\mathbb{R}$, the integral of $f$ is
+            well defined. We write:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=
+                \underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}
+            \end{equation}
+        \subsection{Properties of the Integral
+                    of Non-Negative Functions}
+        \begin{theorem}[Homogeneity of the Integral]
+            If $f$ is a non-negative measurable function, and if
+            $c>0$, then:
+            \begin{equation}
+                \int_{\Omega}(cf)\diff{\mu}=
+                c\int_{\Omega}f\diff{\mu}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For let $f_{n}$ be a sequence of simple functions such
+            that $f_{n}\rightarrow{f}$ and $f_{n}$ is monotonically
+            increasing. Then:
+            \begin{equation}
+                \int_{\Omega}(cf)\diff{\mu}
+                =\underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}(cf_{n})\diff{\mu}
+                =c\underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}
+                =c\int_{\Omega}f\diff{\mu}
+            \end{equation}
+        \end{proof}
+        \begin{theorem}[Additivity of the Integral]
+            If $f$ and $g$ are non-negative and measurable,
+            then:
+            \begin{equation}
+                \int_{\Omega}(f+g)\diff{\mu}
+                =\int_{\Omega}f\diff{\mu}
+                +\int_{\Omega}g\diff{\mu}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For let $f_{n}$ and $g_{n}$ be simple functions such
+            that $f_{n}\rightarrow{f}$, $g_{n}\rightarrow{g}$, and
+            such that $f_{n}$ and $g_{n}$ are monotonically
+            increasing. Then:
+            \begin{align}
+                \int_{\Omega}(f+g)\diff{\mu}
+                &=\underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}(f_{n}+g_{n})\diff{\mu}\\
+                &=\underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}+
+                \underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}g_{n}\diff{\mu}\\
+                &=\int_{\Omega}f\diff{\mu}+\int_{\Omega}g\diff{\mu}
+            \end{align}
+        \end{proof}
+        \begin{theorem}
+            If $f$ is non-negative and measurable, and if
+            $E_{1},E_{2}$ are disjoint sets, then:
+            \begin{equation}
+                \int_{E_{1}\cup{E}_{2}}f\diff{\mu}
+                =\int_{E_{1}}f\diff{\mu}+\int_{E_{2}}f\diff{\mu}
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $f$ is a non-negative measurable function, then:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}\geq{0}
+            \end{equation}
+        \end{theorem}
+        \begin{theorem}
+            If $f$ is a non-negative measurable function, then:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=0
+                \Longleftrightarrow{f=0}
+                \quad\mu\textrm{-almost everywhere}
+            \end{equation}
+        \end{theorem}
+        \begin{ldefinition}{Summable Functions}
+            A non-negative summable function is a non-negative
+            and measurable function from
+            a measure space $(\Omega,\mathcal{A},\mu)$ where
+            $\mu$ is $\sigma\textrm{-Finite}$ to $\mathbb{R}$
+            such that:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}<\infty
+            \end{equation}
+        \end{ldefinition}
+        \begin{ltheorem}{Chebyshev's Inequality}
+            If $f$ is a non-negative measurable function, then for
+            all $a\in\mathbb{R}^{+}$:
+            \begin{equation}
+                \mu\Big(\{\omega:f(\omega)\geq{a}\}\Big)
+                <\frac{1}{a}\int_{\Omega}f\diff{\mu}
+            \end{equation}
+        \end{ltheorem}
+        \begin{proof}
+            For define the following:
+            \begin{align}
+                E_{1}&=\{\omega:f(\omega)\geq{a}\}\\
+                E_{2}&=\{\omega:f(\omega)<a\}
+            \end{align}
+            Then $E_{1}$ and $E_{2}$ are disjoint, and therefore:
+            \begin{equation}
+                \int_{\Omega}f\diff{\mu}=
+                \int_{E_{1}}f\diff{\mu}+
+                \int_{E_{2}}f\diff{\mu}
+                \geq\int_{E_{1}}f\diff{\mu}
+                \geq\int_{\Omega}a\diff{\mu}
+                =a\mu(E_{1})
+            \end{equation}
+            Dividing by $a$ completes the proof.
+        \end{proof}
+        \begin{theorem}
+            If $f$ is a non-negative summable function, then
+            for all $a\in\mathbb{R}^{+}$:
+            \begin{equation}
+                \underset{a\rightarrow\infty}{\lim}
+                \mu\Big(\{\omega:f(\omega)\geq{a}\}\Big)=0
+            \end{equation}
+        \end{theorem}
+        \begin{ltheorem}{Monotone Convergence Theorem}
+            If $f$ is a non-negative measurable function and if
+            $f_{n}$ is a sequence of non-negative measurable
+            functions that are monotonically increasing and such
+            that $f_{n}\rightarrow{f}$, then:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}
+                =\int_{\Omega}f\diff{\mu}
+            \end{equation}
+        \end{ltheorem}
+        \begin{proof}
+            For all $n\in\mathbb{N}$, there is a function
+            $g_{n,k}$ such that $g_{n,k}$ is simple and:
+            \begin{equation}
+                \int_{\Omega}f_{n}\diff{\mu}=
+                \underset{k\rightarrow\infty}{\lim}
+                \int_{\Omega}g_{n,k}\diff{\mu}
+            \end{equation}
+            Define $F_{n}$ as follows:
+            \begin{equation}
+                F_{n}(\omega)=
+                \max\{g_{j,n}(\omega):
+                    \omega\in\Omega,0\leq{j}\leq{n}\}
+            \end{equation}
+            Then, for all $n\in\mathbb{N}$, $F_{n}$ is simple.
+            For it is the maximum of finitely many measurable
+            functions, and is therefore measurable. Moreover:
+            \begin{equation}
+                supp(F_{n})\subseteq
+                \bigcup_{k=1}^{n}supp(f_{k,n})
+            \end{equation}
+            And finally, $F_{n}$ is monotonically increasing from
+            it's definition. Now we must show that
+            $F_{n}\rightarrow{f}$. For:
+            \begin{equation}
+                g_{k,n}\leq{F}_{k}\leq{f}_{k}
+            \end{equation}
+            Since $g_{n,k}$ increases monotonically to $f_{n}$.
+            Taking the limit as $k\rightarrow\infty$, we obtain:
+            \begin{equation}
+                f_{n}\leq\underset{k\rightarrow\infty}{\lim}F_{k}
+                \leq{f}
+            \end{equation}
+            Then taking the limit on $n$, we see that
+            $F_{n}\rightarrow{f}$. Integrating this inequality, we
+            get:
+            \begin{equation}
+                \int_{\Omega}g_{k,n}\diff{\mu}
+                \leq\int_{\Omega}F_{k}\diff{\mu}
+                \leq\int_{\Omega}f\diff{\mu}
+            \end{equation}
+            Taking the limit as $k\rightarrow\infty$, we get:
+            \begin{equation}
+                \underset{k\rightarrow\infty}{\lim}
+                \int_{\Omega}g_{k,n}\diff{\mu}
+                \leq\int_{\Omega}f\diff{\mu}
+                \leq\underset{k\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{k}\diff{\mu}
+            \end{equation}
+            Finally, taking the limit on $n$, we get:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{n}\diff{\mu}
+                \leq\int_{\Omega}f\diff{\mu}
+                \leq\underset{k\rightarrow\infty}{\lim}
+                \int_{\Omega}f_{k}\diff{\mu}
+            \end{equation}
+            This completes the proof.
+        \end{proof}
+\end{document}

@@ -1,0 +1,276 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+\graphicspath{{../../images/}}   % Path to Image Folder.
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Numerical Analysis}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Numerical Analysis}
+        \addcontentsline{toc}{chapter}{Numerical Analysis}
+        \markboth{}{NUMERICAL ANALYSIS}
+        \vspace{10ex}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Numerical Analysis}
+    \fi
+    \subsection{Numerical Analysis}
+        \begin{definition}
+            If $a_{n}\rightarrow{a}$, then $a_{n}$ converges
+            with order of converges $O(\beta_{n})$, where
+            $\beta_{n}\ne{0}$, if, for large enough $N$, there
+            is a $K$ such that for all $n<N$:
+            \begin{equation*}
+                \Big|\frac{a-a_{n}}{\beta_{n}}\Big|\leq{K}
+            \end{equation*}
+        \end{definition}
+        Given the order of convergence $\beta_{n}$, we can
+        write $a_{n}=a+O(\beta_{n})$. A similar definition
+        holds for the limit of functions.
+        If $f$ is continuous and $f(a)$ and $f(b)$ have
+        opposite signs, then the intermediate value theorem
+        says that there is a $c\in(a,b)$ such that
+        $f(c)=0$. The bisection method is an algorithm for
+        approximation such a value $c$. Let $p$ be the
+        mean of $a$ and $b$ (The midpoint). If $f(p)$ has
+        the same sign as $f(a)$, choose your next point
+        to be the mean of $p$ and $b$. If $f(p)$ has
+        the same sign as $f(b)$, choose your next point
+        to be the midpoint of $a$ and $p$. If $f(p)=0$,
+        you're done. Continuing on in this manner, we bisect
+        the interval each time so that after $n$ steps we
+        have an interval $(b-a)/2^{n+1}$ in width. The error
+        of $p$ from the actual value is the bound by this
+        number, which tends to zero very fast.
+        The Newton-Raphson method is a method for computing
+        the roots of various equations. If $f$ is twice
+        differentiable, and $x_{0}$ is your initial guess,
+        we can create a sequence that converges to the
+        root (Provided $f$ has various properties) by:
+        \begin{equation*}
+            x_{n+1}=x_{n}-\frac{f(x_{n})}{f'(x_{n})}
+        \end{equation*}
+        In particular, $f'(x)$ can not be zero, or near
+        zero. This can cause convergence to fail.
+        If the root is a simple root, the convergence
+        is quadratic. The fixed tangent method is:
+        \begin{equation*}
+            x_{n+1}=x_{n}-\frac{f(x_{n})}{f'(x_{0})}
+        \end{equation*}
+        Convergence is again subjeect to various criteria
+        on $f$. For derivatives that are difficult to
+        compute, we can use the secant method:
+        \begin{equation*}
+            x_{n+1}=x_{n}-\frac{f(x_{n})(x_{n}-x_{n-1})}
+                               {f(x_{n})-f(x_{n-1})}
+        \end{equation*}
+        The order of convergence is approximately 1.62.
+        The Regula Falsi method combines the secant
+        method and the bisection method. We create the
+        sequence:
+        \begin{equation*}
+            x_{n+1}=a_{n}-\frac{f(a_{n})(b_{n}-a_{n})}
+                               {f(b_{n})-f(a_{n})}
+        \end{equation*}
+        \begin{theorem}
+            If $P$ is a polynomial over the complex plane
+            of degree $n\geq{1}$,
+            then there is a $z\in\mathbb{C}$
+            such that $P(z)=0$. That is,
+            all non-constant polynomials have at least
+            one root in the complex plane.
+        \end{theorem}
+        \begin{theorem}
+            If $P$ is a polynomial of degree $n$,
+            then there exists a unique complex number $\alpha$,
+            and unique complex numbers $r_{i}$ called the roots,
+            and integers $m_{i}$ called the degrees,
+            such that $\sum{m_{i}}=n$, and
+            $P=\alpha(x-r_{1})^{m_{1}}\cdots(x-r_{N})^{m_{N}}$
+        \end{theorem}
+        \begin{theorem}
+            A polynomial of degree $n$ has
+            $n$ roots (Though they may not be distinct).
+        \end{theorem}
+        \begin{theorem}
+            If $P$ and $Q$ are polynomials
+            of degree $n$, and if there are
+            $N>n$ numbers $x_{i}$ such that
+            $P(x_{i})=Q(x_{i})$, then
+            $P(x)=Q(x)$.
+        \end{theorem}
+        \begin{theorem}
+            If $P$ is a polynomial and
+            $z=a+bi$ has multiplicity $m$, then
+            $a-bi$ has multiplicity $m$ as well.
+        \end{theorem}
+        Horner's Method is used to quickly calculate
+        polynomials:
+        $P(x)=a_{0}+x(a_{1}+a_{2}x(a_{3}+x_{4}x(\hdots)))$
+        \begin{theorem}[Weierstrass Approximation Theorem]
+            If $f$ is continuous on $[a,b]$, then for all
+            $\varepsilon>0$ there is a polynomial $P(x)$
+            such that $|P(x)-f(x)|<\varepsilon$ for all
+            $x\in[a,b]$.
+        \end{theorem}
+        Recalling the binomial theorem from before, we have
+        several theorem pertaining to polynomials:
+        \begin{theorem}
+            The following are true:
+            \begin{enumerate}
+                \begin{multicols}{2}
+                    \item $\sum_{i=0}^{n}%
+                           \binom{n}{i}x^{i}(1-x)^{n-i}=1$
+                    \item $\sum_{i=0}^{n}%
+                           \binom{n}{i}x^{i}(1-x)^{n-i}%
+                           (i-nx)=0$
+                    \item $\sum_{i=0}^{n}%
+                           \binom{n}{i}x^{i}(1-x)^{n-i}%
+                           (i-nx)^{2}=nx(1-x)$
+                \end{multicols}
+            \end{enumerate}
+        \end{theorem}
+        \begin{definition}
+            If $f$ is defined on $[0,1]$, then the Bernstein
+            polynomial of $f$ of degree $N$ is:
+            \begin{equation*}
+                B_{N}(x)=\sum_{n=0}^{N}\binom{N}{n}
+                    f\Big(\frac{n}{N}\Big)
+                    x^{n}(1-x)^{N-n}
+            \end{equation*}
+        \end{definition}
+        \begin{theorem}[Bernstein's Theorem]
+            If $f[0,1]:\rightarrow\mathbb{R}$ is
+            continuous, then $B_{N}(x)\rightarrow{f(x)}$
+            uniformly.
+        \end{theorem}
+        The problem of finding polynomials that pass through
+        fixed points in the plane involves the
+        techniques of interpolation. Lagrange polynomials can
+        be used for this problem. There are other methods such
+        as Neville's method and Aitken's method.
+        \begin{definition}
+            Given a function $f$ defined on $[a,b]$, and
+            nodes $a=x_{0}<x_{1}<\hdots<x_{n}=b$, a
+            cubic spline $C$ is a function such that,
+            for all $[x_{i},x_{i+1}]$, the restriction
+            of $C$ to that interval, $C_{i}$,
+            is a cubic polynomial and
+            $C(x_{i})=f(x_{i})$ for all nodes. Also,
+            $C_{i}(x_{i+1})=C_{i+1}(x_{i+1})$,
+            $C_{i}'(x_{i+1})=C_{i+1}'(x_{i+1})$, and
+            $C_{i}''(x_{i+1})=C_{i+1}''(x_{i+1})$
+            That is, the cubic sections meet
+            tangentially and share the same
+            second derivative.
+        \end{definition}
+        Numerical integration is another technique that is
+        important in numerical analysis. There are two popular
+        kinds. Riemann sums approximate integrates with
+        rectangles. We can instead approximate with
+        lines (Forming trapezoids) of quadratics.
+        The trapezoid rule has the formula:
+        \begin{equation*}
+            \int_{a}^{b}f(x)\diff{x}\approx
+            \frac{b-a}{2n}[f_{0}+2f_{1}+2f_{2}+
+            \hdots+2f_{n-2}+2f_{n-1}+f_{n}]
+        \end{equation*}
+        The approximation error for the trapezoid rule is:
+        \begin{equation*}
+            E_{n}=\Big|\frac{(b-a)^{3}f''(c)}{12n^{2}}\Big|
+        \end{equation*}
+        Where $c\in(a,b)$. Simpson's rule uses approximating
+        quadratics between each node. This formula is:
+        \begin{equation*}
+            \int_{a}^{b}f(x)\diff{x}\approx
+            \frac{b-a}{3n}[f(x_{0})+4f(x_{1})+2f(x_{2})
+            +4f(x_{3})+\hdots+2f(x_{n-2})+4f(x_{n-1})+f(x_{n})]
+        \end{equation*}
+        The approximating error is:
+        \begin{equation*}
+            E_{n}=\Big|\frac{(b-a)^{5}f^{(4)}(c)}{180n^{4}}\Big|
+        \end{equation*}
+        Where $c\in(a,b)$. The trapazoidal and Simpson's rules
+        can be obtained by integrating the Lagrange
+        interpolating formula over
+        $[a,b]$. Quadrature methods are obtained from
+        integrating over the Lagrange polynomials:
+        \begin{equation*}
+            \int_{a}^{b}\sum_{n=0}^{N}f(x_{n})L_{n}(x)\diff{x}
+            =\sum_{n=0}^{N}c_{i}f(x_{i})
+        \end{equation*}
+        There are many types of quadrature rules, such as
+        Newton-Cotes methods, and Gaussian quadrature. Another
+        type of problem that arises in numerical analysis is
+        finding a continuous function that best fits a
+        discrete set of data. Least squares approximations are
+        one such method of finding a line of best fit.
+        We wish to find a line $y=ax+b$ that minimizes the
+        following: If $(x_{i},y_{i})$ are the data points,
+        \begin{equation*}
+            M=\sum_{n=1}^{N}\big(y_{n}-(ax_{n}+b_{n})\big)^{2}
+        \end{equation*}
+        Thus we have:
+        \begin{align*}
+            \frac{\partial{M}}{\partial{a}}&=0
+            &
+            \frac{\partial{M}}{\partial{b}}&=0
+        \end{align*}
+        Solving this set of equations gives us
+        our $a$ and $b$:
+        \begin{align*}
+            a&=
+            \frac{N\sum_{n=1}^{N}x_{n}y_{n}-
+                  \Big(\sum_{n=1}^{N}x_{n}\Big)
+                  \Big(\sum_{n=1}^{N}y_{n}\Big)}
+                 {N\sum_{n=1}^{N}x_{n}^{2}-
+                  \Big(\sum_{n=1}^{N}x_{n}\Big)^{2}}\\
+            b&=
+            \frac{\Big(\sum_{n=1}^{N}x_{n}^{2}\Big)
+                  \Big(\sum_{n=1}^{N}y_{n}\Big)-
+                  \Big(\sum_{n=1}^{N}x_{n}y_{n}\Big)
+                  \Big(\sum_{n=1}^{N}x_{n}\Big)}
+                 {N\sum_{n=1}^{N}x_{n}^{2}-
+                  \Big(\sum_{n=1}^{N}x_{n}\Big)^{2}}\\
+        \end{align*}
+        This least squares method uses a line to best fit
+        the data. However we may use arbitrary polynomials
+        and exponential functions, as well.
+        \begin{definition}
+            A sequence of polynomials $P_{n}(x)$ is
+            orthogonal on an interval $[a,b]$ with
+            respect to a weight $w$ if:
+            \begin{equation*}
+                \int_{a}^{b}w(x)P_{n}(x)P_{m}(x)\diff{x}
+                =\delta_{nm}
+            \end{equation*}
+            Where $\delta_{nm}$ is the Kronecker Delta Function.
+            That is, $\delta_{nm}=1$ if $n=m$, and
+            is equal to zero otherwise.
+        \end{definition}
+        \begin{theorem}
+            If $\psi_{n}$ is a set of orthogonal
+            polynomials with weight $w$ on the
+            interval $[a,b]$, then the least squares
+            solution for approximating a continuous
+            function $f$ with $\psi_{n}$ is
+            $f(x)=\sum_{n=0}^{N}c_{n}\psi_{n}(x)$,
+            where:
+            \begin{equation*}
+                c_{n}=
+                \frac{\int_{a}^{b}w(x)\psi_{n}(x)f(x)\diff{x}}
+                     {\int_{a}^{b}w(x)\psi_{n}^{2}(x)\diff{x}}
+            \end{equation*}
+        \end{theorem}
+\end{document}

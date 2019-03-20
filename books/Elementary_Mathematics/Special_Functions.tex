@@ -1,0 +1,1804 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Special Functions}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \setcounter{chapter}{6}
+        \chapter{Special Functions}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Special Functions}
+    \fi
+    \section{The Error Function}
+        There are algebraic functions, square roots, polynomials,
+        logarithms, exponential, and trigonometric functions.
+        The latter three are elementary transcendental functions,
+        and special functions covers the rest. These are often
+        defined by integrals, or as solutions to strange
+        differential equations that arise from modelling. For
+        example, the following arises when one models heat:
+        \begin{align}
+            \ddot{y}(x)+2x\dot{y}(x)&=0\\
+            x\ddot{y}(x)+\dot{y}(x)&=0
+        \end{align}
+        The solutions to these are, respectively:
+        \begin{align}
+            y(x)&=C_{1}+C_{2}\Erf(x)\\
+            y(x)&=C_{1}+C_{2}\ln(x)
+        \end{align}
+        The logarithmic function is usually studied in
+        calculus in detail, and thus knowing this gives us a
+        good idea as to what the graph of the solution looks like.
+        However, much about logarithms is also glossed over.
+        We may first see this when studying the power rule for
+        integral powers:
+        \begin{equation}
+            \int{x}^{n}\diff{x}=\frac{1}{n+1}x^{n+1}+C
+        \end{equation}
+        And this fails for $n=-1$. However, we \textit{know}
+        from Calculus that when $n=-1$ we obtain the natural
+        logarithm. This is somewhat circular, since we actually
+        \textit{define} logarithm as follows:
+        \begin{equation}
+            \ln(x)=\int_{1}^{x}t^{-1}\diff{t}
+        \end{equation}
+        This is somewhat cheating, as we really haven't obtained
+        any knew information, we just have something to write
+        when $n=-1$. Similarly, we can define $\Erf$ as:
+        \begin{equation}
+            \Erf(x)=\int_{0}^{x}\exp(-t^{2})\diff{t}
+        \end{equation}
+        In calculus, we are very happy with writing the integral
+        of $x^{-1}$ is $\ln(x)$, but we are probably uncomfortable
+        with writing $\Erf$ as the integral of $\exp(-x^{2})$,
+        since one may very reasonably ask
+        \textit{What the hell if Erf?}. But we can ask the same
+        question for $ln(x)$. Thus, to know more about this function
+        we can apply some of the basics from calculus and use the
+        integral definition to learn the properties of $\ln$.
+        We can come up with a few properties almost immediately:
+        \begin{equation}
+            \ln(1)=\int_{1}^{1}t^{-1}\diff{t}=0
+        \end{equation}
+        Using the fundamental theorem of calculus, we obtain:
+        \begin{equation}
+            \frac{\diff}{\diff{x}}\big(\ln(x)\big)
+            =x^{-1}
+        \end{equation}
+        We can also study the integral, using integration by parts:
+        \begin{equation}
+            \int\ln(x)\diff{x}
+            =x\ln(x)-\int\diff{x}
+            =x\ln(x)-x+C
+        \end{equation}
+        It may be the case that we are unable to solve for the
+        integral in terms of other elementary functions, in which
+        case we may have had to define the integral of $\ln(x)$
+        as another special function. Fortunately, we did not have
+        to do this here. What about the most important properties
+        of logarithms, such as the product rule?
+        \begin{subequations}
+            \begin{align}
+                \ln(xy)&=\int_{1}^{xy}t^{-1}\diff{t}\\
+                &=\int_{1}^{x}t^{-1}\diff{t}
+                +\int_{x}^{xy}t^{-1}\diff{t}\\
+                &=\ln(x)+\int_{1}^{y}(xu)^{-1}x\diff{u}\\
+                &=\ln(x)+\int_{1}^{y}u^{-1}\diff{u}\\
+                &=\ln(x)+\ln(y)
+            \end{align}
+        \end{subequations}
+        This now gives us the power rule:
+        \begin{equation}
+            \ln(x^{2})=\ln(x\cdot{x})=\ln(x)+\ln(x)=2\ln(x)
+        \end{equation}
+        By induction:
+        \begin{subequations}
+            \begin{align}
+                \ln(x^{n+1})&=\ln(x^{n}\cdot{x})\\
+                &=\ln(x^{n})+\ln(x)\\
+                &=n\ln(x^{n})+\ln(x)\\
+                &=(n+1)\ln(x)
+            \end{align}
+        \end{subequations}
+        By studying the definition of $\ln(x)$, we know that
+        $\ln(2)>0$. We can thus determine the limiting behavior:
+        \begin{equation}
+            \ln(2^{n})=n\ln(2)\rightarrow{+\infty}
+        \end{equation}
+        The derivative is $x^{-1}$, which is always positive
+        for $x>0$, and thus the function is monotonic. Moreover,
+        the second derivative is $-x^{-2}$, which is always
+        negative for $x>0$, and thus $\ln(x)$ is concave down.
+        We can also determine the behavior as $x$ tends to
+        zero from the right. We have the following:
+        \begin{equation}
+            \ln(1)=\ln(x\cdot{x}^{-1})=\ln(x)+\ln(x^{-1})
+        \end{equation}
+        But $\ln(1)=0$, and thus we have:
+        \begin{equation}
+            \ln(x)+\ln(x^{-1})=0
+        \end{equation}
+        Therefore:
+        \begin{equation}
+            \ln(2^{-n})=-n\ln(2)\rightarrow{-\infty}
+        \end{equation}
+        Monotonicity gives us that $\ln(x)\rightarrow{-\infty}$
+        as $x\rightarrow{0^{+}}$. Finally, we can compute the
+        Taylor series about $x=1$. Equivalently, let's compute
+        the MacLaurin series for $\ln(x+1)$:
+        \begin{align}
+            \ln(1+x)&=\int_{1}^{1+x}t^{-1}\diff{t}\\
+            &=\int_{0}^{u}\frac{1}{1+u}\diff{u}\\
+            &=\int_{0}^{x}\sum_{n=0}^{\infty}(-u)^{n}\diff{u}\\
+            &=\sum_{n=0}^{\infty}(-1)^{n}\int_{0}^{x}u^{n}\diff{u}\\
+            &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n+1}x^{n+1}
+        \end{align}
+        The radius of convergence of the integral of a power
+        series does not change. The \textit{interval} may.
+        Indeed, for the original series evaluating at
+        $u=1$ is invalid, however for the integral, the series at
+        $x=1$ is well define and evaluates to $\ln(2)$. We can
+        use this series expansion for the purpose of computation
+        for when $|x|<1$.
+        \par\hfill\par
+        We now have that the natural logarithm is well defined on
+        $(0,\infty)$, the range of the function is
+        $\mathbb{R}$, and that $\ln(x)$ is strictly monotonically
+        increasing. Therefore there is an inverse. We call the
+        inverse the \textit{exponential} function. Let's see
+        if we can determine some properties of it:
+        \begin{align}
+            y&=\exp(x)\\
+            x&=\ln(y)\\
+            \Rightarrow\frac{\diff{x}}{\diff{x}}
+            &=\frac{\diff}{\diff{x}}\ln(y)\\
+            \Rightarrow\frac{1}{y}\frac{\diff{y}}{\diff{x}}&=1\\
+            \Rightarrow\frac{\diff{y}}{\diff{x}}&=y
+        \end{align}
+        From this, we obtain almost all of the familiar rules for
+        $\exp(x)$. Since $\ln(1)=0$, we have that $\exp(0)=1$.
+        Using the derivative obtained, have have that, for all
+        $n$, $y^{(n)}(0)=1$, and thus the Taylor series is:
+        \begin{equation}
+            \exp(x)=\sum_{n=0}^{\infty}\frac{x^{n}}{n!}
+        \end{equation}
+        Now let's return to the original differential equation,
+        for which we wrote the solution as $C_{1}+C_{2}\Erf(x)$.
+        \begin{equation}
+            \ddot{y}(x)+2x\dot{y}(x)=0
+        \end{equation}
+        Let $u(x)=\dot{y}(x)$, so $\dot{u}(x)=\ddot{y}(x)$.
+        Then we obtain:
+        \begin{equation}
+            \dot{u}(x)+2xu(x)=0
+        \end{equation}
+        This is separable, so we can solve for $u$ as follows:
+        \begin{align}
+            \int{u}^{-1}\diff{u}
+            &=-2\int{2x}\diff{x}\\
+            \Rightarrow\ln(u)&=-x^{2}+\ln(C_{1})\\
+            \Rightarrow{u}&=C_{1}\exp(-x)^{2}
+        \end{align}
+        But $u(x)=\dot{y}(x)$, so we can solve for $y$ now:
+        \begin{equation}
+            y(x)=C_{1}\int\exp(-x^{2})\diff{x}+C_{2}
+        \end{equation}
+        What can we learn from this? Let's define the following:
+        \begin{equation}
+            \Erf(x)=\int_{0}^{x}\exp(-t^{2})\diff{t}
+        \end{equation}
+        From this, we obtain $\Erf(0)=0$, and for all
+        $x$, $\Erf(-x)=-\Erf(x)$, since $\exp(-t^{2})$ is an
+        even function. Looking at the derivative, we see that
+        $\Erf'(x)=\exp(-x^{2})$, which is always positive, and
+        thus $\Erf(x)$ is strictly monotonically increasing.
+        The second derivative is $-2x\exp(-x^{2})$, which is
+        negative for $x>0$ and positive for $x<0$. Thus $\Erf(x)$
+        is concave up when $x<0$ and concave down when $x>0$.
+        What happens as $x\rightarrow\infty$? We can use a
+        familiar trick from Gauss to evaluate this. Consider
+        the square of $\Erf(z)$:
+        \begin{align}
+            \Erf(z)^{2}
+            &=\Big(\int_{0}^{z}\exp(-x^{2})\diff{x}\Big)
+            \Big(\int_{0}^{z}\exp(-y^{-2})\diff{y}\Big)\\
+            &=\int_{0}^{z}
+                \Big(\int_{0}^{z}\exp(-x^{2})\diff{x}\Big)
+                \exp(-y^{2})\diff{y}\\
+            &=\int_{0}^{z}\int_{0}^{z}\exp(-(x^{2}+y^{2})
+                \diff{x}\diff{y}
+        \end{align}
+        This is a square $A$ in the plane. From the positivity of
+        $\exp(-(x^{2}+y^{2})$, the integral over $A$ is greater
+        than or equal to integral over the circle that fits
+        inside the square $A$, and less than or equal to the
+        integral over the circle that contains the square $A$.
+        Using this, we swap to polar coordinates. The radius
+        of the inner circle is $z$, and the radius of the
+        outer circle is $\sqrt{2}z$. So we have:
+        \begin{align}
+            \int_{0}^{\pi/2}\int_{0}^{z}r\exp(-r^{2})
+                \diff{r}\diff{\theta}
+            &\leq\int_{0}^{z}\int_{0}^{z}\exp(-(x^{2}+y^{2}))
+                \diff{x}\diff{y}\\
+            &\leq\int_{0}^{\pi/2}\int_{0}^{\sqrt{2}z}r\exp(-r^{2})
+                \diff{r}\diff{\theta}
+        \end{align}
+        The left and right integrals can be evaluated, and we
+        have:
+        \begin{equation}
+            \frac{\pi}{4}\Big[1-\exp(-z^{2})\Big]
+            \leq\Erf(z)^{2}
+            \leq\frac{\pi}{4}\Big[1-\exp(-2z^{2})\Big]
+        \end{equation}
+        From the squeeze theorem, we obtain:
+        \begin{equation}
+            \underset{x\rightarrow\infty}{\lim}
+            \Erf(x)=\frac{\sqrt{\pi}}{2}
+        \end{equation}
+        We now redefine $\Erf$, and give it a name.
+        \begin{definition}
+            The Error Function is the function
+            $\Erf:\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+            \begin{equation}
+                \Erf(x)=\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{x}\exp(-t^{2})\diff{t}
+            \end{equation}
+        \end{definition}
+        The coefficient out in front of the integral is to make
+        $\Erf(x)$ asymptotic to $\pm{1}$ as $x\rightarrow\pm\infty$.
+        The integral can also be evaluated in similar manner to
+        how we evaluated the integral of $\ln(x)$:
+        \begin{align}
+            \int\Erf(x)\diff{x}
+            &=x\Erf(x)-\frac{2}{\sqrt{\pi}}
+                \int{x}\exp(-x^{2})\diff{x}\\
+            &=x\Erf(x)+\frac{1}{\sqrt{\pi}}\exp(-x^{2}+C
+        \end{align}
+        Talking about the weirdness of Taylor series, look at
+        $\exp(-1000)$. Taylor says that:
+        \begin{equation}
+            \exp(-1000)=1-1000+\frac{1000^{2}}{2!}-\hdots
+        \end{equation}
+        The first term is 1, second term is 1000, third term
+        is 500,000, and this goes on. What the largest term?
+        We see that the terms get bigger and bigger up until
+        the $1000^{th}$ term. Using Sterling's approximation,
+        we can see that this term is monumental in size,
+        over 400 digits long. After this the terms get smaller
+        and smaller, cancelling, until we have have
+        something on the order of $10^{-400}$, meaning over
+        800 digits cancelled. Woah. Ignoring that, we can
+        continue and obtain the power series for $\Erf$:
+        \begin{align}
+            \Erf(x)&=\frac{2}{\sqrt{\pi}}
+                \int_{0}^{x}\exp(-t^{2})\diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}\int_{0}^{\infty}
+                \sum_{n=0}^{\infty}\frac{(-t^{2})^{n}}{n!}
+                \diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}
+                \sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                \int_{0}^{x}t^{2n}\diff{t}\\
+            &=\frac{2}{\sqrt{\pi}}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{n!}\frac{x^{2n+1}}{2n+1}
+        \end{align}
+        This confirms our suspicion that $\Erf(x)$ is an
+        odd function. The alternating series test tells us how
+        accurate any partial sum is, since the error in the
+        approximation will be less than the magnitude of the
+        last term. For example, if we want to know $\Erf(1)$,
+        we have:
+        \begin{equation}
+            \Erf(1)\approx
+                \sum_{n=0}^{N}\frac{(-1)^{n}}{n!(2n+1)}
+        \end{equation}
+        The error $E$ will be:
+        \begin{equation}
+            E<\Big|\frac{1}{(N+1)!(2N+3)}\Big|
+        \end{equation}
+        To obtain $\Erf(1)$ to high precision does not require
+        using a substantial amount of terms. For large $x$,
+        we also may use the inequality we obtained before:
+        \begin{equation}
+            1-\exp(-x^{2})\leq\Erf(x)\leq1-\exp(-2x^{2})
+        \end{equation}
+        So $\Erf(x)\approx{1}$, with error $\exp(-x^{2})$.
+        More often in probability and in statistics one defines
+        the \textit{complementary error function}
+        $\Erfc(x)=1-\Erf(x)$. This is used when studying the
+        tail of the normal distribution. We can obtain another
+        series as well by using integration by parts:
+        \begin{align}
+            \frac{\sqrt{\pi}}{2}\Erf(x)
+            &=\int_{0}^{x}\exp(-t^{2})\diff{t}\\
+            &=x\exp(-x^{2})+\int_{0}^{x}2t\exp(-t^{2})\diff{t}\\
+            &=\exp(-x^{2})\sum_{n=0}^{N}
+                \frac{2^{n}}{(2n+1)!!}x^{2n+1}
+            +\frac{2^{N+1}}{(2N+1)!!}
+            \int_{0}^{x}t^{2n+2}\exp(-t^{2})\diff{t}
+        \end{align}
+        The double factorial sign means skip every other point.
+        So $5!!=5\cdot{3}\cdot{1}$. For even numbers, we have:
+        \begin{equation}
+            (2n)!!=(2n)\cdot(2n-2)\cdots{2}
+            =2^{n}n!
+        \end{equation}
+        Thus, for odd numbers, we can write:
+        \begin{equation}
+            (2n-1)!!=\frac{(2n)!}{(2n)!!}
+            =\frac{(2n)!}{2^{n}n!}
+        \end{equation}
+        And thus the notation is redundant. We can also obtain a
+        series expansion for $\Erfc(x)$.
+        \begin{subequations}
+            \begin{align}
+                \Erfc(x)&=1-\Erf(x)\\
+                &=1-\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{x}\exp(-t^{2})\diff{t}\\
+                &=\frac{2}{\sqrt{\pi}}
+                    \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                    +\frac{2}{\sqrt{\pi}}\int_{0}^{x}
+                    \exp(-t^{2})\diff{t}\\
+                &=\frac{2}{\sqrt{\pi}}\int_{x}^{\infty}
+                    \exp(-t^{2})\diff{t}
+            \end{align}
+        \end{subequations}
+        Using this, we obtain a series:
+        \begin{subequations}
+            \begin{align}
+                \frac{\sqrt{\pi}}{2}\Erfc(x)&=
+                \int_{x}^{\infty}\exp(-t^{2})\diff{t}\\
+                &=\frac{1}{2x}\exp(-x^{2})+
+                \int_{x}^{\infty}\frac{1}{2t^{2}}\frac{1}{2t}
+                \frac{\diff}{\diff{t}}
+                    \Big(\exp(-t^{2})\Big)\diff{t}\\
+                &=\frac{\exp(-t^{2})}{2}
+                \sum_{n=0}^{N}(-1)^{n}\frac{(2n-1)!!}{(2x^{2})^{n}}
+                +R_{N}
+            \end{align}
+            Where $R_{N}$ is the remainder term:
+            \begin{equation}
+                R_{N}=(-1)^{N}\frac{(2N-1)!!}{2^{N+3}}
+                \int_{x}^{\infty}\frac{1}{t^{2N+2}}\exp(-t^{2})
+                \diff{t}
+            \end{equation}
+        \end{subequations}
+        $R_{N}$ diverges for any $x$. This series is useful
+        for large $x$, however, since the factorial term that
+        cause $R_{N}$ to diverge take a while to get large.
+        Thus, $R_{N}$ decreasing for a while, and then eventually,
+        once the factorial term is larger than the exponential
+        terms, $R_{N}$ starts to decrease. Choosing the $N$ that
+        minimizes $R_{N}$, we obtain a series that can very
+        accurately approximate the nature of $\Erfc(x)$ for
+        large $x$. This is similar to $\exp(-1000)$ where the
+        terms got bigger and bigger, until the eventually cancel.
+        We now have the opposite, where the terms get smaller
+        and smaller, until $R_{N}$ starts to diverse of to
+        infinity. If terms past the ``good'' $N$ are added,
+        the series will fail to accurate represent $\Erfc(x)$.
+        \par\hfill\par
+        Make graph of $R_{N}$ vs $N$ for $\Erf$ and $\Erfc$.
+        \par\hfill\par
+        This type of series is an example of an asymptotic series.
+        We can't write $f(x)=\sum{a}_{n}x^{n}$ since the
+        series diverges, so we write
+        $f(x)\sim\sum{a}_{n}(x)$ as $x\rightarrow\infty$.
+        Taylor series say that the series approximation works
+        well every as $n$ gets large. Asymptoptic series say
+        that the approximation works well as the argument of
+        $f$ gets large, rather than the number of terms.
+        More precisely:
+        \begin{equation}
+            \underset{x\rightarrow\infty}{\lim}
+            \frac{f(x)-\sum_{n=0}^{N}a_{n}(x)}{a_{N}(x)}=0
+        \end{equation}
+        As such, there are divergent as convergent asymptotic
+        series. For example, consider the following:
+        \begin{align}
+            \frac{1}{1+x^{2}}
+            &=\frac{1}{x^{2}}\frac{1}{1+\frac{1}{x^{2}}}\\
+            &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{x^{n+2}}\\
+            &=\sum_{n=0}^{\infty}(-1)^{n}x^{2n}
+        \end{align}
+        The third equation is an asymptotic series and the
+        fourth equation is the Taylor series. The Taylor
+        series has a radius of convergence of 1, and thus for
+        all $x>1$, the Taylor series will fail. For
+        $x>1$, however, the asymptotic expansion does a very
+        good job
+    \section{Lecture 2}
+        We can approximate the error in the power series and
+        asymptotic series expansions by looking at the largest
+        and smallest terms, respectively. For the power series:
+        \begin{align}
+            \Big|\frac{a_{n+1}}{a_{n}}\Big|
+            &=\frac{x^{2}}{n+1}\frac{2n+3}{2n+1}\\
+            &\approx\frac{x^{2}}{n+1}
+        \end{align}
+        And this is largest when $n\sim{x}^{2}$.
+        Using Stirling's Formula, the term is then:
+        \begin{align}
+            \frac{x^{2n+1}}{n!(2n+1)}
+            &\approx\frac{x^{2n+1}}{(x^{2})!(2x^{2}+1)}\\
+            &\approx\frac{x^{2x^{2}-1}}{2}
+            \frac{1}{2\pi{x}^{2}(x^{2})^{(x^{2})}\exp(-x^{2})}\\
+            &=\frac{1}{2}\frac{\exp(x^{2})}{x^{2}\sqrt{2\pi}}
+        \end{align}
+        Similarly, the lowest term in the asymptotic series
+        can be obtained.
+        \begin{align}
+            \Big|\frac{a_{n+1}}{a_{n}}\Big|
+            &=\frac{(2n+2)(2n+1)}{4(n+1)x^{2n+1}}\\
+            &=\frac{2n+1}{2x^{2n+1}}\\
+            &\approx\frac{n}{x^{2}}
+        \end{align}
+        So again, the smallest term occurs when
+        $n\sim{x}^{2}$. The smallest term is approximately:
+        \begin{align}
+            \frac{(2x^{2})!}{2^{2x^{2}}(x^{2})!x^{2x^{2}+1}}
+            &\approx
+            \frac{\sqrt{2\pi{x}^{2}}(2x^{2})^{2x^{2}}\exp(-2x^{2}}
+                 {2^{2x^{2}}\sqrt{2\pi{x}^{2}}(x^{2})^{x^{2}}
+                  \exp(-x^{2})x^{2x^{2}+1}}\\
+            &=\frac{\sqrt{2}\exp(-x^{2})}{x}
+        \end{align}
+        \subsection{Watson's Lemma}
+            The Laplace transform of an integrable function $f$
+            is defined as:
+            \begin{equation}
+                \mathscr{L}(f)_{s}=\int_{0}^{\infty}
+                    f(t)\exp(-st)\diff{t}
+            \end{equation}
+            Watson's lemma says to substitute the MacLaurin
+            series for $f$ and integrate term by term. For example,
+            letting $f(x)=\Erfc(x)$, we have:
+            \begin{align}
+                \Erfc(x)&=\int_{x}^{\infty}\exp(-t^{2})\diff{t}\\
+                &=\int_{0}^{\infty}\exp\big(-(s+x)^{2}\big)\diff{s}\\
+                &=\exp(-x^{2})\int_{0}^{\infty}
+                    \exp(-2sx)\exp(-s^{2})\diff{s}\\
+                &\sim
+                \exp(-x^{2})\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                    \int_{0}^{\infty}s^{2n}\exp(-2sx)\diff{s}\\
+                &=\exp(-x^{2})\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}(2n)!}{2^{2n+1}n!x^{2n+1}}
+            \end{align}
+        \subsection{The Exponential Integral}
+            The indefinite integral of the function
+            $\exp(-x)/x$ can not be expressed in terms of
+            elementary functions that one sees in a calculus course.
+            Similar to how $\Erf$ was define, the exponential
+            integral is defined as the \textit{solution} to this
+            problem.
+            \begin{equation}
+                E_{1}(x)=\int_{x}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+            \end{equation}
+            $E_{1}(x)$ is defined by an improper integral, and
+            as such we must show that this is well defined for
+            various values. That is, we must show the following
+            limit is well defined:
+            \begin{equation}
+                E_{1}(x)=\underset{b\rightarrow\infty}{\lim}
+                \int_{x}^{b}\frac{\exp(-t)}{t}\diff{t}
+            \end{equation}
+            Since $\exp(-t)/t$ is positive for all
+            $t>0$, the area under the curve increases as $b$
+            increases. That is, we have monotonicity. Also, for
+            all $t\geq{x}$, $\exp(-t)/t\leq\exp(-t)/x$, and thus
+            we obtain:
+            \begin{equation}
+                \int_{x}^{b}\frac{\exp(-t)}{t}\diff{t}
+                \leq\int_{x}^{b}\frac{\exp(-t)}{x}\diff{t}
+                =\frac{1}{x}\Big[\exp(-x)-\exp(-b)\Big]
+            \end{equation}
+            Taking the limit as $b\rightarrow\infty$, we see
+            that the integral converges and thus $E_{1}(x)$ is
+            well defined for all positive $x$. This is a combination
+            of the comparison test and the fact that, if
+            $f(b)$ is a monotonic bounded function, then it
+            converges. Taking $f(b)$ to be the integral of
+            $\exp(-t)/t$ over the interval $(x,b)$ gives us the
+            result. From the integral definition, we can obtain
+            many properties of $E_{1}(x)$. As $x$ increases, there
+            is less area, and thus $E_{1}(x)$ is decreasing.
+            We can also show this by taking the derivative, and
+            observing that $-\exp(-x)/x$ is negative for all
+            $x>0$. Looking at the second derivative, we get:
+            \begin{equation}
+                E_{1}''(x)=\exp(-x)\frac{x+1}{x^{2}}
+            \end{equation}
+            And this is positive for all $x>0$, and thus
+            $E_{1}(x)$ is concave up. We can obtain a series for
+            $E_{1}$ as follows:
+            \begin{align}
+                E_{1}'(x)&=-\frac{\exp(-x)}{x}\\
+                &=-\frac{1}{x}\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}x^{n}}{n!}\\
+                \Rightarrow
+                E_{1}(x)&=-\ln(x)-\sum_{n=1}^{\infty}
+                    \frac{(-1)^{n}x^{n}}{nn!}+C
+            \end{align}
+            Where the $C$ comes out as a constant of integration.
+            Evaluating $E_{1}(1)$ gives us this constant.
+            We can't evaluate at zero since the log function is
+            undefined there, and similarly for infinity.
+            \begin{equation}
+                C=\int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}
+            \end{equation}
+            Using integration by parts, we have:
+            \begin{equation}
+                \int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                =\int_{1}^{\infty}\ln(t)\exp(-t)\diff{t}
+            \end{equation}
+            Note that this does not say that $t^{-1}$ and
+            $\ln(t)$ are the same function, but rather the
+            area under $\exp(-t)t^{-1}$ and $\ln(t)\exp(-t)$
+            are the same on the interval $(1,\infty)$.
+            Let's look at the following function on $(0,1]$:
+            \begin{equation}
+                f(b)=\int_{b}^{1}\ln(x)\exp(-x)\diff{x}
+            \end{equation}
+            We can show this is well defined when
+            $b\rightarrow{0}^{+}$ since:
+            \begin{equation}
+                \int_{b}^{1}\ln(t)\diff{t}
+                \leq\int_{b}^{1}\ln(t)\exp(-t)\diff{t}
+                \leq{0}
+            \end{equation}
+            And thus, we have:
+            \begin{equation}
+                -1+b(1-\ln(b))\leq{f}(b)\leq{0}
+            \end{equation}
+            Since $f$ is monotonic, the limit exists as
+            $b\rightarrow{0}^{+}$. This again uses the comparison
+            test for integrals. Getting back to our computation
+            of $C$, we obtain a series for integrand of the function
+            used in the definition of $f(b)$:
+            \begin{align}
+                \int_{0}^{1}\ln(t)\exp(-t)\diff{t}
+                &=\int_{0}^{1}\ln(t)\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}}{n!}t^{n}\diff{t}\\
+                &=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!}
+                \int_{0}^{\infty}t^{n}\ln(t)\diff{t}
+            \end{align}
+            Examining that last integral, we get:
+            \begin{equation}
+                \int_{0}^{1}\ln(t)t^{n}\diff{t}
+                =\int_{0}^{1}\ln(t)\frac{\diff}{\diff{t}}
+                    \Big(\frac{t^{n+1}}{n+1}\Big)\diff{t}
+            \end{equation}
+            Applying integration by parts and L'H\"{o}pital's rule,
+            we see that this simplifies to:
+            \begin{equation}
+                -\int_{0}^{1}\frac{1}{n+1}t^{n}\diff{t}
+                =-\frac{1}{(n+1)^{2}}
+            \end{equation}
+            Thus, this original integral is:
+            \begin{equation}
+                \int_{0}^{1}\exp(-t)\ln(t)\diff{t}
+                =\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}
+            \end{equation}
+            But from how $C$ was defined, we obtain:
+            \begin{align}
+                C&=\int_{1}^{\infty}\frac{\exp(-t)}{t}\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}\\
+                &=\int_{0}^{1}\ln(t)\exp(-t)\diff{t}
+                +\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}\\
+                &=\int_{0}^{\infty}\exp(-t)\ln(t)\diff{t}
+            \end{align}
+            This constant appears in many different areas of
+            mathematics, and is given a symbol and a name.
+            It's called the
+            \textit{Euler-Mascheroni Constant}, and is
+            denoted $\gamma$. It's also called the Euler Gamma
+            constant. It's value is approximately $0.57721$. It is
+            unknown whether this is an irrational number or not
+            (As of January, 2019). With this we obtain our series
+            for $E_{i}(x)$:
+            \begin{equation}
+                E_{i}(x)=-\gamma-\ln(x)
+                -\sum_{n=1}^{\infty}\frac{(-1)^{n}}{nn!}x^{n}
+            \end{equation}
+            We can also examine the indefinite integral by using
+            integration by parts:
+            \begin{equation}
+                \int{E}_{1}(x)\diff{x}=
+                xE_{1}(x)+\exp(-x)+C
+            \end{equation}
+            Where $C$ is a (different) constant of integration.
+            What happens as $x\rightarrow\infty$? We saw earlier
+            that $E_{1}(x)$ is bounded by
+            $\exp(-x)/x$, and thus the indefinite integral is well
+            behaved in this limit. We could, however, continue
+            using integration by parts and obtain an asymptotic
+            series.
+    \section{Lecture 3}
+        \subsection{Fresnel Integrals}
+            The Fresnel Integrals are defined as:
+            \begin{align}
+                S(x)&=\int_{0}^{x}\sin(t^{2})\diff{t}\\
+                C(x)&=\int_{0}^{x}\cos(t^{2})\diff{t}
+            \end{align}
+            Occasionally there is a $\pi/2$ inside the sine and
+            cosine functions. These functions appear in optics.
+            It's not obvious that these integrals converge as
+            $x\rightarrow\infty$, but they do:
+            \begin{align}
+                \underset{x\rightarrow\infty}{\lim}S(x)
+                &=\frac{\sqrt{\pi}}{8}\\
+                \underset{x\rightarrow\infty}{\lim}C(x)
+                &=\frac{\sqrt{\pi}}{8}\\
+            \end{align}
+            The problem is that the integrands do not tend to
+            zero, but rapidly oscillate between -1 and 1. If this
+            was a series, we'd be done since the sequence being
+            summed over must converge to zero if the series
+            converges. For integrals it's slightly trickier and
+            rapid cancellations can occur.
+            \begin{align}
+                \int_{1}^{\infty}\sin(t^{2})\diff{t}
+                &=\underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\sin(t^{2})\diff{t}\\
+                &=\underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}-\frac{1}{2t}\frac{\diff}{\diff{t}}
+                \big[\cos(t^{2})\big]\diff{t}\\
+                &=\underset{b\rightarrow\infty}{\lim}
+                \Big(\Big[-\frac{1}{2t}\cos(t^{2})\Big]_{1}^{b}
+                -\int_{1}^{b}\frac{1}{2t^{2}}\cos(t^{2})\diff{t}
+                \Big)\\
+                &=\frac{1}{2}\cos(1)-
+                \underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\frac{1}{2t^{2}}\cos(t^{2})\diff{t}
+            \end{align}
+            So we need to show that this final integral converges.
+            We can use the comparison test. For $t\geq{1}$, we have:
+            \begin{align}
+                \Big|\frac{1}{2t^{2}}\cos(t^{2})\Big|&\leq
+                \frac{1}{2t^{2}}\\
+                \underset{b\rightarrow\infty}{\lim}
+                \int_{1}^{b}\frac{1}{2t^{2}}\diff{t}\\
+                &=\frac{1}{2}
+            \end{align}
+            It follows that the limit exists. From this, we obtain
+            the convergence of $S(x)$ as well. Similarly, $C(x)$
+            converges. We can also evaluate these limits. We will
+            need a simple result from complex variables known as
+            \textit{Euler's Formula}:
+            \begin{equation}
+                \exp(ix)=\cos(x)+i\sin(x)
+            \end{equation}
+            This can be derived by showing that both sides of the
+            equation satisfy $\dot{z}(t)=iz(t)$, $z(0)=1$. Since
+            solutions to such differential equations are unique,
+            we thus obtain Euler's Formula. As a side fact:
+            \begin{align}
+                \exp(ix)^{2}&=\exp(2ix)\\
+                &=\big(\cos(x)+i\sin(x)\big)^{2}\\
+                &=\big(\cos^{2}(x)-\sin^{2}(x)\big)+
+                i\big(2\sin(x)\cos(x)\big)\\
+                &=\cos(2x)+i\sin(2x)
+            \end{align}
+            All of the trig identities learned simply come from
+            the exponent rules, and then applying Euler's formula.
+            Now:
+            \begin{equation}
+                \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                =\frac{\sqrt{\pi}}{2}
+            \end{equation}
+            et $t=\exp(i\pi/2)u$, and secretly using some complex
+            variables, we obtain:
+            \begin{align}
+                \int_{0}^{\infty}\exp(-t^{2})\diff{t}
+                &=\int_{0}^{\infty}
+                \exp\Big(-i\frac{\pi}{2}u^{2}\Big)
+                \exp\Big(i\frac{\pi}{4}\Big)\diff{u}\\
+                &=\exp\Big(-i\frac{\pi}{4}\Big)
+                \int_{0}^{\infty}\exp(iu^{2})\Big)\\
+                &=\frac{1-i}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\cos(u^{2})+i\sin(u^{2})\big)\diff{u}\\
+                &=\frac{1}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\cos(u^{2})+\sin(u^{2})\big)\diff{u}
+                +\frac{i}{\sqrt{2}}\int_{0}^{\infty}
+                \big(\sin(u^{2})-\cos(u^{2})\big)\diff{u}\\
+                &=\frac{\sqrt{\pi}}{2}
+            \end{align}
+            Equating real and imaginary parts obtains the limits.
+            We can obtain the power series for $S(x)$ by integrating
+            the power series for $\sin(x^{2})$ term by term:
+            \begin{align}
+                S(x)&=\int_{0}^{x}\sin(t^{2})\diff{t}\\
+                &=\int_{0}^{x}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n+1)!}t^{4n+2}\diff{t}\\
+                &=\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n+1)!}\frac{1}{4n+3}x^{4n+3}
+            \end{align}
+            For the asymptotic series, we note that:
+            \begin{equation}
+                S(x)=\frac{\sqrt{\pi}}{8}-
+                \int_{x}^{\infty}\sin(t^{2})\diff{t}
+            \end{equation}
+            We use integration by parts to obtain the following
+            series:
+            \begin{equation}
+                S(x)=
+                \frac{\sqrt{\pi}}{8}-\frac{1}{2x}\cos(x^{2})+\cdots
+            \end{equation}
+        \subsection{Bernouli Polynomials}
+            One question that is often avoided in a calculus course
+            is the Taylor series for $\tan$. The sine, cosine,
+            exponential, etc., functions are usually done, but
+            $\tan$ and $\sec$ are often avoided. It turns out to be
+            tricky, and we'll develop some methods to evaluate this.
+            Recall the following from a calculus course:
+            \begin{align}
+                \sum_{k=0}^{n}k&=\frac{n(n+1)}{2}\\
+                \sum_{k=0}^{n}k^{2}&=
+                \frac{n(n+1)(2n+1)}{6}\\
+                \sum_{k=0}^{n}k^{3}&=\frac{n^{2}(n+1)^{2}}{4}
+            \end{align}
+            There are different ways to show this, usually via
+            induction. One way for the first equation is to count
+            this twice:
+            \begin{table}[]
+                \centering
+                \begin{tabular}{cc|c|c|c|c}
+                    &1&2&$\cdots$&$n-1$&$n$\\
+                    &$n$&$n-1$&$\cdots$&2&1\\
+                    \hline
+                    +&$n+1$&$n+1$&$\cdots$&$n+1$&$n+1$
+                \end{tabular}
+            \end{table}
+            Noting that we double counted, we divide by 2 and
+            obtain the formula.
+            Jacques Beroulli evaluated, apparently in half of a
+            quarter of an hour, the following sum:
+            \begin{equation}
+                N=\sum_{k=1}^{100}k^{10}
+            \end{equation}
+            First we need to find a polynonial $P_{n}(x)$ such that:
+            \begin{equation}
+                P_{n}(x+1)-P_{n}(x)=x^{n}
+            \end{equation}
+            For all $n\in\mathbb{N}$. Let's try this with a
+            quadratic. Letting $P_{2}(x)=ax^{2}+bx+c$:
+            \begin{align}
+                x^{2}&\overset{\textrm{?}}{=}
+                \big(a(x+1)^{2}+b(x+1)+c\big)-
+                \big(ax^{2}+bx+c\big)\\
+                &=2ax+a+b
+            \end{align}
+            So this is impossible since the quadratic term will
+            cancel. So instead we try a cubic term:
+            \begin{align}
+                x^{2}&=
+                \big(a(x+1)^{3}+b(x+1)^{2}+c(x+1)+d)-
+                \big(ax^{3}+bx^{2}+cx+d)\\
+                &=a(3x^{2}+3x+1)+b(2x+1)+c
+            \end{align}
+            So we obtain the following:
+            \begin{align}
+                a&=\frac{1}{3}\\
+                b&=-\frac{1}{2}\\
+                c&=\frac{1}{6}
+            \end{align}
+            The reason this property is so nice is because we can
+            obtain a telescoping series with it.
+            \begin{equation}
+                1^{n}+\cdots+N^{n}
+                =\big(P_{n}(2)-P_{n}(1)\big)+\cdots+
+                \big(P_{n}(N+1)-P_{n}(N)\big)
+            \end{equation}
+            Combining this, we obtain:
+            \begin{equation}
+                P_{n}(N+1)-P_{n}(1)=\sum_{k=0}^{N}k^{n}
+            \end{equation}
+            Other than evaluating directly, we can calculate the
+            polynomial $P_{n}$ in a more efficient manner. First,
+            we differentiate:
+            \begin{align}
+                P_{n}'(x+1)-P_{n}'(x)&=nx^{n-1}\\
+                &=n\big[P_{n-1}(x+1)-P_{n-1}(x)\big]
+            \end{align}
+            We then obtain:
+            \begin{equation}
+                P_{n}'(x+1)-nP_{n-1}(x+1)=P_{n}'(x)-nP_{n-1}(x)
+            \end{equation}
+            But the derivative of a polynomial is another
+            polynomial, and thus we have that the polynomial
+            $F(x)=P_{n}'(x)-nP_{n-1}(x)$ is such that
+            $F(0)=F(1)=\cdots=F(n)=\cdots$. But the only polynomial
+            that is constant on all of the integers is a constant
+            polynomial. For any polynomial that is not constant
+            must diverge. Thus $F(x)=c$. Another way to see this
+            is to note that if two polynomials of degree $n$
+            agree on $n+1$ points, then they are the same
+            polynomial. This again means that $F(x)$ is a constant.
+            So, we have:
+            \begin{equation}
+                P_{n}'(x)-nP_{n-1}(x)=c
+            \end{equation}
+            Note that the defining property of $P_{n}$ is that
+            $P_{n}(x+1)-P_{n}(x)=x^{n}$. Adding any constant to
+            $P_{n}$ will yield the same property. So we can define
+            our polynomials to be the ones such that
+            $P_{n}'(x)-nP_{n-1}(x)=0$. There is only one polynomial
+            of degree $n$ that will do this, so we define this as
+            the $n^{\textrm{th}}$ Bernouli polynomial $B_{n}(x)$.
+            This is not the only \textit{function} that will do
+            this, since $B_{n}(x)+\sin(k\pi{x})$ will also have
+            all of this property.
+            \begin{ldefinition}{Bernouli Polynomial}
+                The $n^{th}$ Bernouli polynomial is the polynomial
+                of degree $n$ such that:
+                \begin{equation}
+                    \int_{x}^{x+1}B_{n}'(t)\diff{t}=x^{n}
+                \end{equation}
+            \end{ldefinition}
+            Several properties arise immediately from this:
+            \begin{align}
+                \int_{0}^{1}B_{n}(t)\diff{t}&=0\\
+                B_{n}'(x)&=nB_{n-1}(x)
+            \end{align}
+            The first few polynomials are:
+            \begin{table}[H]
+                \captionsetup{type=table}
+                \centering
+                \begin{tabular}{l|l}
+                    $n$&$B_{n}(x)$\\
+                    \hline
+                    0&1\\
+                    1&$x-\frac{1}{2}$\\
+                    2&$x^{2}-x+\frac{1}{6}$\\
+                    3&$x^{3}-\frac{3}{2}x^{2}+\frac{1}{2}x$
+                \end{tabular}
+                \caption{Bernouli Polynomials}
+                \label{tab:Special_Functions_BERNOULI_POLY}
+            \end{table}
+            \begin{theorem}
+                The $n^{th}$ Bernouli polynomial
+                is a monic polynomial of degree $n$.
+            \end{theorem}
+            \begin{proof}
+                We prove by induction. The base case is true since
+                $B_{0}(x)=1$. Suppose it is true for $B_{n}(x)$.
+                Then $B_{n}(x)=x^{n}+p_{n-1}(x)$, where
+                $p_{n-1}(x)$ is a polynomial of degree $n-1$.
+                But then:
+                \begin{equation}
+                    B_{n+1}'(x)=n\big(x^{n}+p_{n-1}(x)\big)
+                \end{equation}
+                Integrating, we get that $B_{n+1}(x)$ is a monic
+                polynomial of degree $n+1$.
+            \end{proof}
+            \begin{theorem}
+                If $B_{n}(x)$ is the $n^{th}$ Bernouli polynomial,
+                then the coefficient of the degree $n-1$ term is
+                $-n/2$.
+            \end{theorem}
+            \begin{proof}
+                Again, by induction. The base case is true from
+                Tab.~\ref{tab:Special_Functions_BERNOULI_POLY}.
+                Suppose it is true for $B_{n}(x)$. Then:
+                \begin{align*}
+                    B_{n+1}(x)&=
+                    \int(n+1)B_{n}(x)\diff{x}\\
+                    &=\int(n+1)
+                    \big[x^{n}-\frac{n}{2}x^{n-1}+\cdots\big]
+                    \diff{x}\\
+                    &=x^{n+1}-\frac{n+1}{2}x^{n}+\cdots
+                \end{align*}
+            \end{proof}
+    \section{Lecture 4}
+        \subsection{Bernoulli Polynomials}
+            So far we know that $B_{0}(x)=1$, 
+            $B_{n}'(x)=nB_{n-1}(x)$, for $n\in\mathbb{N}$.
+            Sequences like this are called Appell sequences.
+            The definining property is
+            $B_{n}(x+1)-B_{n}(x)=nx^{n-1}$. From this, we obtain:
+            \begin{equation}
+                \sum_{k=1}^{n}k^{m}=
+                \frac{1}{n+1}\Big[B_{n+1}(m+1)-B_{n}(1)\Big]
+            \end{equation}
+            For $n\geq{2}$:
+            \begin{equation}
+                B_{n}(1)-B_{n}(0)=0
+            \end{equation}
+        \subsection{Bernoulli Numbers}
+            The $n^{th}$ Bernoulli number is defined
+            as $b_{n}=B_{n}(0)$, where $B_{n}$ is the
+            $n^{th}$ Bernoulli polynomial. These appear in
+            the expanion of the Bernoulli polynomials as well.
+            For let:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}C_{n}^{k}x^{k}
+            \end{equation}
+            Taking the derivative, we have:
+            \begin{subequations}
+                \begin{align}
+                    B_{n}'(x)
+                    &=\sum_{k=1}^{n}C_{n}^{k}kx^{k-1}\\
+                    &=nB_{n-1}(c)\\
+                    &=n\sum_{k=0}^{n-1}C_{n-1}^{k}x^{k}\\
+                    &=n\sum_{k=1}^{n}C_{n-1}^{k-1}x^{k-1}
+                \end{align}
+            \end{subequations}
+            So we have a recurrance relation for the coefficients:
+            \begin{equation}
+                kC_{k}^{n}=nC_{k-1}^{n-1}
+            \end{equation}
+            We can keep applying this to obtain:
+            \begin{equation}
+                C_{k}^{n}=\frac{n}{k}C_{k-1}^{n-1}
+                =\frac{n(n-1)}{k(k-1)}C_{k-2}^{n-2}=\cdots
+                =\frac{n(n-1)\cdot(n-(k-1))}{k(k-1)\cdots(k-(k-1))}
+                C_{0}^{n-k}
+            \end{equation}
+            This coefficient is the \textit{binomial coefficient}
+            $\binom{n}{k}$, read as $n$ choose $k$. So we have:
+            \begin{equation}
+                C_{k}^{n}=\binom{n}{k}C_{0}^{n-k}
+            \end{equation}
+            Therefore:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}
+                \binom{n}{k}C_{0}^{n-k}x^{k}
+            \end{equation}
+            Evaluating at $x=0$, we get:
+            \begin{equation}
+                C_{0}^{n}=b_{n}
+            \end{equation}
+            Where $b_{n}$ is the $n^{th}$ Bernoulli number.
+            But from this, we obtain:
+            \begin{equation}
+                C_{k}^{n}=\binom{n}{k}b_{n-k}
+            \end{equation}
+            Thus, putting this all together, we have:
+            \begin{equation}
+                B_{n}(x)=\sum_{k=0}^{n}
+                \binom{n}{k}B_{n-k}x^{k}
+            \end{equation}
+            We can then flip the indexing to obtain the following:
+            \begin{align}
+                B_{n}(x)&=
+                \sum_{k=0}^{n}\binom{n}{k}B_{n-k}x^{k}\\
+                &=\sum_{k=0}^{n}\binom{n}{n-k}
+                B_{n-(n-k)}x^{n-k}\\
+                &=\sum_{k=0}^{n}\binom{n}{n}B_{k}x^{n-k}
+            \end{align}
+            This then gives us a recurrence relation that can be
+            used to define the Bernoulli numbers, without first
+            defining the Bernoulli polynomials. Let
+            $B_{0}=1$, $B_{1}=-\frac{1}{2}$, and then for
+            $n\geq{2}$, define:
+            \begin{equation}
+                B_{n}=\sum_{k=0}^{n}
+                \binom{n}{k}B_{k}
+            \end{equation}
+            Replacing $n$ with $n+1$, we get:
+            \begin{equation}
+                B_{n+1}=\sum_{k=0}^{n+1}
+                \binom{n}{k}B_{k}
+                =\sum_{k=0}^{n}
+                \binom{n}{k}B_{k}+B_{n+1}
+            \end{equation}
+            From this we can conclude:
+            \begin{equation}
+                \sum_{k=0}^{n}\binom{n+1}{k}B_{k}=0
+            \end{equation}
+            So, finally:
+            \begin{equation}
+                B_{n}=-\frac{1}{n+1}\sum_{k=0}^{n-1}
+                \binom{n+1}{k}B_{k}
+            \end{equation}
+        \subsection{Generating Functions}
+            A generating function for a sequence is a function
+            whose power series has the terms of the sequence
+            for its coefficients.
+            \begin{equation}
+                \frac{1}{1-x}=1+x+x^{2}+\cdots
+            \end{equation}
+            The coefficients of this power series are all one,
+            and so this is a generating function for the sequence
+            $a:\mathbb{N}\rightarrow\mathbb{R}$ defined by
+            $a_{n}=1$. We can differentiate this:
+            \begin{equation}
+                \frac{1}{(1-x)^{2}}=1+2x+3x^{2}+\cdots
+            \end{equation}
+            So this is a generating function for
+            $1,2,3,4,\dots$. As another example:
+            \begin{equation}
+                \exp(2x)=1+2x+\frac{2^{2}}{2!}x^{2}
+                +\frac{2^{3}}{3!}x^{3}+\cdots
+            \end{equation}
+            And so $\exp(2x)$ is a generating function for the
+            sequence $a:\mathbb{N}\rightarrow\mathbb{R}$ defined by
+            $a_{n}=\frac{2^{n}}{n!}$. Moreover, since the
+            coefficients of Taylor series for a function are
+            uniquely defined by the function:
+            \begin{equation}
+                \exp(2x)=\sum_{n=0}^{\infty}a_{n}x^{n}
+                \Leftrightarrow{a}_{n}=\frac{2^{n}}{n!}
+            \end{equation}
+            Using this, we can obtain:
+            \begin{align}
+                \frac{\diff}{\diff{x}}\Big(\exp(2x)\Big)
+                &=2\exp(2x)\\
+                &=\sum_{n=1}^{\infty}na_{n}x^{n-1}\\
+                &=\sum_{n=0}^{\infty}(n+1)a_{n+1}x^{n}\\
+                &=2\sum_{n=0}^{\infty}a_{n}x^{n}
+            \end{align}
+            Since two power series are equal if and only if there
+            coefficients are equal, we obtain the following:
+            \begin{equation}
+                a_{n+1}=\frac{2}{n+1}a_{n}
+            \end{equation}
+            Recurrence relations like this are often why it is
+            useful to study generating functions. We now study
+            the generating functions of the Bernoulli Polynomial.
+            \begin{equation}
+                F(x,t)=\sum_{n=0}^{\infty}
+                \frac{B_{n}(x)}{n!}t^{n}
+            \end{equation}
+            Let's now derive what $F$ is. Differentiating with
+            respect to $x$, we get:
+            \begin{align}
+                \frac{\partial{F}}{\partial{x}}
+                &=\sum_{n=1}^{\infty}
+                \frac{B_{n}'(x)}{n!}t^{n}\\
+                &=\sum_{n=1}^{\infty}
+                    \frac{nB_{n-1}(x)}{n!}t^{n}\\
+                &=t\sum_{n=1}^{\infty}
+                    \frac{B_{n-1}(x)}{(n-1)!}t^{n-1}
+                &=t\sum_{n=0}^{\infty}
+                    \frac{B_{n}(x)}{n!}t^{n}\\
+                &=tF(x,t)
+            \end{align}
+            So $F$ satisfies the equation $F_{x}(x,t)=tF(x,t)$.
+            Thus there is some function $C(t)$ such that:
+            \begin{equation}
+                F(x,t)=C(t)\exp(xt)
+            \end{equation}
+            Where the $C(t)$ is obtained as a \textit{function}
+            of integration, rather than a constant of integration,
+            since we are taking partial derivatives. Integrating,
+            we have:
+            \begin{align}
+                \int_{0}^{1}F(x,t)\diff{x}
+                &=\int_{0}^{1}\sum_{n=0}^{\infty}
+                    \frac{B_{n}(x)}{n!}t^{n}\diff{x}\\
+                &=\sum_{n=0}^{\infty}\frac{t^{n}}{n!}
+                \int_{0}^{1}B_{n}(x)\diff{x}\\
+                &=1
+            \end{align}
+            This is because, for $n\geq{1}$,
+            $\int_{0}^{1}B_{n}(x)\diff{x}=1$. Thus, we have:
+            \begin{align}
+                \int_{0}^{1}C(t)\exp(xt)\diff{x}&=
+                C(t)\Big[\frac{1}{t}\exp(xt)\Big]_{x=0}^{1}\\
+                &=\frac{C(t)}{t}\Big[\exp(t)-1\Big]\\
+                &=1
+            \end{align}
+            And therefore:
+            \begin{equation}
+                C(t)=\frac{t}{\exp(t)-1}
+            \end{equation}
+            Thus, the generating function for the Bernoulli
+            polynomials is:
+            \begin{equation}
+                \sum_{n=0}^{\infty}
+                \frac{B_{n}(x)}{n!}t^{n}
+                =\frac{t}{\exp(t)-1}\exp(xt)
+            \end{equation}
+            This can be used to show the following:
+            \begin{align}
+                \frac{t}{\exp(t)-1}
+                \exp\big((1-x)t\big)
+                &=\sum_{n=0}^{\infty}
+                    \frac{B_{n}(1-x)}{n!}t^{}\\
+                &=\frac{t}{\exp(t)-1}\exp(t)\exp(-xt)\\
+                &=\frac{t}{1-\exp(-t)}\exp(-xt)\\
+                &=\frac{(-t)}{\exp(-t)-1}\exp(x(-t))\\
+                &=\sum_{n=0}^{\infty}(-1)^{n}
+                \frac{B_{n}(1-x)}{n!}t^{n}
+            \end{align}
+            Comparing coefficients, we get:
+            \begin{equation}
+                B_{n}(x)=(-1)^{n}B_{n}(1-x)
+            \end{equation}
+            From this we see that, for $n\geq{0}$, and for all
+            odd $n$, $b_{n}=0$, where $b_{n}$ is the
+            $n^{th}$ Bernoulli number. We can use this to simplify
+            the recurrence relation for $b_{n}$:
+            \begin{align}
+                b_{n}&=\frac{-1}{n+1}
+                \sum_{k=0}^{n-1}\binom{n+1}{k}b_{k}\\
+                b_{2n}&=\frac{-1}{2n+1}
+                \sum_{k=0}^{2n-1}\binom{2n+1}{k}b_{k}\\
+                &=\frac{-1}{2n+1}\sum_{k=0}^{n-1}
+                    \binom{2n+1}{2k}b_{2k}
+                    -\frac{1}{2n+1}\binom{2n+1}{1}B_{1}\\
+                    &=\frac{1}{2}-\frac{1}{2n+1}
+                    \sum_{k=0}^{n-1}\binom{2n+1}{2k}b_{2k}
+            \end{align}
+            Returning to the generating function, evaluate
+            $F(x,t)$ at $x=1$. We get:
+            \begin{align}
+                \sum_{n=1}^{\infty}\frac{B_{n}(1)}{n!}t^{n}\\
+                &=\frac{1}{2}t+\sum_{n=0}^{\infty}
+                \frac{B_{2n}}{(2n)!}t^{2n}\\
+                &=\frac{t\exp(t)}{\exp(t)-1)}
+            \end{align}
+            From this, we get:
+            \begin{equation}
+                \sum_{n=0}^{\infty}\frac{B_{2n}}{(2n)!}t^{2n}
+                =-\frac{t}{2}+\frac{t\exp(t)}{\exp(t)-1}
+            \end{equation}
+            Which is an even function, quite bizarrely.
+            We can use this to get:
+            \begin{equation}
+                \sum_{n=0}^{\infty}
+                \frac{2^{2n}b_{2n}}{(2n)!}i^{2n}t^{2n}
+                =-it\frac{\exp(it)+\exp(-it)}{\exp(it)-\exp(-it)}
+            \end{equation}
+            Using Euler's Formula, this last part becomes
+            $t\cot(t)$. So, we have:
+            \begin{equation}
+                t\cot(t)=\sum_{n=0}^{\infty}
+                (-1)^{n}\frac{2^{2n}b_{2n}}{(2n)!}t^{2n}
+            \end{equation}
+            From this, we obtain:
+            \begin{equation}
+                \cot(t)=\frac{1}{t}+\sum_{n=0}^{\infty}
+                (-1)^{n}\frac{2^{2n}b_{2n}}{(2n)!}t^{2n-1}
+            \end{equation}
+            But noting that $\cot(t)-2\cot(t)=\tan(t)$, we can
+            obtain the Taylor series for $\tan$:
+            \begin{equation}
+                \tan(t)=\sum_{n=0}^{\infty}
+                (-1)^{n+1}\frac{2^{2n}b_{2n}}{(2n)!}(2^{n}-1)t^{2n-1}
+            \end{equation}
+            But the coefficients of the Taylor series of $\tan$
+            are the derivatives of $\tan$ evaluated at the origin,
+            and divided by $n!$. And this is always positive. From
+            this we conclude that $b_{2n}$ oscillates from positive
+            to negative as $n$ increasing to cancel out the
+            $(-1)^{n+1}$ term.
+    \section{Lecture 5}
+        \begin{align}
+            \int{Ci(x)}\diff{x}&=xCi(x)-\sin(x)+c\\
+            \int_{0}^{\infty}Ci(x)\diff{x}
+            &=\big[xCi(x)-\sin(x)\big]_{0}^{\infty}\\
+            &=\underset{b\rightarrow\infty}{\lim}
+                \big(xCi(x)-\sin(x)\big)-
+                \underset{a\rightarrow{0}}{\lim}
+                \big(xCi(x)-\sin(x)\big)
+        \end{align}
+        But:
+        \begin{align}
+            Ci'(x)&=\frac{\cos(x)}{x}\\
+                &=\frac{1}{x}\sum_{n=0}^{\infty}
+                \frac{(-1)^{n}}{(2n)!}x^{2n}\\
+            Ci(x)&=\ln(x)+\sum_{n=1}^{\infty}
+            \frac{(-1)^{n}}{2n(2n)!}x^{2n}+\gamma\\
+            \underset{a\rightarrow{0}}{\lim}(xCi(x)-\sin(x))&=0\\
+        \end{align}
+        Using the asymptotic expansion:
+        \begin{equation}
+            Ci(x)=\frac{1}{x}\sin(x)-\frac{1}{x^{2}}\cos(x)+\cdots
+        \end{equation}
+        Back to Bernoulli Polynomials.
+        \begin{align}
+            B_{0}(x)&=1\\
+            B_{n}'(x)&=nB_{n-1}(x)\\
+            \int_{0}^{1}B_{n}(x)\diff{x}&=0
+        \end{align}
+        \subsection{Half-Range Fourier Series}
+            On the interval $(0, L)$, and if $g$ is piece-wise smooth
+            and with bounded derivative, then:
+            \begin{align}
+                f(x)&=\sum_{n=1}^{\infty}b_{n}\sin(\frac{n\pi}{L}x)\\
+                &=\frac{a_{0}}{2}+\sum_{n=1}^{\infty}
+                    a_{n}\cos(\frac{n\pi}{L}x)
+            \end{align}
+            Where the constant's $a_{n}$ and $b_{n}$ are determinded by:
+            \begin{align}
+                a_{n}&=\frac{2}{L}
+                    \int_{0}^{L}f(x)\cos(\frac{n\pi}{L}x)\diff{x}\\
+                b_{n}&=
+                    \int_{0}^{L}f(x)\sin(\frac{n\pi}{L}x)\diff{x}
+            \end{align}
+            The Fourier series converges to $f$ everywhere except at the
+            jumps, where it converges to the middle of the jumps.
+            \begin{lexample}
+                Find the Fourier Sine Series for $f(x)=x-1/2$ on $(0,1)$.
+                \begin{align}
+                    f(x)&=\sum_{n=1}^{\infty}b_{n}\sin(n\pi{x})\\
+                    b_{n}&=2\int_{0}^{1}f(x)\sin(n\pi{x})\diff{x}\\
+                    &=2\int_{0}^{1}(x-\frac{1}{2})\sin(n\pi{x})\diff{x}\\
+                    &=\Big[
+                        \minus{2}\frac{x-\frac{1}{2}}{n\pi}\cos(n\pi{x}
+                    \Big]_{0}^{1}+
+                    \int_{0}^{1}\frac{1}{n\pi}\cos(n\pi{x})\diff{x}\\
+                    &=\Big[
+                        \frac{1-2x}{n\pi}\cos(n\pi{x})+
+                        \frac{1}{n^{2}\pi^{2}}\sin(n\pi{x})
+                    ]_{0}^{1}\\
+                    &=\minus\frac{1}{n\pi}(1+\cos(n\pi))\\
+                    &==\minus\frac{1}{n\pi}(1+(-1)^{n})
+                \end{align}
+                If we plot this we will see some overshoot at the endpoints.
+                This is a result of something called Gibb's Phenomenon.
+            \end{lexample}
+            Find the Fourier Cosine Series of $f(x)=\cos(ax)$ on
+            $(0,\pi)$, where $a\in(0,1)$.
+            \begin{align}
+                \cos(ax)&=\frac{a_{0}}{2}+
+                    \sum_{n=1}^{\infty}a_{n}\cos(nx)\\
+                a_{n}&=\frac{2}{\pi}
+                    \int_{0}^{\pi}\cos(ax)\cos(n\pi{x})\diff{x}\\
+                    &=\frac{2}{\pi}
+                        \frac{a(-1)^{n}}{a^{2}-n^{2}}\sin(\pi{a})
+            \end{align}
+            Dividing off by the $\sin(a\pi)$, we get:
+            \begin{align}
+                \frac{\cos(ax)}{\sin(a\pi)}
+                &=\frac{1}{a\pi}+\frac{2a}{\pi}
+                    \sum_{n=1}^{\infty}\frac{(-1)^{n}}{a^{2}-n^{2}}
+                    \cos(nx)\\
+                \cot(a\pi)&=
+                    \frac{1}{a\pi}+\frac{2a}{\pi}
+                    \sum_{n=1}^{\infty}\frac{1}{a^{2}-n^{2}}
+            \end{align}
+            Bringing the first term over to the left and then integrating,
+            we get:
+            \begin{align}
+                \int_{0}^{x}\big(\cos(a\pi)-\frac{1}{a\pi}\big)\diff{a}
+                &=\int_{0}^{x}\frac{2a}{\pi}\sum_{n=1}^{\infty}
+                    \frac{1}{a^{2}-n^{2}}\\
+                &=\frac{2}{\pi}\sum_{n=1}^{\infty}\int_{0}^{x}
+                    \frac{a}{a^{2}-n^{2}}\diff{a}\\
+                &=\frac{1}{\pi}\sum_{n=1}^{\infty}
+                    \ln\Big[n^{2}-a^{2}\Big]_{0}^{x}\\
+                &=\frac{1}{\pi}\sum_{n=1}^{\infty}
+                    \ln\Big(\frac{n^{2}-x^{2}}{n^{2}}\Big)\\
+                \int_{0}^{x}\big(\cos(a\pi)-\frac{1}{a\pi}\big)\diff{a}
+                &=\frac{1}{\pi}\Big[
+                    \ln\big(\sin(\pi{a})\big)-\ln(a)
+                \Big]_{0}^{x}\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{x}\Big)-
+                    \underset{a\rightarrow{0}^{+}}{\lim}
+                    \ln\Big(\frac{\sin(\pi{a})}{a}\Big)\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{x}\Big)-
+                    \frac{1}{\pi}\ln(\pi)\\
+                &=\frac{1}{\pi}\ln\Big(\frac{\sin(\pi{x})}{\pi{x}}\Big)
+            \end{align}
+            Thus, we have:
+            \begin{align}
+                \ln\Big(\frac{\sin(\pi{x})}{\pi{x}}\Big)
+                &=\sum_{n=1}^{\infty}
+                    \ln\Big(\frac{n^{2}-x^{2}}{n^{2}}\Big)\\
+                \frac{\sin(\pi{x})}{\pi{x}}
+                &=\prod_{n=1}^{\infty}\Big(1-\frac{x^{2}}{n^{2}}\Big)\\
+                &=1-x^{2}\sum_{n=1}^{\infty}\frac{1}{n^{2}}+\cdots
+            \end{align}
+            We can use the Taylor expansion for $\sin(\pi{x})$ as:
+            \begin{align}
+                \frac{\sin(\pi{x})}{\pi{x}}&=
+                \frac{1}{\pi{x}}\Big(\sum_{n=0}^{\infty}
+                    \frac{(-1)^{n}}{(2n+1)!}x^{2n+1}\Big)\\
+                &=1-\frac{\pi^{2}}{6}x^{2}+\cdots
+            \end{align}
+            Subtracting 1 and dividing by $x^{2}$, we get:
+            \begin{equation}
+                \frac{\pi^{2}}{6}+\cdots
+                =\sum_{n=1}^{\infty}\frac{1}{n^{2}}+\cdots
+            \end{equation}
+            Evaluating at $x=0$, we get:
+            \begin{equation}
+                \sum_{n=1}^{\infty}\frac{1}{n^{2}}=\frac{\pi^{2}}{6}
+            \end{equation}
+            Now, to get the Fourier Sine series of the Bernoulli polynomials.
+            We have the first one:
+            \begin{equation}
+                B_{1}(x)=\minus\sum_{n=1}^{\infty}\frac{1}{n\pi}\sin(2n\pi{x})
+            \end{equation}
+            Using the fact that $B_{n}'(x)=nB_{n-1}(x)$ we can obtain the
+            Fourier Sine series for the other polynomials by induction.
+            Integrating across, we get:
+            \begin{equation}
+                B_{2}(x)=\sum_{n=1}^{\infty}\frac{4}{(2\pi{n})^{2}}
+                    \cos(2n\pi{x})
+            \end{equation}
+            This is only true on the interval $x\in(0,1)$. Since 
+            $B_{n}$ is a polynomial it must diverge as
+            $x\rightarrow\pm\infty$, and thus cannot be periodic. By
+            induction, we obtain the rest:
+            \begin{align}
+                B_{2k}(x)&=
+                    2\sum_{n=1}^{\infty}
+                        \frac{(-1)^{n}(2k)!}{(2\pi{n})^{2k}}\cos(2n\pi{x})\\
+                B_{2k+1}(x)&=
+                    2\sum_{n=1}^{\infty}
+                        \frac{(-1)^{n}(2k+1)!}{(2\pi{n})^{2k+1}}
+                            \sin(2n\pi{x})\\
+            \end{align}
+            We can use this for the even Bernoulli numbers:
+            \begin{equation}
+                |b_{2k}|=2(2k)!\sum_{n=1}^{\infty}
+                    \frac{1}{(2\pi)^{2k}}\frac{1}{n^{2k}}
+            \end{equation}
+            From this, we have:
+            \begin{equation}
+                \sum_{n=1}^{\infty}\frac{1}{n^{2k}}
+                =\frac{(2\pi)^{2k}|B_{2k}|}{2(2k)!}
+            \end{equation}
+            Stuff about the Riemann Zeta function. Critical strip,
+            trivial zeros, prime number theorem.
+            \begin{align}
+                |B_{2k}(x)|&=
+                    \Big|2(-1)^{k+1}(2k)!\sum_{n=1}^{\infty}
+                    \frac{\cos(2n\pi{x})}{(2n\pi)^{2k}}\Big|\\
+                    &\leq2(2k)!\sum_{n=1}^{\infty}\frac{1}{(2\pi{n})^{2k}}\\
+                    &=|b_{2k}|
+            \end{align}
+            So the Bernoulli polynomials attain their maximum or minimum
+            at the origin.
+    \section{Lecture 6}
+        We have obtained the following power series:
+        \begin{align}
+            \tan(x)&=\sum_{n=1}^{\infty}
+                \frac{2^{2n}(2^{2n}-1)|B_{2n}|}{(2n)!}x^{2n-1}\\
+            \sec(x)&=\sum_{n=0}^{\infty}
+                \frac{|A_{2n}|}{(2n)!}x^{2n}
+        \end{align}
+        Stuff about Boustrophedon transform of 1,0,0,0,...
+        Using this to expand $\tan$ and $\sec$. Zigzag numbers,
+        up/down numbers. $\tan+\sec$ is the sum of the
+        $n^{th}$ zigzag over $n!$, with $x^{n}$.
+        Some stuff about integration by parts:
+        \begin{align}
+            \int_{0}^{1}f(x)\diff{x}
+            &=xf(x)\big|_{0}^{1}-\int_{0}^{1}xf'(x)\diff{x}\\
+            &=xf(x)\big|_{0}^{1}-\int_{0}^{1}
+                f'(x)\diff\big(\frac{1}{2}x^{2}\big)\\
+            &=\Big[xf(x)-\frac{1}{2}x^{2}f'(x)\Big]_{0}^{1}+
+                \int_{0}^{1}f''(x)\diff\big(\frac{1}{6}x^{3}\big)\\
+            &=\Big[
+                xf(x)-\frac{1}{2}x^{2}f'(x)+\frac{1}{6}x^{3}f''(x)
+            \Big]_{0}^{1}-\int_{0}^{1}\frac{1}{6}x^{3}f'''(x)\diff{x}
+        \end{align}
+        And in general, if $f$ is $N$ times differentiable:
+        \begin{equation}
+            \int_{0}^{1}f(x)\diff{x}=
+            \sum_{n=0}^{N}\frac{(\minus{1})^{n}f^{(n)}(x)}{(n+1)!}x^{n+1}
+                \Big|_{0}^{1}-\frac{(\minus{1})^{N}}{N!}\int_{0}^{1}
+                    f^{(N)}(x)x^{N}\diff{x}
+        \end{equation}
+        Instead of using a monomial like $x^{n}$ we can try with the
+        Bernoulli polynomials $B_{n}(x)$. We obtain:
+        \begin{equation}
+            \int_{0}^{1}f(x)\diff{x}=
+                \sum_{n=0}^{N}\frac{(-1)^{n}f^(n)(x)}{(n+1)!}B_{n+1}(x)
+                \Big|_{0}^{1}-\frac{(-1)^{N}}{N!}\int_{0}^{1}
+                B_{N}(x)f^{(N)}(x)\diff{x}
+        \end{equation}
+        But for $n>1$, $B_{2n-1}(0)=0$, and also
+        $B_{2n-1}(1)=0$. So most of these terms are zero, and we can
+        simplify our sum as follows:
+        \begin{equation}
+            \int_{0}^{1}f(x)\diff{x}=
+            \Big[(x-\frac{1}{2})f(x)\Big]_{0}^{1}-
+            \sum_{n=0}^{N/2}\frac{f^{(2n)}(x)}{(2n+2)!}B_{2n+2}(x)
+                \Big|_{0}^{1}+\frac{f^{(N)}(x)}{(N)!}B_{N}(x)\diff{x}
+        \end{equation}
+        But also, for all $n\in\mathbb{N}$, $B_{2n}(0)=B_{2n}(1)$. So we can
+        simplify further:
+        \begin{equation}
+            \int_{0}^{1}f(x)\diff{x}=\frac{1}{2}(f(0)+f(1))-
+            \sum_{n=1}^{m}b_{2n}\frac{f^{(2n-1)}(1)-f^{(2n-1)}(0)}{(2n)!}
+            +\frac{1}{(2m)!}\int_{0}^{1}B_{2m}(x)f^{(2m)}(x)\diff{x}
+        \end{equation}
+        Apply this to the function $f(x+1)$. Since this is just a translate,
+        the derivatives don't change. Replace $B_{2n}(x)$ with its
+        periodic extension $\tilde{B}_{2n}(x)$. Do this for $f(x+N)$ and
+        then add the results, obtaining a telescoping series. You obtain:
+        \begin{equation}
+            \begin{split}
+                \int_{1}^{n}f(x)\diff{x}
+                    =&\frac{1}{2}f(1)+f(2)+f(3)+
+                        \cdots{f}(N-1)+\frac{1}{2}f(N)\\
+                        &+\frac{B_{2}}{2!}(f'(N)-f'(1))+
+                        \frac{B_{4}}{4!}(f'''(N)-f'''(1))+\\
+                        &+\frac{B_{6}}{6!}(f^{(5)}(N)-f^{(5)}(1))+\cdots+
+                        \frac{B_{2m}}{(2m)!}(f^{(2m-1)}(N)\\
+                        &+f^{(2m-1)}(1))+\frac{1}{(2m)!}\int_{1}^{N}
+                        \tilde{B}_{2m}(x)f^{(2m)}(x)\diff{x}
+            \end{split}
+        \end{equation}
+        This is one form of the Euler-Maclaurin summation formula. The sum
+        of the first $N$ terms, taking into account the factor of one half
+        that appears in the first and last term, is the trapezoidal
+        approximation for the integral of $f$ on the interval $[1,n]$. The
+        remainder can thus be thought of as the correction terms to this
+        approximation.
+        \begin{lexample}
+            Let $f(x)=\frac{1}{x^{2}}$ and apply the Euler-Maclaurin
+            summation formula. We get:
+            \begin{equation}
+                \begin{split}
+                    \frac{\pi^{2}}{6}-\sum_{k=1}^{n}\frac{1}{k^{2}}
+                    =\frac{1}{n}+
+                        &\frac{1}{2n^{2}}+\frac{B_{2}}{n^{3}}+
+                        \frac{B_{4}}{n^{5}}+\cdots+
+                        \frac{B_{2m}}{n^{2m+1}}\\
+                        &-(2m+1)\int_{n}^{\infty}
+                            \tilde{B}_{2m}(x)\frac{1}{x^{2m+2}}\diff{x}
+                \end{split}
+            \end{equation}
+        \end{lexample}
+        We know that the Bernoulli polynomials obtain their maxima and
+        minima on the interval $[0,1]$ at the endpoints. Using this
+        we obtain an upper bound for the error:
+        \begin{align}
+            \Big|(2m+1)\int_{n}^{\infty}
+                \frac{\tilde{B}_{2m}(x)}{x^{2m+2}}\diff{x}\Big|
+                &\leq(2m+1)\int_{n}^{\infty}
+                    \big|\frac{\tilde{B}_{2m}(x)}{x^{2m+2}}\big|\diff{x}\\
+                &\leq(2m+1)|B_{2m}|\int_{n}^{\infty}
+                    \frac{1}{x^{2m+2}}\diff{x}\\
+                &=\frac{|B_{2m}|}{n^{2m+1}}
+        \end{align}
+        If one were to add the terms in the series, at least one thousand
+        terms would be needed to guarantee accuracy of 3 decimals. Using this
+        series we can sum the first 10, and then use the Bernoulli numbers
+        expansion (The first three terms) to get 8 decimals of accuracy.
+        This asymptotic expansion will eventually get bad. These Bernoulli
+        numbers get large, and once they're larger than $x^{2m}$, adding
+        more terms makes the approximation worse. Indeed, while adding
+        60 terms can get the error down to $10^{-20}$, adding 100 terms yields
+        an error of well over one hundred trillion.
+        \begin{lexample}
+            Let's use the Euler-Maclaurin formula on $\ln(x)$.
+            \begin{align}
+                \int_{1}^{n}\ln(x)\diff{x}
+                &=\big[x\ln(x)-x\big]_{1}^{n}\\
+                \nonumber
+                &=\frac{1}{2}\ln(1)+\ln(2)+\cdots+\frac{1}{2}\ln(n)
+                    +\sum_{k=1}^{n}\frac{B_{2k}}{(2k)!}
+                    \Big[
+                        \frac{(2k-2)!}{1^{2k-1}}-\frac{(2k-2)!}{n^{2k-1}}
+                    \Big]\\
+                &\quad\quad
+                    -\frac{1}{(2m)!}\int_{1}^{n}\tilde{B}_{2m}(x)
+                    \frac{(2m-1)!}{x^{2m}}\diff{x}
+            \end{align}
+            Now $\ln(1)=0$, and $\frac{1}{2}\ln(n)=\ln(n)-\frac{1}{2}\ln(n)$.
+            But $\ln(1)+\cdot+\ln(n)=\ln(n!)$. So we can write:
+            \begin{align}
+                \nonumber
+                n\ln(n)-n&=\ln(n!)-\frac{1}{2}\ln(n)\\
+                &\quad
+                    +\sum_{k=1}^{n}\frac{B_{2k}}{2k(2k-1)}
+                    \Big[1-\frac{1}{n^{2k-1}}\Big]
+                    -\frac{1}{2m}\int_{1}^{n}
+                    \frac{\tilde{B}_{2m}(x)}{x^{2m}}\diff{x}
+            \end{align}
+            Using this we get Sterling's Approximation for $n!$.
+        \end{lexample}
+    \section{The Gamma Function}
+        The Gamma Function extends the factorial function to
+        non-integer values. We've seen the following formula:
+        \begin{equation}
+            \sum_{k=0}^{n}k=\frac{n(n+1)}{2}
+        \end{equation}
+        We can use this to extend the sum to have a meaning for
+        non-integer values. Similarly, the Harmonic numbers can be
+        shown to obey the following equation:
+        \begin{equation}
+            H_{n}=\int_{0}^{1}\frac{1-^{n}}{1-t}\diff{t}
+        \end{equation}
+        However, this equation is well defined for any real number,
+        and we can use this to extend the Harmonic numbers to any
+        real number. In a similar manner, we can extend the factorial
+        function by considering various formulas that it obeys. We have:
+        \begin{equation}
+            (m+n)!=m!(m+1)(m+2)\cdots(m+n)=n!(n+1)(n+2)\cdots(n+m)
+        \end{equation}
+        Solving for $m$, we obtain:
+        \begin{equation}
+            m!=\frac{n!(n+1)\cdots(n+m)}{(m+1)(m+2)\cdots(m+n)}
+        \end{equation}
+        The denominator of this equation relies on the fact that
+        $m$ is an integer. So let's try to rewrite this so that it makes
+        sense even if $m$ is a non-integer value. Taking out an $n$ from
+        each product, we can rewrite this as:
+        \begin{equation}
+            m!=n^{m}n!
+                \frac{(1+\frac{1}{n})(1+\frac{2}{n})\cdots(1+\frac{m}{n})}
+                     {(m+1)(m+2)\cdots(m+n)}
+        \end{equation}
+        While this looks like it depends on $n$, it doesn't, since it is
+        equal to $m!$ for all $n$. Thus, taking the limit as
+        $n\rightarrow\infty$, we obtain:
+        \begin{equation}
+            m!=\underset{n\rightarrow\infty}{\lim}n^{m}n!
+                \frac{(1+\frac{1}{n})(1+\frac{2}{n})\cdots(1+\frac{m}{n})}
+                     {(m+1)(m+2)\cdots(m+n)}
+        \end{equation}
+        This makes sense for all real $x$, with the exception of
+        $x=\minus{1},\minus{2},\dots$ since we'd get division by zero.
+        Thus, we can define the following:
+        \begin{equation}
+            x!=\underset{n\rightarrow\infty}{\lim}n^{x}n!
+                \frac{(1+\frac{1}{n})(1+\frac{2}{n})\cdots(1+\frac{x}{n})}
+                     {(x+1)(x+2)\cdots(x+n)}
+        \end{equation}
+        While the limit exists for all $x\in\mathbb{N}$, we still need to
+        verify that it exists for $x\ne\minus{1},\minus{2},\dots$ for this
+        to be a good definition. Define the following:
+        \begin{equation}
+            a_{n}(x)=n^{x}n!
+                \frac{(1+\frac{1}{n})(1+\frac{2}{n})\cdots(1+\frac{x}{n})}
+                     {(x+1)(x+2)\cdots(x+n)}
+        \end{equation}
+        Then, for $x\in(-1,0]$, $a_{n}(x)>0$ for all $n\in\mathbb{N}$.
+        But also:
+        \begin{equation}
+            \frac{a_{n+1}(x)}{a_{n}(x)}=
+            \frac{(n+1)^{x}}{x^{x}}\frac{n+1}{x+n+1}
+        \end{equation}
+        And therefore:
+        \begin{equation}
+            \ln\Big(\frac{a_{n+1}(x)}{a_{n}(x)}\Big)=
+            x\ln(n+1)+\ln(n+1)-x\ln(n)-\ln(x+n+1)
+        \end{equation}
+        Let $f_{n}(x)=\ln(a_{n+1}(x)/a_{n}(x))$. Then:
+        \begin{align}
+            f_{n}(0)&=0\\
+            f_{n}(-1)&=0\\
+            f_{n}'(x)&=\ln(n+1)-\ln(n)-\frac{1}{x+n+1}\\
+            f_{n}''(x)&=\frac{1}{(x+n+1)^{2}}
+        \end{align}
+        And thus, for all $n\in\mathbb{N}$, $f_{n}''(x)>0$.
+        This implies, by using Rolle's Theorem and the extreme value
+        theorem, that $f_{n}(x)$ is negative for all $x\in(-1,0)$.
+        Thus:
+        \begin{equation}
+            \frac{a_{n+1}(x)}{a_{n}(x)}<1
+            \quad\quad\quad
+            \minus{1}<x<0
+        \end{equation}
+        Therefore $a_{n}(x)$ is a monotonically decreasing sequence
+        that is bounded below, and therefore converges. Now we show for
+        positive $x$ that $x!$ is well defined. We start on the interval
+        $(0,1)$ by letting $x\in(\minus{1},0)$, and considering
+        $a_{n}(x+1)$:
+        \begin{align}
+            a_{n}(x+1)
+            &=\frac{n!n^{x+1}}{(x+2)(x+3)\cdots(x+n+1)}\\
+            &=\frac{n!n^{x}}{(x+1)(x+2)\cdots(x+n)}
+                \frac{n(x+1)}{x+n+1}\\
+            &=(x+1)a_{n}(x)\frac{n}{x+n+1}
+        \end{align}
+        But in the limit as $n\rightarrow\infty$, the quotient on the right
+        tends to one. Thus, we have that $(x+1)!$ is well defined for all
+        $x\in(-1,0)$, meaning $x!$ is well defined for all
+        $x\in(0,1)$, and we have that:
+        \begin{equation}
+            \label{eqn:Special_Functions_Factorial_of_x_in_minus_1_0}
+            (x+1)!=(x+1)x!
+            \quad\quad
+            \minus{1}<x<0
+        \end{equation}
+        By induction we have that $x!$ is well defined for all
+        $x\ne\minus{1},\minus{2},\dots$ and that
+        Eqn.~\ref{eqn:Special_Functions_Factorial_of_x_in_minus_1_0}
+        holds for all such $x$. Moreover, for
+        $x\ne0,\minus{1},\minus{2},\dots$ we have:
+        \begin{equation}
+            (x-1)!=\frac{x!}{x}
+        \end{equation}
+        Another way to show that $x!$ is well defined is as follows:
+        \begin{align}
+            \ln\big(a_{n}(x)\big)
+            &=\ln\Big(\frac{n!n^{x}}{(x+1)(x+2)\cdots(x+n)}\Big)\\
+            &=\ln\Big(
+                \frac{n^{x}}{(x+1)(\frac{x}{2}+1)\cdots(\frac{x}{n}+1)}
+            \Big)\\
+            &=x\ln(x)-\sum_{k=1}^{n}\ln\Big(1+\frac{x}{k}\Big)\\
+            &=x\sum_{k=1}^{n}\Big(\ln(k+1)-\ln(k)\Big)
+                -x\sum_{k=1}^{n}\ln\Big(1+\frac{x}{k}\Big)
+                -x\Big[\ln(n+1)-\ln(n)\Big]\\
+            &=\sum_{k=1}^{n}\Big[
+                x\ln\Big(1+\frac{1}{k}\Big)-
+                \ln\Big(1+\frac{x}{k}\Big)\Big]-x\ln\Big(\frac{n+1}{n}\Big)
+        \end{align}
+        The final logarithm on the right tends to zero as
+        $n\rightarrow\infty$, so we need only be concerned with the sum.
+        We can prove the convergence of this sum by invoking the limit
+        comparison test.
+        \begin{theorem}[Limit Comparison Test]
+            If $a_{n}$, $b_{n}$ are positive sequences such that
+            the limit of $a_{n}/b_{n}$ exists and and
+            $\sum_{n=1}^{\infty}b_{n}$ converges, then
+            $\sum_{n=1}^{\infty}a_{n}$ converges.
+        \end{theorem}
+        Looking at the first two terms of the MacLaurin series for
+        $\ln(1+x)$, we choose for the sequence $b_{k}$ the following:
+        \begin{align}
+            x\ln(1+\frac{1}{k})-\ln(1+\frac{x}{k})
+            &\approx
+            x(\frac{1}{k}-\frac{1}{2k^{2}})
+            -(\frac{x}{k}-\frac{x^{2}}{2k^{2}})\\
+            &=\frac{x^{2}-x}{2k^{2}}
+        \end{align}
+        We choose this for the $b_{k}$'s.
+        \begin{align}
+            A_{k}&=
+            \Big|x\ln\big(1+\frac{1}{k}\big)-\ln\big(1+\frac{x}{k}\big)\Big|\\
+            B_{k}&=\frac{|x^{2}-x|}{2k^{2}}
+        \end{align}
+        To find the limit of $A_{k}/B_{k}$, let $s=1/k$. Then:
+        \begin{align}
+            \underset{k\rightarrow\infty}{\lim}\frac{A_{k}}{B_{k}}
+            &=\underset{s\rightarrow{0}^{+}}{\lim}
+            \frac{|x\ln(1+s)-\ln(1+sx)|}{s^{2}}\\
+            &\underset{s\rightarrow{0}^{+}}{\lim}
+            \frac{\big|\frac{x}{1+s}-\frac{x}{1+sx}\big|}{2s}\\
+            &=\frac{|x^{2}-x|}{2}
+        \end{align}
+        Where we have invoked L'H\"{o}pital's Rule and some algebra.
+        But:
+        \begin{equation}
+            \sum_{k=1}^{\infty}B_{k}=
+            \sum_{k=1}^{\infty}\frac{|x^{2}-x|}{2k^{2}}
+        \end{equation}
+        And this converges. Therefore the limit of $\ln(a_{n}(x))$ exists
+        and:
+        \begin{align}
+            \ln(x!)&=\sum_{k=1}^{\infty}\Big[
+                x\ln\big(1+\frac{1}{k}\big)-\ln\big(1+\frac{x}{k}\big)\Big]\\
+            &=\sum_{k=1}^{\infty}
+                \ln\Big(
+                    \frac{\big(1+\frac{1}{k}\big)^{x}}{1+\frac{x}{k}}
+                    \Big)
+        \end{align}
+        But the sum of logarithms is equal to the product of the arguments.
+        That is:
+        \begin{equation}
+            \ln(x!)=
+            \ln\Big[
+                \prod_{k=1}^{\infty}\frac{(1+\frac{1}{k})^{x}}{1+\frac{x}{k}}
+            \Big]
+        \end{equation}
+        Exponentiating, we obtain the following formula for $x!$:
+        \begin{equation}
+            x!=\prod_{k=1}^{\infty}\frac{(1+\frac{1}{k})^{x}}{1+\frac{x}{k}}
+        \end{equation}
+        This is used to define the Gamma Function.
+        \begin{ldefinition}{The Gamma Function}
+            The Gamma Function is the function
+            $\Gamma:\mathbb{R}\setminus\{0,\minus{1},\minus{2},\dots\}\rightarrow\mathbb{R}$
+            defined by:
+            \begin{equation}
+                \Gamma(x)=(x-1)!
+            \end{equation}
+        \end{ldefinition}
+        \begin{theorem}[The Reflection Formula for Gamma]
+            \begin{equation}
+                \frac{1}{\Gamma(x)\Gamma(1-x)}=\frac{\sin(\pi{x})}{\pi}
+            \end{equation}
+        \end{theorem}
+        Looking at the logarithm of the Gamma function, we can obtain some interesting
+        results.
+        \begin{align}
+            \ln(\Gamma(x))&=
+            \underset{n\rightarrow\infty}{\lim}\Big[
+                x\ln(n)-\ln(x)-\sum_{k=1}^{n}\ln\big(1+\frac{x}{k}\big)\Big]
+        \end{align}
+        This sum, by the Maclaurin series, behaves like the Harmonic series, which
+        diverges.
+        \begin{ldefinition}{Harmonic Numbers}
+            The $n^{th}$ Harmonic number is:
+            \begin{equation}
+                H_{n}=\sum_{k=1}^{n}\frac{1}{k}
+            \end{equation}
+        \end{ldefinition}
+        The sequence of Harmonic numbers $H_{n}$ diverges. To see this, first note that
+        for all $x>0$, $\exp(x)>1+x$, by the Maclaurin series for $\exp(x)$. Thus:
+        \begin{align}
+            H_{n}&=\sum_{k=1}^{n}\frac{1}{k}\\
+            \exp(H_{n})&=\exp(\sum_{k=1}^{n}\frac{1}{k})\\
+            &=\prod_{k=1}^{n}\exp(\frac{1}{k})\\
+            &\geq\prod_{k=1}^{n}(1+\frac{1}{k})\\
+            &=\prod_{k=1}^{n}\frac{1+k}{k}\\
+            &=n+1
+        \end{align}
+        Therefore:
+        \begin{equation}
+            \ln(H_{n})\geq\ln(n+1)
+        \end{equation}
+        And thus diverges. Rewriting $\ln(\Gamma(x))$, we get:
+        \begin{align}
+            \ln\big(\Gamma(x)\big)
+            &=\underset{n\rightarrow\infty}{\lim}\Big[
+                x\ln(n)-\ln(x)-\sum_{k=1}^{n}\ln\big(1+\frac{x}{k}\big)\Big]\\
+            &=\underset{n\rightarrow\infty}{\lim}\Big[
+                x\ln(n)-\ln(x)-\sum_{k=1}^{n}\ln\big(1+\frac{x}{k}-\frac{x}{k}\big)
+                -x\sum_{k=1}^{n}\frac{1}{k}\Big]\
+        \end{align}
+        Using the limit comparison test again, we see that the following limit exists:
+        \begin{equation}
+            \underset{n\rightarrow\infty}{\lim}
+            \sum_{k=1}^{n}\ln\big(1+\frac{x}{k}-\frac{x}{k}\big)
+        \end{equation}
+        Because of this, the following limit also exists:
+        \begin{equation}
+            \underset{n\rightarrow\infty}{\lim}
+            \sum_{k=1}^{n}\frac{1}{k}-\ln(n)
+        \end{equation}
+        This is the Euler-Mascheroni constant. Denote this a $\gamma$. Exponentiating,
+        we have:
+        \begin{align}
+            \Gamma(x)&=\frac{1}{x}\exp(-\gamma{x})\prod_{k=1}^{\infty}
+                \Big(1+\frac{x}{k}\Big)^{-1}\exp\Big(\frac{x}{k}\Big)\\
+            \frac{1}{\Gamma(x)}
+            &=x\exp(\gamma{x})\prod_{k=1}^{\infty}
+                \Big(1+\frac{x}{k}\Big)\exp\Big(-\frac{x}{k}\Big)
+        \end{align}
+        By differentiating we obtain:
+        \begin{equation}
+            \frac{\Gamma'(x)}{\Gamma(x)}=
+            \minus\frac{1}{x}-\gamma-\sum_{k=1}^{\infty}
+                \Big[\frac{1}{x+k}-\frac{1}{k}\Big]
+        \end{equation}
+        This is also known as the digamma function, $\Psi(x)$. There is a popular
+        formula used for the Gamma function, known as it's integral form. This is
+        often taken as the definition of the Gamma function. By doing repeated integration
+        by parts, we get:
+        \begin{align}
+            \frac{1}{x+n}
+            &=\int_{0}^{1}s^{x+n-1}\diff{s}\\
+            &=\frac{(-1)^{n}}{n!}\prod_{k=1}^{n}(x+k-1)
+                \int_{0}^{1}s^{x-1}(s-1)^{n}\diff{s}
+        \end{align}
+        Flipping this around, we have:
+        \begin{equation}
+            \int_{0}^{1}s^{x-1}(1-s)^{n}\diff{s}
+            =\frac{n!}{(x(x+1)\cdots(x+n)}
+        \end{equation}
+        Letting $s=t/n$, we get:
+        \begin{equation}
+            \int_{0}^{n}t^{x-1}(1-\frac{t}{n})^{n}\diff{t}=
+            \frac{n!n^{x}}{x(x+1)\cdots(x+n)}
+        \end{equation}
+        Taking the limit as $n\rightarrow\infty$, and recalling one of the formula's
+        for $\exp(x)$, we get:
+        \begin{equation}
+            \Gamma(x)=\int_{0}^{\infty}t^{x-1}\exp(\minus{t})\diff{t}
+        \end{equation}
+        Differentiating, we get:
+        \begin{equation}
+            \Gamma'(x)=
+            \int_{0}^{\infty}t^{x-1}\ln(t)\exp(\minus{t})\diff{t}
+        \end{equation}
+        Therefore:
+        \begin{equation}
+            \gamma'(1)=\int_{0}^{\infty}\ln(t)\exp(\minus{t})\diff{t}
+        \end{equation}
+        This integral we have seen before and is equal to $\minus\gamma$, where
+        $\gamma$ is the Euler-Macheroni constant.
+\end{document}
