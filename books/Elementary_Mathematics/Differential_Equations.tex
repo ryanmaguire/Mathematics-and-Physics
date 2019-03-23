@@ -47,45 +47,67 @@
             form $\sum_{k=0}^{n}a_{k}(x)y^{(n)}(x)=b(x)$, where
             $a_{n}(x)$ is not the zero function.
         \end{definition}
-        First order linear differential equations have a simple method for solution:
-        \begin{align*}
-            \frac{\diff{y}}{\diff{x}}(x)+P(x)y(x)&=Q(x)\\
-            \Rightarrow
-            \exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)
-            \Big(\frac{\diff{y}}{\diff{x}}(x)+P(x)y(x)\Big)
-            &=\exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)Q(x)\\
-            \Rightarrow
-            \frac{\diff}{\diff{x}}\bigg(
+        First order linear differential equations have a
+        simple method for solution:
+        \begin{subequations}
+            \begin{align}
+                \dot{y}(x)+P(x)y(x)&=Q(x)\\
+                \Rightarrow
                 \exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)
-                y(x)\bigg)
-            &=\exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)Q(x)\\
-            \Rightarrow
+                \Big(\dot{y}(x)+P(x)y(x)\Big)
+                &=\exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)Q(x)\\
+                \Rightarrow
+                \frac{\diff}{\diff{x}}\bigg(
+                    \exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)
+                    y(x)\bigg)
+                &=\exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)Q(x)
+            \end{align}
+        \end{subequations}
+        Integrating across this, we get:
+        \begin{equation}
             \exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)y(x)
-            &=\int^{x}\exp\Big(\int^{\tau}P(\xi)\diff{\xi}\Big)
-                Q(\tau)\diff{\tau}\\
-            \Rightarrow
-            y(x)&=\exp\Big(-\int^{x}P(\tau)\diff{\tau}\Big)
-                \int^{x}\bigg(
-                    \exp\Big(\int^{\tau}P(\xi)\diff{\xi}\Big)
-                    Q(\tau)\diff{\tau}
-                \bigg)
-        \end{align*}
+            =\int^{x}\exp\Big(\int^{\tau}P(\xi)\diff{\xi}\Big)
+                Q(\tau)\diff{\tau}
+        \end{equation}
+        From this we obtain:
+        \begin{equation}
+            y(x)=\exp\Big(\minus\int^{x}P(\tau)\diff{\tau}\Big)
+                \int^{x}\exp\Big(\int^{\tau}P(\xi)\diff{\xi}\Big)
+                Q(\tau)\diff{\tau}
+        \end{equation}
         The integration over $\tau$ and $\xi$ are just dummy variables.
-        If we let $\mu(x)=\exp(\int^{x}P(\tau)\diff{\tau})$, we can write this as:
-        \begin{equation*}
+        If we define $\mu$ to be:
+        \begin{equation}
+            \mu(x)=\exp\Big(\int^{x}P(\tau)\diff{\tau}\Big)    
+        \end{equation}
+        We can write this as:
+        \begin{equation}
             y(x)=\frac{1}{\mu(x)}\int\mu(x)Q(x)\diff{x}+C
-        \end{equation*}
-        \begin{example}
+        \end{equation}
+        \begin{lexample}
             The case with constant coefficients is easy to study:
-            \begin{align*}
-                \frac{\diff{y}}{\diff{x}}+ay&=0\\
-                \Rightarrow{y(x)}&=Ce^{-ax}\\
-                \frac{\diff{y}}{\diff{x}}+ay&=g(x)\\
-                \Rightarrow{y(x)}
-                &=e^{-ax}\int{e^{ax}g(x)\diff{x}}
-                +Ce^{-ax}
-            \end{align*}
-        \end{example}
+            \begin{subequations}
+                \begin{align}
+                    \dot{y}(x)+ay(x)&=0\\
+                    \Rightarrow{y(x)}&=C\exp(\minus{a}x)
+                \end{align}
+            \end{subequations}
+            If we introduce a \textit{forcing function}, we obtain:
+            \begin{subequations}
+                \begin{align}
+                    \dot{y}(x)+ay(x)&=g(x)\\
+                    \label{eqn:Diff_EQ_Sol_to_FOLDE_Const_Coeff_Forced}
+                    \Rightarrow{y(x)}
+                    &=\exp(\minus{a}x)\int\exp(ax)g(x)\diff{x}
+                    +C\exp(\minus{a}x)
+                \end{align}
+            \end{subequations}
+            For a general function $g$ it may be
+            difficult to evaluate
+            Eqn.~\ref{eqn:Diff_EQ_Sol_to_FOLDE_Const_Coeff_Forced},
+            but in practice we can apply numerical methods to obtain
+            approximate solutions.
+        \end{lexample}
         A separable equation is one of the form:
         \begin{align*}
             M(x,y)+N(x,y)\frac{\diff{y}}{\diff{x}}&=0\\
@@ -834,19 +856,24 @@
             \end{equation}
             But from Eqn.~\ref{diffeq:reduction_of_order_first_order_ode},
             the right hand side of this equation is zero. Therefore:
-            \newline
+            \par
             \begin{subequations}
-                \begin{tabularx}{\textwidth}{@{}XX@{}}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
                     \begin{equation}
                         \frac{\diff}{\diff{t}}\Big(v(t)\mu(t)\Big)=0
                     \end{equation}
-                    &
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
                     \begin{equation}
                         \Rightarrow
                         v(t)=\frac{C}{\mu(t)}
                     \end{equation}
-                \end{tabularx}
+                \end{minipage}
             \end{subequations}
+            \par\hfill\par
             Where $C$ is some constant of integration. But from
             Eqn.~\ref{diffeq:reduction_term_v_of_u},
             $v(t)=\dot{u}(t)$. Using this, we obtain:
