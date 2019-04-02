@@ -1,0 +1,345 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmathcourses\undefined
+        \pagenumbering{roman}
+        \title{Combinatorics}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Combinatorics}
+        \addcontentsline{toc}{chapter}{Combinatorics}
+        \markboth{}{COMBINATORICS}
+        \vspace{10ex}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Combinatorics}
+    \fi
+    \section{Introduction}
+        We use the following notation:
+        \begin{equation}
+            [n]=\mathbb{Z}_{n}=\{1,2,\hdots,n\}
+        \end{equation}
+        In combinatorics we study functions of the form
+        $f:[n]\rightarrow[m]$. These functions can be
+        one-to-one, onto, or both. A permutation of the
+        elements of $[n]$ is simply a bijection
+        $f:[n]\rightarrow[n]$. A partial permutation is a
+        permutation of length $k\leq{n}$ of the set
+        $[n]$. That is, a permutation on some subset of
+        $\mathbb{Z}_{n}$. We all study sets. In particular,
+        the power set of $[n]$ and subsets from $k$ chosen
+        elements of $[n]$. Another topic of study is that of
+        lattice paths on $\mathbb{Z}\times\mathbb{Z}$. That
+        it, paths from $(i,j)$ to $(n,m)$ using a prescribed
+        set of rules. For example, how many ways can you get
+        from $(0,0)$ to $(21,7)$ if you're only allowed to move
+        North and East. Restricted paths impose more rules,
+        for example the number of moves east must be greater
+        than the number of moves north. There are also things
+        called Catalan paths and Motzkin paths.
+        \par\hfill\par
+        Another topic in combinatorics is that of words. An
+        alphabet is a set $[n]$, and we wish to study the number
+        of words of length $k$ in $[n]$. Binary words are words
+        when the alphabet is $\{0,1\}$. There are also words
+        with a prescribed number for each letter.
+        There are also circular arrangements of the elemnts
+        in $[n]$, and the idea of multi-sets. Multi-sets
+        are sets that allow for repetition. From elementary
+        set theory, we have:
+        \begin{equation}
+            \{a,b,c\}=\{a,a,b,c\}
+        \end{equation}
+        Sets are uniquely defined by the elements they contain.
+        Multi-sets allow for repetition, and this distringuishes
+        two different sets. We write:
+        \begin{equation}
+            A=\{\{1,1,1,2,3,3\}\}
+        \end{equation}
+        Note that $A\ne\{\{1,2,3\}\}$. The multiplicty of
+        an elements $a\in{A}$ is the number of times the
+        element $a$ occurs in the multi-set $A$. To know how
+        many multi-sets chosen from $[n]$ with $k$ elements,
+        we wish to study the following equation:
+        \begin{equation}
+            \sum_{i=1}^{n}m_{i}=k
+        \end{equation}
+        Where $m_{i}$ is the multiplicity of the $i^{th}$
+        element of $[n]$. Where wish to find integer solutions
+        to this equation, in particular solutions with
+        non-negative integers. We can also place restrictions
+        on the multi-sets, for example by requiring that
+        each element occurs at least once. Thus we'd have:
+        \begin{equation}
+            \sum_{i=1}^{n}m_{i}=k
+            \quad\quad
+            m_{i}\geq{1}
+        \end{equation}
+        A partition of $[n]$ is a collection of sets
+        $B_{1},b_{2},\dots,B_{k}$ such that:
+        \begin{equation}
+            \cup_{i=1}^{k}B_{i}=[n]
+            \quad\quad
+            B_{i}\cap{B}_{j}=\emptyset
+            \quad{i}\ne{j}
+        \end{equation}
+        The $B_{i}$ are called \textrm{blocks}. We also
+        study partitions of numbers. Given $n\geq{0}$, we
+        want $\lambda=(\lambda_{1},\dots,\lambda_{\ell})$ such
+        that:
+        \begin{equation}
+            \lambda_{i+1}\leq\lambda_{i},
+            \quad\quad
+            i=1,2,\dots,\ell-1
+        \end{equation}
+        And such that:
+        \begin{equation}
+            \sum_{i=1}{\ell}\lambda_{i}=n
+        \end{equation}
+        Another commonly studied object is a graph. Labelled
+        tress, colorings of graphs, and spanning trees. Finally
+        we study tableaux's. These are fillings of arrays
+        of boxes with objects, such as numbers, sets, and
+        multi-sets.
+    \section{Counting Techniques}
+        \subsection{Basic Numbers}
+            \begin{equation}
+                n^{k}=\big|\{f:[k]\rightarrow[n]\}\big|=
+                \textrm{The number of words over the alphabet }
+                [n]
+            \end{equation}
+            \begin{equation}
+                \binom{n}{k}=
+                \frac{n!}{k!(n-k)!}=
+                \textrm{The number of ways to choose }k
+                \textrm{ objects from }[n]
+            \end{equation}
+            Stirling's number of the second kind, denoted
+            $S(k,n)$, is the number of ways to partition
+            $[n]$ into $n$ blocks. $P(n)$ is the number of
+            partitions of the integer $n$. And lastly,
+            $n!$ is the number of bijections from $[n]$ into
+            $[n]$. That is, $n!$ is the number of permutations
+            on $[n]$.
+        \subsection{Basic Counting Principles}
+            Sum Rule (Divide and Conquer): If you cannot
+            count the set, divide it into pieces and count
+            the pieces.
+            \begin{align}
+                S&=\bigcup_{i=1}^{k}S_{i}
+                \quad\quad
+                S_{i}\cap{S}_{j}=\emptyset,
+                \quad{i}\ne{j}\\
+                |S|&=\sum_{i=1}^{k}|S_{i}|
+            \end{align}
+            Application: Classify or partition the elements
+            in $S$ according to a set of mutually disjoint
+            properties $p_{1},\dots,p_{k}$ and let:
+            \begin{equation}
+                S_{k}=\{x\subseteq{S}:p_{k}(x)\}
+            \end{equation}
+            We often use such a scheme to prove recurrences.
+            For example Pascal's triangle:
+            \begin{equation}
+                \binom{n}{k}=
+                \binom{n-1}{k-1}+\binom{n-1}{k}
+            \end{equation}
+            We can prove this by plugging in the formula and
+            simplifying, but we wish to give a combinatorial
+            proof. Let $S\subseteq[n]$, where
+            $\Card(S)=k\leq{n}$. Define:
+            \begin{align}
+                S_{1}&=\{A\subseteq{S}:n\in{A}\}\\
+                S_{2}=\{A\subseteq{S}:n\notin{A}\}
+            \end{align}
+            Then $S_{1}$ and $S_{2}$ partition $S$, and thus
+            $\Card(S)=\Card(S_{1})+\Card(S_{2})$. But:
+            \begin{align}
+                \Card(S_{1})&=\binom{n-1}{k-1}\\
+                \Card(S_{2})&=\binom{n-1}{k}
+            \end{align}
+            This completes the proof. Next is the difference
+            rule (Count the opposite):
+            \begin{align}
+                S&\subseteq\mathcal{U}\\
+                \overline{S}&=\mathcal{U}\setminus{S}\\
+                \Card(S)&=\Card(\mathcal{U})
+                    -\Card(\overline{S})
+            \end{align}
+            For example, how many permutations on $[n]$ are
+            there so that 1 and 2 are not next to each other?
+            We count 1 and 2 being together as 12 or 21.
+            It's thus easier to think of this as one element.
+            So we're counting the number of permutation on
+            $[n-1]$ by consider $12$ as one element, and
+            again by consider $21$ as one element. This
+            gives $2(n-1)!$. By taking the difference, we
+            have:
+            \begin{equation}
+                \Card(S)=n!-2(n-1)!=(n-1)!(n-2)
+            \end{equation}
+    \section{Posets}
+        Let $n\in\mathbb{N}$, $X=2^{[n]}=\mathcal{P}(\mathbb{Z}_{n})$, and
+        let consider $(X,\subseteq)$, where $\subseteq$ is the partial ordering
+        of inclusion. If $\Card(A)=\Card(B)$, then either $A=B$, or
+        $A$ and $B$ are not comparable, and hence $\subseteq$ is a partial
+        order.
+        \begin{theorem}
+            For any $n\geq{1}$, $2^{[n]}$ has a SCD.
+        \end{theorem}
+        \begin{proof}
+            Let $x\in{2}^{[n]}$. Then $x$ has a binary representation. We
+            want to create 1-0 pairs as if they were parentheses. For example,
+            suppse $x=\{1,5,7\}$. Then $x=0110001$. We match this up to
+            $)(()))(\leftrightarrow0(())01$. To get the chain containing
+            $x$, we need to describe how to go up and how to go down
+            in the chain. To go up, take the right-most unpaired zero
+            and change it to a one. To go down, take the left-most one
+            and change it to a zero. For the example of $x=\{1,5,6\}$, we have:
+            \begin{equation*}
+                0110000\rightarrow0110001\rightarrow0110011\rightarrow1110011
+            \end{equation*}
+            The size of the smallest set in the chain the the number of
+            parenthesizations. If this number is $i$, then the largest set
+            has size $(n-2i)+i=n-i$. By construction, the chain is saturated.
+            At every step we only add one element. Thus, the constructions
+            produce symmetric chains. Notice that we never produce new
+            1-0 pairings in the algorithm. Thus, all of the sets in the chain
+            have the same pairings. So two sets $X$ and $Y$ produce either
+            the same chain or disjoint chains. For example, consider
+            $2^{[4]}$. The chain is:
+            \begin{align*}
+                0000\rightarrow0001\rightarrow
+                0011\rightarrow0111\rightarrow1111\\
+                0010\rightarrow0110\rightarrow1110\\
+                0100\rightarrow0101\rightarrow1101\\
+                1000\rightarrow1001\rightarrow1011
+            \end{align*}
+        \end{proof}
+        \begin{ltheorem}{Sperner's Theorem}
+            Any anti-chain of $2^{[n]}$ elements has at most
+            $\binom{n}{\floor{n/2}}$ subsets.
+        \end{ltheorem}
+        \begin{proof}
+            Notice that in the diagram of $2^{[n]}$ each level contains
+            $\binom{n}{k}$ elements. An SCD partitions $2^{[n]}$. Let
+            $G$ be an $SCD$. with $m$ chains. Then the maximum number of
+            incomparable elements is $m$. therwise, two imcomparable elements
+            are in the same chain. Thus, $m\geq\binom{n}{\floor{n/2}}$. Also,
+            each chain will intersect a level in the graph of the poset at most
+            once. Therefore, $m\leq\binom{n}{\floor{n/2}}$. Thus, etc.
+        \end{proof}
+        The existence of a symmetric chain decomposition gives an elegant
+        combinatorial proof that the sequence
+        $\binom{n}{k}$, $k=0,1,\dots,n$, is unimodal. To prove unimodality, it
+        would suffice to show that, for $k\leq{n/2}$, there exists an
+        injection from $k$ subsets to $k+1$ subsets. If we have a SCD, map
+        a $k$ subset to it's successor in the chain. This gives the injection.
+    \section{Binomial Coefficients and Multi-Sets}
+        Recall that a multi-set is similar to a set, except that repetitions
+        are allowed. For example, if we consider $[3]$, then a multi-set of
+        of this could be:
+        \begin{equation}
+            \{\{1,1,2,2,3\}\}
+        \end{equation}
+        This has 5 elements, and is a mutli-set of size 5.
+        \begin{theorem}
+            The number of $k$ multisets of an $n$ element set is:
+            \begin{equation}
+                \frac{n^{\overline{k}}}{k!}
+                =\frac{n(n+1)\cdots(n+k-1)}{k!}
+                =\binom{n+k-1}{k}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For let $S$ be the set of multi-sets of size $k$ of elements
+            of an $n$ element set, and let $T$ be subsets of size $k$ in
+            $[n+k-1]$. We need to produce a map $f:S\rightarrow[T]$. Let:
+            \begin{equation}
+                M=\{\{1\leq{a}_{1}\leq{a}_{2}\leq\cdots\leq{a}_{k}\leq{n}\}\}
+            \end{equation}
+            This maps to the set:
+            \begin{equation}
+                A=\{1\leq{a}_{1}<a_{2}+1<a_{3}+2<\cdots<a_{k}+k-1\leq{n}+k-1\}
+            \end{equation}
+            This mapping is reversible. Therefore, etc.
+        \end{proof}
+        \begin{example}
+            Let $n=3$, and $k=5$. Also, define:
+            \begin{equation}
+                M=\{\{1,1,2,2,3\}\}
+            \end{equation}
+            Then:
+            \begin{equation}
+                A=\{1,2,4,5,7\}\subseteq[7]
+            \end{equation}
+        \end{example}
+        Multi-sets can be seen as binary sequences (Stars and bars). For
+        example, let $M=\{3,3,4,7,7\}$. We can write this as
+        $||**|*|||**$. This helps count out the repetitions of various elements
+        in the multi-set. $\binom{n}{k}$ can be seen as the number of
+        functions that map $k$ elements to $0$ and $n-k$ elements to $1$.
+        We can generalize to functions $[n]\rightarrow[m]$. Let
+        $k_{1},k_{2},\dots,x_{m}$ be such that:
+        \begin{equation}
+            \sum_{i=1}^{m}k_{i}=n
+        \end{equation}
+        And such that, for all $i$, $k_{i}\geq{0}$. Then
+        $\binom{n}{k_{1},\dots,k_{m}}$ is the number of ways to map
+        $[n]\rightarrow[m]$ such that $k_{i}$ elements map to $i$, where:
+        \begin{align}
+            \binom{n}{k_{1},k_{2},\dots,k_{m}}&=
+            \binom{n}{k_{1}}\binom{n-k_{1}}{k_{2}}
+            \binom{n-k_{1}-k_{2}}{k_{3}}\cdots\binom{k_{m}}{k_{m}}\\
+            &=\frac{n!}{k_{1}!k_{2}!\cdots{k}_{m}!}
+        \end{align}
+        \begin{ltheorem}{Multinomial Theorem}
+            \begin{equation}
+                (x_{1}+x_{2}+\cdots+x_{m})^{n}=
+                \sum_{k_{1}+\cdots+k_{m}=n}
+                \binom{n}{k_{1},\dots,k_{m}}x_{1}^{k_{1}}\cdots{x}_{m}^{k_{m}}
+            \end{equation}
+        \end{ltheorem}
+        \subsection{Lattice Paths}
+            Let $\mathbb{Z}^{d}$ be an integer lattice of dimension $d$, where
+            $d\in\mathbb{N}$ and $d\geq{1}$.
+            \begin{ldefinition}{Lattice Path}
+                A lattice path in $\mathbb{Z}^{d}$ with $k$ steps in
+                $S\subseteq\mathbb{Z}^{d}$ is a subset
+                $L\subseteq\mathbb{Z}^{d}$ such that $L=\{v_{1},\dots,v_{k}\}$
+                such that, for all $i=1,2,\dots,k-1$, $v_{i+1}-v_{i}\in{S}$.
+            \end{ldefinition}
+            \begin{example}
+                If $d=2$, $S=\{(0,1),(1,0)\}$, then there are 6 paths
+                from $(0,0)$ to $(2,2)$.
+            \end{example}
+            \begin{theorem}
+                if $v=(a_{1},\cdots,a_{d})\in\mathbb{Z}^{d}$ and if $e_{i}$ is
+                the $i^{th}$ unit vector in $\mathbb{Z}^{d}$, then the number
+                of lattice paths in $\mathbb{Z}^{d}$ from the origin to
+                $v$ with steps in $\{e_{i}:i\in\mathbb{d}\}$ is given by
+                the multinomial coefficient
+                $\binom{\norm{v}_{1}}{a_{1},\dots,a_{d}}$.
+            \end{theorem}
+            \begin{proof}
+                For let $v_{0},\cdots,v_{k}$ be a path. Then
+                $v_{1}-v_{0},v_{2}-v_{1},\dots,v_{k}-v_{k-1}$ consist of
+                the $e_{i}$. Thus there are $a_{1}$ $e_{1}$'s,
+                $a_{2}$ $e_{2}$'s, and so on. The total number is thus the
+                multinomial coefficient.
+            \end{proof}
+            \begin{theorem}
+                The number of lattice paths from $(0,0)$ to $(n,m)$ with
+                steps in $\{(0,1),(1,0)\}$ is $\binom{n+m}{n}$.
+            \end{theorem}
+\end{document}

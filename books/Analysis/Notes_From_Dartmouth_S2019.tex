@@ -1,0 +1,985 @@
+\documentclass[crop=false,class=article,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../glossary}
+\loadglsentries{../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \pagenumbering{roman}
+    \title{Functional Analysis}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \tableofcontents
+    \clearpage
+    \pagenumbering{arabic}
+    \section{Notes from Dartmouth S2019}
+        \subsection{Metric Spaces}
+            \begin{ldefinition}{Pseudo-Metric}
+                A pseudo-metric on a set $X$ is a function
+                $\rho:X\times{X}\rightarrow[0,\infty)$ such that,
+                for all $x,y,z\in{X}$, it is true that:
+                \begin{align}
+                    \rho(x,y)&=\rho(y,x)
+                    \tag{Symmetry}\\
+                    \rho(x,z)&\leq\rho(x,y)+\rho(y,z)
+                    \tag{Triangle Inequality}
+                \end{align}
+            \end{ldefinition}
+            \begin{ldefinition}{Pseudo-Metric Space}
+                A pseudo-metric space, $(X,\rho)$, is a set
+                $X$ and a pseudo-metric $\rho$ on $X$.
+            \end{ldefinition}
+            \begin{theorem}
+                There exist pseudo-metric spaces $(X,\rho)$
+                such that for all $x\in{X}$, $\rho(x,x)>0$.
+            \end{theorem}
+            \begin{proof}
+                For let $X=\mathbb{R}$ and define
+                $\rho:\mathbb{R}^{2}\rightarrow[0,\infty)$ by:
+                \begin{equation}
+                    \rho(x,y)=1+|x|+|y|
+                \end{equation}
+                Then $\rho$ is a pseudo-metric. For it is symmetric,
+                since:
+                \begin{equation}
+                    \rho(x,y)=1+|x|+|y|=1+|y|+|x|=\rho(y,x)
+                \end{equation}
+                Moreover, it obeys the triangle inequality:
+                \begin{subequations}
+                    \begin{align}
+                        \rho(x,z)&=1+|x|+|z|\\
+                        &\leq{1}+|x|+|z|+2|y|+1\\
+                        &=(1+|x|+|y|)+(1+|y|+|z|)\\
+                        &=\rho(x,y)+\rho(y,z)
+                    \end{align}
+                    Thus, $\rho$ is a pseudo-metric. However, for
+                    all $x\in\mathbb{R}$:
+                    \begin{equation}
+                        \rho(x,x)=1+|x|+|x|=1+2|x|\geq{1}>0
+                    \end{equation}
+                    Thus, there are no $x\in{X}$ such that
+                    $\rho(x,x)=0$. Therefore, etc
+                \end{subequations}
+            \end{proof}
+            If we require $\rho(x,x)=0$ for all $x\in{X}$, we
+            can still have the case where elements cannot be
+            distinguished from. That is, there may be
+            $x,y\in{X}$ such that $x\ne{y}$, but
+            $\rho(x,y)=0$.
+            \begin{theorem}
+                There exist pseudo-metric spaces $(X,\rho)$ such that
+                for all $x\in{X}$, $\rho(x,x)=0$, and there are distinct
+                elements $x,y\in{X}$ such that $\rho(x,y)=0$.
+            \end{theorem}
+            \begin{proof}
+                For let $X$ have at least two distinct elements,
+                and let $\rho:X^{2}\rightarrow[0,\infty)$ be defined by:
+                \begin{equation}
+                    \rho(x,y)=0
+                \end{equation}
+                Then $\rho$ is a pseudo-metric. Symmetry and the triangle
+                inequality are both trivial. However, since there are at least
+                two distinct elements in $X$, we have unique points such that
+                $\rho(x,y)=0$. Therefore, etc.
+            \end{proof}
+            \begin{ldefinition}{Metric Space}
+                A metric space is a pseudo-metric space $(X,d)$ such that:
+                \begin{equation}
+                    d(x,y)=0\Longleftrightarrow{x}=y
+                    \tag{Definiteness}
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{Semi-Norm}
+                A semi-norm on a vector space $V$ over a field
+                $\mathbb{F}\subseteq\mathbb{C}$ is a function
+                $\norm{\cdot}:V\rightarrow[0,\infty)$ such that, for
+                all $v\in{V}$ and $\alpha\in\mathbb{F}$, it is true that:
+                \begin{align}
+                    \norm{\alpha{v}}
+                    &=|\alpha|\norm{v}
+                    \tag{Homogeneity}\\
+                    \norm{v+w}
+                    &\leq\norm{v}+\norm{w}
+                    \tag{Triangle Inequality}
+                \end{align}
+            \end{ldefinition}
+            \begin{theorem}
+                If $V$ is a vector space over a field
+                $\mathbb{F}\subseteq\mathbb{C}$, and if
+                $\norm{\cdot}$ is semi-norm on $V$, then:
+                \begin{equation}
+                    \norm{\mathbf{0}}=0
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{equation}
+                    \norm{\mathbf{0}}=\norm{0\mathbf{0}}=|0|\norm{\mathbf{0}}=0
+                \end{equation}
+                Therefore, etc.
+            \end{proof}
+            \begin{ldefinition}{Norm}
+                A norm on a vector space $V$ over a field $\mathbb{F}\subseteq\mathbb{C}$
+                is a semi-norm $\norm{\cdot}$ such that:
+                \begin{equation}
+                    \norm{\mathbf{x}}\Longrightarrow\mathbf{x}=\mathbf{0}
+                \end{equation}
+            \end{ldefinition}
+            \begin{lexample}
+                Suppose that $\norm{\cdot}_{0}$ is a semi-norm on a vector
+                space $V$. Define the following:
+                \begin{equation}
+                    N=\{v\in{V}:\norm{v}_{0}=0\}
+                \end{equation}
+                If follows from the definition of a semi-norm that
+                $N$ is a subspace of $V$. Thus we can define a function on
+                the quotient space $\norm{\cdot}:V/N\rightarrow[0,\infty)$ by:
+                \begin{equation}
+                    \norm{v+N}=\norm{v}_{0}
+                \end{equation}
+                We can then verify that this is well defined and that
+                $\norm{\cdot}$ is a norm on $V/N$.
+            \end{lexample}
+            If $\norm{\cdot}$ is a norm on $V$, then we get an associated
+            metric $\rho$ via:
+            \begin{equation}
+                \rho(v,u)=\norm{v-u}
+            \end{equation}
+            \begin{lexample}
+                Let $(X,\mathcal{M},\mu)$ be a measure space. That is,
+                $X$ is a set, $\mathcal{M}$ is $\sigma\textrm{-Algebra}$, and
+                $\mu$ is a measure on $X$. Let $1\leq{p}<\infty$. Then:
+                \begin{equation}
+                    \mathcal{L}^{p}(X)=
+                    \{f:X\rightarrow\mathbb{C}:
+                    f\textrm{ is measurable and}
+                    \int_{X}|f|^{p}\diff{\mu}<\infty.\}
+                \end{equation}
+                The set $\mathcal{L}^{p}(X)$ is a vector space. We define
+                the semi-norm on $\mathcal{L}^{p}(X)$ to be:
+                \begin{equation}
+                    \norm{f}_{p}=
+                    \Big(\int_{X}|f|^{p}\diff\mu\Big)^{1/p}
+                \end{equation}
+                This is not a norm, since there are many functions such that
+                $\norm{f}_{p}=0$, yet $f\ne{0}$. However, if
+                $\norm{f}_{p}=0$, then $f=0$ $\mu$ almost-everywhere. So
+                we create equivalence classes by s comparing functions that
+                are $\mu$ almost-everywhere. The final thing to check
+                is the triangle-inequality. It is not obvious and is a
+                consequence of Minkowski's Inequality. We get a normed vector
+                space by considering $N$ to be the set of functions $f$
+                such that $\norm{f}_{p}=0$, and we define:
+                \begin{equation}
+                    L^{p}(X)=\mathcal{L}^{p}(X)/N
+                \end{equation}
+                The analyst Halmos said that the only important values of
+                $p$ are 1, 2, and $\infty$. If $f:X\rightarrow\mathcal{C}$ is
+                measurable, then we define:
+                \begin{equation}
+                    \norm{f}_{\infty}=
+                    \inf\{c\geq{0}:\mu\Big(\{x:|f(x)|>c\}\big)=0\}
+                \end{equation}
+                With the convention that $\inf\{\emptyset\}=\infty$.
+                This defines a semi-norm on:
+                \begin{equation}
+                    \mathcal{L}^{\infty}(X)=\{f:\norm{f}_{\infty}<\infty\}
+                \end{equation}
+                Homogeneity pops out rather quickly, but the
+                triangle-inequality is still tricky. We call
+                $\norm{\cdot}_{\infty}$ the essential supremum of $f$.
+            \end{lexample}
+            \begin{theorem}
+                If $f:X\rightarrow\mathbb{C}$ is measurable, and if:
+                \begin{equation}
+                    E=\{p:\norm{f}_{p}<\infty,p\in[1,\infty)\}
+                \end{equation}
+                Then $E$ is connected.
+            \end{theorem}
+            \begin{lexample}
+                Let $X$ be a finite set, let $\mathcal{M}=\mathcal{P}(X)$,
+                and let $\mu$ be the counting measure on $X$. A function on
+                $X$ is an n-tuple $x=(x_{1},\dots,x_{n})$. Then:
+                \begin{equation}
+                    \norm{x}_{p}=
+                    \begin{cases}
+                        \Big(\sum_{k=1}^{n}|x_{k}|^{p}\Big)^{1/p},
+                        &1\leq{p}<\infty\\
+                        \max\{|x|,x\in{X}\}
+                    \end{cases}
+                \end{equation}
+                $\norm{\cdot}_{p}$ is a norm on $X$.
+            \end{lexample}
+            \begin{lexample}
+                Let $X=\mathbb{N}$, the set of natural numbers. Let
+                $\mathcal{M}=\mathcal{P}(X)$, and let $\mu$ be
+                the counting measure. Then functions are sequences
+                $a:\mathbb{N}\rightarrow\mathbb{R}$, or
+                $a:\mathbb{N}\rightarrow\mathbb{C}$. Then:
+                \begin{equation}
+                    \norm{x}_{p}=
+                    \begin{cases}
+                        \Big(\sum_{n=1}^{\infty}|x_{n}|^{p}\Big)^{1/p},
+                        &1\leq{p}<\infty\\
+                        \max\{|x|,x\in{X}\}
+                    \end{cases}
+                \end{equation}
+                This defines a norm. Recall that a series is
+                absolutely convergent if $\sum|a_{n}|<\infty$. Given an
+                absolutely convergent series, the original series is also
+                convergent. For this space we use the following notation:
+                \begin{equation}
+                    \ell^{p}=
+                    \{a:\mathbb{R}\rightarrow\mathbb{R}:
+                        \sum_{n=1}^{\infty}|a_{n}|^{p}<\infty\}
+                \end{equation}
+            \end{lexample}
+            In general, if $X$ is a set then we can equip $X$ with the
+            counting measure and then if $f$ is any bounded function on
+            $f$, then:
+            \begin{equation}
+                \norm{f}_{\infty}=\sup\{|f(x):x\in{X}\}
+            \end{equation}
+            For the space of sequences, we write $\ell^{\infty}(X)$.
+            \begin{lexample}
+                If $X$ is any set, then we define the following metric:
+                \begin{equation}
+                    \rho(x,y)=
+                    \begin{cases}
+                        1,&x\ne{y}\\
+                        0,&x=1
+                    \end{cases}
+                \end{equation}
+                This is often called the discrete metric. It is indeed a
+                metric, and $(X,\rho)$ is a metric space.
+            \end{lexample}
+            \begin{lexample}
+                Let $(X,\rho)$ be a metric space. If $Y\subseteq{X}$ is a
+                non-empty subset of $X$, we can define a new metric on $Y$
+                be restricting $\rho$ to $Y\times{Y}$. We call this the
+                metric subspace.
+            \end{lexample}
+            \begin{ldefinition}{Strongly Equivalent Metrics}
+                Strongly equilalent metrics on a set $X$ are metrics
+                $\rho_{1}$ and $\rho_{2}$ such that there exists
+                $c,d\in\mathbb{R}^{+}$ such that, for all $x,y\in{X}$:
+                \begin{equation}
+                    c\rho_{1}(x,y)\leq\rho_{2}(x,y)\leq{d}\rho_{1}(x,y)
+                \end{equation}
+            \end{ldefinition}
+            The definition of strongly equivalent metrics is indeed
+            symmetric. For since $c,d\in\mathbb{R}^{+}$,
+            $c^{-1}$ and $d^{-1}$ are well defined and positive, and thus:
+            \begin{equation}
+                \frac{1}{d}\rho_{2}(x,y)\leq\rho_{1}(x,y)
+                \leq\frac{1}{c}\rho_{1}(x,y)
+            \end{equation}
+            \begin{theorem}
+                If $p,q\in[1,\infty)$, then $\norm{\cdot}_{p}$ and
+                $\norm{\cdot}_{q}$ are strongly equivalent.
+            \end{theorem}
+            \begin{proof}
+                It suffices to show that for all $p\in[1,\infty)$ there exist
+                $c,d\in\mathbb{R}^{+}$ such that:
+                \begin{equation}
+                    c\norm{x}_{p}\leq\norm{x}_{2}\leq{d}\norm{x}_{p}
+                \end{equation}
+                Also note that:
+                \begin{equation}
+                    \partial{\overline{B}_{1}(\mathbf{0})}=
+                    \{\mathbf{x}\in\mathbb{R}^{n}:\norm{x}_{2}=1\}
+                \end{equation}
+                Is a closed and bounded subset of $\mathbb{R}^{n}$.
+            \end{proof}
+            \begin{lexample}
+                Let $(X,\rho)$ be a metric space on $X$ and define:
+                \begin{equation}
+                    d(x,y)=\frac{\rho(x,y)}{1+\rho(x,y)}
+                \end{equation}
+                Then $(X,d)$ is a metric space. Definiteness and symmetry
+                come rather immediately from the definition and the fact
+                that $\rho$ is a metric. The only thing to check is the
+                triangle inequality.
+            \end{lexample}
+            \begin{ldefinition}{Open Ball in a Metric Space}
+                The open ball about a point $x$ in a metric space
+                $(X,\rho)$ of radius $r\in\mathbb{R}$ is the set:
+                \begin{equation}
+                    B_{r}(x)=\{y\in{X}:\rho(x,y)<r\}
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{Open Subsets of a Metric Space}
+                An open subset of a metric space $(X,\rho)$ is a set
+                $\mathcal{U}\subseteq{X}$ such that for all
+                $x\in\mathcal{U}$ there is an $\varepsilon>0$ such that:
+                \begin{equation}
+                    B_{\varepsilon}(x)\subseteq\mathcal{U}
+                \end{equation}
+            \end{ldefinition}
+            \begin{theorem}
+                Open balls are open.
+            \end{theorem}
+            \begin{ldefinition}{Neighborhoods}
+                A neighborhood of a point $x$ in a metric space
+                $(X,\rho)$ is a subset $D\subseteq{X}$ such that there
+                is an open subset $\mathcal{U}\subseteq{D}$ such that
+                $x\in\mathcal{U}$.
+            \end{ldefinition}
+            \begin{theorem}
+                IF $(X,\rho)$ is a metric space, then $X$ is an
+                open subset.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, then
+                $\emptyset$ is an open subset.
+            \end{theorem}
+            \begin{theorem}
+                If $\mathcal{U}_{I}$ is a collection of open subsets
+                of a metric space $(X,\rho)$, and if
+                $\mathcal{U}$ is defined by:
+                \begin{equation}
+                    \mathcal{U}=\bigcup_{i\in{I}}\mathcal{U}_{i}
+                \end{equation}
+                Then $\mathcal{U}$ is an open subset.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, and if
+                $\mathcal{U}$ and $\mathcal{V}$ are open subsets, then
+                the set $\mathcal{D}$ defined by:
+                \begin{equation}
+                    \mathcal{D}=\mathcal{U}\cap\mathcal{V}
+                \end{equation}
+                Is an open subset of $X$.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space and
+                $(\mathcal{E},\rho_{\mathcal{E}})$ is a subspace of
+                $(X,\rho)$, then a set $\mathcal{U}\subseteq\mathcal{E}$
+                is open in $\mathcal{E}$ if and only if there is an
+                open set $\mathcal{U}$ in $X$ such that:
+                \begin{equation}
+                    \mathcal{V}=\mathcal{U}\cap\mathcal{E}
+                \end{equation}
+            \end{theorem}
+            \begin{ldefinition}{Topology}
+                A topology on a set $X$ is a subset
+                $\tau\subseteq\mathcal{P}(X)$ such that:
+                \begin{enumerate}
+                    \item $\emptyset\in\tau$ and $X\in\tau$
+                    \item For all $\mathcal{U}\subseteq\tau$, it is true that:
+                          $\cup_{\mathcal{O}\in\mathcal{U}}\mathcal{O}\in\tau$
+                    \item For all $\mathcal{U}\subseteq\tau$ such that
+                          $\mathcal{U}$ is finite, it is true that:
+                          $\cap_{\mathcal{O}\in\mathcal{U}}\mathcal{U}\in\tau$
+                \end{enumerate}
+            \end{ldefinition}
+            \begin{lexample}
+                If $(X,\rho)$ is a metric space, then the set:
+                \begin{equation}
+                    \tau=\{\mathcal{U}\subseteq{X}:
+                        \mathcal{U}\textrm{ is open}\}
+                \end{equation}
+                is a topology on $X$. This is the \textit{metric} topology.
+                Not every topological space can be formed from a metric space.
+                If $(\mathcal{E},\rho_{\mathcal{E}})$ is a subspace of
+                $(X,\rho)$, then the \textit{subspace topology}, or the
+                relative topology, is the set:
+                \begin{equation}
+                    \tau_{\mathcal{E}}
+                    =\{\mathcal{E}\cap\mathcal{U}:\mathcal{U}\in\tau\}
+                \end{equation}
+                This is a topology on $\mathcal{E}$.
+            \end{lexample}
+            \begin{ldefinition}{Closed Subsets}
+                A closed subset of a metric space $(X,\rho)$ is a set
+                $\mathcal{C}\subseteq{X}$ such that $X\setminus\mathcal{C}$
+                is an open subset of $X$.
+            \end{ldefinition}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, then $X$ is closed.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, then $\emptyset$ is closed.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, and if $\mathcal{C}_{i}$ is
+                a finite collection of closed subsets, then the set
+                $\mathcal{C}$ defined by:
+                \begin{equation}
+                    \mathcal{C}=\cup_{i=1}^{n}\mathcal{C}_{i}
+                \end{equation}
+                is a closed subset of $X$.
+            \end{theorem}
+            \begin{ldefinition}{Closure of a Set}
+                If $(X,\rho)$ is a metric space and $\mathcal{E}\subseteq{X}$,
+                then the closure of $\mathcal{E}$ is the set:
+                \begin{equation}
+                    \overline{\mathcal{E}}=
+                    \bigcap\{\mathcal{F}\subseteq{X}:
+                        \mathcal{E}\subseteq\mathcal{F}\land\mathcal{F}
+                        \textrm{ is closed.}\}
+                \end{equation}
+            \end{ldefinition}
+            The closure of a set $\mathcal{E}$ is the smallest closed set that
+            contains $\mathcal{E}$.
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, and if
+                $\mathcal{E}$ is a non-empty subset of $X$, then
+                $x\in\overline{\mathcal{E}}$ if and only if for
+                all $\varepsilon>0$:
+                \begin{equation}
+                    B_{\varepsilon}(x)\cap\mathcal{E}\ne\emptyset
+                \end{equation}
+            \end{theorem}
+            \begin{ldefinition}{Convergent Sequences in a Metric Space}
+                A convergent sequence in a metric space $(X,\rho)$ is a
+                sequence $a:\mathbb{N}\rightarrow{X}$ such that there is an
+                $x\in{X}$ such that for all $\varepsilon>0$ there exists an
+                $N\in\mathbb{N}$ such that, for all $n\in\mathbb{N}$ and
+                $n>N$, it is true that $d(x,a_{n})<\varepsilon$. We write
+                $a_{n}\rightarrow{x}$.
+            \end{ldefinition}
+            \begin{ldefinition}{Limits of Convergent Sequences}
+                A limit of a convergent sequence $a:\mathbb{N}\rightarrow{X}$
+                in a metric space $(X,\rho)$ is a point $x\in{X}$ such that
+                $a_{n}\rightarrow{x}$.
+            \end{ldefinition}
+            \begin{theorem}
+                If $(X,rho)$ is a metric space, if
+                $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence, and if
+                $x$ and $y$ are limits of $a$, then $x=y$.
+            \end{theorem}
+            \begin{ldefinition}{Equivalent Metrics}
+                Equivalent metrics on a set $X$ and metrics
+                $\rho$ and $d$ such that they generate the same topology.
+            \end{ldefinition}
+            \begin{theorem}
+                If $X$ is a set and if $\rho$ and $d$ are equivalent metrics
+                on $X$, then for all $x\in{X}$ and for all
+                $r\in\mathbb{R}^{+}$ there exists
+                $r_{1},r_{2}\in\mathbb{R}^{+}$ such that:
+                \begin{align}
+                    B_{r_{1}}^{\rho}(x)&\subseteq{B}_{r}^{d}(x)\\
+                    B_{r_{2}}^{d}(x)&\subseteq{B}_{r}^{\rho}(x)
+                \end{align}
+            \end{theorem}
+            \begin{lexample}
+                If $(X,\rho)$ is a metric space and if $d$ is defined by:
+                \begin{equation}
+                    d(x,y)=\frac{\rho(x,y)}{1+\rho(x,y)}
+                \end{equation}
+                The $d$ is a metric on $X$. Moreover, $d$ is equivalent to
+                $\rho$. This shows that the notion of boundedness is not
+                a topological one, but a metric property. For, given any
+                metric $\rho$, $d$ is bounded. For all $x,y\in{X}$,
+                $0\leq{d}(x,y)<1$. Letting $\rho$ be the standard metric on
+                $\mathbb{R}$, $\rho(x,y)=|x-y|$, we see that the topology
+                generated by this unbounded metric is equivalent to the
+                topology generated by the metric:
+                \begin{equation}
+                    d(x,y)=\frac{|x-y|}{1+|x-y|}
+                \end{equation}
+            \end{lexample}
+            \begin{theorem}
+                If $(X,\rho)$ is a metric space, and if
+                $d:X^{2}\rightarrow[0,\infty)$ is defined by:
+                \begin{equation}
+                    d(x,y)=\frac{\rho(x,y)}{1+\rho(x,y)}
+                \end{equation}
+                Then $\rho$ and $d$ are equivalent.
+            \end{theorem}
+            \begin{proof}
+                For let $r>0$. For all $x,y\in{X}$,
+                $d(x,y)\leq\rho(x,y)$, and therefore:
+                \begin{equation}
+                    B_{r}^{\rho}(x)\subseteq{B}_{r}^{d}(x)
+                \end{equation}
+                If $\rho(x,y)\leq{1}$, then
+                $\rho(x,y)\leq{2}d(x,y)$. Let $r_{1}=\min\{r/2,1\}$, then:
+                \begin{equation}
+                    B_{r/2}^{d}(x)\subseteq{B}_{r}^{\rho}(x)
+                \end{equation}
+                Therefore, etc.
+            \end{proof}
+            \begin{ldefinition}{Continuous Functions Between Metric Spaces}
+                A continuous function from a metric space $(X,\rho)$ to a
+                metric space $(Y,d)$ is a function $f:X\rightarrow{Y}$ such
+                that, for all $x\in{X}$ and for all $\varepsilon>0$,
+                there is a $\delta>0$ such that:
+                \begin{equation}
+                    f\big(B_{\delta}^{\rho}(x)\big)\subset
+                    B_{\varepsilon}^{d}\big(f(x)\big)
+                \end{equation}
+            \end{ldefinition}
+            \begin{theorem}
+                If $(X,\rho)$ and $(Y,d)$ are metric spaces, and if
+                $f:X\rightarrow{Y}$ is a function, then the following
+                are equivalent:
+                \begin{enumerate}
+                    \item $f$ is continuous at $x_{0}\in{X}$.
+                    \item If $x_{n}\rightarrow{x_{0}}$ then
+                          $f(x_{n})\rightarrow{f}(x_{0})$
+                    \item If $\mathcal{V}$ is a neighborhood of $f(x_{0})$,
+                          then $f^{-1}(\mathcal{V})$ is a neighborhodd of
+                          $x_{0}$.
+                \end{enumerate}
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\rho)$ and $(Y,d)$ are metric spaces, and if
+                $f:X\rightarrow{Y}$ is a function that is continuous
+                at $x_{0}\in{X}$, then for
+                all $\mathcal{V}\subseteq{Y}$ such that $\mathcal{V}$ is
+                open and $f(x_{0})\in\mathcal{V}$, then
+                $f^{-1}(\mathcal{V})$ is an open subset of $x_{0}$.
+            \end{theorem}
+            \begin{ldefinition}{Uniformly Continuous Functions}
+                A uniformly continuous function from a metric space
+                $(X,\rho)$ to a metric space $(Y,d)$ if a function
+                $f:X\rightarrow{Y}$ such that for all $\varepsilon>0$
+                there exists a $\delta>0$ such that, for all $x,y\in{X}$
+                such that $\rho(x,y)<\delta$, it is true that
+                $d(f(x),f(y))<\varepsilon$.
+            \end{ldefinition}
+            \begin{theorem}
+                If $f:X\rightarrow{Y}$ is uniformly continuous, then
+                $f$ is continuous.
+            \end{theorem}
+            The converse is false. For define $f(x)=x^{2}$.
+            \begin{ldefinition}{Cauchy Sequences}
+                A Cauchy sequence in a metric space $(X,d)$ is a
+                sequence $a:\mathbb{N}\rightarrow{X}$ such that, for
+                all $\varepsilon>0$ there is an $N\in\mathbb{N}$ such
+                that, for all $n,m\in\mathbb{N}$ such that $n,m>N$,
+                it is true that $d(x_{n},x_{m})<\varepsilon$.
+            \end{ldefinition}
+            \begin{lexample}
+                Let $X=(0,2)$ with the usual metric, and let
+                $a:\mathbb{N}\rightarrow{X}$ be defined by:
+                \begin{equation}
+                    a_{n}=\frac{1}{n}
+                \end{equation}
+                Then $a$ is a Cauchy sequence since:
+                \begin{equation}
+                    |a_{n}-a_{m}|=\frac{|n-m|}{nm}
+                    <\frac{2}{\min(n,m)}
+                \end{equation}
+                And this converges to zero. However the sequence
+                doesn't converge, since we took zero away.
+            \end{lexample}
+            \begin{lexample}
+                Let $X=C([0,3])$ and let:
+                \begin{equation}
+                    \norm{f}_{1}=\int_{0}^{3}|f(x)|\diff{x}
+                \end{equation}
+                Then $\norm{\cdot}_{1}$ is a norm on the set of
+                continuous functions, and thus induces a metric.
+                Let $f_{n}$ be defined by:
+                \begin{equation}
+                    f_{n}(x)=
+                    \begin{cases}
+                        1,&x\leq{x}<2-\frac{1}{n}\\
+                        Bob,\\
+                        0,&x\geq{2}
+                    \end{cases}
+                \end{equation}
+                Then $f_{n}$ is Cauchy, but does not converge.
+            \end{lexample}
+            \begin{ldefinition}{Complete Metric Spaces}
+                A complete metric space is a metric space $(X,d)$ such
+                that, for all Cauchy sequences
+                $a:\mathbb{N}\rightarrow{X}$, $a$ is a convergent
+                sequence.
+            \end{ldefinition}
+            \begin{theorem}
+                If $(X,d)$ is a metric space, if
+                $a:\mathbb{N}\rightarrow{X}$ is a Cauchy sequence,
+                and if there is a convergent subseqence of $a$, then
+                $a$ is a convergent sequence.
+            \end{theorem}
+            \begin{theorem}
+                A normed vector space $(V,\norm{\cdot})$ is complete
+                if and only if every absolutely convergent series
+                converges.
+            \end{theorem}
+            \begin{proof}
+                Suppose $V$ is complete and let $u_{n}$ be absolutely
+                convergent. That is, the sequence of partial sums:
+                \begin{equation}
+                    S_{N}=\sum_{n=1}^{N}\norm{u_{n}}
+                \end{equation}
+                Converges in $\mathbb{R}$. But then:
+                \begin{equation}
+                    \underset{N\rightarrow\infty}{\lim}
+                    \sum_{k=N}^{\infty}\norm{u_{k}}=0
+                \end{equation}
+                Define:
+                \begin{equation}
+                    s_{n}=\sum_{k=1}^{n}u_{k}
+                \end{equation}
+                But if $m\geq{n}$, then:
+                \begin{equation}
+                    \norm{s_{n}-s_{m}}
+                    \leq\sum_{k=n+1}^{m}\norm{u_{k}}
+                    \leq\sum_{k=n+1}^{\infty}\norm{u_{k}}
+                \end{equation}
+                Thus, if $\varepsilon>0$ there is an $N\in\mathbb{N}$
+                such that, for all $n\geq{N}$, it is true that:
+                \begin{equation}
+                    \sum_{k=n+1}^{\infty}\norm{u_{k}}<\varepsilon
+                \end{equation}
+                Therefore $s_{n}$ is a Cauchy sequence, and therefore
+                there is an $s\in{V}$ such that $s_{n}\rightarrow{s}$.
+                Proving the converse, suppose $u_{n}$ is a Cauchy
+                sequence. Then there is an $N_{1}\in\mathbb{N}$ such
+                that, for all $n,m\geq{N}_{1}$, we have
+                $\norm{u_{n}-u_{m}}<1/2$. But then there is also an
+                $N_{2}\in\mathbb{N}$ such that $N_{2}>N_{1}$, and for
+                all $n,m>N_{2}$, $\norm{u_{n}-u_{m}}$. Continuing
+                inductively, we find a sequence $u_{n_{k}}$ such that:
+                \begin{equation}
+                    \norm{u_{n_{k+1}}-u_{n_{k}}}<\frac{1}{2^{k}}
+                \end{equation}
+                Let $v_{k}=u_{n_{k+1}}-u_{n_{k}}$, and note that:
+                \begin{equation}
+                    \sum_{n=1}^{\infty}\norm{v_{n}}<\infty
+                \end{equation}
+                But then there is a $v\in{V}$ such that:
+                \begin{equation}
+                    \sum_{n=1}^{\infty}v_{n}=v
+                \end{equation}
+                But:
+                \begin{align}
+                    v&=\underset{N\rightarrow\infty}{\lim}
+                        \sum_{k=1}^{N}v_{k}\\
+                    &=\underset{N\rightarrow\infty}{\lim}
+                        v_{n_{N+1}}-u_{n_{1}}
+                \end{align}
+                Therefore $u_{n_{k}}\rightarrow{v}+u_{n_{1}}$.
+                But $u_{n}$ is Cauchy and thus if there is a
+                convergent subsequence, then it is a convergent
+                sequence. Therefore, $(X,\norm{\cdot})$ is complete.
+            \end{proof}
+            \begin{theorem}
+                If $(X,\mathcal{M},\mu)$ is a measure space, and if
+                $1\leq{p}\leq\infty$.
+            \end{theorem}
+            \begin{proof}
+                Suppose that $f_{n}$ is a sequence of functions in
+                $L^{P}(X,\mathcal{M},\mu)$ such that:
+                \begin{equation}
+                    \sum_{k=1}^{\infty}\norm{f_{n}}_{p}=B<\infty
+                \end{equation}
+                Define $G,G_{n}:X\rightarrow[0,\infty]$ be defined by:
+                \begin{align}
+                    G(x)&=\sum_{k=1}^{\infty}|f_{k}(x)|\\
+                    G_{n}(x)&=\sum_{k=1}^{n}|f_{k}(x)|
+                \end{align}
+                Then, from the triangle inequality, we have that:
+                \begin{equation}
+                    \norm{G_{n}}_{p}\leq
+                    \sum_{k=1}^{n}\norm{f_{k}}_{p}
+                    \leq{B}
+                \end{equation}
+                Thus, by the monotone convergence theorem, we have:
+                \begin{equation}
+                    \int_{X}G(x)^{p}\diff{\mu}
+                    =\underset{n\rightarrow\infty}{\lim}
+                    \int_{X}G_{n}(x)^{p}\diff{\mu}\leq{B}^{p}
+                \end{equation}
+                Therefore $G\in\mathcal{L}^{p}(X)$, and thus
+                $G(x)<\infty$ $\mu$ almost-everywhere. But then the
+                original series converges $\mu$ almost everywhere.
+                Define $F$ be:
+                \begin{equation}
+                    F(x)=
+                    \begin{cases}
+                        \sum_{n=1}^{\infty}f_{n}(x),
+                        &|\sum_{n=1}^{\infty}f_{n}(x)|<\infty\\
+                        0,&\textrm{Otherwise}
+                    \end{cases}
+                \end{equation}
+                Then $|F(x)|\leq{G}(x)$, and thus
+                $F\in\mathcal{L}^{p}(X)$. Moreover:
+                \begin{equation}
+                    \big|F(x)-\sum_{k=1}^{n}f_{k}(x)\big|^{p}
+                    \leq{2}^{p}G(x)^{p}
+                \end{equation}
+                Therefore, by the Lebesgue Dominated Convergence
+                Theorem, we have that:
+                \begin{equation}
+                    \norm{F-\sum_{k=1}^{n}f_{k}(x)}^{p}_{p}
+                    \rightarrow{0}
+                \end{equation}
+                Therefore, $F\in{L}^{p}(X,\mathcal{M},\mu)$.
+            \end{proof}
+            \begin{ldefinition}
+                  {Supremum Norm of Bounded Continuous Function}
+                The supremum norm on set $C_{b}(X)$ of bounded
+                continuous functions on a metric space $(X,d)$ is:
+                \begin{equation}
+                    \norm{f}_{\infty}=\sup_{x\in{X}}|f(x)|
+                \end{equation}
+            \end{ldefinition}
+            From this, we can see thatn $f_{n}\rightarrow{f}$ if and
+            only if $f_{n}\rightarrow{f}$ uniformly on $X$.
+            \begin{theorem}
+                $C_{b}(X)$ is complete in the supremum norm.
+            \end{theorem}
+            \begin{proof}
+                Suppose that $f_{n}$ is a Cauchy sequence in
+                $C_{b}(X)$. For for all $f_{n}$ and $x\in{X}$,
+                $f_{n}(x)$ is a Cauchy sequence in $\mathbb{C}$.
+                But $\mathbb{C}$ is complete, and thus there is a
+                $c_{x}\in\mathbb{C}$ such that
+                $f_{n}(x)\rightarrow{c}_{x}$. Let
+                $f(x)=c_{x}$ for all $x\in{X}$. Then
+                $f_{n}\rightarrow{f}$. For, let $\varepsilon>0$.
+                Then there exists $N\in\mathbb{N}$ sch that, for
+                all $n,m>{N}$ implies that:
+                \begin{equation}
+                    |f_{n}(x)-f_{m}(x)|<\varepsilon/2
+                \end{equation}
+                But then:
+                \begin{equation}
+                    |f_{n}(x)-f(x)|=
+                    \underset{m\rightarrow\infty}{\lim}
+                    |f_{n}(x)-f_{m}(x)|
+                    \leq\frac{\varepsilon}{2}<\varepsilon
+                \end{equation}
+                But the uniform limit of continuous functions is
+                continuous. Therefore, etc.
+            \end{proof}
+            \begin{theorem}
+                If $(X,d)$ is a complete metric space, if
+                $(E,d')$ is a subspace of $(X,d)$, and if
+                $E$ is closed, then $(E,d')$ is complete.
+            \end{theorem}
+            \begin{proof}
+                Suppose $E$ is closed and suppose $(x_{n})$ is a
+                Cauchy sequence in $E$. Then $x_{n}$ is a Cauchy
+                sequence in $X$, but $X$ is complete. Therefore
+                there is an $x\in{X}$ such that
+                $x_{n}\rightarrow{x}$. But $E$ is closed, and therefore
+                $x\in{E}$. Now suppose $E$ is complete. Suppose
+                $x_{n}$ is a sequence in $E$ and that
+                $x_{n}\rightarrow{y}$ in $X$. But convergent sequences
+                are Cauchy sequences, and thus $x_{n}$ is a Cauchy
+                sequence. But $E$ is complete and therefore $y\in{E}$.
+                Therefore, $E$ is closed.
+            \end{proof}
+            \begin{ldefinition}{Bounded Metric Spaces}
+                A bounded metric space is a metric space $(X,d)$ such that
+                there exists an $x\in{X}$ and an $r>0$ such that:
+                \begin{equation}
+                    X\subseteq{B}_{r}^{(X,d)}(x)
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{Diameter of a Metric Space}
+                The diameter of a bounded metric space $(X,d)$ is:
+                \begin{equation}
+                    \diam(X)=\sup_{x\in{X}}\{d(x,y):x,y\in{X}\}
+                \end{equation}
+            \end{ldefinition}
+            Every bounded metric space is contained in some open ball.
+            \begin{theorem}
+                If $(X,d)$ is a metric space, and then it is complete if and
+                only if for any sequence of non-empty closed sets
+                $F:\mathbb{N}\rightarrow\mathcal{P}(X)$ such that
+                $F_{n+1}\subseteq{F}_{n}$ and $\diam(F_{n})\rightarrow{0}$,
+                there is an $x\in{X}$ such that:
+                \begin{equation}
+                    \{x\}=\cap_{n=1}^{\infty}F_{n}
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For suppose $(X,d)$ is complete, and let
+                $F:\mathbb{N}\rightarrow\mathcal{P}(X)$ be a sequence of
+                non-empty subsets of $X$. Then, for all $n\in\mathbb{N}$,
+                $F_{n}$ is non-empty, and thus there is a sequence
+                $a:\mathbb{N}\rightarrow{X}$ such that, for all
+                $n\in\mathbb{N}$, $x_{n}\in{F_{n}}$. But then:
+                \begin{equation}
+                    d(a_{n},a_{m})\leq\diam(F_{\max\{n,m\}})
+                \end{equation}
+                But $\diam(F_{n})\rightarrow{0}$, and therefore $a$ is a
+                Cauchy sequence. But $(X,d)$ is complete, and therefore there
+                is an $x\in{X}$ such that $a_{n}\rightarrow{x}$. Moreover,
+                there is an $N\in\mathbb{N}$ such that $x\in\overline{F}_{N}$.
+                But $F_{N}$ is closed, and thus $x\in{F}_{N}$. But for all
+                $n>N$, $F_{n}\subseteq{F}_{N}$. Therefore:
+                \begin{equation}
+                    x\in\cap_{n=1}^{\infty}F_{n}
+                \end{equation}
+                If $y\in\cap_{n=1}^{\infty}F_{n}$, then
+                $d(x,y)\leq\diam(F_{n})$ for all $n\in\mathbb{N}$. But
+                $\diam(F_{n})\rightarrow{0}$, and thus $d(x,y)=0$. Therefore,
+                $x=y$. Going the other way, suppose $X$ has the nested set
+                property and let $a:\mathbb{N}\rightarrow{X}$ be a Cauchy
+                sequence in $X$. Let $F:\mathbb{N}\rightarrow\mathcal{P}(X)$
+                be defined by:
+                \begin{equation}
+                    F_{n}=\overline{\{a_{k}:k\geq{n}\}}
+                \end{equation}
+                Then, for all $n\in\mathbb{N}$, $F_{n}$ is non-empty,
+                and $F_{n+1}\subseteq{F}_{n}$. Moreover,
+                $\diam(F_{n})\rightarrow{0}$. Thus, by the nested sequence
+                property, there is an $x\in{X}$ such that
+                $x\in\cap_{n=1}^{\infty}F_{n}$. But then:
+                \begin{equation}
+                    d(a_{n},x)\leq\diam(F_{n})\rightarrow{0}
+                \end{equation}
+                and therefore $a_{n}\rightarrow{x}$. Thus, $a$ is a Cauchy
+                sequence and $(X,d)$ is complete.
+            \end{proof}
+        \subsection{Compactness}
+            \begin{ldefinition}{Covers}
+                A cover of a subset $\mathcal{E}\subseteq{X}$ of a set $X$
+                is a subset $\mathcal{O}\subseteq\mathcal{P}(X)$ such that:
+                \begin{equation}
+                    \mathcal{E}\subseteq\cup_{\mathcal{U}\in\mathcal{O}}
+                        \mathcal{U}
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{Sub-Cover}
+                A sub-cover of a cover $\mathcal{O}$ of a subset
+                $E\subseteq{X}$ of a set $X$ is a subset
+                $\Delta\subseteq\mathcal{O}$ such that:
+              \begin{equation}
+                    \mathcal{E}\subseteq\cup_{\mathcal{U}\in\Delta}
+                        \mathcal{U}
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{Open Covers}
+                An open cover of a metric space $(X,d)$ is a cover
+                $\mathcal{O}\subseteq\mathcal{P}(X)$ of $X$ such that, for all
+                $\mathcal{U}\in\mathcal{O}$, $\mathcal{U}$ is open.
+            \end{ldefinition}
+            \begin{ldefinition}{Compact Sets}
+                A compact metric space is a metric space $(X,d)$ such that
+                for any open cover $\mathcal{O}$ of $X$, there is a finite
+                sub-cover $\Delta\subseteq\mathcal{O}$.
+            \end{ldefinition}
+            \begin{lexample}
+                Let $X=[0,1)$ with the usual topology, and let:
+                \begin{equation}
+                    \mathcal{U}_{x}=[0,x)
+                    \quad\quad
+                    x\in(0,1)
+                \end{equation}
+                Then $\mathcal{O}=\{\mathcal{U}_{x}:x\in(0,1)\}$ is an
+                open cover of $X$, but there is no finite sub-cover.
+                For given any finite sub-cover, there is a greatest $x$
+                such that $\mathcal{U}_{x}$ is contained in the sub-cover.
+                But then for all $y\in(x,1)$, $y$ is not in the sub-cover.
+                As a trivial example, any finite metric space is compact.
+            \end{lexample}
+            \begin{theorem}
+                If $K$ is a subspace of $X$, then $K$ is compact if and only
+                if every open cover of $K$ has a finite sub-cover.
+            \end{theorem}
+            \begin{proof}
+                For suppose $(K,d_{K})$ is compact, and let
+                $\mathcal{O}$ be an open cover of $K$. Then:
+                \begin{equation}
+                    \mathcal{O}_{K}
+                        =\{K\cup\mathcal{U}:\mathcal{U}\in\mathcal{O}\}
+                \end{equation}
+                Is an open cover of $K$. But $K$ is compact, and thus there is
+                a finite sub-cover $\Delta_{K}$. But then:
+                \begin{equation}
+                    \Delta=\{\mathcal{U}\in\mathcal{U}:
+                             \mathcal{U}\cap{K}\in\Delta_{K}\}
+                \end{equation}
+                And this is a finite sub-cover.
+            \end{proof}
+            \begin{ldefinition}{Finite Intersection Property}
+                A subset with the finite intersection property in a metric
+                space $(X,d)$ is a collection of sets
+                $\mathscr{F}\subseteq\mathcal{P}(X)$ if, for any
+                sequence $F:\mathbb{Z}_{n}\rightarrow\mathscr{F}$, 
+                it is true that $\cap_{k=1}^{n}F_{k}\ne\emptyset$.
+            \end{ldefinition}
+            \begin{theorem}
+                A metric space $(X,d)$ is compact if and only if every
+                collection $\mathscr{F}$ of closed sets in $X$ with the
+                finite intersection property is such that:
+                \begin{equation}
+                    \cap_{\mathcal{C}\in\mathcal{F}}\mathcal{C}\ne\emptyset
+                \end{equation}
+            \end{theorem}
+            \begin{lexample}
+                Let $F_{n}=[n,\infty)$, and let
+                $\mathscr{F}=\{F_{n}:n\in\mathbb{N}\}$.
+                Then $\mathscr{F}$ has the finite intersection property.
+                However, the intersection over the entire set is empty, and
+                hence $\mathbb{R}$ (With the standard metric) is not compact.
+            \end{lexample}
+            \begin{ldefinition}{Totally Bounded Metric Space}
+                A totally bounded metric space is a metric space $(X,d)$ such
+                that, for all $\varepsilon>0$, there exists an $n\in\mathbb{N}$
+                and a sequence $a:\mathbb{Z}_{n}\rightarrow{X}$ such that:
+                \begin{equation}
+                    X=\cup_{k=1}^{n}B_{\varepsilon}^{(X,d)}(a_{k})
+                \end{equation}
+            \end{ldefinition}
+            \begin{ldefinition}{$\varepsilon\textrm{-Nets}$}
+                An $\varepsilon\textrm{-Net}$ of a subspace
+                $(\mathcal{E},d_{\mathcal{E}})$ of a
+                metric space $(X,d)$ is a finite collection:
+                \begin{equation}
+                    E=\{B_{\varepsilon}^(X,d)(x_{k}):x\in\mathbb{Z}_{n}\}
+                \end{equation}
+                Such that $E$ is an open cover of $\mathcal{E}$.
+            \end{ldefinition}
+            \begin{lexample}
+                Let $X=\ell^{2}$ and let:
+                \begin{equation}
+                    e_{n}(x)=
+                    \begin{cases}
+                        1,&k=n\\
+                        0,&k\ne{n}
+                    \end{cases}
+                \end{equation}
+                Then $e_{n}\in\ell^{2}$ and $\norm{e}_{2}=1$, but for all
+                $n\ne{m}$, $\norm{e_{n}-e_{m}}_{2}=\sqrt{2}$. Let:
+                \begin{equation}
+                    B_{1}=\{f\in\ell^{2}:\norm{f}_{2}\leq{1}\}
+                \end{equation}
+                Then $B_{1}$ is bounded, but if $\varepsilon=\sqrt{2}/2$ then
+                no finite collection of $\varepsilon$ balls can cover
+                $B_{1}$ since each ball can contain at most one of the
+                $e_{n}$. Thus any cover is infinite.
+            \end{lexample}
+            \begin{theorem}
+                A subset of $(\mathbb{R}^{n},\norm{\cdot}_{2})$ is totally
+                bounded if and only if it's bounded.
+            \end{theorem}
+            \begin{proof}
+                Totally bounded implies bounded, so it suffices to show that
+                if $\mathbb{R}^{n}$ is bounded then it is totally bounded.
+                Let $\mathcal{E}\subseteq\mathbb{R}^{n}$ be bounded. Then
+                there is an $r>0$ such that:
+                \begin{equation}
+                    \mathcal{E}\subseteq[-r,r]^{n}
+                \end{equation}
+                Then, compactness, stuff like that.
+            \end{proof}
+            This works for any norm on $\mathbb{R}^{n}$, since all norm's
+            on $\mathbb{R}^{n}$ are strongly equivalent.
+            \begin{ldefinition}{Sequential Compactness}
+                A sequentially compact metric space is a metric space $(X,d)$
+                such that, for all $a:\mathbb{N}\rightarrow{X}$, there is a
+                convergent subsequence of $a$.
+            \end{ldefinition}
+            \begin{lexample}
+                Let $X\subseteq\mathbb{R}$ be defined by:
+                \begin{equation}
+                    X=\{\frac{1}{n}:n\in\mathbb{N}\}\cup\{0\}
+                \end{equation}
+                Then $X$ is sequentially compact, with respect to the
+                subspace metric.
+            \end{lexample}
+\end{document}
