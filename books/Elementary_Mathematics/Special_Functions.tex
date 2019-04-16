@@ -709,9 +709,10 @@
                 \int_{0}^{\infty}\exp(iu^{2})\Big)\\
                 &=\frac{1-i}{\sqrt{2}}\int_{0}^{\infty}
                 \big(\cos(u^{2})+i\sin(u^{2})\big)\diff{u}\\
-                &=\frac{1}{\sqrt{2}}\int_{0}^{\infty}
-                \big(\cos(u^{2})+\sin(u^{2})\big)\diff{u}
-                +\frac{i}{\sqrt{2}}\int_{0}^{\infty}
+                \nonumber&=\frac{1}{\sqrt{2}}\int_{0}^{\infty}
+                    \big(\cos(u^{2})+\sin(u^{2})\big)\diff{u}\\
+                &\quad\quad\quad\quad
+                    +\frac{i}{\sqrt{2}}\int_{0}^{\infty}
                 \big(\sin(u^{2})-\cos(u^{2})\big)\diff{u}\\
                 &=\frac{\sqrt{\pi}}{2}
             \end{align}
@@ -1407,9 +1408,13 @@
         But also, for all $n\in\mathbb{N}$, $B_{2n}(0)=B_{2n}(1)$. So we can
         simplify further:
         \begin{equation}
-            \int_{0}^{1}f(x)\diff{x}=\frac{1}{2}(f(0)+f(1))-
-            \sum_{n=1}^{m}b_{2n}\frac{f^{(2n-1)}(1)-f^{(2n-1)}(0)}{(2n)!}
-            +\frac{1}{(2m)!}\int_{0}^{1}B_{2m}(x)f^{(2m)}(x)\diff{x}
+            \begin{split}
+                \int_{0}^{1}f(x)\diff{x}=
+                    \frac{1}{2}(f(0)+f(1))-\sum_{n=1}^{m}&b_{2n}
+                        \frac{f^{(2n-1)}(1)-f^{(2n-1)}(0)}{(2n)!}\\
+                    &+\frac{1}{(2m)!}\int_{0}^{1}
+                        B_{2m}(x)f^{(2m)}(x)\diff{x}
+            \end{split}
         \end{equation}
         Apply this to the function $f(x+1)$. Since this is just a translate,
         the derivatives don't change. Replace $B_{2n}(x)$ with its
@@ -2536,4 +2541,271 @@
         \end{equation}
         And we see that this decays extremely fast, and indeed the
         radius of convergence is the entire real line.
+    \section{Lecture I-Stopped-Counting}
+        Previously we studied Bessel's Equation:
+        \begin{equation}
+            x^{2}\ddot{y}+x\dot{y}+(x^{2}-p^{2})y=0
+        \end{equation}
+        Using the method of Frobnius, we found one solution to be:
+        \begin{equation}
+            J_{p}(x)=\sum_{n=0}^{\infty}
+                \frac{(\minus{1})^{n}}{n!\Gamma(n+p+1)}
+                \Big(\frac{x}{2}\Big)^{2n+p}
+        \end{equation}
+        If $p\ne{0}$, then $J_{p}$ and $J_{\minus{p}}$ are both
+        solutions. If $p\notin\mathbb{N}$, then $J_{p}$ and
+        $J_{\minus{p}}$ are solution. We can see this since
+        $J_{p}(x)\rightarrow{0}$ as $x\rightarrow{0}$, whereas
+        $J_{\minus{p}}(x)\rightarrow\infty$ as
+        $x\rightarrow{0}^{+}$. In the case that $p\notin\mathbb{N}$,
+        we can write the general solution as:
+        \begin{equation}
+            y(x)=C_{1}J_{p}(x)+C_{2}J_{\minus{p}}(x)
+        \end{equation}
+        If $n\in\mathbb{N}$, then:
+        \begin{equation}
+            J_{\minus{n}}(x)=\sum_{k=0}^{\infty}
+                \frac{(\minus{1})^{k}}{k!\Gamma(k+1-n)}
+                \Big(\frac{x}{2}\Big)^{2k-n}
+        \end{equation}
+        The coefficients are thus zero, due to the Gamma function,
+        for when $k+1-n\leq{0}$, and thus we may as well start
+        the sum from $k\geq{n}$. Doing this we obtain:
+        \begin{subequations}
+            \begin{align}
+                J_{\minus{n}}(x)&=\sum_{k=n}^{\infty}
+                    \frac{(\minus{1})^{k}}{k!\Gamma(k+1-n)}
+                    \Big(\frac{x}{2}\Big)^{2k-n}\\
+                &=\sum_{k=0}^{n}
+                    \frac{(\minus{1})^{k+n}}{k!\Gamma(k+1)}
+                    \Big(\frac{x}{2}\Big)^{2(k+n)-n}\\
+                &=(\minus{1})^{n}\sum_{n=0}^{\infty}
+                    \frac{(\minus{1})^{n}}{k!(n+k)!}
+                    \Big(\frac{x}{2}\Big)^{2k+n}\\
+                &=(\minus{1})^{n}J_{n}(x)
+            \end{align}
+        \end{subequations}
+        Frobenius thus failed to find two independent solutions for
+        when $p\in\mathbb{N}$. However, the Frobenius method does
+        then suggest looking for a second solution in the form:
+        \begin{equation}
+            y(x)=J_{p}(x)\ln(x)+\sum_{k=0}^{\infty}b_{k}x^{k-p}
+        \end{equation}
+        This is not the standard approach, and instead $J_{p}(x)$
+        is taken as the first solution, and we define the
+        Bessel Function of the second kind to be:
+        \begin{equation}
+            Y_{p}(x)=
+            \frac{J_{p}(x)\cos(\pi{p})-J_{\minus{p}}(x)}
+                {\sin(\pi{p})}
+            \quad\quad
+            p\notin\mathbb{Z}
+        \end{equation}
+        In the limit as $p\rightarrow{n}$, for $n\in\mathbb{Z}$,
+        we obtain an indeterminate form. This is because:
+        \begin{equation}
+            J_{n}(x)\cos(\pi{n})-J_{\minus{n}}=
+            (\minus{1})^{n}J_{n}(x)-J_{\minus{n}}(x)=0
+        \end{equation}
+        And $\sin(n\pi)=0$, so we obtain $\tfrac{0}{0}$. To
+        evaluate this we need to invoke L'H\"{o}pital's rule.
+        Differentiating the denominator is easy, and we get
+        $\pi\cos(\pi{p})$. Differentiating the numerator is trickier:
+        We obtain:
+        \begin{equation}
+            \underset{p\rightarrow{n}}{\lim}
+            \frac{-\pi{J}_{p}(x)\sin(\pi{p})+\partial_{p}J_{p}(x)-
+                  \partial_{p}J_{\minus{p}}(x)}{\pi\cos(\pi{p})}
+        \end{equation}
+        We can evaluate $\partial_{p}J_{p}(x)$ as follows:
+        \begin{subequations}
+            \begin{align}
+                \partial_{p}J_{p}(x)&=
+                \frac{\partial}{\partial{p}}
+                \Big[\sum_{k=0}^{\infty}
+                    \frac{(\minus{1})^{k}}{k!\Gamma(p+k+1)}
+                    \Big(\frac{x}{2}\Big)^{2k+p}\Big]\\
+                &=\sum_{k=0}^{\infty}
+                    \frac{(\minus{1})^{k}}{k!\Gamma(k+p+1)}
+                    \Big(\frac{x}{2}\Big)^{2k+p}
+                    \Big[\ln\big(\frac{x}{2}\big)-\Psi(p+k+1)\Big]
+            \end{align}
+        \end{subequations}
+        Where $\Psi$ is the Digamma function. This can be used
+        to evaluate the final limit. From this, we obtain the
+        general solution to bessel's equation:
+        \begin{equation}
+            y(x)=C_{1}J_{p}(x)+C_{2}Y_{p}(x)
+        \end{equation}
+        The most important case of the Bessel functions is when
+        $p\in\mathbb{N}$. The second most important case is when
+        $p=n+\frac{1}{2}$, for some $n\in\mathbb{N}$.
+        \subsection{Generating Function}
+            The Bessel functions of the first kind have the
+            following generating function:
+            \begin{equation}
+                \exp\Big(\frac{x}{2}(t-t^{\minus{1}})\Big)
+                =\sum_{n=\minus\infty}^{\infty}
+                    J_{n}(x)t^{n}
+            \end{equation}
+            We can obtain this as follows:
+            \begin{subequations}
+                \begin{align}
+                    \exp\Big(\frac{x}{2}(t-t^{\minus{1}})\Big)
+                    &=\sum_{k=0}^{\infty}\frac{1}{k!}
+                    \Big[\frac{1}{2}x(t-t^{\minus{1}})\Big]^{k}\\
+                    &=\sum_{k=0}^{\infty}\frac{1}{k!}
+                        \Big(\frac{x}{2}\Big)^{k}
+                        \Big(t-t^{\minus{1}}\Big)^{k}
+                \end{align}
+            \end{subequations}
+            Using the binomial expansion on this last sum, we
+            obtain:
+            \begin{subequations}
+                \begin{align}
+                    \exp\Big(\frac{x}{2}(t-t^{\minus{1}})\Big)
+                    &=\sum_{k=0}^{\infty}\frac{1}{k!}
+                        \Big(\frac{x}{2}\Big)^{k}
+                        \sum_{j=0}^{k}\binom{K}{j}
+                        (\minus{1})^{k-j}t^{k}t^{j-k}\\
+                    &=\sum_{k=0}^{\infty}\sum_{j=0}^{k}
+                        \frac{1}{k!}\Big(\frac{x}{2}\Big)^{k}
+                        \binom{k}{j}(\minus{1})^{k-j}t^{2j-k}
+                \end{align}
+            \end{subequations}
+            Rearranging this sum, we obtain the result. If
+            $t=\exp(i\theta)$, we obtain:
+            \begin{align}
+                \exp\Big(\frac{x}{2}\big(
+                    \exp(i\theta)-\exp(\minus{i}\theta)\big)\Big)
+                &=\exp\big(i\sin(\theta)\big)\\
+                &=\sum_{n=\minus\infty}^{\infty}
+                    J_{n}(x)\exp(in\theta)
+            \end{align}
+            The Euler-Formula for the coefficients of a Fourier
+            series is:
+            \begin{equation}
+                c_{n}=\frac{1}{\pi}\int_{\minus\pi}^{\pi}
+                    f(\theta)\exp(\minus{i}n\theta)\diff{\theta}
+            \end{equation}
+            From this, we obtain:
+            \begin{equation}
+                J_{n}(x)=\frac{1}{2\pi}
+                    \int_{\minus\pi}^{\pi}
+                    \exp\big(ix\sin(\theta)\big)
+                    \exp(\minus{i}n\theta)\diff{\theta}
+            \end{equation}
+            Using Euler's Formula for the exponential function,
+            we obtain:
+            \begin{equation}
+                J_{n}(x)=\frac{1}{2\pi}
+                \int_{\minus\pi}^{\pi}\Big[
+                    \cos\big(x\sin(\theta)-n\theta)-
+                    i\sin\big(x\sin(\theta)-n\theta\big)\Big]
+                    \diff{\theta}
+            \end{equation}
+            We can evaluate the imaginary part by one of two ways.
+            The first is to note that the composition of odd
+            functions is again an odd function, and the integral
+            of an odd function on a symmetric interval is zero.
+            The second way is to note that $J_{n}(x)$ is a purely
+            real function, and thus has no imaginary part. Therefore
+            the imaginary integral must be zero. Using this, we
+            obtain:
+            \begin{align}
+                J_{n}(x)&=\frac{1}{2\pi}\int_{\minus\pi}^{\pi}
+                    \cos\big(x\sin(\theta)-n\theta\big)\\
+                &=\frac{1}{\pi}\int_{0}^{\pi}
+                    \cos\big(x\sin(\theta)-n\theta\big)
+            \end{align}
+        \subsection{Hankel Functions}
+            Hankel functions are also called Bessel functions
+            of the third kind, and they come in two flavors.
+            \begin{align}
+                H_{p}^{(1)}(x)
+                    &=J_{p}(x)+iY_{p}(x)\\
+                H_{p}^{(2)}(x)&=J_{p}(x)-iY_{p}(x)
+            \end{align}
+            These are useful in various areas of mathematics and
+            have nice properties as $x\rightarrow\infty$.
+        \subsection{Airy's Equation}
+            The Bessel functions satisfy the following
+            general differential equation. Given:
+            \begin{equation}
+                y(x)=x^{a}J_{p}(bx^{x})
+            \end{equation}
+            We have:
+            \begin{equation}
+                x^{2}\ddot{y}(x)+(1-2a)x\dot{y}(x)+
+                \Big[b^{2}c^{2}x^{2c}+(a^{2}-c^{2}p^{2}\Big]y(x)
+                =0
+            \end{equation}
+            Similarly if we defined $y$ it terms of $Y_{p}(x)$.
+            Airy's equation is a second order differential equation
+            that comes up in optics and physics. It is defined by:
+            \begin{equation}
+                \ddot{y}+xy=0
+            \end{equation}
+            Multiplying through by $x^{2}$, we obtain:
+            \begin{equation}
+                x^{2}\ddot{y}+x^{3}y=0
+            \end{equation}
+            So, we need $1-2a=0$ and $x=\frac{3}{2}$. We also need
+            $b^{2}c^{2}=1$ and $a^{2}=c^{2}p^{2}$. This constrains
+            us to $p=\frac{1}{3}$ and $b=\frac{2}{3}$. We thus
+            arrive at the general solution to Airy's equation:
+            \begin{equation}
+                y(x)=x^{\frac{1}{2}}C_{1}J_{\frac{1}{3}}
+                    \Big(\frac{2}{3}x^{\frac{3}{2}}\Big)+
+                    x^{\frac{1}{2}}C_{2}Y_{\frac{1}{3}}
+                    \Big(\frac{2}{3}x^{\frac{3}{2}}\Big)
+            \end{equation}
+        \subsection{More Stuff About Bessel}
+            Let $a=\frac{1}{2}$, $b=1$, $c=1$,
+            and $p=\frac{1}{2}$. Then the general differential
+            equation reduces to:
+            \begin{equation}
+                \ddot{y}+y=0
+            \end{equation}
+            Then the solution is:
+            \begin{equation}
+                y(x)=C_{1}\sqrt{x}J_{\frac{1}{2}}(x)+
+                    C_{2}\sqrt{x}J_{\minus\frac{1}{2}}(x)
+            \end{equation}
+            But we can solve this directly from the standard
+            methods found in differential equations to obtain:
+            \begin{equation}
+                y(x)=A\cos(x)+B\sin(x)
+            \end{equation}
+            From this, we obtain:
+            \begin{align}
+                J_{\frac{1}{2}(x)}
+                    &=\sqrt{\frac{2}{\pi{x}}}\sin(x)\\
+                J_{\minus\frac{1}{2}(x)}
+                    &=\sqrt{\frac{2}{\pi{x}}}\cos(x)
+            \end{align}
+            If $p\ne\frac{1}{4}$ then this result is a good
+            approximation for large $x$. The validity of the
+            approximation comes from the method of stationary
+            phase.
+        \subsection{Complex Stationary Phase}
+            Suppose $h$ is an analytic function and is such
+            that $h$ has a single stationary point
+            $c\in[a,b]$ and is such that $h''(c)\ne{0}$.
+            Then, as $x\rightarrow\infty$, we obtain the following:
+            \begin{equation}
+                \int_{a}^{b}f(t)\exp\big(ixh(t)\big)\diff{t}
+                \sim{f}(x)\exp\Big(ixh(c)\pm{i}\frac{\pi}{4}\Big)
+                    \sqrt{\frac{2\pi}{x|h''(c)|}}
+            \end{equation}
+            Where the $\pm$ is determined by the sign of
+            $h''(c)$. We can use this formula and combine it with
+            our integral formula for $J_{p}(x)$ to obtain a good
+            approximation for the Bessel functions for large $x$.
+            We obtain:
+            \begin{equation}
+                J_{n}(x)\approx
+                \sqrt{\frac{2}{\pi{x}}}
+                \cos\Big(x-\frac{\pi}{4}-n\frac{\pi}{2}\Big)
+            \end{equation}
 \end{document}

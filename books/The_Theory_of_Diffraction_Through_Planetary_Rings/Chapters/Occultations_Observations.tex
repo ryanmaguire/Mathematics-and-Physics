@@ -16,85 +16,36 @@
     \else
         \chapter{Occultations Observations}
     \fi
-    \section{Diffraction Theory for Occultation Observations}
-        \subsection{Some Notes on Fresnel Inversion}
-            The main equation we wish to study is:
-            \begin{equation*}
-            \hat{T}(\rho_0) = \frac{1-i}{2F}\int_{-\infty}^{\infty} T(\rho)e^{i\psi(\rho_0,\phi_0,\rho,\phi_s)}d\rho
-            \end{equation*}
-            We wish to solve for $T(\rho)$. In general, this is not possible. Indeed, uniqueness is not always necessary. Let us suppose that $\psi = \sum_{n=0}^{\infty}a_n(\rho_0 - \rho)^n$. It is still not the case that we may solve this. What we wish to do is use the Convolution theorem, which states the following:
-            \begin{theorem}
-            If $f,g\in L^{1}(\mathbb{R})$, then $f*g = \mathcal{F}^{-1}\big(\mathcal{F}_{\xi}(f)\cdot \mathcal{F}_{\xi}(g)\big)$
-            \end{theorem}
-            The requirement that $f,g\in L^{1}(\mathbb{R})$ is necessary. Suppose we have $\int_{-\infty}^{\infty} e^{-\rho^2}e^{2\pi i(\rho_0 - \rho)}d\rho = T*e^{i2\pi \rho}$. $\mathcal{F}_{\rho_0}(e^{-\rho^2})\cdot \mathcal{F}_{\rho_0}(e^{2\pi i \rho}) = \sqrt{\pi}e^{-\pi^2 \rho_0^2}\int_{-\infty}^{\infty}e^{2\pi i(\rho-\rho_0)}d\rho$, and this integral on the right does not converge. We may speak in terms of distributions, or generalized functions (Most commonly, the delta function), but this makes numerical application difficult. Going back to our original problem, we have:
-            \begin{align*}
-            \nonumber \psi(\rho_0,\phi_0,\rho,\phi_s) &= kD\sqrt{1+\big(\rho^2+\rho_0^2 - 2\rho \rho_0 \cos(\phi - \phi_s)\big)/D^2 + \cos(B)\big(\rho_0\cos(\phi_0) - \rho\cos(\phi)\big)/D} - \\ &\bigg(1+\cos(B)(\rho_0\cos(\phi_0) - \rho\cos(\phi_s)\big)/D\bigg)
-            \end{align*}
-            Unfortunately, for all values of $\psi$, $\int_{-\infty}^{\infty} |e^{i\psi}|d\rho = \int_{-\infty}^{\infty} 1d\rho = +\infty$. So, we never have the case that $e^{i\psi} \in L^{1}(\mathbb{R})$. However, there are many examples of $\psi$'s such that this theorem still seems to work. Let $\psi = \frac{\pi}{2}\rho^2$, and let $T(\rho) = e^{-\psi}$. Then $T*e^{i\psi} = \int_{-\infty}^{\infty} e^{-\frac{\pi}{2}\rho^2}e^{i\frac{\pi}{2}(\rho_0-\rho)^2}d\rho = \sqrt{1+i}e^{-\frac{1+i}{4}\rho_0^2}$. And $\mathcal{F}_{\xi}\big(\sqrt{1+i}e^{-\frac{1+i}{4}\rho_0^2}\big) = \sqrt{2}(1+i)e^{-(1+i)2\pi \xi^2}$. Now, $\mathcal{F}_{\xi}(e^{-\frac{\pi}{2}\rho^2})\cdot \mathcal{F}_{\xi}(e^{i\frac{\pi}{2}\rho^2}) = \sqrt{2}e^{-2\pi \xi^2}(1+i)e^{-2\pi i \xi^2} = \sqrt{2}(1+i)e^{-(1+i)2\pi \xi^2}$. So we see that, even though $\psi \notin L^{1}(\mathbb{R})$, we still that the result still holds here. 
-        \subsection{Window Width as a Function of Resolution}
-            We start with the following definition for resolution.
-            \begin{definition}
-            The resolution of a reconstruction is:
-            \begin{equation*}
-                \Delta R=\frac{2F^{2}}{W_{eff}}\frac{\frac{b^2}{2}}{e^{-b}+b-1}=\frac{F^{2}}{W_{eff}}\frac{b^2}{e^{-b}+b-1}
-            \end{equation*}
-            Where $W_{eff}$ and $b$ have the following definitions:
-            \begin{align*}
-                W_{eff}&=\frac{W}{N_{eq}}&b&=\frac{\sigma^2\omega^2}{2\dot{\rho}}W_{eff}
-            \end{align*}
-            Here $N_{eq}$ is the normalized equivalent width, $\sigma$ is the Allen Deviation, $\omega$ is the angular frequency, and $\dot{\rho}=\frac{d\rho}{dt}$, where $\rho(t)$ is the ring radius of the ring intercept point. Let $\alpha = \frac{\sigma^2 \omega^2}{2\dot{\rho}}$. Then $b = \alpha W_{eff}$. So:
-            \begin{equation*}
-            R = \frac{F^2}{W_{eff}}\frac{\alpha^2 W_{eff}^2}{e^{-\alpha W_{eff}}+\alpha W_{eff}-1} = \alpha F^2 \frac{\alpha W_{eff}}{e^{-\alpha W_{eff}}+\alpha W_{eff} - 1}
-            \end{equation*}
-            Let $f(x) = xe^{x}$. Then for $x\in \mathbb{R}^{+}$, $f^{-1}(x)$ exists and $f^{-1}(x) = L_{W}(x)$, where $L_{W}(x)$ is the Lambert W Function. Using $b$ again, we have:
-            \begin{equation*}
-                \Delta R = \alpha F^2 \frac{b}{e^{-b}+b-1}\Rightarrow \frac{R}{\alpha F^2} = \frac{b}{e^{-b}+b-1}
-            \end{equation*}
-            Letting $y = \frac{\Delta R}{\alpha F^2}$, we have:
-            \begin{equation*}
-                y = \frac{b}{e^{-b}+b-1}
-            \end{equation*}
-            This is invertable in terms of $L_{W}$:
-            \begin{equation*}
-                b = L_{W}\bigg(\frac{y}{1-y}e^{\frac{y}{1-y}}\bigg) - \frac{y}{1-y}
-            \end{equation*}
-            \end{definition}
-        \subsection{The Forward Model}
-            Given a plane wave of wavelength $\lambda$
-            travelling in the $\mathbf{\hat{u}}_{i}$ direction
-            incident on a thin plane screen, with plane angle $B$,
+    \section{Diffraction Theory for Occultations}
+        \subsection{Reduction to a Single Integral}
+            We have modelled our problem from the
+            Fresnel-Huygens principle. Given a plane wave of
+            wavelength $\lambda$ travelling in the
+            $\mathbf{\hat{u}}_{i}$ direction incident on a thin
+            plane screen, with plane angle $B$,
             the complex transmittance at the point
             $\boldsymbol{\uprho_{0}}=(\rho_{0},\phi_{0})$ measured
             by an observer at the point $\mathbf{R_{c}}$ can be
             modelled by the following equation:
             \begin{equation}
                 \hat{T}(\boldsymbol{\uprho_{0}})
-                =\frac{\sin(B)}
-                      {i\lambda}
-                \int_{0}^{2\pi}\int_{0}^{\infty}
+                =\frac{\mu_{0}}{i\lambda}
+                    \int_{0}^{2\pi}\int_{0}^{\infty}
                     T(\boldsymbol{\rho})
-                    e^{%
-                        ik\mathbf{\hat{u}}_{i}\cdot
-                        (\boldsymbol{\uprho}-\mathbf{R_{c}})
-                    }
-                    \frac{%
-                        e^{%
-                            ik\norm{%
-                                \mathbf{R_{c}}
-                                -\boldsymbol{\uprho}
-                            }
-                        }
-                    }{%
-                        \norm{%
-                            \mathbf{R_{c}}
-                            -\boldsymbol{\uprho}
-                        }
-                    }
-                    \rho{d}\rho{d}\phi
+                    \exp\big(ik\mathbf{\hat{u}}_{i}\cdot
+                        (\boldsymbol{\uprho}-\mathbf{R_{c}})\big)
+                    \frac{\exp(ik
+                          \norm{\mathbf{R_{c}}-\boldsymbol{\uprho}})}
+                         {\norm{\mathbf{R_{c}}-\boldsymbol{\uprho}}}
+                    \rho\diff{\rho}\diff{\phi}
             \end{equation}
             Where $\boldsymbol{\uprho}=(\rho,\phi)$ and $k$
-            is the wavenumber $k=\frac{2\pi}{\lambda}$. If
-            $\mathbf{R_{c}}$ does not lie in the plane of the
+            is the wavenumber $k=\frac{2\pi}{\lambda}$, and
+            $\mu_{0}$ is defined as:
+            \begin{equation}
+                \mu_{0}=\sin(|B|)
+            \end{equation}
+            If $\mathbf{R_{c}}$ does not lie in the plane of the
             screen, and if the transmittance
             $T(\boldsymbol{\uprho})$ is bounded, then this
             integral converges. If we let
@@ -102,55 +53,261 @@
             then we can collect all of the exponential terms
             together as:
             \begin{equation}
-                \begin{split}
-                    \psi(\rho_{0},\phi_{0};\rho,\phi)
-                    =kD\Bigg[%
-                        \sqrt{1+2\cos(B)
-                        \frac{%
-                            \rho_{0}\cos(\phi_{0})
-                            -\rho\cos(\phi)
-                        }{D}
-                        +\frac{%
-                            \rho^{2}+\rho_{0}^{2}
-                            -2\rho\rho_{0}\cos(\phi-\phi_{0})
-                        }{D^2}}\\
-                        -\bigg(
-                            1+\cos(B)
-                            \frac{%
-                                \rho_{0}\cos(\phi_{0})
-                                -\rho\cos(\phi)
-                            }{D}
-                        \bigg)
-                    \Bigg]
-                \end{split}
+                \psi(\rho_{0},\phi_{0},\rho,\phi_{s})
+                =kD\Big[\sqrt{1-2\xi+\eta}-1+\eta\Big]
             \end{equation}
+            Where $\eta$ and $\xi$ are defined by:
+            \begin{subequations}
+                \begin{align}
+                    \xi&=\cos(B)\Big(
+                    \frac{\rho\cos(\phi)-\rho_{0}\cos(\phi_{0}}{D}
+                    \Big)\\
+                    \eta&=\frac{\rho^{2}+\rho_{0}^{2}-2\rho\rho_{0}
+                               \cos(\phi-\phi_{0})}{D^{2}}
+                \end{align}
+            \end{subequations}
+            Please note that $\eta$ here is defined as the negative
+            of the $\eta$ defined in Marouf et. al 1986. This
+            convention is adopted to make it clear later that
+            Legendre polynomials can be applied to the problem.
             The integral becomes:
             \begin{equation}
                 \hat{T}(\boldsymbol{\uprho_{0}})
                 =\frac{\sin(B)}{i\lambda}
-                 \int_{0}^{2\pi}\int_{0}^{\infty}\rho
-                 T(\boldsymbol{\uprho})
-                 \frac{%
-                    e^{i\psi(\rho_{0},\phi_{0};\rho,\phi)}
-                }{%
-                    \norm{\mathbf{R_{c}}-\boldsymbol{\uprho}}
-                }d\rho{d}\phi    
+                    \int_{0}^{2\pi}\int_{0}^{\infty}\rho
+                    T(\boldsymbol{\uprho})
+                    \frac{\exp\big(i\psi(\rho_{0},\phi_{0};
+                          \rho,\phi)\big)}
+                         {\norm{\mathbf{R_{c}}-\boldsymbol{\uprho}}}
+                    \diff{\rho}\diff{\phi}
             \end{equation}
             We impose that $T$ is non-negative
-            (There's no such thing as 'negative' transmittance).
-            From this we may use a complex version of Funini's
+            (There's no such thing as `negative' transmittance).
+            From this we may use a complex version of Fubini's
             theorem to obtain:
             \begin{equation}
                 \hat{T}(\boldsymbol{\uprho_{0}})
-                =\frac{\sin(B)}{i\lambda}\int_{0}^{\infty}\rho T(\boldsymbol{\uprho})\int_{0}^{2\pi}\frac{e^{i\psi(\rho_{0},\phi_{0};\rho,\phi)}}{\norm{\mathbf{R_{c}}-\boldsymbol{\uprho}}}d\phi d\rho
+                =\frac{\sin(B)}{i\lambda}
+                    \int_{0}^{\infty}\rho{T}(\boldsymbol{\uprho})
+                    \int_{0}^{2\pi}
+                    \frac{\exp\big(i\psi(\rho_{0},\phi_{0};
+                          \rho,\phi)\big)}
+                         {\norm{\mathbf{R_{c}}-\boldsymbol{\uprho}}}
+                    \diff{\phi}\diff{\rho}
             \end{equation}
-                In general, this is as far as one can simplify the problem. For ring systems, which we are studying, we can suppose that $T(\boldsymbol{\uprho})=T(\uprho)$. That is, the screen is radially symmetric. The task is, given the data $\hat{T}(\boldsymbol{\uprho})$, can we determine $T(\uprho)$? Unfortunately, we don't have an entire planar set of data, but rather some curve. The need then arises to try to collapse this problem down to a single integral by some means of approximation. The Stationary Phase Approximation works here.
+                In general, this is as far as one can simplify the
+                problem. For ring systems, which we are studying, we
+                can suppose that $T(\boldsymbol{\uprho})=T(\uprho)$.
+                That is, the screen is radially symmetric. The task
+                is, given the data $\hat{T}(\boldsymbol{\uprho})$,
+                can we determine $T(\uprho)$? Unfortunately, we don't
+                have an entire planar set of data, but rather some
+                curve. The need then arises to try to collapse this
+                problem down to a single integral by some means of
+                approximation. The Stationary Phase Approximation
+                works well here. Recall that if we have an equation
+                like:
+                \begin{equation}
+                    I(k)=
+                    \int_{\Omega}f(x)\exp\big(ikg(x)\big)\diff{x}
+                \end{equation}
+                Where $g$ is a smooth function with a minimum
+                $x_{0}$, then for large $k$
+                we can approximate $I$ as:
+                \begin{equation}
+                    I(k)\approx
+                    \exp\big(ikg(x_{0})\big)
+                        \sqrt{\frac{2\pi{i}}{k|g''(c)|}}
+                \end{equation}
+        \subsection{The Inversion Approximation}
+            The main equation we wish to study is:
+            \begin{equation}
+            \hat{T}(\rho_0)=
+            \frac{1-i}{2F}\int_{-\infty}^{\infty}T(\rho)
+            \exp\big(i\psi(\rho_{0},\phi_{0},\rho,\phi_{s})\big)
+                \diff{\rho}
+            \end{equation}
+            We wish to solve for $T(\rho)$. In general, this is not
+            possible and indeed uniqueness is not always guaranteed.
+            For suppose $\hat{T}$ is the zero function, and
+            $\psi$ is a constant. Then any function $T$ whose
+            integral on the real line is zero will be a solution,
+            and there are infinitely many such functions.
+            Let us suppose that $\psi$ has the form:
+            \begin{equation}
+                \psi=\sum_{n=0}^{\infty}a_{n}(\rho-\rho_{0})^{n}
+            \end{equation}
+            It is still not the case that we may solve this. What
+            we wish to do is use the Convolution theorem, which
+            states the following:
+            \begin{theorem}
+                If $f,g\in L^{1}(\mathbb{R})$, then:
+                \begin{equation}
+                    f*g=\mathcal{F}^{-1}\big(
+                        \mathcal{F}_{\xi}(f)\cdot
+                        \mathcal{F}_{\xi}(g)
+                    \big)
+                \end{equation}
+            \end{theorem}
+            The requirement that $f,g\in L^{1}(\mathbb{R})$ is
+            necessary. For suppose we have:
+            \begin{equation}
+                \int_{-\infty}^{\infty}
+                    \exp(\minus\rho^{2})
+                    \exp\big(2\pi{i}(\rho-\rho_{0})\big)\diff{\rho}
+                    =T*e^{i2\pi\rho}    
+            \end{equation}
+            Taking the Fourier Transform, we get:
+            \begin{equation}
+                \mathcal{F}_{\rho_0}(e^{\minus\rho^{2}})\cdot
+                \mathcal{F}_{\rho_0}(e^{2\pi i \rho})
+                =\sqrt{\pi}\exp(\minus\pi^{2}\rho_0^{2})
+                    \int_{-\infty}^{\infty}
+                    \exp\big(2\pi{i}(\rho-\rho_{0})\big)d\rho
+            \end{equation}
+            And the integral on the right does not converge. We may
+            speak in terms of distributions, or generalized
+            functions (Most commonly, the delta function), but this
+            makes numerical application difficult. Going back to
+            our original problem, the $\psi$ we are concerned with
+            comes from the Fresnel kernel. That is::
+            \begin{equation}
+                \psi(\rho_{0},\phi_{0},\rho,\phi_{s})
+                =kD\Big[\sqrt{1-2\xi+\eta}-1+\eta\Big]
+            \end{equation}
+            Where $\eta$ and $\xi$ are defined by:
+            \begin{subequations}
+                \begin{align}
+                    \eta&=\cos(B)\Big(
+                    \frac{\rho\cos(\phi)-\rho_{0}\cos(\phi_{0}}{D}
+                    \Big)\\
+                    \xi&=\frac{\rho^{2}+\rho_{0}^{2}-2\rho\rho_{0}
+                               \cos(\phi-\phi_{0})}{D^{2}}
+                \end{align}
+            \end{subequations}
+            Please note that $\eta$ here is defined as the negative
+            of the $\eta$ defined in Marouf et. al 1986. This
+            convention is adopted to make it clear later that
+            Legendre polynomials can be applied to the problem.
+            Unfortunately, for all values of $\psi$, we have:
+            \begin{equation}
+                \int_{-\infty}^{\infty}|\exp(i\psi)|\diff{\rho}
+                =\int_{-\infty}^{\infty}1\diff{\rho}=+\infty
+            \end{equation}
+            So it is never have the case that
+            $\exp(i\psi)\in L^{1}(\mathbb{R})$. However, there are
+            many examples of $\psi$ where the conclusion of the
+            theorem still seems to hold. Let:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation}
+                        \psi=\frac{\pi}{2}\rho^{2}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation}
+                        T(\rho)=
+                        \exp\big(\minus\frac{\pi}{2}\rho^{2}\big)
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\hfill\par
+            Then evaluate the convolution, we have:
+            \begin{equation}
+                T*e^{i\psi}=
+                \int_{-\infty}^{\infty}
+                e^{-\frac{\pi}{2}\rho^2}
+                e^{i\frac{\pi}{2}(\rho_0-\rho)^2}d\rho
+                =\sqrt{1+i}e^{-\frac{1+i}{4}\rho_0^2}
+            \end{equation}
+            And $\mathcal{F}_{\xi}\big(\sqrt{1+i}e^{-\frac{1+i}{4}\rho_0^2}\big) = \sqrt{2}(1+i)e^{-(1+i)2\pi \xi^2}$. Now, $\mathcal{F}_{\xi}(e^{-\frac{\pi}{2}\rho^2})\cdot \mathcal{F}_{\xi}(e^{i\frac{\pi}{2}\rho^2}) = \sqrt{2}e^{-2\pi \xi^2}(1+i)e^{-2\pi i \xi^2} = \sqrt{2}(1+i)e^{-(1+i)2\pi \xi^2}$. So we see that, even though $\psi \notin L^{1}(\mathbb{R})$, we still that the result still holds here. 
+        \subsection{Window Functions}
+            We start with the following definition for resolution.
+            \begin{definition}
+            The resolution of a reconstruction is:
+            \begin{equation}
+                \Delta{R}=\frac{2F^{2}}{W_{eff}}
+                    \frac{\frac{b^2}{2}}{e^{-b}+b-1}
+                =\frac{F^{2}}{W_{eff}}\frac{b^2}{e^{-b}+b-1}
+            \end{equation}
+            Where $W_{eff}$ and $b$ have the following definitions:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation}
+                        W_{eff}=\frac{W}{N_{eq}}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation}
+                        b=\frac{\sigma^2\omega^2}{2\dot{\rho}}W_{eff}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\hfill\par
+            Here $N_{eq}$ is the normalized equivalent width,
+            $\sigma$ is the Allen Deviation, $\omega$ is the angular
+            frequency, and $\dot{\rho}$ is the time-derivative of
+            $\rho$, where $\rho(t)$ is the ring radius of the ring
+            intercept point. Let:
+            \begin{equation}
+                \alpha=\frac{\sigma^{2}\omega^{2}}{2\dot{\rho}}
+            \end{equation}
+            Then $b=\alpha W_{eff}$. So we have:
+            \begin{subequations}
+                \begin{align}
+                    \Delta{R}=&\frac{F^2}{W_{eff}}
+                    \frac{\alpha^{2}W_{eff}^{2}}
+                        {\exp(\minus\alpha{W}_{eff})
+                         +\alpha{W}_{eff}-1}\\
+                    &=\alpha{F}^{2}\frac{\alpha{W}_{eff}}
+                        {\exp(\minus\alpha{W}_{eff})
+                         +\alpha W_{eff}-1}
+                \end{align}
+            \end{subequations}
+            While it may seem as though we've done some redundant
+            separation of variables, this last expression can be
+            inverted in terms of the Lambert $W$ function. Recall
+            that if $f(x)=x\exp(x)$, $x\in\mathbb{R}^{+}$, then there
+            is an inverse function called the Lambert $W$ function,
+            $L_{W}(x)$, such that:
+            \begin{equation}
+                x=L_{W}(x)\exp\big(L_{W}(X)\big)
+            \end{equation}
+            Returning to $b$ once again, we've reduced
+            $\Delta{R}$ down to:
+            \begin{equation*}
+                \Delta{R}=\alpha{F}^2
+                    \frac{b}{e^{-b}+b-1}\Rightarrow
+                    \frac{R}{\alpha F^2} = \frac{b}{e^{-b}+b-1}
+            \end{equation*}
+            Letting $y=\Delta{R}/\alpha{F}^{2}$, we have:
+            \begin{equation}
+                y=\frac{b}{e^{-b}+b-1}
+            \end{equation}
+            This is invertable in terms of $L_{W}$:
+            \begin{equation*}
+                b=L_{W}\bigg(\frac{y}{1-y}e^{\frac{y}{1-y}}\bigg) - \frac{y}{1-y}
+            \end{equation*}
+            \end{definition}
     \section{Problems with Fresnel Inversion}
         \subsection{Radial Shift from a Linear Phase Offset}
             \begin{theorem}
                 If $\hat{T}_0(\rho_0)=\hat{T}(\rho_0)e^{i(a\rho+b)}$,
-                and if $\hat{f}(\xi)=\mathcal{F}_{\xi}(\hat{T}(\rho_0))$,
-                then $\mathcal{F}_{\xi}(\hat{T}_{0}(\rho_0))=e^{ib}\hat{f}(\frac{a}{2\pi}+\xi)$.
+                and if
+                $\hat{f}(\xi)=\mathcal{F}_{\xi}(\hat{T}(\rho_0))$,
+                then:
+                \begin{equation}
+                    \mathcal{F}_{\xi}(\hat{T}_{0}(\rho_0))
+                    =e^{ib}\hat{f}(\frac{a}{2\pi}+\xi)
+                \end{equation}
             \end{theorem}
             \begin{proof}
                 Let $\hat{T}(\rho_0)$ be the complex amplitude,
@@ -175,17 +332,13 @@
             \nonumber &= e^{ib}\hat{f}(\eta)\\
             		 &= e^{ib}\hat{f}(\frac{a}{2\pi}+\xi)
             \end{align*}
-            
             Thus, we have that:
-            
             \begin{equation*}
             \mathcal{F}_{\xi} (\hat{T}_{0}) = e^{ib}\hat{f}(\frac{a}{2\pi}+\xi)
             \end{equation*}
             So we see that a linear offset in phase creates a horizontal shift in the Fourier transform.
             \end{proof}
-            
-            We want the affects on $T(\rho)$.
-            
+            We want the effects on $T(\rho)$.
             \begin{theorem}
             If $\hat{T}_0(\rho_0) = \hat{T}(\rho_0)e^{i(a\rho+b)}$, $F\ne 0$, $T(\rho) = \int_{-\infty}^{\infty}\hat{T}(\rho_0)e^{i\frac{\pi}{2}\big(\frac{\rho-\rho_0}{F}\big)^2} d\rho_0$, and if $T_{0}(\rho) = \int_{-\infty}^{\infty}\hat{T}_{0}(\rho_0)e^{i\frac{\pi}{2}\big(\frac{\rho-\rho_0}{F}\big)^2} d\rho_0$, then $\norm{T_{0}(\rho)} = \norm{T(\rho - \frac{aF^2}{\pi})}$
             \end{theorem}

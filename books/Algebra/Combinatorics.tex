@@ -492,4 +492,525 @@
                 =[n]_{q}!
             \end{equation}
         \end{theorem}
+    \section{Lecture 6}
+        Last week we introduced q-Analogs, and proved the following
+        identities:
+        \begin{equation}
+            \sum_{\sigma\in{S}_{n}}q^{inv(\sigma)}=
+            \sum_{\sigma\in{S}_{n}}q^{maj(\sigma)}
+            =[n]_{q}!]
+        \end{equation}
+        Where $inv(\sigma)$ is the number of inversions, and
+        $maj(\sigma)$ is the number of descents. We now want a
+        q-Analog of $\binom{n}{k}$. Recall the inversion tables:
+        \begin{equation}
+            \mathcal{I}_{n}=
+                \{(a_{1},\dots,a_{n}):0\leq{a}_{i}\leq{i}\}
+        \end{equation}
+        We can write this as:
+        \begin{equation}
+            \mathcal{I}_{n}=
+                \{0\}\times\{0,1\}\times\{0,1,2\}\times\cdots
+                \times\{0,1,2,\dots,n-1\}
+        \end{equation}
+        From this we obtain:
+        \begin{equation}
+            \Card(\mathcal{I}_{n})=n!
+        \end{equation}
+        We define the function
+        $\Psi_{1}:\mathcal{I}_{n}\rightarrow{S}_{n}$ by mapping:
+        \begin{equation}
+            \Psi_{1}(a_{1},\dots,a_{n})=\sigma
+        \end{equation}
+        Where $\sigma$ is the permutation with inversions
+        $a_{1},\dots,a_{n}$, and $a_{i}$ is the number inversions
+        created by $i$. We also define
+        $\Psi_{2}:\mathcal{I}_{n}\rightarrow{S}_{n}$ and
+        re-interpreted $a_{i}$ to be the contribution of $i$ to the
+        major index. Then $\Psi=\Psi_{2}\circ\Psi_{1}^{\minus{1}}$
+        is a bijection from $S_{n}$ to itself. We now want to find
+        a good q-Analog for $\binom{n}{k}$ that would satisfy
+        similar properties as the binomial coefficient. One nice
+        property is Pascal's Identity:
+        \begin{equation}
+            \binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k}
+        \end{equation}
+        Perhaps the obvious choice is to choose:
+        \begin{equation}
+            \binom{n}{k}_{q}=
+            \frac{[n]_{q}!}{[k]_{q}![n-k]_{q}!}
+        \end{equation}
+        These are called the Gaussian polynomials, and it seems
+        surprising that these are polynomials in the first place,
+        since it appears to be a rational function. However, we
+        can see just by plugging in that:
+        \begin{equation}
+            \binom{n+1}{k}_{q}\ne
+            \binom{n}{k}_{q}+\binom{n}{k-1}_{q}
+        \end{equation}
+        And thus this is not a good q-Analog for the binomial
+        coefficients. Let:
+        \begin{equation}
+            \mathcal{R}(1^{k}0^{n-k})=\{
+            \textrm{Set of binary words of length $n$ with $k$ 1's}
+            \}
+        \end{equation}
+        Then:
+        \begin{equation}
+            \Card\Big(\mathcal{R}(1^{k}0^{n-k})\Big)=
+            \binom{n}{k}
+        \end{equation}
+        This is equivalent to saying:
+        \begin{equation}
+            k!(n-k)!\Card\Big(\mathcal{R}(1^{k}0^{n-k})\Big)
+            =n!
+        \end{equation}
+        But the left-hand side of this equation s the cardinality
+        of $S_{k}\times{S}_{n-k}\times\mathcal{R}(1^{k}0^{n-k})$,
+        and the right-hand side is the cardinality of
+        $S_{n}$. We need to define a function:
+        \begin{equation}
+            f:S_{k}\times{S}_{n-k}\times\mathcal{R}(1^{k}0^{n-k})
+        \end{equation}
+        Add $n-k$ to the numbers in the permutation $S_{k}$.
+        For example consider:
+        \begin{equation}
+            (132,14523,10011000)\mapsto
+            (687,14523,10011000)
+        \end{equation}
+        Send the left-most number in order from left to right
+        to the 1's in the binary word (The third entry). Send the
+        second entry to the 0's in the binary word.
+        So, finally we have:
+        \begin{equation}
+            (132,14523,10011000)\mapsto
+            (61487523)
+        \end{equation}
+        We now want to show that:
+        \begin{equation}
+            \sum_{r\in\mathcal{R}(1^{k}0^{n-k})}q^{inv(r)}
+            =\binom{n}{k}_{q}
+            =\frac{[n]_{q}!}{[k]_{q}![n-k]_{q}!}
+        \end{equation}
+        We can do this in a similar manner as before. We need a
+        function $f$ from
+        $S_{n-k}\times{S}_{k}\times\mathcal{R}(1^{k}0^{n-k})$ that
+        is bijective. Let's use the one defined previously. We
+        now need to show that $f$ preserves inversions.
+        \begin{theorem}
+            \begin{equation}
+                \binom{n+1}{k}_{q}=
+                q^{k}\binom{n}{k}_{q}+
+                \binom{n}{k-1}_{q}
+            \end{equation}
+        \end{theorem}
+        \begin{ltheorem}{Foata's Theorem}
+            \begin{equation}
+                \sum_{r\in\mathcal{R}(1^{k}0^{n-k})}q^{maj(r)}
+                =\binom{n}{k}_{q}
+            \end{equation}
+        \end{ltheorem}
+        \subsection{Lattice Paths and Gaussian Polynomials}
+            \begin{ldefinition}{Partitions of Integers}
+                A partition of $\mathbb{Z}_{n}$, $n\in\mathbb{N}$,
+                is a weakly decreasing sequence
+                $\lambda=(\lambda_{1},\dots,\lambda_{\ell})$,
+                such that:
+                \begin{equation}
+                    |\lambda|=\sum_{k=1}^{\ell}\lambda_{k}=n
+                \end{equation}
+                $|\lambda|$ is called the weight of $\lambda$ and
+                $\lambda_{i}$ are called the parts of $\lambda$.
+                The length of $\lambda$ is the number of non-zero
+                parts.
+            \end{ldefinition}
+            A young diagram is a graphical representation of a
+            partition $\lambda=(\lambda_{1},\dots,\lambda_{\ell})$.
+            The conjugate of a partition $\lambda$ is obtained by
+            transposing the Young diagram of $\lambda$. For example:
+            \begin{equation}
+                (3,3,1)\mapsto(3,2,2)
+            \end{equation}
+            We denote the conjugate by $\lambda'$. Recall that
+            $\binom{n+m}{n}$ is the number of lattice paths from
+            $(0,0)$ to $(n,m)$ using steps $(1,0)$ and $(0,1)$.
+            \begin{theorem}
+                There exists a bijection between the set of lattice
+                paths from $(0,0)$ to $(m,n)$ and the set of
+                partitions of such that $\lambda_{1}\leq{m}$ and
+                $\ell(\lambda)\leq{n}$.
+            \end{theorem}
+            If $p(m,n)$ is the number of partitions that fit in
+            the $m\times{n}$ rectangle, that is
+            $\ell(\lambda)\leq{N}$ and $\lambda_{1}\leq{m}$, then
+            $p(m,n)=\binom{n+m}{n}$. A statistic on partitions is
+            given by the weight of $\lambda$, $|\lambda|$.
+            \begin{theorem}
+                For $m,n\in\mathbb{N}$:
+                \begin{equation}
+                    \binom{n}{m}_{q}=
+                    \sum_{\lambda\subseteq[m^{n}]}q^{|\lambda|}
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                We can show this by proving that the sum satisfies
+                the same recurrence relation and initial conditions
+                as the q binomial.
+            \end{proof}
+    \section{Lecture 7 (I Think)}
+        We're currently discussing q-analogues. We want to extend
+        the q-analogue defined for the factorial function to the
+        binomial coefficient. The Gaussian polynomials are one
+        such attempt at this:
+        \begin{equation}
+            \binom{n}{k}_{q}=
+            \frac{[n]_{q}!}{[k]_{q}![n-k]_{q}!}
+        \end{equation}
+        Another such attempt was to sum over all binary words of
+        length $n$ with $k$ one's, and obtain:
+        \begin{equation}
+            \binom{n}{k}_{q}=
+            \sum_{r\in\mathcal{R}(1^{k},0^{n-k})}
+                q^{inv(r)}
+        \end{equation}
+        Using this definition, we obtained the following equation:
+        \begin{equation}
+            \binom{n+1}{k}_{q}=
+            q^{k}\binom{n}{k}_{q}+
+            \binom{n}{k-1}_{q}
+        \end{equation}
+        Then we discussed lattice paths $L(m,n)$, which are paths
+        from $(0,0)$ to $(m,n)$ using steps in $(1,0)$ and $(0,1)$.
+        Next we discuessed partitions of numbers.
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{|c|c|}
+                \hline
+                $n$&Partitions\\
+                \hline
+                0&$\emptyset$\\
+                \hline
+                1&$(1)$\\
+                \hline
+                2&$(2),(1,1)$\\
+                \hline
+                3&$(3),(2,1),)1,1,1)$\\
+                \hline
+            \end{tabular}
+            \caption{Caption}
+            \label{tab:my_label}
+        \end{table}
+        Given such a partition, we assign the weight to be:
+        \begin{equation}
+            |\lambda|=\sum_{k=1}^{\ell}\lambda_{k}
+        \end{equation}
+        Then we define:
+        \begin{equation}
+            P(m,n)=
+            \{(\lambda_{1},\dots,\lambda_{\ell}:
+                \lambda_{1}\leq{m},\ell(\lambda)\leq{n}\}
+        \end{equation}
+        We showed that there is a bijection between
+        $L(m,n)$ and $P(m,n)$. Thus, we have:
+        \begin{equation}
+            \Card\Big(P(n,m)\Big)=\binom{m+n}{m}
+        \end{equation}
+        \begin{theorem}
+            If $m,n\in\mathbb{N}$, then:
+            \begin{equation}
+                \binom{m+n}{m}_{q}=
+                \sum_{\lambda\in{P}(m,n)}q^{|\lambda|}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            The strategy of the proof is to show that this sum
+            satisfies the same initial conditions and the same
+            recurrence as the original definition. We have that
+            $p(m,0)=1=q^{0}$ since there is only the empty
+            partition in the rectangle $m\times{0}$, and similarly
+            $p(0,n)=1=q^{0}$ since there is only the empty
+            partition in the rectangle $0\times{n}$. Moreover,
+            $p(m,m)=1=q^{0}$ since:
+            \begin{equation}
+                \binom{m}{m}_{q}=
+                \frac{[m]_{q}}{[0]_{q}[m]_{q}}=
+                \frac{[m]_{q}}{[m]_{q}}=1
+            \end{equation}
+            We now must show that the recurrence relation is
+            satisfied. We want:
+            \begin{equation}
+                p(m,n)=q^{m}p(n-1,m)+p(n,m-1)
+            \end{equation}
+            We have that:
+            \begin{align}
+                p(m,n)=&
+                \sum_{\lambda\in{P}(m,n)}q^{|\lambda|}\\
+                &=\sum_{\lambda_{1}=m}q^{|\lambda|}+
+                \sum_{\lambda_{1}<m}q^{|\lambda|}\\
+                &=q^{m}\sum_{\lambda\in{P}(m,n-1)}q^{|\lambda|}
+                +\sum_{\lambda\in{P}(m-1,n)}q^{|\lambda|}
+            \end{align}
+            This completes the proof.
+        \end{proof}
+        \begin{ldefinition}{$x$ Factorization}
+            Let $w\in{X}^{*}$ be a word in the alphabet $X$.
+            Let $x\in{X}$ and suppose $w=vy$, where $v$ is a word
+            and $y$ is a letter in $X$. That is, $y$ is the last
+            letter of $w$. Then the factorization is:
+            \begin{equation}
+                w=v_{1}y_{1}\dots{v}_{k}y_{k}
+            \end{equation}
+            Where, if $y>x$ ($X$ is totally ordered):
+            \begin{equation}
+                y_{i}>x,
+                \quad\quad
+                y_{i}\in{X}
+            \end{equation}
+            \begin{equation}
+                v_{i}\in{L}_{x}^*
+            \end{equation}
+            Where:
+            \begin{equation}
+                L_{x}=\{a:a\leq{x}\}
+            \end{equation}
+            If $y\leq{x}$, then:
+            \begin{equation}
+                y_{i}\leq{x}\quad\quad
+                y_{i}\in{X}
+            \end{equation}
+            and:
+            \begin{equation}
+                v_{i}\in{R}_{x}^{*}
+            \end{equation}
+            Where:
+            \begin{equation}
+                R_{x}=\{a:a>x\}
+            \end{equation}
+        \end{ldefinition}
+        \begin{lexample}
+            Let $x=3$ and let:
+            \begin{equation}
+                w=125312641237
+            \end{equation}
+            Then $y=7$, and thus $y>x$. Then we can write:
+            \begin{equation}
+                w=|12|5|312|6||4|123|7
+            \end{equation}
+            We allow for empty words. As another example,
+            consider:
+            \begin{equation}
+                w=135712136412
+            \end{equation}
+            Then $y=2$, and thus $y<2$. We obtain:
+            \begin{equation}
+                w=1|3|57|2|1|3|641|2
+            \end{equation}
+        \end{lexample}
+        \begin{ltheorem}{Foata's Theorem}
+            The following is true:
+            \begin{equation}
+                \sum_{r\in\mathcal{R}(1^{k},0^{n-k})}q^{maj(r)}
+                =\binom{n}{k}_{q}
+            \end{equation}
+        \end{ltheorem}
+        \begin{proof}
+            We want to define a bijection
+            $\varphi$ from $\mathcal{R}(1^{k},0^{n-k})$ to itself
+            such that, for any $r$, we have $maj(r)=inv(\varphi(r))$.
+            Let $X\subseteq\mathbb{N}$. Let $X^{*}$ be the set
+            of all words over $X$. For example if $X=\{0,1\}$, then
+            $X^{*}$ is the set of all binary words. Define
+            $\varphi:X^{*}\rightarrow{X}^{*}$ be such that
+            $maj(w)=inv(\varphi(w))$ for any $w\in{X}^{*}$.
+            Note that inversions and descents are defined in the
+            same way as for permutations. This is why we required
+            the set to be totally ordered, $\mathbb{N}$ in our
+            case. Define $\gamma_{x}:X^{*}\rightarrow{X}^{*}$ by:
+            \begin{equation}
+                \gamma_{x}(w)=
+                \begin{cases}
+                    \emptyset,&w=\emptyset\\
+                    y_{1}v_{1}\dots{y}_{k}v_{k},&
+                    w=v_{1}y_{1}\dots{v}_{k}y_{k}
+                \end{cases}
+            \end{equation}
+            We define $\varphi$ as follows:
+            \begin{equation}
+                \varphi(w)=
+                \begin{cases}
+                    \emptyset,&w=\emptyset\\
+                    w,&w\in{X}\\
+                    \gamma_{x}(\varphi(v)),&
+                    w=vx,x\in{X}
+                \end{cases}
+            \end{equation}
+            This is a recursive definition. For example, let:
+            \begin{equation}
+                w=121314
+            \end{equation}
+            Then $\varphi(1)=1$, and thus
+            $\varphi(12)=\gamma_{2}(\phi(1))2=12$. The first
+            interesting case is with three elements. We have:
+            \begin{equation}
+                \varphi(121)=
+                \gamma_{1}(\varphi(12))1=
+                \gamma_{1}(12)1=211
+            \end{equation}
+            Note that $inv(211)=2$ and $maj(121)=2$. This function
+            works since, if $w\in{X}^{*}$, then let
+            $r_{x}$ be the number of letters in $w$ that are
+            greater than $x$, and let $\ell_{x}$ be the number
+            of letters in $w$ that are less than or equal to $x$.
+            Let $v\in{X}^{*}$ and $x\in{X}$. Then:
+            \begin{equation}
+                inv(vx)=inv(v)+r_{x}(v)
+            \end{equation}
+            Also, when the last letter of $v$ is less than or
+            equal to $x$, we have:
+            \begin{equation}
+                inv(\gamma_{x}(v))=inv(v)-r_{x}(v)
+            \end{equation}
+            And otherwise we have:
+            \begin{equation}
+                inv(\gamma_{x}(v))=inv(v)+\ell_{x}(v)
+            \end{equation}
+            Moreover, if the last letter $v$ is less than or
+            equal to $x$, then:
+            \begin{equation}
+                maj(vx)=maj(v)
+            \end{equation}
+            And otherwise:
+            \begin{equation}
+                maj(vx)+|v|
+            \end{equation}
+        \end{proof}
+    \section{Lecture 9}
+        As a summary, we we studying q-Analogues. We have shown:
+        \begin{equation}
+            \sum_{\sigma\in{S}_{n}}q^{inv(\sigma)}=
+            \sum_{\sigma\in{S}_{n}}q^{maj(\sigma)}=
+            [n]_{q}!
+        \end{equation}
+        Also:
+        \begin{equation}
+            \sum_{w\in\mathcal{R}(1^{k},0^{n-k})}
+            q^{inv(w)}=
+            \sum_{w\in\mathcal{R}(1^{k},0^{n-k})}
+            q^{maj(w)}=
+            \binom{n}{k}_{q}
+        \end{equation}
+        \begin{ltheorem}{q-Binomial Theorem}
+            The following is true:
+            \begin{equation}
+                \prod_{i=1}^{n}
+                (x+q^{i}y)=
+                \sum{q}^{\binom{n-k+1}{2}}
+                \binom{n}{k}_{q}x^{k}y^{n-k}
+            \end{equation}
+        \end{ltheorem}
+        For all $n,k\in\mathbb{N}$, we have:
+        \begin{equation}
+            \binom{n+k}{k}_{q}=
+            \sum_{\lambda\in{P}(n,k)}q^{|\lambda|}
+        \end{equation}
+        We can use rising factorials to define
+        $\binom{x}{k}_{q}$ for all $x\in\mathbb{R}$ and
+        $k\in\mathbb{N}$. That is:
+        \begin{equation}
+            \binom{x}{k}_{q}=
+            \frac{(1-q^{x-k+1})(1-q^{x-k+1})}{(1-q)(1-q^{2})\dots}
+        \end{equation}
+        \subsection{q-Catalan Analogue}
+            Recall that $C_{n}$ is the number of lattice paths
+            from $(0,0)$ to $(n,n)$ that do not go below or
+            above the line $x=y$ in the plane. We showed earlier
+            that:
+            \begin{equation}
+                C_{n}=\frac{1}{n+1}\binom{2n}{n}
+            \end{equation}
+            Recall that $L(m,n)$ is the number of lattice paths
+            from $(0,0)$ to $(m,n)$. We define $L^{+}(m,n)$ to be
+            the set of lattice paths from $(0,0)$ to $(m,n)$ that
+            do not go below the line $y=\frac{n}{m}x$. In
+            particular, $L^{+}(n,n)=C_{n}$. The Catalan numbers
+            satisfy the following recurrence:
+            \begin{equation}
+                C_{n}=\sum_{k=1}^{n}C_{k-1}C_{n-k}
+            \end{equation}
+            Recall that
+            $\omega:L(m,n)\rightarrow\mathcal{R}(0^{n},1^{m}$,
+            where $\omega$ maps $N\rightarrow{0}$ and
+            $E$ to 1, north and east. Let
+            $\mathcal{R}^{+}(0^{n}1^{n})$ be the elements f
+            $\mathcal{R}(1^{n}0^{n})$ that correspond to
+            Catalan paths. From a previous observation, the words
+            corresponding to the Catalan paths are characterized
+            by alwas have more 0's than 1's for any initial word.
+            \begin{ltheorem}{MacMahor's Theorem}
+                The following is true:
+                \begin{equation}
+                    \sum_{p\in{L}^{+}(n,n)}q^{maj(w(p))}=
+                    \frac{1}{[n+1]_{q}}\binom{2n}{n}_{q}
+                \end{equation}
+            \end{ltheorem}
+            \begin{proof}
+                Define the following:
+                \begin{align}
+                    \mathcal{R}^{\minus}(0^{n}1^{n})
+                        &=\mathcal{R}(0^{n}1^{n})
+                        -\mathcal{R}^{+}(0^{n}1^{n})\\
+                    L^{\minus}(n,n)=L(n,n)-L^{+}(n,n)
+                \end{align}
+                Given a path $P$ in $L^{\minus}(n,n)$, let $A$ be
+                the lattice point with the smallest $x$ coordinate
+                among all the lattice points $(i,j)$ with
+                $i-j$ maximized, whose distance from the
+                $x=y$ line in the south east direction is maximized.
+                Let $B$ be the lattice point just before $A$.
+                Notice that the step $B\rightarrow{A}$ must be
+                an east step. Create a new path as follows. Change
+                the east step to a north step, and then take the
+                remaining path from $A$ to $(n,n)$ and shift it
+                up one and two the left one. This path ends on
+                $(n-1,n+1)$. Let $\varphi$ denote the new path.
+                Then:
+                \begin{equation}
+                    maj(w(\varphi(p)))=maj(w(p))-1
+                \end{equation}
+                For suppose $B\ne(0,0)$. The the step that goes to
+                $B$ must be an east step. For if not, then $A$ does
+                not have the smallest $x$ coordinate with maximal
+                distance to the line $y=x$. If $B=(0,0)$, then the
+                first position goes away. Moreover, the algorithm
+                is reversible. For let $P'$ be a lattice path from
+                $(0,0)$ to $(n,m)$, and let $A'$ be the point with
+                maximal $x$ coordinate such that $i-j$ is maximized.
+                This point corresponds to the $B$ in the previous
+                path. Therefore:
+                \begin{equation}
+                    \sum_{w\in\mathcal{R}(1^{n}0^{n})}q^{maj(w)}=
+                    \sum_{w\in\mathcal{R}(1^{n+1}0^{n-1})}
+                        q^{maj(w)+1}=
+                    q\binom{2n}{n+1}
+                \end{equation}
+            \end{proof}
+            There is another q-analogue for $C_{n}$ due to
+            Carlitz and Riordan. Let $p\in{L}^{+}(n,n)$ and
+            define $a_{i}(p)$ to be the number of complete
+            squares between the path and the $x=y$ line in row
+            $i$. The number $a_{i}(p)$ is called the length of
+            the $i^{th}$ row of $p$ and the sequence
+            $(a_{1}(p),\dots,a_{n}(p))$ is called the
+            co-area vector of $p$. The co-area statistic on
+            $p$ is defined as:
+            \begin{equation}
+                Coarea(p)=\sum_{i=1}^{n}a_{i}(p)
+            \end{equation}
+            \begin{ltheorem}{Carlitz-Riordan Theorem}
+                The following is true:
+                \begin{equation}
+                    C_{n}(q)=\sum_{p\in{L}^{+}(n,n)}q^{Coarea(p)}
+                \end{equation}
+            \end{ltheorem}
 \end{document}
