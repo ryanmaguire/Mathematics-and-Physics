@@ -2808,4 +2808,281 @@
                 \sqrt{\frac{2}{\pi{x}}}
                 \cos\Big(x-\frac{\pi}{4}-n\frac{\pi}{2}\Big)
             \end{equation}
+        \subsection{The Heat Equation}
+            The Heat Equation is defined as:
+            \begin{equation}
+                \frac{\partial{u}}{\partial{t}}=
+                k\nabla^{2}u
+            \end{equation}
+            Where $\nabla^{2}$ is the Laplacian operator. This
+            is defined as:
+            \begin{equation}
+                \nabla^{2}u=\Div\big(\grad(u)\big)
+                =\nabla\cdot\big(\nabla(u)\big)=\Delta{u}
+            \end{equation}
+            Where $\Delta{u}$ is the notation that is often
+            found in various texts on partial differential
+            equations. In Cartesian coordinates, this is:
+            \begin{equation}
+                \nabla^{2}u=\sum_{k=1}^{n}
+                    \frac{\partial^{2}u}{\partial{x}_{k}^{2}}
+            \end{equation}
+            Where $x_{k}$ is the $k^{th}$ coordinate. In
+            one dimension spherical, we have:
+            \begin{equation}
+                \nabla^{2}u=\frac{\partial^{2}u}{\partial{r}^{2}}
+            \end{equation}
+            In two dimensions, we obtain:
+            \begin{equation}
+                \nabla^{2}u=\frac{\partial^{2}u}{\partial{r}^{2}}+
+                    \frac{1}{r}\frac{\partial{u}}{\partial{r}}+
+                    \frac{1}{r^{2}}
+                    \frac{\partial^{2}u}{\partial\theta^{2}}
+            \end{equation}
+            We solve this by using separation of variables.
+            We do:
+            \begin{equation}
+                u(r,t)=R(r)T(t)
+            \end{equation}
+            In two dimensions, we do the same thing:
+            \begin{equation}
+                u(r,\theta,t)=R(r)\Theta(\theta)T(t)
+            \end{equation}
+            Plugging this into the equation, we get:
+            \begin{equation}
+                R\Theta\dot{T}=
+                \ddot{R}\Theta{T}+\frac{1}{r}\dot{R}\Theta{T}+
+                \frac{1}{r^{2}}R\ddot{\Theta}T
+            \end{equation}
+            Dividing through by $kR\Theta{T}$, we obtain:
+            \begin{equation}
+                \frac{1}{k}\frac{\dot{T}}{T}=
+                \frac{\ddot{R}}{R}+\frac{1}{r}\frac{\dot{R}}{R}+
+                \frac{1}{r^{2}}\frac{\ddot{\Theta}}{\Theta}
+            \end{equation}
+            We note that the left side is a function of $t$
+            alone, and that the right side is a function of $r$
+            and $\theta$ alone, and thus this must be a constant.
+            We get the following:
+            \begin{equation}
+                \dot{T}=\minus\lambda{k}T
+            \end{equation}
+            The right hand side reduces to:
+            \begin{equation}
+                \frac{\ddot{R}}{R}+\frac{1}{r}\frac{\dot{R}}{R}+
+                \frac{1}{r^{2}}\frac{\ddot{\Theta}}{\Theta}
+                =\minus\lambda
+            \end{equation}
+            Multiplying through by $r^{2}$, we obtain:
+            \begin{equation}
+                r^{2}\frac{\ddot{R}}{R}+r\frac{\ddot{R}}{R}+
+                \lambda{r}^{2}=\minus\frac{\ddot{\Theta}}{\Theta}
+            \end{equation}
+            Again, the left side is dependent only on $r$ and
+            the right side is dependent only on $\theta$, so this
+            must be a constant, call it $p^{2}$. Simplifying, we
+            get:
+            \begin{equation}
+                r^{2}\ddot{R}+r\dot{R}+(\lambda{r}^{2}-p^{2})R=0
+            \end{equation}
+            And this is Bessel's equation, with the addition of
+            a $\lambda$ stuck inside with the $r^{2}$ term. We
+            can solve the differential equation for $T$ by using
+            standard results from differential equations, and obtain:
+            \begin{equation}
+                T(t)=C\exp(\minus{k}\lambda{t})
+            \end{equation}
+            Similarly, for $\Theta$ we get:
+            \begin{equation}
+                \ddot{\Theta}+p^{2}\Theta=0
+            \end{equation}
+            And we can solve this to obtain:
+            \begin{equation}
+                \Theta(\theta)=C_{1}\cos(p\theta)+C_{2}\sin(p\theta)
+            \end{equation}
+            Finally, we are left with $R$. The general solution is:
+            \begin{equation}
+                R(r)=C_{3}J_{p}(\sqrt{\lambda}r)+
+                C_{4}Y_{p}(\sqrt{\lambda}r)
+            \end{equation}
+            But we are modelling heat moving through some medium,
+            and thuse a good boundary condition is that
+            $u(r,\theta,t)$ is non-zero at the origin. Thus we
+            must throw out the $Y_{p}$ term and conclude that
+            $C_{4}=0$. Note also that the heat equation is linear,
+            and thus any linear combination of solutions is again
+            a solution. We obtain:
+            \begin{equation}
+                u(r,\theta,t)=\sum_{n=0}^{\infty}
+                \big[C_{1}\cos(n\theta)+C_{2}\sin(n\theta)\big]
+                J_{n}(\sqrt{\lambda_{n}}r)
+                \exp(\minus{k}\lambda_{n}{t})
+            \end{equation}
+            If we impose the boundary condition that, for some
+            $a>0$, we have $u(a,\theta,t)=0$, we obtain the
+            condition that:
+            \begin{equation}
+                J_{n}(\sqrt{\lambda_{n}}a)=0
+                \quad\quad
+                n=0,1,2,\dots
+            \end{equation}
+            Letting $j_{n,k}$ denote the positive zeros of
+            $J_{n}$, we obtain the general solution:
+            \begin{equation}
+                u(r,\theta,t)=
+                \sum_{n=0}^{\infty}\sum_{k=1}^{\infty}
+                    \big[A_{n,k}\cos(n\theta)+B_{n,k}\sin(n\theta)
+                    \big]J_{n}\Big(\frac{j_{n,k}}{a}r\Big)
+                    \exp\Big(\minus{k}\frac{j_{n,k}^{2}}{a^{2}}t\Big)
+            \end{equation}
+            Suppose we impose the condition:
+            \begin{equation}
+                u(r,\theta,0)=f(r,\theta)
+            \end{equation}
+            We obtain:
+            \begin{subequations}
+                \begin{align}
+                    f(r,\theta)&=
+                    \sum_{n=0}^{\infty}\sum_{k=1}^{\infty}
+                    \big[A_{n,k}\cos(n\theta)+B_{n,k}\sin(n\theta)
+                    \big]J_{n}\Big(\frac{j_{n,k}}{a}r\Big)\\
+                    &=\sum_{n=0}^{\infty}\Big[\sum_{k=1}^{\infty}
+                    A_{n,k}J_{n}\big(\frac{j_{n,k}}{a}r\big)\Big]
+                    \cos(n\theta)+
+                    \sum_{n=0}^{\infty}\Big[\sum_{k=1}^{\infty}
+                    B_{n,k}J_{n}\big(\frac{j_{n,k}}{a}r\big)\Big]
+                    \sin(n\theta)
+                \end{align}
+            \end{subequations}
+            Using some tricks from Fourier Analysis, we have:
+            \begin{equation}
+                \frac{1}{\pi}\int_{0}^{2\pi}
+                    f(r,\theta)\cos(n\theta)\diff{\theta}
+                =\sum_{k=1}^{\infty}A_{n,k}
+                    J_{n}\big(\frac{j_{n,k}}{a}r\big)
+            \end{equation}
+            Similarly for $\sin$. Define $F_{n}(r)$ as:
+            \begin{equation}
+                F_{n}(r)=\frac{1}{\pi}\int_{0}^{2\pi}
+                    f(r,\theta)\cos(n\theta)\diff{\theta}
+            \end{equation}
+            Then, we have:
+            \begin{equation}
+                \sum_{k=1}^{\infty}A_{n,k}J_{n}
+                    \big(\frac{j_{n.k}}{a}r\big)
+                =F_{n}(r)
+            \end{equation}
+            How do we obtain the $A_{n,k}$ from this information?
+            And similarly, the $B_{n,k}$. It would be nice to use
+            the same trick as is done for Fourier series. That is,
+            use orthogonality and integrate across. Unfortunately,
+            the $J_{n}$ are not orthogonal. But, if we introduce
+            a weight function, then we have:
+            \begin{equation}
+                \int_{0}^{1}J_{n}(j_{n,k}r)J_{m}(j_{m,k}r)r\diff{r}
+                =\delta_{nm}
+            \end{equation}
+            Where $\delta_{nm}$ is the Kronecker Delta. This makes
+            some sense since our problem is in spherical
+            coordinates, and when we integrate we have
+            $r\diff{r}$ rather than just $\diff{x}$. We can see
+            by studying Bessel's differential equation. We have:
+            \begin{equation}
+                r^{2}\ddot{J}_{n}+r\dot{J}_{n}+
+                (\lambda^{2}r^{2}-n^{2})J_{n}=0
+            \end{equation}
+            We can simplify this down to:
+            \begin{equation}
+                \frac{n^{2}}{r}J_{n}-\frac{\diff}{\diff{r}}\Big(
+                    r\dot{J}_{n}\Big)
+                =\lambda^{2}rJ_{n}
+            \end{equation}
+            Thus, we have:
+            \begin{subequations}
+                \begin{align}
+                    \lambda\int_{0}^{1}rJ_{n}J_{m}\diff{r}
+                    &=\int_{0}^{1}(\lambda{r}J_{n})J_{m}\diff{r}\\
+                    &=\int_{0}^{1}\Big[\frac{n^{2}}{r}J_{n}-
+                        \dot{J}_{n}\Big]
+                        J_{m}\diff{r}\\
+                    &=\int_{0}^{1}\frac{n^{2}}{r}J_{n}J_{m}\diff{r}+
+                        \int_{0}^{1}r\dot{J}_{n}\dot{J}_{m}\diff{r}
+                \end{align}
+            \end{subequations}
+            Where this last result was obtained from integration
+            by parts. This last integral is symmetric, showing
+            it didn't matter if we used integration by parts on
+            $J_{n}$ or $J_{m}$. From this we obtain:
+            \begin{equation}
+                \lambda_{n}^{2}\int_{0}^{1}rJ_{n}J_{m}\diff{r}
+                =\lambda_{m}^{2}\int_{0}^{1}rJ_{n}J_{m}\diff{r}
+            \end{equation}
+            And therefore:
+            \begin{equation}
+                (\lambda_{n}^{2}-\lambda_{m}^{2})
+                \int_{0}^{1}rJ_{n}J_{m}\diff{r}=0
+            \end{equation}
+            But if $n\ne{m}$, then $\lambda_{n}\ne\lambda_{m}$,
+            and thus:
+            \begin{equation}
+                \int_{0}^{1}rJ_{n}J_{m}\diff{r}=0
+            \end{equation}
+            The normalization is:
+            \begin{equation}
+                \int_{0}^{1}J_{n}^{2}(\lambda_{n,k}r)r\diff{r}=
+                \frac{1}{2}J_{n+1}(j_{n,k})
+            \end{equation}
+            In three dimensions, the problem becomes:
+            \begin{equation}
+                \frac{1}{k}\frac{\partial{u}}{\partial{t}}=
+                \frac{\partial^{2}u}{\partial{r}^{2}}+
+                \frac{2}{r}\frac{\partial{u}}{\partial{r}}+
+                \frac{1}{r^{2}\sin^{2}(\theta)}
+                \frac{\partial^{2}u}{\partial\theta^{2}}+
+                \frac{1}{r^{2}\sin(\phi)}
+                \frac{\partial}{\partial\phi}\Big(
+                    \sin(\phi)\frac{\partial{u}}{\partial\phi}\Big)
+            \end{equation}
+            Separating leads to:
+            \begin{equation}
+                r^{2}\ddot{R}+2r\dot{R}+(\lambda^{2}r^{2}-m)R=0
+            \end{equation}
+            And:
+            \begin{equation}
+                \frac{1}{\sin(\phi)}\frac{\diff}{\diff{\phi}}
+                    \Big(\sin(\phi)\frac{\diff\Phi}{\diff{\phi}}\Big)
+                =m\Phi
+            \end{equation}
+            Where we let $m=n(n+1)$. Using the generalized Bessel's
+            differential equation, we obtain:
+            \begin{equation}
+                R(r)=C_{1}\frac{1}{\sqrt{x}}J_{n+\frac{1}{2}}(
+                    \lambda{x})+C_{2}\frac{1}{\sqrt{x}}
+                    Y_{n+\frac{1}{2}}(\lambda{x})
+            \end{equation}
+            This is called the Spherical Bessel Function. For the
+            $\Phi$ equation, make the substitution $x=\cos(\phi)$.
+            Let $y(x)=\Phi(\cos^{\minus{1}}(x))$. Then:
+            \begin{equation}
+                (1-x^{2})\ddot{y}-2x\dot{y}+n(n+1)y=0
+            \end{equation}
+            And this is Legendre's equation. To solve this, we try
+            a power series:
+            \begin{equation}
+                y(x)=\sum_{n=0}^{\infty}a_{n}x^{n}
+            \end{equation}
+            Plugging this into the equation and simplifying,
+            we get:
+            \begin{equation}
+                \sum_{k=0}^{\infty}\Big[
+                    (k+2)(k+1)a_{k+2}-\big(k(k+1)-n(n+1)\big)a_{k}
+                    \Big]x^{k}=0
+            \end{equation}
+            Thus, all of the coefficients must be zero. Simplifying
+            further, we obtain:
+            \begin{equation}
+                a_{k+2}=\frac{(k+n+1)(k-n)}{(k+2)(k+1)a}a_{k}
+            \end{equation}
+            We automatically see that $a_{n+2}=0$ for all $n$, and
+            thus this is simply a polynomial.
 \end{document}
