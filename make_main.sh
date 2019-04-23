@@ -30,6 +30,10 @@ rm -f main.acr
 rm -f main.alg
 rm -f main.gls
 rm -f main.ilg
+rm -r main.blg
+rm -r main.bbl
+rm -r main.fdb_latexmk
+rm -r main.fls
 
 
 # Change the name of the output pdf file.
