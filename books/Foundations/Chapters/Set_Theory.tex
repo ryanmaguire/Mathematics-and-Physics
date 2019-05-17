@@ -1,0 +1,1901 @@
+\documentclass[crop=false,class=book,oneside]{standalone}
+%----------------------------Preamble-------------------------------%
+\input{../../../preamble.tex}
+%----------------------------GLOSSARY-------------------------------%
+\makeglossaries
+\loadglsentries{../../../glossary}
+\loadglsentries{../../../acronym}
+%--------------------------Main Document----------------------------%
+\begin{document}
+    \ifx\ifmain\undefined
+        \pagenumbering{roman}
+        \title{Set Theory}
+        \author{Ryan Maguire}
+        \date{\vspace{-5ex}}
+        \maketitle
+        \tableofcontents
+        \clearpage
+        \chapter*{Set Theory}
+        \addcontentsline{toc}{chapter}{Set Theory}
+        \markboth{}{SET THEORY}
+        \vspace{10ex}
+        \setcounter{chapter}{1}
+        \pagenumbering{arabic}
+    \else
+        \chapter{Set Theory}
+    \fi
+    \section{Basic Concepts}
+        
+        \begin{ldefinition}{Sets}{Sets}
+            A set is a collection of objects, called elements,
+            none of which is the set itself.
+        \end{ldefinition}
+        The notion of a \textrm{set} is often left undefined,
+        and we really haven't defined it very well here, either.
+        The terms \textit{collection} and \textit{object} have
+        not been defined, and thus this definition is somewhat
+        meaningless. Intuitively, a set is a bunch of things that
+        we can discuss, either by the properties these things have,
+        or by listing out all of the things. The requirement that
+        a set cannot contain itself is to avoid various
+        paradoxes, such as the one discovered by Bertrand Russell
+        in 1901. Given a set $A$ and an element $x$, we denote that
+        $x$ is contained in $A$ by writing $x\in{A}$. If $x$ is
+        not an element of $A$, we write $x\notin{A}$. There is a
+        special set that contains no elements.
+        \begin{ldefinition}{The Empty Set}{Empty_Set}
+            The \gls{empty set} is the set $\emptyset$ such that,
+            for all $x$, it is true that $x\notin\emptyset$.
+        \end{ldefinition}
+        The empty set contains no elements, and often we
+        write $\emptyset=\{\}$. It is unique. Note that
+        the empty set is different from the set $\{\emptyset\}$.
+        Indeed, this would violate our requirement that sets do
+        not contain themselves. The empty set contains no elements,
+        whereas $\{\emptyset\}$ contains one element
+        (It contains the empty set).
+        \subsection{Sets}
+            Sets are determined entirely by their elements and do
+            not have a sense of \textit{order} on them. We can
+            attempt to place order on sets by defining ordered
+            pairs and functions. Before doing so, we should first
+            discuss some of the properties of sets.
+            \subsubsection{Basic Notions}
+                A set is determined entirely by it's elements.
+                Thus repetition of elements cannot be accounted for,
+                and the sets $\{a,b\}$ and $\{a,a,b\}$ must be
+                considered the same, since they have exactly
+                the same elements. We define a subset of a
+                set as follows:
+                \begin{ldefinition}{Subsets}{Subsets}
+                    A \gls{subset} of a set $B$ is a set $A$, denoted
+                    $A\subseteq{B}$, such that for all $x\in{A}$,
+                    it is true that $x\in{B}$. We write
+                    $A\nsubseteq{B}$ to denote that $A$ is not
+                    a subset of $B$.
+                \end{ldefinition}
+                This definition leads to the following, somewhat
+                redundant, theorems.
+                \begin{theorem}
+                    \label{thm:Emptyset_Is_Subset}%
+                    If $A$ is a set, then $\emptyset\subseteq{A}$.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. Then there is an $x\in\emptyset$
+                    such that $x\notin{A}$, a contradiction as
+                    for all $x$, it is true that $x\notin\emptyset$.
+                    Therefore, etc.
+                \end{proof}
+                \begin{theorem}
+                    \label{thm:Subset_is_Transitive}%
+                    If $A$, $B$, and $C$ are sets, if
+                    $A\subseteq{B}$, and if $B\subseteq{C}$, then
+                    $A\subseteq{C}$.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. Then there is an $x\in{A}$ such
+                    that $x\notin{C}$. But $A$ is a subset of $B$
+                    and thus, by
+                    Def.~\ref{def:Subsets}, $x\in{B}$.
+                    But $B$ is a subset of $C$ and therefore,
+                    again by Def.~\ref{def:Subsets},
+                    $x\in{C}$. But $x\notin{C}$, a contradiction.
+                    Therefore, etc.
+                \end{proof}
+                \begin{theorem}
+                    \label{thm:Set_Is_Subset_Of_Self}%
+                    If $A$ is a set, then $A\subseteq{A}$.
+                \end{theorem}
+                \begin{proof}
+                    Suppose not. Then there is an $x\in{A}$
+                    such that $x\notin{A}$, a contradiction.
+                \end{proof}
+                It would be useful to distinguish between subsets
+                that aren't the entire set. Such beings are called
+                proper subsets. First, we define the notion of
+                equality.
+                \begin{ldefinition}{Equal Sets}{Equal_Sets}
+                    \Glspl{equal set} are sets $A$ and $B$, denoted
+                    $A=B$, such that $A\subseteq{B}$ and
+                    $B\subseteq{A}$.
+                \end{ldefinition}
+                We write $A\ne{B}$ to denote that $A$ and $B$ are
+                not equal sets. From the definition, we have
+                inequality when either $A\nsubseteq{B}$ or
+                $B\nsubseteq{A}$. 
+                We can now rigorously restate our claim that the
+                empty set is unique.
+                \begin{theorem}
+                    If $\emptyset$ and $\emptyset'$ are sets with
+                    no elements, then $\emptyset=\emptyset'$.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. Then either
+                    $\emptyset\nsubseteq\emptyset'$ or
+                    $\emptyset'\nsubseteq\emptyset$. If
+                    $\emptyset\nsubseteq\emptyset'$ then there is
+                    an $x\in\emptyset$ such that
+                    $x\notin\emptyset'$. But for all $x$,
+                    $x\notin\emptyset$, a contradiction. Therefore
+                    $\emptyset\subseteq\emptyset'$. Similarly,
+                    $\emptyset'\subseteq\emptyset$. By the
+                    definition of equality,
+                    Def.~\ref{def:Equal_Sets},
+                    $\emptyset=\emptyset'$.
+                \end{proof}
+                There are several trivial theorems that come from
+                the definition of equality.
+                \begin{theorem}
+                    \label{thm:Equality_Reflexive}%
+                    If $A$ and $B$ are equal sets, then $B$ and
+                    $A$ are equal sets.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. If $B\ne{A}$, then by
+                    Def.~\ref{def:Equal_Sets}, either
+                    $B\nsubseteq{A}$ or $A\nsubseteq{B}$.
+                    But $A=B$, and thus $A\subseteq{B}$ and
+                    $B\subseteq{A}$, a contradiction. Therefore, etc.
+                \end{proof}
+                \begin{theorem}
+                    \label{thm:Equality_Symmetric}%
+                    If $A$ is a set, then $A=A$.
+                \end{theorem}
+                \begin{proof}
+                    For by
+                    Thm.~\ref{thm:Set_Is_Subset_Of_Self}, if $A$ is
+                    a set then $A\subseteq{A}$. Therefore, etc.
+                \end{proof}
+                \begin{theorem}
+                    \label{thm:Equality_Transitive}%
+                    If $A$, $B$, and $C$ are sets, if $A=B$, and if
+                    $B=C$, then $A=C$.
+                \end{theorem}
+                \begin{proof}
+                    By the definition of equality
+                    (Def.~\ref{def:Equal_Sets})
+                    if $A=B$, then $A\subseteq{B}$. But also if
+                    $B=C$, then $B\subseteq{C}$. But by
+                    Thm.~\ref{thm:Subset_is_Transitive}, if
+                    $A\subseteq{B}$ and $B\subseteq{C}$, then
+                    $A\subseteq{C}$. Therefore,
+                    $A\subseteq{C}$. But if $B=C$, then
+                    $C\subseteq{B}$
+                    (Def.~\ref{def:Equal_Sets}).
+                    And if $B=A$, then $B\subseteq{A}$. Therefore, by
+                    Thm.~\ref{thm:Subset_is_Transitive},
+                    $C\subseteq{A}$. But it was just proved that
+                    $A\subseteq{C}$, and therefore, by the
+                    definition of equality, $A=C$.
+                \end{proof}
+                These three properties,
+                Thms.~\ref{thm:Equality_Reflexive}-%
+                \ref{thm:Equality_Transitive}, are the key
+                ingredients to define
+                \textit{equivalence relations}. We'll develop this
+                later once we've discussed the notion of
+                \textit{Cartesian Products}. But first, we now
+                define what a proper subset is.
+                \begin{ldefinition}{Proper Subset}{Proper_Subset}
+                    A \gls{proper subset} of a set $B$ is a set $A$,
+                    denoted $A\subsetneq{B}$, such that
+                    $A\subseteq{B}$ and $A\ne{B}$. We write
+                    $A\not\subset{B}$ to denote $A$ is not a proper
+                    subset of $B$.
+                \end{ldefinition}
+                \begin{theorem}
+                    \label{thm:Prop_Subset_Not_Equal}%
+                    If $A$ and $B$ are sets, and if $A\subsetneq{B}$,
+                    then there is an $x\in{B}$ such that
+                    $x\notin{A}$.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. Then for all $x\in{B}$,
+                    it is true that $x\in{A}$. But then
+                    $B$ is a subset of $A$
+                    (Def.~\ref{def:Subsets}).
+                    But $A$ is a subset of $B$, and thus
+                    by the definition of equality
+                    (Def.~\ref{def:Equal_Sets})
+                    $A=B$, a contradiction. Therefore, etc.
+                \end{proof}
+                Theorem \ref{thm:Prop_Subset_Not_Equal} can
+                be used as an equivalent definition of a proper
+                subset. That is, a proper subset is a subset that
+                is missing at least one element. The notation
+                $\subseteq$ and $\subset$ is analogous to the
+                notation of inequalities that one finds in calculus,
+                $\leq$ and $<$. In many texts, the two symbols
+                $\subseteq$ and $\subset$ are taken to be
+                identical, which can be a cause for confusion.
+                We will attempt to be consistent in writing
+                $\subseteq$ to mean any subset, and
+                $\subset$ to mean a proper subset.
+            \subsubsection{Operations on Sets}
+                Similar to the arithmetic of real numbers, there
+                are standard operations that can be performed on
+                sets to obtain new sets. The four most common
+                operations are union, intersection, set difference,
+                and symmetric difference. Often the
+                \textit{complement} of a set is discussed, but as
+                we will see, this is just a specific case of set
+                difference.
+                \begin{ldefinition}{Union of Sets}{Union_of_Two_Sets}
+                    The union of two sets, $A$ and $B$, is the set:
+                    \begin{equation}
+                        A\cup{B}=
+                        \{x:x\in{A}\textrm{ or }x\in{B}\}
+                    \end{equation}
+                    That is, the set of all elements that are
+                    contained in either $A$ or $B$, or both.
+                \end{ldefinition}
+                \begin{theorem}
+                    \label{thm:Union_is_Bigger}%
+                    If $A$ and $B$ are sets, then
+                    $A\subseteq{A}\cup{B}$.
+                \end{theorem}
+                \begin{proof}
+                    For suppose not. Then there is an
+                    $x\in{A}$ such that $x\notin{A}\cup{B}$.
+                    But by the definition of the union of two sets,
+                    Def.~\ref{def:Union_of_Two_Sets},
+                    if $x\in{A}$, then $x\in{A}\cup{B}$, a
+                    contradiction. Therefore, etc.
+                \end{proof}
+                \begin{theorem}
+                    If $A$ and $B$ are sets, and if
+                    $A\subseteq{B}$, then $A\cup{B}=B$.
+                \end{theorem}
+                \begin{proof}
+                    For by Thm.~\ref{thm:Union_is_Bigger},
+                    for any two sets $A$ and $B$, it is true that
+                    $B\subseteq{A}\cup{B}$. But by the definition of
+                    subsets, Def.~\ref{def:Subsets},
+                    if $A\subseteq{B}$, then for all $x\in{A}$, it
+                    is true that $x\in{B}$.
+                    Thus if $x\in{A}$ or if $x\in{B}$, then
+                    $x\in{B}$. But then, for all $x\in{A}\cup{B}$,
+                    it is true that $x\in{B}$, and therefore
+                    $A\cup{B}\subseteq{B}$. But then $A\cup{B}=B$
+                    (Def.~\ref{def:Equal_Sets}). Therefore, etc.
+                \end{proof}
+            \subsubsection{Cartesian Products}
+                \begin{ldefinition}{Ordered Pair}{Ordered_Pair}
+                    The \gls{ordered pair} of $x$ and $y$ is the set:
+                    \begin{equation}
+                        (x,y)=\big\{\{x\},\{x,y\}\big\}
+                    \end{equation}
+                \end{ldefinition}
+                Note that from the definition, given two distinct
+                elements $x$ and $y$, $(x,y)\ne(y,x)$. This
+                definition of an ordered pair is due to Kazimierz
+                Kuratowski and was first put forward in 1921. It
+                does precisely what we want for an ordered pair,
+                and distinguishes the order of the elements. There
+                is a caveat to this definition, for we have the
+                following reduction:
+                \begin{equation}
+                    (x,x)=\big\{\{x\},\{x,x\}\big\}
+                    =\big\{\{x\},\{x\}\big\}
+                    =\big\{\{x\}\big\}
+                \end{equation}
+                This does not create too much of an issue. An
+                alternative definition due to Norbert Wiener was put
+                forward in 1914. He defines an ordered pair as:
+                \begin{equation}
+                    (x,y)_{W}=\Big\{\big\{\{x\},\emptyset\big\},
+                        \big\{\{y\}\big\}\Big\}
+                \end{equation}
+                To order sets that have more than two elements it is
+                useful to define functions. First we define the
+                \textit{Cartesian Product} of two sets.
+                \begin{ldefinition}{Cartesian Product}
+                      {Cartesian_Product}
+                    The \gls{Cartesian product} of two sets $A$
+                    and $B$ is the set:
+                    \begin{equation}
+                        A\times{B}=\{(a,b):a\in{A},b\in{B}\}
+                    \end{equation}
+                    Where $(a,b)$ denotes the ordered pair of
+                    $a$ with $b$.
+                \end{ldefinition}
+                \begin{lexample}
+                    One example of a Cartesian product
+                    is the Euclidean plane, $\mathbb{R}^{2}$. This is
+                    the set:
+                    \begin{equation}
+                        \mathbb{R}^{2}=\mathbb{R}\times\mathbb{R}
+                    \end{equation}
+                    Where $\mathbb{R}$ denotes the set of real numbers.
+                    $\mathbb{R}^{2}$ is thus the set of all ordered
+                    pairs of real numbers. This is the same thing as
+                    the \textit{Cartesian} plane. Points
+                    in the Cartesian plane are identified by their
+                    \textit{coordinates}, $P=(x,y)$.
+                \end{lexample}
+                \begin{lexample}
+                    \label{ex:Cartesian_Product}%
+                    For the sake of computation, consider the
+                    set $A=\{1,2,3\}$ and $B=\{a,b\}$. We can then
+                    compute $A\times{B}$ directly:
+                    \begin{equation}
+                        A\times{B}=\big\{(1,a),(1,b),(2,a),(2,b),
+                            (3,a),(3,b)\big\}
+                    \end{equation}
+                    We can also compute $A\times{A}$ and $B\times{B}$:
+                    \begin{subequations}
+                        \begin{align}
+                            A\times{A}&=\big\{
+                                (1,1),(1,2),(1,3),
+                                (2,1),(2,2),(2,3),
+                                (3,1),(3,2),(3,3)\big\}\\
+                            B\times{B}&=\big\{
+                                (a,a),(a,b),(b,a),(b,b)\big\}
+                        \end{align}
+                    \end{subequations}
+                    Lastly, compute $B\times{A}$:
+                    \begin{equation}
+                        B\times{A}=\big\{
+                            (a,1),(a,2),(a,3),
+                            (b,1),(b,2),(b,3)\big\}
+                    \end{equation}
+                    Note that, since for distinct elements $\alpha$
+                    and $\beta$, we have that
+                    $(\alpha,\beta)\ne(\beta,\alpha)$, and thus
+                    the Cartesian products $A\times{B}$ and $B\times{A}$
+                    are not equal, in general. Equality is obtained
+                    if and only if $A=B$.
+                \end{lexample}
+                Note that in Ex.~\ref{ex:Cartesian_Product}, the
+                \textit{size} of the Cartesian product of two sets
+                was simply the product of the number of elements of
+                the constituent sets. That is, we see that $A$ has
+                three elements and $B$ has two elements, but also
+                that $A\times{B}$ has six elements. Moreover,
+                $A\times{A}$ has nine elements, and $B\times{B}$ has
+                four. This pattern holds for \textit{finite} sets.
+                To be precise, we need to define what finite sets
+                are, and what are \textit{infinite} sets. To do
+                this we need the notion of a function.
+        \subsection{Functions}
+            \subsubsection{Definitions}
+                \begin{ldefinition}{Functions}{Functions}
+                    A \gls{function} from a set $A$ to a set $B$
+                    is a subset $f$, denoted $f:X\rightarrow{Y}$
+                    of the Cartesian product $A\times{B}$
+                    such that, for all $x\in{A}$, there is a unique
+                    $y\in{B}$ such that $(x,y)\in{f}$.
+                \end{ldefinition}
+                Given two sets $A$ and $B$, and a function
+                $f:A\rightarrow{B}$, we often call $A$ the
+                domain of $f$ and $B$ the co-domain.
+                The \textit{image} of $x\in{X}$ is often written
+                as $y=f(x)$. Requiring that $y$ be unique for each
+                $x$ is equivalent to the \textit{vertical line test}
+                one might find in a calculus course. We can also
+                define the image of a subset of $Y$.
+                \begin{ldefinition}{Image of a Set}{Image_of_Set}
+                    The \gls{set image} of a subset
+                    $S\subseteq{X}$ by a function
+                    $f:X\rightarrow{Y}$ is the set:
+                    \begin{equation}
+                        f(S)=\{f(x)\in{Y}:x\in{X}\}
+                    \end{equation}
+                    That is, the set of all points in $Y$ that $S$
+                    gets mapped to by $f$.
+                \end{ldefinition}
+                This is also called the \textit{range} of a function.
+                In a similar manner, we can define the pre-image, or
+                inverse image, of a set.
+                \begin{ldefinition}{Pre-Image of a Set}
+                      {Funct_Analysis_Pre_Image_of_Set}
+                    The \gls{pre-image} of $S\subseteq{Y}$
+                    by a function $f:X\rightarrow{Y}$ is the set:
+                    \begin{equation}
+                        f^{\minus{1}}(S)=\{x\in{X}:f(x)\in{S}\}
+                    \end{equation}
+                    That is, the set of all points in $X$ that map
+                    into $S$.
+                \end{ldefinition}
+                \begin{lexample}
+                    Given a function $f:X\rightarrow{Y}$, and any
+                    non-empty subset $S\subseteq{X}$, the image
+                    $f(S)$ is non-empty. This is not true for the
+                    pre-image of a function. For let
+                    $f:\mathbb{R}\rightarrow\mathbb{R}$ be defined by
+                    $f(x)=1$ for all $x\in\mathbb{R}$. Then, for any
+                    subset $S\subset\mathbb{R}$ such that
+                    $1\notin{S}$, we have that
+                    $f^{\minus{1}}(S)=\emptyset$.
+                \end{lexample}
+                There are many examples of functions, but certain
+                ones are easier to study than others. We give some
+                of these special functions names.
+                \begin{ldefinition}{Injective Functions}
+                      {Injective_Function}
+                    An \gls{injective function} is a function
+                    $f:X\rightarrow{Y}$ such that, for all
+                    $x,y\in{X}$ such that $x\ne{y}$, it is true that
+                    $f(x)\ne{f}(y)$.
+                \end{ldefinition}
+                That is, an injective function is a function
+                $f:X\rightarrow{Y}$ such that $f(x_{1})=f(x_{2})$
+                if and only if $x_{1}=x_{2}$. Such functions are also
+                called \textit{one-to-one}.
+                \begin{lexample}
+                    Consider the natural logarithm
+                    $\ln:\mathbb{R}^{+}\rightarrow\mathbb{R}$. This
+                    is an injective function. For let
+                    $x,y\in\mathbb{R}^{+}$ be such that $x\ne{y}$.
+                    Suppose $\ln(x)=\ln(y)$. But then:
+                    \begin{equation}
+                        \ln(x)-\ln(y)=\ln\Big(\frac{x}{y}\Big)=0
+                    \end{equation}
+                    Recall the definition of the natural logarithm:
+                    \begin{equation}
+                        \ln(t)=\int_{1}^{t}\frac{1}{x}\diff{x}
+                    \end{equation}
+                    But then $\ln(t)=0$ if and only if $t=1$. Thus
+                    $x=y$, a contradiction. Therefore $\ln$ is an
+                    injective function. Not every function is
+                    injective, for define
+                    $f:\mathbb{R}\rightarrow\mathbb{R}$ by
+                    $f(x)=x^{2}$. Then, for all $x\in\mathbb{R}^{+}$,
+                    $f(\minus{x})=f(x)$, and thus $f$ cannot be an
+                    injective function.
+                \end{lexample}
+                One might think that most functions are not injective,
+                and indeed for the \textit{finite} case, this is true.
+                For let $A$ and $B$ be finite sets with $n$ and $m$
+                elements, respectively. If $m<n$, there can't be
+                any injective function. Consider the case when $n=m$.
+                Then we are simply counting the number of ways to
+                permute the elements of $A$. This is $n!$. On the
+                other hand, the total number of functions is
+                $n^{n}$. Thus, the ratio of the number of injective
+                functions to the number of functions is
+                $n!/n^{n}$, and this decays to zero rapidly as
+                $n$ get's large. Finally, if $m>n$, then the total
+                number of injective functions is
+                $n!\binom{m}{n}$, where $\binom{m}{n}$ is the
+                binomial coefficient. The total number of functions
+                is $n^{m}$. The ratio is thus:
+                \begin{equation}
+                    \frac{n!\binom{m}{n}}{n^{m}}=
+                    \frac{n!\frac{m!}{n!(m-n)!}}{n^{m}}
+                    =\frac{m!}{(m-n)!n^{m}}
+                \end{equation}
+                And again, this decays rapidly to zero and $n$ and $m$
+                get large. Later, when we define infinite sets
+                and the notion of Cardinality, we'll show that this
+                trend continues. That is, in a sense, \textit{most}
+                functions from a set $A$ to a sufficiently large set
+                $B$ are not injective. Next, we define
+                \textit{surjective} functions.
+                \begin{ldefinition}{Surjective Functions}
+                      {Surjective_Function}
+                    A \gls{surjective function} is a function
+                    $f:X\rightarrow{Y}$ such that $f(X)=Y$.
+                    That is, for all $y\in{Y}$, there is an
+                    $x\in{X}$ such that $f(x)=y$.
+                \end{ldefinition}
+                That is, every point $y\in{Y}$ gets mapped to by
+                at least one point in $X$. It may also be true that
+                many points in $X$ map to the same point in $Y$.
+                The notions of surjective functions and injective
+                functions are distinct, and neither implies the
+                other. Surjective functions are also called
+                \textit{onto}.
+                \begin{ldefinition}{Bijective Functions}
+                      {Bijective_Function}
+                    A \gls{bijective function} is a function
+                    that is both injective and surjective.
+                \end{ldefinition}
+                Sets $X$ and $Y$ such that there
+                exists a bijective function $f:X\rightarrow{Y}$ are
+                called \textit{equivalent}. Such sets can be said
+                to have the same size. We say that $X$ is strictly
+                smaller than $Y$ if there is an injective function
+                $f:X\rightarrow{Y}$, but no bijective function.
+            \begin{definition}
+                A finite set is a set $X$ such that there
+                exists an $n\in\mathbb{N}$ such that there is
+                a bijective function
+                $f:\mathbb{Z}_{n}\rightarrow{S}$
+            \end{definition}
+            \begin{definition}
+                A countable set is a set
+                $X$ such that there exists a bijective
+                function $f:\mathbb{N}\rightarrow{X}$.
+            \end{definition}
+            Being countable means you can write
+            the elements out in a list, or a
+            one-to-one correspondence with all of
+            the positive integers. Many sets are countable,
+            including the whole numbers, integers, rational
+            numbers, and \textit{algebraic} numbers. The
+            union of finitely many countable sets is also
+            countable, as is the union of countably many
+            countable sets.
+            \begin{example}
+                The set of all positive even integers is
+                countable. For let $\mathbb{N}_{e}$ be the
+                set of all even integers and define
+                $f:\mathbb{N}\rightarrow\mathbb{N}_{e}$ be
+                $f(n)=2n$ for all $n\in\mathbb{N}$. This is
+                a bijection, and thus $\mathbb{N}_{e}$ is
+                countable. The set of all odd positive integers
+                is countable, as shown by letting
+                $f(n)=2n-1$. Even though the set of even
+                integers may seem ``smaller,'' than the set of
+                all integers, they are equivalent. The set of
+                all integers $\mathbb{Z}$ is also countable.
+                For let $f:\mathbb{N}\rightarrow\mathbb{Z}$
+                be defined as:
+                \begin{equation}
+                    f(n)=
+                    \begin{cases}
+                        \frac{1}{2}(n-1),&n\textrm{ odd}\\
+                        -\frac{n}{2},&n\textrm{ even}
+                    \end{cases}
+                \end{equation}
+            \end{example}
+            Any set that is infinite (Not finite) contains a
+            countable subset. Thus, $\mathbb{N}$ can be
+            considered as the \textit{smallest} infinite set.
+            \begin{theorem}
+                If $A$ is an infinite set, then there exists
+                $S\subseteq{A}$ such that $S$ is countabl e.
+            \end{theorem}
+            \begin{proof}
+                For as $A$ is infinite, for all $n\in\mathbb{N}$
+                there exists a set $B\subseteq{A}$ such that
+                $|B|=n$. For all $n\in\mathbb{N}$,
+                define the following:
+                \begin{equation}
+                    \mathcal{S}_{n}=\{B\subseteq{A}:|B|=n\}
+                \end{equation}
+                Let $\mathcal{S}$ be defined as:
+                \begin{equation}
+                    \mathcal{S}=\{\mathcal{S}_{n}:n\in\mathbb{N}\}
+                \end{equation}
+                Then $\mathcal{S}$ is countable, for
+                $a:\mathbb{N}\rightarrow\mathcal{S}$ defined
+                by $a_{n}=\mathcal{S}_{n}$ is a bijection.
+                By the axiom of choice, there is a function:
+                \begin{equation}
+                    \alpha:\mathcal{S}\rightarrow
+                    \bigcup_{n=1}^{\infty}\mathcal{S}_{n}
+                \end{equation}
+                Such that, for all $x\in\mathcal{S}$,
+                $\alpha(x)\in{x}$. But then, for all
+                $x\in\mathcal{S}$, $\alpha(x)$ is a subset
+                of $A$. But for all $x\in\mathcal{S}$, there
+                is an $n\in\mathbb{N}$ such that
+                $a_{n}=x$. Thus, let $S$ be the following:
+                \begin{equation}
+                    S=\bigcup_{n=1}^{\infty}\alpha(a_{n})
+                \end{equation}
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Countable_Union_of_Countable}%
+                If $A$ is a countable set such that for all
+                $\mathcal{U}\in{A}$, $\mathcal{U}$ is a
+                countable set, and if for all $a,b\in{A}$,
+                $a\cap{b}=\emptyset$, then
+                $\bigcup_{\mathcal{U}\in{A}}\mathcal{U}$
+                is countable set.
+            \end{theorem}
+            \textit{Sketch of Proof.} The proof of
+            Thm.~\ref{thm:Countable_Union_of_Countable}
+            follows in the same manner
+            as proving that the rationals are countable. Since
+            there are countably many sets, write them out in
+            a list $\mathcal{U}_{1}$, $\mathcal{U}_{2}$, and
+            so on. Then write out the elements in a table as
+            follows:
+            \begin{table}[H]
+                \captionsetup{type=table}
+                \centering
+                \begin{tabular}{ccccc}
+                    $u_{11}$&$u_{12}$&$u_{13}$
+                    &$u_{14}$&$\hdots$\\
+                    $u_{21}$&$u_{22}$&$u_{23}$
+                    &$u_{24}$&$\hdots$\\
+                    $u_{31}$&$u_{32}$&$u_{33}$
+                    &$u_{34}$&$\hdots$\\
+                    $u_{41}$&$u_{42}$&$u_{43}$
+                    &$u_{44}$&$\hdots$\\
+                    $\vdots$&$\vdots$&$\vdots$
+                    &$\vdots$&$\ddots$
+                \end{tabular}
+                \caption{Construction of a Bijection on the
+                         Countable Union of Countably Infinite
+                         Sets.}
+                \label{table:Func_Countable_Union_of_Countable}
+            \end{table}
+            Where $u_{nm}$ is the $m^{th}$ element of
+            $\mathcal{U}_{n}$.
+            Using the \textit{diagonal argument},
+            we obtain:
+            \begin{table}[H]
+                \captionsetup{type=table}
+                \centering
+                \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+                    \hline
+                    $\mathbb{N}$&1&2&3&4&5&6&7&8&9&$\hdots$\\
+                    \hline
+                    $\bigcup_{\mathcal{U}\in{A}}\mathcal{U}$&
+                    $u_{11}$&$u_{12}$&$u_{21}$&$u_{13}$&
+                    $u_{22}$&$u_{31}$&$u_{14}$&$u_{23}$&
+                    $u_{32}$&$\hdots$\\
+                    \hline
+                \end{tabular}
+                \caption{The Bijection Between $\mathbb{N}$ and
+                         $\bigcup_{\mathcal{U}\in{A}}\mathcal{U}$}
+                \label{table:Bijection_on_Countable_Union}
+            \end{table}
+            In the absence of the requirement that
+            $a\cap{b}=\emptyset$ for all pairs in $\mathcal{U}$,
+            we still have that the union is, at most, countable.
+            The mapping we found would be a
+            \textit{surjection}, rather than a bijection.
+            The union is then either finite or countable. The
+            Cantor-Schr\"{o}der-Bernstein Theorem can often be
+            used to help identify the size of a set. This says
+            that if $A$ and $B$ are sets such that there exists
+            a surjective function $f:A\rightarrow{B}$ and a
+            surjective function $g:B\rightarrow{A}$, then there
+            is a bijective function $h:A\rightarrow{B}$. The
+            requirement that $f$ and $g$ both be surjective
+            can be replaced with the requirement that they both
+            be injective. This is similar to saying that if
+            $\Card(A)\leq\Card(B)$ and $\Card(B)\leq\Card(A)$,
+            then $\Card(A)=\Card(B)$. Here, $\Card(A)$ denotes
+            the \textit{cardinality} of the set $A$.
+            \begin{definition}
+                An uncountable set is a set that is
+                neither finite nor countable.
+            \end{definition}
+            \begin{theorem}
+                $\mathbb{Q}$ is countable.
+            \end{theorem}
+            \begin{proof}
+                For we have that:
+                \begin{equation}
+                    \mathbb{Q}=
+                    \bigcup_{n=-\infty}^{\infty}
+                    \Big\{\frac{n}{m}:m\in\mathbb{N}\Big\}
+                \end{equation}
+                And this is the union of countably
+                many countable sets, and is thus countable.
+            \end{proof}
+            \begin{theorem}
+                $\mathbb{R}$ is uncountable.
+            \end{theorem}
+            \textit{Sketch of Proof.} We'll show that the unit
+            interval $(0,1)$ is uncountable. Suppose not.
+            Let $r_{ij}$ be the $j^{th}$ decimal of the $i^{th}$
+            element in the list. We construct the real number
+            $d$ as follows: If $d_{j}$ denotes the $j^{th}$
+            decimal in $d$, let $d_{j}=r_{jj}+1$ if
+            $r_{jj}\ne{9}$, and $d_{j}=0$ otherwise. Then
+            $d\in(0,1)$, but $d$ is not on the list. For it's not
+            the $n^{th}$ element, for it differs in the
+            $n^{th}$ decimal place. Thus there is no bijection.
+            Therefore, $(0,1)$ is uncountable. By extension,
+            $\mathbb{R}$ is uncountable.
+            \par\hfill\par
+            \vspace{-2ex}
+            For a set $X$, we often write
+            $\mathcal{P}(X)$ to denote the
+            \textit{power set} of $X$. This is the
+            set of all subsets of $X$.
+            For any set $X$ you can show that $X$ is
+            strictly smaller than $\mathcal{P}(X)$.
+            For example, $\mathcal{P}(\mathbb{N})$
+            can be shown to be equivalent to $\mathbb{R}$.
+            Since $\mathbb{N}$ is stricly smaller than
+            $\mathbb{R}$, one might ask if there exists
+            a set $X$ such that $\mathbb{N}$ is strictly
+            smaller than $X$, but $X$ is strictly smaller
+            than $\mathbb{R}$. Continuing, you can ask the
+            same thing about $\mathbb{R}$ and
+            $\mathcal{P}(\mathbb{R})$, and so on.
+            This is called the continuum hypothesis.
+            It turns out to be independent of
+            the standard axioms of mathematics.
+        \subsection{The Axiom of Choice}
+        \subsection{Cardinality}
+            We begin by talking about cardinality. This is the
+            \textit{size} of a set. For an infinite set it
+            doesn't make sense to talk about the \textit{number}
+            of elements, but we can specify what it means two sets
+            to have the same size. Sets $A$ and $B$ are equivalent
+            if there exists a bijection $f:A\rightarrow{B}$.
+            We then say that $A$ and $B$ have the same cardinality.
+            The notation is written as $|A|=|B|$ or
+            $\Card(A)=\Card(B)$. A finite set is a set $A$ such that
+            there is a bijection between $A$ and $\mathbb{Z}_{n}$.
+            We can then view the elements of $A$ as
+            $A=\{a_{1},\hdots,a_{n}\}$. A countable set is a set
+            $A$ such that there is a bijection between $A$ and
+            $\mathbb{N}$. Here, $\mathbb{N}$ is the set of all
+            natural numbers, or positive integers.
+            \begin{lexample}
+                There are many commonly discussed sets that are
+                countably infinite. $\mathbb{N}$ is a trivial
+                such example, but also $\mathbb{N}_{e}$ and
+                $\mathbb{N}_{o}$, the sets of even and odd positive
+                integers, respectively. For consider as bijections
+                the following functions:
+                \par
+                \begin{subequations}
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            f_{e}(n)=2n
+                        \end{equation}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            f_{0}(n)=2n-1
+                        \end{equation}
+                    \end{minipage}
+                    \par\hfill\par
+                    $\mathbb{Z}$ is also countable, as shown in
+                    Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Z}.
+                    An explicit bijection for $\mathbb{Z}$ is:
+                    \begin{equation}
+                        f(n)=
+                        \begin{cases}
+                            \frac{n}{2},&n\mod{2}=0\\
+                            \frac{1-n}{2},&n\mod{2}=1
+                        \end{cases}
+                    \end{equation}
+                \end{subequations}
+            \end{lexample}
+            $\mathbb{Q}$ is also countable. We may intuitively
+            think of $\mathbb{N}$ as being smaller than $\mathbb{Q}$,
+            since there are simple \textit{surjections} that can be
+            constructed from $\mathbb{Q}$ to $\mathbb{N}$. There
+            is also a surjection from $\mathbb{N}$ onto
+            $\mathbb{Q}^{+}$, as is shown in
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}.
+            \newpage
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \subimport{../../../tikz/}{Surjection_From_N_to_Z}
+                \caption{Diagram of a Bijection Between
+                         $\mathbb{N}$ and $\mathbb{Z}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Z}
+            \end{figure}
+            To construct such a surjection, write out all of the
+            positive rational numbers in a grid so that $a_{nm}$ is
+            the number $n/m$. Then zig-zag along the diagonals
+            to construct the function. Thus there is a surjection
+            $f:\mathbb{Q}^{+}\rightarrow\mathbb{N}$
+            and a surjection $g:\mathbb{N}\rightarrow\mathbb{Q}^{+}$. The
+            Cantor-Schr\"{o}eder-Bernstein theorem says that if there
+            is surjection from $A$ to $B$ and a surjection from $B$
+            to $A$, then there is a bijection between $A$ and $B$.
+            Therefore there is a bijection between $\mathbb{N}$ and
+            $\mathbb{Q}^{+}$, and $\mathbb{Q}^{+}$ is countable.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \resizebox{0.7\textwidth}{!}{%
+                    \subimport{../../../tikz/}
+                              {Surjection_From_N_to_Q_Plus.tex}
+                }
+                \caption{Diagram of a Surjection from
+                         $\mathbb{N}$ onto $\mathbb{Q}^{+}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}
+            \end{figure}
+            We can modify
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q_Plus}
+            slightly to create a surjection between $\mathbb{N}$ and
+            $\mathbb{Q}$, see
+            Fig.~\ref{fig:MEASURE_THEORY:BIJECTION_N_AND_Q}.
+            It is important to note that this bijection will not
+            preserve the order of the rational numbers. The bijection
+            will have to jump around back and forth. Any such
+            bijection will be forced to do this, as the rationals are
+            everywhere dense on $\mathbb{R}$. Any monotonic sequence of
+            $\mathbb{Q}$ cannot possibly be a bijection.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \resizebox{\textwidth}{!}{%
+                    \subimport{../../../tikz/}
+                              {Surjection_From_N_to_Q.tex}
+                }
+                \caption{Diagram of a Surjection from
+                         $\mathbb{N}$ onto $\mathbb{Q}$.}
+                \label{fig:MEASURE_THEORY:BIJECTION_N_AND_Q}
+            \end{figure}
+            \begin{theorem}
+                If $A$ is a countable infinite set and
+                $B\subseteq{A}$, then either $B$ is finite or
+                $B$ is countable.
+            \end{theorem}
+            \begin{proof}
+                As $A$ is countable, there is a bijection
+                $a:\mathbb{N}\rightarrow{A}$. Define the following:
+                \begin{equation}
+                    K=\{n\in\mathbb{N}:a_{n}\in{B}\}
+                \end{equation}
+                As $B\subseteq{A}$,
+                this set contains a subsequence of points in
+                $\mathbb{N}$ that get mapped into $B$. If $K$ is finite,
+                then $B$ is finite, and if not then $K$ is countably
+                infinite, and thus $B$ is countably infinite.
+            \end{proof}
+            \begin{theorem}
+                If $A$ is an infinite set, then there exists a
+                countable subset $B\subseteq{A}$.
+            \end{theorem}
+            \begin{proof}
+                If $A$ is infinite then there is an
+                $a_{1}\in{A}$. But, as $A$ is infinite,
+                $A\setminus\{a_{1}\}$ is infinite, and there
+                is an $a_{2}\in{A}\setminus\{a_{1}\}$. Continuing
+                we obtain a sequence of distinct elements in $A$.
+                Let $B=\{a_{n}:n\in\mathbb{N}\}$. Then
+                $B\subseteq{A}$, and $B$ is countable.
+            \end{proof}
+            \begin{lexample}
+                Suppose we have a collection of disjoint intervals
+                of $\mathbb{R}$. This collection is either finite
+                or countable. For in every interval, choose a
+                rational number $q_{n}$. Let
+                $A=\{q_{1},q_{2},\hdots\}$. Then
+                $A\subseteq\mathbb{Q}$, and thus $A$ is either
+                finite or countable. But this is also an enumeration
+                of the intervals in the collection, and thus the
+                collection is either finite or countable.
+            \end{lexample}
+            Given a countable collection of sets
+            $A=\{\mathcal{A}_{1},\mathcal{A}_{2},\hdots\}$ such
+            that, for all $n\in\mathbb{N}$, $\mathcal{A}_{n}$ is
+            also a countable set, then the union is countable. That is:
+            \begin{equation}
+                B=\bigcup_{n=1}^{\infty}\mathcal{A}_{n}
+            \end{equation}
+            is a countable set. The proof of this is a mimicry of
+            the proof of the countability of $\mathbb{Q}$. Not
+            every set is either finite or countable. The real numbers,
+            $\mathbb{R}$, is an example of an \textit{uncountable}
+            set. First, some notes on the power set of a set.
+            \begin{ldefinition}{Power Set}{Measure_Theory:Power_Set}
+                The power set of a set $\Omega$, denoted
+                $\mathcal{P}(\Omega)$, is the set of all subsets of
+                $\Omega$:
+                \begin{equation}
+                    \mathcal{P}(\Omega)=
+                    \{A:A\subseteq\Omega\}
+                \end{equation}
+            \end{ldefinition}
+            \begin{lexample}
+                \begin{subequations}
+                    If $\Omega=\{1,2\}$, then the power set is:
+                    \begin{equation}
+                        \mathcal{P}(\Omega)=
+                        \big\{\emptyset,\{1\},\{2\},\{1,2\}\big\}
+                    \end{equation}
+                    We must consider the empty set, since for any set
+                    $A$, $\emptyset\subseteq{A}$.
+                    If $\Omega=\{1,2,3\}$, then:
+                    \begin{equation}
+                        \mathcal{P}(\Omega)=
+                        \big\{\emptyset,\{1\},\{2\},\{3\},\{1,2\},
+                          \{1,3\},\{2,3\},\{1,2,3\}\big\}
+                    \end{equation}
+                    We see that, in the first example, a set with
+                    2 elements has a power set with 4 elements. In the
+                    second example we see that a set with 3 elements has
+                    a power set with 8 elements. This pattern continues
+                    for finite sets. If $A$ has $n$ elements, then
+                    $\mathcal{P}(A)$ has $2^{n}$ elements. If
+                    $A$ is an infinite set, then $\mathcal{P}(A)$ is
+                    uncountable. Indeed:
+                    \begin{equation}
+                        \Card\big(\mathcal{P}(\mathbb{N})\big)=
+                        \Card(\mathbb{R})
+                    \end{equation}
+                    We can show this by using the binary representation
+                    of real numbers. We construct a bijection as
+                    follows: If $A\subseteq\mathbb{N}$, then
+                    let $r_{A}=0.n_{1}n_{2}\hdots$ where:
+                    \begin{equation}
+                        n_{i}=
+                        \begin{cases}
+                            0,&i\notin{A}\\
+                            1,&i\in{A}
+                        \end{cases}
+                    \end{equation}
+                    The function
+                    $f:\mathcal{P}(\mathbb{N})\rightarrow[0,1]$
+                    defined by $f(A)=r_{A}$ is thus a bijection.
+                    That is, every element of $[0,1]$ gets mapped to in
+                    a one-to-one manner. The potentially tricky numbers are
+                    0 and 1, but $f(\emptyset)=0$, and $f(\mathbb{N})=1$.
+                    Thus $\mathcal{P}(\mathbb{N})$ and $[0,1]$ are of the
+                    same cardinality. But $(0,1)$ and $\mathbb{R}$
+                    are of the same cardinality. To see this, consider
+                    the graph of the function
+                    $g:(0,1)\rightarrow\mathbb{R}$ defined as:
+                    \begin{equation}
+                        g(x)=\frac{2x-1}{x(1-x)}
+                    \end{equation}
+                    This is a bijection between the unit interval
+                    $(0,1)$ and $\mathbb{R}$. One can also use the
+                    \textit{stereographic projection} to show this.
+                    But also $[0,1]$ and $(0,1)$ have the same cardinality.
+                    For this, consider the following function:
+                    \begin{equation}
+                        f(x)=
+                        \begin{cases}
+                            \frac{1}{2},&x=0\\
+                            \frac{1}{2^{n+2}},&x=\frac{1}{2^{n}}\\
+                            x,&\textrm{Otherwise}
+                        \end{cases}
+                    \end{equation}
+                    A graph of this is shown in
+                    Fig.~\ref{fig:MEASURE_THEORY:Bijection_Closed_Interval_to_Open}.
+                    Therefore, $\mathbb{R}$ and
+                    $\mathcal{P}(\mathbb{N})$ have the same cardinality.
+                    This can then be used to show that $\mathbb{R}$ is
+                    uncountable.
+                \end{subequations}
+            \end{lexample}
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \subimport{../../../tikz/}
+                    {Bijction_Closed_to_Open_Interval}
+                \caption{Bijection from $[0,1]$ to $(0,1)$.}
+                \label{fig:MEASURE_THEORY:Bijection_Closed_Interval_to_Open}
+            \end{figure}
+            The power set of any set is strictly larger than the
+            original set. If $\Omega$ is finite with $n$ elements, it
+            can be shown that $\mathcal{P}(\Omega)$ has $2^{n}$
+            elements. For infinite sets, there is a trivial surjection
+            from $\mathcal{P}(\Omega)$ onto $\Omega$: for any element
+            $x$, let $f(\{x\})=x$. This shows that
+            $\Card(\Omega)\leq\Card(\mathcal{P}(\Omega))$. We now show
+            that the inequality is strict.
+            \begin{theorem}
+                If $\Omega$ is a set, then there is no bijection
+                $f:\Omega\rightarrow\mathcal{P}(\Omega)$
+            \end{theorem}
+            \begin{proof}
+                For suppose not, and let
+                $f:\Omega\rightarrow\mathcal{P}(\Omega)$ be such a
+                bijection. Define:
+                \begin{equation}
+                    A=\{x\in\Omega:x\in{f}(x)\}
+                \end{equation}
+                Then $A\subseteq\Omega$, and thus
+                $A\in\mathcal{P}(\Omega)$. But then the complement of
+                $A$ is also an element of $\mathcal{P}(\Omega)$. But
+                $f$ is a bijection and thus there is an $x\in\Omega$
+                such that $f(x)=A^{C}$. If $x\in{f}(x)$, then
+                $x\in{A}$, a contradiction as $f(x)=A^{C}$, and thus
+                $x\in{A}^{C}$ as well. Therefore $x\notin{f}(x)$. But
+                then $x\in{A}^{C}$. But, from the definition of $A$,
+                since $x\in{A}^{C}$ and $f(x)=A^{C}$, $x\in{f}(x)$
+                and thus $x\in{A}$, a contradiction. Thus there is no
+                $x$ such that $f(x)=A^{C}$. Therefore, $f$ is not a
+                bijection.
+            \end{proof}
+            From this we conclude that $\mathcal{P}(\mathbb{N})$
+            is an uncountable infinite set. But since $\mathbb{R}$
+            and $\mathcal{P}(\mathbb{N})$ have the same cardinality,
+            $\mathbb{R}$ is also uncountable.
+            If a set $A$ has the same cardinality as $\mathbb{R}$,
+            we say that $A$ has the cardinality of the continuum.
+            \begin{lexample}
+                There is a bijection between the open unit
+                square $(0,1)\times(0,1)$ and the open unit interval
+                $(0,1)$. For an element $(x,y)\in(0,1)\times(0,1)$,
+                let $z\in(0,1)$ be defined as
+                $z=0.x_{1}y_{1}x_{2}y_{2}x_{3}y_{3}\dots$ This is
+                a bijection, for all $(x,y)$ in the square there is
+                a corresponding $z\in(0,1)$, and for all
+                $z\in(0,1)$ there is a corresponding element of
+                $(0,1)\times(0,1)$. We can say that $(x,y)$ can
+                be coded into $z$, and $z$ can be decoded into
+                $(x,y)$. Hence, $(0,1)\times(0,1)$ has the cardinality
+                of the continuum. By stereographic projection and induction
+                we obtain:
+                \par\hfill\par
+                \begin{subequations}
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \begin{equation}
+                            \Card(\mathbb{R}^{2})=\Card(\mathbb{R})
+                        \end{equation}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \begin{equation}
+                            \Card(\mathbb{R}^{n})=\Card(\mathbb{R})
+                        \end{equation}
+                    \end{minipage}
+                    \par
+                \end{subequations}
+            \end{lexample}
+            \begin{lexample}
+                Consider the set of all real-valued sequences. We've seen
+                that any real number can be represented as a function
+                $f:\mathbb{N}\rightarrow\{0,1\}$. A real-valued sequence
+                is a function $a:\mathbb{N}\rightarrow\mathbb{R}$, and
+                thus the set of real-valued sequences can be seen as the
+                set of functions whose domain is $\mathbb{N}$ and whose
+                range is the set of all functions
+                $f:\mathbb{N}\rightarrow\{0,1\}$. So given a sequence
+                $a$, the image of $a_{n}$, for $n\in\mathbb{N}$, is a
+                function $f_{n}:\mathbb{N}\rightarrow\{0,1\}$. Therefore
+                the set of all real-valued sequences can be represented
+                as the set of all functions
+                $g:\mathbb{N}\times\mathbb{N}\rightarrow\{0,1\}$, where
+                $g(n,m)=f_{n}(m)$. But $\mathbb{N}\times\mathbb{N}$ is
+                countable, and thus the set of all functions of the form
+                $g:\mathbb{N}\times\mathbb{N}\rightarrow\{0,1\}$ has the
+                same cardinality as the set of all functions of the form
+                $f:\mathbb{N}\rightarrow\{0,1\}$. But this has the
+                cardinality of the continuum. Therefore, the set of all
+                real-valued sequences has the cardinality of the continuum.
+            \end{lexample}
+        \subsection{Set Operations}
+            There are several operations that can be performed on sets,
+            most notable are union, intersection, difference, and symmetric
+            difference.
+            \begin{ldefinition}{Set Union and Intersection}{Measure_Theory:Union}
+                The union of two sets $A$ and $B$, denoted
+                $A\cup{B}$, is the set:
+                \begin{subequations}
+                    \begin{equation}
+                        A\cup{B}=\{x:x\in{A}\textrm{ or }x\in{B}\}
+                    \end{equation}
+                    The intersction of two sets $A$ and $B$, denoted
+                    $A\cap{B}$, is the set:
+                    \begin{equation}
+                        A\cap{B}=\{x:x\in{A}\textrm{ and }x\in{B}\}
+                    \end{equation}
+                \end{subequations}
+            \end{ldefinition}
+            These two concepts can be visualized with Venn diagrams, as shown in
+            Fig.~\ref{fig:MEASURE_THEORY_union_intersection_venn_diagram}.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../../tikz/}{Venn_Diagram_Union}
+                    \subcaption{Set Union}
+                \end{subfigure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../../tikz/}{Venn_Diagram_Intersection}
+                    \subcaption{Set Intersection}
+                \end{subfigure}
+                \caption{Venn Diagrams Depicting the Union and Intersection
+                         of the Sets $A$ and $B$.}
+                \label{fig:MEASURE_THEORY_union_intersection_venn_diagram}
+            \end{figure}
+            \begin{ftheorem}{Laws of Union and Intersection}
+                            {MEASURE_THEORY_UNION_LAWS_UNION_INTERSECTION}
+                If $A$, $B$, and $C$ are sets, then the following are true:
+                \par\hfill\par
+                \begin{subequations}
+                    \underline{Commutative Laws:}
+                    \begin{align}
+                        A\cup{B}&=B\cup{A}\\
+                        A\cap{B}&=B\cap{A}
+                    \end{align}
+                    \underline{Associative Laws:}
+                    \begin{align}
+                        A\cup(B\cup{C})&=(A\cup{B})\cup{C}\\
+                        A\cap(B\cap{B})&=(A\cap{B})\cap{C}
+                    \end{align}
+                    \underline{Distributive Laws:}
+                    \begin{align}
+                        A\cup(B\cap{C})&=(A\cup{B})\cap(A\cup{C})\\
+                        A\cap(B\cup{C})&=(A\cap{B})\cup(A\cap{C})
+                    \end{align}
+                \end{subequations}
+            \end{ftheorem}
+            \begin{bproof}
+                If $x\in{A}\cup{B}$, then either $x\in{A}$ or $x\in{B}$,
+                or both. But then either $x\in{B}$ or $x\in{A}$, or both,
+                and thus $x\in{B}\cup{A}$. Thus $A\cup{B}\subseteq{B}\cup{A}$.
+                Similarly, $B\cup{A}\subseteq{A}\cup{B}$, and thus
+                $A\cup{B}=B\cup{A}$. By a similar argument,
+                $A\cap{B}=B\cap{A}$.
+                \par\hfill\par
+                If $x\in{A}\cup(B\cup{C})$, then either
+                $x\in{A}$ or $x\in{B}\cup{C}$, or both.
+                If $x\in{A}$, then $x\in{A}\cup{B}$, and
+                therefore $x\in(A\cup{B})\cup{C}$. If not,
+                then $x\in{B}\cup{C}$, and thus either
+                $x\in{B}$ or $x\in{C}$, or both.
+                If $x\in{B}$, then $x\in{A}\cup{B}$, and
+                thus $x\in(A\cup{B})\cup{C}$. If not
+                then $x\in{C}$, and therefore
+                $x\in(A\cup{B})\cup{C}$. Therefore
+                $A\cup(B\cup{C})\subseteq(A\cup{B})\cup{C}$.
+                Similarly, $(A\cup{B})\cup{C}\subseteq{A}\cup(B\cup{C})$.
+                Thus, $A\cup(B\cup{C})=(A\cup{B})\cup{C}$. By a similar
+                argument, $A\cap(B\cap{C})=(A\cap{B})\cap{C}$.
+                \par\hfill\par
+                If $x\in{A}\cup(B\cap{C})$, then either $x\in{A}$
+                or $x\in{B}\cap{C}$, or both. If $x\in{A}$, then
+                $x\in{A}\cup{B}$ and $x\in{A}\cup{C}$, and therefore
+                $x\in(A\cup{B})\cap(A\cup{C})$. If $x\in{B}\cap{C}$,
+                then $x\in{B}$ and $x\in{C}$, and therefore
+                $x\in(A\cup{B})\cap(A\cup{C})$. Thus,
+                $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$.
+                Similarly,
+                $(A\cup{B})\cap(A\cup{C})\subseteq{A}\cup(B\cap{C})$.
+            \end{bproof}
+            If $A$ and $B$ are sets, and if $C\subseteq{A}\cup{B}$, then
+            either $C\subseteq{A}$ or $C\subseteq{B}$, or both. It is
+            possible that $C\subseteq{A}\cup{B}$ and yet $C$ and $B$ have no
+            elements in common, as long as $C\subseteq{A}$. As an example,
+            take $A$ and $B$ to be disjoint sets. Then $A\subseteq{A}\cup{B}$,
+            yet $A$ and $B$ have no elements in common. If
+            $C\subseteq{A}\cap{B}$, then it must be true that
+            $C\subseteq{A}$ and $C\subseteq{B}$.
+            \begin{ldefinition}{Set Difference and Symmetric Difference}
+                The set difference of a set $A$ with respect to a set $B$,
+                denoted $B\setminus{A}$, is the set:
+                \begin{equation}
+                    B\setminus{A}=\{x\in{B}:x\notin{A}\}
+                \end{equation}
+                The symmetric difference of $A$ and $B$, denoted
+                $A\ominus{B}$, is the set:
+                \begin{equation}
+                    A\ominus{B}=(A\cup{B})\setminus(A\cap{B})
+                \end{equation}
+            \end{ldefinition}
+            As with the notions of unions and intersections, set differences and
+            symmetric differences can be visualized using Venn diagrams.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../../tikz/}{Venn_Diagram_Set_Difference}
+                    \subcaption{Set Difference}
+                \end{subfigure}
+                \begin{subfigure}[b]{0.49\textwidth}
+                    \centering
+                    \subimport{../../../tikz/}{Venn_Diagram_Symmetric_Difference}
+                    \subcaption{Symmetric Difference}
+                \end{subfigure}
+                \caption{Venn Diagrams Depicting the Set Difference and
+                         Symmetric Difference of the Sets $A$ and $B$.}
+                \label{fig:MEASURE_THEORY_Difference_sym_venn_diagram}
+            \end{figure}
+            \begin{theorem}
+                \label{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION}
+                If $A$, $B$, and $C$ are sets, and if $A\subseteq{C}$
+                and $B\subseteq{C}$, then:
+                \begin{equation}
+                    B\setminus{A}=B\cap(C\setminus{A})
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For if $x\in{B}\setminus{A}$, then
+                $x\in{B}$ and $x\notin{A}$. But
+                $B\subseteq{C}$, and thus if $x\in{B}$, then $x\in{C}$.
+                But if $x\notin{A}$, then $x\in{C}\setminus{A}$. Therefore
+                $B\setminus{A}\subseteq{B}\cap(C\setminus{A})$.
+                Similarly, $B\cap(C\setminus{A})\subseteq{B}\setminus{A}$,
+                and therefore $B\setminus{A}={B}\cap(C\setminus{A})$.
+            \end{proof}
+            While set difference appears similar to subtraction that one finds in
+            basic arithmetic, the two have their differences. For any two real
+            numbers $a$ and $b$, $b=a-(a-b)$. For sets this is not true. For let
+            $A$ be the empty set, and let $B$ be non-empty. Then
+            $A\setminus(A\setminus{B})=\emptyset$, which is not $B$.
+            Also, while it may seems convincing that
+            $A\setminus(B\setminus{A})=A\setminus{B}$, this is not true. For
+            let $A$ be a non-empty set and let $B=A$. Then
+            $A\setminus(B\setminus{A})=A$, but $A\setminus{B}=\emptyset$.
+            The concept of set difference can then be used to define the
+            concept of complement.
+            \begin{ldefinition}{Complement}
+                The complement of a set $A$ with respect to a set
+                $\Omega$, denoted $A^{C}$, is the set:
+                \begin{equation}
+                    A^{C}=\Omega\setminus{A}
+                \end{equation}
+            \end{ldefinition}
+            Thm.~\ref{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION} can then
+            be translated into the notation of complements as follows:
+            \begin{theorem}
+                If $A$, $B$, and $\Omega$ are sets, $A,B\subseteq\Omega$,
+                and if $A^{C}$ is the complement of $A$ with respect
+                to $\Omega$, then:
+                \begin{equation}
+                    B\setminus{A}=B\cap{A}^{C}
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                By the definition of complement, $A^{C}=\Omega\setminus{A}$.
+                As $A\subseteq\Omega$ and $B\subseteq\Omega$, by
+                Thm.~\ref{thm:MEASURE_THEORY_SET_DIFFERENCE_AS_INTERSECTION},
+                $B\setminus{A}=B\cap(\Omega\setminus{A})$, and therefore
+                $B\setminus{A}=B\cap{A}^{C}$.
+            \end{proof}
+            \begin{ftheorem}{DeMorgan's Laws}{MEASURE_DEMORGAN}
+                If $A$ and $B$ are sets, then:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B}\big)^{C}
+                        &=A^{C}\cup{B}^{C}\\
+                        \big(A\cup{B}\big)^{C}
+                        &=A^{C}\cap{B}^{C}
+                    \end{align}
+                \end{subequations}
+            \end{ftheorem}
+            With this, we can prove some results about set differences.
+            \begin{theorem}
+                If $A$ and $B$ are sets, then:
+                \begin{equation}
+                    A=\big(A\cap{B}\big)\cup\big(A\setminus{B}\big)
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B})\cup\big(A\setminus{B}\big)
+                        &=\big(A\cap{B}\big)\cup\big(A\cap{B}^{C}\big)\\
+                        &=A\cap(B\cup{B}^{C})\\
+                        &=A\cap\Omega\\
+                        &=A
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            \begin{theorem}
+                If $A$, $B$, and $C$ are sets, then:
+                \begin{equation}
+                    A\cap\big(B\setminus{C}\big)
+                    =\big(A\cap{B}\big)\cap\big(A\setminus{C}\big)
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        A\cap\big(B\setminus{C}\big)
+                        &=A\cap\big(B\cap{C}^{C}\big)\\
+                        &=\big(A\cap{A}\big)\cap\big(B\cap{C}^{C}\big)\\
+                        &=\big(A\cap{B}\big)\cap\big(A\cap{C}^{C}\big)\\
+                        &=\big(A\cap{B}\big)\cap\big(A\setminus{C}\big)
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            Intersections do distribute over set differences.
+            \begin{theorem}
+                If $A$, $B$, and $C$ are sets, then:
+                \begin{equation}
+                    A\cap(B\setminus{C})=
+                    (A\cap{B})\setminus(A\cap{C})
+                \end{equation}
+            \end{theorem}
+            \begin{proof}
+                For:
+                \begin{subequations}
+                    \begin{align}
+                        \big(A\cap{B}\big)\setminus\big(A\cap{C}\big)
+                        &=\big(A\cap{B}\big)\cap\big(A\cap{C}\big)^{C}\\
+                        &=\big(A\cap{B}\big)\cap\big(A^{C}\cup{C}^{C}\big)\\
+                        &=\Big(\big(A\cap{B}\big)\cap{A}^{C}\Big)
+                            \cup\Big(\big({A}\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\Big(\big(A\cap{A}^{C}\big)\cap{B}\Big)\cup
+                            \Big(\big(A\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\emptyset\cup
+                            \Big(\big(A\cap{B}\big)\cap{C}^{C}\Big)\\
+                        &=\big(A\cap{B}\big)\cap{C}^{C}\\
+                        &=A\cap\big(B\cap{C}^{C}\big)\\
+                        &=A\cap\big(B\setminus{C}\big)
+                    \end{align}
+                \end{subequations}
+            \end{proof}
+            Unions do not, however. For let $A$ be non-empty and let
+            $A=B=C$. Then $A\cup(B\setminus{C})=A$, but
+            $(A\cup{B})\setminus(A\cup{C})=\emptyset$.
+            \begin{enumerate}
+                \item DeMorgan's Laws:
+                      \subitem $(A\cup{B})^{C}=A^{C}\cap{B}^{C}$
+                      \subitem $(A\cap{B})^{C}=A^{C}\cup{B}^{C}$
+            \end{enumerate}
+            DeMorgan's Laws hold for arbitrary collections
+            of set. If $I$ is some indexing set:
+            \begin{align}
+                \Big(\bigcup_{\alpha\in{I}}A_{\alpha}\Big)^{C}
+                &=\bigcap_{\alpha\in{I}}A_{\alpha}^{C}\\
+                \Big(\bigcap_{\alpha\in{I}}A_{\alpha}\Big)^{C}
+                &=\bigcup_{\alpha\in{I}}A_{\alpha}^{C}
+            \end{align}
+            The set operations thus define binary operations
+            on the power set of a set $\Omega$. It's important
+            to note the notation. An element of $\Omega$ may
+            be anything, while an element of
+            $\mathcal{P}(\Omega)$ is a subset of $\Omega$.
+            That is, the \textit{points} of $\mathcal{P}(\Omega)$
+            are themselves sets. Thus, union, intersection,
+            etc., define binary operations on
+            $\mathcal{P}(\Omega)$. Given two subsets of
+            $\Omega$, $A$ and $B$, $A\cup{B}$ is another
+            subset of $\Omega$, as is $A\cap{B}$, and so on.
+            The complement can also be seen as a unary operator
+            on $\mathcal{P}(\Omega)$. From the various theorems
+            presented, we have the following:
+            \begin{enumerate}
+                \item Union is commutative and associative.
+                \item Intersection is commutative and
+                      associative.
+                \item Union distributes over intersection.
+                \item Intersection distributes over union.
+                \item DeMorgan's Laws hold.
+                \item Set difference is not commutative,
+                      nor is it associative.
+            \end{enumerate}
+        \subsection{Sets, Functions, and Countability}
+            A quick review of the notations of various sets:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|l|l|l|}
+                    \hline
+                    Notation:&Description:&Importance:\\
+                    \hline
+                    $\mathbb{N}$&The Natural Numbers
+                    &Used a lot.\\
+                    \hline
+                    $\mathbb{Z}$&The integers.&Never used.\\
+                    \hline
+                    $\mathbb{Z}_{n}$&Integers from $1$ to $n$.
+                    &Mentioned occasionally.\\
+                    \hline
+                    $\mathbb{Q}$&The Rational Numbers&
+                    Good for examples/counterexamples.\\
+                    \hline
+                    $\mathbb{R}$&The Real Numbers.&
+                    Primary set of concern.\\
+                    \hline
+                    $\mathbb{C}$&The Complex Numbers&
+                    Rarely used.\\
+                    \hline
+                \end{tabular}
+            \end{table}
+            From set theory, a function $f$ from a set $X$ to a
+            set $Y$ is a subset of $X\times{Y}$ such that, for
+            all $x\in{X}$, there is a unique $y\in{Y}$
+            such that $(x,y)\in{f}$. We often call $X$ the
+            domain, $Y$ the range or co-domain, and write
+            $f:X\rightarrow{Y}$ to indicate this. The
+            \textit{image} of $x\in{X}$ is often written
+            as $y=f(x)$. Requiring that $y$ be unique for each
+            $x$ is equivalent to the \textit{vertical line test}
+            one might find in a calculus course.
+            \begin{definition}
+                The image of $S\subseteq{X}$
+                by a function $f:X\rightarrow{Y}$
+                is the set:
+                \begin{equation}
+                    f(S)=\{f(x)\in{Y}:x\in{X}\}
+                \end{equation}
+            \end{definition}
+            The image of $S\subseteq{X}$ is the set of all
+            points in $Y$ that $S$ gets mapped to by $f$.
+            \begin{definition}
+                The pre-image of $S\subseteq{Y}$ by a function
+                $f:X\rightarrow{Y}$ is the set:
+                \begin{equation}
+                    f^{-1}(S)=\{x\in{X}:f(x)\in{S}\}
+                \end{equation}
+            \end{definition}
+            An injective function is a function such
+            that $f(x_{1})=f(x_{2})$ if and only if $x_{1}=x_{2}$.
+            A surjective function is a function $f:X\rightarrow{Y}$
+            such that $f(X)=Y$. That is, every point $y\in{Y}$
+            gets mapped to by at least one point in $X$. Or, in
+            more familiar notation, for all $y\in{Y}$ there is
+            and $x\in{X}$ such that $y=f(x)$. A bijective
+            function is a function that is both injective and
+            surjective. Sets $X$ and $Y$ such that there
+            exists a bijective function $f:X\rightarrow{Y}$ are
+            called \textit{equivalent}. Such sets can be said
+            to have the same size. We say that $X$ is strictly
+            smaller than $Y$ if there is an injective function
+            $f:X\rightarrow{Y}$, but no bijective function.
+            \begin{definition}
+                A finite set is a set $X$ such that there
+                exists an $n\in\mathbb{N}$ such that there is
+                a bijective function
+                $f:\mathbb{Z}_{n}\rightarrow{S}$
+            \end{definition}
+            \begin{definition}
+                A countable set is a set
+                $X$ such that there exists a bijective
+                function $f:\mathbb{N}\rightarrow{X}$.
+            \end{definition}
+            Being countable means you can write
+            the elements out in a list, or a
+            one-to-one correspondence with all of
+            the positive integers. Many sets are countable,
+            including the whole numbers, integers, rational
+            numbers, and \textit{algebraic} numbers. The
+            union of finitely many countable sets is also
+            countable, as is the union of countably many
+            countable sets.
+            \begin{example}
+                The set of all positive even integers is
+                countable. For let $\mathbb{N}_{e}$ be the
+                set of all even integers and define
+                $f:\mathbb{N}\rightarrow\mathbb{N}_{e}$ be
+                $f(n)=2n$ for all $n\in\mathbb{N}$. This is
+                a bijection, and thus $\mathbb{N}_{e}$ is
+                countable. The set of all odd positive integers
+                is countable, as shown by letting
+                $f(n)=2n-1$. Even though the set of even
+                integers may seem ``smaller,'' than the set of
+                all integers, they are equivalent. The set of
+                all integers $\mathbb{Z}$ is also countable.
+                For let $f:\mathbb{N}\rightarrow\mathbb{Z}$
+                be defined as:
+                \begin{equation}
+                    f(n)=
+                    \begin{cases}
+                        \frac{1}{2}(n-1),&n\textrm{ odd}\\
+                        -\frac{n}{2},&n\textrm{ even}
+                    \end{cases}
+                \end{equation}
+            \end{example}
+            Any set that is infinite (Not finite) contains a
+            countable subset. Thus, $\mathbb{N}$ can be
+            considered as the \textit{smallest} infinite set.
+            \begin{theorem}
+                If $A$ is an infinite set, then there exists
+                $S\subseteq{A}$ such that $S$ is countabl e.
+            \end{theorem}
+            \begin{proof}
+                For as $A$ is infinite, for all $n\in\mathbb{N}$
+                there exists a set $B\subseteq{A}$ such that
+                $|B|=n$. For all $n\in\mathbb{N}$,
+                define the following:
+                \begin{equation}
+                    \mathcal{S}_{n}=\{B\subseteq{A}:|B|=n\}
+                \end{equation}
+                Let $\mathcal{S}$ be defined as:
+                \begin{equation}
+                    \mathcal{S}=\{\mathcal{S}_{n}:n\in\mathbb{N}\}
+                \end{equation}
+                Then $\mathcal{S}$ is countable, for
+                $a:\mathbb{N}\rightarrow\mathcal{S}$ defined
+                by $a_{n}=\mathcal{S}_{n}$ is a bijection.
+                By the axiom of choice, there is a function:
+                \begin{equation}
+                    \alpha:\mathcal{S}\rightarrow
+                    \bigcup_{n=1}^{\infty}\mathcal{S}_{n}
+                \end{equation}
+                Such that, for all $x\in\mathcal{S}$,
+                $\alpha(x)\in{x}$. But then, for all
+                $x\in\mathcal{S}$, $\alpha(x)$ is a subset
+                of $A$. But for all $x\in\mathcal{S}$, there
+                is an $n\in\mathbb{N}$ such that
+                $a_{n}=x$. Thus, let $S$ be the following:
+                \begin{equation}
+                    S=\bigcup_{n=1}^{\infty}\alpha(a_{n})
+                \end{equation}
+            \end{proof}
+            \begin{table}[H]
+                \captionsetup{type=table}
+                \centering
+                \begin{tabular}{ccccc}
+                    $u_{11}$&$u_{12}$&$u_{13}$
+                    &$u_{14}$&$\hdots$\\
+                    $u_{21}$&$u_{22}$&$u_{23}$
+                    &$u_{24}$&$\hdots$\\
+                    $u_{31}$&$u_{32}$&$u_{33}$
+                    &$u_{34}$&$\hdots$\\
+                    $u_{41}$&$u_{42}$&$u_{43}$
+                    &$u_{44}$&$\hdots$\\
+                    $\vdots$&$\vdots$&$\vdots$
+                    &$\vdots$&$\ddots$
+                \end{tabular}
+                \caption{Construction of a Bijection on the
+                         Countable Union of Countably Infinite
+                         Sets.}
+                \label{table:Countable_Union_of_Countable}
+            \end{table}
+            Where $u_{nm}$ is the $m^{th}$ element of
+            $\mathcal{U}_{n}$.
+            Using the \textit{diagonal argument},
+            we obtain:
+            In the absence of the requirement that
+            $a\cap{b}=\emptyset$ for all pairs in $\mathcal{U}$,
+            we still have that the union is, at most, countable.
+            The mapping we found would be a
+            \textit{surjection}, rather than a bijection.
+            The union is then either finite or countable. The
+            Cantor-Schr\"{o}der-Bernstein Theorem can often be
+            used to help identify the size of a set. This says
+            that if $A$ and $B$ are sets such that there exists
+            a surjective function $f:A\rightarrow{B}$ and a
+            surjective function $g:B\rightarrow{A}$, then there
+            is a bijective function $h:A\rightarrow{B}$. The
+            requirement that $f$ and $g$ both be surjective
+            can be replaced with the requirement that they both
+            be injective. This is similar to saying that if
+            $\Card(A)\leq\Card(B)$ and $\Card(B)\leq\Card(A)$,
+            then $\Card(A)=\Card(B)$. Here, $\Card(A)$ denotes
+            the \textit{cardinality} of the set $A$.
+            \begin{definition}
+                An uncountable set is a set that is
+                neither finite nor countable.
+            \end{definition}
+            \begin{theorem}
+                $\mathbb{Q}$ is countable.
+            \end{theorem}
+            \begin{proof}
+                For we have that:
+                \begin{equation}
+                    \mathbb{Q}=
+                    \bigcup_{n=-\infty}^{\infty}
+                    \Big\{\frac{n}{m}:m\in\mathbb{N}\Big\}
+                \end{equation}
+                And this is the union of countably
+                many countable sets, and is thus countable.
+            \end{proof}
+            \begin{theorem}
+                $\mathbb{R}$ is uncountable.
+            \end{theorem}
+            \textit{Sketch of Proof.} We'll show that the unit
+            interval $(0,1)$ is uncountable. Suppose not.
+            Let $r_{ij}$ be the $j^{th}$ decimal of the $i^{th}$
+            element in the list. We construct the real number
+            $d$ as follows: If $d_{j}$ denotes the $j^{th}$
+            decimal in $d$, let $d_{j}=r_{jj}+1$ if
+            $r_{jj}\ne{9}$, and $d_{j}=0$ otherwise. Then
+            $d\in(0,1)$, but $d$ is not on the list. For it's not
+            the $n^{th}$ element, for it differs in the
+            $n^{th}$ decimal place. Thus there is no bijection.
+            Therefore, $(0,1)$ is uncountable. By extension,
+            $\mathbb{R}$ is uncountable.
+            \par\hfill\par
+            \vspace{-2ex}
+            For a set $X$, we often write
+            $\mathcal{P}(X)$ to denote the
+            \textit{power set} of $X$. This is the
+            set of all subsets of $X$.
+            For any set $X$ you can show that $X$ is
+            strictly smaller than $\mathcal{P}(X)$.
+            For example, $\mathcal{P}(\mathbb{N})$
+            can be shown to be equivalent to $\mathbb{R}$.
+            Since $\mathbb{N}$ is stricly smaller than
+            $\mathbb{R}$, one might ask if there exists
+            a set $X$ such that $\mathbb{N}$ is strictly
+            smaller than $X$, but $X$ is strictly smaller
+            than $\mathbb{R}$. Continuing, you can ask the
+            same thing about $\mathbb{R}$ and
+            $\mathcal{P}(\mathbb{R})$, and so on.
+            This is called the continuum hypothesis.
+            It turns out to be independent of
+            the standard axioms of mathematics.
+        \section{Set Theory}
+            \begin{definition}
+                A set is a collection of distinct objects,
+                none of which are the set itself.
+            \end{definition}
+            As neither "Collection," nor "Objects," have been
+            define, the above definition is logically meaningless.
+            \begin{definition}
+                The objects in a set are called the elements of
+                the set. If $x$ is an element of $A$,
+                we write $x\in A$.
+            \end{definition}
+            \begin{definition}
+                The empty set $\emptyset$ is the set containing
+                no elements. It is unique.
+            \end{definition}
+            \begin{definition}
+                A set $A$ is said to be a subset of a $B$ if
+                and only if $x\in{A}\Rightarrow{x}\in{B}$.
+                This is denoted $A\subset B$.
+            \end{definition}
+            \begin{corollary}
+                For any set $A$, $\emptyset\subset{A}$
+                and $A\subset{A}$.
+            \end{corollary}
+            \begin{proof}
+                Suppose not. Then
+                $\exists{x}\in\emptyset:x\notin A$.
+                A contradiction. Suppose $A\not\subset A$.
+                Then $\exists{x}\in{A}:x\notin{A}$,
+                a contradiction.
+            \end{proof}
+            \begin{definition}
+                $A\subset B$ is said to be a proper subset
+                of $B$ if and only if there is an $x\in B$
+                such that $x\notin A$.
+            \end{definition}
+            \begin{definition}
+                Two sets $A$ and $B$ are said to be equal
+                if and only if $x\in{A}\Leftrightarrow{x}\in B$.
+            \end{definition}
+            \begin{theorem}
+                Two sets $A$ and $B$ are equal if and only
+                if $A\subset{B}$ and $B\subset{A}$.
+            \end{theorem}
+            \begin{proof}
+                $[A=B]\Leftrightarrow%
+                 \big[[x\in{A}\Rightarrow{x}\in{B}]\big]%
+                 \land\big[[y\in{B}\Rightarrow{y}\in{A}]\big]%
+                 \Leftrightarrow[A\subset{B}\land{B}\subset{A}]$. 
+            \end{proof}
+            \begin{definition}
+                The set difference of a set $A$ with respect
+                to a set $B$, denoted $B\setminus{A}$, is the set
+                $B\setminus{A}=\{x\in{B}:x\notin{A}\}$.
+            \end{definition}
+            \begin{theorem}
+                If $A$ and $B$ are sets and $A\subset B$,
+                then $B\setminus(B\setminus A)=A$.
+            \end{theorem}
+            \begin{proof}
+                $[x\in B\setminus(B\setminus{A})]%
+                 \Rightarrow[x\in{B}\land{x}\notin%
+                 \{x\in{B}:x\notin{A}\}]%
+                 \Rightarrow[x\in{A}\subset{B}]$.
+                 $[x\in{A}]\Rightarrow[x\notin{B}\setminus{A}]%
+                 \Rightarrow[x\in{B}\setminus(B\setminus{A})]$.
+            \end{proof}
+            A universe set is the set under consideration
+            from which all subsets are drawn.
+            \begin{definition}
+                If $\mathcal{U}$ is a universe set,
+                $A\subset\mathcal{U}$, then the complement of
+                $A$ is $\mathcal{U}\setminus{A}$ and is
+                denoted $A^{C}$.
+            \end{definition}
+            The previous theorem shows that $(A^c)^{C}=A$.
+            \begin{definition}
+                If $A$ and $B$ are sets, then
+                $A\cup{B}=\{x: x\in A \lor x\in B\}$
+                is called their union.
+            \end{definition}
+            \begin{corollary}
+                If $A$ and $B$ are sets, then $A\subset{A}\cup{B}$.
+            \end{corollary}
+            \begin{proof}
+                $[x\in A]\Rightarrow[x\in A\lor x\in B]%
+                 \Rightarrow[x\in{A}\cup{B}]$.
+            \end{proof}
+            \begin{theorem}
+                If $A$ and $B$ are sets, $A=A\cup B$
+                if and only if $B\subset A$.
+            \end{theorem}
+            \begin{proof}
+                $[B\subset A]\Rightarrow\big[[x\in A\cup B]%
+                 \Rightarrow[x\in A]\big]%
+                 \Rightarrow[A\cup B \subset A],[A\subset A\cup B]%
+                 \Rightarrow[A=A\cup B]$.
+                $[x\in B] \Rightarrow [x\in A\cup B]%
+                 \Rightarrow [x\in A]$
+            \end{proof}
+            \begin{definition}
+                If $A$ and $B$ are sets, then
+                $A\cap{B}=\{x:x\in{A}\land{x}\in{B}\}$
+                is called their intersection.
+            \end{definition}
+            \begin{corollary}
+                If $A$ and $B$ are sets,
+                $A\cap{B}\subset{A}$ and $A\cap{B}\subset{B}$.
+            \end{corollary}
+            \begin{proof}
+                $[x\in A\cap B]\Rightarrow[x\in A\land x\in B]%
+                 \Rightarrow\big[[A\cap B \subset A]%
+                 \land[A\cap B \subset B]\big]$.
+            \end{proof}
+            \begin{theorem}
+                If $A$ and $B$ are sets, then $A=A\cap{B}$
+                if and only if $A\subset{B}$.
+            \end{theorem}
+            \begin{proof}
+            $[A=A\cap B]\Rightarrow [x\in A\Rightarrow x\in A \cap B]\Rightarrow [x\in B]$. $[A\subset B]\Rightarrow [x\in A\Rightarrow x\in B]\Rightarrow [x\in A\cap B]\Rightarrow [A=A\cap B]$.
+            \end{proof}
+            \begin{theorem}
+            If $A,B$, and $C$ are sets, then the following are true:
+            \begin{enumerate}
+            \item $A\cap (B\cup C) = (A\cap B)\cup (A\cap C)$
+            \item $A\cup (B\cup C) = (A\cup B)\cap (A\cup C)$
+            \end{enumerate}
+            \end{theorem}
+            \begin{proof}
+            In order,
+            \begin{enumerate}
+            \item $[x\in A\cap (B\cup C)]\Rightarrow \big[[x\in A] \land [x\in B\cup C]\big]\Rightarrow \big[[x\in A\land x\in B]\lor [x\in A\land x\in C]\big]\Rightarrow [x\in (A\cap B)\cup (A\cap C)]$. $[x\in (A\cap B)\cup(A\cap C)]\Rightarrow \big[[x\in A\land x\in C]\lor [x\in A \land x\in C]\big]\Rightarrow \big[[x\in A]\land [x\in B\lor x\in C]\big]\Rightarrow [x\in A\cap(B\cup C)]$.
+            \item $[x\in A\cup (B\cap C)]\Rightarrow \big[[x\in A]\lor [x\in B\cap C]\big] \Rightarrow \big[[x\in A \lor x\in B]\land [x\in A$ or $x\in C]\big]\Rightarrow [x\in (A\cap B)\cup (A\cap C)]$. $[x\in (A\cup B)\cap (A\cup C)]\Rightarrow \big[[x\in A\lor B]\land [x\in A\lor B]\big]\Rightarrow \big[[x\in A]\lor[x\in B\land C]\big]\Rightarrow [x\in A\cap(B\cup C)]$.
+            \end{enumerate}
+            \end{proof}
+            \begin{theorem}[DeMorgan's Laws]
+            If $A$ and $B$ are subsets of some universe $\mathcal{U}$, then the following are true:
+            \begin{enumerate}
+            \item $(A\cup B)^c = A^c \cap B^c$
+            \item $(A\cap B)^c = A^c \cup B^c$
+            \end{enumerate}
+            \end{theorem}
+            \begin{proof}
+            In order,
+            \begin{enumerate}
+            \item $[x\in (A\cup B)^c]\Rightarrow [x\in A^c\land x\in B^c]\Rightarrow [x\in A^c\cap B^c]$. $[x\in A^c \cap B^c]\Rightarrow [x\in A^c\land x\in B^c]\Rightarrow [x\notin A\cup B]\Rightarrow [x\in (A\cup B)^c]$.
+            \item $[x\in (A\cap B)^c]\Rightarrow [x\in A^c\lor x\in B^c]\Rightarrow [x\in A^c \cup B^c]$. $[x\in A^c \cup B^c]\Rightarrow [x\notin A\lor x\notin B]\Rightarrow [x\notin A\cap B]\Rightarrow [x\in (A\cap B)^c]$.
+            \end{enumerate}
+            \end{proof}
+            \begin{definition}
+            If $A$ is a set and $a,b\in A$, then the ordered pair $(a,b)$ is the set $\{\{a\},\{a,b\}\}$.
+            \end{definition}
+            \begin{remark}
+            This definition is due to Kuratowski. Note that $(a,b)$ and $(b,a)$ are not necessarily equal.
+            \end{remark}
+            \begin{definition}
+            The Cartesian Product of $A$ and $B$ is defined as $A\times B = \{(a,b):a\in A, b\in B\}$.
+            \end{definition}
+            \begin{definition}
+            The power set of a set $A$ is the set $\mathcal{P}(A) = \{\mathcal{U}:\mathcal{U}\subset A\}$. That is, it is the set of all subsets of $A$.
+            \end{definition}
+        \subsection{Equivalence and Transfinite Cardinal Numbers}
+            \begin{definition}
+            $A$ and $B$ are called equivalent if and only if there is a bijective function $f:A\rightarrow B$. We write $A\sim B$.
+            \end{definition}
+            \begin{theorem}
+            Equivalence has the following properties:
+            \begin{enumerate}
+            \item $A\sim A$ for any set $A$.
+            \item If $A\sim B$, then $B\sim A$.
+            \item If $A\sim B$ and $B\sim C$, then $A\sim C$.
+            \end{enumerate}
+            \end{theorem}
+            \begin{proof}
+            In order,
+            \begin{enumerate}
+            \item For let $f$ be the identity mapping. That is, for all $x\in A$, $f(x) = x$. This is bijective and thus $A\sim A$.
+            \item If $A\sim B$, there is a bijective function $f:A\rightarrow B$. Then $f^{-1}:B\rightarrow A$ is bijective, and $B\sim A$.
+            \item Let $f:A\rightarrow B$ and $g:B\rightarrow C$ be bijections. Then $g\circ f:A\rightarrow C$ is a bijection, and thus $A\sim C$.
+            \end{enumerate}
+            \end{proof}
+            \begin{theorem}
+            If $A\sim C$ and $B\sim D$, where $A,B$ and $C,D$ are disjoint, then $A\cup B \sim C\cup D$
+            \end{theorem}
+            \begin{proof}
+            Let $f:A\rightarrow C$ and $g:B\rightarrow D$ be isomorphisms. Let $h:A\cup B \rightarrow C\cup D$ be defined by $h(x) = \begin{cases} f(x), & x\in A\\ g(x), & x\in B\end{cases}$. As $A$ and $B$ are disjoint, this is indeed a function and it is bijective as $C$ and $D$ are disjoint. Therefore, etc.
+            \end{proof}
+            \begin{definition}
+            The set $\mathbb{Z}_n$ is defined for all $n\in \mathbb{N}$ as $\{k\in \mathbb{N}: k\leq n\}$.
+            \end{definition}
+            \begin{definition}
+            A set $A$ is a said to be finite if and only if there is some $n\in \mathbb{N}$ such that there is a bijection $f:\mathbb{Z}_n \rightarrow A$.
+            \end{definition}
+            \begin{definition}
+            If $A$ is a set that is equivalent to $\mathbb{Z}_n$ for some $n\in \mathbb{N}$, then the cardinality of $A$, denoted $|A|$, is $n$.
+            \end{definition}
+            \begin{theorem}
+            For two finite sets $A$ and $B$, $A\sim B$ if and only if $|A|=|B|$.
+            \end{theorem}
+            \begin{proof}
+            $[|A|=|B|=n]\Rightarrow[A\sim \mathbb{Z}_n]\land[B\sim \mathbb{Z}_n]\Rightarrow [A\sim B]$. $[A\sim B]\Rightarrow [\exists \underset{Bijective}{f:A\rightarrow B}]\Rightarrow [f(A) = B]\Rightarrow [|A|=|B|]$.
+            \end{proof}
+            \begin{definition}
+            A set $A$ is said to be infinite if and only if there is a proper subset $B\underset{Proper}\subset A$ such that $B\sim A$.
+            \end{definition}
+            \begin{theorem}
+            Infinite sets are not finite.
+            \end{theorem}
+            \begin{proof}
+            Suppose not. Let $A$ be an infinite set and suppose there is an $n\in \mathbb{N}$ such that $A\sim \mathbb{Z}_n$. But as $A$ is an infinite set, there is a proper subset $B$ such that $B\sim A$. But then $B\sim \mathbb{Z}_n$. But as $B$ is a proper subset, there is at least one point in $A$ not contained in $B$. But then $|B|<n$, a contradiction. Thus $A$ is not finite.
+            \end{proof}
+            \begin{corollary}
+            If $A$ is an infinite set, then for every $n\in \mathbb{N}$ there is a subset $B\subset A$ such that $B\sim \mathbb{Z}_n$.
+            \end{corollary}
+            \begin{proof}
+            Suppose not. Then there is a least $n\in \mathbb{N}:B\subset A\Rightarrow |B|<n$. But then $A$ has at most $n$ elements, a contradiction.
+            \end{proof}
+            \begin{definition}
+            A set $A$ is called countable if and only if $A\sim \mathbb{N}$.
+            \end{definition}
+            \begin{theorem}
+            A set $A$ is infinite if and only if it contains a proper subset $B$ such that $B\sim \mathbb{N}$.
+            \end{theorem}
+            \begin{proof}
+            If $A$ has a proper subset $B$ such that $B\sim \mathbb{N}$, then $A$ is not finite and is thus infinite. If $A$ is infinite, then for all $n\in \mathbb{N}$ there is a set $A_n\subset A$ such that $A_n \sim \mathbb{Z}_n$. Let $B = \{a_n: a_n \in A_n, a_n \notin A_{n-1}\}$. Note that $a_{n} = a_{m}$ if and only if $m= n$. Let $f:\mathbb{N} \rightarrow B$ be defined by $n\mapsto a_n$. This is bijective, and thus $B\sim \mathbb{N}$.
+            \end{proof}
+            \begin{remark}
+            This shows that $\mathbb{N}$ is, in a sense, the "Smallest," infinite set. $|\mathbb{N}|$ is denoted $\aleph_0$.
+            \end{remark}
+            \begin{definition}
+            A set is called uncountable if and only if it is infinite and not countable.
+            \end{definition}
+            \begin{lemma}
+            If $B\subset A$, $f:A\rightarrow B$ is injective, then there is a bijection $g:A\rightarrow B$
+            \end{lemma}
+            \begin{proof}
+            Let $Y = A\setminus B$, and inductively define $f^{k+1}(Y) = f(f^{k}(Y))$. Let $X = Y\cup (\cup_{k=0}^{\infty} f^{k}(Y))$. As $Y\cap B = \emptyset$, then $f(Y)\cap Y= \emptyset$. As $f$ is an injection, $f(f(Y))\cap f(Y)=\emptyset$, and similarly $f(f(Y))\cap Y = \emptyset$. Inductively, $f^{n}(Y)\cap f^{m}(Y) = \emptyset$, for $n\ne m$. It then also follows that $f(X) = \cup_{k=1}^{\infty} f^{k}(Y)$. Thus $A\setminus X = [B\cup Y]\setminus [Y\cup f(X)] = B\setminus f(X)$. Let $g(x) = \begin{cases} f(x), & x\in X \\ x, & x \in B\setminus f(X)\end{cases}$. This is a bijections from $A$ to $B$.
+            \end{proof}
+            \begin{theorem}[Cantor-Schr\"{o}der-Bernstein Theorem]
+            If $A_1 \subset A$, $B_1 \subset B$, and $A\sim B_1$, $B \sim A_1$, then $A\sim B$.
+            \end{theorem}
+            \begin{proof}
+            Let $f:A\rightarrow B_1$ and $g:B\rightarrow A_1$ be bijections.Then $(g\circ f):A\rightarrow A_1$ is an injection from $A$ into $A_1$. Thus, there is a bijection $h:A\rightarrow A_1$. Thus, $A\sim A_1 \sim B\Rightarrow A\sim B$.
+            \end{proof}
+            \begin{theorem}
+            $\mathbb{N}\times \mathbb{N}$ is countable.
+            \end{theorem}
+            \begin{proof}
+            For $f:\mathbb{N} \rightarrow \mathbb{N}\times \mathbb{N}$ defined by $f(n) = (0,n)$ shows there is a subset $N_1$ of $\mathbb{N} \times \mathbb{N}$ such that $\mathbb{N}\sim N_1$. And $g:\mathbb{N}\times \mathbb{N} \rightarrow \mathbb{N}$ defined by $g(n,m) =n+2^{n+m}$ shows that there is a subset $M_1 \subset \mathbb{N}$ such that $\mathbb{N} \times \mathbb{N} \sim M_1$. By the Cantor-Schr\"{o}der-Bernstein Theorem, $\mathbb{N} \sim \mathbb{N}\times \mathbb{N}$.
+            \end{proof}
+            \begin{lemma}
+            If $A$ is infinite and $f:A\rightarrow \mathbb{N}$ is injective, then $A$ is countable.
+            \end{lemma}
+            \begin{proof}
+            As $A$ is infinite and $A\sim f(A)$, $f(A)$ is infinite. But as $f(A)\subset \mathbb{N}$ and $f(A)$ is infinite, $f(A)\sim \mathbb{N}$. Thus, $A\sim \mathbb{N}$. 
+            \end{proof}
+            \begin{theorem}
+            $\mathbb{Q}$ is countable.
+            \end{theorem}
+            \begin{proof}
+            For each $x\in \mathbb{Q}$, $x\ne 0$, let $p_x,q_x\in\mathbb{Z}:q_x>0$ be the unique integers such that $x = \frac{p_x}{q_x}$ and $g.c.d.(|p_x|,|q_x|)=1$. Define $f:\mathbb{Q}\rightarrow \mathbb{N}\times \mathbb{N}$ as $f(x) = \begin{cases}(p_x,q_x), & x\ne 0 \\ 0, & x=0\end{cases}$. This shows there is a subset $N_1$ of $\mathbb{N}\times \mathbb{N}$ such that $\mathbb{Q}\sim N_1$. But $N_1$ is an infinite subset of $\mathbb{N}\times\mathbb{N}$ as $\mathbb{Q}$ is infinite and $f$ is injective. Define $g$ as $n+2^{n+m}:(n,m)\in N_1$. This is an injective function into $\mathbb{N}$, and thus $N_1 \sim \mathbb{N}$. Therefore $\mathbb{Q}\sim \mathbb{N}$.
+            \end{proof}
+            \begin{definition}
+            If $A$ and $B$ are sets, we say that $|A|<|B|$ if there is an injective function $f:A\rightarrow B$, yet no bijection.
+            \end{definition}
+            \begin{theorem}[Cantor's Theorem]
+            For a set $M$, $|M|<|\mathcal{P}(M)|$.
+            \end{theorem}
+            \begin{proof}
+            For let $M$ be a set with cardinality $|M|$. Let $U_m \subset M$ such that $U_m \sim M$. Such a set exists, for example, the singletons of $\mathcal{P}(M)$. Thus, $M$ is split into two distinct sets $Class\ I=\{x\in M: \textrm{There is a subset } X\subset U_m\textrm{ such that }x\in X\}$, and $Class\ II=M-Class\ I$. Let $L = Class\ II$. $L\subset M$, and thus $L\in \mathcal{P}(M)$. However, $L \notin U_m$ for if it were, then the element $m_1$ paired with it in $M$ is of Class II (For it cannot be of Class I as $m_1$ would not appear in $L$). If $m_1$ were in Class II, then by definition $m_1 \notin L$. But as $m_1 \in L$, we see that $L\notin U_m$. Thus, $|U_m| <|\mathcal{P}(M)|$, and therefore $|M|<|\mathcal{P}(M)|$.
+            \end{proof}
+            \begin{theorem}
+            The set $R=\{x\in \mathbb{R}:0<x<1\}$ is equivalent to $\mathcal{P}(\mathbb{N})$.
+            \end{theorem}
+            \begin{proof}
+            For every real number has a binary representation (Proof of this is omitted). That is, for every real number $r$, $ r = \sum_{n=-\infty}^{\infty} \frac{a_n}{2^n}$, where $a_n = 0$ or $1$. As $0<x<1$, this sum is just $\sum_{n=1}^{\infty} \frac{a_n}{2^n}$. Let $f:\mathcal{P}(\mathbb{N})\rightarrow R$ be defined by the following: If $N\subset \mathcal{P}(\mathbb{N})$ and $n\in N$, then $a_n = 1$, other wise $n=0$. Then every real number is matched to a subset of $\mathcal{P}(\mathbb{N})$, moreover this is done bijectively. Thus, $\mathcal{P}(\mathbb{N})\sim R$.
+            \end{proof}
+            \begin{theorem}
+            $\mathbb{R} \sim \mathcal{P}(\mathbb{N})$.
+            \end{theorem}
+            \begin{proof}
+            It suffices to show that $R\sim \mathbb{R}$, where $R$ is from the previous theorem. Let $f(x) = \begin{cases} \frac{x(1-x)}{2x-1}, & x \ne \frac{1}{2} \\ 0, & x = \frac{1}{2}\end{cases}$.
+            \end{proof}
+            \begin{remark}
+            There is something called the continuum hypothesis which states that there is no set $S$ such that $|\mathbb{N}| < |S| < |\mathbb{R}|$. If this is accepted, we may write $|\mathbb{R}| = \aleph_1 = 2^{\aleph_0}$. Much like the axiom of choice, this is independent of the rest of set theory. Its acceptance or negation is possible without contradiction. We will not need to worry about this.
+            \end{remark}
+\end{document}
