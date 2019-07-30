@@ -1,67 +1,94 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{amsfonts}                   % Blackboard Bold R
-\usepackage{tikz}                       % Drawing/graphing tools.
-\usetikzlibrary{
-    arrows.meta,            % Latex and Stealth arrows.
-    positioning,            % Relative positioning of nodes.
-    decorations.markings,   % Adding arrows in the middle of a line.
-}                                       % Libraries for tikz.
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[line cap=round,scale=2]
-        \draw[%
-            postaction={decorate},
-            decoration={%
-                markings,
-                mark=at position .85 with 
-                    {\filldraw circle (1pt) coordinate (a);},
-                mark=at position .9 with
-                    {\filldraw circle (1pt) coordinate (b);},
-                mark=at position .95 with
-                    {\filldraw circle (1pt) coordinate (c);}
-            }
-        ]     (0,0) to [out=0,in=-120] (1,1)
-                    to [out=60,in=20] (0.5,1.5)
-                    to [out=-160,in=45] (-0.5,2)
-                    to [out=-135,in=90] (-1,1)
-                    to [out=-90,in=180] cycle;
-        \node at (0.6,1.7) {$\mathcal{M}$};
-        \draw (-1.2,0.2) to [out=70,in=-150] (a)
-                         to [out=30,in=-135] (-0.5,1)
-                         node[above] {$\mathbb{R}^{n}$};
-        \draw (-1,-0.3) to [out=45,in=-135] (b)
-                        to [out=45,in=-120] (-0.3,0.7)
-                        node[right] {$\mathbb{R}^{n}$};
-        \draw (-0.3,-0.6) to [out=90,in=-135] (c)
-                          to [out=45,in=-150] (0,0.2)
-                          node[right] {$\mathbb{R}^{n}$};
+%--------------------------------Dependencies----------------------------------%
+%   amsfonts                                                                   %
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%       positioning                                                            %
+%       decorations.markings                                                   %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=latex,
+    line width=0.2mm,
+    line cap=round,
+    scale=2
+]
 
-        % Draw arrow from Manifold 1 to Manifold 2.        
-        \draw[>=Latex,->,blue] (1.1,1) to (1.9,1);
+    % Coordinates for left blob.
+    \coordinate (O1) at ( 0.0, 0.0);
+    \coordinate (P1) at ( 1.0, 1.0);
+    \coordinate (P2) at ( 0.5, 1.5);
+    \coordinate (P3) at (-0.5, 2.0);
+    \coordinate (P4) at (-1.0, 1.0);
+    \coordinate (M1) at ( 0.5, 1.7);
 
-        % Draw second manifold, shifting by 3cm.
-        \begin{scope}[xshift=3cm]
-            \draw[%
-                postaction={decorate},
-                decoration={%
-                    markings,
-                    mark=at position .85 with 
-                        {\filldraw circle (1pt) coordinate (a);},
-                    mark=at position .9 with
-                        {\filldraw circle (1pt) coordinate (b);},
-                    mark=at position .95 with
-                        {\filldraw circle (1pt) coordinate (c);}
-                }
-            ]     (0,0) to [out=0,in=-120] (1,1)
-                        to [out=60,in=20] (0.5,1.5)
-                        to [out=-160,in=45] (-0.5,2)
-                        to [out=-135,in=90] (-1,1)
-                        to [out=-90,in=180] cycle;
-            \node at (0.6,1.7) {$\mathcal{M}$};
-            \draw (a) arc(30:390:0.13) node[left=4mm] {$S^{n}$};
-            \draw (b) arc(45:405:0.13) node[below left=2mm and 3mm] {$S^{n}$};
-            \draw (c) arc(70:430:0.13) node[below right=2mm and 1mm] {$S^{n}$};
-        \end{scope}
-    \end{tikzpicture}
-\end{document}
+    % Coordinates for right blob.
+    \coordinate (O2) at (3.0, 0.0);
+    \coordinate (Q1) at (4.0, 1.0);
+    \coordinate (Q2) at (3.5, 1.5);
+    \coordinate (Q3) at (2.5, 2.0);
+    \coordinate (Q4) at (2.0, 1.0);
+    \coordinate (M2) at (3.5, 1.7);
+
+    % Squiggle one.
+    \coordinate (L1) at (-1.2, 0.2);
+    \coordinate (L2) at (-0.5, 1.0);
+
+    % Squiggle two.
+    \coordinate (L3) at (-1.0, -0.3);
+    \coordinate (L4) at (-0.3,  0.7);
+
+    % Squiggle three.
+    \coordinate (L5) at (-0.3, -0.6);
+    \coordinate (L6) at ( 0.0,  0.2);
+
+    % Draw the left blob.
+    \draw[%
+        postaction={decorate},
+        decoration={%
+            markings,
+            mark=at position .85 with 
+                {\filldraw circle (1pt) coordinate (a);},
+            mark=at position .9 with
+                {\filldraw circle (1pt) coordinate (b);},
+            mark=at position .95 with
+                {\filldraw circle (1pt) coordinate (c);}
+        }
+    ]     (O1) to [out=0,in=-120]  (P1) to [out=60,in=20]   (P2)
+               to [out=-160,in=45] (P3) to [out=-135,in=90] (P4)
+               to [out=-90,in=180] cycle;
+
+    % Label the left manifold as M.
+    \node at (M1) {$\mathcal{M}$};
+
+    % Draw squiggles through the three points.
+    \draw (L1) to [out=70,in=-150] (a)
+               to [out=30,in=-135] (L2) node[above] {$\mathbb{R}^{n}$};
+    \draw (L3) to [out=45,in=-135] (b)
+               to [out=45,in=-120] (L4) node[right] {$\mathbb{R}^{n}$};
+    \draw (L5) to [out=90,in=-135] (c)
+               to [out=45,in=-150] (L6) node[right] {$\mathbb{R}^{n}$};
+
+    % Draw arrow from Manifold 1 to Manifold 2.        
+    \draw[>=Latex, ->, blue, very thick] (1.1, 1.0) to (1.9, 1.0);
+
+    % Draw right blob.
+    \draw[%
+        postaction={decorate},
+        decoration={%
+            markings,
+            mark=at position .85 with 
+                {\filldraw circle (1pt) coordinate (a);},
+            mark=at position .9 with
+                {\filldraw circle (1pt) coordinate (b);},
+            mark=at position .95 with
+                {\filldraw circle (1pt) coordinate (c);}
+        }
+    ]     (O2) to [out=0,in=-120]  (Q1) to [out=60,in=20] (Q2)
+               to [out=-160,in=45] (Q3) to [out=-135,in=90] (Q4)
+               to [out=-90,in=180] cycle;
+
+    % Label for the 
+    \node at (M2) {$\mathcal{M}$};
+    \draw (a) arc(30:390:0.13) node[left=4mm] {$S^{n}$};
+    \draw (b) arc(45:405:0.13) node[below left=2mm and 3mm] {$S^{n}$};
+    \draw (c) arc(70:430:0.13) node[below right=2mm and 1mm] {$S^{n}$};
+\end{tikzpicture}
