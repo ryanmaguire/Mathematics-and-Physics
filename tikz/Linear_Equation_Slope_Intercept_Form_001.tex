@@ -1,35 +1,48 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{amssymb}
-\usepackage{tikz}                       % Drawing/graphing tools.
-\usetikzlibrary{arrows.meta}            % Latex and Stealth arrows.
-\DeclareMathSymbol{\minus}{\mathbin}{AMSa}{"39} % Unary minus sign.
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[>=latex, line width=1pt]
-        \draw[style=help lines] (-3.9, -1.9) grid (3.9, 3.9);
-        \begin{scope}[line width=0.3pt]
-            \foreach\n in {1,2,3}{%
-                \draw (\n,3pt) -- (\n,-3pt) node [below] {$\n$};
-                \draw (3pt,\n) -- (-3pt,\n) node [left] {$\n$};
-                \draw (-\n.08,3pt) -- (-\n.08,-3pt) node [below] {$\minus\n$};
-            }
-            \draw (3pt,-1) -- (-3pt,-1) node [left] {$\minus{1}$};
-        \end{scope}
-        \begin{scope}[line width=1.5pt, >=Latex, font=\Large]
-            \draw[<->] (-4.1, 0) to (4.1, 0);
-            \draw[<->] (0, -2.1) to (0, 4.1);
-            \node at (4, 0.4) {$x$};
-            \node at (0.4, 4) {$y$};
-        \end{scope}
-        \draw (-4, -1) to (4, 3);
-        \draw[fill=black] (0,1) circle (0.6mm) node[above left] {$(0,1)$};
-        \draw[fill=black] (2,2) circle (0.6mm) node[above left] {$(2,2)$};
-        \draw[fill=black] (2,1) circle (0.6mm) node[below right] {$(2,1)$};
-        \draw[densely dashed] (0,1) to node [below] {Run} (2,1);
-        \draw[densely dashed] (2,1) to node [right] {Rise} (2,2);
-        \node at (-2.71,2.75) {$m=\frac{\textrm{Rise}}{\textrm{Run}}$};
-        \node at (-2.1,2.25) {$b=y\textrm{ intercept}$};
-        \node at (2,3.3) {$y=mx+b$};
-    \end{tikzpicture}
-\end{document}
+%--------------------------------Dependencies----------------------------------%
+%   amssymb                                                                    %
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%   Unary minus sign                                                           %
+%       \DeclareMathSymbol{\minus}{\mathbin}{AMSa}{"39}                        %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=Latex,
+    line width=0.2mm,
+    line cap=round
+]
+    % Coordinates for various points.
+    \coordinate (P1)    at ( 0.0,  1.0);
+    \coordinate (P2)    at ( 2.0,  1.0);
+    \coordinate (P3)    at ( 2.0,  2.0);
+    \coordinate (START) at (-4.0, -1.0);
+    \coordinate (END)   at ( 4.0,  3.0);
+    \coordinate (m)     at (-2.7,  2.7);
+    \coordinate (b)     at (-2.1,  2.2);
+    \coordinate (y)     at ( 2.0,  3.3);
+
+    % Draw a grid.
+    \draw[style=help lines] (-3.9, -1.9) grid (3.9, 3.9);
+
+    % Axes:
+    \begin{scope}[very thick]
+        \draw[<->] (-4.1,  0.0) to (4.1, 0.0) node [above] {$x$};
+        \draw[<->] ( 0.0, -2.1) to (0.0, 4.1) node [right] {$y$};
+    \end{scope}
+
+    % Draw the line.
+    \draw (START) to (END);
+
+    % Draw points to mark various points.
+    \draw[fill=black] (P1) circle (0.7mm) node [above left] {$(0,1)$};
+    \draw[fill=black] (P2) circle (0.7mm) node [above left] {$(2,2)$};
+    \draw[fill=black] (P3) circle (0.7mm) node [above left] {$(2,1)$};
+
+    % Draw a triangle to indicate the slope of the line.
+    \draw[densely dashed] (P1) to node [below] {Run}  (P2);
+    \draw[densely dashed] (P2) to node [right] {Rise} (P3);
+
+    % Equations for the variables.
+    \node at (m) {$m=\frac{\textrm{Rise}}{\textrm{Run}}$};
+    \node at (b) {$b=y\textrm{ intercept}$};
+    \node at (y) {$y=mx+b$};
+\end{tikzpicture}
