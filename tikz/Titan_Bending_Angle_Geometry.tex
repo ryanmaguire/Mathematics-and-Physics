@@ -1,52 +1,70 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{tikz}                       % Drawing/graphing tools.
-\usetikzlibrary{
-    calc,                   % Calculating right angles and more.
-    angles,                 % Drawing angles within triangles.
-    arrows.meta,            % Latex and Stealth arrows.
-    quotes,                 % Adding labels to angles.
-}                                       % Libraries for tikz.
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[>=Latex,line width=0.3mm]
-        \draw[inner color=white,outer color=orange!80!green,thin]
-            (0,0) circle (1.5);
-        \begin{scope}[
-            every node/.style={
-                circle,
-                fill=black,
-                draw=black,
-                inner sep=0pt,
-                minimum size=0.7mm
-            }
-        ]
-            \node (O) at (0,0) {};
-            \node (E) at (-2.5,1) {};
-            \node (C) at (3,1) {};
-            \node (A) at (0,2) {};
-            \node (P) at (0.6, 1.8) {};
+%--------------------------------Dependencies----------------------------------%
+%   tikz                                                                       %
+%       calc                                                                   %
+%       angles                                                                 %
+%       arrows.meta                                                            %
+%       quotes                                                                 %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=Latex,
+    line width=0.2mm,
+    line cap=round,
+    scale=1.7
+]
+
+    % Start a group to locally define variouble for color.
+    \begingroup
+        % Color for the central ball.
+        \newcommand{\bcolor}{orange!80!green}
+
+        % coordinates
+        \coordinate (O) at ( 0.0, 0.0); % Origin.
+        \coordinate (E) at (-2.5, 1.0); % Earth.
+        \coordinate (C) at ( 3.0, 1.0); % Cassini spacecraft.
+        \coordinate (A) at ( 0.0, 2.0); % Point along axis of symmetry.
+        \coordinate (P) at ( 0.6, 1.8); % Perpendicular projection on line CA.
+        \coordinate (S) at (-3.0, 3.0); % Point in space along line CA.
+
+        % Central circle.
+        \draw[inner color=white, outer color=\bcolor, thin] (O) circle (1.5);
+
+        % Axes:
+        \begin{scope}[thick]
+            \draw[->] (O) to (0.0,3.0) node [right] {$y$};
+            \draw[->] (O) to (3.5,0.0) node [above] {$x$};
         \end{scope}
-        \node at (O) [below left] {O};
-        \node at (E) [below] {E};
-        \node at (C) [right] {C};
-        \node at (A) [above right] {A};
-        \node at (P) [above right] {P};
-        \node (Space) at (-3,3) {};
-        \draw[->] (0,0) to (0,3) node [right] {$y$};
-        \draw[->] (0,0) to (3.5,0) node [above] {$x$};
+
+        % Various labels.
+        \node at (O) [below left]  {$O$};
+        \node at (E) [below]       {$E$};
+        \node at (C) [right]       {$C$};
+        \node at (A) [above right] {$A$};
+        \node at (P) [above right] {$P$};
+
+        % Draw dots to mark various points.
+        \draw[fill=black] (O) circle (0.4mm);
+        \draw[fill=black] (E) circle (0.4mm);
+        \draw[fill=black] (C) circle (0.4mm);
+        \draw[fill=black] (A) circle (0.4mm);
+        \draw[fill=black] (P) circle (0.4mm);
+
+        % Draw lines connecting various points.
         \draw (O) to (P);
         \draw (O) to (E);
         \draw (O) to (C);
         \draw (A) to (E);
-        \draw[->] (C) to (Space);
+
+        % Draw a vector in the direction of the outgoing signal.
+        \draw[->] (C) to (S);
+
+        % Draw various angles.
         \pic[%
             "$\alpha$",
             angle eccentricity=1.4,
             angle radius=0.6cm,
             -,
             draw=black
-        ]   {angle=Space--A--E};
+        ]   {angle=S--A--E};
         \pic[%
             "$\beta$",
             angle eccentricity=1.6,
@@ -68,11 +86,11 @@
             -,
             draw=black
         ]   {angle=C--O--A};
-        
+
         % Draw square indicating right angle.
         \coordinate (tempa) at ($(P)!0.3cm!(O)$);
         \coordinate (tempb) at ($(P)!0.3cm!(C)$);
         \coordinate (tempc) at ($(tempa)!0.5!(tempb)$);
-        \draw (tempa) -- ($(P)!2!(tempc)$) -- (tempb);
-    \end{tikzpicture}
-\end{document}
+        \draw (tempa) to ($(P)!2!(tempc)$) to (tempb);
+    \endgroup
+\end{tikzpicture}

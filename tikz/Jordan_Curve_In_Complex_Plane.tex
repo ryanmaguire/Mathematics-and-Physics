@@ -1,44 +1,56 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{amssymb}        % For \mathbb{C}.
-\usepackage{tikz}           % Drawing/graphing tools.
-\usetikzlibrary{
-    arrows.meta,            % Latex and Stealth arrows.
-    decorations.markings,   % Adding arrows in the middle of a line.
-}
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[thick]
-        % Axes:
-        \draw[>=Latex, ->] (-0.5, 0) -- (4.4, 0) node[above] {$\Re\{z\}$};
-        \draw[>=Latex, ->] (0, -0.5) -- (0, 4.4) node[right] {$\Im\{z\}$};
-        % Axes labels:
-        \foreach\n in {1,2,3,4}{%
-            \draw (\n,3pt) -- (\n,-3pt) node [below] {$\n$};
-            \draw (3pt,\n) -- (-3pt,\n) node [left] {$\n{i}$};
+%--------------------------------Dependencies----------------------------------%
+%   amssymb                                                                    %
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%       decorations.markings                                                   %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=Latex,
+    line width=0.2mm,
+    line cap=round
+]
+
+    % Coordinates for the points in the curve.
+    \coordinate (P1) at (3, 3);
+    \coordinate (P2) at (4, 1);
+    \coordinate (P3) at (2, 1.5);
+    \coordinate (P4) at (1, 2);
+
+    % Axes:
+    \begin{scope}[thick]
+        \draw[->] (-0.5, 0) to (4.4, 0) node [above] {$\Re\{z\}$};
+        \draw[->] (0, -0.5) to (0, 4.4) node [right] {$\Im\{z\}$};
+    \end{scope}
+
+    % Axes labels:
+    \foreach\n in {1, 2, 3, 4}{%
+        \draw (\n, 3pt) to (\n, -3pt) node [below] {$\n$};
+        \draw (3pt, \n) to (-3pt, \n) node [left]  {$\n{i}$};
+    }
+
+    % Draw the Jordan Curve.
+    \begin{scope}[%
+        ->-/.style={%
+            decoration={%
+                markings,
+                mark=at position 0 with \arrow{>},
+                mark=at position .15 with \arrow{>},
+                mark=at position .4 with \arrow{>},
+                mark=at position .6 with \arrow{>},
+                mark=at position .8 with \arrow{>}
+            },
+            postaction={decorate}
         }
-        \begin{scope}[%
-            >=Latex,
-            ->-/.style={%
-                decoration={%
-                    markings,
-                    mark=at position 0 with \arrow{>},
-                    mark=at position .15 with \arrow{>},
-                    mark=at position .4 with \arrow{>},
-                    mark=at position .6 with \arrow{>},
-                    mark=at position .8 with \arrow{>}
-                },
-                postaction={decorate}
-            }
-        ]
-            \draw[->-]
-                (1.5,3) to [out=70, in=140] (3,3)
-                        to [out=-50, in=90] (4,1)
-                        to [out=-90, in=-30] (2,1.5)
-                        to [out=150, in=-90] (1,2)
-                        to [out=90, in=-110] cycle;
-        \end{scope}
-        \node at (4,4) {\Large{$\mathbb{C}$}};
-        \node at (3.5,3.2) {\normalsize{$\Gamma(t)$}};
-    \end{tikzpicture}
-\end{document}
+    ]
+        \draw[->-]
+            (1.5,3) to [out=70, in=140]  (P1)
+                    to [out=-50, in=90]  (P2)
+                    to [out=-90, in=-30] (P3)
+                    to [out=150, in=-90] (P4)
+                    to [out=90, in=-110] cycle;
+    \end{scope}
+
+    % Labels for the complex plane and the Jordan curve.
+    \node at (4,4)     {\Large{$\mathbb{C}$}};
+    \node at (3.5,3.2) {\normalsize{$\Gamma(t)$}};
+\end{tikzpicture}

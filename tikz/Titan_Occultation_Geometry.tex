@@ -1,41 +1,46 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{tikz}                       % Drawing/graphing tools.
-\usetikzlibrary{
-    calc,                   % Calculating right angles and more.
-    arrows.meta,            % Latex and Stealth arrows.
-    decorations.markings,   % Adding arrows in the middle of a line.
-}
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[>={latex[black]}]
-        \begin{scope}[
-            every node/.style={
-                circle,
-                fill=black,
-                draw=black,
-                inner sep=0pt,
-                minimum size=3pt
-            }
-        ]
-            \node (S) at (4,1.6) {};
-            \node (E) at (-4,1.6) {};
-        \end{scope}
-        \coordinate (O) at (0,0);
-        \coordinate (p1) at (-1.5,2);
-        \coordinate (p2) at (1.5,2);
-        \coordinate (P) at (0,2.2);
-        \coordinate (dash) at (-3.5,2.8);
-        \node at (E) [left] {\footnotesize{Earth}};
-        \node at (S) [above] {\footnotesize{Spacecraft}};
-        \draw[%
-            draw=none,
-            inner color=blue,
-            outer color=white!80!blue,
-            opacity=0.6
-        ]   (0,0) circle (26mm) (0,0) circle (1.9);
-        \draw[inner color=white, outer color=gray]
-            (0, 0) circle (1.9);
+%--------------------------------Dependencies----------------------------------%
+%   tikz                                                                       %
+%       calc                                                                   %
+%       arrows.meta                                                            %
+%       decorations.markings                                                   %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=Latex,
+    line width=0.2mm,
+    line cap=round,
+    scale=1.7
+]
+
+    % Start a group to locally define variouble for color.
+    \begingroup
+        % Color for the ring.
+        \newcommand{\rcolor}{white!100!blue}
+
+        % Coordinates
+        \coordinate (S)     at (4,1.6) {};
+        \coordinate (E)     at (-4,1.6) {};
+        \coordinate (O)     at (0,0);
+        \coordinate (p1)    at (-1.5,2);
+        \coordinate (p2)    at (1.5,2);
+        \coordinate (p_in)  at (0.44, 2.133);
+        \coordinate (p_out) at (-0.44, 2.144);
+        \coordinate (P)     at (0,2.2);
+        \coordinate (v_S)   at (4.2, 1);
+        \coordinate (v_E)   at (-4, 1);
+        \coordinate (dash)  at (-3.5,2.8);
+
+        % Labels for various points.
+        \node at (E) [left]        {\footnotesize{Earth}};
+        \node at (S) [above right] {\footnotesize{Spacecraft}};
+
+        % Draw outer ring to simulate the atmosphere.
+        \draw[draw=none, inner color=blue, outer color=\rcolor, opacity=0.6]
+            (0,0) circle (26mm) (0,0) circle (1.9);
+
+        % Draw inner circle.
+        \draw[inner color=white, outer color=gray] (0, 0) circle (1.9);
+
+        % Draw path for the emitted signal through the atmosphere.
         \begin{scope}[line width=0.3mm,->]
             \draw[%
                 postaction={decorate},
@@ -44,25 +49,29 @@
                     mark=at position .29 with \arrow{Latex},
                     mark=at position .72 with \arrow{Latex}
                 }
-            ]   (S) to (p2)
-                    to[bend right=10] (p1)
-                    to (E);
-            \path (O) edge node[right] {$\textbf{p}_{in}$} (0.44,2.144);
-            \path (O) edge node[left] {$\textbf{p}_{out}$} (-0.44,2.144);
-            \path (O) edge node[below left] {$\mathbf{r}_{E}$} (E);
-            \path (O) edge node[below right] {$\mathbf{r}_{S}$} (S);
-            \path (S) edge node[below left] {$\mathbf{v}_{S}$} (4.2,1);
-            \path (E) edge node[below left] {$\mathbf{v}_{E}$} (-4,1);
+            ]   (S) to (p2) to[bend right=10] (p1) to (E);
+            \path (O) edge node [right]       {$\textbf{p}_{in}$}  (p_in);
+            \path (O) edge node [left]        {$\textbf{p}_{out}$} (p_out);
+            \path (O) edge node [below left]  {$\mathbf{r}_{E}$}   (E);
+            \path (O) edge node [below right] {$\mathbf{r}_{S}$}   (S);
+            \path (S) edge node [below left]  {$\mathbf{v}_{S}$}   (v_S);
+            \path (E) edge node [below left]  {$\mathbf{v}_{E}$}   (v_E);
         \end{scope}
+
+        % More labels.
         \node (nin) at (2.9,2.1) {$\hat{\mathbf{n}}_{in}$};
         \node (nout) at (-2.7,2.2) {$\hat{\mathbf{n}}_{out}$};
-        \draw[thick] (O) to (0,2.15);
-        \draw[thick,shorten >=1cm,shorten <=0cm,->]
-            (nin) -- +($(p2)-(S)$);
-        \draw[thick,shorten >=1cm,shorten <=0cm,->]
-            (nout) -- +($(E)-(p1)$);
-        \draw[thick,dashed] (p2) -- (dash);
+
+        % Draw more lines.
+        \begin{scope}[thick]
+          \draw[shorten >=1cm,shorten <=0cm,->] (nin)  to +($(p2)-(S)$);
+          \draw[shorten >=1cm,shorten <=0cm,->] (nout) to +($(E)-(p1)$);
+          \draw[dashed]                         (p2)   to (dash);
+          \draw                                 (O)    to (0, 2.15);
+        \end{scope}
+
+        % And some more labels.
         \node at (-2,2.3) {$\alpha$};
         \node at (-0.1,1.6) [right] {$\rho$};
-    \end{tikzpicture}
-\end{document}
+    \endgroup
+\end{tikzpicture}
