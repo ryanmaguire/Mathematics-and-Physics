@@ -1,65 +1,67 @@
-\documentclass[crop,class=article]{standalone}
-%----------------------------Preamble-------------------------------%
-\usepackage{tikz}                       % Drawing/graphing tools.
-\usetikzlibrary{arrows.meta}            % Latex and Stealth arrows.
-%--------------------------Main Document----------------------------%
-\begin{document}
-    \begin{tikzpicture}[>=Latex,semithick,draw=blue,font=\scriptsize]
-        % Draw the first open ball.
-        \draw[<->,draw=black] (-1.8,0) -- (1.8,0)
-            node [above] {$x$};
-        \draw[<->,draw=black] (0,-1.5) -- (0,2.5)
-            node [below right] {$y$};
-        \draw[fill=cyan,opacity=0.8,densely dashed]
-            (-1,0)--(0,-1)--(1,0)--(0,1)--cycle;
+%--------------------------------Dependencies----------------------------------%
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    >=Latex,
+    line width=0.2mm,
+    line cap=round,
+    scale=1.5
+]
 
-        % Draw the second open ball.
-        \draw[<->,draw=black] (2.2,0) -- (5.8,0)
-            node [above] {$x$};
-        \draw[<->,draw=black] (4,-1.5) -- (4,2.5)
-            node [right] {$y$};
-        \draw (4,0)--(4,2);
+    % Axes for the first ball.
+    \begin{scope}[<->, thick]
+        \draw (-1.8, 0.0) to (1.8, 0.0) node [above] {$x$};
+        \draw (0.0, -1.5) to (0.0, 2.5) node [right] {$y$};
+    \end{scope}
 
-        % Draw the third open ball.
-        \begin{scope}[yshift=-4.5cm]
-            \draw[<->,draw=black] (-1.8,0) -- (1.8,0)
-                node [above] {$x$};
-            \draw[<->,draw=black] (0,-1.5) -- (0,2.5)
-                node [below right] {$y$};
-            \draw[fill=cyan,opacity=0.8,densely dashed]
-                (-0.5,0)--(0,-0.5)--(0.5,0)--(0,0.5)--cycle;
-            \draw (0,0.5)--(0,1.5);
-        \end{scope}
+    % Draw the first ball.
+    \draw[fill=cyan,opacity=0.8,densely dashed] (-1, 0) to (0, -1) to (1,0)
+                                                        to (0,  1) to cycle;
 
-        % Draw the fourth open ball.
-        \begin{scope}[xshift=4cm,yshift=-4.5cm]
-            \draw[<->,draw=black] (-1.8,0) -- (1.8,0)
-                node [above] {$x$};
-            \draw[<->,draw=black] (0,-1.5) -- (0,2.5)
-                node [right] {$y$};
-            \draw[fill=cyan,opacity=0.8,densely dashed]
-                (0,0)--(0.5,0.5)--(1,0)--(0.5,-0.5)--cycle;
-            \draw (0.5,0.5)--(0.5,1.5);
-        \end{scope}
+    % Axes for the second ball..
+    \begin{scope}[<->, thick, xshift=4cm]
+        \draw[<->] (-1.8, 0.0) to (1.8, 0.0) node [above] {$x$};
+        \draw[<->] (0.0, -1.5) to (0.0, 2.5) node [right] {$y$};
+    \end{scope}
 
-        % Draw nodes indicating which points are not included.
-        \begin{scope}[
-            every node/.style={
-                circle,
-                fill=white,
-                draw=blue,
-                inner sep=0pt,
-                minimum size=2pt
-            }
-        ]
-            \node at (4,2) {};
-            \node at (4,0) {};
-            \node at (0,-3) {};
-            \node at (4.5,-3) {};
-        \end{scope}
-        \node at (-1, 2) {(a)};
-        \node at (3, 2) {(b)};
-        \node at (-1, -2.5) {(c)};
-        \node at (3, -2.5) {(d)};
-    \end{tikzpicture}
-\end{document}
+    % Draw the second ball.
+    \draw[blue] (4,0) to (4,2);
+    \draw[blue, fill=white, thick] (4.0, 2.0) circle (0.3mm);
+    \draw[blue, fill=white, thick] (4.0, 0.0) circle (0.3mm);
+
+    % Axes for the third ball.
+    \begin{scope}[<->, thick, yshift=-4.5cm]
+        \draw (-1.8,  0.0) to (1.8, 0.0) node [above] {$x$};
+        \draw ( 0.0, -1.5) to (0.0, 2.5) node [right] {$y$};
+    \end{scope}
+
+    % Draw the third ball.
+    \begin{scope}[yshift=-4.5cm]
+        \draw[fill=cyan, opacity=0.8, densely dashed]
+            (-0.5, 0.0) to (0.0, -0.5) to (0.5,  0.0) to (0,0.5) to cycle;
+        \draw[blue] (0.0, 0.5) to (0,1.5);
+        \draw[blue, fill=white, thick] (0.0, 1.5) circle (0.3mm);
+    \end{scope}
+
+    % Draw the fourth open ball.
+    \begin{scope}[<->, thick, xshift=4cm, yshift=-4.5cm]
+        \draw (-1.8,  0.0) to (1.8, 0.0) node [above] {$x$};
+        \draw ( 0.0, -1.5) to (0.0, 2.5) node [right] {$y$};
+    \end{scope}
+
+    \begin{scope}[xshift=4cm, yshift=-4.5cm]]
+        \draw[fill=cyan, opacity=0.8, densely dashed]
+            (0.0, 0.0) to (0.5, 0.5) to (1.0, 0.0) to (0.5, -0.5) to cycle;
+        \draw[blue] (0.5,0.5) to (0.5,1.5);
+        \draw[blue, fill=white, thick] (0.5, 1.5) circle (0.3mm);
+    \end{scope}
+
+    % Labels.
+    \node at (-1.0,  2.0) {$B_{1}^{(\mathbb{R}^{2},\,d)}\Big((0,\,0)\Big)$};
+    \node at ( 3.0,  2.0) {$B_{1}^{(\mathbb{R}^{2},\,d)}\Big((0,\,1)\Big)$};
+    \node at (-1.0, -2.5) {$B_{1}^{(\mathbb{R}^{2},\,d)}%
+                            \Big(\big(0,\,\frac{1}{2}\big)\Big)$};
+    \node at ( 3.0, -2.5) {$B_{1}^{(\mathbb{R}^{2},\,d)}%
+                            \Big((\frac{1}{2},\,\frac{1}{2})\Big)$};
+\end{tikzpicture}
