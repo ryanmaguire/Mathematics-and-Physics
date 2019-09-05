@@ -1,0 +1,242 @@
+%---------------------------Packages----------------------------%
+\usepackage{geometry}
+\geometry{b5paper, margin=1.0in}
+\usepackage{graphicx, float}            % Graphics/Images.
+\usepackage[english]{babel}             % Language typesetting.
+\usepackage[dvipsnames]{xcolor}         % Color names.
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{tcolorbox}                  % Frames around theorems.
+\usepackage{upgreek}                    % Non-Italic Greek.
+\usepackage[newparttoc]{titlesec}       % Formatting chapter, etc.
+\usepackage{titletoc}                   % Allows \book in toc.
+\usepackage[nottoc]{tocbibind}          % Bibliography in toc.
+\usepackage[titles]{tocloft}            % ToC formatting.
+\usepackage{pgfplots, tikz}             % Drawing/graphing tools.
+\usetikzlibrary{
+    calc,                   % Calculating right angles and more.
+    angles,                 % Drawing angles within triangles.
+    arrows.meta,            % Latex and Stealth arrows.
+    quotes,                 % Adding labels to angles.
+    positioning,            % Relative positioning of nodes.
+    decorations.markings,   % Adding arrows in the middle of a line.
+    patterns,
+    arrows
+}                                       % Libraries for tikz.
+\pgfplotsset{compat=1.9}                % Version of pgfplots.
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize}, hypcap=true, labelsep=colon]{caption}
+\usepackage[pdftex,
+            pdfauthor={Ryan Maguire},
+            pdftitle={Mathematics and Physics},
+            pdfsubject={Mathematics, Physics, Science},
+            pdfkeywords={Physics, Optics, Diffraction},
+            pdfproducer={LaTeX},
+            pdfcreator={pdflatex}]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}                           % Colors for hyperref.
+\usepackage[nopostdot,toc,acronym,nogroupskip]{glossaries}
+%------------------------Theorem Styles-------------------------%
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define theorem style for default spacing with italicized font.
+\newtheoremstyle{normalit}{\topsep}{\topsep}
+                {\itshape}{}{\bfseries}{}{.5em}{}
+% Define italicized environments.
+\theoremstyle{normalit}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{axiom}{Axiom}[section]
+\theoremstyle{plain}
+
+% Define framed environment.
+\tcbuselibrary{most}
+\newtcbtheorem[use counter*=theorem]{ftheorem}{Theorem}{%
+    colback=green!5,
+    colframe=green!35!black,
+    fonttitle=\bfseries\upshape}{thm}
+
+\newtcbtheorem[use counter*=definition]{fdefinition}{Definition}{%
+    fonttitle=\bfseries\upshape,
+    colback=blue!5!white,
+    colframe=blue!75!black}{def}
+
+\newtcbtheorem[use counter*=example]{fexample}{Example}{%
+    fonttitle=\bfseries\upshape,
+    colback=red!5!white,
+    colframe=red!75!black}{ex}
+
+\newtcbtheorem[use counter*=notation]{fnotation}{Notation}{%
+    fonttitle=\bfseries\upshape,
+    colback=SeaGreen!5!white,
+    colframe=SeaGreen!75!black}{not}
+
+\newtcbtheorem[use counter*=remark]{fremark}{Remark}{%
+    fonttitle=\bfseries\upshape,
+    colback=Goldenrod!5!white,
+    colframe=Goldenrod!75!black}{ex}
+
+\newenvironment{bproof}{\textit{Proof.}}{\hfill$\square$}
+\tcolorboxenvironment{bproof}{%
+    blanker,
+    breakable,
+    left=3mm,
+    before skip=5pt,
+    after skip=10pt,
+    borderline west={0.6mm}{0pt}{green!80!black}
+}
+
+\AtEndEnvironment{lexample}{$\hfill\textcolor{red}{\blacksquare}$}
+\newtcbtheorem[use counter*=example]{lexample}{Example}{%
+    empty,
+    title={Example~\theexample},
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=red,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    before=\par\vspace{2ex},
+    left=0pt,
+    right=0pt,
+    top=2.2ex,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[red, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay first={%
+        \draw[red, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}{ex}
+
+\AtEndEnvironment{ldefinition}{$\hfill\textcolor{Blue}{\blacksquare}$}
+\newtcbtheorem[use counter*=definition]{ldefinition}{Definition}{%
+    empty,
+    title={Definition~\thedefinition:~{#1}},
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=Blue,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    before=\par\vspace{2ex},
+    left=0pt,
+    right=0pt,
+    top=2.2ex,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[Blue, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay first={%
+        \draw[Blue, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}{def}
+
+\AtEndEnvironment{ltheorem}{$\hfill\textcolor{Green}{\blacksquare}$}
+\newtcbtheorem[use counter*=theorem]{ltheorem}{Theorem}{%
+    empty,
+    title={Theorem~\thetheorem:~{#1}},
+    boxed title style={%
+        empty,
+        size=minimal,
+        toprule=2pt,
+        top=0.5\topsep,
+    },
+    coltitle=Green,
+    fonttitle=\bfseries,
+    parbox=false,
+    boxsep=0pt,
+    before=\par\vspace{2ex},
+    left=0pt,
+    right=0pt,
+    top=3ex,
+    bottom=-1.5ex,
+    breakable,
+    pad at break*=0mm,
+    vfill before first,
+    overlay unbroken={%
+        \draw[Green, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);},
+    overlay first={%
+        \draw[Green, line width=2pt]
+            ([yshift=-1.2ex]title.south-|frame.west) to
+            ([yshift=-1.2ex]title.south-|frame.east);
+    }
+}{thm}
+
+%----------------------Declared Math Operators--------------------%
+\DeclareMathOperator{\Int}{Int}             % Interior.
+\DeclareMathOperator{\sgn}{sgn}             % Sign of a number.
+%----------------------Declared Math Symbols----------------------%
+\DeclareMathSymbol{\minus}{\mathbin}{AMSa}{"39} % Unary minus sign.
+%------------------------New Commands-----------------------------%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\renewcommand*{\glstextformat}[1]{\textcolor{RoyalBlue}{#1}}
+\renewcommand{\glsnamefont}[1]{\textbf{#1}}
+\renewcommand\thesubfigure{\arabic{chapter}.\arabic{figure}}
+\renewcommand\thesubfigure{%
+    \arabic{chapter}.\arabic{figure}.\arabic{subfigure}}
+\addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
+\numberwithin{equation}{section}
+\renewcommand\glsseelastsep{\glsseesep}
+\newglossarystyle{longpara}{%
+    \setglossarystyle{long}%
+    \renewenvironment{theglossary}{%
+        \begin{longtable}[l]{@{}p{0.3\hsize}p{0.65\hsize}@{}}
+    }{\end{longtable}}%
+    \renewcommand{\glossentry}[2]{%
+        \glstarget{##1}{\glossentryname{##1}}%
+        &\glossentrydesc{##1}{~##2.}
+        \tabularnewline%
+        \tabularnewline
+    }%
+}
+%--------------------------LENGTHS------------------------------%
+
+% Indent and paragraph spacing.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
