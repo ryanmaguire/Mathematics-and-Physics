@@ -1,0 +1,44 @@
+%--------------------------------Dependencies----------------------------------%
+%   amssymb                                                                    %
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%       decorations.markings                                                   %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[
+    >=Latex,
+    ->-/.style={%
+        decoration={%
+            markings,
+            mark=at position 0.24 with \arrow{>},
+            mark=at position .52 with \arrow{>},
+            mark=at position .84 with \arrow{>}
+        },
+        postaction={decorate}
+    }
+]
+
+    % Coordinates for points on the curve.
+    \coordinate (P1) at (0, 0);
+    \coordinate (P2) at (3, 0);
+
+    % Axes:
+    \begin{scope}[thick]
+        \draw[->] (-0.5, 0) to (4.4, 0) node[above] {$\Re\{z\}$};
+        \draw[->] (0, -0.5) to (0, 4.4) node[right] {$\Im\{z\}$};
+    \end{scope}
+
+    % Axes Labels:
+    \foreach\n in {1, 2, 3, 4}{%
+        \draw (\n,3pt) to (\n,-3pt) node [below] {$\n$};
+        \draw (3pt,\n) to (-3pt,\n) node [left]  {$\n{i}$};
+    }
+
+    % Draw the sector, shading the interior cyan.
+    \draw[fill=cyan] (P1) to (P2) arc(0:45:3) to cycle;
+    \draw[blue, ->-] (P1) to (P2) arc(0:45:3) to cycle;
+
+    % Labels.
+    \node at (4, 4)     {\Large{$\mathbb{C}$}};
+    \node at (1, 1.7)   {\normalsize{$\Gamma(t)$}};
+    \node at (1.8, 0.7) {\normalsize{$\textrm{Int}(\Gamma)$}};
+\end{tikzpicture}
