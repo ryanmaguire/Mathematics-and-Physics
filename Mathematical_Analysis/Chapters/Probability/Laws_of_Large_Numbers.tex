@@ -1,0 +1,523 @@
+\section{Laws of Large Numbers}
+    Consider a fair coin and toss it $n$ times. We would
+    expect that, as $n$ gets large, the number of times
+    heads occurs and the number of times heads occurs is
+    roughly the same. That is:
+    \begin{equation}
+        \frac{|\textrm{Heads}|-|\textrm{Tails}|}{n^{2}}
+        \rightarrow{0}
+    \end{equation}
+    And also:
+    \begin{equation}
+        \frac{|\textrm{Heads}|\times|\textrm{Tails}|}{n}
+        \rightarrow\frac{1}{2}
+    \end{equation}
+    We want to build a more rigorous notion from this idea
+    and create a mathematical model out of this. We use
+    probability spaces as this model. Let
+    $(\Omega,\mathcal{A},\mu)$ be a probability space and
+    let $f_{j}:\Omega\rightarrow\mathbb{R}$ be random variables
+    take on the values $\minus{1}$ and $1$, and such that
+    they are independent. Then the associated
+    $\sigma\textrm{-Algebra}$ are:
+    \begin{equation}
+        \mathcal{A}_{f_{j}}=
+        \{\emptyset,f^{\minus{1}}(\{\minus{1}\}),
+            f^{\minus{1}}(\{1\}),\Omega\}
+    \end{equation}
+    The measure on the space is such that:
+    \begin{equation}
+        \mu\Big(f^{\minus{1}}\big(\{\minus{1}\}\big)\Big)=
+        \mu\Big(f^{\minus{1}}\big(\{1\}\big)\Big)=
+        \frac{1}{2}
+    \end{equation}
+    Define a new function by:
+    \begin{equation}
+        F_{N}(\omega)=\frac{1}{N}\sum_{k=1}^{N}f_{k}(\omega)
+    \end{equation}
+    Then $F_{N}(\omega)$ is the number of times 1 occurs
+    minus the number of times -1 occurs, divided by $N$.
+    It seems likely that this function should converge to
+    zero for large $N$. Recall that there are three different
+    types of convergence. We say
+    $g_{n}\rightarrow{g}$ almost everywhere if there is a
+    set of measure 0 such that $g_{n}\rightarrow{g}$ on the
+    complement of this set. We say that
+    $g_{n}\rightarrow{g}$ almost uniformly if there is a set
+    of arbitrarily small measure $\varepsilon$ such that
+    $g_{n}\rightarrow{g}$ uniformly on the complement.
+    Finally, $g_{n}\rightarrow{g}$ in measure if for all
+    $\delta>0$:
+    \begin{equation}
+        \mu\Big(\{\omega:|g_{n}(\omega)-g(\omega)|\geq\delta\}
+        \Big)\rightarrow{0}
+    \end{equation}
+    We have seen the almost uniform convergence is the
+    strongest and implies the other two. By Egorov, since
+    $\mu(\Omega)=1$ in a probability space,
+    convergence almost everywhere implies convergence almost
+    uniformly. Lastly, convergence in measure implies there
+    is a subsequence that converges almost uniformly.
+    \begin{ldefinition}{Strong Law of Large Numbers}
+        A sequence that obeys the Strong Law of Large Numbers
+        in a probability space $(\Omega,\mathcal{A},\mu)$
+        is a sequence $f_{n}$ such that:
+        \begin{equation}
+            \frac{1}{N}\sum_{n=1}^{N}
+                \Big[f_{n}(\omega)-E(f_{n})\Big]\rightarrow{0}
+        \end{equation}
+        $\mu$ almost everywhere.
+    \end{ldefinition}
+    \begin{ldefinition}{Weak Law of Large Numbers}
+        A sequence that obeys the Weak Law of Large Numbers
+        in a probability space $(\Omega,\mathcal{A},\mu)$
+        is a sequence $f_{n}$ such that:
+        \begin{equation}
+            \frac{1}{N}\sum_{n=1}^{N}
+                \Big[f_{n}(\omega)-E(f_{n})\Big]\rightarrow{0}
+        \end{equation}
+        Where the convergence is in measure.
+    \end{ldefinition}
+    \begin{ltheorem}{Khinchin's Weak Law of Large Numbers}
+        If $(\Omega,\mathcal{A},\mu)$ is a probability space,
+        if $f_{j}$ is a sequence of random variables that
+        are pair-wise uncorrelated such that:
+        \begin{equation}
+            \frac{1}{n^{2}}\sum_{j=1}^{n}Var(f_{k})
+            \rightarrow{0}
+        \end{equation}
+        Then $f_{j}$ obeys the Weak Law of Large Numbers.
+    \end{ltheorem}
+    \begin{proof}
+        For:
+        \begin{equation}
+            \int_{\Omega}\Big(\frac{1}{n}\sum_{k=1}^{n}\big(
+                f_{k}(\omega)-E(f_{k})\big)\Big)^{2}\diff{\mu}
+            =\frac{1}{n^{2}}\sum_{k=1}^{n}Var(f_{k})
+        \end{equation}
+        Let:
+        \begin{equation}
+            \Omega_{\delta,n}=
+            \{\omega:|\frac{1}{n}\sum_{k=1}^{n}
+                \big(f_{k}(\omega)-E(f_{k})\big)|\geq\delta\}
+        \end{equation}
+        But by the Chebyshev inequality, we have:
+        \begin{equation}
+            \int_{\Omega}\Big(\frac{1}{n}\sum_{k=1}^{n}\big(
+                f_{k}(\omega)-E(f_{k})\big)\Big)^{2}\diff{\mu}
+            \geq\int_{\Omega_{\delta}}
+                \Big(\frac{1}{n}\sum_{k=1}^{n}\big(
+                f_{k}(\omega)-E(f_{k})\big)\Big)^{2}\diff{\mu}
+            \geq\delta^{2}\int_{\Omega_{\delta}}\diff{\mu}
+        \end{equation}
+        But then:
+        \begin{equation}
+            \mu(\Omega_{\delta,n})\leq
+            \frac{1}{\delta^{2}}\frac{1}{n}^{2}
+            \sum_{j=1}^{n}V(f_{k})
+        \end{equation}
+        But this last part tends to zero. Therefore, etc.
+    \end{proof}
+    \begin{lexample}{}{Distribution}
+        If all of the $f_{i}$ have the same distribution, or
+        if they are uniformly bounded, then the theorem applies.
+        This can be used to show that our model for a fair
+        coin toss obeys the weak law of large numbers.
+    \end{lexample}
+    Suppose $g_{n}(\omega)\rightarrow{g}(\omega)$ almost
+    everywhere. Then, for all $\delta>0$ there is an
+    $N$ such that, for all $n>N$, we have:
+    \begin{equation}
+        |g_{n}(\omega)-g(\omega)|<k^{\minus{1}}
+    \end{equation}
+    For some $k$. Consider the negation of this claim. Then
+    there exists $k\in\mathbb{N}$ such that, for all
+    $N\in\mathbb{N}$ there is an $n>N$ such that:
+    \begin{equation}
+        |g_{n}(\omega)-g(\omega)|\geq{k}^{\minus{1}}
+    \end{equation}
+    COnsider the following set:
+    \begin{equation}
+        B=\bigcup_{n=1}^{\infty}\bigcap_{N=1}^{\infty}
+            \bigcup_{k=N}^{\infty}\big\{\omega:
+            |g_{n}(\omega)-g(\omega)|\geq{k}^{\minus{1}}\big\}
+    \end{equation}
+    This is the set of $\omega$ such that
+    $g_{n}(\omega)\not\rightarrow{g}(\omega)$. We wish to show
+    that $\mu(B)=0$. This will happen if and only if for all
+    $k\in\mathbb{N}$:
+    \begin{equation}
+        \mu\Big(\bigcap_{N=1}^{\infty}\bigcup_{n=N}^{\infty}
+            \big\{\omega:|g_{n}(\omega)-g(\omega)|
+            \geq{k}^{\minus{1}}\big\}\Big)=0
+    \end{equation}
+    Consider a collection of set $A_{n}$ and define:
+    \begin{equation}
+        \overline{A}=\bigcap_{N=1}^{\infty}
+            \bigcup_{n=N}^{\infty}A_{n}
+    \end{equation}
+    If the $A_{n}$ are independent, then $\overline{A}$ is
+    a terminal event, and thus by the Kormogorov zero-one law,
+    eighet $\mu(\overline{A})=1$ or $\mu(\overline{A})=0$.
+    \begin{theorem}
+        If:
+        \begin{equation}
+            \sum_{n=1}^{\infty}\mu)A_{n})<\infty
+        \end{equation}
+        Then:
+        \begin{equation}
+            \mu\Big(\bigcap_{N=1}^{\infty}
+                \bigcup_{N=n}^{\infty}A_{n}\Big)=0
+        \end{equation}
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{equation}
+            \mu\Big(\bigcap_{N=1}^{\infty}
+                \bigcup_{N=n}^{\infty}A_{n}\Big)
+            \leq\mu\Big(\bigcup_{N=n}^{\infty}A_{n}\Big)
+            \leq\sum_{n=N}^{\infty}\mu(A_{n}
+        \end{equation}
+        But this sum converges, and thus the tail end can
+        be made arbitrarily small.
+    \end{proof}
+    \begin{ltheorem}{Borel-Cantelli Lemma}
+        If $A_{n}$ are pair-wise independent and are such
+        that:
+        \begin{equation}
+            \sum_{k=1}^{\infty}\mu(A_{n})=\infty
+        \end{equation}
+        Then:
+        \begin{equation}
+            \mu\Big(\bigcap_{N=1}^{\infty}
+                \bigcup_{N=n}^{\infty}A_{n}\Big)=1
+        \end{equation}
+    \end{ltheorem}
+    \begin{proof}
+        For if:
+        \begin{equation}
+            \mu\Big(\bigcup_{N=1}^{\infty}\bigcap_{n=N}^{\infty}
+                A_{n}^{C}\big)=0
+        \end{equation}
+        Then, for all $N$:
+        \begin{equation}
+            \mu\Big(\bigcap_{n=N}^{\infty}A_{n}^{C}\Big)=0
+        \end{equation}
+        So it suffices to show that this is true. For let
+        $N\in\mathbb{N}$, and define:
+        \begin{equation}
+            B=\bigcap_{n=N}^{\infty}A_{n}^{C}
+        \end{equation}
+        Also define:
+        \begin{equation}
+            B_{M}=\bigcap_{n=N}^{M}A_{n}^{C}
+        \end{equation}
+        It then follows from continuity from below that:
+        \begin{equation}
+            \mu(B)=\underset{M\rightarrow\infty}{\lim}\mu(B_{M})
+            =\underset{M\rightarrow\infty}{\lim}
+                \mu\Big(\bigcap_{n=N}^{M}A_{n}^{C}\Big)
+        \end{equation}
+        But from independence, we obtain:
+        \begin{equation}
+            \mu(B)=\underset{M\rightarrow\infty}{\lim}
+                \prod_{n=N}^{M}\mu\big(A_{n}^{C}\big)
+            =\underset{M\rightarrow\infty}{\lim}
+                \prod_{n=N}^{M}\mu\big(1-A_{n}\big)
+        \end{equation}
+        Using the exponential function, we note that
+        $1-x\leq\exp(\minus{x})$, and so:
+        \begin{equation}
+            \mu(B)\leq               
+            \underset{M\rightarrow\infty}{\lim}
+                \prod_{n=N}^{M}\exp\big(\minus\mu(A_{n})\big)
+            =\underset{M\rightarrow\infty}{\lim}
+                \exp\Big(\sum_{n=N}^{M}\mu(A_{n})\Big)=0
+        \end{equation}
+    \end{proof}
+    The independence of the $A_{n}$ is indeed necessary for
+    this theorem. For let $A_{n}=A_{0}$, and let
+    $\mu(A_{0})=\frac{1}{2}$. Then the sum will indeed
+    diverge, but the measure of final set is still
+    $\frac{1}{2}$.
+    The Borel-Cantelli lemma thus complements the
+    Kormogrov Zero-One law by giving the precise criterion for
+    when the measure is either one or zero. Given a sequence
+    of random events, the terminal event has measure one
+    if and only if the sum of the individual measures converges,
+    and is equal to one otherwise.
+    \begin{ltheorem}{Borel's Strong Law of Large Numbers}
+        If $f_{n}$ is a sequence of random variables such that:
+        \begin{equation}
+            \int_{\Omega}|f_{n}|^{4}\diff{\mu}\leq{M}
+        \end{equation}
+        For all $n\in\mathbb{N}$, then $f_{n}$ obeys the
+        strong law of large numbers.
+    \end{ltheorem}
+    \begin{proof}
+        It suffices to show that, for all $\varepsilon>0$:
+        \begin{equation}
+            \mu\Big(\bigcap_{N=1}^{\infty}
+                \bigcup_{N=n}^{\infty}
+                \big\{\omega:|\frac{1}{n}\sum_{k=1}^{n}
+                    f_{k}(\omega)|\geq\varepsilon\Big)=0
+        \end{equation}
+        Denote the sequence of centered random variables by:
+        \begin{equation}
+            \overset{\circ}{f}_{n}(\omega)=
+            f_{n}(\omega)=E(f_{n}(\omega))
+        \end{equation}
+        To show this, we need to show that:
+        \begin{equation}
+            \sum_{n=1}^{\infty}\mu\Big(
+                \big\{\omega:|\frac{1}{n}\sum_{k=1}^{n}
+                    \overset{\circ}{f}_{n}(\omega)|
+                    \geq\varepsilon\big\}\Big)<\infty
+        \end{equation}
+        Define:
+        \begin{equation}
+            \Omega_{n,\varepsilon}=
+            \Big\{\omega:\big|\frac{1}{n}\sum_{k=1}^{n}
+                \overset{\circ}{f}_{n}(\omega)\big|
+                \geq\varepsilon\Big\}
+        \end{equation}
+        But then:
+        \begin{equation}
+            \int_{\Omega}\big|\frac{1}{n}\sum_{k=1}^{n}
+                \overset{\circ}{f}_{n}\big|^{4}\diff{\mu}
+            \geq\int_{\Omega_{n,\varepsilon}}
+            \big|\frac{1}{n}\sum_{k=1}^{n}
+                \overset{\circ}{f}_{n}\big|^{4}\diff{\mu}
+            \geq\varepsilon^{4}
+                \mu\big(\Omega_{\varepsilon,n}\big)
+        \end{equation}
+        Combining this together, we have:
+        \begin{equation}
+            \mu\big(\Omega_{\varepsilon,n}\big)
+            \leq\frac{1}{\varepsilon^{4}}\frac{1}{n^{4}}
+            \int_{\Omega}\Big(\sum_{k=1}^{n}
+            \overset{\circ}{f}_{k}(\omega)\Big)^{4}\diff{\mu}
+            =\frac{1}{\varepsilon^{4}}\frac{1}{n^{4}}
+            \sum_{i,j,k,\ell}\int_{\Omega}
+            \overset{\circ}{f}_{i}\overset{\circ}{f}_{j}
+            \overset{\circ}{f}_{k}\overset{\circ}{f}_{\ell}
+            \diff{\mu}
+        \end{equation}
+        But the $f_{n}$ are independent, and thus the
+        $\overset{\circ}{f}_{n}$ are independent. But then
+        $\mathcal{A}_{\overset{\circ}{f}_{n}}$ are independent,
+        and thus $\overset{\circ}{f_{i}}$ is independent
+        from the product
+        $\overset{\circ}{f}_{j}\overset{\circ}{f}_{k}\overset{\circ}{f}_{\ell}$. But if they are independent, then:
+        \begin{equation}
+            \int_{\Omega}
+            \overset{\circ}{f}_{i}\overset{\circ}{f}_{j}
+            \overset{\circ}{f}_{k}\overset{\circ}{f}_{\ell}
+            \diff{\mu}=
+            \int_{\Omega}
+            \overset{\circ}{f}_{i}\diff{\mu}
+            \int_{\Omega}\overset{\circ}{f}_{j}
+            \overset{\circ}{f}_{k}\overset{\circ}{f}_{\ell}
+            \diff{\mu}=0
+        \end{equation}
+        There are two cases left, when the indices are equal
+        in pairs, and when all of the indices are equal. In
+        the cases where all are equal, we have:
+        \begin{equation}
+            \sum_{i=1}^{n}
+            \int_{\Omega}
+            |\overset{\circ}{f}_{i}|^{4}\diff{\mu}
+            \leq{M}n
+        \end{equation}
+        For the case of pairs, we have $n^{2}-n$ possibilities,
+        and thus:
+        \begin{equation}
+            \sum_{i,j}\int_{\Omega}
+            |\overset{\circ}{f}_{i}^{2}
+            \overset{\circ}{f}_{j}^{2}|\diff{\mu}
+            \leq{M}(n^{2}-n)
+        \end{equation}
+        Therefore, we have:
+        \begin{equation}
+            \frac{1}{\varepsilon^{4}}\frac{1}{n^{4}}
+            \sum_{i,j,k,\ell}\int_{\Omega}
+            \overset{\circ}{f}_{i}\overset{\circ}{f}_{j}
+            \overset{\circ}{f}_{k}\overset{\circ}{f}_{\ell}
+            \diff{\mu}
+            \leq\frac{M}{\varepsilon^{4}}
+            \frac{1}{n^{2}}
+        \end{equation}
+        But:
+        \begin{equation}
+            \sum_{n=1}^{\infty}\frac{1}{n^{2}}
+            =\frac{\pi^{2}}{6}<\infty
+        \end{equation}
+        Thus, the measure is zero.
+    \end{proof}
+    The $|f_{n}|^{4}$ are called the fourth moments of the
+    $f_{n}$. There are sequences that obey the weak law but
+    not the strong law. Borel's theorem shows that uniformly
+    bounded sequences of random variables automatically obey
+    the strong law of strong numbers, since a uniformly
+    bounded sequence will have uniformly bounded fourth
+    moments. To find a sequence that obeys the weak law but
+    not the strong law, we will need to consider sequences
+    that take on arbitrarily large values.
+    \begin{lexample}{}{Random_Variables}
+        Let $f_{n}$ be a sequence of random variables such that
+        the following are true:
+        \begin{subequations}
+            \begin{align}
+                \mu\Big(\{\omega:f_{n}(\omega)=n\}\Big)
+                &=\frac{P_{n}}{2}\\
+                \mu\Big(\{\omega:f_{n}(\omega)=\minus{n}\}\Big)
+                &=\frac{P_{n}}{2}\\
+                \mu\Big(\{\omega:f_{n}(\omega)=0\}\Big)
+                &=1-P_{n}
+            \end{align}
+        \end{subequations}
+        We need to find a sequence $P_{n}$ such that the
+        $f_{n}$ will obey the weak law but not the strong law.
+        Choosing the $P_{n}$ to be small will most likely
+        result in the sequence obeying the strong law. Indeed,
+        if $P_{n}=0$, then the $f_{n}$ will obey the strong
+        law. In fact, if:
+        \begin{equation}
+            P_{n}\leq\frac{1}{n^{2}}
+        \end{equation}
+        Then $f_{n}$ will obey the strong law. This is a
+        consequence of the Borel-Cantelli lemma. If $P_{n}$
+        is to large, it may not be true that the $f_{n}$ obeys
+        the weak law. For example, suppose:
+        \begin{equation}
+            P_{n}=\frac{1}{n}
+        \end{equation}
+        We cannot apply Khinchin's theorem, since:
+        \begin{equation}
+            \frac{1}{n^{2}}\sum_{j=1}^{n}V(f_{j})=
+            \frac{n(n+1)}{2n^{2}}
+        \end{equation}
+        And this does not converge to zero. Let:
+        \begin{equation}
+            P_{n}=\frac{1}{n\ln(n+2)}
+        \end{equation}
+        Let's now show that $f_{n}$ will obey the weak law.
+        It does. But it does not obey the strong law. We will
+        need to use the Borel-Cantelli lemma. But the sum:
+        \begin{equation}
+            \sum_{n=1}^{\infty}\frac{1}{n\ln(n+2)}=\infty
+        \end{equation}
+        Therefore:
+        \begin{equation}
+            \mu\Big(\bigcap_{N=1}^{\infty}\bigcup_{n=N}^{\infty}
+                \{\omega:|f_{n}(\omega)|\}\Big)=1
+        \end{equation}
+        This contradicts the strong law of large numbers. For
+        suppose not. Then, for almost every $\omega$, and for
+        all $N$, there is an $N>N$ such that
+        $|f_{n}(\omega)|=n$. Then thre exists a sequence
+        $n_{k}$ such that $|f_{n_{k}}(\omega)|=n_{k}$.
+        But:
+        \begin{equation}
+            \frac{1}{n_{k}}\sum_{j=0}^{n_{k}}f_{j}\rightarrow{0}
+        \end{equation}
+        And therefore:
+        \begin{equation}
+            \frac{1}{n_{k}-1}\sum_{j=0}^{n_{k}}f_{j}
+                \rightarrow{0}
+        \end{equation}
+        Taking the difference, we get:
+        \begin{equation}
+            \frac{1}{n_{k}}f_{n_{k}}(\omega)\rightarrow{0}
+        \end{equation}
+        But $|f_{n_{k}}(\omega)|=n_{k}$, a contradiction.
+        So the $f_{n}$ do not obey the strong law.
+    \end{lexample}
+    \subsection{Borel Numbers}
+        Let $0\leq{x}\leq{1}$ and suppose $x$ has the
+        representation $x=0.x_{1}x_{2}\dots$ and exclude
+        numbers with two representations. For example,
+        $1=0.999\dots$. The measure of the set of these numbers
+        is zero. Let $0\leq{a}\leq{9}$. Let $C_{n}(x)$ be
+        the number of $a$ among the first $n$ digits. Then:
+        \begin{equation}
+            \frac{C_{n}(x)}{n}\rightarrow\frac{1}{10}
+        \end{equation}
+        For almost every $x$. Let $\Omega=[0,1]$ and
+        $\mathcal{B}$ be the Borel $\sigma\textrm{-Algebra}$.
+        Also, let $\mu$ be the Lebesgue measure. Consider
+        the functions:
+        \begin{equation}
+            f_{j}(x)=
+            \begin{cases}
+                1,&x_{j}=a\\
+                0,&x_{j}\ne{a}
+            \end{cases}
+        \end{equation}
+        Then:
+        \begin{equation}
+            \frac{C_{n}(x)}{n}=\frac{1}{n}\sum_{k=1}^{n}
+                f_{k}(x)
+        \end{equation}
+        If the $f_{k}$ obey the strong law of large numbers,
+        then:
+        \begin{equation}
+            \frac{1}{n}\sum_{k=1}^{n}\big(f_{k}-E(f_{k})\big)
+            \rightarrow{0}
+        \end{equation}
+        $\mu$ almost everywhere. We have that $f_{j}$ are
+        bounded, and thus it suffices to show that they are
+        also independent. Define:
+        \begin{equation}
+            \mathcal{A}_{f_{i}}=
+            \{\emptyset,A_{j},A_{j}^{C},\Omega\}
+        \end{equation}
+        Where:
+        \begin{equation}
+            A_{j}=\{x:f_{j}(x)=1\}
+        \end{equation}
+        THe $A_{j}$ are the set of elements $x$ such that
+        $x=0.x_{1}x_{2}\dots{a}x_{j+1}x_{j+2}\dots$ Using this
+        there are $10^{j-1}$ options for the first $j-1$
+        digits. This set is covered by $10^{j-1}$ intervals,
+        each of length $10^{\minus{j}}$. Thus, the Lebesgue
+        measure of $A_{j}$ is $\frac{1}{10}$. We now need to
+        show that, for distinct $j,k$, that the measure of the
+        intersection is $\frac{1}{100}$. Suppose $j<k$. Then
+        $A_{j}\cap{A}_{k}$ is the set of numbers with $a$ in
+        the $j^{th}$ decimal and $a$ in the $k^{th}$ decimal.
+        There are $10^{j-1}$ ways to choose the first
+        $j-1$ digits, and $10^{k-j-1}$ ways to choose the
+        next $k-j-1$ digits. Total, there are
+        $10^{k-2}$ digits to choose. So we can cover this
+        set with $10^{k-2}$ intervals, each of lenght
+        $10^{\minus{k}}$. Thus, the measure of the intersection
+        is $10^{\minus{2}}$. Theefore, the $f_{j}$ are
+        independent. By Borel's Strong Law of Large Numbers,
+        the $f_{j}$ obey the strong law of large numbers.
+        \par\hfill\par
+        Let $\Omega=\mathbb{Z}_{n}$, let $\mathcal{A}$ be
+        the power set, and let $\mu$ be the counting
+        measure on $\Omega$. Taking the product
+        $\Omega^{n}$, and considering the product measure,
+        we see that every point has measure $10^{\minus{n}}$.
+        Thus, if we consider the infinite product, points will
+        have measure zero. This isn't too strange since the
+        Lebesgue measure is such that points have measure
+        zero. Let $\tilde{\Omega}$ be the infinite product
+        and let $B_{n}\in\Omega^{n}$. Then
+        $B_{n}\times\Omega_{n+1}\times\dots$ is contained in
+        $\tilde{\Omega}$. Let $\tilde{\mathcal{B}}$ be the
+        smallest $\sigma\textrm{-Algebra}$ on the product
+        space that contains all of these types of sets, and let
+        $\tilde{\mu}$ be the extension measure. Then
+        $f_{j}(\omega)=\omega_{j}$ are independent by
+        construction of the product measure, and also:
+        \begin{equation}
+            \mu(f_{j}=a)=\frac{1}{10}
+        \end{equation}
+        There is a map $\tilde{\Omega}\mapsto[0,1]$ by sending
+        $(\omega_{1},\dots)$ to $0.\omega_{1}\omega_{2}\dots$.
+        The image measure of the product measure $\tilde{\mu}$
+        is the Lebesgue measure. So we have an equivalent
+        model of $[0,1]$ with the Lebesgue measure.
