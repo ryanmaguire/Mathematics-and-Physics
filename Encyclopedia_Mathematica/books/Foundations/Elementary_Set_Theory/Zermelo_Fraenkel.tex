@@ -1,7 +1,200 @@
 %------------------------------------------------------------------------------%
-\chapter{Set Theory}
-    \section{Elementary Set Theory}
-        \subsection{Basic Notions}
+\chapter{Zermelo-Fraenkel Set Theory}
+    We'll start from the basics and develop mathematics from an axiomatic
+    standpoint, adopting as truths the few postulates of Zermelo and
+    Fraenkel. We'll then add the axiom of choice to our toolbelt and
+    proceed from there to define and prove many of the basic and familiar
+    results and concepts of mathematics. It is important not to take anything
+    for granted even if something seems obvious. The existence of many types
+    of sets will be proved from ZFC, rather than simply accepting these
+    things as trivial truths.
+    \section{The Axioms of ZF}
+        The first thing to do is define what \textit{sets} are. These are the
+        most fundamental and basic structures in mathematics.
+        \begin{fdefinition}{Sets}{Sets}
+            A set is a collection of objects, called elements,
+            none of which is the set itself.
+        \end{fdefinition}
+        If we wish to stand on a truly solid foundation, it seems we're off
+        to a bad start. In the definition of sets we used the words
+        \textrm{collection} and \textrm{objects}, neither of which we have
+        defined. If we attempt to define these terms we would almost certainly
+        run into the same problem, and thus we can't proceed until we define
+        the entire English language. Even if we were to do such a task, we'd
+        inevitably end up with circular definitions. To begin stating
+        definitions and theorems we need the existence of a \textit{thing}.
+        Sets act as our thing. We know they exist, but we don't know how to
+        define them all to well. Nevertheless, we can describe how they behave
+        and what they can do, as well as how to obtain new sets from
+        pre-existing ones. This is what the axioms of Zermelo-Fraenkel set
+        theory aim to do.
+        \begin{fnotation}{Element Notation}{Element_Notation}
+            If $A$ is a set and if $x$ is an element of $A$, then we
+            denote this by writing $x\in{A}$. If $x$ is not an element of
+            $A$, we write $x\notin{A}$.
+        \end{fnotation}
+        As of yet we do not know that any sets exist. Pedagogically it seems
+        poor to wait to show examples, so we'll speak loosely for the moment
+        to allow one to familiarize themselves with the notation.
+        \begin{lexample}{Using Element Notation}{Using_Element_Notation}
+            Given a set $A$ that contains only a few objects, we
+            can represent $A$ by listing out the elements, separated by
+            commas, and enclosing them in braces. Suppose $A$ is the set
+            that contains three distinct objects, labelled $a$, $b$, and $c$.
+            We then write:
+            \begin{equation}
+                A=\{\,a,\,b,\,c\,\}
+            \end{equation}
+            If we are told that there is a fourth object $d$ that is different
+            from $a$, $b$, and $c$, then we can use the notation defined in
+            Not.~\ref{not:Element_Notation} to write the following:
+            \par\hfill\par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        a\in{A}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        d\notin{A}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            The notation $a\in{A}$ should be read as
+            \textit{a is an element of A}, or
+            \textit{a is contain in A}, or simply \textit{a is in A}.
+            Similarly, the notation $a\notin{A}$ should be read as
+            \textit{a is not an element of A}, or
+            \textit{a is not contained in A}.
+        \end{lexample}
+        The example shown in Ex.\ref{ex:Using_Element_Notation} is
+        \textit{finite}. Moreover it contains only three elements.
+        For larger sets we rely on other methods to write them down. One
+        such means is to indicate a pattern and use an ellipses to show that
+        it goes on. Such a description is vague and lacks rigor, but can be
+        helpful when the pattern is obvious.
+        \begin{lexample}{More Examples of Element Notation}
+                        {More_Examples_of_Element_Notation}
+            The set of all \textit{natural} numbers, also known as
+            positive integers, will soon be the center of attention as we
+            use the laws of set theory to prove its existence and unveil
+            many properties. We use the symbol $\mathbb{N}$ to denote the
+            set of all natural numbers. We can write:
+            \begin{equation}
+                \mathbb{N}=\{\,1,\,2,\,3,\,4,\,5,\,\dots\,\}
+            \end{equation}
+            Note that 0 (zero) is not contained in $\mathbb{N}$. Using our
+            developed notation, we can write:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        23\in\mathbb{N}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        0\notin\mathbb{N}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            Negative integers can also be used to illustrate our point:
+            $1\in\mathbb{N}$ and $\minus{1}\notin\mathbb{N}$. If we let
+            $\mathbb{Z}_{n}$ denote all of the positive integers between
+            1 and $n$, we can write:
+            \begin{equation}
+                \mathbb{Z}_{n}=\{1,\,2,\,\dots,\,n\,\}
+            \end{equation}
+            Using this we find that $17\in\mathbb{Z}_{18}$ but
+            $19\notin\mathbb{Z}_{18}$.
+        \end{lexample}
+        In our definition of a set (Def.~\ref{def:Sets}), we explicitly
+        required that sets cannot contain themselves. That is, if
+        $A$ is a set, then $A\notin{A}$. This requirement we introduced to
+        avoid paradoxes discovered by Bertrand Russell in 1901. Allow us to
+        neglect this requirement, for a moment, to reveal why it is essential.
+        Let's call a system of mathematics inconsistent if one can prove
+        a contradiction within the theory. In Naive Set Theory we allow the
+        \textit{axiom of unrestricted comprehension}. This allows us to
+        constructs sets as any defineable collection. That is, if we have a
+        proposition $P$, then we can define a set $A$ as the set of all objects
+        that satisfy $P$. We can write:
+        \begin{equation}
+            A=\{\,x\,:\,P(x)\,\}
+        \end{equation}
+        Problems with such a loose definiton arise instantly. Let $P$ be the
+        proposition \textit{true if x is a set, false otherwise}. Then
+        $A=\{\,x\,:\,P(x)\,\}$ can be read in plain English as the
+        \textit{set of all sets}. A natural question would be whether or not
+        $A$ then contains itself. That is, is $A\in{A}$? Russell's paradox
+        arises by defining normal sets to be sets $B$ such that $B\notin{B}$,
+        and abnormal sets to be sets $B$ such that $B\in{B}$. Using the
+        \textit{Law of the Excluded Middle} (which we will prove later), one
+        has that every set is either normal or abnormal.
+        \begin{ftheorem}{Russell's Paradox}{Russell_Paradox}
+            Naive Set Theory is inconsistent.
+        \end{ftheorem}
+        \begin{bproof}
+            For let $P$ be the proposition
+            \textit{true if x is normal, false otherwise}. Let $A$ be the
+            set defined by this proposition:
+            \begin{equation}
+                A=\{\,x\,:\,P(x)\,\}
+            \end{equation}
+            That is, $A$ is the set of all sets that do not contain themselves.
+            Suppose $A\in{A}$. If $A\in{A}$ then $P(A)$ is true. That is,
+            $A$ is a normal set. But normal sets do not contain themselves and
+            $A\in{A}$, a contradiction. Thus $A\notin{A}$. But if
+            $A\notin{A}$ than $P(A)$ is false. But if $P(A)$ is false, than
+            $A$ is a abnormal set. But then $A\in{A}$, a contradiction as
+            $A\notin{A}$. Thus $A\in{A}$ if and only if $A\notin{A}$, a
+            contradiction. Therefore, Naive Set Theory is inconsistent.
+        \end{bproof}
+        Our development of Zermelo-Fraenkel Set Theory is to avoid this
+        paradox and attempt to develop a consistent system of mathematics.
+        The first collection of axioms was proposed in 1908 by Ernst
+        Zermelo. Subtle problems were pointed out by Abraham Fraenkel
+        in 1920, and in 1921 the system of Zermelo-Fraenkel set theory came
+        to be. Combining this with the axiom of choice creates the system
+        commonly abbreviated as ZFC.
+        \par\hfill\par
+        The requirement that a set does not contain itself is sufficient to
+        avoid Russell's paradox. This is usually stated as the
+        \textit{axiom of regularity}. To avoid circular reasoning, we will
+        prove the equivalence of this axiom with our definition once the law
+        of the excluded middle has been proved. We will first develop the
+        other axioms and construct some of the basic objects of set theory.
+        \subsection{Subsets and Equality}
+            Subsets are sets that defined in terms of another given set
+            by simply removing some (or none, or all) of the elements.
+            \begin{fdefinition}{Subsets}{Subsets}
+                A subset of a set $B$ is a set $A$ such that for all
+                $x\in{A}$, it is true that $x\in{B}$. If $A$ is a subset
+                of $B$, we write $A\subseteq{B}$. Otherwise, we write
+                $A\nsubseteq{B}$.
+            \end{fdefinition}
+            The immediate application of this definition is allowing us
+            to define and describe the \textit{axiom schema of specification}.
+            \begin{faxiom}{Axiom Schema of Specification}
+                          {Axiom_Schema_of_Specification}
+                If $A$ is a set and if $P$ is a proposition, then there exists
+                a set $B$ such that $x\in{B}$ if and only if $x\in{A}$ and
+                $P(x)$ is true. We can write this as:
+                \begin{equation}
+                    B=\{\,x\in{A}\,:\,P(x)\,\}
+                \end{equation}
+            \end{faxiom}
+            Ax.~\ref{ax:Axiom_Schema_of_Specification} is different from the
+            inconsistent axiom of unrestricted comprehension in that we can
+            only speak of elements that are already defined and contained in
+            some other set. That is, this new axiom does not allow us to talk
+            about the \textit{set of all sets}, and so we have avoided the
+            crux of Russell's paradox.
             \begin{theorem}
                 \label{thm:Emptyset_Is_Subset}%
                 If $A$ is a set, then $\emptyset\subseteq{A}$.
