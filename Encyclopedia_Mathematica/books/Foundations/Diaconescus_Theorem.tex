@@ -1,0 +1,224 @@
+%------------------------------------------------------------------------------%
+\documentclass[crop=false,class=article]{standalone}                           %
+%----------------------------Preamble------------------------------------------%
+\input{preamble.tex}                                                           %
+%--------------------------Main Document---------------------------------------%
+\begin{document}
+    \title{Diaconescu's Theorem}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \tableofcontents
+    \vspace{10ex}
+    \section{Russell's Paradox}
+        Suppose we allow as an axiom of set theory that, given some
+        proposition $P$, there is a set $A$ defined by all of the things
+        $x$ such that $P(x)$ is true. In set-builder notation, we have:
+        \begin{equation}
+            A=\{\,x\,:\,P(x)\,\}
+        \end{equation}
+        This quickly leads to contradictions, showing that such a naive
+        version of set theory is inconsistent. For let $P$ be the
+        proposition \textit{true if} $x\notin{x}$. That is, $P(x)$ is true if
+        $x$ does not contain itself. These were occasionally called
+        \textit{proper} sets. Let $B$ be the set of all sets that
+        that $P(x)$ is true. The problem arises when we ask if $B\in{B}$.
+        \begin{ftheorem}{Russell's Paradox}{Russells_Paradox}
+            Naive Set Theory is inconsistent.
+        \end{ftheorem}
+        \begin{bproof}
+            For let $P$ be the proposition
+            \textit{true if x is a proper set, false otherwise}, and let $B$ be
+            the set of all $x$ such that $P(x)$ is true. If $B\in{B}$ then
+            $B$ is not a proper set, and thus $P(B)$ is false. But $B$ is the
+            set of all sets such that $P$ is true, and thus $P(B)$ is true, a
+            contradiction. Therefore $B\notin{B}$. But if $B\notin{B}$ then
+            $P(B)$ is false. But if $P(B)$ is false, then $B\in{B}$, a
+            contradiction. Thus $B\in{B}$ if and only if $B\notin{B}$, a
+            contradiction. Therefore, naive set theory is inconsistent.
+        \end{bproof}
+        Since the proof of this theorem relies on the law of the excluded middle,
+        at the very least naive set theory is incompatible with this rule. Since
+        this is the basis of \textit{proof by contradiction}, it would be nice
+        to frame the axioms of set theory in such a way as to allow one to
+        consistently use this law. This is achieved by the system known as
+        Zermelo-Fraenkel set theory. We will combine this with the axiom of
+        choice and prove that the law of the excluded middle is then a theorem.
+    \section{Zermelo-Fraenkel Set Theory}
+        Before we start proving things we will need the existence of
+        \textit{something}. So, we start by stating the existence of nothing.
+        \begin{faxiom}{Axiom of the Empty Set}{Axiom_of_the_Empty_Set}
+            There exists a set $\emptyset$ (the empty set) such that for
+            all $x$ it is true that $x\notin\emptyset$.
+        \end{faxiom}
+        To get something from nothing we will need to be able to build new sets
+        from the empty set. One way is to simply consider the set
+        $\{\,\emptyset\,\}$, and then we can consider
+        $\{\,\emptyset,\,\{\,\emptyset\,\}\,\}$, and so on. Such initial
+        constructions are justified by the axiom of the power set.
+        \begin{faxiom}{Axiom of the Power Set}{Axiom_of_the_Power_Set}
+            If $A$ is a set, then there exists a set $\mathcal{P}(A)$ such that,
+            for all $x$, $x\in\mathcal{P}(A)$ if and only if $x\subseteq{A}$.
+        \end{faxiom}
+        Using Ax.~\ref{ax:Axiom_of_the_Empty_Set} and
+        Ax.~\ref{ax:Axiom_of_the_Power_Set}, we can create a set that has at
+        least one element, namely $\mathcal{P}(\emptyset)$. Let us label this
+        set as 0. Similarly, we can create a new set $\mathcal{P}(0)$. Label
+        this as 1. Next, we build the sets $\{\,0\,\}$ and $\{\,0,\,1,\}$.
+        This requires the axioms of pairing and specification.
+        \begin{faxiom}{Axiom of Pairing}{Axiom_of_Pairing}
+            If $A$ and $B$ are sets, then there exists a set
+            $\mathcal{O}$ such that $A\in\mathcal{O}$ and $B\in\mathcal{O}$.
+        \end{faxiom}
+        Combining this with specification allows for many powerful constructions
+        in set theory, many of which are rightly taken for granted.
+        \begin{faxiom}{Axiom of Specification}{Axiom_of_Specification}
+            If $B$ is a set and $P$ is a proposition, then there is a set
+            $A$ such that $x\in{A}$ if and only if $x\in{B}$ and
+            $P(x)$ is true.
+        \end{faxiom}
+        This looks strikingly familiar to the axiom of naive set theory, which
+        we have seen is inconsistent. The crucial difference is that we are
+        constructing the new set $A$ as a subset of another given set. Before
+        we allowed for our sets to be constructed by any definable rule or
+        proposition, and this allowed for \textit{very} large objects and led to
+        contradiction. With the axiom of pairing and specification we can
+        now construct the set $\{\,0,\,1\,\}$.
+        \begin{ltheorem}{}{Union_of_Two_Exists}
+            If $A$ and $B$ are sets, then there exists a set $C$ such that
+            $x\in{A}$ if and only if $x=A$ or $x=B$. That is,
+            $C=\{\,A,\,B\,\}$.
+        \end{ltheorem}
+        \begin{proof}
+            For by the axiom of pairing (Ax.~\ref{ax:Axiom_of_Pairing}), there
+            exists a set $\mathcal{O}$ such that $A\in\mathcal{O}$ and
+            $B\in\mathcal{O}$. Let $P$ be the proposition
+            \textit{true if} $x=A$ \textit{or} $x=B$. By the axiom of
+            specification (Ax.~\ref{ax:Axiom_of_Specification}) there exists a
+            set $C$ such that $x\in\mathcal{O}$ and $P(x)$ is true. But then
+            $x\in{C}$ if and only if $x=A$ or $x=B$. This completes the proof.
+        \end{proof}
+        By letting $A=B=0$ we obtain the set $\{\,0\,\}$, and by letting
+        $A=0$ and $B=1$ we obtain $\{\,0,\,1\,\}$. There are a few more axioms
+        worth mentioning.
+        \begin{faxiom}{Axiom of Extensionality}{Axiom_of_Extensionality}
+            If $A$ and $B$ are sets, and if for all $x$, $x\in{A}$ if and only
+            if $x\in{B}$, then $A$ and $B$ are equal. That is, $A=B$.
+        \end{faxiom}
+        Combining this with the axiom of regularity allows us to discern which
+        sets are equal and which are not.
+        \begin{faxiom}{Axiom of Regularity}{Axiom_of_Regularity}
+            If $A$ is a non-empty set, then there is a $B\in{A}$ such that
+            $A\cap{B}=\emptyset$.
+        \end{faxiom}
+        While the axiom of regularity does seem bizarre, it's wording is to
+        explicitly prevent statements like \textit{the set of all sets}. This
+        also implies that, given a set $A$, $A\notin{A}$. Thus we've avoided
+        Russell's paradox. It also shows that $0$ and $1$ are different objects
+        since $0\in{1}$, by the definition of the power set, and thus by
+        regularity and extension, $0\ne{1}$. So the sets $\{\,0\,\}$ and
+        $\{\,0,\,1\,\}$ are also different. We wish discuss the axiom of choice
+        next. To do this requires the notion of unions over arbitrary sets.
+        This is achieved by the axiom of union.
+        \begin{faxiom}{Axiom of Union}{Axiom_of_Union}
+            If $\mathcal{O}$ is a non-empty set, then there exists a set
+            $\mathcal{F}$ such that $x\in\mathcal{F}$ if and only if there is
+            a set $\mathcal{U}\in\mathcal{O}$ such that $x\in\mathcal{U}$.
+        \end{faxiom}
+        To frame the axiom of union in clearer language, given a collection of
+        sets $\mathcal{O}$, the set $\mathcal{F}$ defined by:
+        \begin{equation}
+            \mathcal{F}=\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
+        \end{equation}
+        is a valid and well defined set. Finally, we introduce the
+        controversial \textit{axiom of choice}.
+        \begin{faxiom}{Axiom of Choice}{Axiom_of_Choice}
+            If $\mathcal{O}$ is a non-empty set, and if
+            $\mathcal{F}=\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}$,
+            then there is a function $f:\mathcal{O}\rightarrow\mathcal{U}$ such
+            that, for all $x\in\mathcal{O}$, $f(x)\in{x}$
+        \end{faxiom}
+        Such a function is called a choice function. The axiom can be made
+        obviously true if we word it one way, and obviously false if we word it
+        another. To show that it's obvious will require talking about products.
+        The Cartesian product can be easily defined using the above axioms
+        if we define order pairs by:
+        \begin{equation}
+            (a,\,b)=\{\,\{\,a\,\},\,\{\,a,\,b\,\}\,\}
+        \end{equation}
+        Applying the axiom of the power set twice gives us the existence
+        of the Cartesian product $A\times{B}$, which is the set of all
+        ordered pairs $(a,b)$ such that $a\in{A}$ and $b\in{B}$. If we wanted
+        to define ordered $n$ tuples we could construct some means of doing
+        this in a similar fashion to the above equation, but instead we will
+        frame this in terms of functions. We will need the existence of
+        $\mathbb{N}$.
+        \begin{faxiom}{The Axiom of Infinity}{Axiom_of_Infinity}
+            There exists a set $\mathcal{X}$ such that $\emptyset\in\mathcal{X}$
+            and for all $x\in\mathcal{X}$, $x\cup\{\,x\,\}\in\mathcal{X}$.
+        \end{faxiom}
+        By using the axiom of specification and the axiom of infinity, we take
+        $\mathbb{N}$ to be the \textit{smallest} subset of $\mathcal{X}$ such
+        that $\emptyset\in\mathbb{N}$ and for all $n\in\mathbb{N}$,
+        $n\cup\{\,n\,\}\in\mathbb{N}$. We write $n\cup\{\,n\,\}$ as
+        $n+1$, and from there the entirety of number theory is born. We've also
+        welled ordered $\mathbb{N}$ if we take $n\leq{m}$ to mean that
+        $n\subseteq{m}$. We define $\mathbb{Z}_{n}$ to be:
+        \begin{equation}
+            \mathbb{Z}_{n}=\{\,m\in\mathbb{N}\,:\,m<n\,\}
+        \end{equation}
+        This is justified by the axiom of specification. To define ordered
+        $n$-tuples, given a collection $\mathcal{O}$ of $n$ sets $A_{k}$,
+        we can define the product set as:
+        \begin{equation}
+            A=\{\,f:\mathbb{Z}_{n}\rightarrow\bigcup_{k=1}^{n}A_{k}\,:\,
+                  f(k)\in{A}_{k}\,\}
+        \end{equation}
+        This is very similar to how Cartesian products were defined: The set of
+        all ordered pairs whose first entry is in the first set, and whose
+        second entry lies in the second set. Now we have the set of all
+        functions on $\mathbb{Z}_{n}$ such that $k$ maps to the $k^{th}$ set
+        in the product. There was no restriction on the size of the product,
+        and we can allow for products over arbitrarily large collections of
+        sets. The axiom of choice is thus equivalent to the statement
+        \textit{The infinite product of non-empty sets is non-empty}. These
+        functions that identify $k$ with the $k^{th}$ set are precisely
+        choice functions.
+        \par\hfill\par
+        We conclude by presenting Diaconescu's theorem, which states that
+        Zermelo-Fraenkel set theory, together with the axiom of choice
+        (commonly abbreviated ZFC), implies the law of the excluded middle.
+    \section{Diaconescu's Theorem}
+        \begin{ftheorem}{Diaconescu's Theorem}{Diaconescus_Theorem}
+            If $P$ is a proposition on sets and if $x$ is a set, then either
+            $P(x)$ is true or $P(x)$ is false. That is, $P\lor\neg{P}$ is true.
+        \end{ftheorem}
+        \begin{bproof}
+            We have proven that the set $\{\,0,\,1\,\}$ exists. Let $P$ be a
+            proposition on sets and let $\mathcal{U}$ be defined by:
+            \begin{equation}
+                \mathcal{U}=\{\,x\in\{\,0,\,1\,\}\,:\,(x=0)\lor{P}\,\}
+            \end{equation}
+            Such a set exists by the axiom of specification. Similarly, let
+            $\mathcal{V}$ be defined by:
+            \begin{equation}
+                \mathcal{V}=\{\,x\in\{\,0,\,1\,\}\,:\,(x=1)\lor{P}\,\}
+            \end{equation}
+            By Thm.~\ref{thm:Union_of_Two_Exists}, we have that the set
+            $\{\,\mathcal{U},\,\mathcal{V}\,\}$ exists. By the axiom of
+            choice, there exists a choice function such that
+            $f(\mathcal{U})\in\mathcal{U}$ and $f(\mathcal{V})\in\mathcal{V}$.
+            But then, by the definition of $\mathcal{U}$, either
+            $f(\mathcal{U})=0$ or $P$ is true. Similarly, either
+            $f(\mathcal{V})=1$ or $P$ is true. But then, by the axiom of
+            extensionality, either $f(\mathcal{U})\ne{f}(\mathcal{V})$ or
+            $P$ is true. Again by the axiom of extensionality, and by the
+            definition of $\mathcal{U}$ and $\mathcal{V}$, if $P$ is true
+            then $\mathcal{U}=\mathcal{V}$. But then
+            $f(\mathcal{U})=f(\mathcal{V})$. But then, by the contrapositive,
+            $\neg{P}$ implies that $f(\mathcal{U})\ne{f}(\mathcal{V})$. But
+            by extensionality, either $f(\mathcal{U})=f(\mathcal{V})$ or
+            $(\mathcal{U})\ne{f}(\mathcal{V})$, and thus either $P$ or
+            $\neg{P}$. That is, $P\lor\neg{P}$ is true.
+        \end{bproof}
+\end{document}
