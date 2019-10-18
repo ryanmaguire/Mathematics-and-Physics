@@ -1,0 +1,642 @@
+\section{Topologies}
+    When one uses the notation developed for intervals on the real line $[a,b]$
+    and $(a,b)$, the former is called the \textit{closed} interval, and the
+    latter the \textit{open} interval. The clearest difference is that $[a,b]$
+    has it's endpoints, whereas $(a,b)$ does not. We can generalize this
+    further. For every point $x\in(a,b)$ there is some $\varepsilon>0$ such that
+    we can fit $(x-\varepsilon,x+\varepsilon)$ inside of the interval $(a,b)$.
+    Namely, define $\varepsilon$ to be:
+    \begin{equation}
+        \varepsilon=\frac{\min\{b-x,x-a\}}{2}
+    \end{equation}
+    This cannot be done for the closed unit interval. For if we let $x=a$, for
+    any $\varepsilon>0$ we have that $(a-\varepsilon,a+\varepsilon)$ has points
+    that fall outside of $[a,b]$. That is, all of the points between
+    $a-\varepsilon$ and $a$. This is the distinction we want to note between a
+    closed interval and an open interval. If we take the intersection of two
+    intervals $(a,b)$ and $(c,d)$, then either the result is the empty set or it
+    is once again an open interval. Lastly, if we take the union over an
+    arbitrary collection of open intervals, then end result may not be an open
+    interval, but it will still have the property that for any $x$ in the union
+    there is a $\varepsilon>0$ such that $(x-\varepsilon,x+\varepsilon)$ fits
+    inside the union. It is these two properties that we wish to capture:
+    Closure to finite intersections and arbitrary unions. We've already noted
+    that the intersection of two open intervals may be empty, and so we want to
+    claim that the empty set is open as well. Lastly, we may regard the entire
+    real line $\mathbb{R}$ as the \textit{interval} $(\minus\infty,\infty)$, and
+    because of this we wish to regard all of $\mathbb{R}$ to be open too. In
+    capturing these notions we can define a \textit{topology} on a set $X$.
+    \begin{fdefinition}{Topology}{Topology}
+        A topology on a set $X$ is a subset
+        $\tau\subseteq\mathcal{P}(X)$ such that $\emptyset\in\tau$, $X\in\tau$,
+        and for any subset $\mathcal{O}\subseteq\tau$, it is true that:
+        \begin{equation}
+            \bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}\in\tau
+        \end{equation}
+        And such that for all $A,B\in\tau$, it is true that $A\cap{B}\in\tau$.
+    \end{fdefinition}
+    There are many trivial examples of topologies on any set $X$, but the
+    trivial examples often provide excellent counterexamples for various
+    propositions. The two extreme topologies are the \textit{discrete} topology
+    and the \textit{chaotic} topology. The chaotic topology is also called the
+    trivial topology or the indiscrete topology.
+    \begin{fexample}{Discrete and Chaotic Topologies}{Discrete_and_Chaotic_Top}
+        The Discrete Topology\index{Discrete Topology} on a set $X$ is simply
+        $\tau=\mathcal{P}(X)$. That is, the \gls{power set} of $X$. This is
+        indeed a topology since it contains $\emptyset$, $X$, and is most
+        certainly closed to finite intersections. Moreover, from how the union
+        of a set is defined (Def.~\ref{def:Union_over_a_Set}) we have that it
+        is closed to arbitrary unions as wells. The chaotic topology%
+        \index{Chaotic Topology} is $\tau=\{\emptyset,X\}$. This is also a
+        topology, and we can check simply by computation. The empty set
+        and the whole space are contained within $\tau$, and there are only four
+        possible ways to perform unions and intersections. The commutativity of
+        union and intersection reduces this to three. We have:
+        \par
+        \begin{subequations}
+            \begin{minipage}[b]{0.49\textwidth}
+                \begin{align}
+                    \emptyset\cap\emptyset&=\emptyset\\
+                    \emptyset\cap{X}&=\emptyset\\
+                    X\cap{X}&=x
+                \end{align}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \begin{align}
+                    \emptyset\cup\emptyset&=\emptyset\\
+                    \emptyset\cup{X}&=X\\
+                    X\cup{X}&=x
+                \end{align}
+            \end{minipage}
+        \end{subequations}
+        \par\vspace{2.5ex}
+        The name for the discrete topology will be made clear later when we
+        discuss \textit{metric spaces}. The discrete topology on any set $X$
+        will always be a topology induced by the \textit{discrete metric} on
+        $X$, and thus we have that the discrete topology is always a metric
+        topology (these terms will be discussed in great detail later). The
+        chaotic topology is so named for one of it's strange properties. As we
+        will see once we've defined continuity, the chaotic topology has the
+        property that every single function $f:A\rightarrow{X}$ will be
+        continuous, regardless of what the topology chosen on $A$ was.
+    \end{fexample}
+    \begin{ldefinition}{Topological Space}{Topological_Space}
+        A topological space, denote $(X,\tau)$ is a subset $X$ and a topology
+        $\tau$ on $X$.
+    \end{ldefinition}
+    \begin{ldefinition}{Open Subsets}{Open_Subsets}
+        An open subset of a topological space $(X,\tau)$ is a set
+        $\mathcal{U}\subseteq{X}$ such that $\mathcal{U}\in\tau$.
+    \end{ldefinition}
+    \begin{theorem}
+        \label{thm:Emptyset_Is_Open}%
+        If $(X,\tau)$ is a topological space, then $\emptyset$ is open.
+    \end{theorem}
+    \begin{proof}
+        For since $(X,\tau)$ is a topological space, $\tau$ is a topology on $X$
+        (Def.~\ref{def:Topological_Space}). But then
+        $X\in\tau$ (Def.~\ref{def:Topology}) and thus $X$ is an open subset of
+        $(X,\tau)$ (Def.~\ref{def:Open_Subsets}). Therefore, etc.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Whole_Space_Is_Open}%
+        If $(X,\tau)$ is a topological space, then $X$ is an open subset.
+    \end{theorem}
+    \begin{proof}
+        For since $(X,\tau)$ is a topological space, $\tau$ is a topology on $X$
+        (Def.~\ref{def:Topological_Space}). But then $\emptyset\in\tau$
+        (Def.~\ref{def:Topology}) and thus $\emptyset$ is an open subset of
+        $(X,\tau)$ (Def.~\ref{def:Open_Subsets}). Therefore, etc.
+    \end{proof}
+    \begin{ldefinition}{Closed Subsets}{Closed_Subsets}
+        A closed subset of a topological space $(X,\tau)$ is a subset
+        $\mathcal{C}\subseteq{X}$ such that $X\setminus\mathcal{C}\in\tau$.
+        That is, the complement of $\mathcal{C}$ is an open subset of
+        $(X,\tau)$.
+    \end{ldefinition}
+    \begin{theorem}
+        \label{thm:Emptyset_Is_Closed}%
+        If $(X,\tau)$ is a topological space, then $\emptyset$ is closed.
+    \end{theorem}
+    \begin{proof}
+        For since $(X,\tau)$ is a topological space, $X$ is an open subset
+        (Thm.~\ref{thm:Whole_Space_Is_Open}). But $X\setminus\emptyset=X$, and
+        thus the complement of $\emptyset$ is open. Thus, $\emptyset$ is closed
+        (Def.~\ref{def:Closed_Subsets}). Therefore, etc.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Whole_Space_Is_Closed}%
+        If $(X,\tau)$ is a topological space, then $X$ is closed.
+    \end{theorem}
+    \begin{proof}
+        For since $(X,\tau)$ is a topological space, $\emptyset$ is an open
+        subset (Thm.~\ref{thm:Emptyset_Is_Open}). But $X\setminus{X}=\emptyset$,
+        and thus the complement of $X$ is open. Thus, $X$ is closed
+        (Def.~\ref{def:Closed_Subsets}). Therefore, etc.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Comp_of_Open_is_Closed}%
+        If $(X,\tau)$ is a topological space, and if $\mathcal{U}\subseteq{X}$
+        is open, then $X\setminus\mathcal{U}$ is closed.
+    \end{theorem}
+    \begin{proof}
+        For if $\mathcal{U}\subseteq{X}$ is a set, then
+        $X\setminus(X\setminus\mathcal{U})=\mathcal{U}$. But $\mathcal{U}$ is
+        open, and thus the complement of $X\setminus{U}$ is open. But then
+        $X\setminus{U}$ is closed (Def.~\ref{def:Closed_Subsets}).
+    \end{proof}
+    \begin{ldefinition}{Relative Topology}{Relative_Topology}
+        The relative topology of a subset $A\subseteq{X}$ in a topological space
+        $(X,\tau)$ is the set $\tau_{A}$ defined by:
+        \begin{equation}
+            \tau_{A}=\big\{\;A\cap\mathcal{U}\,:\,\mathcal{U}\in\tau\;\big\}
+        \end{equation}
+    \end{ldefinition}
+    \begin{theorem}
+        If $(X,\tau)$ is a topological space, if $A\subseteq{X}$, and if
+        $\tau_{A}$ is the relative topology on $A$, then $\tau_{A}$ is a
+        topology on $A$.
+    \end{theorem}
+    \begin{proof}
+        For since $\emptyset\in\tau$, and $\emptyset\cap{A}=\emptyset$, we have
+        that $\emptyset\in\tau_{A}$. Similarly, since $A\subseteq{X}$, and
+        since $X\in\tau$, we see that $A=A\cap{X}\in\tau_{A}$. If $\mathcal{O}$
+        is a subset of $\tau_{A}$, then there is a subset $\Delta\subseteq\tau$
+        such that:
+        \begin{equation}
+            \mathcal{O}=\big\{\;A\cap\mathcal{U}\,:\,\mathcal{U}\in\Delta\;\}
+        \end{equation}
+        Define $\mathcal{D}$ by:
+        \begin{equation}
+            \mathcal{D}=\bigcup_{\mathcal{U}\in\Delta}\mathcal{U}
+        \end{equation}
+        But then:
+        \begin{equation}
+            \bigcup_{\mathcal{V}\in\mathcal{O}}\mathcal{V}
+            =\bigcup_{\mathcal{U}\in\Delta}(A\cap\mathcal{U})
+            =A\cap\Big(\bigcup_{\mathcal{U}\in\Delta}\mathcal{U}\Big)
+            =A\cap\mathcal{D}
+        \end{equation}
+        But $\tau$ is a topology on $X$, and thus $\mathcal{D}\in\tau$
+        (Def.~\ref{def:Topology}). But then $A\cap\mathcal{D}\in\tau_{A}$
+        (Def.~\ref{def:Relative_Topology}). Thus, $\tau_{A}$
+        is closed to arbitrary unions.
+    \end{proof}
+    \begin{definition}
+        If $(X,\tau)$ is a topological space and $S\subset{X}$, then a set
+        $\mathcal{U}\subset S$ is said to be open in $S$ if and only if
+        $\mathcal{U}\in \mathscr{T}$, where $\mathscr{T}$ is the relative
+        topology on $S$.
+    \end{definition}
+    \begin{fdefinition}{Continuous Functions}{Cont_Func_Top}
+        A continuous function\index{Continuous Function} from a
+        topological space $(X,\tau_{X})$ to a topological space $(Y,\tau_{Y})$
+        is a function $f:X\rightarrow{Y}$ such that for all
+        $\mathcal{U}\in\tau_{Y}$ it is true that
+        $f^{\minus{1}}(\mathcal{U})\in\tau_{X}$. That is, the pre-image of open
+        sets is open.
+    \end{fdefinition}
+    \begin{theorem}
+        If $(X,\tau)$ is a topological space, and if $\textrm{id}_{X}$ is the
+        identity function of $X$, then $\textrm{id}_{X}$ is continuous.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. Then there is a $\mathcal{U}\in\tau$ such that
+        $\textrm{id}_{X}(\mathcal{U})\notin\tau$. But if $\mathcal{U}\in\tau$
+        then $\mathcal{U}\subseteq{X}$, and therefore
+        $\textrm{id}_{X}(\mathcal{U})=\mathcal{U}$. But then
+        $\textrm{id}_{X}(\mathcal{U})\in\tau$, a contradiction. Therefore,
+        $\textrm{id}_{X}$ is continuous.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\tau_{X})$ and $(Y,\tau_{Y})$ are topological spaces, and if
+        $f:X\rightarrow{Y}$ is a constant mapping, then $f$ is continuous.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. Then there is a $\mathcal{U}\in\tau_{Y}$ such that
+        $f^{\minus{1}}(\mathcal{U})\notin\tau_{X}$. But if $f$ is a constant
+        mapping, then there is a $y\in{Y}$ such that, for all $x\in{X}$ it is
+        true that $f(x)=y$. By the law of the excluded middle either
+        $y\in\mathcal{U}$ or $y\notin\mathcal{U}$. If $y\notin\mathcal{U}$ then
+        $f^{\minus{1}}(\mathcal{U})=\emptyset$. But $\tau_{X}$ is a topology and
+        therefore $\emptyset\in\tau_{X}$. Thus $y\in\mathcal{U}$. But if
+        $y\in\mathcal{U}$ then $f^{\minus{1}}(\mathcal{U})=X$. But $\tau_{X}$ is
+        a topology and thus $X\in\tau_{X}$. But then
+        $f^{\minus{1}}(\mathcal{U})\in\tau_{X}$, a contradiction. Therefore,
+        $f$ is continuous.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\tau_{X})$, $(Y,\tau_{Y})$, and $(Z,\tau_{Z})$ are topological
+        spaces, and if the functions $f:X\rightarrow{Y}$ and $g:Y\rightarrow{Z}$
+        are continuous, then $g\circ{f}:X\rightarrow{Z}$ is continuous.
+    \end{theorem}
+    \begin{proof}
+        For if $\mathcal{V}\in\tau_{Z}$ is and open set, then
+        $g^{\minus{1}}(\mathcal{V})\in\tau_{Y}$, since $g$ is continuous. But
+        then since $f$ is continuous,
+        $f^{\minus{1}}(g^{\minus{1}}(\mathcal{V}))\in\tau_{X}$
+        (Def.~\ref{def:Cont_Func_Top}). Thus $g\circ{f}$ is continuous.
+    \end{proof}
+    \begin{ldefinition}{Convergent Sequences In Topological Spaces}
+                       {Conv_Seq_Top}
+        A convergent sequence in a topological space $(X,\tau)$ is a sequence
+        $a:\mathbb{N}\rightarrow{X}$ such that there is an $x\in{X}$ such that,
+        for all $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$, there is an
+        $N\in\mathbb{N}$ such that, for all $n>N$, it is true that
+        $x_{n}\in\mathcal{U}$. We denote this by $a_{n}\rightarrow{x}$.
+    \end{ldefinition}
+    \begin{ldefinition}{Limits of Sequences in Topological Spaces}{Lim_Seq_Top}
+        A limit of a sequence $a:\mathbb{N}\rightarrow{X}$ in a topological
+        space $(X,\tau)$ is a point $x\in{X}$ such that $a_{n}\rightarrow{x}$.
+    \end{ldefinition}
+    \begin{theorem}
+        There exist topological spaces with convergent sequences that do not
+        have unique limits.
+    \end{theorem}
+    \begin{proof}
+        For let $X=\{1,2,3\}$, and let $\tau=\{\emptyset, \{1,2\},\{1,2,3\}\}$.
+        We see that $\emptyset,X\in \tau$, unions and intersections are in
+        $\tau,$ and thus $\tau$ is a topology. Let:
+        \begin{equation}
+            x_{n}=
+            \begin{cases}
+                1,&n\textrm{ odd}\\
+                2,&n\textrm{ even}
+            \end{cases}
+        \end{equation}
+        Then $x_n \rightarrow 1$ and $x_n \rightarrow 2$. To see this, let
+        $\mathcal{U}$ be an open set such that $1\in \mathcal{U}$. Our choices
+        are $\{1,2\}$ and $\{1,2,3\}$. Then for all $n\in \mathbb{N}$,
+        $x_{n}\in\mathcal{U}$, and thus $x_{n}\rightarrow{1}$. Similarly,
+        $x_n \rightarrow 2$. Convergence is not necessarily unique in
+        topological spaces.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\tau_{X})$ and $(Y,\tau_{Y})$ are topological spaces, if
+        $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence in $X$, and if
+        $f:X\rightarrow{Y}$ is a continuous function, then the sequence
+        $b:\mathbb{N}\rightarrow{Y}$ defined by $b_{n}=f(a_{n})$ is a convergent
+        sequence in $Y$.
+    \end{theorem}
+    \begin{proof}
+        For if $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence, then there
+        is a point $x\in{X}$ such that, for all $\mathcal{U}\in\tau_{X}$ such
+        that $x\in\mathcal{U}$, there is an $N\in\mathbb{N}$ such that for all
+        $n\in\mathbb{N}$ with $n>N$, it is true that $a_{n}\in\mathcal{U}$.
+        Suppose $b:\mathbb{N}\rightarrow{Y}$ is not a convergent sequence. Then
+        for all $y\in{Y}$ there exists $\mathcal{V}\in\tau_{Y}$ such that
+        $y\in\mathcal{V}$ and for all $N\in\mathbb{N}$ there exists an
+        $n\in\mathbb{N}$ such that $n>N$ and $b_{n}\notin\mathcal{V}$. Let
+        $y=f(x)$ and let $\mathcal{V}_{y}$ be such that $y\in\mathcal{V}_{y}$
+        and for all $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ such that
+        $n>N$ and $b_{n}\notin\mathcal{V}_{y}$. But $f$ is continuous, and thus
+        $f^{\minus{1}}(\mathcal{V}_{y})\in\tau_{X}$. Moreover, since $y=f(x)$,
+        it is true that $x\in{f}^{\minus{1}}(\mathcal{V}_{y})$. But then there
+        is an $N\in\mathbb{N}$ such that, for all $n\in\mathbb{N}$ with $n>N$,
+        it is true that $a_{n}\in{f}^{\minus{1}}(\mathcal{V}_{y})$. But then
+        for all such $n$ it is true that $f(a_{n})\in\mathcal{V}_{y}$. But
+        $b_{n}=f(a_{n})$ and there exists an $n>N$ such that
+        $b_{n}\notin\mathcal{V}_{y}$, a contradiction. Therefore, $b$ is a
+        convergent sequence in $Y$.
+    \end{proof}
+    \subsection{Separation Axioms}
+    \begin{ldefinition}{Fr\'{e}chet Topological Space}
+                       {Frechet_Topological_Space}
+        A Fr\'{e}chet Topological Space is a topological space $(X,d)$ such that
+        for all distinct $x,y\in{X}$ there is an open set $\mathcal{U}$ such
+        that $x\in\mathcal{U}$ and $y\notin\mathcal{U}$.
+    \end{ldefinition}
+    \begin{theorem}
+        If $(X,\tau)$ is a Fr\'{e}chet Topological space, and if $x\in{X}$,
+        $\{x\}$ is closed subset.
+    \end{theorem}
+    \begin{proof}
+        For if $x\in{X}$, then for all $y\in{X}$ such that $y\ne{x}$, there is
+        a $\mathcal{U}_{y}\in\tau$ such that $x\notin\mathcal{U}_{y}$ and
+        $y\in\mathcal{U}_{y}$. Define $\mathcal{V}$ by:
+        \begin{equation}
+            \mathcal{V}\;=\bigcup_{y\in{X}\setminus\{x\}}\mathcal{U}_{y}
+        \end{equation}
+        But then $\mathcal{V}\in\tau$, since $\tau$ is a topology
+        (Def.~\ref{def:Topology}). And moreover, for all $y\in{X}$ such that
+        $y\ne{x}$, it is true that $y\in\mathcal{V}$. Lastly,
+        $x\notin\mathcal{V}$. Therefore $X\setminus\mathcal{V}=\{x\}$. But if
+        $\mathcal{V}$ is open, then $X\setminus\mathcal{V}$ is closed
+        (Thm.~\ref{thm:Comp_of_Open_is_Closed}). Therefore, etc.
+    \end{proof}
+    \begin{ldefinition}{Hausdorff Topological Space}
+          {Hausdoff_Top}
+        A Hausdorff Topological space is a topological space
+        $(X,\tau)$ such that, for all distinct points
+        $x,y\in{X}$, there are disjoint open subsets
+        $\mathcal{U}_{x}$, $\mathcal{U}_{y}\in\tau$ such that
+        $x\in\mathcal{U}_{x}$ and $y\in\mathcal{U}_{y}$.
+    \end{ldefinition}
+    \begin{theorem}
+        If $(X,\tau)$ is a Hausdorff topological space, then
+        it is a Fr\'{e}chet topological space.
+    \end{theorem}
+    \begin{proof}
+        For if $x$ and $y$ are distinct points in $X$ and if
+        $(X,\tau)$ is a Hausdorff topological space, then there
+        is are disjoint open subsets $\mathcal{U}_{x}$ and
+        $\mathcal{U}_{y}$ such that $x\in\mathcal{U}_{x}$ and
+        $y\in\mathcal{U}_{y}$. But then there is a open subset
+        such that $x\notin\mathcal{U}_{y}$ and
+        $y\in\mathcal{U}_{y}$. Therefore, $(X,\tau)$ is a
+        Fr'{e}chet topological space.
+    \end{proof}
+        \begin{theorem}
+        Convergence in a Hausdorff Space $(X,\tau)$ is unique.
+        \end{theorem}
+        \begin{proof}
+        $[x_n \rightarrow x\in X]\land [x_n \rightarrow y\in X]\land[x\ne y]\Rightarrow [\exists \mathcal{U},\mathcal{V}:\mathcal{U}\cap \mathcal{V}=\emptyset\land x\in \mathcal{U}\land y\in \mathcal{V}]$. $[x_n\rightarrow x]\Rightarrow [\exists N_1\in \mathbb{N}:n>N_1\Rightarrow x_n \in \mathbb{N}]$. $[x_n\rightarrow y]\Rightarrow [N_2\in \mathbb{N}:n>N\Rightarrow x_n \in \mathcal{V}]$. $[n>\max\{N_1,N_2\}]\Rightarrow [x_n \in \mathcal{U}\cap \mathcal{V}]$, a contradiction. Therefore, etc.
+        \end{proof}
+        \begin{definition}
+        A topological space $(X,\tau)$ is said to be regular if for each closed subset $E\subset X$ and for each point $x\in E^c$, there exist disjoint open sets $\mathcal{U}$ and $\mathcal{V}$ such that $x\in \mathcal{U}$ and $E\subset \mathcal{V}$.
+        \end{definition} 
+        \begin{definition}
+        In a topological space $(X,\tau)$, a point $p$ is said to have a neighborhood $S\subset X$ if and only if there is a set $\mathcal{U}\subset S$ such that $\mathcal{U}\in \tau$ and $p\in \mathcal{U}$.
+        \end{definition}
+        \begin{definition}
+        A $T_3$ space is a regular $T_1$ space.
+        \end{definition}
+        \begin{theorem}
+        A $T_3$ space $(X,\tau)$ is a $T_2$ space.
+        \end{theorem}
+        \begin{proof}
+        Let $x,y\in X$ be distinct. As a $T_3$ space is $T_1$, $\{x\}$ is closed. Thus $\exists \mathcal{U},\mathcal{V}\in\tau: \mathcal{U}\cap\mathcal{V}=\emptyset, \{x\}\subset \mathcal{U}$, and $y\in \mathcal{V}$.
+        \end{proof}
+        \begin{definition}
+        A topological space $(X,\tau)$ is said to be normal if and only if for all disjoint closed subsets $E,F\subset X$, there are disjoint open sets $\mathcal{U}$ and $\mathcal{V}$ such that $E\subset \mathcal{U}$ and $F\subset \mathcal{V}$.
+        \end{definition}
+        \begin{definition}
+        A $T_4$ space is a normal $T_1$ space.
+        \end{definition}
+        \begin{theorem}
+        A $T_4$ space $(X,\tau)$ is a $T_3$ space.
+        \end{theorem}
+        \begin{proof}
+        A $T_4$ space is $T_1$. If $E\underset{Closed}\subset X$ and $x\in E^c$, then $\{x\}$ is closed. Thus $\exists \mathcal{U},\mathcal{V}\in\tau: \mathcal{U}\cap\mathcal{V}=\emptyset, \{x\}\subset \mathcal{U}$, and $E\subset \mathcal{V}$.
+        \end{proof}
+        \begin{definition}
+        A homeomorphism between two topological spaces $(X,\tau)$ and $(Y,\tau)$ is a continuous bijection $f:X\rightarrow Y$ such that $f^{-1}:Y\rightarrow X$ is continuous.
+        \end{definition}
+        \begin{definition}
+        If $(X,\tau)$ is a topological space, and $S\subset X$, then an open cover $\mathcal{O}$ of $S$ is a set of open sets $\mathcal{U}_{\alpha}$ such that $S\subset \cup_{\alpha\in A} \mathcal{U}_{\alpha}$, where $A$ is some index set.
+        \end{definition}
+        \begin{definition}
+        A subcover of an open cover $\mathcal{O}$ is a subset of $\mathcal{O}$ that is also a cover.
+        \end{definition}
+        \begin{definition}
+        If $(X,\tau)$ is a topological space and $S\subset X$, then $S$ is said to be compact if and only if every open cover of $S$ has a finite subcover.
+        \end{definition}
+        \begin{theorem}
+        If $S$ is a compact subset of a Hausdorff space, then for all $x\in S^c$ there are disjoint open sets $\mathcal{U}$ and $\mathcal{V}$ such that $x\in \mathcal{U}$ and $S\subset \mathcal{V}$.
+        \end{theorem}
+        \begin{proof}
+        For let $x\in S^c$. For all $y\in S$ there are disjoint open sets $\mathcal{U}_y$ and $\mathcal{V}_y$ such that $x\in \mathcal{U}$ and $y\in \mathcal{V}$. But then $\cup_{y\in S} \mathcal{U}_y$ is an open cover of $S$. As $S$ is compact, there is a finite subcover, that is sets $\mathcal{V}_{y_1},\hdots, \mathcal{V}_{y_n}$ that cover $S$. But then $\cap_{k=1}^{n} \mathcal{U}_{y_k}$ is open, contains $x$ and is disjoint from $\cup_{k=1}^{n} \mathcal{V}_{y_k}$. Therefore, etc.
+        \end{proof}
+        \begin{theorem}
+        Every compact subset of a Hausdorff space $(X,\tau)$ is closed.
+        \end{theorem}
+        \begin{proof}
+        Let $S$ be a compact subset of a X. $\forall x\in S^c, \exists \mathcal{U}_x\in \tau:\mathcal{U}_x\cap S = \emptyset:x\in \mathcal{U}_x$. But then $S^c \subset \underset{x\in S^c}\cup\mathcal{U}_x$. But also $S\cap (\cup_{x\in S^c}\mathcal{U}_x) = \emptyset$. Thus $S^c = \cup_{x\in S^c}\mathcal{U}_x$, and therefore $S^c$ is open. Thus $S$ is closed.
+        \end{proof}
+        \begin{theorem}
+        If $S$ is a closed subset of a compact space $(X,\tau)$, $S$ is compact.
+        \end{theorem}
+        \begin{proof}
+        For let $\mathcal{O}$ be an open cover of $S$. As $S$ is closed, $S^c$ is open, and thus $\{S^c\} \cup \mathcal{O}$ is an open cover $X$. As $X$ is compact, there is a finite subcover, call it $\mathscr{O}$. But then $\mathscr{O}\setminus \{S^c\}$ is a finite subcover $\mathcal{O}$ that covers $S$. Thus, etc.
+        \end{proof}
+        \begin{theorem}
+        If $f:X\rightarrow Y$ is continuous and $X$ is compact, then $f(X)\subset Y$ is compact.
+        \end{theorem}
+        \begin{proof}
+        Let $\mathcal{O}$ be an open cover of $f(X)$. As $f$ is continuous, $\mathcal{U}\in\mathcal{O}\Rightarrow f^{-1}(\mathcal{U})$ is open in $X$. Thus $\cup_{\mathcal{U}\in \mathcal{O}} f^{-1}(\mathcal{U})$ is an open cover of $X$. As $X$ is compact, there is a finite subcover, say $\mathscr{O}$. But then $\cup_{\mathcal{V}\in \mathscr{O}} \mathcal{V}$ is a finite subcover of $\mathcal{O}$. Therefore, etc.
+        \end{proof}
+        \begin{theorem}
+        If $f:X\rightarrow Y$ is a continuous bijection, $X$ is compact and $Y$ is Hausdorff, then $f$ is a homeomorphism.
+        \end{theorem}
+        \begin{proof}
+        If suffices to show that if $\mathcal{U}$ is open in $X$, then $f(\mathcal{U})$ is open in $f(X)$. Let $\mathcal{U}$ be open in $X$. As $X$ is compact and $\mathcal{U}$ is open, $\mathcal{U}^c$ is compact. But then $f(\mathcal{U}^c) = f(X)\setminus f(\mathcal{U})$ is compact. Thus $f(X)\setminus f(\mathcal{U})\underset{Closed}\subset f(X)\Rightarrow f(\mathcal{U})\underset{Open}\subset f(X)$.
+        \end{proof}
+        \begin{definition}
+        A topological space $(X,\tau)$ is said to be disconnected if and only if there are two disjoint nonempty open sets $\mathcal{U}$ and $\mathcal{V}$ such that $X = \mathcal{U}\cup \mathcal{V}$.
+        \end{definition}
+        \begin{theorem}
+        A topological space $(X,\tau)$ is disconnected if and only if there are two non-empty disjoint closed set $\mathcal{C}$ and $\mathcal{D}$ such that $X=\mathcal{C}\cup\mathcal{D}$.
+        \end{theorem}
+        \begin{proof}
+        $\big[\exists \mathcal{U},\mathcal{V}\in \tau: [\mathcal{U}\cap \mathcal{V}=\emptyset]\land [X=\mathcal{U}\cup \mathcal{V}]\land [\mathcal{U},\mathcal{V}\ne \emptyset]\big]\Rightarrow [X = \mathcal{U}^c\cup \mathcal{V}^c]$ thus, $X$ is the union of disjoint, non-empty closed set. $[\mathcal{C}^c,\mathcal{D}^c\in \tau]\land[\mathcal{C},\mathcal{V}\ne\emptyset]\land[\mathcal{C}\cap \mathcal{D}=\emptyset]\land[\mathcal{C}\cup\mathcal{D}=X]\Rightarrow [X=\mathcal{C}^c\cup\mathcal{D}^c].$ Thus $X$ is disconnected.
+        \end{proof}
+        \begin{theorem}
+        $(X,\tau)$ is disconnected if and only if there is a proper, nonempty set $A\subset X$ that is both open and closed.
+        \end{theorem}
+        \begin{proof}
+        $\big[\exists \mathcal{U},\mathcal{V}\in \tau:[\mathcal{U}\cap \mathcal{V}=\emptyset]\land [X=\mathcal{U}\cup\mathcal{V}]\land[\mathcal{U},\mathcal{V}\ne \emptyset]\big]\Rightarrow [\mathcal{U}^c = \mathcal{V}]\Rightarrow [\mathcal{U}^c\in \tau]$. Thus, $\mathcal{U}$ is open and closed.
+        \end{proof}
+        \begin{definition}
+        A topological space is called connected if and only if it is not disconnected.
+        \end{definition}
+        \begin{theorem}
+        If $f:X\rightarrow Y$ is a continuous function and $X$ is connected, then $f(X)$ is connected.
+        \end{theorem}
+        \begin{proof}
+        For let $f$ be continuous and $X$ be connected. Suppose $f(X)$ is disconnected. Then there are two nonempty open disjoint sets $\mathcal{U}$ and $\mathcal{V}$ such that $f(X) = \mathcal{U}\cap \mathcal{V}$. But then their preimage is open, and thus $X=f^{-1}(\mathcal{U})\cup f^{-1}(\mathcal{V})$, and thus $X$ is disconnected, a contradiction. Thus $f(X)$ is connected.
+        \end{proof}
+        \begin{definition}
+        If $(X,\tau)$ and $(Y,\tau')$ are topological spaces, then the product topology on the set $X\times Y$ is the set $\mathscr{T} = \{\mathcal{U}\times \mathcal{V}:\mathcal{U}\in\tau,\mathcal{V}\in \tau'\}$.
+        \end{definition}
+        \begin{theorem}
+        The product topology is a topology.
+        \end{theorem}
+        \begin{proof}
+        \
+        \begin{enumerate}
+        \item As $\emptyset \in \tau$ and $\emptyset\in \tau'$, $\emptyset =\emptyset\times \emptyset \in \mathscr{T}$.
+        \item If $\mathscr{U}_{\alpha}\in \mathscr{T}$, then $\cup_{\alpha} \mathscr{U}_{\alpha} = \cup_{\alpha} (\mathcal{U}_{\alpha},\mathcal{V}_{\alpha})$. As $\tau$ and $\tau'$ are topologies, $\cup_{\alpha} \mathcal{U} \in \tau$ and $\cup_{\alpha}\mathcal{V}_{\alpha} \in \tau'$. Thus, $\cup_{\alpha}\mathscr{U}_{\alpha} \in \mathscr{T}$.
+        \item $\cap_{k=1}^{n} \mathscr{U}_{k} = \cap_{k=1}^{n} (\mathcal{U}_k,\mathcal{V}_k)$. As $\tau$ and $\tau'$ are topologies, $\cap_{k=1}^{n}\mathcal{U}_k \in \tau$ and $\cap_{k=1}^{n}\mathcal{V}_{k} \in \tau'$. Thus $\cap_{k=1}^{n} \mathscr{U}_k \in \mathscr{T}$
+        \end{enumerate}
+        \end{proof}
+        \begin{definition}
+        The projection map $\pi_1$ is defined as $\pi_1:X_1\times X_2\rightarrow X_1$ by $(x_1,x_2)\mapsto x_1$. Similarly for $\pi_2$.
+        \end{definition}
+        \begin{theorem}
+        The projection map is continuous.
+        \end{theorem}
+        \begin{proof}
+        Let $\pi_1:X_1\times X_2\rightarrow X_1$ be the projection map, $X\times Y$ having the project topology. Let $\mathcal{U}\underset{Open}\subset X_1$. Then $f^{-1}(\mathcal{U}) = \{(x_1,x_2):x_1\in \mathcal{U}, x_2\in X_2\}$. But $\mathcal{U}$ and $X_2$ are open, and thus $f^{-1}(\mathcal{U})$ is open (In the product topology).
+        \end{proof}
+        \begin{definition}
+        An open mapping is a function $f:X\rightarrow Y$ such that $\mathcal{U}\underset{Open}\subset X\Rightarrow f(\mathcal{U}) \underset{Open}\subset Y$.
+        \end{definition}
+        \begin{theorem}
+        The projection map is an open mapping.
+        \end{theorem}
+        \begin{proof}
+        For let $\mathscr{U}$ be an open set in $X\times Y$ (With the product topology). That is, there are open sets $\mathcal{U}\subset X$ and $\mathcal{V}\subset Y$ such that $\mathscr{U}= \{(x,y):x\in \mathcal{U},y\in \mathcal{V}\}$, Then $\pi_1(\mathscr{U}) =\mathcal{U}$, which is open. Therefore, etc.
+        \end{proof}
+        \begin{theorem}
+        If $X$ and $Y$ are compact, then $X\times Y$ is compact with the product topology.
+        \end{theorem}
+        \begin{proof}
+        For let $\mathscr{O}$ be an open cover of $X\times Y$. Then $\{\pi_X(\mathscr{U}):\mathscr{U}\in \mathscr{O}\}$ is an open cover of $X$ and $\{\pi_{Y}(\mathscr{V}):\mathscr{V}\in \mathscr{O}\}$ is an open cover of $Y$. As $X$ and $Y$ are compact, there exist finite subcovers of each, say $\mathcal{O}_X$ and $\mathcal{O}_Y$. But then $\{\pi_{X}^{-1}(\mathcal{U}):\mathcal{U}\in \mathcal{O}_X\}\cup \{\pi_{Y}^{-1}(\mathcal{V}):\mathcal{V}\in \mathcal{O}_Y\}$ is a finite subcover of $\mathscr{O}$. Thus, $X\times Y$ is compact.
+        \end{proof}
+        \begin{theorem}
+        If $X,Y\subset Z$ are compact, $X\cup Y$ is compact.
+        \end{theorem}
+        \begin{proof}
+        Let $\mathcal{O}$ be an open cover of $X\cup Y$. Then there is a finite subcover of $X$ and a finite subcover of $Y$, and thus the combination of these subcovers is a cover of $X\cup Y$.
+        \end{proof}
+    \section{Old Notes}
+    \begin{example}
+        The Sierpinski topology
+        on $\{0,1\}$ is the set
+        $\{\emptyset,\{0\},\{0,1\}\}$.
+    \end{example}
+    \begin{theorem}
+        If $T_{\omega}$ is a set of topologies on
+        a topological space $X$, then
+        $\bigcap{T_{\omega}}$ is a topology on $X$.
+    \end{theorem}
+    However, the union of topologies may not be a
+    topology. A topology $\tau_{1}$ is set to
+    be finer than a topology $\tau_{0}$ if
+    $\tau_{0}\subset\tau_{1}$. An accumulation point
+    of a set $A$ is a point $x$ such that, for
+    all open neighborhoods $U$ of $A$,
+    $U\cap{A}\ne\emptyset$.
+    \begin{theorem}[Bolzano-Weierstrass Theorem]
+        If $X$ is a bounded, infinite subset of
+        $\mathbb{R}$, then $X$ has at least
+        one accumulation point.
+    \end{theorem}
+    \begin{definition}
+        The Euclidean topology on
+        $\mathbb{R}$ is the set of
+        all open sets in the sense that
+        $U$ is open if, for all $x\in{U}$,
+        there is an $\varepsilon>0$ such
+        that $(x-\varepsilon,x+\varepsilon)\subset{U}$.
+    \end{definition}
+    \begin{definition}
+        A closed subset of a topological space
+        $(X,\tau)$ is a set $A$ such that
+        $A^{C}\in\tau$.
+    \end{definition}
+    \begin{theorem}
+        The intersection of an arbitrary collection of
+        closed sets is closed. The union of finitely
+        many closed sets is closed.
+    \end{theorem}
+    \begin{proof}
+        Apply DeMorgan's theorem to the properties
+        of a topological space $\tau$.
+    \end{proof}
+    \begin{definition}
+        The closure of a set $A$,
+        denoted $\overline{A}$, is the
+        intersection of all closed sets
+        containing $A$.
+    \end{definition}
+    \begin{theorem}
+        If $A$ is a set in a topological space
+        $(X,\tau)$, then $A\subset\overline{A}$.
+    \end{theorem}
+    There's also something called the derived
+    set of a set $A$. The interior of $A$
+    is the union of all open subset of $A$.
+    The boundary of $A$ is the set difference
+    of the closure of $A$ and the interior of
+    $A$.
+    \begin{theorem}
+        If $A$ is a set, then
+        the interior of $A$ is equal to
+        $(\overline{A^{C}})^{C}$
+    \end{theorem}
+    \begin{definition}
+        A dense subset of a topological
+        space $(X,\tau)$ is a set $A$
+        such that $\overline{A}=X$.
+    \end{definition}
+    \begin{definition}
+        The neighborhood system of a point
+        $x$ in a topological space $(X,\tau)$
+        is the set of all neighborhoods of
+        $x$.
+    \end{definition}
+    \begin{definition}
+        A sequence in a topological space
+        $a_{n}$ converges to a point $a$ if,
+        for all open neighborhoods $U$ of $a$,
+        there is an $N\in\mathbb{N}$ such that,
+        for all $n>N$, $a_{n}\in{U}$.
+    \end{definition}
+    Limits of sequences in topological spaces are NOT
+    necessarily unique. This is different from convergence
+    in $\mathbb{R}$, where convergence is always unique.
+    \begin{definition}
+        The relative topology of a
+        topological space $(X,\tau)$ with
+        respect to a subset $A\subset{X}$
+        is $\tau_{A}=\{A\cap{U}:U\in\tau\}$
+    \end{definition}
+    \begin{theorem}
+        If $(X,\tau)$ is a topological space and
+        $A\subset{X}$, then
+        $(A,\tau_{A})$ is a topological space.
+    \end{theorem}
+    $(A,\tau_{A})$ is called a subspace of
+    $(X,\tau)$.
+    \begin{definition}
+        A basis of a topological space
+        $(X,\tau)$ is a subset $B$ of
+        $\tau$ such that every element
+        of $\tau$ is the union of some of the
+        elements of $B$.
+    \end{definition}
+    \begin{theorem}
+        A subset $B\subset\tau$ is a basis
+        for $\tau$ if and only if for all
+        $U\in\tau$ and all $x\in{U}$, there is
+        a $V\in{B}$ such that
+        $x\in{V}\subset{U}$.
+    \end{theorem}
+    \begin{theorem}
+        If $B$ is a basis of $\tau$, then
+        $U$ is open if and only if for all
+        $x\in{U}$ there is a $V\in{B}$ such that
+        $x\in{V}\subset{U}$.
+    \end{theorem}
+    \begin{theorem}
+        $\mathbb{R}$ has a countable basis.
+    \end{theorem}
+    \begin{proof}
+        For the set of open intervals
+        $(p,q)$, where $p$ and $q$ are rational
+        numbers, forms a basis for the standard
+        topology on $\mathbb{R}$. Moreover, this
+        is countable.
+    \end{proof}
+    \begin{definition}
+        If $(X,\tau)$ is a topological space
+        and $S\subset\tau$, then $S$ is a subbase
+        if a finite intersection of elements of $S$
+        forms a base of $\tau$.
+    \end{definition}
+    \begin{definition}
+        A local base for a point
+        $x$ in a topological space $(X,\tau)$
+        is a set of open neighborhods $B_{x}$ of
+        $x$ such that for all open neighborhoods $G$
+        of $x$, there is a $G_{x}\in{B_{x}}$ such that
+        $x\in{G_{x}}\subset{G}$.
+    \end{definition}
+    \begin{theorem}
+        If $(X,\tau)$ is a topological space, $x\in{X}$,
+        and if $B$ is a base for $\tau$, then
+        the set of elements $G_{x}$ in $B$ such that
+        $x\in{G_{x}}$ is a local base for $x$.
+    \end{theorem}
