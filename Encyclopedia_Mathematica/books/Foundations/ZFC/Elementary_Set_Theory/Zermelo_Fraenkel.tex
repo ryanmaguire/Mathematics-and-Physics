@@ -169,6 +169,9 @@
         \begin{faxiom}{Axiom of the Empty Set}{Axiom_of_the_Empty_Set}
             There exists a set $\emptyset$ (the \gls{empty set}) such that for
             all $x$ it is true that $x\notin\emptyset$.
+            \begin{equation*}
+                \exists_{\emptyset}:\forall_{x}\big(\neg(x\in\emptyset)\big)
+            \end{equation*}
         \end{faxiom}
         The empty set is the set that contains no elements. As such, some choose
         to write $\emptyset=\{\}$. Note that the empty set is different from the
@@ -189,21 +192,50 @@
         \par\hfill\par
         To rigorously show that the examples in the previous paragraph are equal
         requires a definition of equality. This is phrased in Zermelo-Fraenkel
-        set theory as the \textit{axiom of extensionality}.
+        set theory as the \textit{axiom of extensionality}. First, we define the
+        use of the symbol ``$=$'', equality.
+        \begin{fnotation}{Equality}{Equality}
+            If $A$ and $B$ are sets, then $A=B$ if and only if for all sets
+            $C$, $C\in{A}$ if and only if $C\in{B}$, and for all sets $D$,
+            $A\in{D}$ if and only if $B\in{D}$.
+            \begin{equation*}
+                \forall_{A}\forall_{B}(A=B)
+                \Leftrightarrow\forall_{C}(C\in{A}\Leftrightarrow{C}\in{B})
+                \land\forall_{D}(A\in{D}\Leftrightarrow{B}\in{D})
+            \end{equation*}
+        \end{fnotation}
+        In ZFC there is only one symbol that is left undefined and that is
+        $\in$. All other symbols are to be derived from this, including that of
+        equality. The axiom of extensionality says that to check for equality it
+        suffices to check that for all $C$, $C\in{A}$ if and only if $C\in{B}$.
+        That is, there is no need to check that for all $D$, $A\in{D}$ if and
+        only if $B\in{D}$. For simplicity, the axiom of extensionality may
+        simply be taken as the definition of equality.
         \begin{faxiom}{Axiom of Extensionality}{Axiom_of_Extensionality}
             If $A$ and $B$ are sets, and if for all $x$ it is true that
             $x\in{A}$ if and only if $x\in{Y}$, then $A=B$. That is, $A$ and $B$
             are equal sets.
+            \begin{equation*}
+                \forall_{x}\forall_{y}:
+                \forall_{z}(z\in{x}\Leftrightarrow{z}\in{y})
+                \Rightarrow{x}=y
+            \end{equation*}
         \end{faxiom}
-        We won't adopt this axiom directly, but restate equality as a definition
-        using the language of subsets. This will make proving various things
-        easier in the proceeding sections. The notions are equivalent. Subsets
-        are sets that are defined in terms of another given set by simply
-        removing some (or none, or all) of the elements.
+        We won't adopt this axiom
+        directly, but restate equality as a definition using the language of
+        subsets. This will make proving various things easier in the proceeding
+        sections. The notions are equivalent. Subsets are sets that are defined
+        in terms of another given set by simply removing some (or none, or all)
+        of the elements.
         \begin{fdefinition}{Subsets}{Subsets}
             A \gls{subset} of a \gls{set} $B$ is a set $A$ such that for all
             $x\in{A}$, it is true that $x\in{B}$. If $A$ is a subset of $B$, we
             write $A\subseteq{B}$. Otherwise, we write $A\nsubseteq{B}$.
+            \begin{equation*}
+                \forall_{A}\forall_{B}(A\subseteq{B})
+                \Leftrightarrow
+                \forall_{x}(x\in{A}\Rightarrow{x}\in{B})
+            \end{equation*}
         \end{fdefinition}
         We can often visualize sets as blobs in the plane. We can use such a
         visual to represent what subsets are as well
@@ -216,8 +248,19 @@
             \label{fig:Subset_Blobs}
         \end{figure}
         We can use subsets to define equality and to provide examples
-        of the \textit{axiom schema of specification}. We will do this,
-        but first provide examples of subsets.
+        of the \textit{axiom schema of specification}. It is important to note
+        the distinction between the symbols $\in$ and $\subseteq$. The symbol
+        $\in$ is used to denote that some object $x$ is an \textit{element} of
+        some set. That is, $x\in{A}$ indicates that $x$ is an element of $A$.
+        This does not necessarily imply $x\subseteq{A}$, but this \textit{does}
+        imply that $\{x\}\subseteq{A}$. That is, if $x\in{A}$, then the set that
+        contains only $x$ is a subset of $A$. Moreover, the notions are not
+        mutually exclusive. It is possible for $A$ to be a set such that
+        $x\in{A}$ and $x\subseteq{A}$. For let $A=\{\emptyset\}$. As well we
+        soon see, for any set $A$ it is true (vacuously) that
+        $\emptyset\subseteq{A}$. But from how $A$ is defined, we have that
+        $\emptyset\in{A}$. Thus it is true that both $\emptyset\in{A}$ and
+        $\emptyset\subseteq{A}$.
         \begin{fexample}{Elementary Examples of Subsets}
                         {Elementary_Examples_of_Subsets}
             If we let $A$ and $B$ be the sets defined by:
@@ -266,10 +309,43 @@
         discern between the two. This will give us our definition of equality.
         We can also apply our notion of subsets to collections that we are more
         familiar with, such as the natural numbers $\mathbb{N}$
-        (see Ex.~\ref{ex:Elementary_Examples_of_Subsets}). After some more
-        examples we will prove the equivalence of the axiom of extensionality
-        (Ax.~\ref{ax:Axiom_of_Extensionality}) with the scheme we've devised
-        using subsets, and then state the definition of equality using this.
+        (see Ex.~\ref{ex:Elementary_Examples_of_Subsets}). We now prove the
+        equivalence of the axiom of extensionality
+        (Ax.~\ref{ax:Axiom_of_Extensionality}) with our intuition about subsets.
+        \begin{theorem}
+            \label{thm:Equivalent_Def_of_Equality}%
+            If $A$ and $B$ are sets, then $A=B$ if and only if $A\subseteq{B}$
+            and $B\subseteq{A}$.
+        \end{theorem}
+        \begin{proof}
+            For by the axiom of extensionality
+            (Ax.~\ref{ax:Axiom_of_Extensionality}), $A=B$ if and only if, for
+            all $x$ it is true that $x\in{A}$ if and only if $x\in{B}$. But then
+            $x\in{A}$ implies that $x\in{B}$, and thus $A\subseteq{B}$
+            (Def.~\ref{def:Subsets}). But also $x\in{B}$ implies $x\in{A}$, and
+            therefore $B\subseteq{A}$. Moreover, if $A\subseteq{B}$ and
+            $B\subseteq{A}$, then for all $x\in{A}$ it is true that $x\in{B}$
+            and for all $x\in{B}$ it is true that $x\in{A}$
+            (Def.~\ref{def:Subsets}), and therefore $x\in{A}$ if and only if
+            $x\in{B}$. Thus, $A=B$ if and only if $A\subseteq{B}$ and
+            $B\subseteq{A}$.
+        \end{proof}
+        With this, we can redefine the notion of
+        \textit{equal sets}\index{Equal Sets}.
+        \begin{fdefinition}{Equal Sets}{Equal_Sets}
+            \Glspl{equal set} are \glspl{set} $A$ and $B$, denoted $A=B$, such
+            that $A\subseteq{B}$ and $B\subseteq{A}$.
+            \begin{equation*}
+                \forall_{A}\forall_{B}(A=B)
+                \Leftrightarrow
+                (A\subseteq{B}\land{B}\subseteq{A})
+            \end{equation*}
+        \end{fdefinition}
+        Def.~\ref{def:Equal_Sets} is justified by
+        Thm.~\ref{thm:Equivalent_Def_of_Equality}, and thus there is no
+        contradiction with the axiom of extensionality
+        (Ax.~\ref{ax:Axiom_of_Extensionality}). If $A$ and $B$ are not equal, we
+        write $A\ne{B}$. 
         \begin{fexample}{More Examples of Subsets}{More_Examples_of_Subsets}
             Using the notation from Ex.~\ref{ex:Using_Element_Notation}, for all
             $n\in\mathbb{N}$ we have:
@@ -357,82 +433,40 @@
             and in doing so it will be natural to define $\mathbb{N}$ as a set
             that contains $0$.
         \end{fexample}
-        It is important to note the distinction between the symbols $\in$ and
-        $\subseteq$. The symbol $\in$ is used to denote that some object $x$ is
-        an \textit{element} of some set. That is, $x\in{A}$ indicates that $x$
-        is an element of $A$. This does not necessarily imply $x\subseteq{A}$,
-        but this \textit{does} imply that $\{x\}\subseteq{A}$. That is, if
-        $x\in{A}$, then the set that contains only $x$ is a subset of $A$.
-        Moreover, the notions are not mutually exclusive. It is possible for $A$
-        to be a set such that $x\in{A}$ and $x\subseteq{A}$. For let
-        $A=\{\emptyset\}$. As well we soon see, for any set $A$ it is true
-        (vacuously) that $\emptyset\subseteq{A}$. But from how $A$ is defined,
-        we have that $\emptyset\in{A}$. Thus it is true that both
-        $\emptyset\in{A}$ and $\emptyset\subseteq{A}$.
-        \begin{theorem}
-            \label{thm:Equivalent_Def_of_Equality}%
-            If $A$ and $B$ are sets, then $A=B$ if and only if $A\subseteq{B}$
-            and $B\subseteq{A}$.
-        \end{theorem}
-        \begin{proof}
-            For by the axiom of extensionality
-            (Ax.~\ref{ax:Axiom_of_Extensionality}), $A=B$ if and only if, for
-            all $x$ it is true that $x\in{A}$ if and only if $x\in{B}$. But then
-            $x\in{A}$ implies that $x\in{B}$, and thus $A\subseteq{B}$
-            (Def.~\ref{def:Subsets}). But also $x\in{B}$ implies $x\in{A}$, and
-            therefore $B\subseteq{A}$. Moreover, if $A\subseteq{B}$ and
-            $B\subseteq{A}$, then for all $x\in{A}$ it is true that $x\in{B}$
-            and for all $x\in{B}$ it is true that $x\in{A}$
-            (Def.~\ref{def:Subsets}), and therefore $x\in{A}$ if and only if
-            $x\in{B}$. Thus, $A=B$ if and only if $A\subseteq{B}$ and
-            $B\subseteq{A}$.
-        \end{proof}
-        \begin{fdefinition}{Equal Sets}{Equal_Sets}
-            \Glspl{equal set} are \glspl{set} $A$ and $B$, denoted $A=B$, such
-            that $A\subseteq{B}$ and $B\subseteq{A}$.
-        \end{fdefinition}
-        Def.~\ref{def:Equal_Sets} is justified by
-        Thm.~\ref{thm:Equivalent_Def_of_Equality}, and thus there is no
-        contradiction with the axiom of extensionality
-        (Ax.~\ref{ax:Axiom_of_Extensionality}). If $A$ and $B$ are not equal, we
-        write $A\ne{B}$. While Def.~\ref{def:Equal_Sets} is indeed equivalent to
-        the axiom of extensionality, this definition creates a few problems. As
-        discussed previously, sets have no notion of order and cannot account
-        for repetition.
-        \begin{fexample}{Sets Do Not Have Order}{Sets_Do_Not_Have_Order}
-            Let $A$, $B$, and $C$ be the sets defined by:
-            \par
-            \begin{subequations}
-                \begin{minipage}[b]{0.31\textwidth}
-                    \begin{equation}
-                        A=\big\{\,a,\,b\,\big\}
-                    \end{equation}
-                \end{minipage}
-                \hfill
-                \begin{minipage}[b]{0.36\textwidth}
-                    \begin{equation}
-                        B=\big\{\,a,\,a,\,b\,\big\}
-                    \end{equation}
-                \end{minipage}
-                \hfill
-                \begin{minipage}[b]{0.31\textwidth}
-                    \begin{equation}
-                        C=\big\{\,b,\,a\,\big\}
-                    \end{equation}
-                \end{minipage}
-            \end{subequations}
-            \par\vspace{2.5ex}
-            All three of these sets are equal by both the definition of equality
-            (Def.~\ref{def:Equal_Sets}) and the axiom of extensionality. It
-            seems clear that $A\subseteq{B}$, but it is also true that
-            $B\subseteq{A}$. This is because $B$ contains only the elements $a$
-            and $b$. While $a$ is included twice, repetition cannot be accounted
-            for and $B$ is entirely determined by $a$ and $b$. But $A$ also
-            contains $a$ and $b$, and therefire $B\subseteq{A}$. By the
-            definition of equality (Def.~\ref{def:Equal_Sets}), we have that
-            $A=B$. In a similar manner, $A=C$.
-        \end{fexample}
-        From the definition of subsets, for any set $A$ we see that
+        While Def.~\ref{def:Equal_Sets} is indeed equivalent to the axiom of
+        extensionality, this definition creates a few problems. As discussed
+        previously, sets have no notion of order and cannot account for
+        repetition. For let $A$, $B$, and $C$ be the sets defined by:
+        \par
+        \begin{subequations}
+            \begin{minipage}[b]{0.31\textwidth}
+                \begin{equation}
+                    A=\big\{\,a,\,b\,\big\}
+                \end{equation}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.36\textwidth}
+                \begin{equation}
+                    B=\big\{\,a,\,a,\,b\,\big\}
+                \end{equation}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.31\textwidth}
+                \begin{equation}
+                    C=\big\{\,b,\,a\,\big\}
+                \end{equation}
+            \end{minipage}
+        \end{subequations}
+        \par\vspace{2.5ex}
+        All three of these sets are equal by both the definition of equality
+        (Def.~\ref{def:Equal_Sets}) and the axiom of extensionality. It seems
+        clear that $A\subseteq{B}$, but it is also true that $B\subseteq{A}$.
+        This is because $B$ contains only the elements $a$ and $b$. While $a$ is
+        included twice, repetition cannot be accounted for and $B$ is entirely
+        determined by $a$ and $b$. But $A$ also contains $a$ and $b$, and
+        therefire $B\subseteq{A}$. By the definition of equality
+        (Def.~\ref{def:Equal_Sets}), we have that $A=B$. In a similar manner,
+        $A=C$. From the definition of subsets, for any set $A$ we see that
         $A\subseteq{A}$ (to be proven later). It would be nice to distinguish
         between subsets that aren't the entire set itself. These are called
         proper subsets, and we can define them in terms of equality.
@@ -440,6 +474,10 @@
             A \gls{proper subset} of a \gls{set} $B$ is a set $A$ such that
             $A\subseteq{B}$ and $A\ne{B}$. We write $A\subsetneq{B}$
             to denote that $A$ is a proper subset of $B$.
+            \begin{equation*}
+                \forall_{A}\forall_{B}(A\subsetneq{B})
+                \Leftrightarrow(A\subseteq{B}\land{A}\ne{B})
+            \end{equation*}
         \end{fdefinition}
         The symbols $\subseteq$ and $\subsetneq$ are analogous to the notations
         of inequalities that one finds in calculus: $\leq$ and $<$. In many
