@@ -219,4 +219,806 @@
             A function $T:\mathbb{C}\rightarrow\mathbb{C}$ such that
             $TT^{H}=T^{H}T$
         \end{fdefinition}
+        \section{Homework I}
+        \begin{problem}
+            Let $k$ be a field, let $V$ and $W$ be finite dimensional vector
+            spaces over $k$, and let $T:V\rightarrow{W}$ be a linear
+            transformations. Show that there exists bases $\mathscr{B}$ of $V$
+            and $\mathscr{C}$ of $W$ such that the representing matrix
+            $[T]_{\mathscr{C}}^{\mathscr{B}}$ has the following form: All
+            off-diagonal entries are zero, while all the entries lie in the set
+            $\{0,\,1\}$. Give two proofs:
+            \begin{enumerate}
+                \item   An abstract proof (Rank-Nullity Theorem)
+                \item   A computational proof [Recall row/column operations]
+            \end{enumerate}
+        \end{problem}
+        \begin{solution}
+            If $V$ and $W$ are finite dimensional vector spaces then there
+            exists a basis $\mathcal{V}$ and $\mathcal{W}$ of $V$ and $W$,
+            respectively, such that $\textrm{Card}(\mathcal{V})\in\mathbb{N}$
+            and $\textrm{Card}(\mathcal{W})\in\mathbb{N}$. Let
+            $m=\textrm{Card}(\mathcal{V})$ and $n=\textrm{Card}(\mathcal{W})$.
+            We want a matrix $[T]_{\mathscr{C}}^{\mathscr{B}}$ such that:
+            \begin{equation}
+                T\mathbf{x}=T
+                \begin{bmatrix}
+                    x_{1}\\
+                    \vdots\\
+                    x_{m}
+                \end{bmatrix}=
+                \begin{bmatrix}
+                    a_{11}&\cdots&a_{1m}\\
+                    \vdots&\ddots&\vdots\\
+                    a_{n1}&\cdots&a_{nm}
+                \end{bmatrix}
+                \begin{bmatrix}
+                    x_{1}\\
+                    \vdots\\
+                    x_{m}
+                \end{bmatrix}
+            \end{equation}
+            Where the $a_{ij}$ are zero off of the diagonal. First, removing
+            this requirement, such a matrix does exists if we define
+            $a_{ij}$ by:
+            \begin{equation}
+                \begin{bmatrix}
+                    a_{1i}\\
+                    \vdots\\
+                    a_{ni}
+                \end{bmatrix}=Tv_{i}
+            \end{equation}
+            To obtain bases of the form we desire, write:
+            \begin{equation}
+                \begin{bmatrix}
+                    y_{1}\\
+                    \vdots\\
+                    y_{n}
+                \end{bmatrix}=
+                \begin{bmatrix}
+                    a_{11}&\cdots&a_{1m}\\
+                    \vdots&\ddots&\vdots\\
+                    a_{n1}&\cdots&a_{nm}
+                \end{bmatrix}
+                \begin{bmatrix}
+                    x_{1}\\
+                    \vdots\\
+                    x_{m}
+                \end{bmatrix}
+            \end{equation}
+            We can row reduce this matrix by means of Gaussian elimination,
+            keeping track of the row operations as applied to the $x_{i}$
+            and $y_{j}$, so that the matrix has only entries $0$ or $1$.
+            That is, place the matrix into row-echelon form. To obtain a
+            matrix that has only zeroes of ones on the diagonal, further
+            reduce this matrix by column operations, placing the matrix
+            in \textit{column} echelon form. The resulting matrix will thus
+            be both row reduced and column reduced, and is therefore only
+            non-zero on the diagonal. The bases $\mathscr{B}$ and
+            $\mathscr{C}$ are obtained from these operations.
+            \par\hfill\par
+            Going the abstract way, by the rank-nullity theorem:
+            \begin{equation}
+                \textrm{dim}\big(T(V)\big)+
+                \textrm{dim}\big(\ker(T)\big)=
+                \textrm{dim}(V)=m
+            \end{equation}
+            Moreover the kernel of $T$ is a subspace of $V$. Let
+            $\mathcal{N}$ be a basis of this and let $\mathcal{O}$ be such
+            that $\mathcal{O}\cup\mathcal{N}$ is a basis of $V$, and such
+            that $\mathcal{O}\cap\mathcal{N}=\emptyset$.
+            Define $\mathscr{B}=\mathcal{O}\cup\mathcal{N}$. By the
+            definition of the kernel, for all $e\in\mathcal{N}$, $Te=0$.
+            Moreover, $T\mathcal{O}$ is a basis for the image of $T$.
+            Let $w_{i}=Tv_{i}$ for $v_{i}\in\mathcal{O}$. We can then
+            extend $T\mathcal{O}$ with a set $\mathcal{U}$ such that
+            $T\mathcal{O}\cup\mathcal{U}$ is a basis of $W$ and such that
+            $T\mathcal{O}\cap\mathcal{U}=\emptyset$. None of the
+            points in this span (other than zero) are mapped to as they lie
+            outside of the image. Let
+            $\mathscr{C}=T\mathcal{O}\cup\mathcal{U}$.
+            The representing matrix $[T]_{\mathscr{C}}^{\mathscr{B}}$ will
+            then have elements only in $\{0,1\}$, and by construction all
+            off-diagonal elements will be zero.
+        \end{solution}
+        \begin{problem}
+            Let $V$ be a finite dimensional vector space and
+            $T:V\rightarrow{V}$ a linear operator. When does $V$ have a
+            basis $\mathscr{B}$ such that $[T]_{\mathscr{B}}^{\mathscr{B}}$
+            is a diagonal matrix with all diagonal entires in the set
+            $\{0,1\}$? Find a necessary and sufficient condition on $T$.
+            Why was no condition needed in the previous problem?
+        \end{problem}
+        \begin{solution}
+            No condition was required in the previous problem sinced we
+            allowed the bases of both the domain and the target space to
+            vary. Now we require that both bases are identical. If
+            $T$ is idempotent, then $T$ will have a basis such that
+            $[T]_{\mathscr{B}}^{\mathscr{B}}$ is non-zero only on the
+            diagonal, and having values in $\{0,1\}$ on the diagonal.
+            Let $\mathcal{N}$ be a basis for $\ker(T)$, and let
+            $\mathcal{B}$ be a basis for image of $T$. By the rank-nullity
+            theorem, $\mathcal{B}\cup\mathcal{N}$ is a basis for $V$.
+            Let $\mathscr{B}=\mathcal{N}\cup{T}\mathcal{B}$, where
+            $T\mathcal{B}$ is the set of all $Tv$ such that
+            $v\in\mathcal{B}$. Then this is a basis for $V$. Moreover,
+            the representative matrix is only non-zero on the diagonal.
+            For if $v\in{T}\mathcal{B}$, then:
+            \begin{equation}
+                Tv_{i}=\sum_{j}a_{ij}v_{j}
+                \Longrightarrow
+                T^{2}v_{i}=\sum_{j}a_{ij}Tv_{j}
+            \end{equation}
+            But $T$ is idempotent, so we have:
+            \begin{equation}
+                Tv_{i}=\sum_{j}a_{ij}Tv_{j}
+                \Longrightarrow
+                T(v_{i}-\sum_{j}a_{ij}v_{i})=0
+                \Longrightarrow
+                v_{i}-\sum_{j}a_{ij}v_{i}=0
+            \end{equation}
+            But then $v_{j}$ are independent, and therefore
+            $a_{ij}=0$ for all $i\ne{j}$.
+            \par\hfill\par
+            Going the other way, if there is a basis $\mathscr{B}$ such
+            that $[T]_{\mathscr{B}}^{\mathscr{B}}$ is non-zero only on
+            the diagonal, and whose diagonal elements are either $0$ or
+            $1$, then $T$ is idempotent. For If $T$ has such a
+            representation, then $T^{2}=T$, since all non-diagonal
+            components are zero and for all $a_{ii}$ on the diagonal,
+            $a_{ii}^{2}=a_{ii}$.
+        \end{solution}
+        \begin{problem}
+            Let $R_{1}$ and $R_{2}$ be rings. Let $M$ be a module over
+            the product ring $R=R_{1}\times{R}_{2}$. Show that $M$ is
+            the direct sum $M=M_{1}\oplus{M}_{2}$ of two
+            $R$ submodules $M_{1}$ and $M_{2}$ where $M_{1}$ is an
+            $R_{1}$ submodule (viewed as an $R$ module by pullback along
+            the projection $\pi_{1}:R_{1}\times{R}_{2}\rightarrow{R}_{1}$
+            defined by $(x,y)\mapsto{x}$) and $M_{2}$ is an
+            $R_{2}$ module (viewed similarly as above).
+        \end{problem}
+        \begin{solution}
+            For let $M_{1}$ and $M_{2}$ be defined as follows:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        M_{1}=\{\,(1_{1},\,0_{2})
+                                \boldsymbol{\cdot}\mathbf{v}\,:\,
+                                \mathbf{v}\in{M}\,\}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        M_{2}=\{\,(0_{1},\,1_{2})
+                                \boldsymbol{\cdot}\mathbf{v}\,:\,
+                                \mathbf{v}\in{M}\,\}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            Where $\boldsymbol{\cdot}$ is the multiplicative operation
+            $\boldsymbol{\cdot}:R\times{M}\rightarrow{M}$,
+            $1_{1}$ is the multiplicative identity of $R_{1}$,
+            $1_{2}$ is the multiplicative identity of $R_{2}$,
+            $0_{1}$ is the additive identity of $R_{1}$, and
+            $0_{2}$ is the additive identity of $R_{2}$. Then
+            $M_{1}$ is a submodule of $M$. For if $\mathbf{u}\in{M}_{1}$,
+            then there is a $\mathbf{v}\in{M}$ such that
+            $\mathbf{u}=(1_{1},0_{2})\boldsymbol{\cdot}\mathbf{v}$.
+            But then:
+            \begin{subequations}
+                \begin{align}
+                    (1_{1},\,1_{2})\boldsymbol{\cdot}\mathbf{u}
+                    &=(1_{1},\,1_{2})\boldsymbol{\cdot}
+                        \big[
+                            (1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}
+                        \big]\\
+                    &=\big[(1_{1},\,1_{2})\cdot(1_{1},\,0_{2})\big]
+                        \boldsymbol{\cdot}\mathbf{v}\\
+                    &=(1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}\\
+                    &=\mathbf{u}
+                \end{align}
+            \end{subequations}
+            Associativity of ring elements with $M_{1}$ comes for free from
+            the associativity of $M$, similarly for the distributive laws.
+            Moreover, it is closed:
+            \begin{equation}
+                \mathbf{u}_{1}+\mathbf{u}_{2}=
+                (1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}_{1}+
+                (1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}_{2}
+                =(1_{1},\,0_{2})\boldsymbol{\cdot}
+                    \big[\mathbf{v}_{1}+\mathbf{v}_{2}\big]
+            \end{equation}
+            And this is an element of $M_{1}$. Similarly:
+            \begin{equation}
+                (a,\,b)\boldsymbol{\cdot}\mathbf{u}
+                =(a,\,b)\boldsymbol{\cdot}
+                    \big[
+                        (1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}
+                    \big]
+                =\big[
+                    (a,\,b)\cdot(1_{1},\,0_{2})
+                \big]
+                    \boldsymbol{\cdot}\mathbf{v}
+                =(a,\,0_{2})\boldsymbol{\cdot}\mathbf{v}
+            \end{equation}
+            Which is again contained in $M_{1}$. Similarly, $M_{2}$ is an
+            $R$ submodule. Moreover, $M=M_{1}\oplus{M}_{2}$ For if
+            $\mathbf{v}\in{M}$, then:
+            \begin{equation}
+                \mathbf{v}=(1_{1},\,0_{2})\boldsymbol{\cdot}\mathbf{v}+
+                           (0_{1},\,1_{2})\boldsymbol{\cdot}\mathbf{v}
+            \end{equation}
+            And the left part of the sum is an element of $M_{1}$ and the
+            right part is an element of $M_{2}$. It also follows that
+            $M_{1}$ is an $R_{1}$ module, viewing along pullback by the
+            projection $\pi_{1}(x,y)=x$. That is, form the operation
+            $*_{1}:R_{1}\times{M}_{1}\rightarrow{M}_{1}$ by:
+            \begin{equation}
+                r*_{1}\mathbf{m}=(r,\,0_{2})\boldsymbol{\cdot}\mathbf{m}
+                \quad\quad
+                r\in{R}_{1},\,\mathbf{m}\in{M}_{1}
+            \end{equation}
+            Similarly for $M_{2}$:
+            \begin{equation}
+                r*_{2}\mathbf{m}=(0_{1},\,r)\boldsymbol{\cdot}\mathbf{m}
+                \quad\quad
+                r\in{R}_{2},\,\mathbf{m}\in{M}_{2}
+            \end{equation}
+        \end{solution}
+        \begin{problem}
+            The equivalence class one.
+        \end{problem}
+        \begin{problem}
+            Let $A$ and $B$ be rings and let $R=A\times{B}$ be the
+            direct product ring. Show that $R$ contains elements $e_{1}$
+            and $e_{2}$ such that:
+            \begin{enumerate}
+                \item Both $e_{i}$ are idempotent.
+                \item Each $e_{i}$ is central.
+                \item They are orthogonal: $e_{1}\cdot{e}_{2}=0_{R}$.
+                \item They are complete: $e_{1}+e_{2}=1_{R}$.
+            \end{enumerate}
+            Conversely, show if $R$ is a ring with two such elements then
+            there are rings $A$ and $B$ such that $R$ is isomorphic to
+            $A\times{B}$.
+        \end{problem}
+        \begin{solution}
+            For let $e_{1}$ and $e_{2}$ be defined as follows:
+            \par\hfill\par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        e_{1}=(1_{A},\,0_{B})
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        e_{2}=(0_{A},\,1_{B})
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            Where $0_{\alpha}$ and $1_{\alpha}$ are the additive and
+            multiplicative identities of their respective rings,
+            respectively. Then:
+            \begin{subequations}
+                \begin{align}
+                    e_{1}\cdot{e}_{1}
+                    =(1_{A},\,0_{B})\cdot(1_{A},\,0_{B})
+                    =(1_{A}*_{A}1_{A},\,0_{B}*_{B}0_{B})
+                    =(1_{A},\,0_{B})
+                    =e_{1}\\
+                    e_{2}\cdot{e}_{2}
+                    =(0_{A},\,1_{B})\cdot(0_{A},\,1_{B})
+                    =(0_{A}*_{A}0_{A},\,1_{B}*_{B}1_{B})
+                    =(0_{A},\,1_{B})
+                    =e_{2}
+                \end{align}
+            \end{subequations}
+            Thus satisfying idempotency. They are central, for:
+            \begin{subequations}
+                \begin{align}
+                    e_{1}\cdot{r}
+                    &=(1_{A},\,0_{B})\cdot(r_{1},\,r_{2})\\
+                    &=(1_{A}*_{A}r_{1},\,0_{B}*_{B}r_{2})\\
+                    &=(r_{1}*_{A}1_{A},\,r_{2}*_{B}0_{B})\\
+                    &=(r_{1},\,r_{2})\cdot(1_{A},\,0_{B})\\
+                    &=r\cdot{e}_{1}
+                \end{align}
+            \end{subequations}
+            Similarly for $e_{2}$. They are indeed orthogonal:
+            \begin{equation}
+                e_{1}\cdot{e}_{2}
+                =(1_{A},\,0_{B})\cdot(0_{A},\,1_{B})
+                =(1_{A}*_{A}0_{A},\,0_{B}*_{B}1_{B})
+                =(0_{A},\,0_{B})
+                =0_{R}
+            \end{equation}
+            Completeness follows from:
+            \begin{equation}
+                e_{1}+e_{1}
+                =(1_{A},\,0_{B})+(0_{A},\,1_{B})
+                =(1_{A}+0_{A},\,0_{B}+1_{B})
+                =(1_{A},\,1_{B})
+                =1_{R}
+            \end{equation}
+            Conversely, suppose such elements $e_{1}$ and $e_{2}$ exist.
+            Let $A$ and $B$ be defined by:
+            \par\hfill\par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        A=\{\,e_{1}\cdot{r}\,:\,r\in{R}\}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        B=\{\,e_{2}\cdot{r}\,:\,r\in{R}\}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            Let $\varphi:R\rightarrow{A}\times{B}$ be defined by:
+            \begin{equation}
+                \varphi(r)=(r\cdot{e}_{1},\,r\cdot{e}_{2})
+            \end{equation}
+            Then $\varphi$ is an isomorphism. Firstly, it is injective.
+            For if $\varphi(r_{1})=\varphi(r_{2})$, then:
+            \begin{equation}
+                r_{1}\cdot{e}_{1}=r_{2}\cdot{e}_{1}
+                \quad\quad
+                \textrm{and}
+                \quad\quad
+                r_{1}\cdot{e}_{2}=r_{2}\cdot{e_{2}}
+            \end{equation}
+            From the completeness, summing these we obtain $r_{1}=r_{2}$.
+            It is also surjective, for if $(r_{1},r_{2})\in{A}\times{B}$
+            let $r=r_{1}+r_{2}$. Since $r_{1}\in{A}$ there is a
+            $u_{1}\in{R}$ such that $r_{1}=u_{1}\cdot{e}_{1}$, and similarly
+            a $u_{2}$ for $r_{2}$. From orthogonality and idempotency,
+            we have:
+            \begin{subequations}
+                \begin{align}
+                    \varphi(r)
+                    &=\big((r_{1}+r_{2})\cdot{e}_{1},\,
+                           (r_{1}+r_{2})\cdot{e}_{2})\big)\\
+                    &=\big(
+                        (u_{1}\cdot{e}_{1}+u_{2}\cdot{e}_{2})\cdot{e}_{1},\,
+                        (u_{1}\cdot{e}_{1}+u_{2}\cdot{e}_{2})\cdot{e}_{2})
+                    \big)\\
+                    &=(u_{1}\cdot{e}_{1}^{2}+
+                       u_{2}\cdot{e}_{1}\cdot{e}_{2},\,
+                       u_{1}\cdot{e}_{1}\cdot{e}_{2}+
+                       u_{2}\cdot{e}_{2}^{2})\\
+                     &=(u_{1}\cdot{e}_{1},\,u_{2}\cdot{e}_{2})\\
+                     &=(r_{1},\,r_{2})
+                \end{align}
+            \end{subequations}
+            And thus $\varphi$ is a bijection. Lastly, it is a homomorphism.
+            For, by idempotency and centrality:
+            \begin{subequations}
+                \begin{align}
+                    \varphi(r\cdot{s})
+                    &=\big((r\cdot{s})\cdot{e}_{1},\,
+                           (r\cdot{s})\cdot{e}_{2}\big)\\
+                    &=\big((r\cdot{e}_{1})\cdot(s\cdot{e}_{1}),\,
+                           (r\cdot{e}_{1})\cdot(s\cdot{e}_{1})\big)\\
+                    &=(r\cdot{e}_{1},\,s\cdot{e}_{2})\boldsymbol{\cdot}
+                      (s\cdot{e}_{1},\,s\cdot{e}_{2})\\
+                    &=\varphi(r)\boldsymbol{\cdot}\varphi(s)
+                \end{align}
+            \end{subequations}
+            Similarly for addition:
+            \begin{subequations}
+                \begin{align}
+                    \varphi(r+s)
+                    &=\big((r+s)\cdot{e}_{1},\,
+                           (r+s)\cdot{e}_{2}\big)\\
+                    &=(r\cdot{e}_{1}+r\cdot{e}_{1},\,
+                       r\cdot{e}_{2}+s\cdot{e}_{2})\\
+                    &=(r\cdot{e}_{1},\,r\cdot{e}_{2})\boldsymbol{+}
+                      (s\cdot{e}_{1},\,s\cdot{e}_{2})\\
+                    &=\varphi(r)\boldsymbol{+}\varphi(s)
+                \end{align}
+            \end{subequations}
+            Thus, $\varphi$ is a bijective homomorphism and is therefore
+            an isomorphism. It follows that $R$ is isomorphic to
+            $A\times{B}$.
+        \end{solution}
+        \begin{problem}
+            \par\hfill\par
+            \begin{enumerate}
+                \item   Let $A$ and $B$ be rings, and let
+                        $\mathfrak{a}\subseteq{A}$ and
+                        $\mathfrak{b}\subseteq{B}$ be left ideals.
+                        Show that $\mathfrak{a}\times\mathfrak{b}$ is a
+                        left ideal of $A\times{B}$.
+                \item   Show that if $\mathfrak{c}$ is a left ideal of
+                        $A\times{B}$ then there are left ideals
+                        $\mathfrak{a}\subseteq{A}$ and
+                        $\mathfrak{b}\subseteq{B}$ such that
+                        $\mathfrak{c}=\mathfrak{a}\times\mathfrak{b}$.
+                \item   Show that, if $R$ is a ring and $M_{1}$ and $M_{2}$
+                        are left $R$ modules, then it may not be true that
+                        every submodule of $M_{1}\times{M}_{2}$ is of the
+                        form $N_{1}\times{N}_{2}$, where
+                        $N_{1}\subseteq{M}_{2}$ and $N_{2}\subseteq{M}_{2}$.
+            \end{enumerate}
+        \end{problem}
+        \begin{solution}
+            For if $\mathfrak{a}$ and $\mathfrak{b}$ are left ideals of
+            $A$ and $B$, respectively, let
+            $r_{1},r_{2}\in\mathfrak{a}\times\mathfrak{b}$. Then:
+            \begin{equation}
+                r_{1}\boldsymbol{+}r_{2}
+                =(a_{1},\,b_{1})\boldsymbol{+}(a_{2},\,b_{2})
+                =(a_{1}+a_{2},\,b_{1}+b_{2})
+            \end{equation}
+            But $\mathfrak{a}$ and $\mathfrak{b}$ are left ideals, and
+            thus $a_{1}+a_{2}\in\mathfrak{a}$ and
+            $b_{1}+b_{2}\in\mathfrak{b}$, and thus
+            $r_{1}+r_{2}\in\mathfrak{a}\times\mathfrak{b}$. Moreover, if
+            $r\in{A}\times{B}$ and $s\in\mathfrak{a}\times\mathfrak{b}$,
+            then:
+            \begin{equation}
+                r\boldsymbol{\cdot}{s}
+                =(r_{1},\,r_{2})\boldsymbol{\cdot}(s_{1},\,s_{2})
+                =(r_{1}\cdot{s}_{2},\,r_{2}\cdot{s}_{2})
+            \end{equation}
+            But $\mathfrak{a}$ is a left ideal, and thus
+            $r_{1}\cdot{s}_{1}\in\mathfrak{a}$. Similarly, $\mathfrak{b}$
+            is a left ideal and thus $r_{2}\cdot{s}_{2}\in\mathfrak{b}$.
+            Thus, $r\boldsymbol{\cdot}s\in\mathfrak{a}\times\mathfrak{b}$.
+            That is, $\mathfrak{a}\times\mathfrak{b}$ is a left ideal of
+            $A\times{B}$.
+            \par\hfill\par
+            If $\mathfrak{c}\subseteq{A}\times{B}$ is a left ideal,
+            let $\mathfrak{a}=\pi_{1}(\mathfrak{c})$ and
+            $\mathfrak{b}=\pi_{2}(\mathfrak{c})$, where $\pi_{1}$ and
+            $\pi_{2}$ are the projection mappings. Then $\mathfrak{a}$ is
+            a left ideal of $A$. For if $r,s\in\mathfrak{a}$, then
+            $(r,0_{B})$ and $(s,0_{B})$ are elements of $\mathfrak{c}$,
+            and thus:
+            \begin{equation}
+                (r,\,0_{B})\boldsymbol{+}(s,\,0_{B})
+                =(r+s,\,0_{B}+0_{B})
+                =(r+s,\,0_{B})
+            \end{equation}
+            Which is an element of $\mathfrak{c}$ since $\mathfrak{c}$ is
+            a left ideal, and therefore $r+s\in\mathfrak{a}$. If
+            $r\in\mathfrak{a}$ and $s\in{A}$, then:
+            \begin{equation}
+                (r,\,0_{B})\boldsymbol{\cdot}(s,\,0_{B})
+                =(r\cdot{s},\,0_{B})
+            \end{equation}
+            Which is an element of $\mathfrak{c}$ since $\mathfrak{c}$
+            is a left ideal, and therefore $r\cdot{s}\in\mathfrak{a}$. Thus,
+            $\mathfrak{a}$ is a left ideal of $A$. Similarly,
+            $\mathfrak{b}$ is a left ideal of $B$. Moreover, since
+            $\pi_{1}$ and $\pi_{2}$ are simply the projection mappings,
+            it follows that:
+            \begin{equation}
+                \mathfrak{c}=\mathfrak{a}\times\mathfrak{b}
+            \end{equation}
+            Thus completing the proof.
+            \par\hfill\par
+            Lastly, let $R=\mathbb{R}$ with it's usual field structure.
+            Since all fields are also rings, $\mathbb{R}$ has a ring
+            structure. Consider then the vector space of $\mathbb{R}$ over
+            itself. Since all vector spaces are also modules, we have that
+            $\mathbb{R}$ is an $\mathbb{R}$ module. The product of
+            $\mathbb{R}$ with itself will be $\mathbb{R}^{2}$ with its
+            usual vector space structure. Any line through the origin will
+            then be subspace, however the only subspaces of
+            $\mathbb{R}$ are $0$ and the entire real line itself. Thus,
+            the only possible product spaces are:
+            \begin{equation*}
+                \mathbf{0}
+                \quad\quad
+                \{\,(r,\,0)\,:\,r\in\mathbb{R}\,\}
+                \quad\quad
+                \{\,(0,\,r)\,:\,r\in\mathbb{R}\,\}
+                \quad\quad
+                \mathbb{R}^{2}
+            \end{equation*}
+            Thus the subspace $\{(r,r):r\in\mathbb{R}\}$ cannot be written
+            as a product.
+        \end{solution}
+        \begin{problem}
+            \par\hfill\par
+            \begin{enumerate}
+                \item   Let $R$ be a ring and $M$ be a left $R$ module.
+                        Then the set $\textrm{Hom}_{R}(R,M)$ of $R$ module
+                        homomorphisms can be given an Abelian group
+                        structure by defining $f+g$ as the map
+                        $(f+g)(x)=f(x)+g(x)$ for all $x\in{R}$. Show that
+                        there is an isomorphism between this group and $M$.
+                \item   If $R$ is a commutative ring, then
+                        $\textrm{Hom}_{R}(R,M)$ has the structure of an
+                        $R$ module give by: if $r\in{R}$ and if
+                        $f\in\textrm{Hom}_{R}(R,M)$, define
+                        $(rf)(x)=r\cdot{f(x)}$ for all $x\in{R}$. Show that
+                        this makes $\textrm{Hom}_{R}(R,M)$ an $R$ module
+                        and that $\varepsilon$ from above is an isomorphism
+                        of $R$ modules. If $R$ is a field, what simple
+                        observation is this?
+                \item   If $R$ is a ring and $M=R$, so
+                        $\textrm{Hom}_{R}(R,M)=\textrm{End}_{R}(R)$ is
+                        now the set of endomorphisms on $R$ as a left
+                        $R$ module. Then $\textrm{End}_{R}(R)$ is a ring
+                        where the product is given by function
+                        composition. Is $\varepsilon$ as defined before
+                        a ring isomorphism? If not, how can we modify this
+                        so that it is?
+            \end{enumerate}
+        \end{problem}
+        \begin{solution}
+            For let $\varepsilon:\textrm{Hom}_{R}(R,M)\rightarrow{M}$ be
+            defined by:
+            \begin{equation}
+                \varepsilon(f)=f(1)
+            \end{equation}
+            This is injective, for if $\varepsilon(f)=\varepsilon(g)$,
+            then $f(1)=g(1)$. But then, for all $x\in{R}$:
+            \begin{equation}
+                f(x)=f(x\cdot{1})=xf(1)=xg(1)=g(x\cdot{1})=g(x)
+            \end{equation}
+            And thus $f=g$. Moreover, it is surjective. For let
+            $\mathbf{m}\in{M}$ and let $f:R\rightarrow{M}$ be defined by:
+            \begin{equation}
+                f(r)=r\cdot\mathbf{m}
+            \end{equation}
+            From the module structure of $M$, $f\in\textrm{Hom}_{R}(R,M)$,
+            but also $\varepsilon(f)=f(1)=m$. Therefore, $f$ is a bijection.
+            Lastly, $\varepsilon$ is indeed a group homomorphism. For if
+            $f,g\in\textrm{Hom}_{R}(R,M)$, then:
+            \begin{equation}
+                \varepsilon(f+g)=(f+g)(1)=f(1)+g(1)
+                                =\varepsilon(f)+\varepsilon(g)
+            \end{equation}
+            Thus, $\varepsilon$ is an isomorphism.
+            \par\hfill\par
+            This is indeed an $R$ module. For if
+            $f\in\textrm{Hom}_{R}(R,M)$, then:
+            \begin{equation}
+                (1f)(x)=1\cdot{f}(x)=f(x)
+            \end{equation}
+            Since $M$ is an $R$ module. If $r,s\in{R}$ and
+            $f\in\textrm{Hom}_{R}(R,M)$, then:
+            \begin{equation}
+                \big((rs)f\big)(x)
+                =(rs)f(x)
+                =r\big(sf(x)\big)
+                =\big(r(sf)\big)(x)
+            \end{equation}
+            Again from the module structure of $M$. The distributive law
+            is satisfied as well:
+            \begin{equation}
+                \big((r+s)f)(x)=(r+s)f(x)=rf(x)+sf(x)=(rf)(x)+(sf)(x)
+            \end{equation}
+            And lastly, if $r\in{R}$ and $u,v\in{M}$, then:
+            \begin{subequations}
+                \begin{align}
+                    \big(r(u+v)\big)(x)
+                    &=r\big((u+v)(x)\big)\\
+                    &=r\big(u(x)+rv(x)\big)\\
+                    &=ru(x)+rv(x)\\
+                    &=(ru)(x)+(rv)(x)
+                \end{align}
+            \end{subequations}
+            Moreover, $\varepsilon$ is an isomorphism. We have seen that
+            it is bijective and preserves addition, we must now check
+            that it preserve multiplication from the ring:
+            \begin{equation}
+                \varepsilon(rf)
+                =(rf)(1)
+                =r\cdot{f}(1)
+                =r\cdot\varepsilon(f)
+            \end{equation}
+            \par\hfill\par
+            For part 3, it is not, in general, an isomorphism, since:
+            \begin{equation}
+                \varepsilon(f\circ{g})
+                =f(g(1))
+                =f(g(1)\cdot{1})
+                =g(1)f(1)
+            \end{equation}
+            And this may not, necessarily, be equal to $f(1)g(1)$ if
+            $R$ is not commutative. If we define a new operation
+            $*$ by:
+            \begin{equation}
+                r*s=s\cdot{r}
+            \end{equation}
+            Then $\varepsilon$ will be a ring isomorphism from
+            $\textrm{End}_{R}(R)$ to $R$, since:
+            \begin{equation}
+                \varepsilon(f\circ{g})=
+                f(g(1))=g(1)f(1)=f(1)*g(1)
+                =\varepsilon(f)*\varepsilon(g)
+            \end{equation}
+        \end{solution}
+        And thus $\varepsilon$ is a ring isomorphism.
+    \begin{problem}
+        A $k$ algebra is a $k$ module $A$ with a ring structure such
+        that ring multiplication and scalar multiplication by elements
+        of $k$ satisfy:
+        \begin{equation}
+            (\lambda\cdot{a})b=\lambda\cdot(ab)=a(\lambda\cdot{b})
+        \end{equation}
+        Show that $A$ is a $k$ algebra if and only if $A$ is a ring such
+        that there exists a ring homomorphism $\varphi:k\rightarrow{Z}(A)$,
+        where $Z(A)$ is the center of $A$.
+    \end{problem}
+    \begin{solution}
+        Going one way, suppose $A$ is a ring with homomorphism
+        $\varphi:k\rightarrow{Z}(A)$. Define $\cdot$ by:
+        \begin{equation}
+            \lambda\cdot{a}=\varphi(\lambda)a
+        \end{equation}
+        Then $A$ is a $k$ algebra. For:
+        \begin{equation}
+            (\lambda\cdot{a})b
+            =(\varphi(\lambda)a)(b)
+            =\varphi(\lambda)(ab)
+            =\lambda\cdot(ab)
+        \end{equation}
+        And also:
+        \begin{equation}
+            (\lambda\cdot{a})b
+            =(a\varphi(\lambda))b
+            =a(\varphi(\lambda)b)
+            =a(\lambda\cdot{b})
+        \end{equation}
+        From associativity and from the fact that $\varphi(\lambda)$ is
+        a commutative element. Going the other way, if $A$ is a $k$ algebra,
+        let $\varphi:k\rightarrow{Z}(A)$ be defined by:
+        \begin{equation}
+            \varphi(\lambda)=\lambda\cdot{1}
+        \end{equation}
+        Then:
+        \begin{equation}
+            \varphi(a+b)
+            =(a+b)\cdot{1}
+            =a\cdot{1}+b\cdot{1}
+            =\varphi(a)+\varphi(b)
+        \end{equation}
+        And also:
+        \begin{equation}
+            \varphi(ab)
+            =(ab)\cdot{1}
+            =(a\cdot{1})b
+            =(a\cdot{1})(b\cdot{1})
+            =\varphi(a)\varphi(b)
+        \end{equation}
+        And thus $\varphi$ is a homomorphism.
+    \end{solution}
+    \section{Homework IV}
+        \begin{problem}
+            Let $\varphi:\mathbb{Z}^{n}\rightarrow\mathbb{Z}^{n}$ be a
+            $\mathbb{Z}\textrm{-Module}$ homomorphism such that the cokernel is
+            finite. Let $\mathscr{E}$ by the standard basis of $\mathbb{Z}^{n}$
+            and let $A=[\varphi]_{\mathscr{E}}^{\mathscr{E}}$ be the
+            representing matrix of $\varphi$. Show that that cardinality of
+            $\varphi$ is given by:
+            \begin{equation}
+                \textrm{Card}\big(\textrm{coker}(\varphi)\big)=|\textrm{det}(A)|
+            \end{equation}
+        \end{problem}
+        \begin{solution}
+            We prove by induction on $n$. If $n=1$ then for all $m\in\mathbb{Z}$
+            we have:
+            \begin{equation}
+                \varphi(m)=\varphi(n\cdot{1})=m\varphi(1)
+            \end{equation}
+            Since the cokernel is finite, $\varphi(1)\ne{0}$. Otherwise the
+            cokernel would be $\mathbb{Z}$, which is infinite. Let
+            $k=\varphi(1)$. Then we have that the cokernel is isomorphic to
+            $\mathbb{Z}_{k}$, and there are thus $k$ elements. Moreover the
+            transformation matrix $[\varphi]_{\mathscr{B}}^{\mathscr{B}}$ is
+            simply the singleton $[k]$. Thus
+            $\textrm{det}([k])=\textrm{Card}(\mathbb{Z}_{k})=k$. Suppose the
+            proposition is true for $n\in\mathbb{N}$. Let
+            $\varphi:\mathbb{Z}^{n+1}\rightarrow\mathbb{Z}^{n+1}$ be a
+            $\mathbb{Z}\textrm{-Module}$ homomorphism such that the cokernel is
+            finite. But then the restriction $\varphi|_{\mathbb{Z}^{n}}$ is a
+            $\mathbb{Z}\textrm{-Module}$ homomorphism from $\mathbb{Z}^{n}$ to
+            itself and therefore:
+            \begin{equation}
+                \textrm{Card}\big(\textrm{coker}(\varphi|_{\mathbb{Z}^{n}})\big)
+                =\big|\det\big([\varphi|_{\mathbb{Z}^{n}}
+                    ]_{\mathscr{E}_{n}}^{\mathscr{E}_{n}}\big)\big|
+            \end{equation}
+            Doing this for every entry and the summing along, using the minor
+            expansion formula, we get the end result.
+        \end{solution}
+        \begin{problem}
+            Prove the short five-lemma.
+        \end{problem}
+        \begin{solution}
+            It suffices to show that $f$ is bijective. That is, that $f$ is both
+            injective and surjective. It is surjective for let $y\in{N}$. Since
+            $f''$ is an isomorphism it is bijective, and thus there is an
+            $m''\in{M}''$ such that $f''(m'')=h(y)$. But since the rows are
+            short exact, $v$ is surjective and thus there is an $x\in{M}$ such
+            that $v(x)=m''$. But then $f''(v(x))=f''(m'')=h(y)$. From the
+            commutativity of the diagram we have that $h(f(x))=h(y)$. Let
+            $\alpha=f(x)-y$. If $\alpha=0$ then we are done, if not then
+            $\alpha$ is in the kernel of $h$ and is therefore in the image of
+            $g$ since the sequence is exact. But then there is an $n'\in{N}'$
+            such that $g(n')=\alpha$. But $f'$ is an isomorphism so there is
+            an $m'\in{M}'$ such that $f'(m')=n'$. But $u$ is injective and thus
+            there is a unique $m\in{M}$ such that $u(m')=m$. From commutativity
+            we have that $f(u(m'))=\alpha$. But then $f(x-u(m'))=y$, and thus
+            $f$ is surjective. In a similar manner it is injective. For suppose
+            $f(x)=0$ for some $x\in{M}$. Then $f(x)$ is in the kernel of $h$
+            and thus in the image of $g$. Therefore there is a unique
+            $n'\in{N}'$ such that $g(n')=f(x)$. But $0$ is such that $g(0)=0$,
+            and thus $n'=0$. Going back along $f'$, since it is bijective, we
+            get a unique $m'$ such that $f(m')=0$. But again $0$ does this so
+            $m'=0$. Going along $u$ we conclude that $x=0$, and thus $f$ is
+            injective.
+        \end{solution}
+        \begin{problem}
+            Let $M$ and $N$ be finitely generated Abelian group. If $M\oplus{M}$
+            is isomorphic to $N\oplus{N}$, does it follow that $N$ is isomorphic
+            to $N$?
+        \end{problem}
+        \begin{solution}
+            Yes, for by the primary decomposition theorem we have that:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        M\simeq\mathbb{Z}^{m}
+                        \bigoplus_{k=1}^{N}\mathbb{Z}_{q_{k}}
+                    \end{equation}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{equation}
+                        N\simeq\mathbb{Z}^{n}
+                        \bigoplus_{k=1}^{N}\mathbb{Z}_{p_{k}}
+                    \end{equation}
+                \end{minipage}
+            \end{subequations}
+            Where $q_{k}|q_{k+1}$ and $p_{k}|p_{k+1}$ are unique. From this we
+            have:
+            \begin{equation}
+                M\oplus{M}\simeq
+                \mathbb{Z}^{2m}\bigoplus_{k=1}^{N}
+                \Big(\mathbb{Z}_{q_{k}}\oplus\mathbb{Z}_{q_{k}}\Big)
+                \simeq
+                \mathbb{Z}^{2n}\bigoplus_{k=1}^{N}
+                \Big(\mathbb{Z}_{p_{k}}\oplus\mathbb{Z}_{p_{k}}\Big)
+                \simeq{N}\oplus{N}
+            \end{equation}
+            By then this is a primary decomposition of both $M\oplus{M}$ and
+            $N\oplus{N}$ and thus the sequence $q_{1},q_{1},q_{2},q_{2},\dots$
+            all the way up to $q_{N},q_{N}$ is unique and so we conclude that
+            $p_{k}=q_{k}$ for all $k\in\mathbb{Z}_{N}$. Lastly we conclude that
+            $n=m$. Therefore, since $\simeq$ is an equivalence relation, we have
+            that $N\simeq{M}$.
+        \end{solution}
+        \begin{problem}
+            Let $R$ be a ring and let $M$ be and $R\textrm{-Module}$. $M$ is
+            Noetherian if it satisfies the descending chain condition on
+            submodules. That is, for any sequence of submodules $M_{n}$ such
+            that $M_{n}\subseteq{M}_{n+1}$, there exists an $N\in\mathbb{N}$
+            such that for all $n>N$, $M_{n}=M_{N}$.
+        \end{problem}
+        \begin{problem}
+            Let $m$ and $n$ be positive integers. Show that as a $\mathbb{Z}$
+            module:
+            \begin{equation}
+                \textrm{Hom}_{\mathbb{Z}}(\mathbb{Z}/n\mathbb{Z},
+                                          \mathbb{Z}/m\mathbb{Z})
+                \simeq\mathbb{Z}/\textrm{gcd}(n,m)\mathbb{Z}
+            \end{equation}
+        \end{problem}
 \end{document} 
