@@ -348,11 +348,11 @@
         Thus, $(M,\boldsymbol{+},\star)$ is a module over $(R,+,\cdot\,)$.
     \end{proof}
     \begin{lexample}{Another Example of a Module}{Another_Example_of_a_Module}
-        Let $(\mathbb{F},+,\cdot\,)$ be a field and let $V$ be a finite
-        dimensional vector space $(V,\boldsymbol{+},\boldsymbol{\cdot}\,)$ over
-        $\mathbb{F}$. Let $T:V\rightarrow{V}$ be a linear operator and let
-        $\mathbb{F}[x]$ be the polynomial ring with coefficients in
-        $\mathbb{F}$. We can define a module struct over $V$ by letting
+        Let $(V,\boldsymbol{+},\boldsymbol{\cdot}\,)$ be a finite dimensional
+        vector space over the field $(\mathbb{F},+,\cdot\,)$ and let
+        $T:V\rightarrow{V}$ be a linear operator and let $\mathbb{F}[x]$ be the
+        polynomial ring with coefficients in $\mathbb{F}$. We can define a
+        module structure over $V$ by letting
         $\star:\mathbb{F}[x]\times{V}\rightarrow{V}$ be defined by:
         \begin{equation}
             f\star{v}=\sum_{k=0}^{n}a_{k}T^{k}(v)
@@ -361,7 +361,7 @@
         and where $T^{k}$ is the $k^{th}$ composition of $T$ with itself. That
         is, $T^{2}=T\circ{T}$, $T^{n+1}=T^{n}\circ{T}$. Letting
         $\boldsymbol{+}'$ denote polynomial addition, we have that
-        $(V,\boldsymbol{+},\star)$ is a module over $\mathbb{F}[x]$ with its
+        $(V,\boldsymbol{+}',\star)$ is a module over $\mathbb{F}[x]$ with its
         usual ring structure.
     \end{lexample}
     \begin{fdefinition}{Module Homomorphism}{Module_Homomorphism}
@@ -372,7 +372,7 @@
         such that, for all $x,y\in{M}_{1}$, and for all $r\in{R}$, the
         following are true:
         \begin{align}
-            f(x\boldsymbol{+}y)&=f(x)\boldsymbol{+}'f(y)
+            f(x\boldsymbol{+}y)&=f(\mathbf{x})\boldsymbol{+}'f(\mathbf{y})
             \tag{Preservation of Addition}\\
             f(r\star{x})&=r\diamond{f}(x)
             \tag{Preservation of Scalar Multiplication}
@@ -405,9 +405,35 @@
     \end{example}
     \begin{example}
         We've seen that any ring $(R,+,\cdot\,)$ can be seen as a module over
-        itself. We've also seen that the ring of endomorphisms over a module
+        itself. We've also seen that the ring of endomorphisms over $R$ 
         can be given a module structure as well by letting $\boldsymbol{+}'$
-        denote the sum of two endomorphisms and $\star$.
+        denote the sum of two endomorphisms and $\star$ denoting the product
+        by scalar elements of $R$. That is, $r\star{f}$ is the map defined by
+        $(r\star{f})(s)=r\cdot{f}(s)$, for all $s\in{R}$. There is bijective
+        homomorphism between these two modules. For let
+        $\varphi:R\rightarrow\textrm{End}(R)$ be defined by:
+        \begin{equation}
+            \big(\varphi(r)\big)(s)=r\cdot{s}
+        \end{equation}
+        Then $\varphi$ is a module homomorphism. For we have:
+        \begin{equation}
+            \big(\varphi(r+s)\big)(t)=(r+s)\cdot{t}
+                =(r\cdot{t})+(s\cdot{t})
+                =\big(\varphi(r)\big)(t)+\big(\varphi(s)\big)(t)
+        \end{equation}
+        And thus addition is preserved. Moreover, if $r,s\in{S}$, then:
+        \begin{equation}
+            \big(\varphi(r\cdot{s})\big)(t)
+            =(r\cdot{s})\cdot{t}
+            =r\cdot(s\cdot{t})
+            =r\cdot\big(\varphi(r)\big)(t)
+        \end{equation}
+        And thus $\varphi$ is a module homomorphism. Moreover, the identity is
+        mapped to the identity, for:
+        \begin{equation}
+            \big(\varphi(1)\big)(s)=1\cdot{s}=\textrm{id}_{R}(s)
+        \end{equation}
+        We will later show that this homomorphism is bijective.
     \end{example}
     And from this we can define a module isomorphism\index{Module Isomorphism}.
     \begin{fdefinition}{Module Isomorphism}{Module_Isomorphism}
@@ -417,9 +443,157 @@
         $(R,\,+,\,\cdot\,)$ is a \gls{module homomorphism} $f$ such that $f$ is
         a \gls{bijective function}.
     \end{fdefinition}
+    \begin{example}
+        Using the previous example we see with a ring $(R,+,\cdot\,)$ acting as
+        a module over itself, and the ring of endomorphisms
+        $(\textrm{End}(R),\boldsymbol{+}',\circ)$ given the module structure
+        $(r\star{f})(s)=r\cdot{f}(s)$, are homomorphic. The homomorphism given,
+        mapping $r$ to the endomorphism $f(s)=r\cdot{s}$, is bijective. It is
+        injective for:
+        \begin{subequations}
+            \begin{equation}
+                \big(\varphi(r)\big)(t)=\big(\varphi(s)\big)(t)
+                \Leftrightarrow
+                r\cdot{t}=s\cdot{t}
+                \Leftrightarrow
+                (r-s)\cdot{t}=0
+            \end{equation}
+        \end{subequations}
+        But if $(r-s)\cdot{t}=0$ for all $t\in{R}$, then $r-s=0$
+        (Thm.~\ref{thm:Mult_by_Zero_Always_Zero_Implies_Zero}) and therefore
+        $r=s$. Moreover every element of $\textrm{End}(R)$ is mapped to. For let
+        $f\in\textrm{End}(R)$. Then since $f$ is a homomorphism, $f(1)=1$, so
+        we have:
+        \begin{equation}
+            f(s)=f(s\cdot{1})=s\cdot{f}(1)=s\cdot{r}
+        \end{equation}
+    \end{example}
     \begin{fdefinition}{Submodule}{Submodule}
         A \gls{submodule}\index{Submodule} of a \gls{module}
         $(M,\boldsymbol{+},\star)$ over a ring $(R,+,\cdot)$ is a \gls{subgroup}
         $(N,\boldsymbol{+})$ of $(M,\boldsymbol{+})$ such that, for all
         $n\in{N}$ and for all $r\in{R}$ it is true that $r\star{n}\in{N}$.
     \end{fdefinition}
+    \begin{fdefinition}{Linear Transformation}{Linear_Transformation}
+        A linear transformation from a module $(M_{1},\boldsymbol{+},\star)$ to
+        a module $(M_{2},\boldsymbol{+}',\diamond)$ over a ring
+        $(R,+,\cdot\,)$ is a function $T:M_{1}\rightarrow{M}_{2}$ such that,
+        for all $m_{1},m_{2}\in{M}_{1}$ and for all $r_{1},r_{2}\in{R}$, the
+        following is true:
+        \begin{equation*}
+            f\big((r_{1}\star{m}_{1})\boldsymbol{+}(r_{2}\star{m}_{2})\big)
+            =\big(r_{1}\diamond{f}(m_{1})\big)\boldsymbol{+}'
+                \big(r_{2}\diamond{f}(m_{2})\big)
+        \end{equation*}
+    \end{fdefinition}
+    \begin{fdefinition}{Invariant Subspace}{Invariant_Subspace}
+        And invariant subspace of a vector space $(V,\boldsymbol{+},\cdot\,)$
+        over a field $(\mathbb{F},+,\cdot\,)$ under a linear transformation
+        $T:V\rightarrow{V}$ is a subspace $W\subseteq{V}$ such that the image
+        of $W$ under $T$ is a subset of $W$. That is, $T(W)\subseteq{W}$.
+    \end{fdefinition}
+    \begin{theorem}
+        If $(V,\boldsymbol{+},\boldsymbol{\cdot})$ is a vector space over a
+        field $(\mathbb{F},+,\cdot\,)$, if $(\mathbb{F}[x],+',*\,)$ is
+        the ring of polynomials over $\mathbb{F}$, if $T:V\rightarrow{V}$ is a
+        linear transformation, if
+        $\star:\mathbb{F}[x]\times{V}\rightarrow{V}$ is defined by:
+        \begin{equation}
+            f\star{v}=\sum_{k=1}^{n}a_{k}T^{k}(v)
+        \end{equation}
+        where $a_{k}$ are the coefficients of $f\in\mathbb{F}[x]$ and
+        $T^{k}$ is the $k^{th}$ composition of $T$ with itself, then a subset
+        $W\subseteq{V}$ is a submodule of $V$ over $\mathbb{F}[x]$ if and only
+        if $W$ is an invariant subspace of $V$ under $T$.
+    \end{theorem}
+    \begin{proof}
+        For let $W$ be a submodule of $V$, let $w\in{W}$, and let $f$ be the
+        polynomial $f(x)=x$. But then $f\star{w}=T(w)$, and since $W$ is a
+        submodule, it is true that $f\star{w}\in{W}$. But then $T(w)\in{W}$,
+        and therefore $T(W)\subseteq{W}$. Thus, $W$ is an invariant subspace
+        under $T$ (Def.~\ref{def:Invariant_Subspace}). Now suppose $W$ is an
+        invariant subspace of $V$ under $T$. Then for all $n\in\mathbb{N}$,
+        $T^{n}(W)\subseteq{W}$ since by induction
+        $T^{n}(W)=T(T^{n-1}(W))\subseteq{T}(W)\subseteq{W}$. Let
+        $f\in\mathbb{F}[x]$ with coefficients $a_{k}$ and let $w\in{W}$. Since,
+        for all $n\in\mathbb{N}$ it is true that $T^{n}(w)\in{W}$, and since
+        $W$ is a subspace of $V$, for all $k$ it is true that
+        $a_{k}\cdot{T}^{n}(w)\in{W}$. Therefore $f\star{w}\in{W}$. That is,
+        $W$ is a submodule of $V$ over $\mathbb{F}[x]$.
+    \end{proof}
+    If we have a finite dimensional vector space $V$ and a subspace $W$ with
+    basis $\mathscr{B}'$, we can extend this to a basis $\mathscr{B}$. The
+    representiting matrix then has the form:
+    \begin{equation}
+        [T]_{\mathscr{B}}^{\mathscr{B}}=
+        \begin{bmatrix}
+            [T|_{W}]_{\mathscr{B}'}^{\mathscr{B}'}&*\\
+            0&*
+        \end{bmatrix}
+    \end{equation}
+    \begin{theorem}
+        If $(R_{1},+,\cdot\,)$ and $(R_{2},+',*)$ are rings, and if
+        $(M,\boldsymbol{+},\star)$ is a module over $(R_{2},+',*)$, and if
+        $\varphi:R_{1}\rightarrow{R}_{2}$ is a ring homomorphism, then
+        there is a function $\diamond:R_{1}\times{M}\rightarrow{M}$ such that
+        $(M,\boldsymbol{+},\diamond)$ is a module over $(R,+,\cdot\,)$.
+    \end{theorem}
+    \begin{proof}
+        For let $\diamond:R_{1}\times{M}\rightarrow{M}$ be defined by:
+        \begin{equation}
+            r\diamond{m}=\varphi(r)\star{m}
+        \end{equation}
+        The $(M,\boldsymbol{+},\diamond)$ is a module over $(R,+,\cdot\,)$.
+        For since $(M,\boldsymbol{+},\diamond)$ is a module over $(R,+',*)$,
+        $(M,\boldsymbol{+})$ is an Abelian group (Def.~\ref{def:Module}).
+        Moreover, if $r_{1},r_{2}\in{R}_{1}$, and if $m\in{M}$, then:
+        \begin{align}
+            (r_{1}+r_{2})\diamond{m}&=\varphi(r_{1}+r_{2})\star{m}
+            \tag{Definition of $\diamond$}\\
+            &=\Big(\varphi(r_{1})+'\varphi(r_{2})\Big)\star{m}
+            \tag{$\varphi$ is a Homomorphism}\\
+            &=\big(\varphi(r_{1})\star{m}\big)\boldsymbol{+}
+                \big(\varphi(r_{2})\star{m}\big)
+            \tag{Distributive Property}\\
+            &=\big(r_{1}\diamond{m}\big)\boldsymbol{+}\big(r_{2}\diamond{m}\big)
+            \tag{Definition of $\diamond$}
+        \end{align}
+        And thus $\diamond$ is distributive over module elements. If
+        $r\in{R}_{1}$ and if $m_{1},m_{2}\in{M}$, then:
+        \begin{align}
+            r\diamond(m_{1}\boldsymbol{+}m_{2})
+            &=\varphi(r)\star(m_{1}\boldsymbol{+}m_{2})
+            \tag{Definition of $\diamond$}\\
+            &=\big(\varphi(r)\star{m}_{1}\big)\boldsymbol{+}
+                \big(\varphi(r)\star{m}_{2}\big)
+            \tag{Distributive Property}\\
+            &=(r\diamond{m}_{1})\boldsymbol{+}(r\diamond{m}_{2})
+            \tag{Definition of $\diamond$}
+        \end{align}
+        Also, the identity is preserved. For let $\mathbb{I}_{1}$ and
+        $\mathbb{I}_{2}$ be the unital elements of $(R_{1},\cdot)$ and
+        $(R_{2},*)$, respectively. Since $\varphi$ is a ring homomorphism,
+        $\varphi(\mathbb{I}_{1})=\mathbb{I}_{2}$, and therefore:
+        \begin{align}
+            \mathbb{I}_{1}\diamond{m}
+            &=\varphi(\mathbb{I}_{1})\star{m}
+            \tag{Definition of $\diamond$}\\
+            &=\mathbb{I}_{2}\star{m}
+            \tag{Identity Property of Homomorphisms}\\
+            &=m
+            \tag{Identity Property of Modules}
+        \end{align}
+        And thus $\diamond$ preserves the identity. Lastly, $\diamond$ is
+        compatible with scalar multiplication.
+        \begin{align}
+            r_{1}\diamond(r_{2}\diamond{m})
+            &=\varphi(r_{1})\star(\varphi\star{m})
+            \tag{Definition of $\diamond$}\\
+            &=\big(\varphi(r_{1})*\varphi(r_{2})\big)\star{m}
+            \tag{Module Compatibility with Multiplication}\\
+            &=(r_{1}\cdot{r}_{2})\diamond{m}
+            \tag{Definition of $\diamond$}
+        \end{align}
+        Therefore, $(M,\boldsymbol{+},\diamond)$ is a module over
+        $(R_{1},+,\cdot\,)$ (Def.~\ref{def:Module}).
+    \end{proof}
