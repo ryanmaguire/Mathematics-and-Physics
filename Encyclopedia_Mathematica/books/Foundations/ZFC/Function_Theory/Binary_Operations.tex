@@ -74,6 +74,38 @@
             \textrm{Card}(B)=n^{(n^2)}
         \end{equation}
     \end{example}
+    \begin{example}
+        Let's consider some formula that take in numbers and return numbers, and
+        see if they can define operations on various sets. Suppose we have:
+        \begin{equation}
+            a*b=\{\,r\in\mathbb{R}\;|\;r^{2}=|ab|\,\}
+        \end{equation}
+        Where $|ab|$ denotes the absolute value of $a$ times $b$. If we take the
+        positive square root we can write this as $a*b=\sqrt{|ab|}$. If we
+        consider this formula on the rational numbers $\mathbb{Q}$, does it
+        define a function? One might recall that $\sqrt{2}$ is not a rational
+        number. That is, it is \textit{irrational}. Thus $1*2$ is not a rational
+        number, and so $*$ is not a binary operation on $\mathbb{Q}$. It is a
+        binary operation on $\mathbb{R}$, however. Suppose we change the formula
+        to state:
+        \begin{equation}
+            a*b=\{\,r\in\mathbb{R}\:|\;r^{2}-ab=0\,\}
+        \end{equation}
+        and where we consider this formula to take inputs from $\mathbb{R}$.
+        This is not a binary operation since it is poorly defined. That is,
+        should $1*1=1$, or should $1*1=\minus{1}$? The formula is ambgious and
+        thus $*$ is not a binary operation.
+    \end{example}
+    \begin{example}
+        If we consider subtraction on the integers $\mathbb{Z}$, this is a
+        binary operation. The operation is well defined and returns an integer
+        for all integer inputs. If instead we consider subtraction on
+        $\mathbb{N}$, this is \textit{not} a binary operation since it may take
+        in non-negative integers and return a negative integer. For example,
+        $1-2=\minus{1}$, and $\minus{1}\notin\mathbb{N}$. A simple fix for this
+        is considering again the absolute value function. If we define
+        $n*m=|n-m|$, then $*$ is indeed a binary operation on $\mathbb{N}$.
+    \end{example}
     \begin{fnotation}{Binary Operation}{Binary_Operation}
         If $A$ is a set and if $*:A\times{A}\rightarrow{A}$ is a binary
         operation on $A$, for any ordered pair $(a,b)\in{A}^{2}$, the image
@@ -111,6 +143,17 @@
         $*$ is an element $e_{R}$ such that for all $a\in{A}$ it is true that
         $a*e_{R}=a$.
     \end{fdefinition}
+    \begin{example}
+        Consider $\mathbb{R}$ with the operation $*$ defined by $a*b=a+b+1$.
+        This operation has a right unital element, $\minus{1}$. For:
+        \begin{equation}
+            a*(\minus{1})=a+(\minus{1})+1=a+0=a
+        \end{equation}
+        And this is true for all $a\in\mathbb{R}$, so $\minus{1}$ is a right
+        unital element. It turns out this is also a left unital element, and
+        hence a unital element, and this can be proven if addition is known to
+        be a \textit{commutative} operation.
+    \end{example}
     \begin{theorem}
         \label{thm:left_and_right_identity_implies_identity}%
         If $A$ is a set, if $*$ is a binary operation on $A$, if $e_{L}$ is a
@@ -221,3 +264,47 @@
         \gls{binary operation} $*$ such that, for all $a,b,c\in{A}$ it is true
         that $a*(b*c)=(a*b)*c$.
     \end{fdefinition}
+    \begin{example}
+        Consider a finite set $A$ and consider the set of all functions from
+        $\mathbb{Z}_{n}$ to $A$. That is, $\mathcal{F}_{n}(\mathbb{Z}_{n},A)$.
+        Define $A[x]$ by:
+        \begin{equation}
+            \mathcal{F}=\bigcup_{n\in\mathbb{N}}\mathcal{F}_{n}
+        \end{equation}
+        That is, the set of all finite sequences in $A$. We can form an
+        associative operation on this set by defining the concatenation
+        operation. Given $f,g\in\mathcal{F}$, suppose
+        $f\in\mathcal{F}(\mathbb{Z}_{m},A)$ and
+        $g\in\mathcal{F}(\mathbb{Z}_{n},A)$. We define
+        $f*g\in\mathcal{F}(\mathbb{Z}_{m+n},A)$ as follows:
+        \begin{equation}
+            (f*g)(k)=
+            \begin{cases}
+                f(k),&k\in\mathbb{Z}_{m}\\
+                g(k-m),&k\in\mathbb{Z}_{m+n}\textrm{ and }k\geq{m}
+            \end{cases}
+        \end{equation}
+        That is, given two sequences $f_{0},f_{1},\dots,f_{m-1}$ and
+        $g_{0},g_{1},\dots,g_{n-1}$, we concatenate them to form the sequence
+        $f_{0},\dots,f_{m-1},g_{0},\dots,g_{n-1}$. This operation is associative
+        since if $f,g,h\in\mathcal{F}$, then:
+        \begin{subequations}
+            \begin{align}
+                f*(g*h)&=(f_{0},f_{1},\dots,f_{m-1})
+                    *(g_{0},g_{1},\dots,g_{m-1},h_{0},h_{1},\dots,h_{r-1})\\
+                &=f_{0},f_{1},\dots,f_{m-1},
+                    g_{0},g_{1},\dots,g_{m-1},h_{0},h_{1},\dots,h_{r-1}\\
+                &=(f_{0},f_{1},\dots,f_{m-1},
+                    g_{0},g_{1},\dots,g_{m-1})*(h_{0},h_{1},\dots,h_{r-1})\\
+                &=(f*g)*h
+            \end{align}
+        \end{subequations}
+        If $A$ has more than one point than $*$ is not commutative. For let
+        $f,g:\mathbb{Z}_{1}\rightarrow{A}$ be defined by $f(0)=a$ and $g(0)=b$,
+        respectively. Then $f*g=a,b$ but $g*f=b,a$, and thus $f*g\ne{g}*f$.
+        There is, however, an identity. Consider a $\mathbb{Z}_{0}$, which is
+        the empty set. Any function from $\mathbb{Z}_{0}$ to $A$ is therefore
+        the \textit{empty sequence}. If we concatenate $f$ with the empty
+        sequence we get back $f$, and this then acts as our unital element.
+    \end{example}
+
