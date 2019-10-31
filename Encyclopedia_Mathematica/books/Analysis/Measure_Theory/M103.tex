@@ -1309,4 +1309,108 @@
                     na_{n}^{n-1}
             \end{equation}
         \end{proof}
+        \begin{problem}
+            Suppose that $(X,\mathcal{M},\mu)$ is a measure space and that
+            $f\in{L}^{1}(\mu)$. Show that $\{x\in{X}:f(x)\ne{0}\}$ is $\sigma$
+            finite.
+        \end{problem}
+        \begin{solution}
+            For let $g:X\rightarrow[0,\infty]$ be defined by $g(x)=|f(x)|$. Then
+            since $f\in{L}^{1}$ it follows that $g\in{L}^{1}$. Moreover, for all
+            $n\in\mathbb{N}$, it follows that:
+            \begin{equation}
+                \mu\Big(g^{\minus{1}}\big([\frac{1}{n},n]\big)\Big)<\infty
+            \end{equation}
+            Otherwise $g\notin{L}^{1}(\mu)$. And the set $\{x\in{X}:f(x)\ne{0}\}$
+            can be written as the union:
+            \begin{equation}
+                \{x\in{X}:f(x)\ne{0}\}
+                =\bigcup_{n\in\mathbb{N}}g^{\minus{1}}\big([\frac{1}{n},n]\big)
+            \end{equation}
+            The countable union of sets of finite measure, and is therefore
+            $\sigma$ finite. For the second part this is the definition of the
+            integral of a measurable function. From the previous construction, the
+            $\varphi_{n}$ must vanish on $\{x\in{X}:f(x)=0\}$, otherwise this would
+            violate monotonicity. Since the complement of this set is $\sigma$
+            finite, we are done. Third, per definition of integral:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}\int_{X}\varphi_{n}\diff\mu
+                =\int_{X}f\diff\mu
+            \end{equation}
+            Combining this with the continuity of the absolute value function,
+            we have:
+            \begin{align}
+                \Big|\underset{n\rightarrow\infty}{\lim}\int_{X}\varphi_{n}\diff\mu-
+                    \int_{X}f\diff\mu\Big|
+                &=\underset{n\rightarrow\infty}{\lim}\Big|
+                    \int_{X}\varphi_{n}\diff\mu-\int_{X}f\diff\mu\Big|\\
+                &\leq\underset{n\rightarrow\infty}{\lim}\int_{X}|
+                    f-\varphi_{n}|\diff\mu\\
+                &=\underset{n\rightarrow\infty}{\lim}\int_{X}(f-\varphi_{n})\diff\mu
+            \end{align}
+            Where the inequality comes from the triangle inequality and the
+            monotonicity of $\varphi_{n}$ gives the last equality. But this
+            converges to zero, and thus for any $\varepsilon>0$ there is an
+            $N\in\mathbb{N}$ such that $n>N$ implies the integral of
+            $f-\varphi_{n}$ across $X$ is less than $\varepsilon$. Choose
+            $\varphi=\varphi_{N+1}$.
+        \end{solution}
+        \begin{problem}
+            Prove that convergence in measure implies there's a subsequence that
+            converges almost everywhere.
+        \end{problem}
+        \begin{solution}
+            For let $n_{k}\in\mathbb{N}$ be such that, for all $n>n_{k}$ we have:
+            \begin{equation}
+                \mu\Big(\{x\in{X}:|f_{n}(x)-f(x)|\geq\frac{1}{2^{k}}\}\Big)
+                    <\frac{1}{2^{k}}
+            \end{equation}
+            Define $E_{k}$ by:
+            \begin{equation}
+                E=\bigcap_{k\in\mathbb{N}}\bigcup_{i=k}^{\infty}
+                \{x\in{X}:|f_{n}(x)-f(x)|\geq\frac{1}{2^{k}}\}
+            \end{equation}
+            Then since $f_{n}$ converges in measure so $f$, $\mu(E)=0$. Moreover,
+            $f_{n_{k}}$ is Cauchy on $X\setminus{E}$ since if $k\leq{j}$, and if
+            $x\in{X}\setminus{E}$, then:
+            \begin{equation}
+                |f_{n_{k}}(x)-f_{n_{j}}(x)|\leq
+                    |f_{n_{k}}(x)-f(x)|+|f(x)-f_{n_{j}}(x)|\leq
+                    \frac{1}{2^{k-1}}
+            \end{equation}
+            And this can be made small. Thus, $f_{n_{k}}\rightarrow{f}$ for all
+            $x\in{X\setminus{E}}$. And since $\mu(E)=0$, $f_{n_{k}}\rightarrow{f}$
+            almost everywhere.
+        \end{solution}
+        \begin{problem}
+            Prove Egorov's Theorem (Damn westerners mispelling Russian names).
+        \end{problem}
+        \begin{solution}
+            Throw out the part that isn't converging since it happens on a null set,
+            and suppose $f_{n}\rightarrow{f}$ pointwise. Let $E_{n}$ be defined by:
+            \begin{equation}
+                E_{n,k}=\{x\in{X}:|f_{n}(x)-f(x)|\geq\frac{1}{k}\}
+            \end{equation}
+            Then for all $m<n$ we have:
+            \begin{equation}
+                \bigcup_{i=n}^{\infty}E_{i,k}\subseteq\bigcup_{i=m}^{\infty}E_{i,k}
+            \end{equation}
+            And thus this forms a nested decreasing chains of subsets. But
+            $\mu(X)<\infty$ so we may apply continuity from above and obtain:
+            \begin{equation}
+                \mu\Big(\bigcap_{n\in\mathbb{N}}\bigcup_{m=n}^{\infty}E_{m,k}\Big)
+                    =\mu(\emptyset)=0
+            \end{equation}
+            So, given $\varepsilon>0$, we can choose a subsequence $n_{k}$ such that
+            $\mu(E_{n_{k},k})<\varepsilon/2^{k}$. Define $E$ by:
+            \begin{equation}
+                E=\bigcup_{k\in\mathbb{N}}E_{n_{k},k}
+            \end{equation}
+            Then $\mu(E)<\varepsilon$ and moreover, for all $x\in{X}\setminus{E}$
+            we have that, for all $n>n_{k}$:
+            \begin{equation}
+                |f_{n}(x)-f(x)|<\frac{1}{k}
+            \end{equation}
+            And therefore $f_{n}\rightarrow{f}$ uniformly.
+        \end{solution}
 \end{document}
