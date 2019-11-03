@@ -1,10 +1,10 @@
 \section{Groups}
-    While monoids are structurally simpler than groups, the notion of a group is
-    one of the most basic and fundamental algebraic structures that one can
+    While monoids are structurally simpler than groups, the notion of a group
+    is one of the most basic and fundamental algebraic structures that one can
     consider.
     \begin{fdefinition}{Group}{Group}
-        A group is a \gls{monoid} $(G,*)$ such that for all $g\in{G}$, $g$ is an
-        \gls{invertible element} with respect to $*$. That is:
+        A group is a \gls{monoid} $(G,*)$ such that for all $g\in{G}$, $g$ is
+        an \gls{invertible element} with respect to $*$. That is:
         \begin{itemize}
             \item The binary operation $*$ is associative.
             \item There exists an identity element $e\in{G}$.
@@ -24,9 +24,9 @@
     \begin{example}
         If $\mathbb{R}^{+}$ denotes the positive real numbers, and if $\cdot$
         denotes the usual multiplication of real numbers, then
-        $(\mathbb{R},\cdot)$ is a group. For this group, 1 is the unital element
-        for all $r\in\mathbb{R}^{+}$, $1/r$ is the inverse element. Lastly,
-        the operation is indeed associative.
+        $(\mathbb{R},\cdot)$ is a group. For this group, 1 is the unital
+        element for all $r\in\mathbb{R}^{+}$, $1/r$ is the inverse element.
+        Lastly, the operation is indeed associative.
     \end{example}
     \begin{example}
         Consider $\mathbb{Z}_{n}$ with modular addition $+$. Then
@@ -89,6 +89,7 @@
         $a*b=b^{\minus{1}}*a^{\minus{1}}$.
     \end{proof}
     \begin{theorem}
+        \label{thm:Group_Inverse_of_Inverse}%
         If $(G,*)$ is a group and $a\in{G}$, then:
         \begin{equation}
             (a^{\minus{1}})^{\minus{1}}=a
@@ -179,9 +180,217 @@
         \par\vspace{2.5ex}
         And therefore by transitivity, $b=c$.
     \end{proof}
+    The cancellation laws allow us to perform the elementary techniques found
+    in elementary algebra.
+    \begin{example}
+        Let $(G,*)$ be a group with unital element $e\in{G}$, and let
+        $x,a\in{G}$ be such that $x^{2}=b$ and $x^{7}=e$, where
+        $x^{n}=x^{n-1}*x$. We can use the cancellation laws to solve for $x$.
+        We have:
+        \begin{equation}
+            b^{3}*x=(x^{2})^{3}*x=x^{6}*x=x^{7}=e
+        \end{equation}
+        And thus we have $b^{3}*x=e$. But all $b^{3}*(b^{3})^{\minus{1}}=e$, and
+        thus by the left cancellation law
+        (Thm.~\ref{thm:Group_Left_Cancellation_Law}), we have
+        $x=(b^{3})^{\minus{1}}$.
+    \end{example}
+    \begin{theorem}
+        If $(G,*)$ is a group and if $a\in{G}$ is idempotent, then $a$ is the
+        unital element.
+    \end{theorem}
+    \begin{proof}
+        If $(G,*)$ is a group, then there is a unital element $e\in{G}$
+        (Def.~\ref{def:Group}). But if $a$ is idempotent, then $a*a=a$
+        (Def.~\ref{def:Idempotent}). But $a*e=a$, and thus by the left
+        cancellation law (Thm.~\ref{thm:Group_Left_Cancellation_Law}) $a=e$.
+    \end{proof}
+    Note that this does not say that $a^{2}=e$ implies that $a=e$, for consider
+    the group $(\mathbb{Z}_{2},+)$. Then $1+1=0$, which is the identity element,
+    but $1\ne{0}$. That is, we can't form square roots in general. And indeed,
+    given a group $(G,*)$ and an element $a\in{G}$, there may not be an element
+    $b\in{G}$ such that $a=b*b$. One need only think of the group
+    $(\mathbb{Q}^{+},\cdot\,)$, where $\cdot$ denotes usual multiplication.
+    This is a group, and $2\in\mathbb{Q}^{+}$, but there is no element
+    $x\in\mathbb{Q}^{+}$ such that $x^{2}=2$. Groups do have the Latin square
+    property\index{Latin Square Property}.
+    \begin{ltheorem}{Latin Square Property of Groups}{Group_Latin_Square}
+        If $(G,*)$ is a group, $a,b\in{G}$, then there is a unique $x\in{G}$
+        such that $a*x=b$.
+    \end{ltheorem}
+    \begin{proof}
+        For since $(G,*)$ is a group, there is a unital element $e\in{G}$ and an
+        element $a^{\minus{1}}\in{G}$ such that $a*a^{\minus{1}}=e$.
+        Let $x=a^{\minus{1}}*b$ (Def.~\ref{def:Group}). Then:
+        \begin{equation}
+            a*x=a*(a^{\minus{1}}*b)=(a*a^{\minus{1}})*b=e*b=b
+        \end{equation}
+        Moreover, if $a*y=b$, then by the left cancellation law
+        \ref{thm:Group_Left_Cancellation_Law}, $y=x$. Therefore, $x$ is unique.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Commuting_Elements_Have_Commuting_Inverses}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ are commuting elements, and if
+        $a^{\minus{1}}$ and $b^{\minus{1}}$ are the inverses of $a$ and $b$,
+        respectively, then $a^{\minus{1}}$ and $b^{\minus{1}}$ are commuting
+        elements.
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{align}
+            b^{\minus{1}}*a^{\minus{1}}
+            &=(a*b)^{\minus{1}}
+            \tag{Thm.~\ref{thm:Group_Inverse_of_Product}}\\
+            &=(b*a)^{\minus{1}}
+            \tag{Hypothesis}\\
+            &=a^{\minus{1}}*b^{\minus{1}}
+            \tag{Thm.~\ref{thm:Group_Inverse_of_Product}}
+        \end{align}
+        By transitivity,
+        $a^{\minus{1}}*b^{\minus{1}}=b^{\minus{1}}*a^{\minus{1}}$. Thus,
+        $a^{\minus{1}}$ and $b^{\minus{1}}$ commute
+        (Def.~\ref{def:Commuting_Elements}).
+    \end{proof}
+    We will later define the center of a group to be the subset of all commuting
+    elements. The above theorem will the be used to show that the center is a
+    \textit{subgroup} of the original group.
+    \begin{theorem}
+        \label{thm:Group_Commuting_Elements_Have_Commuting_Powers_Part_a}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ commute, and if $n\in\mathbb{N}$,
+        then $a^{n}$ and $b$ commute.
+    \end{theorem}
+    \begin{proof}
+        For by induction, suppose not. Then by the well ordering of $\mathbb{N}$
+        there is a least $n\in\mathbb{N}$ such that $a^{n}$ and $b$ do not
+        commute. But $a$ and $b$ commute, and thus $n>1$. But then $a^{n-1}$
+        commutes with $b$. Thus:
+        \par
+        \begin{minipage}[t]{0.52\textwidth}
+            \centering
+            \begin{align}
+                a^{n}*b&=(a^{n-1}*a)*b
+                \tag{Definition of $a^{n}$}\\
+                &=a^{n-1}*(a*b)
+                \tag{Associativity}\\
+                &=a^{n-1}*(b*a)
+                \tag{Commutativity}\\
+                &=(a^{n-1}*b)*a
+                \tag{Associativity}
+            \end{align}
+            \hfill
+        \end{minipage}
+        \begin{minipage}[t]{0.47\textwidth}
+            \centering
+            \begin{align}
+                &=(b*a^{n-1})*a
+                \tag{Commutativity}\\
+                &=b*(a^{n-1}*a)
+                \tag{Associativity}\\
+                &=b*a^{n}
+                \tag{Definition of $a^{n}$}
+            \end{align}
+        \end{minipage}
+        \par\vspace{2.5ex}
+        By transitivity, $a^{n}*b=b*a^{n}$, a contradiction. Thus, for all
+        $n\in\mathbb{N}$ it is true that $a^{n}$ and $b$ commute.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Commuting_Elements_Have_Commuting_Powers_Part_b}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ commute, and if $n\in\mathbb{N}$,
+        then $a^{n}$ and $b^{n}$ commute.
+    \end{theorem}
+    \begin{proof}
+        For by
+        Thm.~\ref{thm:Group_Commuting_Elements_Have_Commuting_Powers_Part_a},
+        $b$ commutes with $a^{n}$. But again, if $a^{n}$ commutes with
+        $b$, then $a^{n}$ commutes with $b^{n}$
+        (Thm.~\ref{thm:Group_Commuting_Elements_Have_Commuting_Powers_Part_a}),
+        completing the proof.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Equiv_Def_of_Commute_a}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ commute, and if $b^{\minus{1}}$
+        is the inverse element of $b$, then $a=b*a*b^{\minus{1}}$
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{equation}
+            a=a*(b*b^{\minus{1}})
+            =(a*b)*b^{\minus{1}}
+            =(b*a)*b^{\minus{1}}
+        \end{equation}
+        By transitivity, $a=b*a*b^{\minus{1}}$.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Equiv_Def_of_Commute_b}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ are such that
+        $a=b*a*b^{\minus{1}}$, then $a$ and $b$ commute.
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{equation}
+            a*b=(b*a*b^{\minus{1}})*b
+            =b*(a*b*b^{\minus{1}})
+            =b*a
+        \end{equation}
+        By transitivity, $a*b=b*a$, and thus $a$ and $b$ commute
+        (Def.~\ref{def:Commuting_Elements}).
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Commuting_Elements_Commute_with_Inverses}%
+        If $(G,*)$ is a group, if $a,b\in{G}$ commute, and if $b^{\minus{1}}$ is
+        the inverse of $b$, then $a$ and $b^{\minus{1}}$ commute.
+    \end{theorem}
+    \begin{proof}
+        For let $e\in{G}$ be the unital element. Then:
+        \par
+        \begin{minipage}[t]{0.56\textwidth}
+            \centering
+            \begin{align}
+                b^{\minus{1}}*a
+                &=b^{\minus{1}}*(b*a*b^{\minus{1}})
+                \tag{Thm.~\ref{thm:Group_Equiv_Def_of_Commute_a}}\\
+                &=(b^{\minus{1}}*b)*(a*b^{\minus{1}})
+                \tag{Associativity}
+            \end{align}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.42\textwidth}
+            \centering
+            \begin{align}
+                &=e*(a*b^{\minus{1}})
+                \tag{Inverse}\\
+                &=a*b^{\minus{1}}
+                \tag{Identity}
+            \end{align}
+        \end{minipage}
+        \par\vspace{2.5ex}
+        By transitivity, $a*b^{\minus{1}}=b^{\minus{1}}*a$, and thus $a$ and
+        $b^{\minus{1}}$ commute (Def.~\ref{def:Commuting_Elements}).
+    \end{proof}
+    \begin{theorem}
+        If $(G,*)$ is a group, if $e\in{G}$ is the unital element, and if
+        $a,b\in{G}$ commute, then $a*b*a^{\minus{1}}*b^{\minus{1}}=e$.
+    \end{theorem}
+    \begin{proof}
+        For $(a*b)^{\minus{1}}=b^{\minus{1}}*a^{\minus{1}}$
+        (Thm.~\ref{thm:Group_Inverse_of_Product}). But if $a$ and $b$ commute,
+        and $a^{\minus{1}}$ and $b^{\minus{1}}$ commute
+        (Thm.~\ref{thm:Group_Commuting_Elements_Have_Commuting_Inverses}),
+        and thus $b^{\minus{1}}*a^{\minus{1}}=a^{\minus{1}}*b^{\minus{1}}$.
+        But then:
+        \begin{equation}
+            e=(a*b)*(b^{\minus{1}}*a^{\minus{1}})
+            =(a*b)*(a^{\minus{1}}*b^{\minus{1}})
+        \end{equation}
+        Completing the proof.
+    \end{proof}
+    The above theorems did not require all elements to commute with each other,
+    and thus apply in more general settings. When we always have commutativity,
+    we call the group \textit{Abelian}.
     \begin{fdefinition}{Abelian Group}{Abelian_Group}
         An \gls{Abelian group} is a \gls{group} $(G,*)$ such that $*$ is
-        a \gls{commutative operation}.
+        a \gls{commutative operation}.\index{Abelian Group}
     \end{fdefinition}
     \begin{lexample}{The Dihedral Group $D_{6}$}{Dihedral_Group_D_6}
         Not every group is Abelian, and a classic non-Abelian group is the group
@@ -205,10 +414,10 @@
         (Tab.~\ref{tab:Cayley_Table_D_6}) of this operation. A few things to
         note, the identity of our group is the \textit{do nothing} symmetry.
         That is, we neither rotate nor reflect. Also note that reflecting twice
-        in a row or rotating three times in a row is equivalent to doing nothing.
-        The last thing to note is that reflection, rotation, then reflecting
-        again is the same as rotating \textit{backwards}. In other words, we
-        have the following constraints:
+        in a row or rotating three times in a row is equivalent to doing
+        nothing. The last thing to note is that reflection, rotation, then
+        reflecting again is the same as rotating \textit{backwards}. In other
+        words, we have the following constraints:
         \begin{equation}
             r^{3}=e
             \quad\quad
@@ -469,12 +678,110 @@
         \end{table}
         From the table we see that this group is not Abelian.
     \end{lexample}
-    \begin{definition}
-        If $(G,*)$ and $(G',\circ)$ are groups and
-        $f:G\rightarrow G'$ is a bijective function, then $f$ is said to
-        be an isomorphism between $(G,*)$ and $(G',\circ)$ if and only if
-        for all $a,b\in{G}$, $f(a*b)=f(a)\circ{f}(b)$.
-    \end{definition}
+    \begin{theorem}
+        If $(G,*)$ is a group, if $a,b\in{G}$ commute, and if $g\in{G}$, then
+        $g*a*g^{\minus{1}}$ and $g*b*g^{\minus{1}}$ commute.
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{align}
+            (g*a*g^{\minus{1}})*(g*b*g^{\minus{1}})
+            &=(g*a)*(g^{\minus{1}}*g)*(b*g^{\minus{1}})
+            \tag{Associativity}\\
+            &=(g*a)*e*(b*g^{\minus{1}})
+            \tag{Inverse}\\
+            &=(g*a)*(b*g^{\minus{1}})
+            \tag{Identity}\\
+            &=g*(a*b)*g^{\minus{1}}
+            \tag{Associativity}\\
+            &=g*(b*a)*g^{\minus{1}}
+            \tag{Commutativity}\\
+            &=g*\big((b*e)*a\big)*g^{\minus{1}}
+            \tag{Identity}\\
+            &=g*\Big(\big(b*(g^{\minus{1}}*g)\big)*a\Big)*g^{\minus{1}}
+            \tag{Inverse}\\
+            &=g*\Big(\big((b*g^{\minus{1}})*g\big)*a)*g^{\minus{1}}
+            \tag{Associativity}\\
+            &=g*(b*g^{\minus{1}})*(g*a)*g^{\minus{1}}
+            \tag{Associativity}\\
+            &=(g*b*g^{\minus{1}})*(g*a*g^{\minus{1}})
+            \tag{Associativity}
+        \end{align}
+        And thus $g*a*g^{\minus{1}}$ and $g*b*g^{\minus{1}}$ commute
+        (Def.~\ref{def:Commuting_Elements}).
+    \end{proof}
+    \begin{theorem}
+        If $(G,*)$ is a group, if $e$ is the unital element of $G$, and if
+        $a,b\in{G}$ are such that $a*b=a$, then $b=e$.
+    \end{theorem}
+    \begin{proof}
+        For since $e$ is the unital element, $a*e=a$
+        (Def.~\ref{def:Unital_Element}). But then by the left cancellation
+        law (Thm.~\ref{thm:Group_Left_Cancellation_Law}), $b=e$.
+    \end{proof}
+    \begin{theorem}
+        If $(G,*)$ is a group, if $e$ is the unital element of $G$, and if
+        $a,b\in{G}$ are such that $a*b=b$, then $a=e$.
+    \end{theorem}
+    \begin{proof}
+        For since $e$ is the unital element, $e*b=b$
+        (Def.~\ref{def:Unital_Element}). But then by the right cancellation
+        law (Thm.~\ref{thm:Group_Right_Cancellation_Law}), $a=e$.
+    \end{proof}
+    These two theorems state some slightly stronger than the uniqueness of
+    the unital element, and show that to check that an element $e\in{G}$ is the
+    unital element it suffices to see that $a*e=a$ for at least one $a\in{G}$.
+    \begin{theorem}
+        \label{thm:Group_Mult_by_Const_is_Surj_Func}%
+        If $(G,*)$ is a group, if $a\in{G}$, and if $f:G\rightarrow{G}$ is
+        defined by $f(g)=a*g$ for all $g\in{G}$, then $f$ is surjective.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. Then there is a $y\in{G}$ such that, for all $x\in{G}$
+        it is true that $f(x)\ne{y}$. But by the Latin square property
+        (Thm.~\ref{thm:Group_Latin_Square}), if $a,y\in{G}$ then there is a
+        unique $x\in{G}$ such that $a*x=y$. But then $f(x)=y$, a contradiction.
+        Therefore, $f$ is surjective.
+    \end{proof}
+    \begin{theorem}
+        \label{thm:Group_Mult_by_Const_is_Inj_Func}%
+        If $(G,*)$ is a group, if $a\in{G}$, and if $f:G\rightarrow{G}$ is
+        defined by $f(g)=a*g$ for all $g\in{G}$, then $f$ is injective.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. Then there exists $x,y\in{G}$ such that $x\ne{y}$ and
+        $f(x)=f(y)$. But then $a*x=a*y$, and thus by the left cancellation law
+        (Thm.~\ref{thm:Group_Left_Cancellation_Law}), $x=y$, a contradiction.
+        Therefore, $f$ is injective.
+    \end{proof}
+    \begin{theorem}
+        If $(G,*)$ is a group, if $a\in{G}$, and if $f:G\rightarrow{G}$ is
+        defined by $f(g)=a*g$ for all $g\in{G}$, then $f$ is a permutation.
+    \end{theorem}
+    \begin{proof}
+        For by Thm.~\ref{thm:Group_Mult_by_Const_is_Surj_Func}, $f$ is
+        surjective. And by Thm.~\ref{thm:Group_Mult_by_Const_is_Inj_Func},
+        $f$ is injective. But then $f$ is a bijection
+        (Def.~\ref{def:Bijective_Function}), and therefore $f$ is a bijective
+        function from $G$ to itself, and is therefore a permutation
+        (Def.~\ref{def:Permutation}).
+    \end{proof}
+    The function presented in these three theorems is the main tool used in
+    proving Cayley's Theorem\index{Cayley's Theorem}, which is one of the
+    classic results of group theory.
+    \begin{fdefinition}{Group Homomorphism}{Group_Homomorphism}
+        A \gls{group homomorphism} from a \gls{group} $(G,*)$ to a group
+        $(G',\circ)$ is a \gls{bijective function} $\varphi:G\rightarrow{G}'$
+        such that for all $a,b\in{G}$ it is true that:
+        \begin{equation}
+            \varphi(a*b)=\varphi(a)\circ\varphi(b)
+        \end{equation}
+    \end{fdefinition}
+    \begin{fdefinition}{Group Isomorphism}{Group_Isomorphism}
+        A \gls{group isomorphism} from a \gls{group} $(G,*)$ to a group
+        $(G',\circ)$ is a \glslink{bijective function}{bijective}
+        \gls{group homomorphism} $\varphi:G\rightarrow{G}'$.
+    \end{fdefinition}
     \begin{theorem}
         If $(G,*)$ and $(G',\circ)$ are isomorphic with identities $e_{*}$
         and $e_{\circ}$ are the identities, then $f(e_{*})=e_{\circ}$.
@@ -498,14 +805,6 @@
         \end{equation}
         As inverses are unique, $f(a^{-1})=f(a)^{-1}$.
     \end{proof}
-    \begin{theorem}
-        If $(G,*)$ is a group, then the following are true:
-        \begin{enumerate}
-            \item If $a*b=a*c$, then $b=c$.
-            \item If $b*a=c*a$, then $b=c$.
-            \item $\forall_{{a,b}\in{G}}\exists_{{x}\in{G}}:a*x=b$
-        \end{enumerate}
-    \end{theorem}
     \begin{definition}
         The order of a group is number of elements in the
         group.
@@ -552,15 +851,6 @@
         $h$ is bijective.
     \end{definition}
     \begin{definition}
-        A ring is a set $R$ and two binary operations
-        on $R$, denoted $(R,\cdot,+)$, such that:
-        \begin{enumerate}
-            \item $(R,+)$ is an Abelian group.
-            \item $a\cdot({b}\cdot{c})=({a}\cdot{b})\cdot{c}$
-            \item ${a}\cdot(b+c)={a}\cdot{b}+{a}\cdot{c}$
-        \end{enumerate}
-    \end{definition}
-    \begin{definition}
         A ring with identity is a ring $(R,\cdot,+)$
         such that there is a ${1}\in{R}$ such that for
         all ${a}\in{R}$, ${a}\cdot{1}={1}\cdot{a}=a$.
@@ -577,3 +867,4 @@
         A commutative ring with identity is a ring with identity such
         that $\cdot$ is commutative.
     \end{definition}
+    \subsection{Direct Products}
