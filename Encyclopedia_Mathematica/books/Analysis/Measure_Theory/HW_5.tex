@@ -1,0 +1,126 @@
+%------------------------------------------------------------------------------%
+\documentclass[crop=false,class=article]{standalone}                           %
+%------------------------------Preamble----------------------------------------%
+\makeatletter                                                                  %
+    \def\input@path{{../../../../}}                                            %
+\makeatother                                                                   %
+\input{preamble.tex}                                                           %
+%----------------------------Main Document-------------------------------------%
+\begin{document}
+    \pagenumbering{roman}
+    \title{Measure Theory and Complex Analysis}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \vspace{10ex}
+    \pagenumbering{arabic}
+    \setcounter{section}{1}
+    \section*{Homework 5}
+    \begin{problem}
+        Show that a sequence of functions converges uniformly on a compact set
+        if and only if it converges on every closed disk.
+    \end{problem}
+    \begin{solution}
+        One direction is clear from the Heine-Borel theorem, unless we consider
+        $B_{\infty}(z_{0})$ to be a closed disk (an arguable point), in which
+        case we'd have uniform convergence on all of $\Omega$, and hence
+        uniform convergence on any subset. Going the other way, suppose
+        $f_{n}\rightarrow{f}$ uniformly on every closed disk. Note that if
+        $f_{n}\rightarrow{f}$ uniformly on $A$ and $f_{n}\rightarrow{f}$
+        uniformly on $B$, then the convergence is uniform on $A\cup{B}$.
+        Given $\varepsilon>0$ there is a $N_{A}>0$ and a $N_{B}>0$
+        such that, for all $z\in{A}$, $n>N_{A}$ implies
+        $|f(z)-f_{n}(z)|<\varepsilon$ and similarly for all $z\in{B}$ and all
+        $n>N_{B}$, $|f(z)-f_{n}(z)|<\varepsilon$. Choose
+        $N=\max\{N_{A},N_{B}\}$. Implying induction, we see that the result
+        holds for finite unions of compact disks. Now since $\Omega$ is open,
+        for all $z\in\Omega$ there is an $r_{z}>0$ such that
+        $B_{2r_{z}}(z)\subseteq\Omega$. But since $0<r_{z}<2r_{z}$, we have
+        $B_{r_{z}}(z)\subseteq\Omega$ as well. Let $C$ be a compact subset of
+        $\Omega$, and let $\mathcal{O}$ be the collection:
+        \begin{equation}
+            \mathcal{O}=\{B_{r_{z}}(z):z\in{C}\}
+        \end{equation}
+        Then $\mathcal{O}$ is an open cover of $C$ since for all $z\in{C}$,
+        $z\in{B}_{r_{z}}(z)$, and this is contained in the cover. But $C$ is
+        compact and thus there is a finite subcover
+        $\Delta\subseteq\mathcal{O}$. Let $z_{1},\dots,z_{n}$ be the centers of
+        the balls contained in $\Delta$. Then $\textrm{Cl}(B_{r_{z}}(z))$ is a
+        closed and bounded disk, and:
+        \begin{equation}
+            \textrm{Cl}(B_{r_{z}}(z))\subseteq{B}_{2r_{z}}(z)\subseteq\Omega
+        \end{equation}
+        And thus $C$ is contained in the finite union of closed disks. But
+        $f_{n}\rightarrow{f}$ uniformly on the finite union of closed disks, and
+        thus $f_{n}\rightarrow{f}$ uniformly on $C$.
+    \end{solution}
+    \begin{problem}
+        Prove the dog walking lemma.
+    \end{problem}
+    \begin{solution}
+        For if $0\leq|\gamma_{1}(t)-\gamma_{0}(t)|<|a-\gamma_{0}(t)|$, then
+        $\gamma_{0}(t)\ne{a}$, for otherwise we would conclude $0<0$. Thus, let
+        $\gamma(t)$ be defined by:
+        \begin{equation}
+            \gamma(t)=\frac{\gamma_{1}(t)-a}{\gamma_{0}(t)-a}
+        \end{equation}
+        Then we have:
+        \begin{equation}
+            \textrm{Ind}_{\gamma}(0)=\oint_{\gamma}\frac{1}{z}\diff{z}
+            =\int_{a}^{b}\frac{\dot{\gamma}(t)}{\gamma(t)}\diff{t}
+        \end{equation}
+        Applying some calculus, we note that $\dot{\gamma}(t)/\gamma(t)=0$ for
+        all $t$, and thus $\textrm{Ind}_{\gamma}(0)=0$. But:
+        \begin{align}
+            \gamma_{1}(t)-a&=\gamma(t)(\gamma_{0}(t)-a)\\
+            \dot{\gamma_{1}}(t)
+                &=\dot{\gamma}(t)(\gamma_{0}(t)-a)+\gamma(t)\dot{\gamma}_{0}(t)
+        \end{align}
+        And therefore:
+        \begin{align}
+            \textrm{Ind}_{\gamma_{1}}(a)
+            &=\frac{1}{2\pi{i}}\oint_{\gamma_{1}}\frac{1}{z-a}\diff{z}\\
+            &=\frac{1}{2\pi{i}}\int_{a}^{b}
+                \frac{\dot{\gamma}_{1}(t)}{\gamma_{1}(t)-a}\diff{t}\\
+            &=\frac{1}{2\pi{i}}\int_{a}^{b}
+            \frac{\dot{\gamma}(t)(\gamma_{0}(t)-a)+\gamma(t)\dot{\gamma}_{0}(t)}
+                 {\gamma(t)(\gamma_{0}(t)-a)}\diff{t}\\
+            &=\frac{1}{2\pi{i}}\int_{a}^{b}\frac{\dot{\gamma}(t)}{\gamma(t)}
+                \diff{t}
+             +\frac{1}{2\pi{i}}\int_{a}^{b}\frac{\gamma(t)\dot{\gamma}_{0}(t)}
+                {\gamma(t)(\gamma_{0}(t)-a)}\diff{t}\\
+            &=\frac{1}{2\pi{i}}\int_{a}^{b}\frac{\dot{\gamma}_{0}(t)}
+                {(\gamma_{0}(t)-a)}\diff{t}\\
+            &=\frac{1}{2\pi{i}}\oint_{\gamma_{0}}\frac{1}{z-a}\diff{z}\\
+            &=\textrm{Ind}_{\gamma_{0}}(a)
+        \end{align}
+        Completing the proof.
+    \end{solution}
+    \begin{problem}
+        If $f$ and $g$ are entire and $|f|\leq|g|$, what conclusion can you
+        draw?
+    \end{problem}
+    \begin{solution}
+        (Bjoern gave this as a qual question). You can conclude that
+        $f=cg$ for some constant $c$. If $g$ is the zero function, we're done.
+        If not, look at $f/g$. At the zero points of $g$ we can take limits and
+        invoke the hypothesized inequality $|f|\leq|g|$ to show that the limit
+        does indeed exist, and thus the resulting function will be entire and
+        bounded by one. By Liouville's theorem, $f/g=c$.
+    \end{solution}
+    \begin{problem}
+        Suppose $f$ is an entire function and $|f|\leq{A}+B|z|^{k}$, where
+        $A,B,k\in\mathbb{R}^{+}$. Prove that $f$ is a polynomial.
+    \end{problem}
+    \begin{solution}
+        Since $f$ is entire, we can apply Cauchy estimates to the coefficients
+        of the Taylor expansion of $f$ about the origin. Since
+        $|f(z)|\leq{A}+B|z|^{k}$, for all $n>k$ we have:
+        \begin{equation}
+            |a_{n}|\leq\frac{A+B|z|^{k}}{R^{n}}
+        \end{equation}
+        Mirroring the proof for Liouville's theorem, taking that limit as
+        $R\rightarrow\infty$ shows that $a_{n}=0$ for all $n>k$. Thus, $f$ is
+        a polynomial.
+    \end{solution}
+\end{document}
