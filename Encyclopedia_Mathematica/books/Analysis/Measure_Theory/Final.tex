@@ -75,7 +75,7 @@
             \underset{n\rightarrow\infty}{\lim}
             \Big|\frac{b_{n}}{(z-z_{0})^{n}}\Big|=
             \underset{n\rightarrow\infty}{\lim}
-            \frac{|b_{n}|}{|z-z_{0}|^{n}}=
+            \frac{|b_{n}|}{|z-z_{0}|^{n}}\leq
             \underset{n\rightarrow\infty}{\lim}
             \frac{|b_{n}|}{R^{n}}=0
         \end{equation}
@@ -131,7 +131,8 @@
         Let $g(z)=\exp(f(z))$. Then $g$ is holomorphic, and thus by the
         maximum modulus principle, $|g|$ has no local maximum. But
         $|g|=|\exp(f)|=\exp(\Re(f))=\exp(u)$, and thus $\exp(u)$ has no local
-        maximum. But then $u$ has no local maximum.
+        maximum. But then $u$ has no local maximum since the exponential
+        function is monotonic on $\mathbb{R}$.
     \end{solution}
     \clearpage
     \begin{problem}
@@ -146,16 +147,21 @@
     \begin{solution}
         By the definition of a pole of order $m$, the function:
         \begin{equation}
-            g(z)=f(z)-\sum_{k=1}^{m}\frac{b_{k}}{(z-a)^{k}}
+            g(z)=f(z)-\sum_{n=1}^{m}\frac{b_{n}}{(z-a)^{n}}
         \end{equation}
         has a removable singularity at $a$ and $b_{m}\ne{0}$. That is,
         $\lim_{z\rightarrow{a}}g(z)$ exists. But then:
         \begin{equation}
             |(z-a)^{k}f(z)|=
-            \Big|g(z)(z-a)^{k}+\sum_{k=1}^{m}\frac{b_{k}}{(z-a)^{m-k}}\Big|
+            \Big|g(z)(z-a)^{k}+\sum_{n=1}^{m}b_{n}(z-a)^{k-n}\Big|
         \end{equation}
         Thus, if $0\leq{k}<m$ the right side tends to infinity, and thus so
-        does the left. If $k=m$ the limit is $|b_{m}|$, which is non-zero.
+        does the left. That is, since $|g(z)|$ is holomorphic, it is necessarily
+        bounded in a small neighborhood around $a$. And similarly,
+        $|(z-a)^{k}g(z)|$ will be bounded in a small neighborhood around $a$ for
+        all $k\in\mathbb{N}$. But for $k<m$, the sum is not bounded in any
+        neighborhood around $a$, otherwise the pole would be removeable, which
+        it is not for $k<m$. If $k=m$ the limit is $|b_{m}|$, which is non-zero.
     \end{solution}
     \clearpage
     \begin{problem}
@@ -217,60 +223,100 @@
     \end{solution}
     \clearpage
     \begin{problem}
-        Such that if $f\in{L}^{1}(\mathbb{R})$, and if $y\in\mathbb{R}$, then:
+        Show that if $f\in{L}^{1}(\mathbb{R})$, and if $y\in\mathbb{R}$, then:
         \begin{equation}
             \int_{\mathbb{R}}f(x)\diff\mu(x)
-            =\int_{\mathbb{R}}f(x-y)\diff\mu(y)
+            =\int_{\mathbb{R}}f(x-y)\diff\mu(x)
         \end{equation}
         Then show that $\phi_{y}(f)(x)=f(x-y)$ is a continuous function from
         $\mathbb{R}$ to $L^{1}(\mathbb{R})$.
     \end{problem}
     \begin{solution}
-        For if $f\in{L}^{1}(\mathbb{R})$, then given $\varepsilon>0$,
-        there is an $N\in\mathbb{N}$ such that for all $n,m>N$:
+        For if $f\in{L}^{1}(\mathbb{R})$, then:
         \begin{equation}
-            \Big|\int_{\mathbb{R}}f\diff\mu-\int_{[\minus{m},n]}f\diff\mu\Big|
+            \int_{\mathbb{R}}|f|\diff\mu<\infty
+        \end{equation}
+        But if $f$ is absolutely integrable, then it is integrable, and thus:
+        \begin{equation}
+            \Big|\int_{\mathbb{R}}f\diff\mu\Big|<\infty
+        \end{equation}
+        But then, for all $\varepsilon>0$ there is an $R\in\mathbb{R}^{+}$ such
+        that for all $r_{1},r_{2}>R$:
+        \begin{equation}
+            \Big|\int_{\mathbb{R}}f\diff\mu-
+                 \int_{[\minus{r}_{1},r_{2}]}f\diff\mu\Big|
             <\varepsilon
         \end{equation}
-        But:
+        But by the invariance of translation, for any $r\in\mathbb{R}$ we have:
         \begin{equation}
             \Big|\int_{\mathbb{R}}f\diff\mu
-                -\int_{[\minus{n},n]}f(x-y)\diff\mu(x)\Big|
+                -\int_{[\minus{r},r]}f(x-y)\diff\mu(x)\Big|
             =\Big|\int_{\mathbb{R}}f\diff\mu
-            -\int_{[\minus{n-y},n-y]}f\diff\mu\Big|
+            -\int_{[\minus{r-y},r-y]}f\diff\mu\Big|
         \end{equation}
-        And by the Archimedean property there is an $M\in\mathbb{N}$ such that
-        $M>|y|$. Then for all $n>\max\{N,M\}$, we have:
+        Let $M=R+|y|$. Then $M-y\geq{R}$ and $M+y\geq{R}$, and thus we obtain:
         \begin{equation}
             \Big|\int_{\mathbb{R}}f\diff\mu
-            -\int_{[\minus{n-y},n-y]}f\diff\mu\Big|<\varepsilon
+            -\int_{[\minus{M-y},M-y]}f\diff\mu\Big|<\varepsilon
         \end{equation}
-        Thus proving the first claim. Suppose $y_{n}\rightarrow{y}$. Then:
+        Thus proving the first claim. For the second part, first suppose $f$ is
+        continuous and suppose $y_{n}\rightarrow{y}$. Let $\varepsilon>0$ be
+        given and let $g(x)=f(x-y)$. Then, since $f\in{L}^{1}(\mathbb{R})$, it
+        is true that $g\in{L}^{1}(\mathbb{R})$ and thus there is an
+        $R\in\mathbb{R}^{+}$ such that for all $r_{1},r_{2}>R$ the following
+        holds:
         \begin{equation}
-            \norm{\phi_{y_{n}}(f)-\phi_{y}(f)}_{1}
-            =\int_{\mathbb{R}}\big|f(x-y)-f(x-y_{n})\big|\diff\mu
-        \end{equation}
-        Since $y_{n}\rightarrow{y}$ there exists an $N_{1}\in\mathbb{N}$ such
-        that for all $n>N_{1}$ it is true that $|y-y_{n}|<\varepsilon/2$. But
-        there is also an $N_{2}$ such that, for all $n,m>N_{2}$:
-        \begin{equation}
-            \int_{[\minus{m},n]^{C}}\big|f(x-y)\big|\diff\mu
+            \Big|\int_{\mathbb{R}}g\diff\mu-
+                 \int_{[\minus{r}_{1},r_{2}]}g\diff\mu\Big|
             <\frac{\varepsilon}{2}
         \end{equation}
-        But then for all $n>\textrm{max}\{N_{1},N_{2}\}$ we have:
+        Let $M=R+|y|$ and let $x_{n}=x+y-y_{n}$. Then since
+        $y_{n}\rightarrow{y}$, is is true that $x_{n}\rightarrow{x}$. But $f$
+        is continuous, and $g$ is the composition of continuous functions, and
+        is therefore continuous. But then $g(x_{n})\rightarrow{g}(x)$. Moreover,
+        if $g$ is continuous, since $[\minus{M},M]$ is compact by the
+        Heine-Borel theorem, it is then true that $g$ is uniformly continuous
+        since continuous functions on compact sets are uniformly continuous. But
+        then, for all $\varepsilon>0$ there is a $\delta>0$ such that, for all
+        $x\in[\minus{M},M]$ and for all $x_{0}\in[\minus{M},M]$ such that
+        $|x-x_{0}|<\delta$, it is true that:
+        \begin{equation}
+            |g(x)-g(x_{0})|<\frac{\varepsilon}{4M}
+        \end{equation}
+        But $x_{n}\rightarrow{x}$ and thus there is an $N\in\mathbb{N}$ such
+        that, for all $n>N$ it is true that $|x-x_{n}|<\delta$. But then, for
+        all $n>N$:
         \begin{subequations}
             \begin{align}
-                \norm{\phi_{y_{n}}-\phi_{y}}_{1}
-                &=\int_{\mathbb{R}}|f(x-y_{n})-f(x-y)|\diff\mu\\
-                \nonumber&=\int_{[\minus{n},n]}|f(x-y_{n})-f(x-y)|\diff\mu\\
-                &\quad\quad+\int_{[\minus{n},n]^{C}}
-                    |f(x)-y_{n})-f(x-y)|\diff\mu\\
-                &<\frac{\varepsilon}{2}
-                +\int_{[\minus{n},n]}|f(x-y_{n})-f(x-y)|\diff\mu\\
-                &<\varepsilon
+                \int_{\mathbb{R}}|f(x-y)-f(x-y_{n})|\diff\mu
+                &=\int_{[\minus{M},M]^{C}}|f(x-y)-f(x-y_{n})|\diff\mu\\
+                &\nonumber\quad\quad\quad
+                    +\int_{[\minus{M},M]}|f(x-y)-f(x-y_{n})|\diff\mu\\
+                &<\frac{\varepsilon}{2}+
+                    \int_{[\minus{M},M]}|g(x)-g(x_{n})|\diff\mu\\
+                &\leq\frac{\varepsilon}{2}+
+                    \frac{\varepsilon}{4M}\int_{[\minus{M},M]}\diff\mu\\
+                &=\frac{\varepsilon}{2}+
+                    \frac{\varepsilon}{4M}\mu([\minus{M},M])\\
+                &=\varepsilon
             \end{align}
         \end{subequations}
-        So $\phi$ is continuous.
+        Now in general if $g\in{L}^{1}(\mathbb{R})$, then there is a continuous
+        function $G\in{L}^{1}(\mathbb{R})$ such that
+        $\norm{g-G}_{1}<\varepsilon/3$. That is, continuous functions are dense
+        in $L^{1}(\mathbb{R})$. But then:
+        \begin{align}
+            \int|g(x)-g(x_{n})|\diff\mu
+            &\leq\int|g(x)-G(x)|\diff\mu+\\
+            \nonumber&\quad\quad\quad\int|G(x)-G(x_{n})|
+                +\int|G(x_{n})-g(x_{n})|\diff\mu\\
+        \end{align}
+        But the first and last integrals are bounded by $\varepsilon/3$ by
+        choice of $G$, and since the integral is translation invariant. The
+        middle integral can be made less than $\varepsilon/3$ as well since
+        $G$ is continuous, and thus the sum is bounded by $\varepsilon$.
+        By the definition of continuity,
+        $\phi:\mathbb{R}\rightarrow{L}^{1}(\mathbb{R})$ is continuous.
     \end{solution}
     \clearpage
     \begin{problem}
