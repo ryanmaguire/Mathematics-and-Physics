@@ -1,0 +1,36 @@
+% arara: pdflatex: {synctex: yes, action: nonstopmode, shell: yes}
+% arara: asymptote
+% arara: pdflatex: {synctex: yes, action: nonstopmode, shell: yes}
+\documentclass{standalone}
+\usepackage{asymptote}
+\begin{document}
+    \begin{asy}
+        import tube;
+        import graph3;
+        import palette;
+
+        size(200,0);
+        currentprojection=perspective(
+            camera=(0,0,25),
+            up=(0,0,1),
+            target=(0,0,0),
+            zoom=0.85
+        );
+
+        triple f(real t){
+        return (2*sin(2*t)-sin(t),
+                2*cos(2*t)+cos(t),
+                sin(3*t));
+        }
+
+        pen pen(real t){
+            return interp(red,blue,sin(t*2pi/500)^2);
+        }
+
+
+        path section=scale(0.5)*unitcircle;
+
+        path3 p=graph(f,0,2pi,n=1000,operator ..);
+        draw(tube(p,coloredpath(section,pen)));
+    \end{asy}
+\end{document}
