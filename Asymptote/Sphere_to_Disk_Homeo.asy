@@ -56,14 +56,14 @@ triple f4(pair t) {
     return (u, 9+v, 0.0);
 }
 
+material blob = material(diffusepen=gray,
+                         emissivepen=gray(0.2),
+                         specularpen=gray(0.1));
+
 surface s1=surface(f1,(0,0.1),(2pi,pi),20,20,Spline);
 surface s2=surface(f2,(0,1.0),(2pi,pi),20,20,Spline);
 surface s3=surface(f3,(0,pi/2),(2pi,pi),20,20,Spline);
 surface s4=surface(f4,(0,0),(1,2pi),20,20,Spline);
-
-material blob = material(diffusepen=gray,
-                         emissivepen=gray(0.2),
-                         specularpen=gray(0.1));
 
 draw(s1, render(merge=true), light=currentlight, surfacepen=blob);
 draw(s2, render(merge=true), light=currentlight, surfacepen=blob);
