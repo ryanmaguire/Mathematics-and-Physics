@@ -17,13 +17,13 @@ import palette;
 real SQRT_3 = sqrt(3.0);
 
 // Size of the created image.
-size(500,0);
+size(500, 0);
 
 // Set camera location and orientation.
 currentprojection=perspective(
-    camera=(10,10,10),
-    up=(0,0,1),
-    target=(0,0,0),
+    camera=(70, 70, 70),
+    up=(0, 0, 1),
+    target=(0, 0, 0),
     zoom=1.0
 );
 
@@ -91,16 +91,16 @@ triple Surf1(pair t) {
 }
 
 // Draw everything.
-path3 p1=   graph(Tube1a,-0.5,1.5,n=2000,operator ..);
-path3 p2=   graph(Tube1b,-0.5,1.5,n=2000,operator ..);
-path3 p3=T1*graph(Tube1a,-0.5,1.5,n=2000,operator ..);
-path3 p4=T1*graph(Tube1b,-0.5,1.5,n=2000,operator ..);
-path3 p5=T2*graph(Tube1a,-0.5,1.5,n=2000,operator ..);
-path3 p6=T2*graph(Tube1b,-0.5,1.5,n=2000,operator ..);
+path3 p1=   graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
+path3 p2=   graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
+path3 p3=T1*graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
+path3 p4=T1*graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
+path3 p5=T2*graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
+path3 p6=T2*graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
 
-surface s1=   surface(Surf1,(0,0),(1,1),2000,20,Spline);
-surface s2=T1*surface(Surf1,(0,0),(1,1),2000,20,Spline);
-surface s3=T2*surface(Surf1,(0,0),(1,1),2000,20,Spline);
+surface s1=   surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
+surface s2=T1*surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
+surface s3=T2*surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
 surface bot=surface(aB--bB--cB--dB--eB--fB--cycle);
 surface top=surface(aT--bT--cT--dT--eT--fT--cycle);
 
@@ -111,8 +111,8 @@ draw(tube(p4,section), light=currentlight, surfacepen=pipe);
 draw(tube(p5,section), light=currentlight, surfacepen=pipe);
 draw(tube(p6,section), light=currentlight, surfacepen=pipe);
 
-draw(s1, render(merge=true), light=currentlight, surfacepen=blob);
-draw(s2, render(merge=true), light=currentlight, surfacepen=blob);
-draw(s3, render(merge=true), light=currentlight, surfacepen=blob);
+draw(s1,  render(merge=true), light=currentlight, surfacepen=blob);
+draw(s2,  render(merge=true), light=currentlight, surfacepen=blob);
+draw(s3,  render(merge=true), light=currentlight, surfacepen=blob);
 draw(bot, render(merge=true), light=currentlight, surfacepen=blob);
 draw(top, render(merge=true), light=currentlight, surfacepen=blob);
