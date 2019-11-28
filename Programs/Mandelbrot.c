@@ -11,51 +11,61 @@ void color(int red, int green, int blue)
 
 int main(int argc, char *argv[])
 {
-    int w = 4*512;
-    int h = 4*512;
+    int size = 4*1024;
+    int w = size;
+    int h = size;
     int brightness, x, y, i;
     double pr, pi, z;
     double newRe, newIm, oldRe, oldIm;
-    double zoom = 1;
+    double zoom = 0.65;
     double moveX = -1.0;
     double moveY = 0.0;
-    int maxIterations = 1000;
+    double radius = 4.0;
+    int maxIterations = 256;
 
-    printf("P6\n# CREATOR: E.T / mandel program\n");
-    printf("%d %d\n255\n",w,h);
+    printf("P6\n# CREATOR: Ryan Maguire / Mandelbrot Set\n");
+    printf("%d %d\n255\n", size, size);
 
-    //loop through every pixel
-    for(y = 0; y < h; y++)
-    for(x = 0; x < w; x++)
-    {
-        //calculate the initial real and imaginary part of z, based on the pixel location and zoom and position values
-        pr = 1.5 * (x - w / 2) / (0.5 * zoom * w) + moveX;
-        pi = (y - h / 2) / (0.5 * zoom * h) + moveY;
-        newRe = newIm = oldRe = oldIm = 0; //these should start at 0,0
+    double radius_squared = radius*radius;
 
-        //start the iteration process
-        for(i = 0; i < maxIterations; i++)
-        {
-            //remember value of previous iteration
-            oldRe = newRe;
-            oldIm = newIm;
+    //  Loop through each pixel.
+    for(y = 0; y < size; y++){
+        for(x = 0; x < size; x++){
 
-            //the actual iteration, the real and imaginary part are calculated
-            newRe = oldRe * oldRe - oldIm * oldIm + pr;
-            newIm = 2 * oldRe * oldIm + pi;
+            // Calculate the location of the current point being calculated.
+            pr = (x - size / 2) / (0.5 * zoom * size) + moveX;
+            pi = (y - size / 2) / (0.5 * zoom * size) + moveY;
 
-            //if the point is outside the circle with radius 2: stop
-            if((newRe * newRe + newIm * newIm) > 16)
-                break;
-        }
+            // Reset starting Real and Imaginary parts to zero.
+            newRe = newIm = 0;
 
-        if(i == maxIterations) {
-            color(0, 0, 0);
-        }
-        else {
-            z = sqrt(newRe * newRe + newIm * newIm);
-            brightness = 256.0*log2(1.75+i-log2(log2(z)))/log2(maxIterations);
-            color(brightness, brightness, 255);
+            //  Start the iteration process.
+            for(i = 0; i < maxIterations; i++){
+
+                //remember value of previous iteration
+                oldRe = newRe;
+                oldIm = newIm;
+
+                //  Calculate real and imaginary parts.
+                newRe = oldRe * oldRe - oldIm * oldIm + pr;
+                newIm = 2 * oldRe * oldIm + pi;
+
+                //  Check for divergence.
+                if((newRe * newRe + newIm * newIm) > radius_squared){
+                    break;
+                }
+            }
+
+            if(i == maxIterations) {
+                color(0, 0, 0);
+            }
+            else if (i < 64){
+                brightness = 4*i;
+                color(brightness, brightness, 255-brightness);
+            }
+            else {
+                color(255, 255, 0);
+            }
         }
     }
     return 0;
