@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
             }
 
             /*  Find which roots the final iteration is closest too.          */
-            min = cabs(z-roots[i]);
+            min = cabs(z-roots[0]);
             ind = 0;
 
             for (i=1; i<NRoots; ++i){
