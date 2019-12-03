@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <complex.h>
 
-#define Half_Sqrt_3_I 0.8660254037844386*_Complex_I
-#define Two_Thirds    0.6666666666666666
-
-#define ROOT_1 1.0
-#define ROOT_2 -0.5+Half_Sqrt_3_I
-#define ROOT_3 -0.5-Half_Sqrt_3_I
+#define Root_1 1.0
+#define Root_2 1.0*_Complex_I
+#define Root_3 -1.0
+#define Root_4 -1.0*_Complex_I
 
 /*  Create a variable for the number of roots. z^3-1 has three.               */
-#define NRoots 3
+#define NRoots 4
 
 void color(char red, char green, char blue)
 {
@@ -37,7 +35,7 @@ int main(int argc, char *argv[])
     char iters, i, ind;
 
     /* List the roots of z^3 - 1.                                             */
-    complex double roots[NRoots] = {ROOT_1, ROOT_2, ROOT_3};
+    complex double roots[NRoots] = {Root_1, Root_2, Root_3, Root_4};
 
     /*  More dummy variables to loop over.                                     */
     int x, y;
@@ -50,7 +48,12 @@ int main(int argc, char *argv[])
     printf("%d %d\n255\n",size,size);
 
     // Colors for the roots (Red, Green, Blue).
-    char colors[NRoots][3] = {{255, 0, 30}, {0, 255, 30}, {0, 30, 255}};
+    char colors[NRoots][3] = {
+        {255, 0,   30},     // Red
+        {0,   255, 30},     // Green
+        {0,   30,  255},    // Blue
+        {255, 255, 0}       // Yellow
+    };
     char brightness[3];
 
     for (y=0; y<size; ++y){
@@ -63,8 +66,8 @@ int main(int argc, char *argv[])
             // Allow iters number of iterations for Newton-Raphson.
             for (iters=0; iters<MaxIters; ++iters){
 
-                // Perfrom Newton-Raphson on z^3 - 1 (Simplifying as well).
-                root = Two_Thirds*z + 1.0/(3.0*z*z);
+                // Perfrom Newton-Raphson on z^4 - 1 (Simplifying as well).
+                root = 0.75*z + 1.0/(4.0*z*z*z);
 
                 // Checks for convergence
                 if (cabs(root - z) < 10e-10) break;
@@ -72,7 +75,7 @@ int main(int argc, char *argv[])
             }
 
             /*  Find which roots the final iteration is closest too.          */
-            min = cabs(z-roots[i]);
+            min = cabs(z-roots[0]);
             ind = 0;
 
             for (i=1; i<NRoots; ++i){
@@ -82,12 +85,21 @@ int main(int argc, char *argv[])
                 }
             }
 
+            /* Create a gradient in color to emphasize rate of convergence.   */
             for (i=0; i<3; ++i){
                 brightness[i] = colors[ind][i];
             }
 
-            // Create a gradient in color to emphasize rate of convergence.
-            brightness[ind] -= factor*iters;
+            switch (ind)
+            {
+                case 3:
+                    brightness[0] -= iters*factor;
+                    brightness[1] -= iters*factor;
+                    break;
+                default:
+                    brightness[ind] -= iters*factor;
+                    break;
+            }
 
             // Color the current pixel.
             color(brightness[0], brightness[1], brightness[2]);
