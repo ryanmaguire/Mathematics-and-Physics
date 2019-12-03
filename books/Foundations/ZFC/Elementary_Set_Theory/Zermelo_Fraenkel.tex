@@ -126,6 +126,7 @@
     improper.
     \begin{ftheorem}{Russell's Paradox}{Russells_Paradox}
         Naive Set Theory is inconsistent.\index{Russell's Paradox}
+        \index{Theorem!Russell's Paradox}
     \end{ftheorem}
     \begin{bproof}
         For let $P$ be the proposition \textit{true if} $x\notin{x}$,
@@ -1405,10 +1406,10 @@
             Extensionality (Ax.~\ref{ax:Axiom_of_Extensionality}), $A\ne{B}$.
         \end{proof}
         \begin{theorem}
+            \label{thm:Cor_of_Containment_NEqual_Underlying_Set}%
             If $A$ is a set, then $A\ne\{A\}$.
         \end{theorem}
         \begin{proof}
-            \label{thm:Cor_of_Containment_NEqual_Underlying_Set}%
             For if $A$ is a set, then $A\notin{A}$
             (Thm.~\ref{thm:Anti_Russells_Paradox}). But if $A$ is a set, then
             $\{A\}$ is a set (Thm.~\ref{thm:Existence_of_Set_Containing_Set}).
@@ -1504,6 +1505,53 @@
             and a set with 3 elements has a power set with 8. This pattern
             continues for finite sets and if $A$ has $n$ elements, then
             $\mathcal{P}(A)$ has $2^{n}$ elements.
+        \end{example}
+        \begin{example}
+            Let $A=\{a_{1},\dots,a_{n}\}$, where all of the elements $a_{k}$ are
+            distinct. To count the total number of subsets we first note that
+            there is one set that contains zero elements, the empty set. Next,
+            there are $n$ subsets that contain one element, these are the sets
+            $\{a_{k}\}$. There are $n(n-1)/2$ sets that contain two elements,
+            $\{a_{i},a_{j}\}$, such that $i\ne{j}$. Continuing, we see that
+            there are $\binom{n}{k}$ subsets that contain $k$ elements, where
+            $\binom{n}{k}$ is the \textit{binomial coefficient}%
+            \index{Binomial Coefficient}. This is defined in terms of the
+            factorial function:
+            \begin{subequations}
+                \begin{align}
+                    \binom{n}{k}
+                    &=\frac{n!}{k!(n-k)!}\\
+                    &=\frac{n\cdot(n-1)\cdots{2}\cdot{1}}
+                        {k\cdot(k-1)\cdots{2}\cdot{1}\cdot(n-k)
+                        \cdot(n-k-1)\cdots{2}\cdot{1}}\\
+                    &=\frac{n\cdot(n-1)\cdots\cdot(n-k+1)}
+                        {k\cdot(k-1)\cdots{2}\cdot{1}}
+                \end{align}
+            \end{subequations}
+            To avoid undefined ratios, we define $0!=1$. Note then that
+            $\binom{n}{n}=1$. This says that the number of ways to choose $n$
+            element subsets from $A$ is 1. This makes sense since the only $n$
+            element subset of $A$ is the entire of $A$! To compute the size of
+            $\mathcal{P}(A)$ it now suffices to sum over all of these binomial
+            coefficients. Such a task can be achieved by invoking the
+            \textit{binomial theorem}\index{Theorem!Binomial Theorem}. Given
+            a positive integer $n$ and two real numbers $x$ and $y$, the
+            binomial theorem states that:
+            \begin{subequations}
+                \begin{align}
+                    (x+y)^{n}
+                    &=\sum_{k=0}^{n}\binom{n}{k}x^{n-k}y^{k}\\
+                    &=\binom{n}{0}x^{n}+\binom{n}{1}x^{n-1}y+\cdots+
+                        \binom{n}{n-1}xy^{n-1}+\binom{n}{n}y^{n}
+                \end{align}
+            \end{subequations}
+            Here, the notation $\sigma$ is simply shorthand for denoting a long
+            sum. Thus $\sum_{n=1}^{3}n$ is a short way of writing $1+2+3$.
+            Setting $x=y=1$, we obtain:
+            \begin{equation}
+                2^{n}=\sum_{k=0}^{n}\binom{n}{k}
+            \end{equation}
+            and this is precisely the number of elements of $\mathcal{P}(A)$.
         \end{example}
         \begin{example}
             When we consider the case of an \textit{infinite} set $A$ we have
@@ -2161,6 +2209,64 @@
         (Def.~\ref{def:Subsets}) and thus there is no need to prove again that
         the fiber of an element $b\in{B}$ is a valid set, since
         Thm.~\ref{thm:Existence_of_Pre_Image} applies.
+        \par\hfill\par
+        Before we end our introduction to the concept of a function, we should
+        first note the other synonomous terminology that is used and give some
+        historical background. In many texts, including this one, authors use
+        the word \textit{map} or \textit{mapping} to denote a function, rather
+        than simply use the word function. This language has its roots in
+        geometry, and particularly in the study of projective geometry. One can
+        consider \textit{perspectives}, which are functions that map one line in
+        the Euclidean plane to another. Consider two non-parallel lines
+        $\overline{AB}$ and $\overline{CD}$ and a point $P$ in the plane that
+        lies on neither of these two. Given a point $x$ which lies on
+        $\overline{AB}$, we map this to the line $\overline{CD}$ by drawing a
+        straight line from $P$ to $x$ and marking where this intersects
+        $\overline{CD}$.
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \begin{tikzpicture}[>=Latex]
+                \coordinate (A) at (-4.0000, -1.0000);
+                \coordinate (B) at ( 4.0000,  1.0000);
+                \coordinate (C) at (-4.0000,  0.0000);
+                \coordinate (D) at ( 4.0000, -1.0000);
+                \coordinate (P) at ( 0.0000,  1.5000);
+                \coordinate (x) at ( 1.0000,  0.2500);
+                \coordinate (y) at ( 1.7778, -0.7222);
+
+                \draw[<->, shorten >=-1cm, shorten <=-1cm] (A) to (B);
+                \draw[<->, shorten >=-1cm, shorten <=-1cm] (C) to (D);
+                \draw (P) to (y);
+
+                \draw[fill=black] (P) circle (0.5mm);
+                \draw[fill=black] (A) circle (0.5mm);
+                \draw[fill=black] (B) circle (0.5mm);
+                \draw[fill=black] (C) circle (0.5mm);
+                \draw[fill=black] (D) circle (0.5mm);
+                \draw[fill=black] (x) circle (0.5mm);
+                \draw[fill=black] (y) circle (0.5mm);
+
+                \node at (A) [below] {$A$};
+                \node at (B) [above] {$B$};
+                \node at (C) [above] {$C$};
+                \node at (D) [below] {$D$};
+                \node at (P) [right] {$P$};
+                \node at (x) [above] {$x$};
+                \node at (y) [below] {$y$};
+            \end{tikzpicture}
+            \caption{Example of a Mapping from Projective Geometry}
+            \label{fig:Example_of_Map_from_Projective_Geometry}
+        \end{figure}
+        Such constructions play a central role in geometry, and particularly
+        projective geometry, and culminate in a beautiful theorem known as
+        \textit{Desargues's Theorem}\index{Theorem!Desargues's}, named after
+        Girard Desargues. From this historical motivation, the word function,
+        map, and mapping are synonomous in the realm of mathematics. In select
+        fields such as analysis and geometry the words \textit{operator} and
+        \textit{transformation} are used, and occasionally the word
+        \textit{graph} is used. We will try to be clear in are useage of this
+        vocabularly to rid of any potential ambiguity.
     \subsection{The Axiom of Choice and Diaconescu's Theorem}
         The next two axioms to be introduced are the most controversial of those
         listed in ZFC: The \textit{axiom of infinity} and the
@@ -2258,6 +2364,7 @@
         \begin{ftheorem}{Diaconescu's Theorem}{Diaconescus_Theorem}
             If $P$ is a proposition on sets and if $x$ is a set, then either
             $P(x)$ is true or $P(x)$ is false. That is, $P\lor\neg{P}$ is true.
+            \index{Theorem!Diaconescu's}
         \end{ftheorem}
         \begin{bproof}
             Let $0=\emptyset$. By
