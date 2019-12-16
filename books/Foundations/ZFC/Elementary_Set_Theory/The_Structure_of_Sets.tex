@@ -699,6 +699,14 @@
             $A\cap\emptyset=A$. Again by transitivity, $A=\emptyset$
             (Thm.~\ref{thm:Transitivity_of_Equality}).
         \end{proof}
+        \begin{ltheorem}{Idempotent Law of Intersections}
+                        {Idempotent_Law_of_Intersections}
+            If $A$ is a set, then $A\cap{A}=A$.
+        \end{ltheorem}
+        \begin{proof}
+            For $A\subseteq{A}$ (Thm.~\ref{thm:Reflexivity_of_Inclusion}) and
+            thus $A\cap{A}=A$ (Thm.~\ref{thm:Intersection_with_Subset}).
+        \end{proof}
         \begin{theorem}
             \label{thm:Intersection_with_Equal_Sets}%
             If $A$, $B$, and $C$ are sets, and if $B=C$, then
@@ -791,7 +799,37 @@
             $B\cup{C}\subseteq(A\cup{C})\cup(A\cup{C})$
             (Thm.~\ref{thm:A_cup_B_Subset_C_cup_D}).
         \end{proof}
-        We will use this to prove the distribute law of unions.
+        \begin{theorem}
+            \label{thm:Second_Pseudo_Dist_Law_Union}%
+            If $A$, $B$, and $C$ are sets, then
+            $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$.
+        \end{theorem}
+        \begin{proof}
+            For $A\subseteq{A}\cup{B}$ and $A\subseteq{A}\cup{C}$
+            (Thm.~\ref{thm:Union_is_Bigger_Left}), and therefore it is true that
+            $A\cap{A}\subseteq(A\cup{B})\cap(A\cup{C})$
+            (Thm.~\ref{thm:A_cup_B_Subset_C_cup_D}). But $A=A\cap{A}$
+            (Thm.~\ref{thm:Idempotent_Law_of_Unions}), and if
+            $A=A\cap{A}$ and $A\cap{A}\subseteq(A\cup{B})\cap(A\cup{C})$, then
+            $A\subseteq(A\cup{B})\cap(A\cup{C})$
+            (Thm.~\ref{thm:Superset_of_Equal_Sets}). But
+            $B\cap{C}\subseteq(A\cup{B})\cap(A\cup{C})$
+            (Thm.~\ref{thm:First_Pseudo_Dist_Law_Union}), and therefore:
+            \begin{equation}
+                A\cap(B\cup{C})\subseteq
+                \big((A\cup{B})\cap(A\cup{C})\big)\cap
+                \big((A\cup{B})\cap(A\cup{C})\big)
+                =(A\cup{B})\cap(A\cup{C})
+            \end{equation}
+            Where this last equality is by the idempotent law of intersections
+            (Thm.~\ref{thm:Idempotent_Law_of_Intersections}). But then
+            $A\cap(B\cup{C})\subseteq(A\cup{B})\cap(A\cup{C})$
+            (Thm.~\ref{thm:Subsets_of_Equal_Sets}).
+        \end{proof}
+        Thus, half of the distributive law of unions is proved. To prove
+        equality seems to require either proof by contradiction or the
+        distributive law of conjunctions and disjunctions. We will use the
+        former.
         \begin{ftheorem}{Distributive Law of Unions}{Distributive_Law_of_Unions}
             If $A$, $B$, and $C$ are sets, then:
             \begin{equation*}
@@ -799,32 +837,21 @@
             \end{equation*}
         \end{ftheorem}
         \begin{bproof}
-            For $B\cap{C}\subseteq(A\cup{B})\cap(A\cup{C})$
-            (Thm.~\ref{thm:First_Pseudo_Dist_Law_Union}). But
-            $A\subseteq{A}\cup{B}$ and $A\subseteq{A}\cup{C}$
-            (Thm.~\ref{thm:Union_is_Bigger_Left}) and so
-            $A\subseteq(A\cup{B})\cap(A\cup{C})$
-            (Thm.~\ref{thm:Intersection_of_Supersets_is_Still_Superset}). Thus:
-            \begin{align}
-                A\cup(B\cap{C})
-                &\subseteq\big((A\cup{B})\cap(A\cup{C})\big)
-                    \cup\big((A\cup{B})\cap(A\cup{C})\big)
-                \tag{Thm.~\ref{thm:A_cup_B_Subset_C_cup_D}}\\
-                &=\big((A\cup{B})\cap(A\cup{C})\big)
-                \tag{Thm.~\ref{thm:Idempotent_Law_of_Unions}}
-            \end{align}
-            And therefore $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$
-            (Thm.~\ref{thm:Subsets_of_Equal_Sets}).
-            \begin{equation}
-                A\cup(B\cap{C})\subseteq
-                A\cup\Big((A\cup{B})\cap(A\cup{C})\Big)
-            \end{equation}
-            But $A\cup((A\cup{B})\cap(A\cup{C}))=(A\cup{B})\cap(A\cup{C})$,
-            and therefore:
-            \begin{equation}
-                A\cup(B\cap{C})\subseteq
-                (A\cup{B})\cap(A\cup{C})
-            \end{equation}
+            For suppose not. But
+            $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$
+            (Thm.~\ref{thm:Second_Pseudo_Dist_Law_Union}), and therefore
+            $A\cup(B\cap{C})\subsetneq(A\cup{B})\cap(A\cup{C})$
+            (Def.~\ref{def:Proper_Subsets}). But then there is an
+            $x\in(A\cup{B})\cap(A\cup{C})$ such that $x\notin{A}\cup(B\cap{C})$
+            (Thm.~\ref{thm:Prop_Subset_Not_Equal}). But if
+            $x\notin{A}\cup(B\cap{C})$, then $x\notin{A}$ and
+            $x\notin{B}\cap{C}$ (Def.~\ref{def:Union_of_Two_Sets}). But
+            $x\in(A\cup{B})\cap(A\cup{C})$, and therefore $x\in{A}\cup{B}$ and
+            $x\in{A}\cup{C}$ (Def.~\ref{def:Intersection_of_Two_Sets}). But
+            $x\notin{A}$, and therefore is $x\in{A}\cup{B}$ then it must be true
+            that $x\in{B}$. And similarly, since $x\in{A}\cup{C}$, it must be
+            true that $x\in{C}$. But then $x\in{B}$ and $x\in{C}$, and therefore
+            $x\in{B}\cap{C}$, a contradiction. This completes the proof.
         \end{bproof}
         We can represent this pictorially using Venn diagrams.
         \begin{figure}[H]
