@@ -98,8 +98,8 @@
         $d(x,y)=0$. If $x\ne{y}$, then $d(x,y)=1$. The topology
         \textit{generated}\index{Topology!Induced by Metric} from this metric
         is precisely the discrete topology $\mathcal{P}(X)$. One of the strange
-        properties of the discrete topology is that, as we will see, for any
-        function $f:X\rightarrow{A}$, $f$ is \textit{continuous}%
+        properties of the discrete topology is that any function
+        $f:X\rightarrow{A}$ is \textit{continuous} (to be defined)%
         \index{Function!Continuous}\index{Continuous Function}
         regardless of the topology on $A$.
     \end{example}
@@ -186,10 +186,25 @@
     the chaotic topology, which is also the discrete topology on one point.
     This is because, since $\{x\}=X$, the set $\{\emptyset,\{x\},X\}$ is equal
     to the set $\{\emptyset,X\}$ (recall that sets have no notion of
-    repetition).
-    \par\hfill\par
-    We develop some more terminology to become more acquainted with the language
-    of point-set topology.
+    repetition). A further generalization goes as follows:
+    \begin{theorem}
+        If $X$ is a set, if $\mathcal{U}\subseteq{X}$, and if
+        $\tau=\{\emptyset,\mathcal{U},X\}$, then $\tau$ is a topology
+        on $X$.
+    \end{theorem}
+    \begin{proof}
+        For $\emptyset,X\in\tau$. If $\mathcal{O}\subset\tau$, either
+        $X\in\mathcal{O}$ or not. If it is, then $\bigcup\mathcal{O}=X$.
+        If not, then either $\mathcal{U}\in\mathcal{O}$ or not. If it is,
+        then $\bigcup\mathcal{O}=\mathcal{U}$. If not, then
+        $\bigcup\mathcal{O}=\emptyset$. In any of the three cases, the union is
+        contained in $\tau$ and so we have closure with respect to arbitrary
+        unions. Similarly, it is closed to intersections, and is therefore a
+        topology (Def.~\ref{def:Topology}).
+    \end{proof}
+    A set combined with a topology on it is called a topological space. These
+    are the main objects, together with continuous functions, of study in
+    topology.
     \begin{fdefinition}{Topological Space}{Topological_Space}
         A \gls{topological space}, denote $(X,\tau)$ is a \gls{set} $X$ and a
         \gls{topology} $\tau$ on $X$.
@@ -232,10 +247,88 @@
     spaces are extremely well-behaved spaces and many theorems in topology are
     dedicated to proving that certain topological spaces can be given
     compatible metrics.
-    \begin{fdefinition}{Open Subsets}{Open_Subsets}
+    \par\hfill\par
+    One of the common problems in analysis, geometry, and topology is placing a
+    \textit{natural} topology on a given set. That is, some how concocting an
+    \textit{obvious} or most useful topology. The construction often goes by
+    considering the smallest topology that has a certain property, smallest
+    meaning the intersection of all other topologies with said property. It
+    would be essential, then, to know that the intersection of topologies is
+    again a topology. We prove this now.
+    \begin{ltheorem}{The Intersection of Topologies is a Topology}
+                   {Intersection_of_Topologies_is_a_Topology}
+        If $X$ is a set, if $\Omega$ is a non-empty set such that for all
+        $\tau\in\Omega$ it is true that $\tau$ is a topology on $X$, then
+        $\bigcap\Omega$ is a topology on $X$.
+    \end{ltheorem}
+    \begin{proof}
+        For since $\Omega$ is non-empty there is a set $\tau\in\Omega$
+        (Def.~\ref{def:Non_Empty_Set}). But by hypothesis, if $\tau\in\Omega$
+        then $\tau$ is a topology on $X$, and thus $\emptyset,X\in\tau$.
+        Suppose $\emptyset\notin\bigcap\Omega$. Then there exists
+        $\xi\in\Omega$, $\xi\ne\tau$, such that $X\notin\xi$
+        (Def.~\ref{def:Intersection_Over_a_Collection}). But if $\xi\in\Omega$
+        then $\xi$ is a topology on $X$, and thus $X\in\xi$
+        (Def.~\ref{def:Topology}), thus $X\in\xi$, and similarly
+        $\emptyset\in\xi$. Suppose there is an
+        $\mathcal{O}\subseteq\bigcap\Omega$ such that
+        $\bigcup\mathcal{O}\notin\bigcap\Omega$. But for all
+        $\mathcal{U}\in\mathcal{O}$ it is true that
+        $\mathcal{U}\in\bigcap\Omega$ since $\mathcal{O}$ is a subset of
+        $\bigcap\Omega$ (Def.~\ref{def:Subsets}). But then for all
+        $\tau\in\bigcap\Omega$ is it true that $\mathcal{U}\in\tau$
+        (Def.~\ref{def:Intersection_Over_a_Collection}). But $\tau$ is a
+        topology on $X$, and thus $\bigcup\mathcal{O}\in\tau$
+        (Def.~\ref{def:Topology}). And this is true of all such $\tau$, and thus
+        $\bigcup\mathcal{O}\in\bigcap\Omega$, a contradiction. Thus
+        $\bigcap\Omega$ is closed to arbitrary unions. Lastly, if
+        $A,B\in\bigcap\Omega$, then for all $\tau\in\bigcap\Omega$ it is true
+        that $A,B\in\tau$. But $\tau$ is a topology, and thus
+        $A\cap{B}\in\tau$ (Def.~\ref{def:Topology}). And since this is true of
+        all $\tau\in\bigcap\Omega$, it is true that $A\cap{B}\in\bigcap\Omega$
+        (Def.~\ref{def:Intersection_Over_a_Collection}). Therefore
+        $\bigcap\Omega$ is a topology on $X$ (Def.~\ref{def:Topology}).
+    \end{proof}
+    However, the union of topologies may not be a topology. For consider the two
+    Sierpinski-like topologies on $\mathbb{Z}_{3}$ defined by
+    $\tau_{1}=\{\emptyset,\{0\},\mathbb{Z}_{3}\}$ and
+    $\tau_{2}=\{\emptyset,\{1\},\mathbb{Z}_{3}\}$. Both of these are topologies,
+    however $\tau_{1}\cup\tau_{2}=\{\emptyset,\{0\},\{1\},\mathbb{Z}_{3}\}$,
+    which is not a topology since it is not closed to unions. To see this,
+    not that $\{0\}\in\tau_{1}\cup\tau_{2}$, as is the set $\{1\}$, however
+    $\{0,1\}$ is not. This is why we chose $\mathbb{Z}_{3}$ for our
+    counterexample. Picking $\mathbb{Z}_{2}$ would actually result in a topology
+    since $\{0,1\}=\mathbb{Z}_{2}$, and the whole space would be contained in
+    the union.
+    \par\hfill\par
+    In some contexts it is necessary to compare topologies on a given set. For
+    example, if one were to study measure theory, there are two topologies one
+    could study on $\mathbb{R}$: The standard topology $\tau_{\mathbb{R}}$ which
+    is the one induced by the standard metric $d(x,y)=|x-y|$, and the topology
+    associated with the \textit{Lebesgue} $\sigma\textrm{-Algebra}$,
+    $\tau_{L}$. As it turns out, $\tau_{\mathbb{R}}\subseteq\tau_{L}$. A
+    topology $\tau_{1}$ is often said to be \textit{finer} than a topology
+    $\tau_{0}$ if $\tau_{0}\subset\tau_{1}$. Thus, the Lebesgue topology is
+    finer than the standard one. There's a \textit{fine} line between a topology
+    being too large and too small. The chaotic topology is essentially useless,
+    and is the smallest possible topology, but also the discrete topology is
+    also rather poor, whereas it is the largest. The standard topology on
+    $\mathbb{R}$ is good middle ground and many of the wonderous results of
+    calculus come from this structure. The Lebesgue topology $\tau_{\mathbb{R}}$
+    being only slightly larger (having the same cardinality) is horrendous and
+    leads to counterintuitive and undesirable results (to be elaborated on
+    in Book~\ref{book:Analysis}).
+    \par\hfill\par
+    We develop some more terminology to become more acquainted with the language
+    of point-set topology.
+    \begin{fdefinition}{Open Subset}{Open_Subset}
         An open subset of a \gls{topological space} $(X,\tau)$ is a \gls{set}
-        $\mathcal{U}\subseteq{X}$ such that $\mathcal{U}\in\tau$.
+        $\mathcal{U}\in\tau$.
     \end{fdefinition}
+    That is, an open subset of a topological space $(X,\tau)$ is simply an
+    element of the topology. $\mathcal{U}\subseteq{X}$ is open if and only if
+    $\mathcal{U}\in\tau$. Thus we could, rather circularly, define the topology
+    to be the collection of all open subsets of $X$.
     \begin{theorem}
         \label{thm:Emptyset_Is_Open}%
         If $(X,\tau)$ is a topological space, then $\emptyset$ is open.
@@ -244,7 +337,7 @@
         For since $(X,\tau)$ is a topological space, $\tau$ is a topology on $X$
         (Def.~\ref{def:Topological_Space}). But then $\emptyset\in\tau$
         (Def.~\ref{def:Topology}) and thus $\emptyset$ is open
-        (Def.~\ref{def:Open_Subsets}).
+        (Def.~\ref{def:Open_Subset}).
     \end{proof}
     \begin{theorem}
         \label{thm:Whole_Space_Is_Open}%
@@ -254,11 +347,11 @@
         For since $(X,\tau)$ is a topological space, $\tau$ is a topology on $X$
         (Def.~\ref{def:Topological_Space}). But then
         $X\in\tau$ (Def.~\ref{def:Topology}) and thus $X$ is open.
-        (Def.~\ref{def:Open_Subsets}).
+        (Def.~\ref{def:Open_Subset}).
     \end{proof}
     Equally important is the notion of \textit{closed sets}. Indeed, topologies
     may equivalently defined solely in terms of closed sets.
-    \begin{fdefinition}{Closed Subsets}{Closed_Subsets}
+    \begin{fdefinition}{Closed Subset}{Closed_Subset}
         A closed subset of a \gls{topological space} $(X,\tau)$ is a
         \gls{subset} $\mathcal{C}\subseteq{X}$ such that
         $X\setminus\mathcal{C}\in\tau$. That is, the complement of $\mathcal{C}$
@@ -269,23 +362,23 @@
         If $(X,\tau)$ is a topological space, then $\emptyset$ is closed.
     \end{theorem}
     \begin{proof}
-        For since $(X,\tau)$ is a topological space, $X$ is an open subset
-        (Thm.~\ref{thm:Whole_Space_Is_Open}). But $X\setminus\emptyset=X$, and
-        thus the complement of $\emptyset$ is open. Thus, $\emptyset$ is closed
-        (Def.~\ref{def:Closed_Subsets}). Therefore, etc.
+        For $\emptyset=X\setminus{X}$
+        (Thm.~\ref{thm:Set_Difference_of_Set_with_Self}) and $X$ is open
+        (Thm.~\ref{thm:Whole_Space_Is_Open}). Thus, $\emptyset$ is closed
+        (Def.~\ref{def:Closed_Subset})
     \end{proof}
     \begin{theorem}
         \label{thm:Whole_Space_Is_Closed}%
         If $(X,\tau)$ is a topological space, then $X$ is closed.
     \end{theorem}
     \begin{proof}
-        For since $(X,\tau)$ is a topological space, $\emptyset$ is an open
-        subset (Thm.~\ref{thm:Emptyset_Is_Open}). But $X\setminus{X}=\emptyset$,
-        and thus the complement of $X$ is open. Thus, $X$ is closed
-        (Def.~\ref{def:Closed_Subsets}). Therefore, etc.
+        For $X=X\setminus\emptyset$
+        (Thm.~\ref{thm:Set_Difference_of_Set_and_Empty}), and $\emptyset$ is
+        open (Thm.~\ref{thm:Emptyset_Is_Open}). Thus, $X$ is closed
+        (Def.~\ref{def:Closed_Subset}).
     \end{proof}
     \begin{theorem}
-        \label{thm:Comp_of_Open_is_Closed}%
+        \label{thm:Complement_of_Open_is_Closed}%
         If $(X,\tau)$ is a topological space, and if $\mathcal{U}\subseteq{X}$
         is open, then $X\setminus\mathcal{U}$ is closed.
     \end{theorem}
@@ -293,8 +386,31 @@
         For if $\mathcal{U}\subseteq{X}$ is a set, then
         $X\setminus(X\setminus\mathcal{U})=\mathcal{U}$. But $\mathcal{U}$ is
         open, and thus the complement of $X\setminus{U}$ is open. But then
-        $X\setminus{U}$ is closed (Def.~\ref{def:Closed_Subsets}).
+        $X\setminus{U}$ is closed (Def.~\ref{def:Closed_Subset}).
     \end{proof}
+    Thus, by definition, a closed set is a set whose complement is open, and
+    equivalently an open set is a set whose complement is closed. A common
+    misunderstanding is that sets are either closed or open, but not both. This
+    is false as we've just shown, the entire space $X$ is both closed and open,
+    and the empty set $\emptyset$ is also both closed and open. Sets of this
+    nature are called \textit{clopen}\index{Clopen Set}. As it turns out, clopen
+    sets are indeed rare and only occur in \textit{disconnected}
+    spaces\index{Topological Space!Disconnected}\index{Disconnected Space} and
+    as such a discussion on clopen sets will be saved for when we discuss the
+    notion of connectedness. It is further worth pointing out that it is
+    possible for a set to be neither closed nor open. Indeed, consider any
+    \textit{large} set $X$ (having at least a few points), and endow it with the
+    chaotic (or trivial) topology $\tau$. Then every proper non-empty subset
+    will be neither open nor closed, since the only open sets are $X$ and
+    $\emptyset$, and similary these are the only closed sets. For a concrete
+    example one can consider the real numbers. The subset $\mathbb{Q}$ of
+    rational numbers is neither open nor closed. It is not open since
+    for any point $x\in\mathbb{Q}$ and for any $\varepsilon>0$ the open interval
+    $(x-\varepsilon,x+\varepsilon)$ contains irrational numbers, and thus
+    $(x-\varepsilon,x+\varepsilon)\nsubseteq\mathbb{Q}$. It is not closed since
+    it's complement is the set of irrational numbers, and by a similar argument
+    this set is not open either. Thus $\mathbb{Q}$ is neither open nor closed,
+    and similarly the set of irrational numbers is neither open nor closed.
     \begin{ldefinition}{Relative Topology}{Relative_Topology}
         The relative topology of a subset $A\subseteq{X}$ in a topological space
         $(X,\tau)$ is the set $\tau_{A}$ defined by:
@@ -472,7 +588,7 @@
         $y\ne{x}$, it is true that $y\in\mathcal{V}$. Lastly,
         $x\notin\mathcal{V}$. Therefore $X\setminus\mathcal{V}=\{x\}$. But if
         $\mathcal{V}$ is open, then $X\setminus\mathcal{V}$ is closed
-        (Thm.~\ref{thm:Comp_of_Open_is_Closed}). Therefore, etc.
+        (Thm.~\ref{thm:Complement_of_Open_is_Closed}). Therefore, etc.
     \end{proof}
     \begin{ldefinition}{Hausdorff Topological Space}
           {Hausdoff_Top}
@@ -640,18 +756,8 @@
         Let $\mathcal{O}$ be an open cover of $X\cup Y$. Then there is a finite subcover of $X$ and a finite subcover of $Y$, and thus the combination of these subcovers is a cover of $X\cup Y$.
         \end{proof}
 \section{Old Notes}
-    \begin{theorem}
-        If $T_{\omega}$ is a set of topologies on
-        a topological space $X$, then
-        $\bigcap{T_{\omega}}$ is a topology on $X$.
-    \end{theorem}
-    However, the union of topologies may not be a
-    topology. A topology $\tau_{1}$ is set to
-    be finer than a topology $\tau_{0}$ if
-    $\tau_{0}\subset\tau_{1}$. An accumulation point
-    of a set $A$ is a point $x$ such that, for
-    all open neighborhoods $U$ of $A$,
-    $U\cap{A}\ne\emptyset$.
+    An accumulation point of a set $A$ is a point $x$ such that, for all open
+    neighborhoods $U$ of $A$, $U\cap{A}\ne\emptyset$.
     \begin{theorem}[Bolzano-Weierstrass Theorem]
         If $X$ is a bounded, infinite subset of
         $\mathbb{R}$, then $X$ has at least
@@ -667,10 +773,8 @@
         of a topological space $\tau$.
     \end{proof}
     \begin{definition}
-        The closure of a set $A$,
-        denoted $\overline{A}$, is the
-        intersection of all closed sets
-        containing $A$.
+        The closure of a set $A$, denoted $\overline{A}$, is the intersection of
+        all closed sets containing $A$.
     \end{definition}
     \begin{theorem}
         If $A$ is a set in a topological space
