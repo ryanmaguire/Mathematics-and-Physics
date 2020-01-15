@@ -1,0 +1,2878 @@
+%------------------------------------------------------------------------------%
+\documentclass{article}                                                        %
+%------------------------------Preamble----------------------------------------%
+\makeatletter                                                                  %
+    \def\input@path{{../../}}                                                  %
+\makeatother                                                                   %
+\input{preamble.tex}                                                           %
+%----------------------------Main Document-------------------------------------%
+\begin{document}
+    \title{Misc Notes from Semi-Remiannian Geometry}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \tableofcontents
+    \section{Locally Euclidean Spaces}
+        We wish to speak about topological spaces that are sufficiently well
+        behaved in the sense that it allows one to do calculus. The first
+        naive approach is to consider such spaces that can be locally
+        approximated by Euclidean space.
+        \begin{fdefinition}{Chart}{Chart}
+            A chart of dimension $n\in\mathbb{N}$ in a topological space
+            $(X,\tau)$, denoted $(\mathcal{U},\varphi)$, is an open set
+            $\mathcal{U}\in\tau$ and a function
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ such that
+            $\varphi$ is injective, continuous, and an open mapping with
+            respect to the standard topology on $\mathbb{R}^{n}$.
+        \end{fdefinition}
+        Some authors simply denote a chart by the function $\varphi$. Note
+        that since the image of $\varphi$ lies in $\mathbb{R}^{n}$, if we
+        compose with one of the projection mappings $\pi_{k}$ we obtain a
+        function $\pi_{k}\circ\phi:\mathcal{U}\rightarrow\mathbb{R}$. These
+        are called the coordinate functions of the chart
+        $(\mathcal{U},\phi)$ and are often denoted $x^{k}=\pi_{k}\circ\phi$.
+        Note that we may then write the image of $p\in\mathcal{U}$ as:
+        \begin{equation}
+            \phi(p)=\big(x^{1}(p),\dots,x^{n}(p)\big)
+        \end{equation}
+        and such notation is often useful. Avoiding the \textit{dot dot dot}
+        notation, we can recall that $\mathbf{x}\in\mathbb{R}^{n}$ is a
+        function $\mathbf{x}:\mathbb{Z}_{n}\rightarrow\mathbb{R}$. Thus if
+        $p\in\mathcal{U}$ and $\mathbf{x}=\phi(p)$, we can write this
+        explicitly by:
+        \begin{equation}
+            \big(\phi(p)\big)(k)=\mathbf{x}(k)=x_{k}=x^{k}(p)
+        \end{equation}
+        Thus distinguishing the difference between the notation $x^{k}$ and
+        $x_{k}$. Here, $x_{k}$ is simply a real number, $x^{k}$ is a function
+        $x^{k}:\mathcal{U}\rightarrow\mathbb{R}$, and $\mathbf{x}(k)$ is the
+        image of $k\in\mathbb{Z}_{n}$ under $\mathbf{x}$. In other words, it is
+        the $k^{th}$ component of $\mathbf{x}$.
+        \begin{example}
+            If $X=\mathbb{R}^{n}$ and $\tau$ is the standard topology, then
+            for any open subset $\mathcal{U}\subseteq\mathbb{R}^{n}$ the
+            pair $(\mathcal{U},\textrm{id}_{\mathbb{R}^{n}}|_{\mathcal{U}})$
+            is a chart, where $\textrm{id}_{\mathbb{R}^{n}}|_{\mathcal{U}}$
+            denotes the restriction of the identity map to $\mathcal{U}$.
+        \end{example}
+        \begin{example}
+            If $X=S^{2}$, and if $\tau$ is the subspace topology inherited
+            from $\mathbb{R}^{3}$, then we can form a chart around the
+            south pole $(0,0,\minus{1})$ as follows. Let
+            $\mathcal{U}=S^{2}\setminus\{(0,0,1)\}$. Since $\mathbb{R}^{3}$
+            is Hausdorff, and since $S^{2}$ is a subspace of
+            $\mathbb{R}^{3}$, it then follows that $S^{2}$ is Hausdorff. But
+            if $S^{2}$ is Hausdorff, then the set $\{(0,0,1)\}$ is closed
+            since finite sets are closed in a Hausdorff space. But then
+            $X\setminus\{(0,0,1)\}$ is the complement of a closed set, and
+            thus by definition is open. Hence, $\mathcal{U}$ is an open
+            subset of $S^{2}$. We can construct our open mapping
+            $\phi:\mathcal{U}\rightarrow\mathbb{R}^{2}$ by using the
+            \textit{stereographic projection}:
+            \begin{equation}
+                \phi(x,y,z)=\Big(\frac{x}{1-z},\frac{y}{1-z}\Big)
+                \quad\quad
+                \forall_{(x,y,z)\in{S}^{2}\setminus\{(0,0,1)\}}
+            \end{equation}
+            This function is continuous and bijective, and has a continuous
+            inverse:
+            \begin{equation}
+                \phi^{\minus{1}}(X,Y)=
+                \Big(\frac{2X}{1+X^{2}+Y^{2}},\frac{2Y}{1+X^{2}+Y^{2}},
+                    \frac{\minus{1}+X^{2}+Y^{2}}{1+X^{2}+Y^{2}}\Big)
+            \end{equation}
+            Therefore $\phi$ is a homeomorphism from $\mathcal{U}$ to
+            $\mathbb{R}^{2}$, and is thus necessarily a continuous injective
+            open mapping. This chart $(\mathcal{U},\phi)$ is actually a
+            chart for any point that is not the north pole. If we flip this
+            around and do the stereographic projection about the south pole,
+            we'll obtain a chart that contains the north pole. Thus the
+            sphere can be covered by two charts.
+        \end{example}
+        \begin{example}
+            Another example of a chart on the sphere is the
+            \textit{orthographic projection}. The stereographic projection
+            is obtain by placing an observer at one of the poles, and
+            drawing a straight line from the observer to a point on the
+            sphere. This point then gets mapped to $\mathbb{R}^{2}$ by
+            finding where this line intersects the $xy$ plane. The
+            orthographic is obtained in a similar manner by placing the
+            observer \textit{at infinity}. There is now the problem that
+            such a straight line intersects the sphere twice: Once on the
+            top and once on the bottom. That is, if $(x,y,z)$ lies on this
+            line, then so does $(x,y,\minus{z})$. To form our chart we must
+            consistently choose either the top or the bottom. Let
+            $\mathcal{U}$ be defined as follows:
+            \begin{equation}
+                \mathcal{U}=\{(x,y,z)\in{S}^{2}\;|\;z>0\}
+            \end{equation}
+            Define the orthographic projection by:
+            \begin{equation}
+                \phi(x,y,z)=(x,y)
+            \end{equation}
+            This is a homeomorphism between $\mathcal{U}$ and the open unit
+            disc $B_{1}(0)$. The inverse function is:
+            \begin{equation}
+                \phi^{\minus{1}}(X,Y)=\big(X,Y,\sqrt{1-X^{2}-Y^{2}}\big)
+            \end{equation}
+            where we unambiguously take the positive square root. This is
+            a chart for any point in the upper hemisphere (the equator is
+            not included). To completely cover the sphere using orthographic
+            projections requires 6 charts ($\pm{x}$, $\pm{y}$, $\pm{z}$,
+            our open set $\mathcal{U}$ corresponding to $+z$).
+        \end{example}
+        Equivalently, one could say that $\phi$ is a homeomorphism between
+        $\mathcal{U}$ and it's image under $\phi$. That is,
+        $\phi(\mathcal{U})\subseteq\mathbb{R}^{n}$ is homeomorphic to
+        $\mathcal{U}$ and $\phi:\mathcal{U}\rightarrow\phi(\mathcal{U})$ is
+        a homeomorphism.
+        \begin{theorem}
+            If $(X,\tau)$ is a topological space, if $n\in\mathbb{N}$, if
+            $(\mathcal{U},\phi)$ is a chart in $(X,\tau)$, and if
+            $\mathcal{V}=\phi(\mathcal{U})$ is the image of $\mathcal{U}$
+            under $\phi$, then $\phi:\mathcal{U}\rightarrow\mathcal{V}$ is
+            a homeomorphism.
+        \end{theorem}
+        \begin{proof}
+            For since $(\mathcal{U},\phi)$ is a chart, $\phi$ is injective,
+            continuous, and an open mapping. But since $\mathcal{V}$ is the
+            image of $\mathcal{U}$ under $\phi$, the restriction
+            $\phi:\mathcal{U}\rightarrow\mathcal{V}$ is therefore
+            surjective. But then $\phi:\mathcal{U}\rightarrow\mathcal{V}$ is
+            both injective and surjective, and is therefore bijective. But
+            since $\phi$ is an open mapping, $\phi^{\minus{1}}$ is
+            continuous. But then $\phi$ is a continuous bijection with a
+            continuous inverse and is thus a homeomorphism.
+        \end{proof}
+        \begin{fdefinition}{Locally Euclidean Space}
+                           {Locally Euclidean Space}
+            A locally Euclidean space is a topological space $(X,\tau)$
+            such that for all $x\in{X}$ there exists an $n\in\mathbb{N}$ and
+            an $n$ dimensional chart $(\mathcal{U},\phi)$ of $(X,\tau)$ such
+            that $x\in\mathcal{U}$.
+        \end{fdefinition}
+        This is the most general setting for one to define a manifold. The
+        dimension of a locally Euclidean space need not be constant, for we
+        can consider the disjoint union of a sphere with a line. Thus there
+        will be 2 dimensional points and 1 dimensional points. Dimension is,
+        however, a locally constant property. In particular, for any fixed
+        point $x\in{X}$ there is only one $n\in\mathbb{N}$ such that
+        $x$ is locally like $\mathbb{R}^{n}$. If in addition the space
+        $(X,\tau)$ is connected, then there is only one unambiguous number
+        $n\in\mathbb{N}$ such that every point $x\in{X}$ is locally like
+        $\mathbb{R}^{n}$. This allows us to define dimension.
+        \begin{theorem}
+            If $X$ and $Y$ are sets, if $\mathcal{U}\subseteq{X}$, if
+            $f:X\rightarrow{Y}$ is a function, if
+            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{f}(\mathcal{U})$ is the
+            restriction of $f$ to $\mathcal{U}$, and if
+            $\mathcal{V}\subseteq{f}(\mathcal{U})$, then:
+            \begin{equation}
+                f|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})
+                =\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For if $x\in{f}|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})$, then
+            there is an $x\in\mathcal{U}$ such that
+            $f|_{\mathcal{U}}(x)\in\mathcal{V}$. But for all
+            $x\in\mathcal{U}$ it is true that $f|_{\mathcal{U}}(x)=f(x)$,
+            and thus $f(x)\in\mathcal{V}$. But if $f(x)\in\mathcal{V}$, then
+            $x\in{f}^{\minus{1}}(\mathcal{V})$. Thus $x\in\mathcal{U}$ and
+            $x\in{f}^{\minus{1}}(\mathcal{V})$, and therefore
+            $x\in\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})$. So we obtain:
+            \begin{equation}
+                f|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})
+                \subseteq\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})
+            \end{equation}
+            In the other direction, if
+            $x\in\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})$, then
+            $x\in\mathcal{U}$ and $f(x)\in\mathcal{V}$. But if
+            $x\in\mathcal{U}$, then $f(x)=f|_{\mathcal{U}}(x)$ and therefore
+            $f|_{\mathcal{U}}(x)\in\mathcal{V}$. But then
+            $x\in{f}|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})$. That is:
+            \begin{equation}
+                \mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})
+                \subseteq{f}|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})
+            \end{equation}
+            From the definition of equality, we are done.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau_{X})$ and $(Y,\tau_{Y})$ are topological spaces,
+            if $f:X\rightarrow{Y}$ is a homeomorphism, and if
+            $\mathcal{U}\subseteq{X}$, then the restriction
+            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{f}(\mathcal{U})$ is
+            a homeomorphism between $(\mathcal{U},\tau_{X}|_{\mathcal{U}})$
+            and $(f(\mathcal{U}),\tau_{Y}|_{f(\mathcal{U})})$, where
+            $\tau_{X}|_{\mathcal{U}}$ and $\tau_{Y}|_{f(\mathcal{U})}$ are
+            the subspace topologies.
+        \end{theorem}
+        \begin{proof}
+            Since $f:X\rightarrow{Y}$ is a homeomorphism it is therefore
+            bijective. But then
+            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{f}(\mathcal{U})$ is
+            bijective. For if not, then it is either not injective or not
+            surjective. But if it is not injective then there exists points
+            $x_{1},x_{2}\in\mathcal{U}$ such that $x_{1}\ne{x}_{2}$ and
+            $f|_{\mathcal{U}}(x_{1})=f|_{\mathcal{U}}(x_{2})$. But since
+            $f|_{\mathcal{U}}$ is the restriction of $f$ to $\mathcal{U}$,
+            for all $x\in\mathcal{U}$ it is true that
+            $f(x)=f|_{\mathcal{U}}(x)$. But $x_{1},x_{2}\in\mathcal{U}$ and
+            thus $f(x_{1})=f|_{\mathcal{U}}(x_{1})$ and similary for
+            $x_{2}$. Then by the transitivity of equality,
+            $f(x_{1})=f(x_{2})$, a contradiction since $f$ is injective.
+            Therefore $f|_{\mathcal{U}}$ is injective. It is surjective by
+            the definition of the image of $\mathcal{U}$ under $f$. Thus,
+            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{f}(\mathcal{U})$ is
+            bijective. If $\mathcal{V}\subseteq{f}(\mathcal{U})$ is open in
+            the subspace topology then there is an open set
+            $\mathcal{O}\in\tau_{Y}$ such that
+            $\mathcal{V}=\mathcal{O}\cap{f}(\mathcal{U})$. But then:
+            \begin{subequations}
+                \begin{align}
+                    f|_{\mathcal{U}}^{\minus{1}}(\mathcal{V})
+                    &=\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V})\\
+                    &=\mathcal{U}\cap
+                        f^{\minus{1}}\big(
+                            f(\mathcal{U})\cap\mathcal{O}
+                        \big)\\
+                    &=\mathcal{U}\cap\Big(
+                        f^{\minus{1}}\big(f(\mathcal{U})\big)\cap
+                        f^{\minus{1}}(\mathcal{O})
+                    \Big)\\
+                    &=\mathcal{U}\cap\big(
+                        \mathcal{U}\cap{f}^{\minus{1}}(\mathcal{O})\big)\\
+                    &=\big(\mathcal{U}\cap\mathcal{U})\cap
+                        f^{\minus{1}}(\mathcal{O})\\
+                    &=\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{O})
+                \end{align}
+            \end{subequations}
+            But $f$ is continuous and therefore $f^{\minus{1}}(\mathcal{O})$
+            is an open subset of $X$. But then
+            $\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{O})$ is open in the
+            subspace topology $\tau_{X}|_{\mathcal{U}}$, and therefore
+            $f|_{\mathcal{U}}$ is continuous. In a similar manner,
+            $f|_{\mathcal{U}}^{\minus{1}}$ is continuous and therefore
+            $f|_{\mathcal{U}}$ is a homeomorphism.
+        \end{proof}
+        While we were very liberal in our definition of a locally Euclidean
+        space, allowing the set $\mathcal{V}\subseteq\mathbb{R}^{n}$ to be
+        any open set, we need not be. A topological space is locally
+        Euclidean if and only if every point has an open neighborhood that
+        is homeomorphic to all of $\mathbb{R}^{n}$.
+        \begin{theorem}
+            If $(X,\tau)$ is a topological space, $x\in{X}$, if
+            $n\in\mathbb{N}$, and if $(\mathcal{U},\phi)$ is an $n$
+            dimensional chart in $(X,\tau)$ such that $x\in\mathcal{U}$,
+            then there is an open subset $\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{V}$ and $\mathcal{V}$ is homeomorphic to
+            $\mathbb{R}^{n}$.
+        \end{theorem}
+        \begin{proof}
+                For since $\phi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is an open
+                mapping, $\phi(\mathcal{U})$ is an open subset of
+                $\mathbb{R}^{n}$. But if $x\in\mathcal{U}$, then
+                $\phi(x)\in\phi(\mathcal{U})$. But if $\mathcal{U}$ is open and
+                if $\phi(x)\in\phi(\mathcal{U})$, then there is an $r>0$ such
+                that the open ball of radius $r$ about $\phi(x)$ is contained in
+                $\phi(\mathcal{U})$. That is,
+                $B_{r}(\phi(x),\mathbb{R}^{n})\subseteq\phi(\mathcal{U})$. But
+                since $B_{r}(\phi(x),\mathbb{R}^{n})\subseteq\phi(\mathcal{U})$,
+                we have:
+                \begin{equation}
+                    \phi^{\minus{1}}\big(B_{r}(\phi(x),\mathbb{R}^{n})\big)
+                    \subseteq\mathcal{U}
+                \end{equation}
+                But then since $B_{r}(\phi(x),\mathbb{R}^{n})$ is contained in
+                the image of $\mathcal{U}$ under $\phi$, we have:
+                \begin{equation}
+                    \phi\Big(
+                        \phi^{\minus{1}}\big(B_{r}(\phi(x_,\mathbb{R}^{n})\big)
+                    \Big)
+                    =B_{r}(\phi(x),\mathbb{R}^{n})
+                \end{equation}
+                But then the restriction of $\phi$ to
+                $\phi^{\minus{1}}\big(B_{r}(\phi(x),\mathbb{R}^{n})\big)$ is a
+                homeomorphism from
+                $\phi^{\minus{1}}\big(B_{r}(\phi(x),\mathbb{R}^{n})\big)$ to
+                $B_{r}(\phi(x),\mathbb{R}^{n})$. But
+                $B_{r}(\phi(x),\mathbb{R}^{n})$ is homeomorphic to
+                $\mathbb{R}^{n}$, and since homeomorphic is an equivalence
+                relation, we have that
+                $\phi^{\minus{1}}\big(B_{r}(\phi(x),\mathbb{R}^{n})\big)$ is
+                homeomorphic to $\mathbb{R}^{n}$. But then
+                $\phi^{\minus{1}}\big(B_{r}(\phi(x),\mathbb{R}^{n})\big)$ is an
+                open subset of $X$ that contains $x$ and is homeomorphic to
+                $\mathbb{R}^{n}$, completing the proof.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\tau)$ is a topological space, if $Y$ is a set with at
+                least two points, and if for all locally constant functions
+                $f:X\rightarrow{Y}$ it is true that $f$ is constant, then
+                $(X,\tau)$ is connected.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Then there are non-empty disjoint open subsets
+                $\mathcal{U},\mathcal{V}\in\tau$ that partition $X$. That is,
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$ and
+                $\mathcal{U}\cup\mathcal{V}=X$. Since $Y$ has at least two
+                points, there are distinct $y_{1},y_{2}\in{Y}$. Let
+                $f:X\rightarrow{Y}$ be defined as follows:
+                \begin{equation}
+                    f(x)=
+                    \begin{cases}
+                        y_{1},&x\in\mathcal{U}\\
+                        y_{2},&x\in\mathcal{V}
+                    \end{cases}
+                \end{equation}
+                Then $f$ is locally constant. That is, since $\mathcal{U}$ and
+                $\mathcal{V}$ partition $X$, for all $z\in{X}$ it is true that
+                either $z\in\mathcal{U}$ or $z\in\mathcal{V}$, but not both.
+                Thus suppose there is a $z\in{X}$ such that for all
+                $\mathcal{O}\in\tau$ such that $z\in\mathcal{O}$ it is not true
+                that $f$ is constant on $\mathcal{O}$. But either
+                $z\in\mathcal{U}$ or $z\in\mathcal{V}$. If $z\in\mathcal{U}$,
+                then for all $x\in\mathcal{U}$, $f(x)=y_{1}$ and thus $f$ is
+                locally constant on $\mathcal{U}$. Similarly if
+                $z\in\mathcal{V}$, and thus $f$ is locally constant. It is not
+                constant since $\mathcal{U}$ and $\mathcal{V}$ are non-empty,
+                and thus $f(X)=\{y_{1},y_{2}\}$, which is not a singleton. A
+                contradiction since by hypothesis for all locally constant
+                functions $f:X\rightarrow{Y}$ it is true that $f$ is constant.
+                Therefore, $(X,\tau)$ is connected.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\tau)$ is a connected topological space, if $Y$ is a set,
+                and if $f:X\rightarrow{Y}$ is locally constant, then $f$ is
+                constant.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Then there is a function $f:X\rightarrow{Y}$
+                that is locally constant but not constant. But if $f$ is not
+                constant, then there are distinct $y_{1},y_{2}\in{Y}$ such that
+                $f^{\minus{1}}\{y_{1}\}\ne\emptyset$ and similarly for $y_{2}$.
+                Define $\mathcal{U}$ as follows:
+                \begin{equation}
+                    \mathcal{U}=f^{\minus{1}}\big(\{y_{1}\}\big)
+                \end{equation}
+                Since $f$ is locally constant, for all $x\in\mathcal{U}$ there
+                exists an open subset $\mathcal{V}_{x}\in\tau$ such that
+                $x\in\mathcal{V}_{x}$ and $f$ is constant on $\mathcal{V}_{x}$.
+                But since $x\in\mathcal{U}$, for all $z\in\mathcal{V}_{x}$ it
+                must be true that $f(z)=y_{1}$. But then:
+                \begin{equation}
+                    \mathcal{U}=
+                    \bigcup_{x\in\mathcal{U}}\mathcal{V}_{x}
+                \end{equation}
+                Since $\mathcal{U}$ is the union of open sets, it must be open
+                itself. In a similarly manner, $X\setminus\mathcal{U}$ is open.
+                But $X\setminus\mathcal{U}$ is non-empty since
+                $f^{\minus{1}}(\{y_{2}\})\subseteq{X}\setminus\mathcal{U}$
+                and $f^{\minus{1}}(\{y_{2}\})$ is non-empty. But then
+                $\mathcal{U}$ and $X\setminus\mathcal{U}$ are non-empty disjoint
+                open sets that partition $X$, and therefore $(X,\tau)$ is
+                disconnected, a contradiction. Therefore, $f$ is constant.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\tau)$ is a topological space, if $x\in{X}$, if
+                $m,n\in\mathbb{N}$, if $(\mathcal{U},\varphi)$ and
+                $(\mathcal{V},\psi)$ are $m$ and $n$ dimensional charts,
+                respectively, and if $x\in\mathcal{U}$ and $x\in\mathcal{V}$,
+                then $n=m$.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Since $\mathcal{U}$ and $\mathcal{V}$ are open,
+                $\mathcal{U}\cap\mathcal{V}$ is open. But $x\in\mathcal{U}$ and
+                $x\in\mathcal{V}$, and thus $\mathcal{U}\cap\mathcal{V}$ is
+                non-empty. But since
+                $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{m}$ and
+                $\psi:\mathcal{V}\rightarrow\mathbb{R}^{n}$ are open mappings,
+                $\psi\circ\varphi^{\minus{1}}:%
+                 \varphi(\mathcal{U}\cap\mathcal{V})\rightarrow\mathbb{R}^{n}$
+                is an open mapping. But since $\mathcal{U}\cap\mathcal{V}$ is
+                open, and since $\varphi$ is an open mapping,
+                $\varphi(\mathcal{U}\cap\mathcal{V})$ is an open subset of
+                $\mathbb{R}^{m}$. But then $\varphi(\mathcal{U}\cap\mathcal{V})$
+                is an open subset of $\mathbb{R}^{m}$ that is homeomorphic to
+                $\psi(\mathcal{U}\cap\mathcal{V})$, which is an open subset
+                of $\mathbb{R}^{n}$. But then by invariance of domain, $n=m$.
+        \end{proof}
+        With this we can define a function
+        $\textrm{dim}:X\rightarrow\mathbb{N}$ from any locally Euclidean
+        topological space $(X,\tau)$ called the \textit{dimension} function.
+        Our current goal is to show that this function is locally constant.
+        \begin{theorem}
+                If $(X,\tau)$ is a locally Euclidean topological space, if
+                $\textrm{dim}:X\rightarrow\mathbb{N}$ is the function such that
+                for all $x\in{X}$, $\textrm{dim}(x)$ is the unique
+                $n\in\mathbb{N}$ such that there exists a chart
+                $(\mathcal{U},\varphi)$ of dimension $n$ such that
+                $x\in\mathcal{U}$, then $\textrm{dim}$ is locally constant.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Then there is a point $x\in{X}$ such that for
+                all $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$, it is not
+                true that $f$ is constant on $\mathcal{U}$. But since $(X,\tau)$
+                is locally Euclidean, there is an $n\in\mathbb{N}$ and a chart
+                $(\mathcal{U},\phi)$ of dimension $n$ such that
+                $x\in\mathcal{U}$. But for all $z\in\mathcal{U}$,
+                $(\mathcal{U},\phi)$ is a chart of dimension $n$ that contains
+                $z$. But the dimension is pointwise invariant, and thus the
+                dimension is constant on $\mathcal{U}$, a contradiction. Thus,
+                dimension is a locally constant function.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\tau)$ is a connected locally Euclidean topological
+                space, then the dimension is constant.
+        \end{theorem}
+        \begin{proof}
+                For dimension is locally constant, and locally constant
+                functions on a connected topological space are constant.
+        \end{proof}
+    \section{Homogeneous Spaces}
+        \begin{fdefinition}{Homogeneous Topological Space}
+                               {Homogeneous_Topological_Space}
+                A homogeneous topological space is a topological space
+                $(X,\tau)$ such that for all $x,y\in{X}$ there exists a
+                homeomorphism $f:X\rightarrow{X}$ such that $f(x)=y$.
+        \end{fdefinition}
+        Homogeneous spaces are ones where any point $x$ looks locally like
+        any other point.
+        \begin{example}
+                For any $n\in\mathbb{N}$, the Euclidean space $\mathbb{R}^{n}$
+                is homogeneous. Given $\mathbf{x},\mathbf{y}\in\mathbb{R}^{n}$,
+                define $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n}$ by:
+                \begin{equation}
+                    f(\mathbf{z})=\mathbf{y}+(\mathbf{x}-\mathbf{z})
+                \end{equation}
+                Then $f(\mathbf{x})=\mathbf{y}$, as desired. This is bijective
+                and bicontinuous, and therefore a homeomorphism. Indeed, by
+                invariance of domain it suffices to show that $f$ is bijective
+                and continuous. The fact that $f^{\minus{1}}$ is continuous then
+                comes for free.
+        \end{example}
+        \begin{example}
+                If $X=S^{n}$, $n>1$, then $S^{n}$ is homogeneous. Given two
+                points $\mathbf{x},\mathbf{y}\in{S}^{n}$, let $R$ be the
+                rotation mapping that takes $\mathbf{x}$ to $\mathbf{y}$. This
+                is bijective and bicontinuous, and hence a homeomorphism. For
+                the case of $n=0$, $S^{0}$ is merely two points and the topology
+                is the power set. Letting $f$ be the function that swaps these
+                two points shows that $S^{0}$ is also homogeneous.
+        \end{example}
+        Not every space is homogeneous. We'll need a brief discussion on
+        ordered spaces to demonstrate this.
+        \begin{definition}
+                The order topology from a totally ordered set $(X,\leq)$ is
+                the topology $\tau$ generated by sets of the form:
+                \begin{equation}
+                    (a,b)=\{\,x\in{X}\;|\;a<x\textrm{ and }x<b\,\}
+                \end{equation}
+                together with open rays:
+                \par
+                \begin{subequations}
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            (\minus\infty,a)=\{\,x\in{X}\;|\;x<a\,\}
+                        \end{equation}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.49\textwidth}
+                        \centering
+                        \begin{equation}
+                            (a,\infty)=\{\,x\in{X}\;|\;a<x\,\}
+                        \end{equation}
+                    \end{minipage}
+                \end{subequations}
+                \par\vspace{2.5ex}
+        \end{definition}
+        \begin{example}
+                The standard topology on $\mathbb{R}$ is an order topology
+                induced by the standard order. The long line is another such
+                topology induced by the lexicographic ordering on
+                $[0,1)\times\omega_{1}$, where $\omega_{1}$ is the first
+                uncountable ordinal.
+        \end{example}
+        \begin{definition}
+                A complete totally ordered set is a totally ordered set
+                $(X,\leq)$ with the least upper bound property.
+        \end{definition}
+        \begin{theorem}
+                If $(X,\leq)$ is a totally ordered set, if $\tau$ is the order
+                topology, and if $(X,\tau)$ is connected, then $(X,\leq)$ is
+                a complete totally ordered set.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Then there exists a set
+                $\mathcal{U}\subseteq{X}$ that is bounded above that contains
+                no least upper bound. Let $\mathcal{V}_{+}$ be defined as
+                follows:
+                \begin{equation}
+                    \mathcal{V}_{+}=\{\,x\in{X}\;|\;
+                        \forall_{y\in\mathcal{U}}(y<x)\,\}
+                \end{equation}
+                Since $\mathcal{U}$ is bounded above, $\mathcal{V}_{+}$ is
+                non-empty. Moreover, it is open since:
+                \begin{equation}
+                    \mathcal{V}_{+}=
+                    \bigcup_{x\in\mathcal{V}_{+}}(x,\infty)
+                \end{equation}
+                For if $x_{0}\in\bigcup(x,\infty)$ then there is an
+                $x\in\mathcal{V}_{+}$ such that $x_{0}\in(x,\infty)$. But
+                for all $y\in\mathcal{U}$ it is true that $y<x$, and thus by
+                transitivity $y<x_{0}$. Thus, by definition,
+                $x_{0}\in\mathcal{V}_{+}$. Now if $x_{0}\in\mathcal{V}_{+}$,
+                suppose it is not in $\bigcup(x,\infty)$. Then for all
+                $x\in\mathcal{V}_{+}$ it is true that $x_{0}<x$, or $x=x_{0}$,
+                and thus $x_{0}$ is a greatest lower bound of $\mathcal{V}_{+}$.
+                But by construction, $x_{0}$ is then a least upper bound of
+                $\mathcal{U}$, but $\mathcal{U}$ has no such thing. Thus
+                $x_{0}\in\bigcup(\minus\infty,x)$, and hence we have equality.
+                Thus $\mathcal{V}_{+}$ is open. By a similar argument,
+                ${X}\setminus\mathcal{V}_{+}$ is open, and hence $X$ is
+                disconnected, a contradiction. Thus, $(X,\leq)$ is complete.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\leq)$ is a totally ordered set, if $\tau$ is the order
+                topology, if $\mathcal{U}$ is a connected subset of $X$, and if
+                $a,b\in\mathcal{U}$ are such that $a<b$, then
+                $(a,b)\subseteq\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+                Suppose not. Then there is a $c\in(a,b)$ such that
+                $c\notin\mathcal{U}$. But then $(c,\infty)\cap\mathcal{U}$ and
+                $(\minus\infty,c)\cap\mathcal{U}$ are disjoint non-empty subsets
+                that are open in $\mathcal{U}$, and hence $\mathcal{U}$ is
+                disconnected, a contradiction.
+        \end{proof}
+        \begin{ltheorem}{Intermediate Value Theorem}
+                            {Intermediate_Value_Theorem}
+                If $(X,<_{X})$ and $(Y,<_{Y})$ are totally ordered sets, if
+                $\tau_{X}$ and $\tau_{Y}$ are the order topologies on $X$ and
+                $Y$, respectively, if $(X,\tau_{X})$ is a connected topological
+                topological space, if $f:X\rightarrow{Y}$ is a continuous
+                function, and if $a,b\in{X}$ are such that $a<_{X}b$ and
+                $f(a)<_{Y}f(b)$, then for all $c\in(f(a),f(b))$ there is an
+                $x_{0}\in(a,b)$ such that $f(x_{0})=c$.
+        \end{ltheorem}
+        \begin{proof}
+                For the continuous image of a connected set is connected, and
+                thus $f\big([a,b]\big)$ is a connected subset of $Y$. But
+                $f(a)\in{f}\big([a,b]\big)$ and $f(b)\in{f}\big([a,b]\big)$ and
+                since $f\big([a,b]\big)$ is connected we have that
+                $\big(f(a),f(b)\big)\subseteq{f}\big([a,b]\big)$. But then for
+                all $c\in\big(f(a),f(b)\big)$ it is true that
+                $c\in{f}\big((a,b)\big)$, and thus there is an $x_{0}\in(a,b)$
+                such that $f(x_{0})=c$.
+        \end{proof}
+        \begin{theorem}
+                If $(X,\leq)$ is a totally ordered set, if $\tau$ is the order
+                topology, if $(X,\tau)$ is connected, and if $f:X\rightarrow{X}$
+                is a homeomorphism, then either $f$ is order preserving or
+                order reversing.
+        \end{theorem}
+        \begin{proof}
+                For suppose not. Then there are $a,b,c\in{X}$ such that
+                $a<b$ and $b<c$, yet either $f(b)<f(a)$ and $f(b)<f(c)$, or
+                $f(a)<f(b)$ and $f(c)<f(b)$. Suppose $f(a)<f(b)$ and
+                $f(c)<f(b)$. Since $a<b$ and $b<c$, by transitivity $a<c$, and
+                thus $a\ne{c}$. Furthermore, since $f$ is a homeomorphism it is
+                bijective, and therefore injective, and thus $f(a)\ne{f}(c)$.
+                But $\leq$ is a total ordering and thus by trichotomy either
+                $f(a)<f(c)$ or $f(c)<f(a)$. Suppose $f(a)<f(c)$. But since
+                $f(a)<f(c)$ and $f(c)<f(b)$, and thus
+                $f(c)\in\big(f(a),f(b)\big)$. But then by the intermediate value
+                theorem there is an $x_{0}\in(a,b)$ such that $f(x_{0})=f(c)$.
+                But if $x_{0}\in(a,b)$, then $x_{0}<b$. But $b<c$, and therefore
+                $x_{0}<c$ and hence $x_{0}\ne{c}$. But then $f(x_{0})=f(c)$ and
+                $x_{0}\ne{c}$, contradicting the fact that $f$ is a bijection,
+                a contradiction. Similarly, it is not true that $f(b)<f(a)$ and
+                $f(b)<f(c)$. Thus, either $f$ is order preserving or order
+                reversing.
+        \end{proof}
+        We can now prove that there are non-homogeneous spaces.
+        \begin{example}
+                Let $X=(0,1]$, with the standard subspace topology inherited
+                from $\mathbb{R}$. This is the same as the order topology from
+                the standard ordering. Suppose $(0,1]$ is homogeneous and let
+                $x=1$, $y=1/2$. Then there is a homeomorphism
+                $f:X\rightarrow{X}$ such that $f(1)=1/2$. But any homeomorphism
+                must be order preserving or order reserving, and since
+                $1\geq{x}$ for all $x\in(0,1]$, either $f(1)\geq{x}$ for all
+                $x$, or $f(1)\leq{x}$ for all $x$. But it $f(1)\leq{x}$ for all
+                $x$ then $f(1)$ is a greatest lower bound, but $(0,1]$ has no
+                such bound. Hence, $f(1)\geq{x}$ for all $x\in{X}$. But then
+                $f(1)=1$, a contradiction since $f(1)=1/2$. Hence, $(0,1]$ is
+                not homogeneous.
+        \end{example}
+        The next theorem to prove is that any connected Hausdorff locally
+        Euclidean topological space is homogeneous.
+        \begin{theorem}
+                If $(X,\tau)$ is a connected Hausdorff locally Euclidean
+                topological space, then it is homogeneous.
+        \end{theorem}
+        If the Hausdorff property is lost we may lose the homogeneity of the
+        space as well. The fact that locally Euclidean spaces can be
+        non-Hausdorff is one justification for including the Hausdorff
+        property in the definition of a topological manifold, which is a
+        locally Euclidean Hausdorff topological space that is second
+        countable. First we'll demonstrate the existence of non-Hausdorff
+        locally Euclidean topological spaces.
+        \begin{example}
+                Let $X$ be the disjoint union of $\mathbb{R}$ with itself:
+                \begin{equation}
+                    X=\mathbb{R}\sqcup\mathbb{R}
+                \end{equation}
+                That is, $X=(\mathbb{R}\times\{0\})\cup(\mathbb{R}\times\{1\})$.
+                Furthermore, consider the relation $R'\subseteq{X}\times{X}$
+                defined by:
+                \begin{equation}
+                    R'=\Big\{\,\Big((x,a),(x,b)\Big)\;\Big|\;
+                        x\in\mathbb{R}\setminus\{0\}
+                        \textrm{ and }a,b\in\mathbb{Z}_{2}\,\Big\}
+                \end{equation}
+                That is, $(x,a)R'(y,b)$ if and only if $a,b\in\{0,1\}$, and
+                $x=y$ are non-zero. From this we can obtain an equivalence
+                relation $R$ as follows:
+                \begin{equation}
+                    R=R'\cup\big\{\big((0,0),(0,0)\big\}\cup
+                        \big\{\big((0,1),(0,1)\big\}
+                \end{equation}
+                That is, $R$ is the reflexive closure of $R'$. This is an
+                equivalence relation. Let $Y$ be the topological space
+                $(X/R,\tau_{R})$, where $\tau_{R}$ is the quotient topology.
+                This space is then locally Euclidean. For if $x\ne{0}$, let
+                $r=|x|/2$ Let $\mathcal{U}$ be defined by:
+                \begin{equation}
+                    \mathcal{U}=\big\{[(y,0)]\in{X}\;|\;|y-x|<r\big\}
+                \end{equation}
+                Then $\mathcal{U}$ is open since for all points
+                $[z]\in\mathcal{U}$, either $z=(y,0)$ or $z=(y,1)$ where
+                $|x-y|<r$. By the triangle inequality we can then conclude that
+                $y\ne{0}$. But then:
+                \begin{equation}
+                    \bigcup\mathcal{U}=\Big(B_{r}^{\mathbb{R}}(x)\times\{0\}\Big)
+                        \bigcup\Big(B_{r}^{\mathbb{R}}(x)\times\{1\}\Big)
+                \end{equation}
+                And this is an open subset of $X$ with the disjoint union
+                topology, and therefore $\mathcal{U}$ is open in the quotient
+                topology. We can define a homemorphism between $\mathcal{U}$ and
+                the open interval $(x-r,x+r)$ by defining:
+                \begin{equation}
+                    \phi\big([(y,0)]\big)=y
+                \end{equation}
+                Similarly, for the points $(0,0)$ and $(0,1)$ we can define
+                $\mathcal{U}_{0}=X\setminus\{[(0,1)]\}$ and
+                $\mathcal{U}_{1}=X\setminus\{[0,0]\}$, both of which are
+                homeomorphic to all of $\mathbb{R}$. Thus this space, which is
+                called the \textit{bug-eyed line}\index{Bug-Eyed Line}, or the
+                \textit{line with two origins}\index{Line with Two Origins}, is
+                locally Euclidean but is not Hausdorff since every open set
+                containing $(0,0)$ and every open set containing $(0,1)$ have
+                non-empty intersection.
+        \end{example}
+        The bug-eyed line\index{Bug-Eyed Line} is shown in
+        Fig.~\ref{fig:Bug_Eyed_Line}. The dashed line is used to denote that
+        this final sketch is approximately what the space \textit{looks}
+        like. We can use this figure to show that any open set containing
+        the upper origin must also contain the lower one
+        (see Fig.~\ref{fig:Open_Neighborhoods_of_Origins_in_Bug_Eyed_Line}).
+        \begin{example}
+                The bug-eyed line is not homogeneous. For the points $(0,0)$ and
+                $[(1,0)]$ can be separated by open sets, as can the points
+                $(0,1)$ and $[(1,0)]$. However $(0,0)$ can not be be separated
+                from $(0,1)$, and since homeomorphisms preserve the Hausdorff
+                property, there can be no such function $f:X\rightarrow{X}$ such
+                that $f\big((0,0)\big)=[(1,0)]$. Hence, the bug-eyed line is
+                not homogeneous.
+        \end{example}
+        \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \input{tikz/Bug_Eyed_Line_Construction.tex}
+                \caption{Construction of the Bug-Eyed Line}
+                \label{fig:Bug_Eyed_Line}
+        \end{figure}
+        \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \input{tikz/Bug_Eyed_Line_Open_Sets.tex}
+                \caption{Open Subsets of the Bug-Eyed Line}
+                \label{fig:Open_Neighborhoods_of_Origins_in_Bug_Eyed_Line}
+        \end{figure}
+        Another common example of a non-Hausdorff locally Euclidean space is
+        the branching line. This is defined in a similar manner as the
+        bug-eyed line, but with a slightly different equivalence relation.
+        We define $R$ by:
+        \begin{equation}
+                R=\big\{\,\big((x,a),(x,b)\big)\;|\;
+                    x<0\textrm{ and }a,b\in\mathbb{Z}_{2}\big\}
+        \end{equation}
+        We then look at the reflexive closure of $R$, adding
+        $\big((x,0),(x,0)\big)$ and $\big((x,1),(x,1)\big)$ for all
+        $x\geq{0}$. This is an equivalence relation, and looking at
+        $\mathbb{R}\sqcup\mathbb{R}/R$ with the quotient topology gives us
+        the branching line. The construction is shown in
+        Fig.~\ref{fig:Construction_of_Branching_Line}.
+        \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \input{tikz/Branching_Line_Construction.tex}
+                \caption{Construction of the Branching Line}
+                \label{fig:Construction_of_Branching_Line}
+        \end{figure}
+        Both the bug-eyed line and the branching line are examples of
+        non-Hausdorff, non-homogeneous, locally Euclidean second countable
+        topological spaces. Moreover, they are both path-connected. While
+        connected Hausdorff spaces that are locally Euclidean are indeed
+        homogeneous, the converse is not true. That is, the are connected
+        homogeneous locally Euclidean spaces that are not Hausdorff. If one
+        adds the Lindel\"{o}f requirement, then it can be proved that the
+        space is Hausdorff.
+        \begin{fdefinition}{The Complete Feather}{The_Complete_Feather}
+                The complete feather is the set:
+                \begin{equation*}
+                    F=\Big(\bigcup_{n\in\mathbb{N}^{+}}
+                        \big\{\,\mathbf{x}\in\mathbb{R}^{n+1}\;|\;
+                            \forall_{i\in\mathbb{Z}_{n-1}}(x_{i}<x_{i+1})
+                            \land(x_{n-1}\leq{x}_{n})\,\big\}\Big)
+                        \bigcup\mathbb{R}
+                \end{equation*}
+        \end{fdefinition}
+        The complete feather is a subset of $\bigcup\mathbb{R}^{n}$ with the
+        additional requirements that $x_{0}<x_{1}<\dots<x_{m-1}\leq{x}_{m}$.
+        No such restraint is imposed on the $\mathbb{R}^{1}$ term. We place
+        a topology by considering the following partial ordering.
+        \begin{theorem}
+                If $(X,\tau)$ is a Lindel\"{o}f topological space that is
+                locally second countable, then it is second countable.
+        \end{theorem}
+        \begin{proof}
+                For if $(X,\tau)$ is locally second countable, for all $x\in{X}$
+                there is an open subset $\mathcal{U}_{x}\in\tau$ such that
+                $(\mathcal{U}_{x},\tau|_{\mathcal{U}_{x}})$ has a countable
+                basis, where $\tau|_{\mathcal{U}_{x}}$ is the subspace topology.
+                But then the set:
+                \begin{equation}
+                    \mathcal{O}=
+                    \{\,\mathcal{U}_{x}\in\tau\;|\;x\in{X}\,\}
+                \end{equation}
+                is an open cover of $X$. But $(X,\tau)$ is Lindel\"{o}f and thus
+                there is a countable subcover $\Delta$. But for all
+                $\mathcal{U}\in\Delta$ there is a countable basis for
+                $\mathcal{U}$, $\mathscr{B}_{\mathcal{U}}$. But then:
+                \begin{equation}
+                    \mathscr{O}=
+                    \bigcup_{\mathcal{U}\in\Delta}
+                        \{\,\mathscr{B}_{\mathcal{U}}\;|\;
+                            \mathcal{U}\in\Delta\,\}
+                \end{equation}
+                Is countable basis for $(X,\tau)$. It is countable since it is
+                the countable union of countable sets. Morever, let
+                $\mathcal{V}\in\tau$. But since $\Delta$ is a cover of $X$, we
+                have:
+                \begin{equation}
+                    \mathcal{V}
+                    =\mathcal{V}\cap{X}
+                    =\mathcal{V}\cap\Big(
+                        \bigcup_{\mathcal{U}\in\Delta}\mathcal{U}
+                    \Big)
+                    =\bigcup_{\mathcal{U}\in\Delta}\big(
+                        \mathcal{U}\cap\mathcal{V}
+                    \big)
+                \end{equation}
+                But for all $\mathcal{U}\in\Delta$ it is true that
+                $\mathcal{U}\cap\mathcal{V}\subseteq\mathcal{U}$. But then there
+                is a subset
+                $\Delta_{\mathcal{U}}\subseteq\mathscr{B}_{\mathcal{U}}$
+                \begin{equation}
+                    \mathcal{U}\cap\mathcal{V}=
+                    \bigcup_{A\in\Delta_{\mathcal{U}}}A
+                \end{equation}
+                Thus:
+                \begin{equation}
+                    \mathcal{V}=\bigcup_{\mathcal{U}\in\Delta}\Big(
+                        \bigcup_{A\in\Delta_{\mathcal{U}}}A\Big)
+                \end{equation}
+        \end{proof}
+    \section{Topological Manifolds}
+        Manifolds are locally Euclidean spaces that have sufficiently nice
+        structure to exclude pathalogical examples such as the bug-eyed line
+        and the long line. Manifolds are required to have a second-countable
+        topology and must also be Hausdorff.
+        \begin{fdefinition}{Topological Manifold}{Topological_Manifold}
+            A topological manifold of dimension $n\in\mathbb{N}$ is a
+            Hausdorff locally Euclidean topological space of dimension $n$
+            that is second countable.
+        \end{fdefinition}
+        \begin{fdefinition}{Atlas}{Atlas}
+            An atlas on a topological space $(X,\tau)$ is a set
+            $\mathcal{A}$ such that for all $z\in\mathcal{U}$ it is true
+            that $z$ is a chart in $(X,\tau)$, and such that for all
+            $x\in{X}$ there exists a chart
+            $(\mathcal{U},\varphi)\in\mathcal{A}$ such that
+            $x\in\mathcal{U}$.
+        \end{fdefinition}
+        An atlas for a connected space necessarily has a constant and well
+        defined dimension, whereas the by definition of a manifold, any
+        atlas on a manifold must have the same dimension.
+    \section{Smooth Manifolds}
+        Smooth manifolds are topological manifolds with a smooth structure
+        on them so that one can do calculus. Such objects first require a
+        notion of smooth functions, and we define this in terms of the
+        familiar notions of smoothness of functions between Euclidean spaces
+        $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$.
+        \begin{fdefinition}{Smooth Real-Valued Functions On $\mathbb{R}$}
+                           {Smooth_Real_Valued_Functions_on_R}
+            A smooth real-valued function on an open subset
+            $\mathcal{U}\subseteq\mathbb{R}^{n}$ is a function
+            $f:\mathcal{U}\rightarrow\mathbb{R}$ such that all mixed partial
+            derivatives of all orders exist and are continuous for all
+            $\mathbf{x}\in\mathcal{U}$.
+        \end{fdefinition}
+        $\mathbb{R}^{n}$ can be defined as the set of all functions
+        $\mathbf{x}:\mathbb{Z}_{n}\rightarrow\mathbb{R}$. Given an element
+        $\mathbf{x}\in\mathbb{R}^{n}$ and $k\in\mathbb{Z}_{n}$ we denote
+        image of $k$ as $x_{k}=\mathbf{x}(k)$. This is called the $k^{th}$
+        coordinate of $\mathbf{x}$. The projection mapping
+        $\pi_{k}:\mathbb{R}^{n}\rightarrow\mathbb{R}$ for
+        $k\in\mathbb{Z}_{n}$ is the function defined by
+        $\pi_{k}(\mathbf{x})=x_{k}$. We can use this notion to define smooth
+        functions between arbitrary Euclidean spaces by requiring the
+        composition of $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$ with
+        $\pi_{k}$ to be smooth for all $k$.
+        \begin{fdefinition}{Smooth Euclidean Functions}
+                           {Smooth_Euclidean_Functions}
+            A smooth function on a subset
+            $\mathcal{U}\subseteq\mathbb{R}^{m}$ to $\mathbb{R}^{n}$ is a
+            function $f:\mathcal{U}\rightarrow\mathbb{R}^{m}$ such that, for
+            all $k\in\mathbb{Z}_{n}$, the function $\pi_{k}\circ{f}$ is a
+            smooth real-valued function.
+        \end{fdefinition}
+        We can use this definition to create a notion of smoothness on a
+        manifold by considering charts that overlap \textit{smoothly}.
+        \begin{fdefinition}{Smoothly Overlapping Charts}
+                               {Smoothly_Overlapping_Charts}
+                Smoothly overlapping charts of dimension $n\in\mathbb{N}$ are
+                charts $(\mathcal{U}_{1},\varphi_{1})$ and
+                $(\mathcal{U}_{2},\varphi_{2})$ of dimension $n$ on a
+                topological space $(X,\tau)$ such that:
+                \par
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation*}
+                        \varphi_{1}\circ\phi_{2}^{\minus{1}}:
+                            \varphi_{2}(\mathcal{U}_{1}\cap\mathcal{U}_{2})
+                            \rightarrow\mathbb{R}^{n}
+                    \end{equation*}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{equation*}
+                        \varphi_{2}\circ\phi_{1}^{\minus{1}}:
+                        \varphi_{1}(\mathcal{U}_{1}\cap\mathcal{U}_{2})
+                        \rightarrow\mathbb{R}^{n}
+                    \end{equation*}
+                \end{minipage}
+                \par\vspace{2.5ex}
+                are smooth functions, or such that
+                $\mathcal{U}_{1}\cap\mathcal{U}_{2}=\emptyset$.
+        \end{fdefinition}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Smoothly_Overlapping_Charts.tex}
+            \caption{Smoothly Overlapping Charts}
+            \label{fig:Smoothly_Overlapping_Charts}
+        \end{figure}
+        \begin{fdefinition}{Transition Function}{Transition_Function}
+            The transition function of a chart $(\mathcal{U},\varphi)$ with
+            respect a chart $(\mathcal{V},\psi)$ on a topological space
+            $(X,\tau)$ is the function
+            $f:\varphi(\mathcal{U}\cap\mathcal{V})%
+             \rightarrow\psi(\mathcal{V}\cap\mathcal{V})$:
+            \begin{equation*}
+                f(x)=(\psi\circ\phi^{\minus{1}})(x)
+            \end{equation*}
+        \end{fdefinition}
+        \begin{fdefinition}{Smooth Atlas}{Smooth Atlas}
+            A smooth atlas on a topological space $(X,\tau)$ is an
+            atlas $\mathcal{A}$ such that for all charts
+            $(\mathcal{U},\phi),(\mathcal{V},\xi)\in\mathcal{A}$, the
+            transition function of $(\mathcal{U},\phi)$ with respect to
+            $(\mathcal{V},\xi)$ is smooth.
+        \end{fdefinition}
+        \begin{fdefinition}{Maximal Smooth Atlas}{Maximal_Smooth_Atlas}
+            A maximal smooth atlas on a topological space $(X,\tau)$ is a
+            smooth atlas $\mathcal{A}$ on $(X,\tau)$ such that for all
+            charts $(\mathcal{U},\varphi)$ of $(X,\tau)$ such that
+            $(\mathcal{U},\varphi)$ overlaps smoothly with all
+            $(\mathcal{V},\psi)\in\mathcal{A}$, it is true that
+            $(\mathcal{U},\varphi)\in\mathcal{A}$.
+        \end{fdefinition}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological space and if $\mathcal{A}$ is a
+            smooth atlas of dimension $n\in\mathbb{N}$ on $(X,\tau)$, then
+            there is a unique maximal smooth atlas $\mathcal{C}$ on
+            $(X,\tau)$ such that $\mathcal{A}\subseteq\mathcal{C}$.
+        \end{theorem}
+        \begin{proof}
+            For let $\mathcal{C}$ be the set of all charts on $(X,\tau)$
+            that overlap smoothly with the charts in $\mathcal{A}$. Then
+            since $\mathcal{A}$ is an atlas, for all
+            $(\mathcal{U},\phi)\in\mathcal{A}$ and for all
+            $(\mathcal{V},\xi)\in\mathcal{A}$, we have that
+            $(\mathcal{U},\phi)$ and $(\mathcal{V},\xi)$ overlap smoothly,
+            and thus $(\mathcal{U},\phi)\in\mathcal{C}$. Therefore
+            $\mathcal{A}\subseteq\mathcal{C}$. But $\mathcal{A}$ is an
+            atlas and thus for all $x\in{X}$ there is a chart
+            $(\mathcal{U},\phi)\in\mathcal{A}$ such that $x\in\mathcal{U}$.
+            But $\mathcal{A}\subseteq\mathcal{C}$ and thus
+            $(\mathcal{U},\phi)\in\mathcal{C}$. Thus, for all $x\in{X}$ there
+            is a chart $(\mathcal{U},\phi)\in\mathcal{C}$ such that
+            $x\in\mathcal{U}$. Suppose
+            $(\mathcal{U}_{1},\phi_{1}),%
+             (\mathcal{U}_{2},\phi_{2})\in\mathcal{C}$.
+            If $\mathcal{U}_{1}$ and $\mathcal{U}_{2}$ are disjoint, then
+            these two charts overlap smoothly. Suppose it is non-empty and let
+            $f$ be the transition function of $(\mathcal{U}_{1},\phi_{1})$ with
+            respect to $(\mathcal{U}_{2},\phi_{2})$. Let
+            $p\in\phi_{1}(\mathcal{U}_{1}\cap\mathcal{U}_{2})$. But then there
+            is a chart $\xi\in\mathcal{A}$ such that $\phi_{2}^{\minus{1}}(p)$
+            is contained in the domain of $\xi$. From the associativity of
+            composition, we have:
+            \begin{equation}
+                \phi_{1}\circ\phi_{2}^{\minus{1}}
+                =(\phi_{1}\circ\xi^{\minus{1}})\circ
+                 (\xi\circ\phi_{2}^{\minus{1}})
+            \end{equation}
+            But by the definition of $\mathcal{C}$, $\phi_{1}$ and $\phi_{2}$
+            overlap smoothly with $\xi$, and thus this is the composition of
+            smooth functions, and is therefore smooth. Therefore
+            $\phi_{1}\circ\phi_{2}^{\minus{1}}$ is smooth and thus
+            $(\mathcal{U}_{1},\phi_{1})$ and $(\mathcal{U}_{2},\phi_{2})$
+            overlap smoothly. Thus, $\mathcal{C}$ is a smooth atlas. Moreover,
+            it is complete from the construction. Given any other complete
+            atlas $\mathcal{C}'$ that contains $\mathcal{A}$ we would have
+            $\mathcal{C}\subseteq\mathcal{C}'$ and
+            $\mathcal{C}'\subseteq\mathcal{C}$, and therefore
+            $\mathcal{C}=\mathcal{C}'$. Thus, this completion is unique.
+        \end{proof}
+        \begin{fdefinition}{Smooth Manifold}{Smooth_Manifold}
+            A smooth manifold of dimension $n\in\mathbb{N}$, denoted
+            $(X,\tau,\mathcal{A})$ is topological manifold $(X,\tau)$ with
+            a maximal smooth atlas $\mathcal{A}$ of dimension $n$ on
+            $(X,\tau)$.
+        \end{fdefinition}
+        Any smooth atlas $\mathcal{A}$ on a topological space $(X,\tau)$
+        defines a a smooth manifold if we let $\mathcal{C}$ be the maximal
+        smooth atlas generated by $\mathcal{A}$.
+        \begin{example}
+            Let $(\mathbb{R}^{n},\tau_{\mathbb{R}^{n}})$ be the standard
+            $n$ dimensional Euclidean space. We can define a trivial smooth
+            atlas on this space by let
+            $\mathcal{A}=\{(\mathbb{R}^{n},\textrm{id})\}$, where $\textrm{id}$
+            is the identity function. This defines a smooth atlas. By
+            considering the unique maximal smooth atlas generated by this
+            we obtain the standard smooth structure on $\mathbb{R}^{n}$.
+        \end{example}
+        \begin{theorem}
+            If $(X,\tau,\mathcal{A})$ is a smooth manifold of dimension
+            $n\in\mathbb{N}$, if $(\mathcal{U},\varphi)$ is a chart in
+            $\mathcal{A}$, if $\mathcal{V}\in\tau$, and if
+            $\varphi_{\mathcal{V}}$ denotes the restriction mapping:
+            $\varphi_{\mathcal{V}}:\mathcal{V}\rightarrow\mathbb{R}^{n}$,
+            then $(\mathcal{V},\varphi_{\mathcal{V}})\in\mathcal{A}$.
+        \end{theorem}
+        \begin{proof}
+            For since $\phi$ is a homeomorphism from $\mathcal{U}$ to
+            $\phi(\mathcal{U})$, and since $\mathcal{V}\in\tau$, we have
+            that $\phi_{\mathcal{V}}$ is a homeomorphism between
+            $\mathcal{V}$ and $\phi_{\mathcal{V}}(\mathcal{V})$, and
+            therefore $(\mathcal{V},\phi_{\mathcal{V}})$ is a chart. But
+            this chart meets $(\mathcal{U},\phi)$ smoothly, and $\mathcal{A}$
+            is complete. Thus,
+            $(\mathcal{V},\phi_{\mathcal{A}})\in\mathcal{A}$.
+        \end{proof}
+        \begin{theorem}
+            If $n\in\mathbb{N}$, then there is a complete atlas
+            $\mathcal{A}$ on $(S^{n},\tau)$, where $\tau$ is the inherited
+            topology from $\mathbb{R}^{n+1}$.
+        \end{theorem}
+        \begin{proof}
+            For all $k\in\mathbb{Z}_{n+1}$, let $\mathcal{U}_{k}^{+}$ and
+            $\mathcal{U}_{k}^{\minus}$ be defined as:
+            \par\hfill\par
+            \begin{minipage}[b]{0.49\textwidth}
+                \begin{equation}
+                    \mathcal{U}_{k}^{+}
+                    =\{\,\mathbf{x}\in{S}^{n}\,:\,x_{k}>0\,\}
+                \end{equation}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \begin{equation}
+                    \mathcal{U}_{k}^{\minus}
+                    =\{\,\mathbf{x}\in{S}^{n}\,:\,x_{k}<0\,\}
+                \end{equation}
+            \end{minipage}
+            \par\vspace{2.5ex}
+            Define $\phi_{\mathcal{U}_{k}^{+}}:\mathcal{U}_{k}^{+}%
+                    \rightarrow\mathbb{R}^{n}$ by:
+            \begin{equation}
+                \phi_{\mathcal{U}_{k}^{+}}(\mathbf{x})
+                =(x_{1},\,\dots,\,x_{k-1},\,x_{k+1},\,\dots,\,x_{n+1})
+            \end{equation}
+            That is, the mapping that projects the point onto the plane
+            defined by $x_{k}=0$. Define $\phi_{\mathcal{U}_{k}^{\minus}}$
+            similarly. Then all such $\phi$ are homeomorphisms from their
+            domain to their image. Let $\mathcal{A}$ be defined as follows:
+            \begin{equation}
+                \mathcal{A}
+                =\big\{\,(\mathcal{U}_{k}^{+},\,\phi_{\mathcal{U}_{k}^{+}})
+                       \,:\,k\in\mathbb{Z}_{n}\big\}\bigcup
+                \big\{\,(\mathcal{U}_{k}^{-},\,\phi_{\mathcal{U}_{k}^{-}})
+                       \,:\,k\in\mathbb{Z}_{n}\big\}
+            \end{equation}
+            Then $\mathcal{A}$ is an atlas of $(S^{n},\tau)$. For if
+            $\mathbf{x}\in{S}^{n}$, then $\norm{\mathbf{x}}_{2}=1$. But then
+            there is a coordinate $x_{k}$ of $\mathbf{x}$ such that
+            $x_{k}\ne{0}$. But then either $x_{k}>0$ or $x_{k}<0$, and thus
+            either $\mathbf{x}\in\mathcal{U}_{k}^{+}$ or
+            $\mathbf{x}\in\mathcal{U}_{k}^{\minus}$. If
+            $(\mathcal{V}_{2},\phi_{2})$ and $(\mathcal{V}_{2},\phi_{2})$
+            are charts, then either $\phi_{1}(\mathcal{V}_{1})$
+            and $\phi_{2}(\mathcal{V}_{2})$ are disjoint or they are not.
+            If they are disjoint, then $\phi_{1}$ and $\phi_{2}$ overlap
+            smoothly. If they are not disjoint, let $\mathbf{x}$ be contained
+            in the intersection. But then, for all $k\in\mathbb{Z}_{n}$,
+            $\pi_{k}\circ(\phi_{1}\circ\phi_{2}^{\minus{1}})$ is smooth,
+            and thus $\phi_{1}$ and $\phi_{2}$ overlap smoothly.
+        \end{proof}
+        \begin{fdefinition}{Open Submanifold}{Open_Submanifold}
+            An open submanifold on a manifold $(X,\tau,\mathcal{A})$ is a
+            an open subset $\mathcal{U}\subseteq{X}$ and the collection
+            $\mathcal{A}_{\mathcal{U}}$ defined by:
+            \begin{equation}
+                \mathcal{A}_{\mathcal{U}}
+                =\{\,(\mathcal{V},\phi)\in\mathcal{A}\,:\,
+                     \mathcal{V}\subseteq\mathcal{U}\,\}
+            \end{equation}
+            Together with the inherited topology $\tau_{\mathcal{U}}$.
+        \end{fdefinition}
+        \begin{theorem}
+            If $(X,\tau,\mathcal{A})$ is a smooth manifold and if
+            $(\mathcal{U},\tau_{\mathcal{U}},\mathcal{A}_{\mathcal{U}})$
+            is an open submanifold, then it is a smooth manifold.
+        \end{theorem}
+        \begin{proof}
+            For by the previous theorem, $\mathcal{A}_{\mathcal{U}}$ is a
+            complete atlas. Moreover, a subspace of a Hausdorff topological
+            space is also a Hausdorff topological space, and hence
+            $(\mathcal{U},\tau_\mathcal{U})$ is a Hausdorff space. Thus,
+            $(\mathcal{U},\tau_\mathcal{U},\mathcal{A}_{\mathcal{U}})$ is
+            a smooth manifold.
+        \end{proof}
+        \begin{fdefinition}{Product Chart}{Product_Chart}
+            The product chart of an $n$ dimensional chart $(\mathcal{U},\phi)$
+            on a topological space $(X,\tau_{X})$ with an $m$ dimensional chart
+            $(\mathcal{V},\xi)$ on a topological space $(Y,\tau_{Y})$ is
+            the ordered pair $(\mathcal{U}\times\mathcal{V},f)$ where
+            $f:\mathcal{U}\times\mathcal{V}\rightarrow\mathbb{R}^{n+m}$
+            defined by:
+            \begin{equation}
+                f(p,q)_{k}=
+                \begin{cases}
+                    \phi(p)_{k},&k<n\\
+                    \xi(q)_{k},&n\leq{k}<n+m
+                \end{cases}
+            \end{equation}
+            Where $\phi(p)_{k}$ is the $k^{th}$ coordinate of
+            $\phi(p)\in\mathbb{R}^{n}$ and $\xi(q)_{k}$ is the $k^{th}$
+            coordinate of $\xi(q)\in\mathbb{R}^{m}$. We denote this by
+            $(\mathcal{U},\phi)\times(\mathcal{V},\xi)$.
+        \end{fdefinition}
+        Thinking of the elements of $\mathbb{R}^{n+m}$ as tuples of length
+        $n+m$, we can write:
+        \begin{equation}
+            f(p,q)=\big(x_{1}(p),\dots,x_{n}(p),y_{1}(q),\dots,y_{m}(q)\big)
+        \end{equation}
+        \begin{theorem}
+            If $(X,\tau_{X},\mathcal{A}_{X})$ and $(Y,\tau_{Y},\mathcal{A}_{Y})$
+            are smooth manifolds, and if $\mathcal{A}$ is the set of all
+            product charts on $X\times{Y}$, then $\mathcal{A}$ is a smooth
+            atlas on $(X\times{Y},\tau_{X\times{Y}})$, where
+            $\tau_{X\times{Y}}$ is the product topology.
+        \end{theorem}
+        \begin{proof}
+            For if $p\in{X}\times{Y}$ then there is an $x\in{X}$ and a
+            $y\in{Y}$ such that $p=(x,y)$. But $\mathcal{A}_{X}$ is a smooth
+            atlas on $(X,\tau_{X})$, and thus if $x\in{X}$ then there is a
+            $(\mathcal{U},\phi)\in\mathcal{A}_{X}$ such that $x\in\mathcal{U}$.
+            Similarly, there is a $(\mathcal{V},\xi)\in\mathcal{A}_{Y}$ such
+            that $y\in\mathcal{V}$. But then $p\in\mathcal{U}\times\mathcal{V}$,
+            and $\mathcal{U}\times\mathcal{V}\in\tau_{X\times{Y}}$. But if
+            $\phi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is a homeomorphism
+            between $\mathcal{U}$ and $\phi(\mathcal{U})$ and
+            $\xi:\mathcal{V}\rightarrow\mathbb{R}^{m}$ is a homemorphism
+            between $\mathcal{V}$ and $\xi(\mathcal{V})$, then
+            $f:\mathcal{U}\times\mathcal{V}\rightarrow\mathbb{R}^{n+m}$ is
+            a homeomorphism between $\mathcal{U}\times\mathcal{V}$ and
+            $f(\mathcal{U}\times\mathcal{V})$, and thus the product chart
+            is a chart in $(X\times{Y},\tau_{X\times{Y}})$. Moreover, all of
+            the elements of $\mathcal{A}$ are smoothly overlapping. Thus,
+            $\mathcal{A}$ is an atlas on $(X\times{Y},\tau_{X\times{Y}})$.
+        \end{proof}
+        Using the maximal smooth atlas generated by the product atlas
+        $\mathcal{A}$ creates the product manifold.
+        \subsection{Smooth Mappings}
+            \begin{fdefinition}{Smooth Real-Valued Functions}
+                               {Smooth_Real_Valued_Functions}
+                A smooth real-valued function on a smooth manifold
+                $(X,\tau,\mathcal{A})$ of dimension $n\in\mathbb{N}$ is a
+                function $\phi:X\rightarrow\mathbb{R}$ such that for every
+                chart $(\mathcal{U},\varphi)\in\mathcal{A}$, the function
+                $\phi\circ\varphi^{\minus{1}}:\phi(\mathcal{U})%
+                 \rightarrow\mathbb{R}$ is a smooth Euclidean function.
+            \end{fdefinition}
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \input{tikz/Smooth_Real_Valued_Function_on_a_Manifold.tex}
+                \caption{Smooth Real-Valued Function on a Manifold}
+            \end{figure}
+            \begin{theorem}
+                If $(X,\tau,\mathcal{A})$ is a manifold and if
+                $f,g:X\rightarrow\mathbb{R}$ are smooth real-valued functions,
+                then $(f+g):X\rightarrow\mathbb{R}$ defined by:
+                \begin{equation}
+                    (f+g)(x)=f(x)+g(x)
+                    \quad\quad
+                    x\in{X}
+                \end{equation}
+                Is a smooth real-valued function.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\tau,\mathcal{A})$ is a manifold and if
+                $f,g:X\rightarrow\mathbb{R}$ are smooth real-valued functions,
+                then $(f\cdot{g}):X\rightarrow\mathbb{R}$ defined by:
+                \begin{equation}
+                    (f\cdot{g})(x)=f(x)\cdot{g}(x)
+                    \quad\quad
+                    x\in{X}
+                \end{equation}
+                Is a smooth real-valued function.
+            \end{theorem}
+            \begin{fdefinition}{Smooth Functions Between Manifolds}
+                               {Smooth Functions Between Manifolds}
+                A smooth function from a smooth manifold
+                $(X,\tau_{X},\mathcal{A}_{X})$ of dimension $m\in\mathbb{N}$
+                to a smooth manifold $(Y,\tau_{Y},\mathcal{A}_{Y})$ of
+                dimension $n\in\mathbb{N}$ is a function
+                $\phi:X\rightarrow{Y}$ such that for every chart
+                $(\mathcal{U},\varphi)\in\mathcal{A}_{X}$ and for every
+                chart $(\mathcal{V},\psi)\in\mathcal{A}_{Y}$, the function
+                $\psi\circ\phi\circ\varphi^{\minus{1}}:\varphi(\mathcal{V})%
+                 \rightarrow\mathbb{R}^{n}$ is a smooth function.
+            \end{fdefinition}
+            \begin{theorem}
+                If $(X,\tau_{X},\mathcal{A}_{X})$ and
+                $(Y,\tau_{Y},\mathcal{A}_{Y})$ are manifolds, if
+                $A_{X}\subseteq\mathcal{A}_{X}$ is an atlas on $(X,\tau_{X})$,
+                if $A_{Y}\subseteq\mathcal{A}_{Y}$ is an atlas on
+                $(Y,\tau_{Y})$, and if $f:X\rightarrow{Y}$ is a function such
+                that, for all $(\mathcal{U},\phi)\in{A}_{X}$ and for all
+                $(\mathcal{Y},\xi)\in{A}_{y}$ it is true that
+                $\xi\circ{f}\circ\phi^{\minus{1}}:\xi(\mathcal{V})%
+                 \rightarrow\mathbb{R}^{m}$ is a smooth Euclidean function,
+                then $f$ is smooth.
+            \end{theorem}
+            \begin{proof}
+                Since charts in $\mathcal{A}_{X}$ and $\mathcal{A}_{Y}$
+                overlap smoothly with charts in $A_{X}$ and $A_{Y}$, and since
+                the atlases $A_{X}$ and $A_{Y}$ cover $X$ and $Y$, respectively,
+                we are done.
+            \end{proof}
+            \begin{theorem}
+                If $(X,\tau_{X},\mathcal{A}_{X})$ is a manifold, then
+                $\textrm{id}:X\rightarrow{X}$ is a smooth function.
+            \end{theorem}
+            \begin{theorem}
+                If $(X,\tau_{X},\mathcal{A}_{X})$,
+                $(Y,\tau_{Y},\mathcal{A}_{Y})$, and
+                $(Z,\tau_{Z},\mathcal{A}_{Z})$ are manifolds, if
+                $f:X\rightarrow{Y}$ and $g:Y\rightarrow{Z}$ are smooth, then
+                $g\circ{f}:X\rightarrow{Z}$ is smooth.
+            \end{theorem}
+            Smoothness is a local property. A function $\phi:M\rightarrow{N}$
+            is smooth at $p\in{M}$ if there is a neighborhood
+            $\mathcal{U}$ of $p$ such that the restriction of $\phi$ to
+            $\mathcal{U}$ is smooth. A smooth function is thus a function
+            that is smooth at every point.
+            \begin{theorem}
+                If $(X,\mathcal{A}_{X},\tau_{X})$ and
+                $(Y,\mathcal{A}_{Y},\tau_{Y})$ are manifolds and if
+                $f:X\rightarrow{Y}$ is smooth, then $f$ is continuous.
+            \end{theorem}
+            \begin{fdefinition}{Diffeomorphism}{Diffeomorphism}
+                A diffeomorphism from a manifold
+                $(X,\tau_{X},\mathcal{A}_{X})$ to a manifold
+                $(Y,\tau_{Y},\mathcal{A}_{Y})$ is a bijective function
+                $f:X\rightarrow{Y}$ such that $f$ and $f^{\minus{1}}$ are
+                smooth.
+            \end{fdefinition}
+            \begin{example}
+                For any $a,b\in\mathbb{R}$ with $a<b$, the interval
+                $(a,b)$ is diffeomorphic to the unit interval $(0,1)$. For
+                let $\phi:(0,1)\rightarrow(a,b)$ be defined by:
+                \begin{equation}
+                    \phi(t)=(a-b)t+b
+                \end{equation}
+                Then $\phi$ is a smooth bijection and it's inverse is
+                smooth. Moreover, the unit interval is diffeomorphic to
+                $\mathbb{R}$. For let $\xi:(0,1)\rightarrow\mathbb{R}$ be
+                defined by:
+                \begin{equation}
+                    \xi(t)=\frac{2t}{t(1-t)}
+                \end{equation}
+            \end{example}
+            \begin{theorem}
+                If $(X,\tau_{X},\mathcal{A}_{X})$ and
+                $(Y,\tau_{Y},\mathcal{A}_{Y})$ are manifolds, and if
+                $f:X\rightarrow{Y}$ is a diffeomorphism, then $f$ is a
+                homeomorphism from $(X,\tau_{X})$ to $(Y,\tau_{Y})$.
+            \end{theorem}
+            \begin{proof}
+                For if $f$ is a diffeomorphism, then it is a smooth bijection
+                such that it's inverse is smooth. But if $f$ is smooth, then
+                it is continuous and therefore it is a continuous bijection.
+                But if $f^{\minus{1}}$ is smooth, then it is continuous, and
+                thus $f$ is a bicontinuous bijective function, and is therefore
+                a homeomorphism.
+            \end{proof}
+            A smooth homeomorphism need not be a diffeomorphism. The inverse
+            function may not be smooth. For let
+            $f:\mathbb{R}\rightarrow\mathbb{R}$ be defined by $f(x)=x^{3}$.
+            Then $f$ is a homeomorphism and it's forward direction is smooth,
+            but $f^{\minus{1}}$ is not smooth at the origin.
+            \begin{theorem}
+                If $A$ is a set, if $(X,\tau,\mathcal{A})$ is a manifold, and
+                if $f:A\rightarrow{X}$ is an bijective function, then there
+                exists a topology $\tau_{A}$ and an atlas $\mathcal{A}_{A}$
+                on $X$ such that $f$ is a diffeomorphism.
+            \end{theorem}
+    \section{Manifolds}
+        \begin{definition}
+            An $n$ dimensional smooth manifold is a topological space $(M,\tau)$
+            equipped with a collection $\mathcal{A}$ or ordered pairs
+            $\{(\mathcal{U}_{\alpha},\varphi_{\alpha})\}$ such that
+            $\mathcal{U}_{\alpha}$ are open and cover the space, and such that
+            $\varphi_{\alpha}:\mathcal{U}_{\alpha}\rightarrow\mathcal{V}_{\alpha}$
+            is a homeomorphism to an open subset $\mathcal{V}_{\alpha}$ of
+            $\mathbb{R}^{n}$ and such that for when
+            $\mathcal{U}_{\alpha}\cap\mathcal{U}_{\beta}\ne\emptyset$, the
+            functions $\varphi_{\beta}\circ\varphi_{\alpha}^{\minus{1}}$
+            are smooth.
+        \end{definition}
+        The notion of smoothness here is simply the smoothness of functions
+        from $\mathbb{R}^{n}$ to itself. The collection $\mathcal{A}$ is called
+        an atlas and $(\mathcal{U},\varphi)$ are called charts.
+        \begin{example}
+            If $\mathcal{U}$ is an open subset of $\mathbb{R}^{n}$ and
+            $f:\mathcal{U}\rightarrow\mathbb{R}$ is smooth, then the
+            graph of $f$ is a smooth manifold.
+        \end{example}
+        \begin{example}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is open, if
+            $f:\mathcal{U}\rightarrow\mathbb{R}$ is smooth, if $c$ is in the
+            range of $f$, and if $\textrm{grad}(f)$ is non-zero on all of
+            $f^{\minus{1}}(c)$, then $f^{\minus{1}}(c)$ is a smooth manifold.
+        \end{example}
+        \begin{example}
+            Define $f:\mathbb{R}^{3}\rightarrow\mathbb{R}$ by
+            $f(\mathbf{x})=\norm{\mathbf{x}}_{2}^{2}$. For all
+            $\mathbf{x}\in\mathbb{R}^{3}$ such that $\norm{\mathbf{x}}=1$ we
+            have $\textrm{grad}(f)\ne{0}$, and thus $f^{\minus{1}}(\{1\})$ is a
+            smooth manifold. This is the unit sphere.
+        \end{example}
+        \begin{example}
+            The orthographic projection of the sphere maps:
+            \begin{equation}
+                (x,y)\mapsto(x,y,\sqrt{1-x^{2}-y^{2}})
+            \end{equation}
+            The stereographic projection also exists.
+        \end{example}
+        \begin{definition}
+            The product manifold of manifolds $M_{1},\hdots,M_{k}$, where
+            $M_{j}$ is an $n_{j}$ smooth manifold then
+            $M=\prod_{j=1}^{k}M_{j}$ has a natural structure of an
+            $n=n_{1}+\dots+n_{k}$ dimensional manifold.
+        \end{definition}
+        \begin{definition}
+            The quotient manifold of a smooth manifold $M$ with an equivalence
+            relation $\sim$ is a manifold structure on $M/\sim$ with the
+            quotient topology. In particular when we have group actions.
+        \end{definition}
+        \begin{example}
+            Consider the sphere $S^{2}$ with the equivalence relation $R$
+            defined by $pRq$ if and only if $p=\pm{q}$. The quotient space
+            $S^{2}/R$ is the real projective plane $\mathbb{RP}^{2}$. We can
+            consider this by means of a group action on $\mathbb{Z}_{2}$ on
+            $S^{2}$. Define $g\cdot{p}$ by $1\cdot{p}=p$ and
+            $\minus{1}\cdot{p}=\minus{p}$. This is a group action of
+            $\mathbb{Z}_{2}$ on $S^{2}$.
+        \end{example}
+        All of the examples thus far have been subsets of some Euclidean space
+        $\mathbb{R}^{n}$. One natural question is whether or not there are
+        smooth manifolds that do no live in some higher dimensional Euclidean
+        space. That is, are there manifolds $M$ such that $M$ can not be
+        embedded into some $\mathbb{R}^{m}$?
+        \begin{definition}
+            A function $\phi:M\rightarrow{N}$ is smooth if for all $p\in{M}$
+            there is a chart $(\mathcal{U},\varphi)$ containing $p$ and a
+            chart $(\mathcal{V},\psi)$ containing $\phi(p)$ such that
+            $\psi\circ\phi\circ\varphi^{\minus{1}}$ is smooth.
+        \end{definition}
+        Studying maps between manifolds gives us new manifolds to study. In
+        particular, there are submersions and embeddings, and in particular
+        embedded submanifolds.
+        \par\hfill\par
+        Tangent spaces are another important topic in differential topology. The
+        classic example is that of a sphere $S^{2}$ in $\mathbb{R}^{3}$. We draw
+        the tangent plane to a point on a sphere, which is the best linear
+        approximation of the sphere at that point. This notion relies on an
+        ambient space (that of $\mathbb{R}^{3}$), but since we do not yet know
+        if all manifolds can be embedded into such an ambient space, we need a
+        new means of defining tangent spaces that agrees with our intuition.
+        There are several ways of thinking of this:
+        \begin{itemize}
+            \item Tangent vectors are derivations on $C^{\infty}(p)$.
+            \item Tangent vectors are equivalence classes of curves through $p$.
+        \end{itemize}
+        Given a function $\phi:M\rightarrow{N}$ that is smooth between two
+        manifolds, there is a function $\diff\phi_{o}:T_{p}M\rightarrow{T}_{p}N$
+        between these tangent spaces. We can further consider the collection of
+        all tangent spaces at all points $p$ of $M$, forming the tangent bundle
+        of $M$, denoted $TM$. Set theoretically, this is the disjoint union
+        $TM=\coprod_{p}T_{p}M$, but we do \textbf{not} give this the disjoint
+        union topology. There is a natural topology that can be endowed on $TM$.
+        \begin{example}
+            If we take $S^{1}$, the tangent bundle is
+            $TM=S^{1}\times\mathbb{R}$. This is an example of a trivial bundle.
+            Most tangent bundles are not of this form. That is, for an $m$
+            dimensional manifold $M$, $TM$ is usual \textbf{not} equal to
+            $M\times\mathbb{R}^{m}$. It will always have dimension $2m$.
+        \end{example}
+    \section{A Review of Topology}
+        \begin{definition}
+            Let $X$ be a set. A topology on $X$ is a collection $\tau$
+            consisting of subsets of $X$ such that $\emptyset\in\tau$,
+            $X\in\tau$, and $\tau$ is closed to arbitrary unions and finite
+            intersections. The elements of $\tau$ are called the open sets of
+            $X$. $(X,\tau)$ is called a topological space. The closed subsets
+            of $X$ are sets of the form $X\setminus\mathcal{U}$, where
+            $\mathcal{U}$ is open. That is, a set is closed if its complement is
+            open.
+        \end{definition}
+        \begin{example}
+            The discrete topology $\mathcal{P}(X)$, the power set on $X$, is
+            always a topology. So is $\{\emptyset,X\}$, the trivial topology.
+        \end{example}
+        \begin{example}
+            If $(X,d)$ is a metric space, and if $\mathcal{U}\subseteq{X}$ is
+            such that for all $x\in\mathcal{U}$ there is an $\varepsilon>0$
+            such that $B_{\varepsilon}(x)\subseteq\mathcal{U}$, then we call
+            $\mathcal{U}$ open. The collection of all such sets forms a topology
+            on $X$, called the metric topology.
+        \end{example}
+        \begin{definition}
+            The interior of a subset $S\subseteq{X}$ of a topology space
+            $(X,\tau)$ is the set $\textrm{Int}(X)$ defined to by the
+            set of all $s\in{S}$ such that there is an open set
+            $\mathcal{U}\subseteq{X}$ such that $s\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{S}$.
+        \end{definition}
+        \begin{definition}
+            The closure of a subset $S\subseteq{X}$ in a topological space
+            $(X,\tau)$ is the intersection of all closed sets in $X$ that
+            contain $S$, denoted $\textrm{Cl}(S)$.
+        \end{definition}
+        \begin{definition}
+            A subset subset of $X$ is a set $S$ such that
+            $\textrm{Cl}(S)=X$.
+        \end{definition}
+        \begin{definition}
+            A continuous function is a function $f:X\rightarrow{Y}$ such that
+            for all open $\mathcal{V}\subseteq{Y}$, the pre-image
+            $f^{\minus{1}}(\mathcal{V})$ is open in $X$.
+        \end{definition}
+        \begin{definition}
+            A homeomorphism is a bijective continuous function
+            $f:X\rightarrow{Y}$ such that $f^{\minus{1}}$ is continuous.
+        \end{definition}
+        \begin{definition}
+            A compact space is such that every open cover has a finite subcover.
+        \end{definition}
+        \begin{definition}
+            A connected topological space is such that it can't be written as
+            the non-trivial union of disjoint open subsets.
+        \end{definition}
+        \begin{definition}
+            Path connected, for all $x,y\in{X}$ there is a continuous function
+            $\gamma:[0,1]\rightarrow{X}$ such that $\gamma(0)=x$ and
+            $\gamma(1)=y$.
+        \end{definition}
+        \begin{definition}
+            A Hausdorff space, for all $x,y\in{X}$ there are disjoint open
+            $\mathcal{U},\mathcal{V}$ such that $x\in\mathcal{U}$ and
+            $y\in\mathcal{V}$.
+        \end{definition}
+        \begin{definition}
+            A basis, collection $\mathscr{B}$ such that for all
+            $\mathcal{U}\in\tau$, $\tau$ can be written as the union of the
+            elements of $\mathscr{B}$.
+        \end{definition}
+        \subsection{New Spaces from Old}
+            \begin{definition}
+                Given a topological space $(X,\tau)$, and a subset
+                $A\subseteq{X}$, the subspace topology is the topology
+                $\tau_{A}$ defined by
+                $\tau_{A}=\{A\cap\mathcal{U}|\mathcal{U}\in\tau\}$.
+            \end{definition}
+            \begin{definition}
+                The product of spaces is a thing.
+            \end{definition}
+            \begin{definition}
+                The quotient space of $(X,\tau)$ with respect to a set $Y$ and
+                a surjective map $\pi:X\rightarrow{Y}$ is the topology generated
+                by $\pi$ such that it is continuous.
+            \end{definition}
+            More generally, let $X$ be a topological space and $G$ a topological
+            group with a product $G\times{X}\rightarrow{X}$ satisfying:
+            \begin{align}
+                (g_{1}*{g}_{2})\cdot{x}&=g_{1}\cdot(g_{2}\cdot{x})\\
+                e*x&=x
+            \end{align}
+            We can define an equivalence relation $R$ by $pRq$ if there is a
+            $g\in{G}$ such that $p=g\cdot{q}$. This gives us a quotient space.
+            \begin{example}
+                Consider $X=S^{2}$, the sphere, with $G=S^{1}$ as a group.
+                Then $X/G$ is simply the unit interval.
+            \end{example}
+            Draw this out, the orbits are lattitudinal lines, plus the two
+            poles.
+        \subsection{Quotient Maps}
+            Let $\pi:X\rightarrow{Y}$ be a quotient map (surjective and
+            continuous). A set $C\subseteq{Y}$ is closed if and only if
+            $\pi^{\minus{1}}(C)$ is closed in $X$. The composition of quotient
+            maps is a quotient map. If $F$ is continuous, $F\circ\pi$ from $X$
+            to $B$ is continuous.
+    \section{Topological Manifold}
+        \begin{definition}
+            A topological space is said to be an $n$ dimensional topological
+            manifold if the following hold:
+            \begin{itemize}
+                \item $M$ is Hausdorff.
+                \item $M$ is second countable.
+                \item $M$ is locally Euclidean of dimension $n$. For all
+                      $p\in{M}$ there is an open set $\mathcal{U}$ and a
+                      homeomorphism $\varphi:\mathcal{U}\rightarrow\mathcal{V}$
+                      to an open subset $\mathcal{V}\subseteq\mathbb{R}^{n}$.
+            \end{itemize}
+            The pair $(\mathcal{U},\varphi)$ is called a chart. If the image of
+            $\mathcal{U}$ by $\varphi$ is an open ball in $\mathbb{R}^{n}$ we
+            call this a coordinate ball.
+        \end{definition}
+        \begin{example}
+            Open subsets of $\mathbb{R}^{n}$ are $n$ dimensional manifolds.
+            Moreover, any open subset of an $n$ dimensional manifold, given the
+            subspace topology, will again be an $n$ dimensional manifold.
+        \end{example}
+        \begin{example}
+            The graphs of continuous functions $f:X\rightarrow{Y}$ from
+            topological manifolds of dimension $n$ and $m$, repsectively, are
+            manifolds. That is, if $\mathcal{U}\subseteq{X}$ is open, and
+            $f|_{\mathcal{U}}$ is the restriction of $f$, then
+            $\{(p,f(p)|p\in\mathcal{U}\}$, equipped with the subspace topology
+            induced by the product topology on $X\times{Y}$, is a topological
+            manifold of dimesnion $n$. It is Hausdorff and second countable
+            since it is the subspace of such spaces.
+        \end{example}
+        \subsection{Review of Previous Lecture}
+            \subsubsection{Subspace Topology}
+                Let $X$ be a topological space with topology $\tau$. For any
+                $S\subseteq{X}$ let $\tau_{S}$ be the subspace topology:
+                \begin{equation}
+                    \tau_{S}=\{\mathcal{U}\cap{S}\;|\;\mathcal{U}\in\tau\}
+                \end{equation}
+                Then $\tau_{S}$ is a topology on $S$, called the subspace
+                topology. The restriction of a continuous map
+                $f:X\rightarrow{Y}$ to $S$ is continuous with respect to the
+                subspace topology on $f(S)\subseteq{Y}$. If $f|_{S}$ is
+                continuous, then $f:X\rightarrow{f}(X)$ is continuous with the
+                subspace topology.
+            \subsubsection{Basis for a Topology}
+                Let $\mathscr{B}$ be a bsis for a topology on $X$. Then:
+                \begin{equation}
+                    \tau(\mathscr{B})=\{\mathcal{U}\subseteq{X}\;|\;
+                        \forall_{x\in\mathcal{U}}\exists_B\in\mathscr{B}:
+                        x\in{B}\subseteq\mathcal{U}\}
+                \end{equation}
+                is a topology on $X$, and this is the topology generated by
+                $\mathscr{B}$. If $X_{1},\dots,X_{n}$ are topological spaces,
+                $X=\prod{X}_{k}$ is the product space generated by the
+                \textit{open rectangles} in the $X_{i}$.
+            \subsection{Continuous Maps and Products}
+                Let $X$, $Y_{1},\dots,Y_{n}$ be topological spaces, and let
+                $Y=\prod_{k}Y_{k}$ be the product topological space. For each
+                $k$ let $\pi_{k}:Y\rightarrow{Y}_{k}$ be the projection mapping
+                sending $\mathbf{y}\in{Y}$ to $y_{k}$, then $k^{th}$ component
+                of $\mathbf{y}$. Then $f:X\rightarrow{Y}$ is continuous if and
+                only if $\pi_{k}\circ{f}$ is continuous for each $k$. Going the
+                other way, if $X=\prod_{k}X_{k}$ and $F:X\rightarrow{Y}$,
+                $F=f_{1}\times\cdots\times{f}_{n}$, then it is continuous if and
+                only if $f_{k}$ is continuous for all $k$. Let
+                $f:X\rightarrow{Y}$ be a continuous function. Note that from the
+                definition of a function, $f\subseteq{X}\times{Y}$. Thus we can
+                endow $f$ with the subspace topology on the product topology of
+                $X\times{Y}$. This is occasionally called the \textit{graph} of
+                $f$. If $X$ and $Y$ are Hausdorff and second countable, then
+                $X\times{Y}$ is, and thus any subspace of $X\times{Y}$ is
+                also Hausdorff and second countable. Hence the graph of $f$ is
+                a second countable Hausdorff topological space.
+                \begin{example}
+                    The $n$ sphere $S^{n}$ is the subset of $\mathbb{R}^{n+1}$
+                    such that $\norm{\mathbf{x}}_{2}=1$, equipped with the
+                    subspace topology. We can make it into a manifold with the
+                    charts $(\mathcal{U}_{k}^{\pm},\phi_{k}^{\pm})$ where
+                    $\mathcal{U}_{k}^{\pm}$ is the $k^{th}$ upper (or lower)
+                    hemisphere, and $\phi_{k}^{\pm}$ is simply the projection
+                    mapping onto the hyperplane $\mathbb{R}^{n}$. We can also
+                    cover this with two simpler coordinate charts, the
+                    two stereographic projections about the north and south
+                    pole.
+                \end{example}
+                \begin{example}
+                    The real projective space $\mathbb{RP}^{n}$ is another
+                    manifold. For any $x,y\in\mathbb{R}^{n+1}\setminus\{0\}$,
+                    we write $xRy$ if there is a $t\in\mathbb{R}$ such that
+                    $x=ty$. That is, $x$ and why are equivalent if they lie on
+                    the same line through the origin. We define
+                    $\mathbb{RP}^{n}$ by $\mathbb{R}^{n+1}\setminus\{0\}/R$,
+                    equipped with the quotient topology. That is, a subset is
+                    open if and only if $\pi^{\minus{1}}(\mathcal{U})$ is open
+                    where $\pi$ is the quotient map (the natural projection).
+                    For any $k=1,\dots,n$, let $\tilde{\mathcal{U}}_{j}$ be the
+                    $(x_{1},\dots,x_{n+1})\in\mathbb{R}^{n+1}\setminus\{0\}$
+                    such that $x_{j}\ne{0}$. This is an open subset and it is
+                    saturated with respect to $\pi$. That is, for all
+                    $[x]\in\mathbb{RP}^{n}$,
+                    $\pi^{\minus{1}}([x])\cap\tilde{\mathcal{U}}_{j}\ne\emptyset$
+                    if and only if $\pi^{\minus{1}}([x])\subseteq\tilde{\mathcal{U}}_{j}$.
+                    Now let $\mathcal{U}=\pi(\tilde{\mathcal{U}}_{j})$. Then
+                    since $\tilde{\mathcal{U}}_{j}$ is saturated it is equal
+                    to $\pi^{\minus{1}}(\mathcal{U}_{j})$ and is therefore
+                    open in the quotient topology. Define $\varphi_{j}$ by:
+                    \begin{equation}
+                        \varphi_{j}\big([(x_{1},\dots,x_{n+1})]\big)
+                        =\big(\frac{x_{1}}{x_{j}},\dots,
+                            \frac{x_{j-1}}{x_{j}},\frac{x_{j+1}}{x_{j}},\dots,
+                            \frac{x_{n+1}}{x_{j}}\big)
+                    \end{equation}
+                    Then this map commutes with $\pi$ with $\tilde{\varphi}$:
+                    $\tilde{\varphi}=\varphi\circ\pi$.
+                \end{example}
+    \section{Topological Groups}
+        \begin{definition}
+            A topological Lie group is a group $(G,*)$ with a topology $\tau$ on
+            $G$ such that $\nu:G\rightarrow{G}$ defined by
+            $\nu(g)=g^{\minus{1}}$ is continuous $*:G\times{G}\rightarrow{G}$ is
+            continuous in the product topology, and $(G,\tau)$ is a topological
+            manifold.
+        \end{definition}
+        \begin{theorem}
+            $GL_{n}(\mathbb{R})$ is a topological Lie group of dimension
+            $n^{2}$.
+        \end{theorem}
+        \begin{proof}
+            For we have:
+            \begin{equation}
+                GL_{n}(\mathbb{R})=
+                \textrm{det}^{\minus{1}}(\mathbb{R}\setminus\{0\})
+            \end{equation}
+            and since $\textrm{det}$ is continuous (it's a polynomial), it's
+            thus an open subset of $\mathbb{R}^{n^{2}}$ (we can identify
+            $n\times{n}$ matrices with points in $\mathbb{R}^{n^{2}}$). Moreover
+            multiplication is continuous since it's continuous in every slot,
+            it's a polynomial. The inverse function
+        \end{proof}
+    \section{More on Topological Manifolds}
+        \begin{definition}
+            A precompact subset of a topological space $(X,\tau)$ is a subset
+            $\mathcal{U}\subseteq{X}$ such that $\textrm{Cl}(\mathcal{U})$
+            is compact.
+        \end{definition}
+        \begin{theorem}
+            Every topological $n$ manifold has a countable basis of precompact
+            coordinate balls.
+        \end{theorem}
+        \begin{proof}
+            Let $(X,\tau)$ be a topological manifold and
+            $\{(\mathcal{U}_{\alpha},\varphi_{\alpha})\}$ a cover by coordinate
+            charts. Since second countable spaces are Lindelof, there is a
+            countable subcover. Since each $\varphi_{k}$ is an open mapping,
+            $\varphi_{k}(\mathcal{U}_{k})$ is an open subset of
+            $\mathbb{R}^{n}$.
+        \end{proof}
+        \begin{definition}
+            A locally path connected topological space is a topological space
+            $(X,\tau)$ such that there exists a basis of path connected open
+            sets.
+        \end{definition}
+        \begin{definition}
+            A locally compact topological space is such that for all $x\in{X}$
+            there is an open $\mathcal{U}\subseteq{X}$ and a compact
+            $K\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{K}$.
+        \end{definition}
+        \begin{definition}
+            A connected component of $X$ is a maximal connected subset of $X$.
+        \end{definition}
+        Connected components partition the space. If two connected sets have
+        a point in common, their union is connected.
+        \begin{definition}
+            A path connected component s a maximal path component.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold, then $M$ is locally path
+            connected, locally compact, and the path components and connected
+            components are identical. Moreover, $M$ has countably many connected
+            components, each of which is open.
+        \end{theorem}
+        \begin{proof}
+            Locally path connected and connected implies path connected, hence
+            connected components and path connected components are the same.
+            Locally compact since compact coordinate balls about each point
+            suffice. Countably many connected components since second countable.
+        \end{proof}
+        \begin{definition}
+            A locally finite subset $\mathcal{O}\subseteq\mathcal{P}(X)$ is a
+            collection such that for all $x\in{X}$ there is a neighborhood
+            $\mathcal{U}\in\tau$ such that $\mathcal{U}$ intersects at most
+            finitely many elements of $\mathcal{O}$.
+        \end{definition}
+        \begin{definition}
+            A refinitement of a collection $\mathcal{O}\subseteq\mathcal{P}(X)$
+            is a collection $\mathcal{D}\subseteq\mathcal{P}(X)$ such that for
+            all $\mathcal{V}\in\mathcal{D}$ there is a
+            $\mathcal{U}\in\mathcal{O}$ such that
+            $\mathcal{V}\subseteq\mathcal{U}$.
+        \end{definition}
+        \begin{definition}
+            A paracompact space is a space such that every open cover has a
+            locally finite refinement.
+        \end{definition}
+        \begin{theorem}
+            If $\mathcal{O}$ is a locally finite collection of subsets of $X$,
+            then the collection of the closures is locally finite and the union
+            of the closures is the closure of the unions.
+        \end{theorem}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold, then it is paracompact.
+        \end{theorem}
+    \section{Smooth Manifolds}
+        \begin{definition}
+            A diffeomprhism from an open subset
+            $\mathcal{U}\subseteq\mathbb{R}^{n}$ to an open subset
+            $\mathcal{V}\subseteq\mathbb{R}^{n}$ is a homeomorphism
+            $f:\mathcal{U}\rightarrow\mathcal{V}$ such that $f$ and
+            $f^{\minus{1}}$ are smooth functions.
+        \end{definition}
+        \begin{definition}
+            Let $M$ an $n$ dimensional topological manifold. Two coordinate
+            charts $(\mathcal{U},\varphi)$ and $(\mathcal{V},\psi)$ are said to
+            be $C^{\infty}$ compatible if $\psi\circ\phi^{\minus{1}}$,
+            defined as a function from $\varphi(\mathcal{U}\cap\mathcal{V})$ to
+            $\psi(\mathcal{U}\cap\mathcal{V})$, is a diffeomprhism.
+        \end{definition}
+        \begin{definition}
+            Let $M$ be an $n$ dimensional topological manifold. A smooth atlas
+            on $M$ is a collection $\mathcal{A}$ of charts
+            $(\mathcal{U},\varphi)$ that cover $M$ and such that all charts
+            are smoothly compatible. A smooth atlas $\mathcal{A}$ on $M$ is
+            called maximal if it is not contained in any strictly larger
+            smooth atlas. A smooth structure on $M$ is a maximal smooth atlas.
+        \end{definition}
+        \begin{definition}
+            A smooth manifold is a topological manifold $(X,\tau)$ with a
+            smooth structure $\mathcal{A}$.
+        \end{definition}
+        \begin{theorem}
+            If $M$ is an $n$ dimensional topological manifold, and if
+            $\mathcal{A}$ is a smooth atlas on $M$, then there is a unique
+            maximal atlas $\mathcal{A}'$ such that
+            $\mathcal{A}\subseteq\mathcal{A}'$.
+        \end{theorem}
+    \section{More on Smooth Manifolds}
+        Given a smooth manifold $(X,\tau,\mathcal{A})$, $\mathcal{A}$ a maximal
+        smooth atlas, a chart $(\mathcal{U},\varphi)\in\mathcal{A}$ is called
+        smooth, $\mathcal{U}$ is called a coordinate domain, and $\varphi$ is
+        called a smooth coordinate map. This chart is called a coordinate ball
+        if $\varphi(\mathcal{U})$ is an open ball. Similarly, it's called a
+        coordinate cube if $\varphi(\mathcal{U})$ is an open cube. A chart is
+        called regular if it is a smooth coordinate ball and there is a
+        coordinate ball $(\mathcal{V},\psi)$ such that
+        $\varphi(\mathcal{U})\subseteq\psi(\mathcal{V})$ with the same center
+        and different radii.
+        \begin{example}
+            A zero dimensional manifold is just a countable collection of
+            isolated points.
+        \end{example}
+        \begin{example}
+            For any $n\in\mathbb{N}$, $\mathbb{R}^{n}$ with the identity mapping
+            $\textrm{id}_{\mathbb{R}^{n}}$ forms an atlas, and thus lives inside
+            a unique maximal smooth atlas.
+        \end{example}
+        \begin{example}
+            We can put another non-compatible smooth structure on
+            $\mathbb{R}^{n}$. Let $\mathbb{R}$ be taken with the mapping
+            $f(x)=x^{3}$. Then $(\mathbb{R},f)$ forms an atlas since $f$ is a
+            homemorphism. It overlaps smoothly with every other element since
+            there's only element and $f\circ{f}^{\minus{1}}$ is just the
+            identity mapping, which is smooth and has smooth inverse. However,
+            this atlas and the standard atlas aren't compatible since the
+            composition is $x^{1/3}$, which is not differentiable at the origin.
+            However, there is a diffeomprhism from the standard atlas to this
+            one, and hence the two maximal atlases are essentially the same.
+        \end{example}
+        \begin{example}
+            Consider the space of $m\times{n}$ matrices over both $\mathbb{R}$
+            and $\mathbb{C}$. These are smooth manifolds of dimensions
+            $m\cdot{n}$ and $2\cdot{m}\cdot{n}$, respectively. From this,
+            $GL_{n}(\mathbb{R})$ is an $n^{2}$ matrix since it is an open subset
+            of $\mathbb{R}^{n^{2}}$. It is the complement of the pre-image of
+            $\textrm{det}(0)$. Since the determinant is continuous, and points
+            are closed, the pre-image is closed. Hence the complmement is open.
+            Thus $\textrm{GL}_{n}(\mathbb{R})$ is an open subset of a smooth
+            manifold, and hence is a smooth manifold itself.
+        \end{example}
+    \section{Even More on Smooth Manifolds}
+        An $n$ dimensional manifold is a topological manifold $(M,\tau)$ with a
+        smooth differentiable structure $\mathcal{A}$. In particular, for charts
+        $(\mathcal{U},\varphi)$ and $\mathcal{V},\psi)$ such that
+        $\mathcal{U}\cap\mathcal{V}\ne\emptyset$, then
+        $\varphi\circ\psi^{\minus{1}}$ is a diffeomprhism from an open subset of
+        $\mathbb{R}^{n}$ to another open subset of $\mathbb{R}^{n}$. A function
+        $\phi:M\rightarrow\mathbb{R}$ is smooth if for all $p\in{M}$ there is a
+        chart $(\mathcal{U},\varphi)\in\mathcal{A}$ such that
+        $\phi\circ\varphi^{\minus{1}}$ is a smooth function from a subset
+        $\mathbb{R}^{n}$ to $\mathbb{R}$.
+        \begin{example}
+            Matrices of full rank form a smooth manifold. Let $m<n$ and let
+            $\textrm{Mat}_{m\times{n}}^{F}$ be the set of all $m\times{n}$
+            matrices $A$ such that $A$ has full rank $m$. For if $A$ has full
+            rank, then there is an $m\times{m}$ submatrix $B$ such that
+            $\textrm{det}(B)\ne{0}$. That is, $A=[B|C]$, where $C$ is some
+            $m\times{n-m}$ matrix. Since the determinant is continuous, there
+            is an open neighborhood about $B$, call it $\mathcal{U}$, such that
+            none of the elements have zero determinant. Let $\mathcal{V}$ be
+            the set of all $m\times(n-m)$ matrices. Then $A$ is an element of
+            $\mathcal{U}\times\mathcal{V}$, which is the product of open, and
+            hence open in the product topology. Thus
+            $\textrm{Mat}_{n\times{M}}^{F}$ is an open subset of the entire
+            space, and is hence a smooth manifold.
+        \end{example}
+        \begin{example}
+            Given an open subset $\mathcal{U}\subseteq\mathbb{R}^{n}$ and a
+            smooth function $f:\mathcal{U}\rightarrow\mathbb{R}$, the graph of
+            $f$, as a subset of $\mathbb{R}^{n}\times\mathbb{R}$, is a smooth
+            manifold.
+        \end{example}
+        \begin{theorem}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}\times\mathbb{R}^{k}$ is open,
+            if $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{k}$ is a continuously
+            differentiable function, $(a,b)\in\mathcal{U}$ and
+            $c=\varphi(a,b)$, then the implicit function theorem.
+        \end{theorem}
+        \begin{example}
+            Let $\mathcal{U}\subseteq\mathbb{R}^{n}$ be open, and
+            $\varphi\mathcal{U}\rightarrow\mathbb{R}$ a smooth function.
+            Level sets are manifolds when the implicit function theorem applies.
+        \end{example}
+        \begin{example}
+            Let $V$ be an $n$ dimensional real vector space,
+            $k\in\mathbb{Z}_{n}$ such that $k\ne{0}$, and let $G_{k}(V)$ be the
+            set of all $k$ dimensional subspaces of $V$. Then this is a smooth
+            manifold of dimension $k(n-k)$ with a certain topology and smooth
+            structure.
+        \end{example}
+    \section{Reading From Lee (Topology Review)}
+    \section{Reading From Lee (Chapter 1)}
+        Smoothness cannot be a topological property. To see this, note that the
+        circle and the square are homeomorphic to each other, and thus topology
+        cannot distinguish between the two. They different in the smooth sense
+        since one has sharp corners (the square) and the other does not. We can
+        be explicit, let
+        $\varphi:\mathbb{R}^{2}\setminus\{0\}\rightarrow{S}^{1}$ be the mapping:
+        \begin{equation}
+            \varphi(\mathbf{x})=\frac{\mathbf{x}}{\norm{\mathbf{x}}}
+        \end{equation}
+        The restriction of $\varphi$ to the square will then be a homemorphism
+        (Fig.~\ref{fig:Homeomorphism_Square_to_Circle}).
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Homeomorphism_Square_to_Circle.tex}
+            \caption{homemorphism from the Square to the Circle}
+            \label{fig:Homeomorphism_Square_to_Circle}
+        \end{figure}
+        \begin{definition}
+            A topological $n$ manifold is a topological space $(X,\tau)$ that is
+            Hausdorff, second-countable, and for all $p\in{X}$ there is an open
+            subset $\mathcal{U}\subseteq{X}$ such that $p\in\mathcal{U}$ and
+            $\mathcal{U}$ is homeomorphic to an open subset of $\mathbb{R}^{n}$.
+        \end{definition}
+        \begin{theorem}
+            A topological space $(X,\tau)$ is a topological manifold if and only
+            if if is Hausdorff, second countable, and for all $p\in{X}$ there is
+            an open subset $\mathcal{U}\subseteq{X}$ such that $p\in\mathcal{U}$
+            and $\mathcal{U}$ is homeomorphic to $\mathbb{R}^{n}$.
+        \end{theorem}
+        \begin{proof}
+            If every point in $X$ is contained in an open set $\mathcal{U}$ that
+            is homeomorphic to all of $\mathbb{R}^{n}$, then it is a topological
+            manifold since $\mathbb{R}^{n}$ is an open subset of
+            $\mathbb{R}^{n}$. Going the other direction, suppose $(X,\tau)$ is a
+            topological manifold and $p\in{X}$. Then there is an open subset
+            $\mathcal{U}$ such that $p\in\mathcal{U}$ and $\mathcal{U}$ is
+            homeomorphic to an open subset of $\mathbb{R}^{n}$. That is, there
+            is a $\mathcal{V}\subseteq\mathbb{R}^{n}$ and a homemorphism
+            $\varphi:\mathcal{U}\rightarrow\mathcal{V}$. But since
+            $p\in\mathcal{U}$ and $\varphi:\mathcal{U}\rightarrow\mathcal{V}$,
+            it is then true that $\varphi(p)\in\mathcal{V}$. But $\mathcal{V}$
+            is open, and thus there is an $r>0$ such that
+            $B_{r}^{\mathbb{R}^{n}}(\varphi(p))\subseteq\mathcal{V}$. That is,
+            there is an $r>0$ such that the $r$ ball centered about $\varphi(p)$
+            is contained in $\mathcal{V}$. But $\varphi$ is a homeomorphism, and
+            thus $\varphi^{\minus{1}}$ is a homeomorphism. And the restriction
+            of a homeomorphism to a subspace is again a homeomorphism in the
+            subspace topologies. Thus,
+            $\varphi^{\minus{1}}|_{B_{r}^{\mathbb{R}^{n}}(\varphi(p))}$ is a
+            homeomorphism from $B_{r}^{\mathbb{R}^{n}}(\varphi(p))$ to its
+            image. But it's image is simply
+            $\varphi^{\minus{1}}(B_{r}^{\mathbb{R}^{n}}(\varphi(p)))$, which is
+            open since $\varphi$ is continuous. Thus, there is an open subset of
+            $(X,\tau)$ that contains $p$ which is homeomorphic to an open ball
+            in $\mathbb{R}^{n}$. But any open ball in $\mathbb{R}^{n}$ is
+            homeomorphic to all of $\mathbb{R}^{n}$, and since homeomorphic is
+            an equivalence relation, there is thus an open subset containing $p$
+            that is homeomorphic to all of $\mathbb{R}^{n}$.
+        \end{proof}
+        \begin{example}
+            All of $\mathbb{R}^{n}$ is itself a topological $n$ dimensional
+            manifold. It is Hausdorff since it is a metric space, given two
+            points a distance $d$ away one can choose open balls of radius
+            $d/4$ about each point as disjoint open neighborhoods, ensuring the
+            Hausdorff property. Moreover, it is second countable since the set
+            of all balls with rational radii centered about rational points
+            (elements of $\mathbb{Q}^{n}$) form a countable basis for the
+            topology on $\mathbb{R}^{n}$. Hence it is Hausdorff and second
+            countable. That any point $\mathbf{x}\in\mathbb{R}^{n}$ is contained
+            in an open subset homeomorphic to $\mathbb{R}^{n}$ can be seen by
+            letting $\mathcal{U}=\mathbb{R}^{n}$. That is, take as the open
+            subset the entire space. Therefore, $\mathbb{R}^{n}$ is a
+            topological manifold.
+        \end{example}
+        \begin{example}
+            In the previous example we implicitly thought of $\mathbb{R}^{n}$ as
+            being equipped with the standard Euclidean topology. This is the
+            topology that arises from the Pythagorean distance function:
+            \begin{equation}
+                d_{2}(\mathbf{x},\mathbf{y})=
+                \sqrt{\sum_{k\in\mathbb{Z}_{n}}(x_{k}-y_{k})^{2}}
+            \end{equation}
+            What if we change the metric? Any metric on $\mathbb{R}^{n}$ will
+            preserve the Hausdorff property, since all metric spaces are
+            Hausdorff, however the discrete metric loses the second countability
+            property, and hence cannot be considered a topological manifold
+            (although it is still locally \textit{zero} dimensional). What about
+            the metrics that arise from the $\norm{\cdot}_{p}$ norm:
+            \begin{equation}
+                d_{p}(\mathbf{x},\mathbf{y})=
+                \Big(\sum_{k\in\mathbb{Z}_{n}}(x_{k}-y_{k})^{p}\Big)^{1/p}
+            \end{equation}
+            For $1\leq{p}\leq\infty$ this will be second countable and Hausdorff
+            and since these metrics are equivalent, they will induce the same
+            topology, and hence will be topological manifolds of dimension $n$.
+            However the case of $n=1$ and $n=\infty$ are somewhat peculiar. An
+            open ball in the $\norm{\cdot}_{1}$ norm looks like a diamond,
+            whereas in $\norm{\cdot}_{\infty}$ the open balls are squares. So
+            while all of these metrics give rise to the same topological
+            structure, they create a different \textit{smooth} structure on the
+            space. When one considers $\mathbb{R}^{n}$ it is standard to assume
+            the Euclidean $\norm{\cdot}_{2}$ norm (and the structure induced by
+            it) is being considered. That is, open balls
+            $B_{r}^{(\mathbb{R}^{n},\norm{\cdot}_{2})}(\mathbf{x})$ are just the
+            interiors of $n$ dimensional spheres.
+        \end{example}
+        The Hausdorff condition is to exclude bizarre spaces such as the
+        bug-eyed line and the branching line. The second countability criterion
+        ensures the space won't be massive. For example, the uncountable
+        disjoint union of spheres will be Hausdorff and locally Euclidean, but
+        not second countable (but it will be first countable). This space isn't
+        too horrible since it's metrizable (in the disjoint union topology). A
+        more pathalogical example is the long line, occasionally denoted
+        $[0,\omega_{1})$, defined as $[0,1)\times\omega_{1}$ with the dictionary
+        or lexicographic ordering. Here $\omega_{1}$ denotes the first
+        uncountable ordinal. This space is not metrizable, but it is Hausdorff
+        and locally Euclidean (it is locally like $\mathbb{R}$), but it is
+        not second countable. One of the nice theorems from topology is the
+        Smirnov metrization theorem which states that a topological space is
+        metrizable if and only if it is locally metrizable, Hausdorff, and
+        paracompact. Every locally Euclidean space is automatically locally
+        metrizable since we can steal the Euclidean metric on small enough
+        neighborhoods about every point.
+        \par\hfill\par
+        The second countability condition allows one to prove paracompactness,
+        and thus every topological manifold is automatically metrizable by the
+        Smirnov theorem. This is perhaps one justification for the second
+        countability condition. Note that the metric that we can place on the
+        topological manifold $(X,\tau)$ may not give us much geometrical
+        information, but simply allows us to apply the results of the theory of
+        metric spaces without much thought. For example, topological manifolds
+        must be regular, normal, perfectly normal Hausdorff, we may apply
+        Urysohn's lemma and Tietze extension theorem should the need arise, and
+        more. Moreover, from an analytical point of view, we have that functions
+        are continuous if and only if there are sequentially continuous (i.e.
+        $a_{n}\rightarrow{x}$ implies $f(a_{n})\rightarrow{f}(x)$) and compact
+        if and only if sequentially compact. So while the metric does not
+        necessarily have much to do with the structure we care about, it's
+        existence gives us this plethora of data for free.
+        \begin{example}
+            Consider the sphere $S^{2}$. We can place a natural metric on this
+            by defining the distance to be the length of the shortest curve
+            connecting two points. One can prove the shortest curve exists and
+            that it lies on the great circle between the two points (the circle
+            containing the two points with the center of the sphere as the
+            origin). This function is symmetric, positive definite, and obeys
+            the triangle inequality and is therefore a metric. However, if we
+            were to take two disjoint spheres, how can we metrize this? There's
+            one way, defining:
+            \begin{equation}
+                d(x,y)=
+                \begin{cases}
+                    d_{1}(x,y),&x,y\in{S}_{1}^{2}\\
+                    d_{2}(x,y),&x,y\in{S}_{2}^{2}\\
+                    4,&\textrm{Otherwise}
+                \end{cases}
+            \end{equation}
+            where $S_{i}^{2}$ is the $i^{th}$ sphere and $d_{i}$ is the
+            \textit{geodesic} metric described above on the respective spheres.
+            For the case of when the points lie in separate sphere we've chosen
+            the constant 4 since this is greater than the furthest two points
+            can be on the unit sphere (which is $\pi$, half of the perimeter
+            $2\pi$). Doing this enures $d$ is a metric. So while intuitively we
+            want to thing of the disjoint union of two spheres as a two
+            dimesnional topological space, the metric that can induce the
+            topology seems somewhat irrelevant to the picture we have in mind. 
+        \end{example}
+        Before continuing it is perhaps important to note that paracompactness
+        does not imply second countable. Again, the disjoint union of spheres
+        serves as an example.
+        \begin{definition}
+            A chart of dimension $n\in\mathbb{N}$ in a topological space
+            $(X,\tau)$ is an open set $\mathcal{U}\in\tau$ and a function
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ such that $\varphi$
+            is continuous, injective, and an open mapping. A chart is denoted
+            $(\mathcal{U},\varphi)$.
+        \end{definition}
+        Equivalently, we could say that $\varphi$ is a homeomorphism onto its
+        image or that $\varphi:\mathcal{U}\rightarrow\mathcal{V}$ is a
+        homeomorphism where $\mathcal{V}\subseteq\mathbb{R}^{n}$ is open. The
+        definition adopted here is so that all of the details about a chart
+        $(\mathcal{U},\varphi)$ are embedded in the notation. That is, we need
+        not add a $\mathcal{V}$ nor talk about $\varphi^{\minus{1}}$.
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \begin{tikzpicture}[>=LaTeX]
+                \draw[<->] (-1,  0) to (3, 0);
+                \draw[<->] ( 0, -1) to (0, 3);
+                \draw[dashed, fill=red!70!white]
+                (0.5, 1.5) to[out=30,  in=180]  (1.2,  1.9)
+                           to[out=0,   in=90]   (1.9,  1.4)
+                           to[out=-90, in=0]    (1.4,  0.2)
+                           to[out=180, in=-30]  (0.4,  0.3)
+                           to[out=150, in=-150] cycle;
+            
+                \node at (0.5, 3.0) {$\mathbb{R}^{n}$};
+                \node at (1.1, 1.0) {$\varphi(\mathcal{U})$};
+                \draw[->] (-3.5, 1) to node[above left] {$\varphi$} (-1.5, 1);
+            
+                \begin{scope}[xshift=-8cm,yshift=1.3cm]
+                    \draw (0,0) to[out=90,  in=180] (1,  0.8)
+                                to[out=0,   in=150] (2,  0.8)
+                                to[out=-30, in=90]  (4,  0.0)
+                                to[out=-90, in=0]   (2, -1.5)
+                                to[out=180, in=-30] (0, -1.5)
+                                to[out=150, in=-90] cycle;
+                    
+                    \draw (0.5, -0.7) to[in=-130, out=-50] (1.8, -0.7);
+                    \draw (0.6, -0.8) to[in=130,  out=50]  (1.7, -0.8);
+            
+                    \draw[dashed, fill=cyan]
+                        (2.0, 0.0) to[out=30,  in=180]  (2.7,  0.5)
+                                   to[out=0,   in=90]   (3.5,  0.0)
+                                   to[out=-90, in=0]    (3.2, -0.9)
+                                   to[out=180, in=-30]  (2.2, -0.8)
+                                   to[out=150, in=-150] cycle;
+            
+                    \node at (2.8, -0.2) {$\mathcal{U}$};
+                    \node at (1.0,  0.4) {$X$};
+                \end{scope}
+            \end{tikzpicture}
+            \caption{A Chart in a Topological Space}
+            \label{fig:Chart_in_Topological_Space}
+        \end{figure}
+        Another equivalent definition of topological manifold is that for all
+        $x\in{X}$ there is a chart $(\mathcal{U},\varphi)$ such that
+        $x\in\mathcal{U}$.
+        \begin{definition}
+            The coordinate functions of a chart $(\mathcal{U},\varphi)$ of
+            dimension $n\in\mathbb{N}$ in a topological space $(X,\tau)$
+            are the function $x^{i}:X\rightarrow\mathbb{R}$ defined by
+            $x^{i}=\varphi\circ\pi_{i}$, where
+            $\pi_{i}:\mathbb{R}^{n}\rightarrow\mathbb{R}$ is the $i^{th}$
+            projection mapping.
+        \end{definition}
+        With this definition it is often common to write the image of a point
+        $p\in\mathcal{U}$ by:
+        \begin{equation}
+            \varphi(p)=\big(x^{1}(p),x^{2}(p),\dots,x^{n-1}(p),x^{n}(p)\big)
+        \end{equation}
+        One should note that $x^{2}$ does not denote the square of $x$, and this
+        may cause confusion. It is the composition of $\varphi$ with the map
+        $\pi_{2}:\mathbb{R}^{n}\rightarrow\mathbb{R}$ which simply selects the
+        second coordinate.
+        \begin{example}
+            The graph of a continuous function
+            $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is an $n$ dimensional
+            manifold. That is, recalling from set theory that a function
+            $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is a subset
+            $f\subseteq\mathbb{R}^{n}\times\mathbb{R}^{m}$, if we endow $f$ with
+            the subspace topology of $\mathbb{R}^{n+m}$, then it will be an
+            $n$ dimensional manifold. To see this, for
+            $(\mathbf{x},\mathbf{y})\in{f}$, let
+            $\pi_{1}:\mathbb{R}^{n+m}\rightarrow\mathbb{R}^{n}$ be the mapping
+            $\pi_{1}(\mathbf{x},\mathbf{y})=\mathbf{x}$. This is continuous, and
+            thus the restriction $\pi_{1}|_{f}:f\rightarrow\mathbb{R}^{n}$ is
+            continuous in the subspace topology (that is, in the graph of $f$).
+            Moreover, $\varphi|_{f}$ is a homeomorphism with continuous inverse
+            $\varphi|_{f}^{\minus{1}}(\mathbf{x})=(\mathbf{x},f(\mathbf{x})$.
+            This projection then shows that the graph of $f$ is homeomorphic to
+            $\mathbb{R}^{n}$ itself. If we were to replace $\mathbb{R}^{n}$ with
+            and open subset $\mathcal{U}\subseteq\mathbb{R}^{n}$, the claim
+            would still hold.
+        \end{example}
+        \begin{example}
+            The most common non-trivial example of a topological manifold is
+            the sphere $S^{n}$. This is the subset of $\mathbb{R}^{n}$ such that
+            $\norm{\mathbf{x}}_{2}=1$, where $\norm{\cdot}_{2}$ is the Euclidean
+            norm defined by the Pythagorean formula. That $S^{n}$ is a
+            topological manifold can be realized in two ways. The first is
+            called the \textit{orthographic projection}. We take an observer
+            standing on the north pole and then then them off to infinity along
+            the line through the origin and the north pole. From the observers
+            new perspective, only the top half of the sphere is visible. That
+            is, this projection \textit{at infinity} is the set:
+            \begin{equation}
+                \mathcal{U}_{n-1}^{+}=\big\{\mathbf{x}\in{S}^{2}\;|\;x_{n-1}>0\}
+            \end{equation}
+            where $x_{n-1}$ is the last coordinate (the coordinate that
+            corresponds to the north pole). For $S^{1}$ this is just the set:
+            \begin{equation}
+                \mathcal{U}_{y}^{+}=
+                    \{\,(x,\sqrt{1-x^{2}})\in{S}^{2}\;|\;x\in[-1,1])\,\}
+            \end{equation}
+            and for $S^{2}$ this is:
+            \begin{equation}
+                \mathcal{U}_{z}^{+}=
+                    \{\,(x,y,\sqrt{1-x^{2}-y^{2}})\in{S}^{2}\;
+                    |\;x^{2}+y^{2}\leq{1}\,\}
+            \end{equation}
+            Since we only see the top half, this does not cover the entire
+            sphere. Moreover it contains the boundary, and is therefore not
+            open. To meet the requirements of a chart we must therefore remove
+            the equator from this projection. Thus, if we with to cover the
+            entire sphere with such sets we need $2(n+1)$ charts. That these
+            charts are homeomorphic to $\mathbb{R}^{n}$ can be seen by simply
+            using the projection map
+            $\pi^{i}:\mathbb{R}^{n+1}\rightarrow\mathbb{R}^{n}$ which maps:
+            \begin{equation}
+                \pi^{i}(x_{0},x_{1},\dots,x_{j-1},x_{j},x_{j+1},\dots,x_{n-1})
+                =(x_{0},x_{1},\dots,x_{j-1},x_{j+1},\dots,x_{n-1})
+            \end{equation}
+            This is continuous, and thus it's restriction to $S^{n}$ is
+            continuous. Moreover, it's restriction is an open mapping, and hence
+            the sets $\textrm{Int}(\mathcal{U}_{i}^{\pm})$ together with
+            $\pi^{i}$ form charts.
+        \end{example}
+        \begin{example}
+            The second, perhaps easier but less intuitive, method of showing
+            that $S^{n}$ is a manifold is using \textit{stereographic}
+            projection. Before, we lifted our observer to infinity and then
+            projected the sphere from this point of view. Now, we keep the
+            observer at the north pole and imagine what they'd see if the sphere
+            was transparent. Drawing a line from the observer to another point
+            on the sphere will then intersect the hyperplane $x_{0}=0$ once.
+            We can use this to describe a chart that covers almost the entirety
+            of $S^{n}$. Note the line from the North pole to itself will be
+            parallel to the plane, and hence will never intersect. We define
+            the stereographic projection function
+            $\varphi:S^{n}\setminus\{(0,0,\dots,0,1)\}\rightarrow\mathbb{R}^{n}$
+            as follows:
+            \begin{equation}
+                \varphi(\mathbf{x})=\frac{\mathbf{x}}{1-x_{n-1}}
+            \end{equation}
+            Since a point is closed in a Hausdorff space, the set $S^{n}$ minus
+            the north pole is open. Hence this open set is homeomorphic to
+            $\mathbb{R}^{n}$ and covers all but one point of the sphere. The
+            mapping $\varphi$ is a homemorphism since its inverse is continuous:
+            \begin{equation}
+                \varphi^{\minus{1}}(\mathbf{X})=\Big(
+                    \frac{2X_{0}}{1+\norm{\mathbf{X}}^{2}},\dots,
+                    \frac{2X_{n-2}}{1+\norm{\mathbf{X}}^{2}},
+                    \frac{1-\norm{\mathbf{X}}^{2}}{1+\norm{\mathbf{X}}^{2}}\Big)
+            \end{equation}
+            To make $S^{n}$ a topological manifold of dimension $n$ we need only
+            add one more stereographic projection about any other point. The
+            south pole is usually the most fitting choice, and so we have that
+            $S^{n}$ is a manifold that can be covered with two charts.
+        \end{example}
+        This may naturally lead one to ask the question
+        \textit{what's the minimum number of charts needed to cover a manifold?}
+        Ostrand's theorem from topology tells us the answer is $n+1$. If the
+        space is oriented and 2 dimensional, Morse theory can be used to reduce
+        that to 1 or 2 (The only case where 1 is occurs is if the space is
+        homeomorphic to $\mathbb{R}^{2}$).
+        \par\hfill\par
+        The next example to discuss are the real projective spaces, commonly
+        denoted $\mathbb{RP}^{n}$.
+        \begin{example}
+            There are three common and equivalent ways to think of
+            $\mathbb{RP}^{2}$, the real projective plane. Much the way the
+            torus and the Klein bottle can be realized by and equivalence
+            relation on the unit square, so can the real projective plane. The
+            more common method is to consider the sphere $S^{2}$ and the
+            following equivalence relation: $\mathbf{x}R\mathbf{y}$ if and only
+            if $\mathbf{y}=\pm\minus\mathbf{x}$. The quotient space
+            $S^{2}/R$ is then the real projective plane. Such pairing of
+            antipodal points generalizes to all $n$ and so we may discuss the
+            more general real projective space $\mathbb{RP}^{n}$. The last
+            method is by considering the set of all lines through the origin.
+            We can develop a projection map $\mathbb{R}^{n+1}\setminus\{0\}$
+            into $\mathbb{RP}^{n}$ be sending $\mathbf{x}$ to the line it spans.
+            That is, $\mathbf{x}\mapsto{t}\mathbf{x}$, where $t$ is a real
+            variable. This mapping is indeed a projection mapping and thus we
+            can endow $\mathbb{RP}^{n}$ with the quotient topology. For all
+            $i\in\mathbb{Z}_{n+1}$, let $\mathcal{U}_{i}$ be the subset of
+            $\mathbb{R}^{n+1}$ where $x_{i}\ne{0}$. Since lines are closed in
+            $\mathbb{R}^{n+1}$, the complement is open and hence
+            $\mathcal{U}_{i}$ is open. Moreover, it is saturated with respect to
+            the quotient map:
+            \begin{equation}
+                \pi^{\minus{1}}\big(\pi(\mathcal{U}_{i})\big)=\mathcal{U}_{i}
+            \end{equation}
+            and hence the restriction of $\pi$ to $\mathcal{U}_{i}$ is again a
+            quotient map. Let
+            $\mathcal{V}_{i}=\pi|_{\mathcal{U}_{i}}(\mathcal{U}_{i})$ and define
+            $\varphi:\mathcal{V}_{i}\rightarrow\mathbb{R}^{n}$ by:
+            \begin{equation}
+                \varphi_{i}\big([\mathbf{x}]\big)=
+                    \frac{\pi^{i}(\mathbf{x})}{x_{i}}
+            \end{equation}
+            This mapping is well define, for if $\mathbf{y}\in[\mathbf{x}]$ then
+            there is a non-zero $t\in\mathbb{R}$ such that
+            $\mathbf{y}=t\mathbf{x}$. But then:
+            \begin{equation}
+                \varphi\big([\mathbf{y}]\big)=
+                    \frac{\pi^{i}(t\mathbf{x})}{tx_{i}}
+                    =\frac{t\pi^{i}(\mathbf{x})}{tx_{i}}
+                    =\frac{\pi^{i}(\mathbf{x})}{x_{i}}
+                    =\varphi\big([\mathbf{x}]\big)
+            \end{equation}
+            Morevoer, since $x_{i}$ is non-zero for all
+            $\mathbf{x}\in\mathcal{U}_{i}$, we are not dividing by zero.
+            But $\varphi_{i}\circ\pi$ is continuous, and thus $\varphi_{i}$ is
+            continuous (because $\pi$ is a quotient mapping). Moreover, it is a
+            homeomorphism since it's inverse:
+            \begin{equation}
+                \varphi_{i}^{\minus{1}}(\mathbf{x})=
+                    [x_{1},\dots,x_{i-1},1,x_{i},\dots,x_{n}]
+            \end{equation}
+            is continuous. Hence, $\mathbb{RP}^{n}$ is locally Euclidean.
+        \end{example}
+        \begin{theorem}
+            $\mathbb{RP}^{n}$ is Hausdorff.
+        \end{theorem}
+        \begin{proof}
+            For let $[\mathbf{x}]$ and $[\mathbf{y}]$ be distinct elements of
+            $\mathbb{RP}^{n}$. For the case of $n>2$ there must be a
+            $\mathcal{U}_{i}$ such that $\pi(\mathcal{U}_{i})$ contains both
+            points. Since $\pi(\mathcal{U}_{i})$ is locally Euclidean, it is
+            Hausdorff, and therefore $[\mathbf{x}]$ and $[\mathbf{y}]$ can be
+            separated by open subsets of $\pi()\mathcal{U}_{i})$. For the case
+            of $n=2$, the only scenario where $[\mathbf{x}]$ and $[\mathbf{y}]$
+            do not lie in the same $\mathcal{U}_{i}$ for some $i$ is where
+            $[\mathbf{x}]=[(1,0)]$ and $[\mathbf{y}]=[(0,1)]$. In this case,
+            let $\mathcal{U}$ be the complement of the line spanned by
+            $(1,1)$. Then $\pi(\mathcal{U})$ contains both $[\mathbf{x}]$ and
+            $[\mathbf{y}]$, and by the preceeding arguments will be locally
+            Euclidean. Being locally Euclidean, these two points can be
+            separated by disjoint open sets. Thus, $\mathbb{RP}^{n}$ is
+            Hausdorff.
+        \end{proof}
+        \begin{theorem}
+            $\mathbb{RP}^{n}$ is second countable.
+        \end{theorem}
+        \begin{proof}
+            We have shown that $\mathbb{RP}^{n}$ can be covered by finitely many
+            open subsets each of which is homeomorphic to $\mathbb{R}^{n}$.
+            But $\mathbb{R}^{n}$ is second countable, and second countability is
+            preserved by homeomorphisms and hence each of these open subsets is
+            second countable. But then $\mathbb{RP}^{n}$ is the finite unione of
+            second countable open subspaces, and is hence second countable.
+        \end{proof}
+        The open subspace part is crucial. One might think that if one has a
+        countable collection of subspaces that cover the space, each of which
+        being second countable, then the whole space is second countable, but
+        this is not true. For example, consider the \textit{infinite bouquet}.
+        Take $\mathbb{R}$ with the equivalence relation $R$ defined by
+        $xRy$ if and only if $x=y$ or $x$ and $y$ are integers. The quotient
+        space collaps all of $\mathbb{Z}$ down to a point, and the result looks
+        like infinitely many rings connected at the origin. The point
+        $[\mathbb{Z}]$ has no neighborhood that has a countable basis. Thus not
+        only is this space not second countable, it's not even first countable
+        (but it is separable).
+        \begin{theorem}
+            $\mathbb{RP}^{n}$ is compact.
+        \end{theorem}
+        \begin{proof}
+            For the restriction $\pi_{S^{n}}:S^{n}\rightarrow\mathbb{RP}^{n}$
+            is surjective. Given $[\mathbf{x}]\in\mathbb{RP}^{n}$, let
+            $\mathbf{y}=\mathbf{x}/\norm{\mathbf{x}}_{2}$. Then
+            $\mathbf{y}\in{S}^{n}$ and $\pi(\mathbf{y})=[\mathbf{x}]$. Thus
+            $\pi|_{S^{n}}$ is a continuous surjective map. But $S^{n}$ is
+            compact by the Heine-Borel theorem, and thus the image of
+            $S^{n}$ under $\pi|_{S^{n}}$ is compact. Therefore,
+            $\mathbb{RP}^{n}$ is compact.
+        \end{proof}
+    \section{Notes from O'Neill}
+        A smooth function $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is one
+        such that $\pi_{k}\circ{f}:\mathbb{R}^{n}\rightarrow\mathbb{R}$ is
+        smooth for all $k\in\mathbb{Z}_{m}$. A chart $(\mathcal{U},\varphi)$ in
+        a topological space $(X,\tau)$ is an open set $\mathcal{U}\subseteq{X}$
+        and an injective continuous open mapping
+        $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$. The coordinate functions
+        of the chart $(\mathcal{U},\varphi)$ are the functions
+        $x^{k}:\mathcal{U}\rightarrow\mathbb{R}$ defined by
+        $x^{k}=\pi_{k}\circ\varphi$ for all $k\in\mathbb{Z}_{n}$. Smoothly
+        overlapping charts are charts $(\mathcal{U},\varphi)$ and
+        $(\mathcal{V},\psi)$ such that either
+        $\mathcal{U}\cap\mathcal{V}=\emptyset$ or both
+        $\varphi\circ\psi^{\minus{1}}$ and $\psi\circ\varphi^{\minus{1}}$ are
+        smooth functions (in the Euclidean sense). The domain of
+        $\varphi\circ\psi^{\minus{1}}$ is $\psi(\mathcal{V})$, which is an open
+        subset of $\mathbb{R}^{n}$, and hence this composition is a function
+        from an open subset of $\mathbb{R}^{n}$ to $\mathbb{R}^{n}$ and thus
+        asking if it is smooth is a valid well defined question. Similarly for
+        $\psi\circ\varphi^{\minus{1}}$. A smooth atlas is a collection of charts
+        $(\mathcal{U}_{\alpha},\varphi_{\alpha})$ such that the
+        $\mathcal{U}_{\alpha}$ cover $X$ and each chart overlaps smoothly. A
+        maximal smooth atlas is a smooth atlas $\mathcal{A}$ on $(X,\tau)$ such
+        that for all smooth atlases $\mathcal{A}'$ such that
+        $\mathcal{A}\subseteq\mathcal{A}'$ it is true that
+        $\mathcal{A}=\mathcal{A}'$.
+        \begin{theorem}
+            If $(X,\tau)$ is a topological space, if $\mathcal{A}$ and
+            $\mathcal{A}'$ are smooth atlases on $(X,\tau)$, then they are
+            compatible if and only if $\mathcal{A}\cup\mathcal{A}'$ is a smooth
+            atlas on $(X,\tau)$.
+        \end{theorem}
+        \begin{proof}
+            If they are compatible, then every chart in $\mathcal{A}$ overlaps
+            smoothly with every chart in $\mathcal{A}'$, and vice versa. But
+            $\mathcal{A}$ is a smooth atlas and thus every chart in
+            $\mathcal{A}$ overlaps smoothly with every other chart in
+            $\mathcal{A}$. Thus, every chart in $\mathcal{A}$ overlaps smoothly
+            with every chart in $\mathcal{A}\cup\mathcal{A}'$, and similarly for
+            $\mathcal{A}'$. Hence if $\mathcal{A}$ and $\mathcal{A}'$ are
+            compatible, then $\mathcal{A}\cup\mathcal{A}'$ is a smooth atlas.
+            Moreover, if $\mathcal{A}\cup\mathcal{A}'$ is a smooth atlas, then
+            every element of $\mathcal{A}\cup\mathcal{A}'$ overlaps smoothly
+            with every other element of $\mathcal{A}\cup\mathcal{A}'$. In
+            particular, every element of $\mathcal{A}$ overlaps smoothly with
+            every element of $\mathcal{A}'$, and vice-versa. Hence,
+            $\mathcal{A}$ and $\mathcal{A}'$ are compatible.
+        \end{proof}
+        \begin{theorem}
+            If $\mathcal{A}$ is a smooth atlas on $(X,\tau)$, then there is a
+            unique maximal smooth atlas $\mathcal{C}$ such that
+            $\mathcal{A}\subseteq\mathcal{C}$.
+        \end{theorem}
+        \begin{proof}
+            The set of all atlases on $(X,\tau)$ forms a partially ordered set
+            by inclusion. Given any chain of atlases, by the previous theorem
+            the union is then again an atlas compatible with all atlases in the
+            chain. That is, every chain has an upper bound. Hence by Zorn's
+            lemma every Atlas has a maximal atlas. If there is another maximal
+            atlas, the union will again be a smooth atlas, contradicting
+            maximality, and hence there is a unique maximal smooth atlas.
+        \end{proof}
+        A smooth manifold is a second countable Hausdorff topological space with
+        a maximal smooth atlas.
+        \begin{theorem}
+            If $(X,\tau,\mathcal{A})$ is a smooth manifold, if
+            $(\mathcal{U},\varphi)\in\mathcal{A}$, and if $\mathcal{V}$ is an
+            open subset such that $\mathcal{U}\cap\mathcal{V}\ne\emptyset$, then
+            $(\mathcal{U}\cap\mathcal{V},%
+             \varphi|_{\mathcal{U}\cap\mathcal{V}})\in\mathcal{A}$.
+        \end{theorem}
+        \begin{proof}
+            For since $\mathcal{U}$ and $\mathcal{V}$ are open,
+            $\mathcal{U}\cap\mathcal{V}$ is open. But then
+            $\varphi|_{\mathcal{U}\cap\mathcal{V}}$ is a continuous and
+            injective open mapping. If $(\mathcal{O},\psi)\in\mathcal{A}$, then
+            it overlaps smoothly with $(\mathcal{U},\varphi)$. But smoothness
+            is a local property, and hence it overlaps smoothly with
+            $(\mathcal{U}\cap\mathcal{V},\varphi|_{\mathcal{U}\cap\mathcal{V}})$
+            and since $\mathcal{A}$ is maximal, it contains this chart.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau,\mathcal{A})$ is a smooth manifold and $A\subseteq{X}$,
+            then $(A,\tau|_{A},\mathcal{A}|_{A})$ is a smooth manifold where
+            $\tau|_{A}$ is the subspace topology and:
+            \begin{equation}
+                \mathcal{A}|_{A}=
+                \{\,(\mathcal{U},\varphi)\in\mathcal{A}\;|\;\,
+                    \mathcal{U}\subseteq{A}\,\}
+            \end{equation}
+        \end{theorem}
+    \section{Manifolds Review}
+        \begin{definition}
+            A locally Euclidean topological space is a topological space
+            $(X,\tau)$ such that for all $x\in{X}$ there is an $n\in\mathbb{N}$
+            such that there exists an open set $\mathcal{U}\subseteq{X}$ such
+            that $x\in\mathcal{U}$ and a continuous injective open mapping
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$.
+        \end{definition}
+        Since $\varphi$ is an injective open mapping, it is automatically a
+        homeomorphism onto it's image. Indeed, it is common to define locally
+        Euclidean in terms of homeomorphisms. The dimension can vary in this
+        definition and we can consider the disjoint union of a sphere and a
+        line. However, dimension is locally constant. This requires Brouer's
+        invariance of domain.
+        \begin{ftheorem}{Invariance of Domain}{Invariance of Domain}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is open, and if
+            $f:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is a continuous injective
+            function, then $f(\mathcal{U})$ is open.
+        \end{ftheorem}
+        \begin{bproof}
+            Difficult.
+        \end{bproof}
+        We can now prove that dimension is locally constant.
+        \begin{ltheorem}{Invariance of Dimension}{Invariance_of_Dimension}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is open and
+            $\mathcal{V}\subseteq\mathbb{R}^{m}$ is open, and if
+            $f:\mathcal{U}\rightarrow\mathcal{V}$ is a homeomorphism, then
+            $n=m$
+        \end{ltheorem}
+        \begin{proof}
+            For suppose not and suppose $n>m$. Let $\tilde{\mathcal{V}}$ be the
+            extension of $\mathcal{V}$ into $\mathbb{R}^{n}$ where the last
+            $n-m$ coordinates are simply 0. But $f$ is a homeomorphism, and thus
+            the extension $\tilde{f}:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is
+            an injective continuous function, and hence an open mapping.
+            But $f(\mathcal{U})$ is not open since for any point and for any
+            $\varepsilon>0$ the $\varepsilon$ be must leak into the last
+            $n-m$ coordinates, a contradiction. Thus $n=m$.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau)$ is a locally Euclidean topological space, if
+            $x\in{X}$, and if $n,m\in\mathbb{N}$ are such that there exists
+            open sets $\mathcal{U}_{n}$ and $\mathcal{V}_{m}$ such that there
+            are injective open mapping
+            $\varphi_{n}:\mathcal{U}_{n}\rightarrow\mathbb{R}^{n}$ and
+            $\varphi_{m}:\mathcal{V}_{m}\rightarrow\mathbb{R}^{m}$, then $m=n$.
+        \end{theorem}
+        \begin{proof}
+            For $\mathcal{U}_{n}\cap\mathcal{V}_{m}$ is non-empty since $x$ is
+            in the intersection, and the intersection of open is open. Thus the
+            resection $\varphi_{n}|_{\mathcal{U}_{n}\cap\mathcal{V}_{m}}$ and
+            $\varphi_{m}|_{\mathcal{U}_{n}\cap\mathcal{V}_{m}}$ are open
+            mappings into $\mathbb{R}^{n}$ and $\mathbb{R}^{m}$, respectively.
+            But then these are homeomorphisms onto their images. But by
+            composing $\varphi_{n}\circ\varphi_{m}^{\minus{1}}$ we obtain a
+            homeomorphism from an open subset of $\mathbb{R}^{m}$ to
+            $\mathbb{R}^{n}$. But then $n=m$, by the previous theorem.
+        \end{proof}
+        We have thus shown that there is a well defined dimension function
+        $\textrm{dim}:X\rightarrow\mathbb{N}$ that assigns to every $x\in{X}$
+        the unique dimension of $x$. That is, the space $\mathbb{R}^{n}$ that
+        $x$ locally looks like.
+        \begin{definition}
+            A locally constant function on from a topological space $(X,\tau)$
+            to a set $Y$ is a function $f:X\rightarrow{Y}$ such that for all
+            $x\in{X}$ there exists an open subset $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ and $f|_{\mathcal{U}}$ is a constant mapping.
+        \end{definition}
+        Note that there need not be any topology on $Y$.
+        \begin{theorem}
+            If $(X,\tau)$ is a connected topological space, if $Y$ is a set with
+            at least two distinct points, and if $f:X\rightarrow{Y}$ is a
+            locally constant function, then it is a constant function.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there are $c_{1},c_{2}\in{Y}$ such that
+            $f^{\minus{1}}[\{c_{1}\}]$ and $f^{\minus{1}}[\{c_{2}\}]$ are
+            non-empty. Let $x\in{f}^{\minus{1}}[\{c_{1}\}]$. Since $f$ is a
+            locally constant function, there exists an open subset
+            $\mathcal{U}_{x}\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            $f|_{\mathcal{U}}$ is a constant mapping. But this is true of all
+            $x\in{f}^{\minus{1}}[\{c_{1}\}]$, and hence:
+            \begin{equation}
+                f^{\minus{1}}[\{c_{1}\}]=
+                    \bigcup_{x\in{f}^{\minus{1}}[\{c_{1}\}]}\mathcal{U}_{x}
+            \end{equation}
+            which is the union of open, and hence open. Similarly, the
+            complement can be written as:
+            \begin{equation}
+                X\setminus{f}^{\minus{1}}[\{c_{1}\}]=
+                    \bigcup_{x\notin{f}^{\minus{1}}[\{c_{1}\}]}\mathcal{U}_{x}
+            \end{equation}
+            which is the union of open, and hence open. Moreover it is non-empty
+            since $f^{\minus{1}}[\{c_{2}\}]$ is a subset, and this set is
+            non-empty. But then $X$ is the union of two disjoint non-empty open
+            subsets and is hence disconnected, a contradiction. Thus, $f$ is
+            constant.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau)$ is a locally Euclidean topological space, then the
+            dimension function $\textrm{dim}:X\rightarrow\mathbb{N}$ is locally
+            constant.
+        \end{theorem}
+        \begin{proof}
+            For let $x\in{X}$. Then there is an open subset
+            $\mathcal{U}\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            there exists a continuous injective open mapping
+            $f:\mathcal{U}\rightarrow\mathbb{R}^{n}$. But then for all
+            $y\in\mathcal{U}$, $\mathcal{U}$ is an open set such that
+            $y\in\mathcal{U}$ and $f:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is a
+            continuous injective open mapping, and hence
+            $\textrm{dim}(y)=\textrm{dim}(x)$. Thus, $\textrm{dim}$ is locally
+            constant.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau)$ is a connected locally Euclidean topological space,
+            then there is a unique dimension.
+        \end{theorem}
+        \begin{proof}
+            For $\textrm{dim}$ is locally constant, and a locally constant
+            function on a connected space is constant.
+        \end{proof}
+        \begin{definition}
+            A topological manifold is a topological space $(X,\tau)$
+            that is locally Euclidean, Hausdorff, and second countable.
+        \end{definition}
+        \begin{example}
+            Neither the Hausdorff nor the second countable claims are redundant.
+            The bug eye line is a non-Hausdorff locally Euclidean space that is
+            second countable, and the long line is a non-second countable space
+            that is locally Euclidean and Hausdorff.
+        \end{example}
+        \begin{definition}
+            A chart on a topological space $(X,\tau)$ is an open set
+            $\mathcal{U}$ and a continuous injective open mapping
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$.
+        \end{definition}
+        \begin{definition}
+            Compatible charts on a topological space $(X,\tau)$ are charts
+            $(\mathcal{U},\varphi)$ and $(\mathcal{V},\psi)$ such that either
+            $\mathcal{U}\cap\mathcal{V}$ are empty, or
+            $\varphi\circ\psi^{\minus{1}}:%
+             \psi(\mathcal{V})\rightarrow\mathbb{R}^{n}$ and
+            $\psi\circ\varphi^{\minus{1}}:%
+             \varphi(\mathcal{U})\rightarrow\mathbb{R}^{n}$ are smooth.
+        \end{definition}
+        \begin{definition}
+            A smooth atlas on a topological manifold $(X,\tau)$ is a collection
+            of compatible charts that cover $X$.
+        \end{definition}
+        \begin{definition}
+            A maximal smooth atlas on a topological manifold $(X,\tau)$ is a
+            smooth atlas $\mathcal{A}$ such that for all smooth atlases
+            $\mathcal{A}'$ such that $\mathcal{A}\subseteq\mathcal{A}'$, it is
+            true that $\mathcal{A}=\mathcal{A}'$.
+        \end{definition}
+        \begin{definition}
+            Compatible atlases on a topological manifold $(X,\tau)$ are atlases
+            $\mathcal{A}$ and $\mathcal{A}'$ such that for every chart in
+            $\mathcal{A}$ is compatible with every chart in $\mathcal{A}'$, and
+            vice-versa.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold and if $\mathcal{A}$ and
+            $\mathcal{A}'$ are smooth atlases, then they are compatible if and
+            only if $\mathcal{A}\cup\mathcal{A}'$ is a smooth atlas.
+        \end{theorem}
+        \begin{proof}
+            For if $\mathcal{A}$ and $\mathcal{A}'$ are compatible, then
+            every element of $\mathcal{A}\cup\mathcal{A}'$ is compatible with
+            every other element, and moreover the domains cover $X$. Hence,
+            the union is a smooth atlas. If the union is a smooth atlas, then
+            every element of $\mathcal{A}$ is compatible with every element of
+            $\mathcal{A}\cup\mathcal{A}'$, and in particular it is compatible
+            with every element of $\mathcal{A}'$. Similarly, every element of
+            $\mathcal{A}'$ is compatible with $\mathcal{A}$, and hence they are
+            compatible atlases.
+        \end{proof}
+        \begin{ltheorem}{Existence and Uniqueness of Maximal Smooth Atlas}
+                        {Existence and Uniqueness of Maximal Smooth Atlas}
+            If $(X,\tau)$ is a topological manifold and if $\mathcal{A}$ is a
+            smooth atlas, then there is a maximal smooth atlas $\mathcal{C}$
+            such that $\mathcal{A}\subseteq\mathcal{C}$.
+        \end{ltheorem}
+        \begin{proof}
+            For consider the set of all atlases on $(X,\tau)$. This forms a
+            partially ordered set by inclusion. Given a chain of atlases,
+            the union over the entire chain is again an atlas by the previous
+            theorem. But then every chain is bounded, and thus by Zorn's lemma
+            for every $\mathcal{A}$ there is a maximal element $\mathcal{C}$
+            that bounds $\mathcal{A}$. If $\mathcal{C}'$ is another, then
+            they are compatible since they are both compatible with
+            $\mathcal{A}$, and thus $\mathcal{C}\cup\mathcal{C}'$ is a smooth
+            atlas, contradicting maximality. Hence, $\mathcal{C}$ is unique.
+        \end{proof}
+        \begin{definition}
+            A smooth manifold is a topological manifold $(X,\tau)$ with a
+            maximal smooth atlas $\mathcal{A}$.
+        \end{definition}
+        \begin{definition}
+            A smooth function from a smooth manifold
+            $(M,\tau_{M},\mathcal{A}_{M})$ to a smooth manifold
+            $(N,\tau_{N},\mathcal{A}_{n})$ is a function $\phi:M\rightarrow{N}$
+            such that for all $p\in{M}$ there is a chart
+            $(\mathcal{U},\varphi)\in\mathcal{A}_{M}$ and a chart
+            $(\mathcal{V},\psi)\in\mathcal{A}_{N}$ such that $p\in\mathcal{U}$,
+            $\phi(p)\in\mathcal{V}$, and the mapping
+            $\psi\circ\phi\circ\varphi^{\minus{1}}:%
+             \varphi(\mathcal{U}\cap\phi^{\minus{1}}(\mathcal{V}))%
+             \rightarrow\mathbb{R}^{n}$ is a smooth function.
+        \end{definition}
+        Note that since charts in a smooth atlas overlap smoothly, this
+        definition does not actually depend on the choice of charts.
+        \begin{definition}
+            A diffeomorphism from a smooth manifold
+            $(M,\tau_{M},\mathcal{A}_{M})$ to a smooth manifold
+            $(N,\tau_{N},\mathcal{A}_{N})$ is a homeomorphism
+            $\phi:M\rightarrow{N}$ such that $\phi$ and $\phi^{\minus{1}}$ are
+            smooth.
+        \end{definition}
+        In particular, we can consider the set of all smooth functions
+        from the manifold $M$ into $\mathbb{R}$, where $\mathbb{R}$ has its
+        usual smooth structure. This structure $C^{\infty}(M,\mathbb{R})$ forms
+        a commutative ring.
+        \begin{definition}
+            A tangent vector at a point $p$ in a smooth manifold
+            $(M,\tau,\mathcal{A})$ is a function
+            $v:C^{\infty}(M,\mathbb{R})\rightarrow\mathbb{R}$ that is linear and
+            Liebnezian. That is:
+            \begin{align}
+                v(af+bg)&=av(f)+bv(g)
+                \tag{Linearity}\\
+                v(fg)&=v(f)g(p)+f(p)v(g)
+                \tag{Liebnezian}
+            \end{align}
+        \end{definition}
+        \begin{definition}
+            The tangent space at a point $p$ in a smooth manifold
+            $(M,\tau,\mathcal{A})$ is the set $T_{p}M$ of all tangent vectors
+            at $p$.
+        \end{definition}
+        This may seem abstract, but it is a direct generalization of the
+        directional derivative one studies in vector calculus.
+        \begin{theorem}
+            If $\phi:M\rightarrow{N}$ is a smooth function, if $p\in{M}$, and if
+            $v$ is a tangent vector at $p$, then the function
+            $\diff_{p}\phi:C^{\infty}(N,\mathbb{R})\rightarrow\mathbb{R}$
+            defined by $\diff_{p}\phi(v)(f)=v(f\circ\phi)$ is an element of
+            $T_{\phi(p)}N$.
+        \end{theorem}
+        \begin{proof}
+            For:
+            \begin{equation}
+                v\big((af+bg)\circ\phi\big)
+                =v\big(a(f\circ\phi)+b(g\circ\phi)\big)
+                =av(f\circ\phi)+bv(g\circ\phi)
+            \end{equation}
+            and:
+            \begin{equation}
+                v\big((fg)\circ\phi\big)
+                =v\big((f\circ\phi)(g\circ\phi)\big)
+                =v(f\circ\phi)(g\circ\phi)(p)+(f\circ\phi)(p)v(g\circ\phi)
+            \end{equation}
+        \end{proof}
+        \begin{definition}
+            The differential pushforward of a smooth function
+            $\phi:M\rightarrow{N}$ from a smooth manifold
+            $(M,\tau_{M},\mathcal{A}_{M})$ to a smooth manifold
+            $(N,\tau_{N},\mathcal{A}_{M})$ at a point $p\in{M}$ is the function
+            $\diff_{p}\phi:T_{p}M\rightarrow{T}_{\phi(p)}N$ defined by
+            $\diff_{p}\phi(v)(f)=v(f\circ\phi)$ for all
+            $f\in{C}^{\infty}(N,\mathbb{R})$.
+        \end{definition}
+        \begin{definition}
+            An open curve in a topological space $(X,\tau)$ is a continuous
+            function $\alpha:I\rightarrow{X}$, where $I$ is the open unit
+            interval.
+        \end{definition}
+        \begin{definition}
+            A smooth curve in a smooth manifold $(M,\tau,\mathcal{A})$ is a
+            curve $\alpha:I\rightarrow{M}$ such that $\alpha$ is a smooth
+            function with respect to the standard smooth structure on $I$.
+        \end{definition}
+        \begin{definition}
+            The velocity of a smooth curve $\alpha:I\rightarrow{M}$ at a point
+            $t\in{I}$ differential pushforward evaluated at the tangent vector
+            $\diff/\diff{x}|_{x=t}$. That is:
+            \begin{equation}
+                \dot{\alpha}(t)=
+                    \diff_{t}\alpha\Big(\frac{\diff}{\diff{x}}\big|_{x=t}\Big)
+            \end{equation}
+        \end{definition}
+        \begin{definition}
+            The tangent bundle of a smooth manifold $(M,\tau,\mathcal{A})$ is
+            the set $TM=\coprod_{p\in{M}}T_{p}M$. That is, the disjoint union of
+            all tangent spaces.
+        \end{definition}
+        There is a topology that one can place on the tangent bundle that makes
+        it a $2n$ dimensional manifold (with a natural smooth atlas) and this is
+        not the disjoint union topology. Indeed for any manifold of non-zero
+        dimension the disjoint union topology is not second countable, and hence
+        not a manifold (but it will be an $n$ dimensional locally Euclidean
+        Hausdorff space).
+        \begin{definition}
+            A vector field is a smooth function $V:M\rightarrow{TM}$ such that
+            for all $p\in{M}$, $V(p)\in{T}_{p}M$.
+        \end{definition}
+        The collection $\mathfrak{X}(M)$ of all smooth vector fields on a smooth
+        manifold $M$ has a module structure over $C^{\infty}(M,\mathbb{R})$ is
+        we define addition and scalar multiplication as follows:
+        \begin{align}
+            (fV)_{p}&=f(p)V_{p}\\
+            (V+W)_{p}&=V_{p}+W_{p}
+        \end{align}
+        We can also evaluate vector fields at functions in
+        $C^{\infty}(M,\mathbb{R})$ as follows:
+        \begin{equation}
+            (Vf)(p)=V_{p}(f)
+        \end{equation}
+        This is well defined since for all $p\in{M}$, $V_{p}$ is a tangent
+        vector in $T_{p}M$, which is a linear functional. Thus $Vf$ is a
+        function from $C^{\infty}(M,\mathbb{R})$ to itself. The structure of
+        $C^{\infty}(M,\mathbb{R})$ can also be seen as an algebra over the field
+        $\mathbb{R}$. As such we can define derivations.
+        \begin{definition}
+            A derivation on a $C^{\infty}(M,\mathbb{R})$ is a function
+            $D:C^{\infty}(M,\mathbb{R})\rightarrow{C}^{\infty}(M,\mathbb{R})$
+            that is $\mathbb{R}$ linear and Liebnezian:
+            \begin{align}
+                D(af+bg)&=aD(f)+bD(g)\\
+                D(fg)&=D(f)g+fD(g)
+            \end{align}
+        \end{definition}
+        This is slightly redundant since every derivation comes from a vector
+        field. Given $V\in\mathfrak{X}(M)$, the function
+        $D:C^{\infty}(M,\mathbb{R})\rightarrow{C}^{\infty}(M,\mathbb{R})$
+        defined by $D(v)=Vf$ is a derivation, and moreover every derivation
+        comes from a vector field. Simply let $V_{p}$ be the tanget vector such
+        that $V_{p}(f)=D(f)(p)$ for all $p\in{M}$ and
+        $f\in{C}^{\infty}(M,\mathbb{R})$. 
+        \par\hfill\par
+        We can also evaluated vector fields on other vector fields. Given
+        $V,W\in\mathfrak{X}(M)$, we denote $V(W)$ to be the function
+        $V(W):C^{\infty}(M,\mathbb{R})\rightarrow{C}^{\infty}(M,\mathbb{R})$
+        defined by:
+        \begin{equation}
+            V(W)(f)=V(Wf)
+        \end{equation}
+        More explicitly, if $p\in{M}$, then:
+        \begin{equation}
+            \Big(\big(V(W)\big)(f)\Big)(p)=V_{p}(Wf)
+        \end{equation}
+        Remember that $Wf$ is a function from $C^{\infty}(M,\mathbb{R})$ into
+        itself, where as $V_{p}$ is a tangent vector and hence a linear
+        functional from $C^{\infty}(M,\mathbb{R})$ into $\mathbb{R}$. Thus,
+        while strange, this definition is well posed. What's important is that
+        now we can define the Lie bracket of two vector fields.
+        \begin{definition}
+            The Lie Bracket is the function
+            $[\cdot,\cdot]:\mathfrak{X}(M)\times\mathfrak{X}(M)%
+             \rightarrow\mathfrak{X}(M)$ defined by:
+            \begin{equation}
+                [V,W]=V(W)-W(V)
+            \end{equation}
+        \end{definition}
+        More explicitly, given $f\in{C}^{\infty}(M,\mathbb{R})$ and $p\in{M}$,
+        we have:
+        \begin{equation}
+            [V,W]_{p}(f)=V_{p}(Wf)-W_{p}(Vf)
+        \end{equation}
+        Before moving on to connections, we define integral curves.
+        \begin{definition}
+            An integral curve of a vector field $V\in\mathfrak{X}(M)$ is a
+            curve $\alpha:I\rightarrow{M}$ such that for all $t\in{I}$,
+            $\dot{\alpha}(t)=V_{\alpha(t)}$.
+        \end{definition}
+        \begin{definition}
+            A bilinear form on a vector field $V$ over a field $F$ is a function
+            $g:V\times{V}\rightarrow{F}$ such that:
+            \begin{align}
+                g(a\vector{x}+b\vector{y},\vector{z})
+                    &=ag(\vector{x},\vector{z})+bg(\vector{y},\vector{z})\\
+                g(\vector{x},a\vector{y}+b\vector{z})
+                    &=ag(\vector{x},\vector{y})+bg(\vector{x},\vector{z})
+            \end{align}
+        \end{definition}
+        \begin{definition}
+            A symmetric form on a vector space $V$ over a field $F$ is a
+            function $g:V\times{V}\rightarrow{F}$ such that for all
+            $\vector{x},\vector{y}\in{V}$,
+            $g(\vector{x},\vector{y})=g(\vector{y},\vector{x})$.
+        \end{definition}
+        \begin{definition}
+            A non-degenerate form on a vector space $V$ over a field $F$ is a
+            function $g:V\times{V}\rightarrow{F}$ such that for all
+            $\vector{x}\in{V}$ such that $\vector{x}\ne\vector{0}$ there exists
+            a $\vector{y}\in{V}$ such that $g(\vector{x},\vector{y})\ne{0}$.
+        \end{definition}
+        In other words, if $g(\vector{x},\vector{y})=0$ for all $\vector{y}$,
+        then $\vector{x}=\vector{0}$. Lastly, positive-definiteness.
+        \begin{definition}
+            A positive-definite form on a vector space $V$ over an ordered field
+            $F$ is a function $g:V\times{V}\rightarrow{F}$ such that for all
+            $\vector{x}\in{V}$ it is true that $g(\vector{x},\vector{x})\geq{0}$
+            and $g(\vector{x},\vector{x})=0$ implies that
+            $\vector{x}=\vector{0}$.
+        \end{definition}
+        Semi-Riemannian and Riemannian geometry are concerned with smooth
+        manifolds that have symmetric bilinear forms that are non-degenerate
+        (Semi-Riemannian) or positive-definite (Riemannian). The vector spaces
+        are simply the tangent spaces, and we need a function $g$ that takes in
+        a point $p\in{M}$ and two elements of $T_{p}M$ and returns a real
+        number. We further want this function to be a symmetric non-degenerate
+        bilinear form for every $p$, and we would also like this function to
+        vary smoothly between points. So in essence, we want a function
+        $g:\mathfrak{X}(M)\times\mathfrak{X}(M)%
+         \rightarrow{C}^{\infty}(M,\mathbb{R})$. Given a point $p\in{M}$,
+        and two vector fields $V,W\in\mathfrak{X}(M)$, we want
+        $g(V,W)(p)=g_{p}(V_{p},W_{p})$ to vary smoothly with $p$. We also want
+        symmetry, bilinearity, and non-degenacy.
+        \begin{definition}
+            A metric tensor on a smooth manifold $(M,\tau,\mathcal{A})$ is a
+            smooth non-degenacy symmetric bilinear form
+            $g:\mathfrak{X}(M)\times\mathfrak{X}(M)%
+             \rightarrow{C}^{\infty}(M,\mathbb{R})$.
+        \end{definition}
+        \begin{definition}
+            A semi-Riemannian manifold is a smooth manifold
+            $(M,\tau,\mathcal{A})$ with a metric tensor $g$.
+        \end{definition}
+    \section{Connections}
+        We now want to talk about transporting data along a manifold in a
+        parallel manner. For Euclidean space $\mathbb{R}^{n}$ there is an
+        intuitive manner to do this: Simply translate your vector from point $a$
+        to point $b$. On a sphere there's a slightly intuitive manner.
+        Translations may leave the sphere and so we need a new method. Give two
+        points we can simply rotate a tangent vector at $a$ to $b$, but the
+        resultant vector depends on how one rotated the sphere. That is, along
+        which path did one rotate. This is simply a consequence of the curvature
+        of the sphere. For the problem of generalizing to aribtrary
+        manifolds one might think coordinates suffice to perform parallel
+        transport, but this is not true. Even on the sphere, using the two
+        stereographic projections about the north and south pole, one runs into
+        incompatibility issues. So the idea is to find a way of describing the
+        rate of change of one vector field with respect to another. Given a
+        vector field $V$ and a tangent vector $v\in{T}_{p}M$ for some point
+        $p\in{M}$ such that $V_{p}=v$, and given another vector field $W$,
+        we can think of parallel transport as transporting $v$ along an
+        integral curve of $W$.
+        \begin{definition}
+            A connection $\nabla$ on a smooth manifold $(M,\tau,\mathcal{A})$
+            is a function $\nabla:\mathfrak{X}(M)\times\mathfrak{X}(M)%
+            \rightarrow\mathfrak{X}(M)$ such that:
+            \begin{align}
+                \nabla(fV_{1}+gV_{2},W)
+                    &=f\nabla(V_{1},W)+g\nabla(V_{2},W)\\
+                \nabla(V,aW_{1}+bW_{2})
+                    &=a\nabla(V,W_{1})+b\nabla(V,W_{2})\\
+                \nabla(V,fW)&=
+                    (Vf)W+f\nabla(V,W)
+            \end{align}
+        \end{definition}
+        \begin{definition}
+            A Levi-Civita connection on a semi-Riemannian manifold
+            $(M,g)$ is a connection $\nabla$ that is torsion
+            free (preserves the Lie bracket):
+            \begin{equation}
+                \nabla(V,W)-\nabla(W,V)=[V,W]
+            \end{equation}
+            and preserves the metric tensor:
+            \begin{equation}
+                Xg(V,W)=g\big(\nabla(X,V),W\big)+g\big(V,\nabla(X,W)\big)
+            \end{equation}
+        \end{definition}
+        \begin{ftheorem}{Fundamental Theorem of Riemannian Geometry}
+                        {Fundamental_Theorem_of_Riemannian Geometry}
+            If $(M,g)$ is a semi-Riemannian manifold, then there is a unique
+            Levi-Civita connection $\nabla$ on $(M,g)$.
+        \end{ftheorem}
+        \begin{bproof}
+            Just use the Koszul Formula:
+            \begin{equation}
+                \begin{split}
+                    2g\big(\nabla(X,V),W)=&\partial_{X}\big(g(V,W)\big)+
+                        \partial_{Y}\big(g(X,W)\big)\\
+                        &-\partial_{Z}\big(g(X,V)\big)+g\big([X,V],W\big)\\
+                        &-g\big([X,W],V\big)-g\big([V,W],X\big)
+                \end{split}
+            \end{equation}
+        \end{bproof}
+    \section{Pendulums}
+        We can apply our new found Levi-Civita connection to a classic problem.
+        Consider the sphere with it's standard embedding into $\mathbb{R}^{3}$.
+        There is a natural metric tensor we can associate too it, combined with
+        the standard smooth structure induced by the orthographic projections,
+        that make $S^{2}$ a Riemannian manifold. That is, there is a natural
+        metric tensor that is also positive-definite. Take the dot product
+        $\langle\cdot|\cdot\rangle:\mathbb{R}^{3}\rightarrow\mathbb{R}$ apply
+        this to tangent vectors in $T_{p}S^{2}$. Since the tangent spaces are
+        isometric to subspaces of $\mathbb{R}^{3}$, there's a nice way to do
+        this. The dot product varies smoothly as one moves smoothly from one
+        point to another, and so this creates a metric tensor $g$ and
+        $(M,g)$ is a Riemannian manifold.
+        \par\hfill\par
+        Consider a pendulum in Paris oscillating in the direction of north to
+        south. We can attach a tangent vector to this pendulum pointing towards
+        the north pole. What happens as the Earth rotates around it's axis after
+        a full day? The resulting parallel transport is no long pointing towards
+        the north pole, but rather has tipped 270 degrees and oscillates east
+        to west. This is in agreement with the parallel transport we get from
+        our Levi-Civita connection on a sphere. This connection gives rotations
+        as the means of parallel transport, in correspondence with our
+        intuition. The change in angle is a function of the area of the curve
+        enclosed.
+    \section{Notes}
+\end{document}
