@@ -12,6 +12,7 @@
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
+    \listoffigures
     \section{Locally Euclidean Spaces}
         We wish to speak about topological spaces that are sufficiently well
         behaved in the sense that it allows one to do calculus. The first
@@ -2483,13 +2484,37 @@
             now extend the notion of smoothness to functions between arbitrary
             manifolds.
             \begin{definition}
-                A smooth function from a smooth manifold $\manifold[X]{X}$ to a
-                smooth manifold $\manifold[Y]{Y}$ is a function
-                $f:X\rightarrow{Y}$ such that for all
-                $(\mathcal{U},\varphi)\in\mathcal{A}_{X}$ and for all
-                $(\mathcal{V},\psi)\in\mathcal{A}_{Y}$, the function
+                A smooth function from a smooth manifold $\manifold[M]{M}$ to a
+                smooth manifold $\manifold[N]{N}$ is a function
+                $f:M\rightarrow{N}$ such that for all
+                $(\mathcal{U},\varphi)\in\mathcal{A}_{M}$ and for all
+                $(\mathcal{V},\psi)\in\mathcal{A}_{N}$, the function
                 $\psi\circ{f}\circ\varphi^{\minus{1}}$ is Euclidean smooth.
             \end{definition}
+            This function $\psi\circ{f}\circ\varphi^{\minus{1}}$ is defined on
+            the overlaps of the domains in question. That is, the domain is
+            $\varphi(\mathcal{U}\cap{f}^{\minus{1}}(\mathcal{V}))$, which is an
+            open subset of $\mathbb{R}^{m}$ since $\varphi$ is an open mapping,
+            $\mathcal{U}$ is open, and $f^{\minus{1}}(\mathcal{V})$ is open
+            since $f$ is smooth, and hence continuous. The range is some subset
+            of $\mathbb{R}^{n}$. Specifically, the range is the set
+            $\psi[\mathcal{V}\cap\phi[\mathcal{U}]]$, so we defined the
+            function:
+            \begin{equation}
+                \psi\circ\phi\circ\varphi^{\minus{1}}:
+                    \varphi\big[\mathcal{U}\cap
+                        \phi^{\minus{1}}(\mathcal{V})\big]\rightarrow
+                    \psi\big[\mathcal{V}\cap\phi[\mathcal{U}]\big]
+            \end{equation}
+            The schematic for this can be seen in
+            Fig.~\ref{fig:Smooth_Function_Between_Manifolds}.
+            \begin{figure}[H]
+                \centering
+                \captionsetup{type=figure}
+                \input{tikz/Smooth_Function_Between_Manifolds.tex}
+                \caption{Smooth Function Between Manifolds}
+                \label{fig:Smooth_Function_Between_Manifolds}
+            \end{figure}
             \begin{theorem}
                 If $\manifold{X}$ is a smooth manifold, then the identity
                 mapping $\textrm{id}_{X}:X\rightarrow{X}$ is a smooth function.
@@ -2777,7 +2802,7 @@
                 $\manifold[M]{M}$ at a point $p\in{M}$ by a smooth function
                 $\phi:M\rightarrow{N}$ into a smooth manifold $\manifold[N]{N}$
                 is the function
-                $\diff\phi_{p}(v):C^{\infty}(N,\mathbb{R})\rightarrow\mathbb{R}$
+                $\diff\phi_{p}(v):\Ckspace{\infty}{N}\rightarrow\mathbb{R}$
                 defined by:
                 \begin{equation}
                     \diff\phi_{p}(v)(f)=v(f\circ\phi)
@@ -2788,10 +2813,38 @@
             \begin{theorem}
                 If $\manifold[M]{M}$ and $\manifold[N]{N}$ are smooth manifolds,
                 if $\phi:M\rightarrow{N}$ is a smooth function, if $p\in{M}$,
-                if $v\in{T}_{p}(M)$, and if $\diff\phi_{p}$ is the differential
-                pushforward of $\phi$, then
-                $\diff\phi_{p}(v)\in{T}_{\phi(p)}(N)$.
+                if $v\in\tanspace{p}{M}$, and if $\diff\phi_{p}$ is the
+                differential pushforward of $\phi$, then
+                $\diff\phi_{p}(v)\in\tanspace{\phi(p)}{N}$.
             \end{theorem}
+            \begin{proof}
+                For if $a,b\in\mathbb{R}$, $f,g\in\Ckspace{\infty}{M}$, then:
+                \begin{subequations}
+                    \begin{align}
+                        \diff\phi_{p}(v)(af+bg)
+                            &=v\big((af+bg)\circ\phi\big)\\
+                            &=v\big(a(f\circ\phi)+b(g\circ\phi)\big)\\
+                            &=av(f\circ\phi)+bv(g\circ\phi)\\
+                            &=a\diff\phi_{p}(v)(f)+b\diff\phi_{p}(v)(g)
+                    \end{align}
+                \end{subequations}
+                Finally, if $f,g\in\Ckspace{\infty}{N}$, then:
+                \begin{subequations}
+                    \begin{align}
+                        \diff\phi_{p}(v)(fg)
+                            &=v\big((fg)\circ\phi\big)\\
+                            &=v\big((f\circ\phi)(g\circ\phi)\big)\\
+                            &=v(f\circ\phi)g\big(\phi(p)\big)\\
+                            &=v\big(\phi(p)\big)v(g\circ\phi)\\
+                            &=v(f\circ\phi)g\big(\phi(p)\big)
+                             +f\big(\phi(p)\big)v(g\circ\phi)\\
+                            &=\diff\phi_{p}(v)(f)g\big(\phi(p)\big)
+                             +f\big(\phi(p)\big)\diff\phi_{p}(v)(g)
+                    \end{align}
+                \end{subequations}
+                Thus, $\diff\phi_{p}(v)$ is a tangent vector to $\phi(p)$.
+                Hence, $\diff\phi_{p}(v)\in\tanspace{\phi(p)}{N}$.
+            \end{proof}
             \begin{figure}[H]
                 \centering
                 \captionsetup{type=figure}
@@ -2812,6 +2865,15 @@
                     \partial_{\psi^{k}}|_{\phi(p)}
                 \end{equation}
             \end{theorem}
+            \begin{proof}
+                For by the basis theorem, we have:
+                \begin{equation}
+                    \diff\phi_{p}(\partial_{\varphi^{k}}|_{p})=
+                    \sum_{k\in\mathbb{Z}_{n}}
+                    \frac{\partial(\psi^{k}\circ\phi)}{\partial\varphi^{k}}(p)
+                    \partial_{\psi^{k}}|_{\phi(p)}
+                \end{equation}
+            \end{proof}
     \section{Manifolds Review}
         \begin{definition}
             A locally Euclidean topological space is a topological space
