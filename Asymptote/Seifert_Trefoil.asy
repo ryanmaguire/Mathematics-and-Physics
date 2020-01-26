@@ -1,17 +1,16 @@
-if(!settings.multipleView) settings.batchView=false;
-if(settings.render < 0) settings.render=4;
+import settings;
+import tube;
+import graph3;
+import palette;
 
-settings.tex="pdflatex";
-defaultfilename="Seifert_Trefoil.pdf";
+if(!settings.multipleView)  settings.batchView=false;
+if(settings.render < 0)     settings.render=4;
+
 settings.outformat="pdf";
 settings.inlineimage=true;
 settings.embed=true;
 settings.toolbar=false;
 viewportmargin=(2,2);
-
-import tube;
-import graph3;
-import palette;
 
 // Declare variable for the square root of three.
 real SQRT_3 = sqrt(3.0);
@@ -38,7 +37,7 @@ currentlight = light(
 path section=scale(0.05)*unitcircle;
 
 // The material used for the surface.
-material blob = material(diffusepen=gray+opacity(0.8),
+material blob = material(diffusepen=gray(0.5)+opacity(0.8),
                          emissivepen=gray(0.2),
                          specularpen=gray(0.1));
 
