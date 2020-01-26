@@ -1,17 +1,16 @@
-if(!settings.multipleView) settings.batchView=false;
-if(settings.render < 0) settings.render=4;
+import settings;
+import tube;
+import graph3;
+import palette;
 
-settings.tex="pdflatex";
-defaultfilename="Mobius_Strip.pdf";
+if(!settings.multipleView)  settings.batchView=false;
+if(settings.render < 0)     settings.render=4;
+
 settings.outformat="pdf";
 settings.inlineimage=true;
 settings.embed=true;
 settings.toolbar=false;
 viewportmargin=(2,2);
-
-import tube;
-import graph3;
-import palette;
 
 size(500,0);
 
