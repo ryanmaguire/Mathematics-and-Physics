@@ -11,6 +11,7 @@
     \author{Ryan Maguire}
     \date{\vspace{-5ex}}
     \maketitle
+    \tableofcontents
     \section{Fields}
         \subsection{What's the Point?}
             From the historical perspective, we can start with numbers. There's
@@ -1057,6 +1058,139 @@
             $K$. Adjoing $\alpha$ to $K$. Let $E$ be the intersection of all
             subfields of $E$ containing this $K$ adjoing $\alpha$.
         \end{proof}
+        \subsection{Review from Previous Lecture}
+            If $F$ is a field, and if $f\in{F}[x]$, then an extension field
+            $K$ over $F$ is a splitting field if $f\in{K}[x]$ is a splitting
+            polynomial. That is, there are linear factors
+            $a_{k}x+b_{k}$, with $a_{k},b_{k}\in{K}$, such that:
+            \begin{equation}
+                f(x)=\prod_{k\in\mathbb{Z}_{n}}(a_{k}x+b_{k})
+            \end{equation}
+            Splitting fields exists since given $f$ we can find an irreducible
+            factor $g$, and thus $F[x]/(g)$ will be a field extension of $F$.
+            Letting $\alpha_{1}=\overline{x}$, the equivalence class of $x$,
+            this will be a root of $g$ in $F[x]/(g)$, and hence a root of
+            $f$ in $G$. The extension field will have degree less than or equal
+            to $n$. Continuing on inductively, obtaining $\alpha_{k}$, we find
+            that $f\in{F}[\alpha_{1},\dots,\alpha_{n}]$ splits completely and
+            that this field extension has at most degree $n!$. If $f$ was
+            irreducible to begin with then $f$ is a minimal polynomial up to
+            scalar multiplication, and hence the degree of $F[\alpha_{1}]$ over
+            $F$ will be $n$. From the tower law, $n$ will divide the degree of
+            $F[\alpha_{1},\dots,\alpha_{n}]$.
+            \begin{example}
+                Let $f(x)=x^{4}+4$. This factors as:
+                \begin{equation}
+                    x^{4}+4(x^{2}-2x+2)(x^{2}+2x+2)
+                \end{equation}
+                We can invoke the quadratic formula to find the roots of these
+                two over $\mathbb{C}$:
+                \twocolumneq{
+                    \alpha_{1}=\frac{2\pm\sqrt{\minus{4}}}{2}
+                              =1\pm{i}
+                }
+                {
+                    \alpha_{2}=\frac{\minus{2}\pm\sqrt{\minus{4}}}{2}
+                              =\minus{1}\pm{i}
+                }
+                So the splitting field is $K=\mathbb{Q}(\pm{1}\pm{i})$, and this
+                is just $\mathbb{Q}(i)$. Thus, $[K:\mathbb{Q}]=2$.
+            \end{example}
+            \begin{theorem}
+                If $F$, $F'$ are fields, if $\varphi:F\rightarrow{F}'$ is
+                a field isomorphism, and if $f\in{F}[x]$, if
+                $f'(x)(\varphi\circ{f})(x)\in{F}'[x]$, if $K$ is a splitting
+                field for $f$, and if $K'$ is a splitting field for
+                $f'$, then there is an isomorphism $\sigma:K\rightarrow{K}'$
+                such that for all $c\in{F}$, $\sigma(c)=\varphi(c)$.
+            \end{theorem}
+            \begin{proof}
+                We prove by induction on the degree of $f$. Since $\varphi$ is
+                an isomorphism, $f'$ and $f$ have the same degree. Thus if
+                $f\in{F}[x]$ and $f'\in{F}'[x]$ are degree one polynomials, then
+                they already split and hence if we let $\sigma=\varphi$, then
+                we have shown that the splitting fields are isomorphic. Assume
+                the claim is true for $n\in\mathbb{N}$. We can assume that $f$
+                has an irreducible factor $g$ of degree greater than 1. Then
+                $g$ has a root in $K$, label it $\alpha$, and let
+                $g'=\varphi\circ{g}$. Then $g'|f'$ and $g'$ is irreducible
+                over $F'$. So let $\alpha$ be a root of $g'$ in $K'$. Then
+                $F[x]/(g)\simeq{F}[\alpha]\simeq{F}'[\alpha']\simeq{F}'[x]/(g')$
+                and thus we can extend this isomorphism one step up. So now we
+                have:
+                \twocolumneq{f(x)=(x-\alpha)f_{1}(x)}
+                            {f'(x)=(x-\alpha')f_{1}'(x)}
+                $f_{1}$ splits in $K$ and thus we need to show that $K$ is
+                minimal. Suppose $K/L/F_{1}$. Then since $f_{1}$ splits in $L$,
+                $F$ splits in $L$ as well, contradicting the minimality of $K$
+                over $F$, and hence $K$ is minimal over $F_{1}$. Thus, $K$ is
+                a splitting field for $f_{1}$ over $F_{1}$. Thus by induction
+                there is an isomorphism $\sigma:K\rightarrow{K}'$ with the
+                desired property over $F_{1}$ and $F_{1}'$. But $F_{1}$ and
+                $F_{1}'$ are extensions over $F$ and $F'$, so we're done.
+            \end{proof}
+    \section{Separability}
+            Let $F$ be a field, $f\in{F}[x]$ be a polynomial of degree $n$, and
+            $K$ the splitting field of $f$ over $F$. Then:
+            \begin{equation}
+                f(x)=a_{n}\prod_{k\in\mathbb{Z}_{r}}(x-\alpha_{k})^{m_{k}}
+            \end{equation}
+            where the $\alpha_{k}$ are distinct roots, and the $m_{k}$ are all
+            positive integers.
+            \begin{definition}
+                A simply root of a polynomial $f$ over a field $F$ is an element
+                $\alpha\in{F}$ such that $\alpha$ is a root of $f$ and
+                $(x-\alpha)^{2}$ does not divide $f$. Otherwise $\alpha$ is
+                called a multiple root.
+            \end{definition}
+            \begin{example}
+                In $\mathbb{Q}[x]$ we can consider $x^{2}-1$. This splits as
+                $(x-1)(x+1)$ and so we see that the roots are $\pm{1}$. However
+                neither $(x-1)^{2}$ nor $(x+1)^{2}$ divides $f$, and hence both
+                roots are simple. If we consider $x^{2}+2x+1$ then we know this
+                factors as $(x+1)^{2}$ and so the only root is $\minus{1}$ and
+                it is a multiple root with multiplicity 2.
+            \end{example}
+            \begin{definition}
+                A separable polynomial is one such that every rot is simple.
+                Otherwise, $f$ is inseparable.
+            \end{definition}
+            Over $\mathbb{C}$ we can use calculus to determine separability.
+            Let $\alpha\in\mathbb{C}$ be a root of $f(x)\in\mathbb{C}[x]$ and
+            suppose:
+            \begin{equation}
+                f(x)=(x-\alpha)^{m}g(x)
+            \end{equation}
+            with $m\geq{1}$. If we look at the derivative of $f$, we obtain:
+            \begin{equation}
+                \dot{f}(x)=m(x-\alpha)^{m-1}g(x)+(x-\alpha)^{m}\dot{g}(x)
+            \end{equation}
+            where $g(\alpha)\ne{0}$. Then there are two possibilities:
+            \begin{equation}
+                \dot{f}(\alpha)=
+                \begin{cases}
+                    0,&m\geq{2}\\
+                    g(\alpha),&m=1
+                \end{cases}
+            \end{equation}
+            Since $g(\alpha)$ is non-zero we see that $\alpha$ is a simply root
+            if and only if the derivative of $f$ evaluated at $\alpha$ is
+            non-zero. The idea is to generalize such notions to general fields
+            where we may not have the structure to perform calculus. We thus
+            define a derivation on $F[x]$.
+            \begin{definition}
+                A derivation on an algebra $\mathscr{A}$ over a field $F$ is a
+                function $D:\mathscr{A}\rightarrow\mathscr{A}$ such that:
+                \begin{align}
+                    D(af+bg)&=aD(f)+bD(g)\\
+                    D(x^{n})&=nx^{n-1}\\
+                    D(f\circ{g})&=Df(g(x))\cdot{D}g(x)\\
+                    D(fg)&=D(f)g+fD(g)
+                \end{align}
+            \end{definition}
+            \begin{theorem}
+                Linearity, Liebnizean, and $D(x)=1$ imply the other properties.
+            \end{theorem}
     \section{Notes from Milne (Chapter 1)}
         Def of rings, subrings, ring homomorphisms, commutative rings.
         \begin{definition}
