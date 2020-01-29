@@ -1,20 +1,37 @@
-\begin{tikzpicture}
-    % Coordinates for the points.
+%--------------------------------Dependencies----------------------------------%
+%   tikz                                                                       %
+%       arrows.meta                                                            %
+%       decorations.markings                                                   %
+%-------------------------------Main Document----------------------------------%
+\begin{tikzpicture}[%
+    ->-/.style={%
+        decoration={%
+            markings,
+            mark=at position .55 with \arrow{Stealth}
+        },
+        postaction={decorate}
+    }
+]
+    % Coordinates for the points (they lie on an octogon).
     \foreach\x in {0,45,90,135,180,225,270,315}{%
         \coordinate (\x) at (\x:2);
+
+        % Add a dot at each point.
         \draw[fill=black] (\x) circle (0.05);
+
+        % Label the point by it's angle on the unit circle.
         \node at (\x:2.3) {$\x$};
     }
 
-    % Dashed lines for acting by d.
+    % Dashed lines for one action.
     \draw[densely dashed] (0)   to (45);
     \draw[densely dashed] (90)  to (135);
     \draw[densely dashed] (180) to (225);
     \draw[densely dashed] (270) to (315);
 
-    % Dashed lines for acting by d.
-    \draw(45)  to (90);
-    \draw(135) to (180);
-    \draw(225) to (270);
-    \draw(315) to (0);
+    % Solid lines for the other.
+    \draw[->-] (45)  to (90);
+    \draw[->-] (135) to (180);
+    \draw[->-] (225) to (270);
+    \draw[->-] (315) to (0);
 \end{tikzpicture}
