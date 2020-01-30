@@ -1,20 +1,12 @@
-if(!settings.multipleView) settings.batchView=false;
-if(settings.render < 0) settings.render=4;
-
-settings.tex="pdflatex";
-defaultfilename="Seifert_Hopf_Link.pdf";
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
-
+import settings;
 import tube;
 import graph3;
 import palette;
 
+outformat="pdf";
+
 // Size of the created image.
-size(500, 0);
+size(300, 300);
 
 // Set camera location and orientation.
 currentprojection=perspective(
@@ -35,7 +27,7 @@ currentlight = light(
 path section=scale(0.05)*unitcircle;
 
 // The material used for the surface.
-material blob = material(diffusepen=gray+opacity(0.8),
+material blob = material(diffusepen=gray(0.5)+opacity(0.8),
                          emissivepen=gray(0.2),
                          specularpen=gray(0.1));
 

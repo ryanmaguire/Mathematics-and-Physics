@@ -3,20 +3,13 @@ import tube;
 import graph3;
 import palette;
 
-if(!settings.multipleView)  settings.batchView=false;
-if(settings.render < 0)     settings.render=4;
+outformat="pdf";
 
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
+// Size of the created image.
+size(300, 300);
 
 // Declare variable for the square root of three.
 real SQRT_3 = sqrt(3.0);
-
-// Size of the created image.
-size(500, 0);
 
 // Set camera location and orientation.
 currentprojection=perspective(
