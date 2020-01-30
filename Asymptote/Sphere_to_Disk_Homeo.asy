@@ -1,19 +1,10 @@
-if(!settings.multipleView) settings.batchView=false;
-if(settings.render < 0) settings.render=4;
-
-settings.tex="pdflatex";
-defaultfilename="Sphere_to_Disk_Homeo.pdf";
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
-
+import settings;
 import graph3;
 import palette;
 
-// Size of the created image.
-size(500,0);
+outformat="pdf";
+
+size(300, 300);
 
 // Set camera location and orientation.
 currentprojection=perspective(
@@ -56,7 +47,7 @@ triple f4(pair t) {
     return (u, 9+v, 0.0);
 }
 
-material blob = material(diffusepen=gray,
+material blob = material(diffusepen=gray(0.5),
                          emissivepen=gray(0.2),
                          specularpen=gray(0.1));
 

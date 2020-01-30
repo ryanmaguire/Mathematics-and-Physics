@@ -3,16 +3,9 @@ import tube;
 import graph3;
 import palette;
 
-if(!settings.multipleView)  settings.batchView=false;
-if(settings.render < 0)     settings.render=4;
+outformat="pdf";
 
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
-
-size(500,0);
+size(300, 300);
 
 currentprojection=perspective(
     camera=(0,0,25),

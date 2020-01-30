@@ -1,19 +1,12 @@
-if(!settings.multipleView) settings.batchView=false;
-if(settings.render < 0) settings.render=4;
-
-settings.tex="pdflatex";
-defaultfilename="Trefoil_Knot.pdf";
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
-
+import settings;
 import tube;
 import graph3;
 import palette;
 
-size(300,0);
+outformat="pdf";
+
+size(300, 300);
+
 currentprojection=perspective(
     camera=(0,0,25),
     up=(0,0,1),

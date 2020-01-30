@@ -3,17 +3,10 @@ import tube;
 import graph3;
 import palette;
 
-if(!settings.multipleView)  settings.batchView=false;
-if(settings.render < 0)     settings.render=4;
-
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2,2);
+outformat="pdf";
 
 // Size of the created image.
-size(300,300);
+size(300, 300);
 
 currentprojection=perspective(
     camera=(50,-60,40),
