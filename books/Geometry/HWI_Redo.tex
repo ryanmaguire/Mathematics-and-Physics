@@ -1,0 +1,339 @@
+%------------------------------------------------------------------------------%
+\documentclass{article}                                                        %
+%------------------------------Preamble----------------------------------------%
+\makeatletter                                                                  %
+    \def\input@path{{../../}}                                                  %
+\makeatother                                                                   %
+\input{preamble.tex}                                                           %
+%----------------------------Main Document-------------------------------------%
+\begin{document}
+    \title{Differential Topology}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \section{Preliminary Stuff}
+        \begin{fdefinition}{Sequentially Continuous}{Sequentially_Continuous}
+            A sequentially continuous function from a topological space
+            $(X,\tau_{X})$ to a topological space $(Y,\tau_{Y})$ is a
+            function $f:X\rightarrow{Y}$ such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that there exists an $x\in{X}$
+            such that $a_{n}\rightarrow{x}$, it is true that
+            $f(a_{n})\rightarrow{f}(x)$.
+        \end{fdefinition}
+        \begin{fdefinition}{Sequential Space}{Sequential_Space}
+            A sequential topological space is a topological space
+            $\topspace[X]{X}$ such that for every topological space
+            $\topspace[Y]{Y}$ and for every sequentially continuous function
+            $f:X\rightarrow{Y}$, it is true that $f$ is continuous.
+        \end{fdefinition}
+        Continuity implies sequential continuity, the converse need not always
+        hold. If $(X,\tau)$ is first countable, the result is true.
+        \begin{theorem}
+            If $(X,\tau)$ is a first countable topological space, if
+            $\mathcal{U}\subseteq{X}$, then $\mathcal{U}$ is open if and only if
+            for every sequence $a:\mathbb{N}\rightarrow{X}$ such that there is
+            an $x\in\mathcal{U}$ such that $a_{n}\rightarrow{x}$, then there
+            exists an $N\in\mathbb{N}$ such that for all $n>N$, it is true that
+            $a_{n}\in\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            One direction is the definition of convergence. In the other, since
+            $(X,\tau)$ is first countable, for all $x\in\mathcal{U}$ there is a
+            countable neighborhood basis $\mathcal{B}_{x}$. Let
+            $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ be a
+            bijection. Then there exists an $N\in\mathbb{N}$ such that
+            $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. For suppose not. Let
+            $B_{n}$ be defined by:
+            \begin{equation}
+                B_{n}=\bigcap_{k\in\mathbb{Z}_{n}}\mathcal{V}_{x,k}
+            \end{equation}
+            Since $B_{n}$ is the intersection of finitely many open sets, it is
+            open. Moreover it is non-empty since $x\in{B}_{n}$ for all $n$.
+            But then $B_{n}$ is an open neighborhood about $x$, and since
+            $\mathcal{B}_{x}$ is a neighborhood basis there is an element
+            $\mathcal{V}_{x,N}$ such that $\mathcal{V}_{x,N}\subseteq{B}_{n}$.
+            But by hypothesis, for any such set there is a
+            $y_{n}\in\mathcal{V}_{x,N}$ such that $y_{n}\notin\mathcal{U}$.
+            Thus, for all $n$ there is a $y_{n}\in{B}_{n}$ such that
+            $y_{n}\notin\mathcal{U}$. Then $y_{n}\rightarrow{x}$ since for any
+            open subset about $x$ there is an $N\in\mathbb{N}$ such that
+            $\mathcal{V}_{x,N}$ sits inside this open set. But for all $n>N$,
+            $y_{n}\notin\mathcal{U}$. Thus $y_{n}$ is a sequence that
+            converges to $x$, but is never contained inside $\mathcal{U}$,
+            a contradiction. Thus, for all $x\in\mathcal{U}$ there is an open
+            subset $\mathcal{V}_{x,N}$ such that $x\in\mathcal{V}_{x,N}$ and
+            $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. But then $\mathcal{U}$ is
+            simply the union over all of these open sets, and is thus open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\tau)$ is a first countable topological space, then it is
+            a sequential space.
+        \end{theorem}
+        \begin{proof}
+            For let $(Y,\tau_{Y})$ be a topological space, and let
+            $f:X\rightarrow{Y}$ be a sequentially continuous function. Let
+            $\mathcal{V}\in\tau_{Y}$ be an open subset of $Y$. If
+            $f^{\minus{1}}[\mathcal{V}]=\emptyset$, we are done. If not, let
+            $x\in{f}^{\minus{1}}[\mathcal{V}]$ and let
+            $a:\mathbb{N}\rightarrow{X}$ be a sequence such that
+            $a_{n}\rightarrow{x}$. But $f$ is sequentially continuous, and thus
+            $f(a_{n})\rightarrow{f}(x)$. But since $\mathcal{V}$ is open, there
+            is an $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+            $f(a_{n})\in\mathcal{V}$. But then for all $n>N$ it is true that
+            $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$. Thus every sequence that
+            converges to a point in $f^{\minus{1}}[\mathcal{V}]$ is eventually
+            contained in $f^{\minus{1}}[\mathcal{V}]$, and thus by the
+            previous theorem this set is open. Thus the pre-image of open is
+            open, and hence $f$ is continuous.
+        \end{proof}
+        \begin{fdefinition}{$\sigma$ Compact}{Sigma_Compact}
+            A $\sigma$ compact topological space is a topological space
+            $\topspace{X}$ such that there exists a sequence
+            $K:\mathbb{N}\rightarrow\powset{X}$ of compact subsets of $X$ such
+            that:
+            \begin{equation*}
+                X=\bigcup{K}_{n}
+            \end{equation*}
+        \end{fdefinition}
+        \begin{fdefinition}{Locally Compact Topological Space}{Locally_Compact}
+            A locally compact topological space is a topological space
+            $\topspace{X}$ such that for all $x\in{X}$ there exists a compact
+            subset $K\subseteq{X}$ and an open set $\mathcal{U}\in\tau$ such
+            that $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$.
+        \end{fdefinition}
+        \begin{fdefinition}{Lindel\"{o}f Topology Space}{Lindelof_Space}
+            A Lindel\"{o}f topological space is a topological space $(X,\tau)$
+            such that for every open cover $\mathcal{O}$ of $X$ there exists a
+            countable subcover.
+        \end{fdefinition}
+        \begin{theorem}
+            If $\topspace{X}$ is a $\sigma$ compact topological space, then it
+            is Lindel\"{o}f.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there exists an open cover $\mathcal{O}$ of
+            $X$ with no countable subcover. But $X$ is $\sigma$ compact, and
+            hence there is a sequence $K:\mathbb{N}\rightarrow\powset{X}$ of
+            compact sets such that $X=\bigcup{X}_{n}$. But the for all
+            $n\in\mathbb{N}$, $K_{n}$ is a subset of $X$, and hence
+            $\mathcal{O}$ is an open cover of $K_{n}$. But by hypothesis,
+            $K_{n}$ is compact and hence there is a finite subcover
+            $\Delta\subseteq\mathcal{O}$ of $K_{n}$. That is, if we define the
+            sequence $A_{n}:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ by:
+            \begin{equation}
+                A_{n}=\{\mathscr{D}\in\powset{\mathcal{O}}\;|\;
+                    \mathscr{D}\textrm{ is finite and }
+                    K_{n}\subseteq\bigcup\mathscr{D}\,\}
+            \end{equation}
+            Then for all $n\in\mathbb{N}$, $A_{n}$ is non-empty. Hence by the
+            axiom of choice, there is a choice function
+            $\Delta:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ such that for all
+            $n\in\mathbb{N}$, $\Delta_{n}$ is a finite open subcover of $K_{n}$.
+            But then the union of all $\Delta_{n}$ is the countable union of
+            finite collections, and is hence countable. But then this collection
+            covers $K_{n}$ for all $n\in\mathbb{N}$, and hence covers
+            $\bigcup{K}_{n}$. But $\bigcup{K}_{n}=X$, a contradiction since
+            $\mathcal{O}$ has no countable subcover. Thus, $\topspace{X}$ is
+            Lindel\"{o}f.
+        \end{proof}
+        This theorem reverses if we add locally compact. The requirement of
+        local compactness can be seen by examining the irrational numbers with
+        the subspace topology. This is Lindel\"{o}f (since it is second
+        countable), but it is not $\sigma$ compact.
+        \begin{theorem}
+            If $\topspace{X}$ is a locally compact Lindel\"{o}f space, then it
+            is $\sigma$ compact.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is locally compact, then for all $x\in{X}$
+            there is a compact set $K\subseteq{X}$ and an open set
+            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{K}$. Invoking the axiom of choice, we get a
+            function $A:X\rightarrow\tau\times\powset{X}$ such that for all
+            $x$, $A_{x}=(\mathcal{U},K)$ where $x\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{K}$, where $K$ is compact. But then the
+            collection of all such $\mathcal{U}$ is an open cover of $X$. But
+            $X$ is Lindel\"{o}f and hence there is a countable subcover. But
+            then the subcollection of all $K$ form a countable collection of
+            compact sets that cover $X$. Hence, $\topspace{X}$ is $\sigma$
+            compact.
+        \end{proof}
+        \begin{fdefinition}{Sequentially Compact}{Sequentially_Compact}
+            A sequentially compact topological space is a topological space
+            $\topspace{X}$ such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ there exists a strictly increasing
+            sequence $k:\mathbb{N}\rightarrow\mathbb{N}$ such that
+            $a\circ{k}:\mathbb{N}\rightarrow{X}$ converges.
+        \end{fdefinition}
+        \begin{theorem}
+            If $\topspace{X}$ is metrizable, and if $\mathcal{C}\subseteq{X}$,
+            then $\mathcal{C}$ is compact if and only if it is sequentially
+            compact.
+        \end{theorem}
+        This is not true in general. The long ling is sequentially compact but
+        not compact, whereas the space of all functions
+        $f:[0,1]\rightarrow[0,1]$ is compact (by Tychonoff) but not sequentially
+        compact.
+        \begin{fdefinition}{$\sigma$ locally finite basis}
+            A $\sigma$ locally finite basis of a topological space
+            $\topspace{X}$ is a basis $\mathcal{B}$ of $X$ such that
+            $\mathcal{B}$ is $\sigma$ locally finite. That is, for all $x\in{X}$
+            there is an open set $\mathcal{U}\in\tau$ such that only countably
+            many elements of $\mathcal{B}$ have non-empty intersection with
+            $\mathcal{U}$.
+        \end{fdefinition}
+        \begin{theorem}
+            \label{thm:Second_Countable_Implies_Sigma_Loc_Fin_Basis}%
+            If $\topspace{X}$ is second countable, then it is has a $\sigma$
+            locally finite.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is has a countable basis $\mathcal{B}$, and
+            thus every open subset meats $\mathcal{B}$ at mostly countably many
+            times. Hence, given $x\in{X}$, pick the whole space $X\in\tau$.
+            Then $x\in{X}$, and $X$ intersects with only countably many elements
+            of $\mathcal{B}$ (it intersects with all of them, but $\mathcal{B}$
+            is countable).
+        \end{proof}
+        \begin{ftheorem}{Nagata-Smirnov Metrization Theorem}
+                        {Nagata_Smirnov_Metrization_Theorem}
+            If $\topspace{X}$ is a topological space, then it is metrizable if
+            and only if it is regular, Hausdorff, and has a $\sigma$ locally
+            finite basis.
+        \end{ftheorem}
+        \begin{proof}
+            Munkres.
+        \end{proof}
+        \begin{ftheorem}{Smirnov Metrization Theorem}
+                        {Smirnov_Metrization_Theorem}
+            If $\topspace{X}$ is a topological space, then it is metrizable if
+            and only if it is Hausdorff, paracompact, and locally metrizable.
+        \end{ftheorem}
+        \begin{proof}
+            Also Munkres.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a topological space, if
+            $\mathcal{O}\subseteq\tau$ is a countable subset of open sets such
+            that for all $\mathcal{U}\in\mathcal{O}$,
+            $\topspace[\mathcal{U}]{\mathcal{U}}$ is second countable, where
+            $\tau_{\mathcal{U}}$ is the subspace topology, then $\topspace{X}$
+            is second countable.
+        \end{theorem}
+        \begin{proof}
+            For let $\mathcal{B}$ be the collection of all of the basis for all
+            of the $\mathcal{U}\in\mathcal{O}$. Since it is the countable union
+            of countable sets, it is countable. But since $\mathcal{U}$ is open
+            for all $\mathcal{U}\in\mathcal{O}$, this is a countable open cover
+            of $X$. It suffices to show that it is a basis. Let
+            $\mathcal{V}\in\tau$ be an open subset. But then:
+            \begin{align}
+                \mathcal{V}&=\mathcal{V}\cap{X}\\
+                &=\mathcal{V}\cap\Big(
+                    \bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
+                \Big)\\
+                &=\bigcup_{\mathcal{U}\in\mathcal{O}}
+                    \big(\mathcal{V}\cap\mathcal{U}\big)
+            \end{align}
+            But $\mathcal{V}\cap\mathcal{U}$ is an open subset of the subspace
+            $\topspace[\mathcal{U}]{\mathcal{U}}$, and hence there is a subset
+            of $\Delta_{\mathcal{V}}\subseteq\mathcal{B}_{\mathcal{U}}$ such
+            that $\mathcal{V}\cap\mathcal{U}=\bigcup\Delta_{\mathcal{V}}$. But
+            then the entire of $\mathcal{V}$ is the union of all such
+            collections, each of which is contained in $\mathcal{B}$, and hence
+            $\mathcal{V}$ can be written as the union of elements of
+            $\mathcal{B}$. Thus, $\mathcal{B}$ is a basis.
+        \end{proof}
+        The requirement that the covering collection be open subspaces is
+        crucial. The quotient space $\mathbb{R}/R$, where $R$ is the equivalence
+        relation generated by $nRm$ for all $n,m\in\mathbb{N}$, can be thought
+        of as a countable collection of rings all glued together at the origin.
+        Hence, it can be covered by countably many closed subspaces, each of
+        which is homeomorphic to $\nsphere[1]$ in the subspace topology, and
+        hence each of which is second countable. However, this space
+        $\mathbb{R}/R$ is not even first countable, let alone second countable.
+        The point $[0]\in\mathbb{R}/R$ has no countable neighborhood basis.
+    \section{Problems}
+        \begin{problem}
+            Show that if $\topspace{X}$ is a locally Euclidean connected
+            Hausdorff space, then it is a manifold if and only if it is
+            paracompact.
+        \end{problem}
+        \begin{solution}
+            If $\topspace{X}$ is a topological manifold, then it is locally
+            Euclidean, Hausdorff, and second countable. But if $X$ is locally
+            Euclidean, then it is locally metrizable. But then $\topspace{X}$ is
+            a locally metrizable Hausdorff space that is second countable,
+            and second countable spaces have a $\sigma$ locally finite basis
+            (Thm.~\ref{thm:Second_Countable_Implies_Sigma_Loc_Fin_Basis}).
+            But then $X$ is metrizable by the Nagata-Smirnov theorem
+            (Thm.~\ref{thm:Nagata_Smirnov_Metrization_Theorem}). But if
+            $X$ is metrizable, then it is paracompact by the
+            Smirnov theorem (Thm.~\ref{thm:Smirnov_Metrization_Theorem}). Hence,
+            $\topspace{X}$ is paracompact. Going the other way, if $X$ is
+            locally Euclidean, Hausdorff, paracompact, and connected, to show
+            that it is a manifold suffices to show that it is second countable.
+            But if $X$ is locally Euclidean, then there is a basis of
+            precompact open subsets $\mathcal{B}$. But $X$ is paracompact, and
+            hence there is a locally finite refinement $\Delta$ of
+            $\mathcal{B}$. Let $\mathcal{U}_{0}$ be an element of $\Delta$.
+            Since $\Delta$ is a refinement of $\mathcal{B}$, then is an element
+            $\mathcal{V}\in\mathcal{B}$ such that
+            $\mathcal{U}_{0}\subseteq\mathcal{V}$. But then
+            $\closure{\mathcal{U}_{0}}\subseteq\closure{\mathcal{V}}$, and
+            and $\mathcal{V}$ is precompact, and thus $\closure{\mathcal{V}}$
+            is compact. But then $\closure{\mathcal{U}_{0}}$ is a closed subset
+            of a compact set, and is hence compact. For all $n\in\mathbb{N}$,
+            let $\mathcal{U}_{n}$ be defined as follows:
+            \begin{equation}
+                \mathcal{U}_{n}=\Big\{\,x\in{X}\;|\;
+                    \exists_{A:\mathbb{Z}_{n}\rightarrow\Delta}\big(
+                        \mathcal{U}_{0}=A_{0},\,x\in{A}_{n-1}\textrm{ and }
+                        \forall_{i<n-1}(A_{i}\cap{A}_{i+1}\ne\emptyset)
+                    \big)\,\Big\}
+            \end{equation}
+            That is, the set of all points that are separated from
+            $\mathcal{U}_{0}$ by at most $n$ consecutive elements of $\Delta$.
+            Then $\mathcal{U}_{n}$ is precompact. We prove by induction. The
+            base case of $\mathcal{U}_{0}$ is true from the previous paragraph.
+            Suppose it is true for $n\in\mathbb{N}$. Since $X$ is locally
+            metrizable, Hausdorff, and paracompact, it is metrizable
+            (Thm.~\ref{thm:Smirnov_Metrization_Theorem}). But then if
+            $\mathcal{C}\subseteq{X}$, then $\mathcal{C}$ is compact if and only
+            if it is sequentially compact. But if $\mathcal{U}_{n+1}$ is not
+            precompact, then there is an open cover such that
+            $\closure{\mathcal{U}_{n+1}}$ has not finite subcover. But
+            $\mathcal{U}_{n+1}$ is the union of $\closure{\mathcal{U}_{n}}$ and
+            elements of $\mathcal{V}\in\Delta$ such that
+            $\mathcal{V}\cap\mathcal{U}_{n}\ne\emptyset$. Since
+            $\closure{\mathcal{U}_{n}}$ is not compact, there must be infinitely
+            many such $\mathcal{V}$. But $\mathcal{V}\cap\mathcal{U}_{n}$ is non
+            empty for all such $\mathcal{V}$, and hence by the axiom of choice
+            there is a sequence $a:\mathbb{N}\rightarrow\mathcal{U}_{n}$ such
+            that $a_{n}$ lies in a distinct $\mathcal{V}$ for all
+            $n\in\mathbb{N}$. But $\closure{\mathcal{U}_{n}}$ is compact, and
+            hence sequentially compact, and thus there is a convergent
+            subsequence $a_{k}:\mathbb{N}\rightarrow\closure{\mathcal{U}_{n}}$
+            with a limit $x$. But $x\in\closure{\mathcal{U}_{n}}$ and hence
+            there is an open set $\mathcal{V}\in\tau$ that fits inside finitely
+            many of the elements of $\Delta$, since $\Delta$ is a locally finite
+            refinement. But then $a_{k_{n}}$ is eventually contained in
+            $\mathcal{V}$, contradicting that each $a_{k_{n}}$ is in a different
+            element of $\Delta$. Hence, $\mathcal{U}_{n+1}$ is covered by
+            finitely many elements of $\Delta$ and is therefore precompact.
+            Moreover, $\bigcup\closure{\mathcal{U}_{n}}=X$. For if
+            $y\in{X}$, let $x\in\mathcal{U}_{0}$ be any point. Then since
+            $X$ is locally path connected and connected, it is path connected.
+            Let $\gamma:[0,1]\rightarrow{X}$ be a path from $x$ to $y$. But
+            $[0,1]$ is compact and hence $\gamma\big[[0,1]\big]$ is a compact
+            subset of $X$. But then it is covered by only finitely many elements
+            of $\Delta$, and hence $y$ is contained in one of the
+            $\mathcal{U}_{n}$. BUt this shows that $X$ is $\sigma$ compact. But
+            if $X$ is $\sigma$ compact, then it is Lindel\"{o}f. But the
+            collection of all precompact coordinate balls about every point
+            forms a cover, and hence there is a countable subcover. But then
+            $X$ is the union of countably many open subspaces, each of which
+            is second countable, and hence $X$ is second countable. Therefore,
+            $X$ is a manifold.
+        \end{solution}
+\end{document}
