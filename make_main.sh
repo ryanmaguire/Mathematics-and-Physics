@@ -30,11 +30,12 @@ rm -f main.acr
 rm -f main.alg
 rm -f main.gls
 rm -f main.ilg
-rm -r main.blg
-rm -r main.bbl
-rm -r main.fdb_latexmk
-rm -r main.fls
-
+rm -f main.blg
+rm -f main.bbl
+rm -f main.fdb_latexmk
+rm -f main.fls
+rm -f main.ind
+rm -f main.idx
 
 # Change the name of the output pdf file.
 mv main.pdf Mathematics_and_Physics.pdf
