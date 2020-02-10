@@ -2,25 +2,25 @@
 \section{Definitions}
     The first thing to do is to define a module\index{Module} over a given ring.
     \begin{fdefinition}{Modules}{Module}
-        A \gls{module}\index{Module} on a \gls{ring} $(R,\,+,\,\cdot\,)$ is an
-        \gls{Abelian group} $(M,\boldsymbol{+})$ with a \gls{function}
+        A \gls{module}\index{Module} on a \gls{ring} $\ring[R]{R}$ is an
+        \gls{Abelian group} $\monoid[][+]{M}$ with a \gls{function}
         $\star:R\times{M}\rightarrow{M}$ such that for all $r_{1},r_{2}\in{R}$
         and for all $m_{1},m_{2}\in{M}$, the following are true:
         \begin{align}
-            r_{1}\star(m_{1}\boldsymbol{+}m_{2})
-                &=(r_{1}\star{m}_{1})\boldsymbol{+}(r_{1}\star{m}_{2})
+            r_{1}\star(m_{1}+m_{2})
+                &=(r_{1}\star{m}_{1})+(r_{1}\star{m}_{2})
                 \tag{Scalar Distributivity}\\
-            (r_{1}+r_{2})\star{m}_{1}
-                &=(r_{1}\star{m}_{1})\boldsymbol{+}(r_{2}\star{m}_{1})
+            (r_{1}+_{R}r_{2})\star{m}_{1}
+                &=(r_{1}\star{m}_{1})+_{M}(r_{2}\star{m}_{1})
                 \tag{Module Distributivity}\\
             r_{1}\star(r_{2}\star{m}_{1})
-                &=(r_{1}\cdot{r}_{2})\star{m}_{1}
+                &=(r_{1}\cdot_{R}r_{2})\star{m}_{1}
                 \tag{Associativity}\\
             1\star{m}_{1}&=m_{1}
             \tag{Identity}
         \end{align}
         Where 1 is the unital element of $R$. We denote a module by
-        $(M,\,\boldsymbol{+},\,\star)$.
+        $\module{M}$.
     \end{fdefinition}
     Note that, while we've called these properties \textit{associative} and
     \textit{distributive}, we are not using these words as defined in
@@ -36,77 +36,89 @@
     Thus, we use reuse the terms associativity and distributivity and hope that
     no confusion arises from this.
     \begin{example}
-        If $(R,\,+,\,\cdot\,)$ is a \textit{field}\index{Field}, and if
-        $(M,\,\boldsymbol{+},\,\star)$ is a module over this field, then it will
+        If $\ring[R]{R}$ is a \textit{field}\index{Field}, and if
+        $\module{M}$ is a module over this field, then it will
         also be a \textit{vector space}\index{Vector Space}. That is, modules
         are the ring-analog of vector spaces. Vectors spaces will be discussed
         in detail later.
     \end{example}
     \begin{example}
-        If $(R,+,\cdot\,)$ is a ring, then it can be thought of as a module over
-        itself. That is, define $(R,\boldsymbol{+},\star)$ as follows:
-        \par\hfill\par
-        \begin{subequations}
-            \begin{minipage}[b]{0.49\textwidth}
-                \begin{equation}
-                    r_{1}\boldsymbol{+}r_{2}=r_{1}+r_{2}
-                \end{equation}
-            \end{minipage}
-            \hfill
-            \begin{minipage}[b]{0.49\textwidth}
-                \begin{equation}
-                    r_{1}\star{r}_{2}=r_{1}\cdot{r}_{2}
-                \end{equation}
-            \end{minipage}
-        \end{subequations}
-        \par\vspace{2.5ex}
+        \label{ex:Ring_is_Module_over_Self}%
+        If $\ring{R}$ is a ring, then it can be thought of as a module over
+        itself. That is, define $\module{R}$ trivially as follows:
+        \twocolumneq{r_{1}\boldsymbol{+}r_{2}=r_{1}+r_{2}}
+                    {r_{1}\star{r}_{2}=r_{1}\cdot{r}_{2}}
         From this we have that $R$ is a module over itself. This follows since
-        by the definition of a \gls{ring}, $(R,+)$ is an Abelian group and
-        $(R,\cdot)$ is a \gls{monoid} such that $\cdot$ is a distributive
-        operation over $+$ (Here we are using the word distributive correctly.
-        That is, as defined by Def.~\ref{def:Distributive_Operation}). Hence we
-        obtain scalar and module distributivity, as well as associativity
+        by the definition of a \gls{ring}, $\monoid[][+]{R}$ is an Abelian group
+        and $\monoid[][\cdot]{R}$ is a \gls{monoid} such that $\cdot$ is a
+        distributive operation over $+$ (Here we are using the word distributive
+        correctly. That is, as defined by
+        Def.~\ref{def:Distributive_Operation}). Hence we obtain scalar and
+        module distributivity, as well as associativity
         (monoids are associative). The identity property is simply a restatement
-        of the fact that 1 is a unital element of the monoid $(R,\cdot)$.
+        of the fact that 1 is a unital element of the monoid
+        $\monoid[][\cdot]{R}$.
     \end{example}
+    For the sake of using Ex.~\ref{ex:Ring_is_Module_over_Self} in later
+    theorems, we take the time to prove it.
+    \begin{theorem}
+        \label{thm:Ring_is_Module_over_itself}%
+        If $\ring{R}$ is a ring, then $\ring{R}$ is a module over $R$.
+    \end{theorem}
+    \begin{proof}
+        For if $\ring{R}$ is a ring, then $\monoid[][+]{R}$ is an Abelian group
+        and $\monoid[][\cdot]{R}$ is a monoid such that $\cdot$ distributed over
+        $+$ (Def.~\ref{def:Ring}). But then $\cdot$ is an associative binary
+        operation (Def.~\ref{def:Monoid}), and hence for all $r_{1},r_{2}\in{R}$
+        and for all $m_{1},m_{2}\in{R}$, we have:
+        \begin{align}
+            r_{1}\cdot(m_{1}+m_{2})&=r_{1}\cdot{m}_{1}+r_{1}\cdot{m}_{2}
+                \tag{Associativity}\\
+            (r_{1}+r_{2})\cdot{m}_{1}&=r_{1}\cdot{m}_{1}+r_{2}\cdot{m}_{1}
+                \tag{Distributivity}\\
+            r_{1}\cdot(r_{2}\cdot{m}_{1})&=(r_{1}\cdot{r}_{2})\cdot{m}_{1}
+                \tag{Associativity}\\
+            1\cdot{m}_{1}&=m_{1}
+                \tag{Identity}
+        \end{align}
+        Thus, $\ring{R}$ is a module over $\ring{R}$ (Def.~\ref{def:Module}).
+    \end{proof}
     \begin{example}
         Another example arises from the polynmial ring $R[x]$ over a commutative
-        ring $(R,+,\cdot\,)$. Define $\star:R\times{R}[x]\rightarrow{R}[x]$ by:
+        ring $\ring[R]{R}$. Define $\star:R\times{R}[x]\rightarrow{R}[x]$ by:
         \begin{equation}
-            r\star{m}(x)
-            =r\star\Big(\sum_{k=1}^{n}a_{k}x^{k}\Big)
-            =\sum_{k=1}^{n}(r\cdot{a}_{k})x^{k}
+            r\star{m}(x)=r\star\Big(\sum_{k=1}^{n}a_{k}x^{k}\Big)
+                        =\sum_{k=1}^{n}(r\cdot_{R}{a}_{k})x^{k}
         \end{equation}
-        where $\cdot$ is ring multiplication and the $a_{k}$ are elements of
+        where $\cdot_{R}$ is ring multiplication and the $a_{k}$ are elements of
         $R$. Stated another way, given a finitely supported sequence
         $a:\mathbb{N}\rightarrow{R}$, we define
         $r\star{a}:\mathbb{N}\rightarrow{R}$ by:
         \begin{equation}
-            (r\star{a})_{n}=r\cdot{a}_{n}
+            (r\star{a})_{n}=r\cdot_{R}a_{n}
             \quad\quad
             n\in\mathbb{N}
         \end{equation}
         Module addition is then just sequence addition. Given two finitely
         supported sequences $a,b:\mathbb{N}\rightarrow{R}$, we define
-        $(a\boldsymbol{+}b):\mathbb{N}\rightarrow{R}$ by:
+        $(a+b):\mathbb{N}\rightarrow{R}$ by:
         \begin{equation}
-            (a\boldsymbol{+}b)_{n}=a_{n}+b_{n}
+            (a+b)_{n}=a_{n}+_{R}b_{n}
         \end{equation}
-        Since $a$ and $b$ are finitely supported there is are $N_{1},N_{2}$
+        Since $a$ and $b$ are finitely supported there exists $N_{1},N_{2}$
         such that for all $n\in\mathbb{N}$ with $n>N_{1}$ it is true that
         $a_{n}=0$, and similarly for all $n>N_{2}$ it is true that $b_{n}=0$.
-        Thus, for all $n\in\mathbb{N}$ such that $n>\textrm{max}\{N_{1},N_{2}\}$
-        we have that $a_{n}+b_{n}=0+0=0$, and thus $a\boldsymbol{+}b$ is
-        finitely supported. Hence $\boldsymbol{+}$ is a well defined binary
-        operation, and since $(R,+,\cdot)$ is a commutative ring, $+$ is a
-        commutative operation, which in turn implies that $\boldsymbol{+}$ is a
-        commutative operation, and thus $(R[x],\boldsymbol{+})$ an Abelian
-        group. Then $(R[x],\boldsymbol{+},\star)$ is a module over
-        $(R,+,\cdot\,)$. We can also think about modules on $R[x]$ itself, since
-        $R[x]$ is a ring. If we consider the case where $R$ is itself a field,
-        then any module over $R[x]$ will be equivalent to a vector space over
-        $R$ that is equipped with a \textit{linear transformation} from the
-        vector space to itself.
+        Thus, for all $n\in\mathbb{N}$ such that $n>\maximum{N_{1},N_{2}}$
+        we have that $a_{n}+_{R}b_{n}=0+0=0$, hence $a+b$ is finitely supported.
+        Hence $+$ is a well defined binary operation on $R[x]$, and since
+        $\ring{R}$ is a commutative ring, $+_{R}$ is a commutative operation,
+        which in turn implies that $+$ is a commutative operation, and thus
+        $\monoid[][+]{R[x]}$ an Abelian group. Then $\module[]{R}$ is a module
+        over $\ring[R]{R}$. We can also think about modules on $R[x]$ itself,
+        since $R[x]$ is a ring. If we consider the case where $R$ is itself a
+        field, then any module over $R[x]$ will be equivalent to a vector space
+        over $R$ that is equipped with a \textit{linear transformation} from
+        the vector space to itself.
     \end{example}
     \begin{fexample}{Abelian Groups as $\mathbb{Z}$ modules}
                     {Abelian_Groups_as_Z_Modules}
