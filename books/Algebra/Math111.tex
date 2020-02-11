@@ -12,7 +12,129 @@
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
-    \section{A Bit More Algebra (Review)}
+    \section{Rings}
+        Definition of ring, commutative ring, subring, and ideal are assumed.
+        \begin{fdefinition}{Prime Ideal}{Prime_Ideal}
+            A prime ideal of a commutative ring $\ring{R}$ is an ideal
+            $I\subsetneq{R}$ such that for all $a,b\in{R}$ such that
+            $a\cdot{b}\in{I}$, it is true that either $a\in{I}$ or $b\in{I}$.
+        \end{fdefinition}
+        This is a generalization of a theorem due to Euclid which states that if
+        $a,b\in\mathbb{Z}$ are integers, and if $p\in\mathbb{N}$ is a prime such
+        that $p$ divides $a\cdot{b}$, then either $p$ divides $a$ or $p$ divides
+        $b$. We can use this to prove the following theorem.
+        \begin{theorem}
+            \label{thm:Prime_Ideals_of_Z}%
+            If $\ring{\mathbb{Z}}$ is the usual ring structure on $\mathbb{Z}$,
+            and if $p\in\mathbb{Z}$, then $p\mathbb{Z}$ is a prime ideal of
+            $\mathbb{Z}$ if and only if $p$ is prime.
+        \end{theorem}
+        \begin{proof}
+            For if $p\in\mathbb{N}$ is prime, and if $a,b\in\mathbb{Z}$ are such
+            that $a\cdot{b}\in{p}\mathbb{Z}$, then there is an $m\in\mathbb{Z}$
+            such that $a\cdot{b}=m\cdot{p}$. But then $p$ divides $a\cdot{b}$,
+            and thus either $p$ divides $a$ or $p$ divides $b$. But if $p$
+            divides $a$, then $a\in{p}\mathbb{Z}$, and similarly if $p$ divides
+            $b$. Hence, $p\mathbb{Z}$ is a prime ideal. In the other direction,
+            if $p\mathbb{Z}$ is a prime ideal, suppose $p$ is not prime. Then
+            there are integers $a,b\in\mathbb{Z}$, neither of which are units,
+            such that $p=a\cdot{b}$. But by hypothesis $p\mathbb{Z}$ is a prime
+            ideal, and hence if $a\cdot{b}\in{p}\mathbb{Z}$, then either
+            $a\in{p}\mathbb{Z}$ or $b\in{p}\mathbb{Z}$. But if
+            $a\in{p}\mathbb{Z}$, then there is an $m\in\mathbb{Z}$ such that
+            $a=m\cdot{p}$. But $a\cdot{b}=p$, and hence $m\cdot{p}\cdot{b}=p$.
+            But then $m\cdot{b}=1$, and thus $b$ is a unit, which is a
+            contradition. Hence, $p$ is prime.
+        \end{proof}
+        We can use this to generate examples of prime ideals.
+        \begin{example}
+            The even integers $\mathbb{Z}_{e}$ form a prime ideal of
+            $\mathbb{Z}$. This can be seen immediately once one notes that
+            $\mathbb{Z}_{e}=2\mathbb{Z}$, and since $2$ is a prime number,
+            by Thm.~\ref{thm:Prime_Ideals_of_Z} we see that $2\mathbb{Z}$ is a
+            prime ideal.
+        \end{example}
+        A useful equivalent definition of prime ideals goes as follows:
+        \begin{theorem}
+            If $\ring{R}$ is a ring, and if $I\subsetneq{R}$ is an ideal, then
+            it is a prime ideal if and only if for all $a,b\in{R}\setminus\{I\}$
+            it is true that $a\cdot{b}\in{R}\setminus\{I\}$.
+        \end{theorem}
+        \begin{proof}
+            For if $I$ is a prime ideal, then for all $a,b\in{R}$ such that
+            $a\cdot{b}\in{I}$, it is true that either $a\in{I}$ or $b\in{I}$.
+            Suppose there exists $a,b\in{R}\setminus\{I\}$ such that
+            $a\cdot{b}\notin{R}\setminus\{I\}$. But since $\cdot$ is a binary
+            operation it is true that $a\cdot{b}\in{R}$, and hence if
+            $a\cdot{b}\notin{R}\setminus{I}$, then $a\cdot{b}\in{I}$. But $I$ is
+            a prime ideal, and thus if $a\cdot{b}\in{I}$ then either $a\in{I}$
+            or $b\in{I}$, a contradiction since by hypothesis $a,b\notin{I}$.
+            Therefore, $a\cdot{b}\in{R}\setminus\{I\}$. In the other direction,
+            if $R\setminus\{I\}$ is multiplicatively closed, suppose $a,b\in{R}$
+            are such that $a\cdot{b}\in{I}$. But $R\setminus\{I\}$ is
+            multiplicatively closed, and thus if $a,b\in{R}\setminus\{I\}$, then
+            $a\cdot{b}\in{R}\setminus\{I\}$, a contradiction, and thus either
+            $a\in{I}$ or $b\in{I}$. Thus, $I$ is a prime ideal.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:homo_pre_image_of_ideal_is_ideal}%
+            If $\ring[R]{R}$ and $\ring[S]{S}$ are rings, if
+            $\phi:R\rightarrow{S}$ is a ring homomoprhism, and if
+            $I\subseteq{S}$ is an ideal in $S$, then $\phi^{\minus{1}}[I]$ is an
+            ideal in $R$.
+        \end{theorem}
+        \begin{proof}
+            Since $I$ is an ideal, $0_{S}\in{I}$, and since $\phi$ is a ring
+            homomoprhism it is true that $\phi(0_{R})=0_{S}$. Hence,
+            $\phi^{\minus{1}}[I]$ is non-empty. But if
+            $a,b\in\phi^{\minus{1}}[I]$, then $\phi(a),\phi(b)\in{I}$. But
+            $\phi$ is a ring homomoprhism and hence
+            $\phi(a+_{R}b)=\phi(a)+_{S}\phi(b)$, and since $I$ is an ideal it is
+            true that $\phi(a)+_{S}\phi(b)\in{I}$. Therefore
+            $\phi(a+_{R}b)\in{I}$, and thus $a+_{R}b\in\phi^{\minus{1}}[I]$.
+            Hence $\phi^{\minus{1}}[I]$ is closed to addition. But if $r\in{R}$
+            and $a\in\phi^{\minus{1}}[I]$, then since $\phi$ is a ring
+            homomoprhism it is true that
+            $\phi(r\cdot_{R}a)=\phi(r)\cdot_{S}\phi(a)$. But since
+            $a\in\phi^{\minus{1}}[I]$ it is true that $\phi(a)\in{I}$, and since
+            $I$ is an ideal in $S$ it is therefore true that
+            $\phi(r)\cdot_{S}\phi(a)\in{I}$. Thus, $\phi(r\cdot_{R}a)\in{I}$,
+            and hence $r\cdot_{R}a\in\phi^{\minus{1}}[I]$. Therefore,
+            $\phi^{\minus{1}}[I]$ is an ideal in $R$.
+        \end{proof}
+        \begin{theorem}
+            If $\ring[R]{R}$ and $\ring[S]{S}$ are commutative rings, if
+            $I\subsetneq{S}$ is a prime ideal, and if $\phi:R\rightarrow{S}$ is
+            a ring homomoprhism, then $\phi^{\minus{1}}[I]$ is a prime ideal in
+            $R$.
+        \end{theorem}
+        \begin{proof}
+            For if $I$ is an ideal in $S$ and $\phi:R\rightarrow{S}$ is a ring
+            homomorphism, then $\phi^{\minus{1}}[I]$ is an ideal in $R$
+            (Thm.~\ref{thm:homo_pre_image_of_ideal_is_ideal}). Suppose
+            $a,b\in{R}$ are such that $a\cdot_{R}b\in\phi^{\minus{1}}[I]$.
+            But then $\phi(a\cdot_{R}b)\in{I}$, and since $\phi$ is a ring
+            homomoprhism it is therefore true that
+            $\phi(a\cdot_{R}b)=\phi(a)\cdot_{S}\phi(b)$. But $I$ is a prime
+            ideal, and if $\phi(a)\cdot_{S}\phi(b)\in{I}$, then either
+            $\phi(a)\in{I}$ or $\phi(b)\in{I}$. But then either
+            $a\in\phi^{\minus{1}}[I]$ or $b\in\phi^{\minus{1}}[I]$, and hence
+            $\phi^{\minus{1}}[I]$ is a prime ideal.
+        \end{proof}
+        Given a ring $\ring{R}$, the existence of prime ideals follows directly
+        from the existence of \textit{maximal} ideals. We first must define such
+        things, and then prove that every maximal ideal is prime.
+        \begin{fdefinition}{Maximal Ideal}{Maximal_Ideal}
+            A maximal ideal in a ring $\ring{R}$ is an ideal $I\subsetneq{R}$
+            such that for every ideal $J\subsetneq{R}$ such that
+            $I\subseteq{J}$, it is true that $I=J$.
+        \end{fdefinition}
+        \begin{fdefinition}{Integral Domain}{Integral Domain}
+            An integral domain is a commutative ring $\ring{R}$ such that for
+            every $a,b\in{R}\setminus\{0\}$ it is true that $a\cdot{b}\ne{0}$.
+        \end{fdefinition}
+        That is, an integral domain is a commutative ring that contains no zero
+        divisors.
         \begin{definition}
             A unique factorization domain (UFD) $R$ is an integral domain
             (no zero divisors) such that for every element $r\in{R}$ with
