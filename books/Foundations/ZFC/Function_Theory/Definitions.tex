@@ -1,6 +1,42 @@
 \section{Basic Definitions and Theorems}
     We start by presenting some basic, but crucial, facts about the image and
     pre-images of subsets under a function.
+    \begin{fdefinition}{Identity Function}{Identity_Function}
+        The identity function on a set $A$ is the subset
+        $\identity{A}\subseteq{A}\times{A}$ defined by:
+        \begin{equation*}
+            \identity{A}=\{\,\vector{x}\in{A}\times{A}\;|\;
+                \exists_{x\in{A}}\big(\vector{x}=(x,\,x)\big)\,\}
+        \end{equation*}
+    \end{fdefinition}
+    It would be poor to prove by definition, and thus we show that the identity
+    function is indeed a function.
+    \begin{theorem}
+        \label{thm:Identity_Function_is_a_Function}%
+        If $A$ is a set, and if $\identity{A}$ is the idenitity function on
+        $A$, this $\identity{A}$ is a function from $A$ to $A$.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. But if $x\in{A}$, then $(x,x)\in{A}\times{A}$
+        (Def.~\ref{def:Cartesian_Product_of_Two_Sets}), and hence
+        $(x,x)\in\identity{A}$ (Def.~\ref{def:Identity_Function}). Thus, for all
+        $x\in{A}$ there is a $y\in{A}$ such that $(x,y)\in\identity{A}$. Thus,
+        if $\identity{A}$ is not a function, then there is an $x\in{A}$
+        such that there are at least two distinct $y_{1},y_{2}\in{A}$ such that
+        $(x,y_{1})\in\identity{A}$ and $(x,y_{2})\in\identity{A}$
+        (Def.~\ref{def:Function}). But by the definition of the identity
+        function, $(x,y_{1})\in\identity{A}$ if and only if there is a $z\in{A}$
+        such that $(x,y_{1})=(z,z)$ (Def.~\ref{def:Identity_Function}). But then
+        $x=z$ and $y_{1}=z$, and similarly $y_{2}=z$, and thus by the
+        transitivity of equality (Thm.~\ref{thm:Transitivity_of_Equality}),
+        $y_{1}=y_{2}$, a contradiction since $y_{1}$ and $y_{2}$ are distinct.
+        Thus, $\identity{A}$ is a function.
+    \end{proof}
+    We can write the identity in a nicer way by defining the image of an element
+    $x\in{A}$.
+    \begin{equation}
+        \identity{A}(x)=x
+    \end{equation}
     \begin{theorem}
         \label{thm:Image_of_Empty_Set_Is_Empty}%
         If $A$ and $B$ are sets, if $f:A\rightarrow{B}$ is a function,
@@ -798,3 +834,143 @@
             (Thm.~\ref{thm:Transitivity_of_Equality}),
             $(h\circ(g\circ{f}))(x)=((g\circ{g})\circ{f}))(x)$, a contradiction.
         \end{bproof}
+        One of the most important aspects of functions is the notion of
+        \textit{inverses}.
+        \begin{fdefinition}{Right Invertible Function}{Right_Inv_Func}
+            A right invertible function from a set $A$ to a set $B$ is function
+            $f:A\rightarrow{B}$ such that there exists a function
+            $g:B\rightarrow{A}$ such that $f\circ{g}=\identity{B}$.
+        \end{fdefinition}
+        \begin{example}
+            If we consider $f:\mathbb{R}^{+}\rightarrow\mathbb{R}^{+}$, where
+            $\mathbb{R}^{+}$ is the set of positive real numbers, given by
+            $f(x)=x^{2}$, then $g:\mathbb{R}^{+}\rightarrow\mathbb{R}^{+}$
+            defined by $g(x)=\sqrt{x}$ is a right inverse since
+            $(f\circ{g})(x)=(\sqrt{x})^{2}=x$, and thus
+            $f\circ{g}=\identity{\mathbb{R}^{+}}$.
+        \end{example}
+        \begin{example}
+            If we let $f:\mathbb{Z}\rightarrow\mathbb{Z}$ be defined by
+            $f(n)=n+1$, then $g:\mathbb{Z}\rightarrow\mathbb{Z}$ defined by
+            $g(n)=n-1$ is a right inverse since
+            $(f\circ{g})(n)=f(n-1)=(n-1)+1=n$, and hence
+            $f\circ{g}=\identity{\mathbb{Z}}$.
+        \end{example}
+        A common feature of both of these examples is that the function $f$ is
+        surjective. This is both a necessary and sufficient condition for a
+        function to have a right inverse.
+        \begin{theorem}
+            \label{thm:Right_Inv_iff_Surj}%
+            If $A$ and $B$ are sets, and if $f:A\rightarrow{B}$ is a function,
+            then there exists a right inverse $g:B\rightarrow{A}$ if and only
+            if $f$ is surjective.
+        \end{theorem}
+        \begin{proof}
+            For suppose $f$ is surjective, and let
+            $G:B\rightarrow\powset{A}$ be defined by:
+            \begin{equation}
+                G(y)=f^{\minus{1}}[\{y\}]
+            \end{equation}
+            and let $\mathcal{O}=G[B]$. Then $\emptyset\notin\mathcal{O}$. For
+            suppose not. But $\emptyset\in\mathcal{O}$ if and only if there is a
+            $y\in{B}$ such that $f^{\minus{1}}[\{y\}]=\emptyset$. But $f$ is
+            surjective, and thus if $y\in{B}$ then there is an $x\in{A}$ such
+            that $f(x)=y$ (Def.~\ref{def:Surjective_Function}). But if $f(x)=y$,
+            then $x\in{f}^{\minus{1}}[\{y\}]$ (Def.~\ref{def:Fiber_of_Element}),
+            a contradiction since for all $x$ it is true that $x\notin\emptyset$
+            (Def.~\ref{def:Empty_Set}). Hence, $\emptyset\notin\mathcal{O}$.
+            But then $\mathcal{O}$ is a collection of non-empty sets, and hence
+            by the axiom of choice there is a function
+            $F:\mathcal{O}\rightarrow\bigcup\mathcal{O}$ such that for all
+            $\mathcal{U}\in\mathcal{O}$ it is true that
+            $F(\mathcal{U})\in\mathcal{U}$ (Ax.~\ref{ax:Axiom_of_Choice}). But
+            $f$ is a function, and hence for all $x\in{A}$ there is a $y\in{B}$
+            such that $f(x)=y$ (Def.~\ref{def:Function}). But then for all
+            $x\in{A}$, there is a $\mathcal{U}\in\mathcal{O}$ such that
+            $x\in\mathcal{U}$, and hence $x\in\bigcup\mathcal{O}$
+            (Def.~\ref{def:Union_over_a_Set}). But then
+            $X\subseteq\bigcup\mathcal{O}$ (Def.~\ref{def:Subsets}), and hence
+            $X=\bigcup\mathcal{O}$. Thus, $F$ is a function from $\mathcal{O}$
+            to $X$. Let $g:B\rightarrow{A}$ be defined by $F\circ{G}$. But then
+            for all $y\in{B}$, $g(x)=(F\circ{G})(y)=F(G(y))$, and thus by the
+            definition of $F$ and $G$, $g(y)\in{f}^{\minus{1}}[\{y\}]$. But then
+            $f(g(x))\in\{y\}$ (Def.~\ref{def:Fiber_of_Element}), and therefore
+            $(f\circ{g})(y)=y$, and therefore $f\circ{g}$ is the identity
+            function. Therefore, $f$ is right invertible
+            (Def.~\ref{def:Right_Inv_Func}). In the other direction, if $f$ is
+            right invertible, then there is a function $g:B\rightarrow{A}$ such
+            that $f\circ{g}=\identity{B}$ (Def.~\ref{def:Right_Inv_Func}).
+            Suppose $f$ is not surjective. Then there is a $y\in{B}$ such that
+            for all $x\in{A}$ it is true that $f(x)\ne{y}$
+            (Def.~\ref{def:Surjective_Function}). But $f\circ{g}=\identity{B}$,
+            and thus $(f\circ{g})(y)=y$ (Def.~\ref{def:Identity_Function}). But
+            then $g(y)\in{A}$ is such that $f(g(y))=y$, a contradiction.
+            Therefore, $f$ is surjective.
+        \end{proof}
+        \begin{fdefinition}{Left Invertible Function}{Left_Inv_Func}
+            A left invertible function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that there exists a function
+            $g:B\rightarrow{A}$ such that $g\circ{f}=\identity{A}$.
+        \end{fdefinition}
+        \begin{theorem}
+            \label{thm:Left_Inv_iff_Inj}%
+            If $A$ and $B$ are non-empty sets, and if $f:A\rightarrow{B}$ is a
+            function, then $f$ is left invertible if and only if $f$ is
+            injective.
+        \end{theorem}
+        \begin{proof}
+            For suppose $f$ is injective. Since $A$ is non-empty, there is an
+            element $a\in{A}$ (Def.~\ref{def:Non_Empty_Set}). Let
+            $g\subseteq{B}\times{A}$ be defined by:
+            \begin{equation}
+                g=\{\,(y,x)\in{B}\times{A}\;|\;\exists_{x\in{A}}
+                    \big(y=f(x)\big)\textrm{ or }
+                    \big(y\notin{f}[A]\textrm{ and }x=a\big)\,\}
+            \end{equation}
+            Then $g$ is a function from $B$ to $A$. for if $y\in{B}$, by the law
+            of the excluded middle either $y\in{f}[A]$ or $y\notin{f}[A]$. But
+            if $y\in{f}[A]$, then there is an $x\in{A}$ such that $y=f(x)$
+            (Def.~\ref{def:Image_of_Subset}). But then $(y,x)\in{g}$.
+            If $y\notin{f}$, then $(y,a)\in{g}$. Thus, if $g$ is not a function,
+            then there is a $y\in{B}$ such that there are two distinct elements
+            $x_{1},x_{2}\in{A}$ such that $(y,x_{1})\in{g}$ and
+            $(y,x_{2})\in{g}$. But if $y\notin{f}[A]$, then $x_{1}=a$ and
+            $x_{2}=a$, and hence by the transitivity of equality, $x_{1}=x_{2}$
+            (Thm.~\ref{thm:Transitivity_of_Equality}), a contradiction.
+            Hence $y\in{f}[A]$. But if $(y,x_{1})\in{g}$ and
+            $(y,x_{2})\in{g}$, then $f(x_{1})=y$ and $f(x_{2})=y$. Thus, by the
+            transitivity of equality, $f(x_{1})=f(x_{2})$
+            (Thm.~\ref{thm:Transitivity_of_Equality}). But $f$ is injective, and
+            therefore if $f(x_{1})=f(x_{2})$, then $x_{1}=x_{2}$
+            (Def.~\ref{def:Injective_Function}), a contradiction. Therefore,
+            $g:B\rightarrow{A}$ is a function. Moreover, for all
+            $x\in{A}$, $(g\circ{f})(x)=g(f(x))=x$ by definition of $g$, and
+            thus $f$ is left invertible (Def.~\ref{def:Left_Inv_Func}). In the
+            other direction, if $f$ is left invertible, then there is a function
+            $g:B\rightarrow{A}$ such that $g\circ{f}=\identity{A}$. Suppose $f$
+            is not injective. Then there exists $x_{1},x_{2}\in{A}$ such that
+            $x_{1}\ne{x}_{2}$ and $f(x_{1})=f(x_{2})$
+            (Def.~\ref{def:Injective_Function}). But then:
+            \begin{equation}
+                x_{1}=g(f(x_{1}))=g(f(x_{2}))=x_{2}
+            \end{equation}
+            a contradiction. Therefore, $f$ is injective.
+        \end{proof}
+        \begin{fdefinition}{Invertible Function}{Inv_Func}
+            An invertible function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that $f$ is right invertible and left
+            invertible.
+        \end{fdefinition}
+        \begin{theorem}
+            If $A$ and $B$ are non-empty sets, and if $f:A\rightarrow{B}$ is a
+            function, then $f$ is invertible if and only if it is a bijection.
+        \end{theorem}
+        \begin{proof}
+            For if $f$ is invertible, then it is right invertible and left
+            invertible. But if $f$ is right invertible, then it is surjective
+            (Thm.~\ref{thm:Right_Inv_iff_Surj}). And if $f$ is left invertible,
+            then it is injective (Thm.~\ref{thm:Left_Inv_iff_Inj}). But then
+            $f$ is injective and surjective, and hence it is bijective
+            (Def.~\ref{def:Bijective_Function}). In the other direction, if $f$
+            is bijection, then it is injective and surjective.
+        \end{proof}
