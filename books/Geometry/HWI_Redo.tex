@@ -20,30 +20,144 @@
             such that $a_{n}\rightarrow{x}$, it is true that
             $f(a_{n})\rightarrow{f}(x)$.
         \end{fdefinition}
-        \begin{fdefinition}{Sequential Space}{Sequential_Space}
-            A sequential topological space is a topological space
-            $\topspace[X]{X}$ such that for every topological space
-            $\topspace[Y]{Y}$ and for every sequentially continuous function
-            $f:X\rightarrow{Y}$, it is true that $f$ is continuous.
-        \end{fdefinition}
-        Continuity implies sequential continuity, the converse need not always
-        hold. If $(X,\tau)$ is first countable, the result is true.
         \begin{theorem}
-            \label{thm:First_Countable_Implies_Seq_Open_are_Open}%
-            If $(X,\tau)$ is a first countable topological space, if
-            $\mathcal{U}\subseteq{X}$, then $\mathcal{U}$ is open if and only if
-            for every sequence $a:\mathbb{N}\rightarrow{X}$ that coverges to an
-            element $x\in\mathcal{U}$, then there exists an $N\in\mathbb{N}$
-            such that for all $n>N$ it is true that $a_{n}\in\mathcal{U}$.
+            \label{thm:cont_implies_seq_cont}%
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            and if $f:X\rightarrow{Y}$ is a continuous function, then it is
+            sequentially continuous.
         \end{theorem}
         \begin{proof}
-            One direction is the definition of convergence. In the other, since
-            $\topspace{X}$ is first countable, for all $x\in\mathcal{U}$ there
-            is a countable neighborhood basis $\mathcal{B}_{x}$. Let
-            $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ be a
-            surjection. Then there exists an $N\in\mathbb{N}$ such that
+            For suppose not. Then there is a sequence
+            $a:\mathbb{N}\rightarrow{X}$ and a point $x\in{X}$ such that
+            $a_{n}\rightarrow{x}$, but $f(a_{n})\not\rightarrow{f}(x)$
+            (Def.~\ref{def:Sequentially_Continuous}). But then there exists
+            an open subset $\mathcal{V}\in\tau_{Y}$ such that
+            $f(x)\in\mathcal{V}$, and for all $N\in\mathbb{N}$ there exists an
+            $n\in\mathbb{N}$ such that $n>N$ and
+            $f(a_{n})\notin\mathcal{V}$. But $f$ is continuous, and therefore
+            $f^{\minus{1}}[\mathcal{V}]$ is an open subset of $X$. And since
+            $f(x)\in\mathcal{V}$ it is true that
+            $x\in{f}^{\minus{1}}[\mathcal{V}]$. But $a_{n}\rightarrow{x}$, and
+            thus there is an $N\in\mathbb{N}$ such that, for all
+            $n\in\mathbb{N}$ with $n>N$ it is true that
+            $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$. But then for all $n>N$ it is
+            true that $f(a_{n})\in\mathcal{V}$, a contradiction. Therefore, $f$
+            is sequentially continuous.
+        \end{proof}
+        This theorem does not reverse.
+        \begin{example}
+            Let $X$ be the order topology on the order $\omega_{1}+1$, where
+            $\omega_{1}$ is the first uncountable ordinal. Define
+            $f:X\rightarrow\nspace[]$ by:
+            \begin{equation}
+                f(x)=
+                \begin{cases}
+                    0,&x\ne\omega_{1}\\
+                    1,&\textrm{otherwise}
+                \end{cases}
+            \end{equation}
+            then $f$ is sequentially continuous, but not continuous. If
+            $a:\mathbb{N}\rightarrow{X}$ is any sequence, either it coverges to
+            $\omega_{1}$ or it is not. In the latter case the limit of
+            $f(a_{n})$ will be zero, and in the former case there is an
+            $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+            $a_{n}=\omega_{1}$, and hence $f(a_{n})\rightarrow{1}$. In both
+            scenarios, $f$ is sequentially continuous. It is not continuous
+            since $\{\omega_{1}\}$ is not an isolated point of $X$, yet
+            $f^{\minus{1}}[(0,\infty)]=\{\omega_{1}\}$.
+        \end{example}
+        The problem with this space is that it is not first countable. First
+        countability implies that sequentially continuous and continuous are
+        identical concepts. There's a weaker such notion, called sequential
+        spaces.
+        \begin{fdefinition}{Sequentially Open}{Sequentially_Open}
+            A sequentially open subset of a topological space $\topspace{X}$
+            is a subset $\mathcal{U}\subseteq{X}$ such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to an element
+            $x\in\mathcal{U}$ there exists an $N\in\mathbb{N}$ such that for all
+            $n\in\mathbb{N}$ with $n>N$, it is true that $a_{n}\in\mathcal{U}$.
+        \end{fdefinition}
+        \begin{theorem}
+            \label{thm:Open_is_Seq_Open}%
+            If $\topspace{X}$ is a topological space, if $\mathcal{U}\in\tau$ is
+            an open subset of $X$, then $\mathcal{U}$ is sequentially open.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there is a sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to a point
+            $x\in\mathcal{U}$, but for all $N\in\mathbb{N}$ there is an
+            $n\in\mathbb{N}$ such that $n>N$ and $a_{n}\notin\mathcal{U}$. But
+            if $\mathcal{U}$ is an open subset containing $x$, and if
+            $a_{n}\rightarrow{x}$, then there is an $N\in\mathbb{N}$ such that
+            for all $n>N$ it is true that $a_{n}\in\mathcal{U}$, a
+            contradiction.
+        \end{proof}
+        \begin{fdefinition}{Sequential Space}{Sequential_Space}
+            A sequential topological space is a topological space
+            $\topspace{X}$ such that for every sequentially open subset
+            $\mathcal{U}\subseteq{X}$ it is true that $\mathcal{U}\in\tau$.
+        \end{fdefinition}
+        As the name suggests, the usefulness of sequential spaces stems from the
+        fact that continuity and sequential continuity are equivalent. One
+        direction is true of any topological space
+        (Thm.~\ref{thm:cont_implies_seq_cont}). We now prove the other direction
+        in the setting of a sequential space.
+        \begin{theorem}
+            \label{thm:seq_space_seq_cont_eqiv_cont}%
+            If $\topspace[X]{X}$ is a sequential topological space, if
+            $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
+            is a sequentially continuous function, then $f$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there is a open subset
+            $\mathcal{V}\in\tau_{Y}$ such that $f^{\minus{1}}[\mathcal{V}]$ is
+            not open. But $\topspace[X]{X}$ is sequential, and thus if
+            $f^{\minus{1}}[\mathcal{V}]$ is not open, then it is not
+            sequentially open (Def.~\ref{def:Sequential_Space}). But then there
+            is a sequence $a:\mathbb{N}\rightarrow{X}$ and a point
+            $x\in{f}^{\minus{1}}[\mathcal{V}]$ such that $a_{n}\rightarrow{x}$
+            but for all $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ with
+            $n>N$ such that $a_{n}\notin{f}^{\minus{1}}[\mathcal{V}]$
+            (Def.~\ref{def:Sequentially_Open}). But $f$ is sequentially
+            continuous, and thus if $a_{n}\rightarrow{x}$, then
+            $f(a_{n})\rightarrow{f}(x)$
+            (Def.~\ref{def:Sequentially_Continuous}). But $\mathcal{V}$ is open
+            $f(x)\in\mathcal{V}$. Therefore if $f(a_{n})\rightarrow{f}(x)$, then
+            there is an $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$ with
+            $n>N$, it is true that $f(a_{n})\in\mathcal{V}$. But then for all
+            $n>N$ it is true that $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$, a
+            contradiction. Therefore, $f$ is continuous.
+        \end{proof}
+        Two amazing equivalent definitions of sequential spaces that we will not
+        prove since these will not be used.
+        \begin{itemize}
+            \item $\topspace{X}$ is sequential if and only if it is the quotient
+                  of a first countable space.
+            \item $\topspace{X}$ is sequential if and only if it is the quotient
+                  of a metrizable space.
+        \end{itemize}
+        In just about every setting we will be working with first countable
+        spaces. It would be nice to know that first countable spaces are
+        sequential, and indeed they are.
+        \begin{theorem}
+            \label{thm:First_Countable_Implies_Sequential}%
+            If $\topspace{X}$ is a first countable topological space, then it
+            is a sequential topological space.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there is a sequentially open subset
+            $\mathcal{U}\subseteq{X}$ such that $\mathcal{U}$ is not open
+            (Def.~\ref{def:Sequential_Space}). But since $\topspace{X}$ is first
+            countable, for all $x\in\mathcal{U}$ there is a countable
+            neighborhood basis. By the axiom of choice there is a
+            function $\mathcal{B}:\mathcal{U}\rightarrow\powset{\tau}$ such that
+            for all $x\in\mathcal{U}$, $\mathcal{B}_{x}$ is a countable
+            neighborhood basis of $x$. But if for all $x\in\mathcal{U}$ it is
+            true that $\mathcal{B}_{x}$ is countable, then there is surjective
+            function $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$.
+            Then there exists an $N\in\mathbb{N}$ such that
             $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. For suppose not and let
-            $B_{n}$ be defined by:
+            $B:\mathbb{N}\rightarrow{X}$ be defined by:
             \begin{equation}
                 B_{n}=\bigcap_{k\in\mathbb{Z}_{n}}\mathcal{V}_{x,k}
             \end{equation}
@@ -77,37 +191,65 @@
             $B_{n}\subseteq\mathcal{V}_{x,N}$ and thus $B_{n}\subseteq{U}$.
             But then for all $n>N$, $y_{n}\in{U}$, a contradiction. Hence,
             $y_{n}\rightarrow{x}$. But for all $n\in\mathbb{N}$,
-            $y_{n}\notin\mathcal{U}$. Thus $y_{n}$ is a sequence that converges
-            to $x$, but is never contained inside $\mathcal{U}$, contradicting
-            our hypothesis. Thus, for all $x\in\mathcal{U}$ there is an open
-            subset $\mathcal{V}_{x,N}$ such that $x\in\mathcal{V}_{x,N}$ and
+            $y_{n}\notin\mathcal{U}$. Thus $y_{n}$ is a sequence such that
+            $y_{n}\rightarrow{x}$, but for all $N\in\mathbb{N}$ there is an
+            $n\in\mathbb{N}$ with $n>N$ such that $y_{n}\notin\mathcal{U}$, a
+            contradiction since $x\in\mathcal{U}$ and $\mathcal{U}$ is
+            sequentially open (Def.~\ref{def:Sequentially_Open}). Thus, for all
+            $x\in\mathcal{U}$ there is an open subset $\mathcal{V}_{x,N}$ such
+            that $x\in\mathcal{V}_{x,N}$ and
             $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. But then $\mathcal{U}$ is
             simply the union over all of these open sets, and is thus open.
         \end{proof}
+        And now, our useful corollary.
         \begin{theorem}
-            If $(X,\tau)$ is a first countable topological space, then it is
-            a sequential space.
+            \label{thm:First_Countable_Implies_Seq_Cont_is_Cont}%
+            If $\topspace[X]{X}$ is a first countable topological space, if
+            $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
+            is sequential continuous, then $f$ is continuous.
         \end{theorem}
         \begin{proof}
-            For suppose not. Then there is a topological space $\topspace[Y]{Y}$
-            and a sequentially continuous function $f:X\rightarrow{Y}$ that is
-            not continuous. But if $f$ is not continuous, then there is an open
-            subset $\mathcal{V}\in\tau_{Y}$ such that
-            $f^{\minus{1}}[\mathcal{V}]$ is not open in $X$. But
-            $\topspace[X]{X}$ is first countable, and thus by
-            Thm.~\ref{thm:First_Countable_Implies_Seq_Open_are_Open}, if
-            $f^{\minus{1}}[\mathcal{V}]$ is not open, then there is a sequence
-            $a:\mathbb{N}\rightarrow{X}$ that converges to a point
-            $x\in{f}^{\minus{1}}[\mathcal{V}]$ such that for all
-            $N\in\mathbb{N}$ there is an $n>N$ such that
-            $a_{n}\notin{f}^{\minus{1}}[\mathcal{V}]$. But $f$ is sequentially
-            continuous, and thus if $a_{n}\rightarrow{x}$, then
-            $f(a_{n})\rightarrow{f}(x)$
-            (Def.~\ref{def:Sequentially_Continuous}). But since $\mathcal{V}$ is
-            open, there is an $N\in\mathbb{N}$ such that for all $n>N$ it is
-            true that $f(a_{n})\in\mathcal{V}$. But then for all $n>N$ it is
-            true that $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$, a contradiction.
-            Thus, $f$ is continuous.
+            For since $\topspace[X]{X}$ is first countable, it is sequential
+            (Thm.~\ref{thm:First_Countable_Implies_Sequential}). But if
+            $\topspace[X]{X}$ is a sequential topological space and if $f$ is
+            sequentially continuous, then $f$ is continuous
+            (Thm.~\ref{thm:seq_space_seq_cont_eqiv_cont}). Therefore, $f$ is
+            continuous.
+        \end{proof}
+        It's laborious to show a certain space is first countable, especially in
+        the case of manifold theory, and so we rely on the following theorems.
+        \begin{theorem}
+            \label{thm:Locally_Metrizable_is_First_Countable}%
+            If $\topspace{X}$ is a locally metrizable topological space, then it
+            is first countable.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there is a point $x\in{X}$ with no countable
+            neighborhood basis. But if $\topspace{X}$ is locally metrizable,
+            then there is an open subset $\mathcal{U}$ such that
+            $x\in\mathcal{U}$ and $\topspace[\mathcal{U}]{\mathcal{U}}$ is
+            metrizable, where $\tau_{\mathcal{U}}$ is the subspace topology. But
+            then there is a metric
+            $d:\mathcal{U}\times\mathcal{U}\rightarrow\nspace[]$ such that
+            $d$ induces $\tau_{\mathcal{U}}$. Let $\mathcal{B}\subseteq\tau$ be
+            defined by:
+            \begin{equation}
+                \mathcal{B}=\{\,\rball{n^{\minus{1}}}{\metspace{\mathcal{U}}}{x}
+                    \;|\;n\in\mathbb{N}^{+}\}
+            \end{equation}
+            That is, the set of all open balls about $x$ of radius $1/n$.
+            Suppose $\mathcal{V}\in\tau$ is such that $x\in\mathcal{V}$. But
+            then $x\in\mathcal{V}\cap\mathcal{U}$. But
+            $\mathcal{V}\cap\mathcal{U}$ is an open subset of $\mathcal{U}$, and
+            thus there is an $r>0$ such that:
+            \begin{equation}
+                \rball{r}{\metspace{\mathcal{U}}}{x}
+            \end{equation}
+            but by Archimede's Theorem, there is an $N\in\mathbb{N}$ such that
+            $N>r$. But
+            $\rball{N^{\minus{1}}}{\metspace{\mathcal{U}}}{x}\in\mathcal{B}$,
+            and hence $\mathcal{B}$ is a countable neighborhood basis of $x$,
+            a contradiction. Thus, $\topspace{X}$ is first countable.
         \end{proof}
         \begin{fdefinition}{$\sigma$ Compact}{Sigma_Compact}
             A $\sigma$ compact topological space is a topological space
