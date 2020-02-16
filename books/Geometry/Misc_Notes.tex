@@ -7,81 +7,1600 @@
 \input{preamble.tex}                                                           %
 %----------------------------Main Document-------------------------------------%
 \begin{document}
-    \title{Misc Notes from Semi-Remiannian Geometry}
+    \title{Misc Notes from Differential Topology}
     \author{Ryan Maguire}
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
     \listoffigures
-    \section{A Review of Topology}
-        Def dense, compact, connected, path connected, Hausdorff, basis.
-        \begin{definition}
-            The quotient space of $(X,\tau)$ with respect to a set $Y$ and
-            a surjective map $\pi:X\rightarrow{Y}$ is the topology generated
-            by $\pi$ such that it is continuous.
-        \end{definition}
-        More generally, let $X$ be a topological space and $G$ a topological
-        group with a product $G\times{X}\rightarrow{X}$ satisfying:
-        \begin{align}
-            (g_{1}*{g}_{2})\cdot{x}&=g_{1}\cdot(g_{2}\cdot{x})\\
-            e*x&=x
-        \end{align}
-        We can define an equivalence relation $R$ by $pRq$ if there is a
-        $g\in{G}$ such that $p=g\cdot{q}$. This gives us a quotient space.
+    \newpage
+    \section{Reading From Lee (Topology Review)}
+        Define topological space, open sets, neighborhoods, closed sets.
+        \begin{fdefinition}{Interior Point}{Interior_Point}
+            An interior point of a subset $A\subseteq{X}$ of a topological space
+            $\topspace{X}$ is a point $p\in{A}$ such that there exists an open
+            set $\mathcal{U}\in\tau$ such that $\mathcal{U}\subseteq{A}$ and
+            $p\in\mathcal{U}$.
+        \end{fdefinition}
         \begin{example}
-            Consider the sphere $\nsphere[2]$ and the group
-            $\monoid{\nsphere[1]}$ where
+            If we let $I=[0,1]$, considered as a subset of $\nspace[]$, then
+            every $x\in(0,1)$ is an interior point of $I$. To see this, let
+            $\varepsilon>0$ be defined by:
             \begin{equation}
-                \exp(i\theta)*\exp(i\phi)=\exp\big(i(\theta+\phi)\big)
+                \varepsilon=\minimum[\Big]{\frac{x}{2},\frac{1-x}{2}}
             \end{equation}
-            This acts on $\nsphere$ with
-            $\Theta:\nsphere[1]\times\nsphere[2]\rightarrow\nsphere[2]$ defined
-            by:
-            \begin{equation}
-                \Theta\big(\theta,(\varphi,\psi)\big)=(\varphi+\theta,\psi)
-            \end{equation}
-            that is, we rotate asymuthally by $\theta$.
-            \begin{figure}[H]
-                \centering
-                \captionsetup{type=figure}
-\begin{tikzpicture}[
-    line width=0.3pt,
-    line cap=round,
-    >=Latex,
-    ->-/.style={%
-        decoration={%
-            markings,
-            mark=at position .55 with \arrow{Stealth}
-        },
-        postaction={decorate}
-    }
-]
-    \coordinate (O) at (0, 0);
-    \def\AngleA{60};
-    \def\Radius{3.2};
-    \def\RadiusA{1.845 and 0.5};
-    \draw[blue] (0, -\Radius) to (0, \Radius);
-    \draw (O) circle (\Radius);
-
-    \draw[draw=none, fill=red!80!white, opacity=0.5]
-        (O) ellipse ({\Radius} and 0.8);
-
-    \draw[draw=none, fill=red!80!white, opacity=0.5]
-        (0, 2.52) ellipse (1.845 and 0.5);
-
-    \draw (180-\AngleA:\Radius) arc(180-\AngleA/2:360+\AngleA/2:\RadiusA);
-    \draw[->-] (-\Radius, 0) arc(180:360:{\Radius} and 0.8);
-
-    \begin{scope}[densely dashed]
-        \draw[->-] (\Radius, 0) arc(0:180:{\Radius} and 0.8);
-        \draw (\AngleA:\Radius) arc(\AngleA/2:180-\AngleA/2:1.845 and 0.5);
-    \end{scope}
-\end{tikzpicture}
-            \end{figure}
-            Then $X/G$ is simply the unit interval.
+            since $x\in(0,1)$, $\varepsilon>0$. If we define
+            $\mathcal{U}=(x-\varepsilon,x+\varepsilon)$, then
+            $x\in\mathcal{U}$ and $\mathcal{U}\subseteq[0,1]$. Moreover,
+            $\mathcal{U}$ is open and thus $x$ is an interior point of $I$.
         \end{example}
-        Draw this out, the orbits are lattitudinal lines, plus the two
-        poles.
+        Fig.~\ref{fig:Interior_Point_of_Set} shows two points $p$ and $q$ in a
+        topological space $X$ and an arbitrary subset $A\subseteq{X}$. The point
+        $p$ is an interior point of $A$ since we can surround $p$ with the blue
+        open subset that lies entirely inside $A$. On the other hand, $q$ is
+        \textit{not} an interior point of $A$ since every open subset that
+        contains $q$ also contains points that are not in $A$.
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Interior_Point_of_Set.tex}
+            \caption{Interior Point of a Set}
+            \label{fig:Interior_Point_of_Set}
+        \end{figure}
+        \begin{example}
+            Consider $\mathbb{Q}$ as a subset of $\nspace[]$, where $\nspace[]$
+            carries its usual metric topology. Then $\mathbb{Q}$ has no interior
+            points. For if $q\in\mathbb{Q}$, and if $\mathcal{U}$ is an open
+            subset containing $q$, then there is an $\varepsilon>0$ such that
+            $(q-\varepsilon,q+\varepsilon)\subseteq\mathcal{U}$. But then
+            $(q-\varepsilon,q+\varepsilon)\subseteq\mathbb{Q}$. But for all
+            $\varepsilon>0$, there is an irrational number $r$ such that
+            $|q-r|<\varepsilon$, and thus $r\in(q-\varepsilon,q+\varepsilon)$
+            which is a contradiction since
+            $(q-\varepsilon,q+\varepsilon)\subseteq\mathbb{Q}$. Hence,
+            $\mathbb{Q}$ has no interior points.
+        \end{example}
+        \begin{example}
+            For the same reasons, the irrational numbers
+            $\mathbb{R}\setminus\mathbb{Q}$ also have no interior points.
+        \end{example}
+        \begin{fdefinition}{Interior of Set}{Interior_of_Set}
+            The interior of a subset $A\subseteq{X}$ of a topological
+            $\topspace{X}$, denoted $\interior[\tau]{A}$ is the set of all
+            interior points of $A$. That is:
+            \begin{equation*}
+                \interior[\tau]{A}=\{\,p\in{X}\;|\;p
+                    \textrm{ is an interior point of }A\,\}
+            \end{equation*}
+        \end{fdefinition}
+        \begin{example}
+            The previous examples allow us to compute the interior of a few sets
+            quickly. If $I=[0,1]$, then every element of $(0,1)$ is an interior
+            point. The endpoints 0 and 1 are not interior points since every
+            $\varepsilon$ neighborhood must contain points outside of $[0,1]$.
+            Thus, $\interior[{\nspace[]}]{I}=(0,1)$. Also,
+            $\interior[{\nspace[]}]{\mathbb{Q}}=\emptyset$ and
+            $\interior[{\nspace[]}]{\nspace[]\setminus\mathbb{Q}}=\emptyset$.
+        \end{example}
+        Borrowing from Fig.~\ref{fig:Interior_Point_of_Set}, we now present the
+        interior of the set $A$, $\interior{A}$
+        (Fig.~\ref{fig:Interior_of_Set}).
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Interior_of_Set.tex}
+            \caption{Interior of a Set}
+            \label{fig:Interior_of_Set}
+        \end{figure}
+        \begin{theorem}
+            \label{thm:Equiv_Def_Interior_of_Set}%
+            If $\topspace{X}$ is a topological space, if
+            $\tau_{A}$ is the set of all elements of $\tau$ that are subsets of
+            in $A$, and if $\interior[\tau]{A}$ is the interior of $A$, then:
+            \begin{equation}
+                \interior[\tau]{A}=
+                    \bigcup_{\mathcal{U}\in\tau_{A}}\mathcal{U}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For if $p\in\interior[\tau]{A}$, then $p$ is an interior point of
+            $A$ (Def.~\ref{def:Interior_of_Set}) and hence there is an open
+            subset $\mathcal{U}\subseteq{A}$ such that $p\in\mathcal{U}$
+            (Def.~\ref{def:Interior_Point}). But then by hypothesis
+            $\mathcal{U}\in\tau_{A}$, and hence $p\in\bigcup\tau_{A}$. Thus,
+            $\interior[\tau]{A}\subseteq\bigcup\tau_{A}$. If
+            $p\in\bigcup\tau_{A}$, then there is a $\mathcal{U}\in\tau_{A}$
+            such that $p\in\mathcal{U}$. But by hypothesis if
+            $\mathcal{U}\in\tau_{A}$, then $\mathcal{U}\subseteq{A}$, and hence
+            $p$ is an interior point of $A$. Thus, $p\in\interior[\tau]{A}$.
+            Therefore, $\interior[\tau]{A}=\bigcup\tau_{A}$.
+        \end{proof}
+        Thus, an equivalent formulation of the interior of a set is the union
+        of all open sets that are contained in $A$.
+        \begin{theorem}
+            \label{thm:Interior_is_Smaller}%
+            If $\topspace{X}$ is a topological space, and if $A\subseteq{X}$,
+            then $\interior{A}\subseteq{A}$.
+        \end{theorem}
+        \begin{proof}
+            For $\interior{A}=\bigcup\tau_{A}$, where $\tau_{A}\subseteq{A}$ is
+            the set of all element of $\tau$ that are contained in $A$
+            (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}). But then for all
+            $\mathcal{U}\in\tau_{A}$, $\mathcal{U}\subseteq{A}$. Thus,
+            $\bigcup\tau_{A}\subseteq{A}$, and therefore
+            $\interior{A}\subseteq{A}$.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Interior_is_Open}%
+            If $\topspace{X}$ is a topological space, and if $A\subseteq{X}$,
+            then $\interior{A}\in\tau$. That is, the interior of $A$ is open.
+        \end{theorem}
+        \begin{proof}
+            For $\interior{A}=\bigcup\tau_{A}$, where $\tau_{A}\subseteq\tau$
+            is the set of all open subsets of $X$ that are contained in $A$
+            (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}). But then $\interior{A}$
+            is the union of open subsets of $X$ and is hence open.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Open_iff_Int_A_eq_A}%
+            If $\topspace{X}$ is a topological space, and if
+            $\mathcal{U}\subseteq{X}$, then $\mathcal{U}\in\tau$ if and only if
+            $\interior{\mathcal{U}}=\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            For if $\mathcal{U}\in\tau$, and if $\tau_{\mathcal{U}}$ is the set
+            of all elements of $\tau$ that are subsets of $\mathcal{U}$, then
+            $\mathcal{U}\in\tau_{\mathcal{U}}$ since
+            $\mathcal{U}\subseteq\mathcal{U}$ and by hypothesis
+            $\mathcal{U}\in\tau$. But
+            $\interior{\mathcal{U}}=\bigcup\tau_{\mathcal{U}}$
+            (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}) and
+            $\mathcal{U}\subseteq\bigcup\tau_{\mathcal{U}}$. But
+            $\interior{\mathcal{U}}\subseteq\mathcal{U}$
+            (Thm.~\ref{thm:Interior_is_Smaller}), and thus
+            $\mathcal{U}=\interior{\mathcal{U}}$. In the other direction, since
+            $\interior{\mathcal{U}}$ is open (Thm.~\ref{thm:Interior_is_Open}),
+            if $\mathcal{U}=\interior{\mathcal{U}}$, then $\mathcal{U}$ is open.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Interior_Preserves_Inclusion}%
+            If $\topspace{X}$ is a topological space, if $A,B\subseteq{X}$, and
+            if $A\subseteq{B}$, then $\interior{A}\subseteq\interior{B}$.
+        \end{theorem}
+        \begin{proof}
+            For if $p\in\interior{A}$, then there is an open subset
+            $\mathcal{U}\in\tau$ such that $p\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{A}$ (Def.~\ref{def:Interior_of_Set}). But if
+            $\mathcal{U}\subseteq{A}$ and $A\subseteq{B}$, then
+            $\mathcal{U}\subseteq{B}$ and thus $p\in\interior{B}$
+            (Def.~\ref{def:Interior_of_Set}).
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Open_Subset_of_A_is_Subset_of_Interior}%
+            If $\topspace{X}$ is a topological space, if $\mathcal{U}\in\tau$
+            is open, if $A\subseteq{X}$, and if $\mathcal{U}\subseteq{A}$,
+            then $\mathcal{U}\subseteq\interior{A}$.
+        \end{theorem}
+        \begin{proof}
+            For if $\mathcal{U}\subseteq{A}$, then
+            $\interior{\mathcal{U}}\subseteq\interior{A}$
+            (Thm.~\ref{thm:Interior_Preserves_Inclusion}). But $\mathcal{U}$ is
+            open, and therefore $\interior{\mathcal{U}}=\mathcal{U}$
+            (Thm.~\ref{thm:Open_iff_Int_A_eq_A}). Therefore
+            $\mathcal{U}\subseteq\interior{A}$.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Idempotence_of_Interior}
+            If $\topspace{X}$ is a topological space, and if $A\subseteq{X}$,
+            then:
+            \begin{equation}
+                \interior{\interior{A}}=\interior{A}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For if $A\subseteq{X}$, then $\interior{A}$ is open
+            (Thm.~\ref{thm:Interior_is_Open}). But if $\interior{A}$ is open,
+            then $\interior{\interior{A}}=\interior{A}$
+            (Thm.~\ref{thm:Open_iff_Int_A_eq_A}).
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Interior_of_Whole_Space}%
+            If $\topspace{X}$ is a topological space, then $\interior{X}=X$.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is a topological space, then $X\in\tau$. But
+            if $X$ is open, then $\interior{X}=X$
+            (Thm.~\ref{thm:Open_iff_Int_A_eq_A}).
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Interior_Preserves_Intersection}%
+            If $\topspace{X}$ is a topological space, and if $A,B\subseteq{X}$,
+            then:
+            \begin{equation}
+                \interior{A\cap{B}}=\interior{A}\cap\interior{B}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For $\interior{A\cap{B}}=\bigcup\tau_{A\cap{B}}$, where
+            $\tau_{A\cap{B}}\subseteq\tau$ is the set of all open subsets that
+            are contained in $A\cap{B}$
+            (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}). Similarly,
+            $\interior{A}=\bigcup\tau_{A}$ and $\interior{B}=\bigcup{B}$.
+            But if $\mathcal{U}\in\tau_{A\cap{B}}$, then by definition
+            $\mathcal{U}\in\tau$ and $\mathcal{U}\subseteq{A}\cap{B}$.
+            But $A\cap{B}\subseteq{A}$, and hence $\mathcal{U}\subseteq{A}$.
+            Hence, $\mathcal{U}\in\tau_{A}$ and similarly
+            $\mathcal{U}\in\tau_{B}$. But then
+            $\tau_{A\cap{B}}\subseteq\tau_{A}\cap\tau_{B}$, and therefore
+            $\bigcup\tau_{A\cap{B}}\subseteq\bigcup\tau_{A}\cap\bigcup\tau_{B}$
+            and thus $\interior{A\cap{B}}\subseteq\interior{A}\cap\interior{B}$.
+            But if $x\in\interior{A}\cap\interior{B}$, then $x$ is an interior
+            point of $A$ and an interior point of $B$
+            (Def.~\ref{def:Interior_of_Set}) and there there exists
+            $\mathcal{U}_{A},\mathcal{U}_{B}\in\tau$ such that
+            $x\in\mathcal{U}_{A}$, $x\in\mathcal{U}_{B}$, and it is true that
+            $\mathcal{U}_{A}\subseteq{A}$ and $\mathcal{U}_{B}\subseteq{B}$
+            (Def.~\ref{def:Interior_Point}). But
+            then $\mathcal{U}_{A}\cap\mathcal{U}_{B}$ is an open subset, and
+            $\mathcal{U}_{A}\cap\mathcal{U}_{B}\subseteq{A}\cap{B}$. Thus,
+            $\mathcal{U}_{A}\cap\mathcal{U}_{B}\in\tau_{A\cap{B}}$, and thus
+            $x\in\interior{A\cap{B}}$. Therefore
+            $\interior{A\cap{B}}=\interior{A}\cap\interior{B}$.
+        \end{proof}
+        The theorems proved here can actually completely characterize a
+        topological space. Kuratowski famously did this with the notion of the
+        \textit{closure} of a set, but interior works as well. That is, if we
+        have a function $\sigma:\powset{X}\rightarrow\powset{X}$ such that:
+        \par
+        \begin{subequations}
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \begin{align}
+                    \sigma(A)&\subseteq{A}\\
+                    \sigma\big(\sigma(A)\big)&=\sigma(A)
+                \end{align}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \begin{align}
+                    \sigma(A\cap{B})&=\sigma(A)\cap\sigma(B)\\
+                    \label{eqn:Int_Op_Sigma_of_X_is_X}%
+                    \sigma(X)&=X
+                \end{align}
+            \end{minipage}
+        \end{subequations}
+        \par\vspace{2.5ex}
+        We define the topology $\tau$ on $X$ by declaring $\mathcal{U}\in\tau$
+        if and only if $\sigma(\mathcal{U})=\mathcal{U}$. That is, the topology
+        is the set of all fixed points of $\sigma$. A topology gives a unique
+        interior operator, and an interior operator gives a unique topology.
+        Thus, all of topology could be done by considering such a function. We
+        still need the notion of \textit{morphism}, and in the ordinary study of
+        topology we have continuous functions. The following theorem gives an
+        equivalent definition of continuity in terms of interior.
+        \begin{ftheorem}{Kuratowski's Interior Theorem}{Kuratowski_Interior_Thm}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            and if $f:X\rightarrow{Y}$ is a function, then $f$ is continuous if
+            and only if for all $B\subseteq{Y}$ it is true that:
+            \begin{equation*}
+                f^{\minus{1}}[\interior[Y]{B}]\subseteq
+                    \interior[X]{f^{\minus{1}}[B]}
+            \end{equation*}
+        \end{ftheorem}
+        \begin{bproof}
+            For suppose $f$ is continuous. But if $B\subseteq{Y}$, then
+            $\interior[Y]{B}$ is an open subset of $Y$
+            (Thm.~\ref{thm:Interior_is_Open}). But if $\interior[Y]{B}$ is open
+            and $f$ is continuous, then $f^{\minus{1}}[\interior[Y]{B}]$ is an
+            open subset of $X$. Moreover, $\interior[Y]{B}\subseteq{B}$
+            (Thm.~\ref{thm:Interior_is_Smaller}) and therefore
+            $f^{\minus{1}}[\interior[Y]{B}]\subseteq{f}^{\minus{1}}[B]$. But
+            then $f^{\minus{1}}[\interior[Y]{B}]$ is an open subset contained in
+            $f^{\minus{1}}[B]$, and therefore
+            $f^{\minus{1}}[\interior[Y]{B}]\subseteq%
+             \interior[X]{f^{\minus{1}}[B]}$
+            (Thm.~\ref{thm:Open_Subset_of_A_is_Subset_of_Interior}). In the
+            other direction, suppose $f$ preserves the interior. If $f$ is not
+            continuous, then there is an open subset $\mathcal{V}\in\tau_{Y}$
+            such that $f^{\minus{1}}[\mathcal{V}]$ is not an open subset of $X$.
+            But if $\mathcal{V}$ is open, then
+            $\interior[Y]{\mathcal{V}}=\mathcal{V}$
+            (Thm.~\ref{thm:Open_iff_Int_A_eq_A}). But then by hypothesis:
+            \begin{equation}
+                f^{\minus{1}}[\mathcal{V}]\subseteq
+                \interior[X]{f^{\minus{1}}[\mathcal{V}]}
+            \end{equation}
+            But $\interior[X]{f^{\minus{1}}[\mathcal{V}]}\subseteq%
+            f^{\minus{1}}[\mathcal{V}]$ (Thm.~\ref{thm:Interior_is_Smaller}),
+            and therefore $f^{\minus{1}}[\mathcal{V}]=%
+            \interior[X]{f^{\minus{1}}[\mathcal{V}]}$. But
+            $\interior[X]{f^{\minus{1}}[\mathcal{V}]}$ is open
+            (Thm.~\ref{thm:Interior_is_Open}), and thus
+            $f^{\minus{1}}[\mathcal{V}]$ is open, a contradiction. Therefore,
+            $f$ is continuous.
+        \end{bproof}
+        With this, we now prove our claim that the interior operator is an
+        equivalent formulation of topology. The four equations defined before
+        give a complete algebraic axiomization of the notion of topologies on a
+        set. One may be tempted to think that these four set of equations
+        satisfy a \textit{unique} interior operator (that is,
+        $\sigma=\textrm{Int}_{\tau}$), but there's a different distinct
+        interior operator for every topology $\tau$ on a set $X$. Thus, to prove
+        any form of uniqueness we must greatly strengthen
+        Eqn.~\ref{eqn:Int_Op_Sigma_of_X_is_X} so that $\sigma$ pertains to a
+        single topology. We do this by requiring the
+        $\sigma(\mathcal{U})=\mathcal{U}$ if and only if $\mathcal{U}$ is open.
+        This new requirement gives us a bijection between interior operators
+        on $X$ and topologies.
+        \begin{ftheorem}{Interior Operator of a Topological Space}
+                        {Interior_Operator_of_a_Topological_Space}
+            If $\topspace{X}$ is a topological space, if
+            $\sigma:\powset{X}\rightarrow\powset{X}$ is such that for all
+            $A\in\powset{X}$ it is true that:
+            \begin{align}
+                \label{eqn:Int_Op_Inclusion}%
+                \sigma(A)&\subseteq{A}\tag{1}\\
+                \label{eqn:Int_Op_Idempotence}%
+                \sigma\big(\sigma(A)\big)&=\sigma(A)\tag{2}\\
+                \label{eqn:Int_Op_Inter_Preserve}%
+                \sigma(A\cap{B})&=\sigma(A)\cap\sigma(B)\tag{3}
+            \end{align}
+            and if $\mathcal{U}\in\tau$ if and only if
+            $\sigma(\mathcal{U})=\mathcal{U}$, then $\sigma(A)=\interior{A}$.
+        \end{ftheorem}
+        \begin{bproof}
+            For suppose not. Then there is an $A\in\powset{X}$ such that
+            $\sigma(A)\ne\interior{A}$. But then there either
+            $\sigma(A)\nsubseteq\interior{A}$ or $\interior{A}\nsubseteq{A}$.
+            But $\interior{A}$ is open (Thm.~\ref{thm:Interior_is_Open}) so by
+            hypothesis $\sigma(\interior{A})=\interior{A}$. But
+            $\interior{A}\subseteq{A}$ (Thm.~\ref{thm:Interior_is_Smaller})
+            and therefore $\interior{A}=A\cap\interior{A}$. But
+            $\sigma(A\cap\interior{A})=\sigma(A)\cap\sigma(\interior{A})$
+            (\ref{eqn:Int_Op_Inter_Preserve}) and
+            $\sigma(A)\cap\sigma(\interior{A})=\sigma(A)\cap\interior{A}$.
+            Therefore by the transitivity of equality we obtain
+            $\interior{A}=\sigma(A)\cap\interior{A}$, and therefore
+            $\interior{A}\subseteq\sigma(A)$. But $\sigma(\sigma(A))=\sigma(A)$
+            (\ref{eqn:Int_Op_Idempotence}), and thus by hypothesis
+            $\sigma(A)$ is open. But since $\sigma(A)\subseteq{A}$
+            (\ref{eqn:Int_Op_Inclusion}), if $\sigma(A)$ is open, then
+            $\sigma(A)\subseteq\interior{A}$
+            (Thm.~\ref{thm:Open_Subset_of_A_is_Subset_of_Interior}). Therefore
+            $\sigma(A)=\interior{A}$, a contradiction. Hence, for all
+            $A\subseteq{X}$ it is true that $\sigma(A)=\interior{A}$.
+        \end{bproof}
+        There's a similar notion for exterior points and the exterior of a set.
+        \begin{fdefinition}{Exterior Point}{Exterior_Point}
+            An exterior point of a subset $A\subseteq{X}$ of a topological
+            spacec $\topspace{X}$ is a point $p\in{X}\setminus{A}$ such that
+            there exists an open set $\mathcal{U}\in\tau$ such that
+            $\mathcal{U}\subseteq{A}\setminus{A}$ and $p\in\mathcal{U}$.
+        \end{fdefinition}
+        \begin{theorem}
+            \label{thm:Equiv_Def_Exterior_Point_of_Set}%
+            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, and if
+            $p\in{X}$, then $p$ is an exterior point of $A$ if and only if it is
+            an interior point of $X\setminus{A}$.
+        \end{theorem}
+        \begin{proof}
+            For if $p$ is an exterior point of $A$, then there is an open subset
+            $\mathcal{U}\in\tau$ such that $\mathcal{U}\subseteq{X}\setminus{A}$
+            and $p\in\mathcal{U}$ (Def.~\ref{def:Exterior_Point}). But then
+            $p\in{X}\setminus{A}$ and there exists an open subset
+            $\mathcal{U}\in\tau$ such that $\mathcal{U}\subseteq{X}\setminus{A}$
+            and hence $p$ is an interior point of $X\setminus{A}$
+            (Def.~\ref{def:Interior_Point}). If $p\in\interior{X\setminus{A}}$,
+            then there is an open subset $\mathcal{U}\in\tau$ such that
+            $p\in\mathcal{U}$ and $\mathcal{U}\subseteq{X}\setminus{A}$. But
+            then $p$ is an exterior point of $A$
+            (Def.~\ref{def:Exterior_Point}), completing the proof.
+        \end{proof}
+        \begin{example}
+            Using Thm.~\ref{thm:Equiv_Def_Exterior_Point_of_Set} we have that
+            every point in $(\minus\infty,0)\cup(1,\infty)$ is an exterior point
+            of the set $I=[0,1]$.
+        \end{example}
+        \begin{fdefinition}{Exterior of a Set}{Exterior_of_a_Set}
+            The exterior of a subset $A\subseteq{X}$ in a topological space
+            $\topspace{X}$, denoted $\exterior[\tau]{A}$, is the set of all
+            exterior points of $A$. That is:
+            \begin{equation*}
+                \exterior{A}=\{\,p\in{X}\;|\;
+                    p\textrm{ is an exterior point of }X\,\}
+            \end{equation*}
+        \end{fdefinition}
+        \begin{theorem}
+            \label{thm:Equiv_Def_of_Exterior_of_Set}%
+            If $\topspace{X}$ is a topological space, and if $A\subseteq{X}$,
+            then:
+            \begin{equation}
+                \exterior{A}=\interior{X\setminus{A}}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For if $p\in\exterior{A}$ if and only if $p$ is an exterior point of
+            $A$ (Def.~\ref{def:Exterior_of_a_Set}). But $p$ is an exterior point
+            of $A$ if and only if it is an interior point of
+            $X\setminus{A}$ (Thm.~\ref{thm:Equiv_Def_Exterior_Point_of_Set}).
+            But $p\in\interior{X\setminus{A}}$ if and only if
+            $p\in\interior{X\setminus{A}}$. Therefore, we have that
+            $\exterior{A}=\interior{X\setminus{A}}$.
+        \end{proof}
+        \begin{example}
+            When we examined the interior of the rationals and irrationals we
+            noted that both were empty, and hence both
+            $\exterior[{\nspace[]}]{\mathbb{Q}}$ and
+            $\exterior[{\nspace[]}]{\nspace[]\setminus\mathbb{Q}}$ are empty.
+            That is, $\mathbb{Q}$ has empty interior and empty exterior, even
+            though $\mathbb{Q}$ is dense in $\nspace[]$, which is quite
+            paradoxical.
+        \end{example}
+        \begin{theorem}
+            \label{thm:Alt_Equiv_Def_Exterior_of_Set}%
+            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, if
+            $\tau_{A^{C}}$ is the set of all open subsets contained in
+            $X\setminus{A}$, then:
+            \begin{equation}
+                \exterior{A}=\bigcup_{\mathcal{U}\in\tau_{A}^{C}}\mathcal{U}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            For $\exterior{A}=\interior{X\setminus{A}}$
+            (Thm.~\ref{thm:Equiv_Def_of_Exterior_of_Set}). But
+            $\interior{X\setminus{A}}=\bigcup\tau_{A^{C}}$
+            (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}) and therefore
+            $\exterior{A}=\bigcup\tau_{A^{C}}$.
+        \end{proof}
+        Kuratowski's main interest were in the closure axioms that could be used
+        to define topological spaces. Closure is the \textit{dual} notion to
+        interior and is a used in many contexts. Like interior, closure is
+        defined in terms of closure points.
+        \begin{fdefinition}{Point of Closure}{Point_of_Closure}
+            A point of closure of a subset $A\subseteq{X}$ in a topological
+            space $\topspace{X}$ is a point $p\in{X}$ such that for every open
+            subset $\mathcal{U}\in\tau$ such that $p\in\mathcal{U}$ it is true
+            that $\mathcal{U}\cap{A}\ne\emptyset$.
+        \end{fdefinition}
+        \begin{fdefinition}{Boundary of a Set}{Boundary_of_Set}
+            The boundary of a subset $A\subseteq{X}$ in a topological space
+            $\topspace{X}$ is the set $\partial{A}$ defined by:
+            \begin{equation*}
+                \partial{A}=\closure{A}\setminus\interior{A}
+            \end{equation*}
+            Where $\closure{A}$ is the closure of $A$ and $\interior{A}$ is its
+            interior.
+        \end{fdefinition}
+        \begin{theorem}
+            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, then:
+            \begin{equation}
+                \partial{A}=X\setminus\big(\interior{A}\cup\exterior{A}\big)
+            \end{equation}
+        \end{theorem}
+        \begin{fdefinition}{Isolated Point}{Isolated_Point}
+            An isolated point of a subset $A\subseteq{X}$ in a topological space
+            $\topspace{X}$ is a point $p\in{A}$ such that there exists an
+            open set $\mathcal{U}\in\tau$ such that $\mathcal{U}\cap{A}=\{p\}$.
+        \end{fdefinition}
+        \begin{fdefinition}{Limit Point}{Limit_Point}
+            A limit point of a subset $A\subseteq{X}$ in a topological space
+            $\topspace{X}$ is a point $p\in{X}$ such that
+            $p\in\closure{A}$ and $p$ is not an isolated point of $A$.
+        \end{fdefinition}
+        That is, limit points can be approximated arbitrarily well by points in
+        $A$, other than the point $p$ itself.
+        \begin{fdefinition}{Dense Subset}{Dense_Subset}
+            A dense subset of a topological space $\topspace{X}$ is a subset
+            $A\subseteq{X}$ such that $\closure{A}=X$
+        \end{fdefinition}
+        \begin{fdefinition}{Nowhere Dense}{Nowhere_Dense}
+            A nowhere dense subset of a topological space $\topspace{X}$ is a
+            subset $A\subseteq{A}$ such that:
+            \begin{equation*}
+                \interior{\closure{A}}=\emptyset
+            \end{equation*}
+        \end{fdefinition}
+        \begin{theorem}
+            If $\topspace{X}$ is a topological space, then $A\subseteq{X}$ is
+            nowhere dense if and only if for every non-empty open subset
+            $\mathcal{U}\in\tau$, $A$ is not dense in the subspace topology of
+            $\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            For if suppose not and suppose $\mathcal{U}\in\tau$ is such that
+            $A$ is dense in $\mathcal{U}$ in the subspace topology. But then:
+            \begin{equation}
+                \mathcal{U}=\interior{\mathcal{U}}
+                    \subseteq\interior{\closure{A}}
+            \end{equation}
+            But $A$ is nowhere dense, and hence
+            $\interior{\closure{A}}=\emptyset$, a contradiction. In the other
+            direction, suppose $\interior{\closure{A}}\ne\emptyset$. But the
+            interior of any set is open, and hence $A$ is dense in
+            $\interior{\closure{A}}$, a contradiction.
+        \end{proof}
+        Def continuous, def homeomorphism.
+        \begin{fdefinition}{Local Homeomorphism}{Local_Homeomorphism}
+            A local homeomorphism from a topological space $\topspace[X]{X}$ to
+            a topological space $\topspace[Y]{Y}$ is a function
+            $f:X\rightarrow{Y}$ such that for all $x\in{X}$ there exists and
+            open set $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $f|_{\mathcal{U}}$ is a continuous bijective open mapping.
+        \end{fdefinition}
+        Def convergent sequence.
+        \begin{ftheorem}{Kuratowski's Continuity Theorem}
+                        {Kuratowski_Continuity_Theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            then $f:X\rightarrow{Y}$ is continuous if and only if for all
+            $A\subseteq{X}$ it is true that:
+            \begin{equation*}
+                f\big[\closure[\tau_{X}]{A}\big]\subseteq
+                \closure[\tau_{Y}]{f[A]}
+            \end{equation*}
+        \end{ftheorem}
+        \begin{bproof}
+            For suppore $f:X\rightarrow{Y}$ is continuous. Since
+            $\closure[\tau_{Y}]{f[A]}$ is closed and $f$ is continuous,
+            $f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]$ is closed.
+            But $f[A]\subseteq\closure[\tau_{Y}]{f[a]}$, and thus
+            $A\subseteq{f}^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]$,
+            and therefore:
+            \begin{equation}
+                \closure[\tau_{X}]{A}\subseteq
+                \closure[\tau_{X}]
+                    {{f}^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]}
+            \end{equation}
+            But the closure of a closed set is the original set, and hence:
+            \begin{equation}
+                \closure[\tau_{X}]{A}\subseteq
+                    f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]
+            \end{equation}
+            But then:
+            \begin{equation}
+                f\big[\closure[\tau_{X}]{A}\big]\subseteq
+                f\Big[f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]\Big]
+                \subseteq\closure[\tau_{Y}]{f[A]}
+            \end{equation}
+            In other direction, let $C\subseteq{Y}$ be closed. Let
+            $x\in\closure[\tau_{X}]{f^{\minus{1}}[C]}$. But then by hypothesis
+            $f(x)\in\closure[\tau_{Y}]{f\big[f^{\minus{1}}[C]\big]}$ and so
+            $f(x)\in\closure[\tau_{Y}]{C}$. But $C$ is closed, and hence
+            $\closure[\tau_{Y}]{C}=C$, and therefore $f(x)\in{C}$. But then
+            $x\in{f}^{\minus{1}}[C]$, and thus
+            $\closure[\tau_{X}]{f^{\minus{1}}[c]}\subseteq{f}^{\minus{1}}[C]$,
+            and thus $f^{\minus{1}}[C]$ is closed. Hence, $f$ is continuous.
+        \end{bproof}
+        There's a dual theorem for the interior operator.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            then $f:X\rightarrow{Y}$ is continuous if and only if for all
+            $B\subseteq{Y}$ it is true that:
+            \begin{equation}
+                f^{\minus{1}}\big[\interior[\tau_{Y}]{B}\big]
+                \subseteq\interior[\tau_{X}]{f^{\minus{1}}[B]}
+            \end{equation}
+        \end{theorem}
+        Identity map is continuous, constant maps are continuous, composition is
+        continuous.
+        \begin{fdefinition}{Sequentially Continuous}{Sequentially_Continuous}
+            A sequentially continuous function from a topological space
+            $\topspace[X]{X}$ to a topological space $\topspace[Y]{Y}$ is a
+            function $f:X\rightarrow{Y}$ such that for every convergent sequence
+            $a:\mathbb{N}\rightarrow{X}$ and for every limit $x$ of $a$ it is
+            true that $f(a_{n})\rightarrow{f}(x)$.
+        \end{fdefinition}
+        \begin{fdefinition}{Sequential Topological Space}
+                           {Sequential_Topological_Space}
+            A sequential topological space is a topological space $\topspace{X}$
+            such that for every topological space $\topspace{Y}$ and for every
+            sequentially continuous function $f:X\rightarrow{Y}$, it is true
+            that $f$ is continuous.
+        \end{fdefinition}
+        Without sufficient separation properties (such as being Hausdorff) we
+        don't know if the limits of sequences are unique, hence the phrasing
+        \textit{for every limit}.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $f:X\rightarrow{Y}$ is continuous, then it is sequentially
+            continuous.
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally compact Lindel\"{o}f topological
+            space, then it is $\sigma$ compact.
+        \end{theorem}
+        \begin{proof}
+            For every $x\in{X}$ there exists compact $K_{x}$ and an open
+            $\mathcal{U}_{x}$ such that $x\in\mathcal{U}_{x}$ and
+            $\mathcal{U}_{x}\subseteq{K}_{x}$. But then $\{\mathcal{U}_{x}\}$ is
+            a cover of $X$, and since $\topspace{X}$ is Lindel\"{o}f there
+            exists a countable subcover $\mathcal{U}_{n}$. Then
+            $\mathcal{U}_{n}\subseteq{K}_{n}$, and thus $K_{n}$ is a countable
+            covering of $X$ by compact sets, hence $X$ is $\sigma$ compact.
+        \end{proof}
+        \begin{theorem}
+            Limits in Hausdorff are unique.
+        \end{theorem}
+        \begin{proof}
+            Suppose $a_{n}\rightarrow{x}$ and $a_{n}\rightarrow{y}$, $x\ne{y}$.
+            Then there are disjoint non-empty $\mathcal{U}_{x}$,
+            $\mathcal{U}_{y}$. But then there exists $N_{x},N_{y}$ such that
+            $n>N_{x}$ implies $a_{n}\in\mathcal{U}_{x}$ and $n>N_{y}$ implies
+            $a_{n}\in\mathcal{U}_{y}$. Choose $N=\max\{N_{x},N_{y}\}$, a
+            contradiction.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a Hausdorff topological spacec, and if
+            $x\in{X}$, then $\{x\}$ is a closed subset of $X$.
+        \end{theorem}
+        \begin{proof}
+            For all $y\in{X}$, $y\ne{x}$, there is a $\mathcal{U}_{y}\in\tau$
+            such that $y\in\mathcal{U}_{y}$ and $x\notin\mathcal{U}_{y}$. But
+            then $X\setminus\{x\}=\bigcup\mathcal{U}_{y}$, and $\{x\}$ is
+            the complement of an open set and is therefore closed.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a Hausdorff topological space, and if
+            $A\subseteq{X}$ is finite, then $A$ is closed.
+        \end{theorem}
+        \begin{proof}
+            For $A$ is the union of finitely many closed sets, and thus closed.
+        \end{proof}
+        \begin{fdefinition}{Neighborhood Basis}{Neighborhood_Basis}
+            A neighborhood basis for a point $x$ in a topological space
+            $\topspace{X}$ is a subset $\mathcal{B}_{x}\subseteq\tau$ such that
+            for all $\mathcal{V}\in\mathcal{B}_{x}$ it is true that
+            $x\in\mathcal{V}$, and for all $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ there exists $\mathcal{V}\in\mathcal{B}_{x}$ such
+            that $\mathcal{V}\subseteq\mathcal{U}$.
+        \end{fdefinition}
+        \begin{fdefinition}{First Countable Topological Space}
+                           {First_Countable_Topological_Space}
+            A first countable topological space is a topological space
+            $\topspace{X}$ such that all $x\in{X}$ there exists a countable
+            neighborhood basis $\mathcal{B}$ of $x$.
+        \end{fdefinition}
+        \begin{example}
+            Any metric space.
+        \end{example}
+        \begin{fdefinition}{Second Countable Topological Space}
+                           {Second_Countable_Topological_Space}
+            A second countable topological space is a topological space
+            $\topspace{X}$ such that there exists a countable basis
+            $\mathcal{B}$ for $\tau$.
+        \end{fdefinition}
+        \begin{theorem}
+            Second countable implies first countable.
+        \end{theorem}
+        \begin{example}
+            This does not reverse, take the discrete metric on $\mathbb{R}$.
+        \end{example}
+        \begin{theorem}
+            If $\topspace{X}$ is a first countable topological space, if
+            $A\subseteq{X}$, and if $x\in{X}$, then $x\in\closure{A}$, if and
+            only if there is a sequence $a:\mathbb{N}\rightarrow{X}$ such that
+            $a_{n}\rightarrow{x}$ and for all $n\in\mathbb{N}$ it is true that
+            $a_{n}\in{A}$.
+        \end{theorem}
+        \begin{proof}
+            For suppose $x\in\closure{A}$. Since $\topspace{X}$ is first
+            countable, there exists a countable neighborhood basis $\mathcal{B}$
+            of $x$. Since $\mathcal{B}$ is countable, there exists a surjection
+            $B:\mathbb{N}\rightarrow\mathcal{B}$. Let
+            $\mathcal{U}:\mathbb{N}\rightarrow\tau$ be defined by:
+            \begin{equation}
+                \mathcal{U}_{n}=\bigcap_{k\in\mathbb{Z}_{n+1}}B_{k}
+            \end{equation}
+            Since $x\in\closure{A}$, for every open subset $\mathcal{U}\in\tau$
+            that contains $x$ there exists a point $y\in{A}$ such that
+            $y\in\mathcal{U}$. But then for all $n\in\mathbb{N}$ the set
+            $A_{n}$ defined by:
+            \begin{equation}
+                A_{n}=\{\,y\in{A}\;|\;y\in\mathcal{U}_{n}\}
+            \end{equation}
+            is non-empty. Thus by the axiom of choice there is a choice function
+            $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\in{A}_{n}$. From the
+            definition of $\mathcal{U}_{n}$, $a_{n}\rightarrow{X}$. The other
+            direction is the definition of convergence and closure
+            (no first countability needed).
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a first countable topological space, if
+            $A\subseteq{X}$, and if $x\in{X}$, then $x\in\interior{A}$ if and
+            only if for every sequence $a:\mathbb{N}\rightarrow{X}$ such that
+            $a_{n}\rightarrow{x}$ there exists an $N\in\mathbb{N}$ such that for
+            all $n>N$, $a_{n}\in{A}$.
+        \end{theorem}
+        \begin{proof}
+            For if $x\in\interior{A}$, and if $a:\mathbb{N}\rightarrow{X}$ is a
+            sequence such that $a_{n}\rightarrow{x}$, then for every open subset
+            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ there exists an
+            $N\in\mathbb{N}$ such that $n>N$ implies $a_{n}\in\mathcal{U}$.
+            But $\interior{A}$ is open and $\interior{A}\subseteq{A}$. Going the
+            other way, suppose $x\in{A}$ is such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\rightarrow{x}$ there
+            exists an $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+            $a_{n}\in{A}$. Suppose $x\notin\interior{A}$. Since $\topspace{X}$
+            is first countable, there is a countable neighborhood basis
+            $\mathcal{B}_{x}$ of $x$. Let $B:\mathbb{N}\rightarrow\mathcal{B}$
+            be a surjection and let $\mathcal{U}_{n}$ be defined by:
+            \begin{equation}
+                \mathcal{U}_{n}=\bigcap_{k\in\mathbb{Z}_{n+1}}B_{k}
+            \end{equation}
+            But if $xn\notin\interior{A}$ then for all $n\in\mathcal{N}$ there
+            is a $y\in\mathcal{U}_{n}$ such that $y\notin{A}$. By the axiom of
+            choice there is a sequence $y:\mathbb{N}\rightarrow{X}$ such that
+            $y_{n}\in\mathcal{U}_{n}$ and $y_{n}\notin{A}$. But then
+            $y_{n}\rightarrow{x}$ and $y_{n}$ is never in $A$, a contradiction.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a first countable topological space, and if
+            $A\subseteq{X}$, then $A$ is open if and only if for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that there exists an $x\in{A}$
+            such that $a_{n}\rightarrow{x}$, then there is an $N\in\mathbb{N}$
+            such that for all $n>N$, $a_{n}\in{A}$.
+        \end{theorem}
+        \begin{proof}
+            One direction is the definition of convergence in a topological
+            space. Suppose for every sequence $a:\mathbb{N}\rightarrow{X}$ such
+            that there exists $x\in{A}$ such that $a_{n}\rightarrow{x}$, it is
+            true that there exists an $N\in\mathbb{N}$ such that $n>N$ implies
+            $a_{n}\in{A}$. Then for every $x\in{A}$ there is an open subset
+            $\mathcal{U}_{x}\subseteq{A}$ such that $x\in\mathcal{U}_{x}$. For
+            suppose not, and let $x\in{A}$ be such that there is not open
+            neighborhood $\mathcal{U}_{x}\in\tau$ such that
+            $x\in\mathcal{U}_{x}$ and $\mathcal{U}_{x}\subseteq{A}$. But
+            $\topspace{X}$ is first countable and thus there is a countable
+            neighborhood basis $\mathcal{B}_{x}$ about $x$. Let
+            $B:\mathbb{N}\rightarrow\mathcal{B}$ be a surjection and let
+            $\mathcal{U}_{n}$ be the intersection of $B_{0},\dots,B_{n}$. Since
+            none of these are contained in $A$, by hypothesis, there exists a
+            $y_{n}\in\mathcal{U}_{n}$ such that $y_{n}\notin{A}$. But then
+            $y_{n}\rightarrow{x}$, a contradiction.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a first countable topological space, and if
+            $A\subseteq{X}$, then $A$ is closed if and only for every convergent
+            sequence $a:\mathbb{N}\rightarrow{X}$ with limit $x\in{X}$ such that
+            for all $n\in\mathbb{N}$ it is true that $a_{n}\in{A}$, then
+            $x\in{A}$.
+        \end{theorem}
+        \begin{proof}
+            For if $A$ is closed, and if $a:\mathbb{N}\rightarrow{A}$ is such
+            that $a_{n}\rightarrow{x}$, suppose $x\notin{A}$. Then since $A$ is
+            closed, $X\setminus{A}$ is open. But if $a_{n}\rightarrow{x}$ then
+            for all $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$, there is
+            and $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+            $a_{n}\in\mathcal{U}$. But $X\setminus{A}$ is open and
+            $x\in{X}\setminus{A}$, a contradiction since $a_{n}\in{A}$ for all
+            $n$. In the other direction, a set is closed if and only if it is
+            equal to it's closure, hence apply the previous theorem.
+        \end{proof}
+        \begin{fdefinition}{Lindel\"{o}f Topological Space}
+                           {Lindelof_Topological_Space}
+            A Lindel\"{o}f topological space is a topological $\topspace{X}$
+            such that for every open cover $\mathcal{O}$ of $X$ there exists a
+            countable subcover $\Delta$.
+        \end{fdefinition}
+        This is a weaker version of compactness, but it has it's uses.
+        \begin{theorem}
+            If $\topspace{X}$ is a second countable topological space, then it
+            is Lindel\"{o}f.
+        \end{theorem}
+        \begin{proof}
+            For let $\mathcal{O}$ be an open cover of $X$. Since $\topspace{X}$
+            is second countable, there exists a countable basis $\mathcal{B}$
+            for $\tau$. Let $B:\mathbb{N}\rightarrow\mathcal{B}$ be a
+            surjection. For all $\mathcal{U}\in\mathcal{O}$, define:
+            \begin{equation}
+                A_{\mathcal{U}}=
+                    \{\,n\in\mathbb{N}\;|\;B_{n}\subseteq\mathcal{U}\}
+            \end{equation}
+            Since $\mathcal{B}$ is a basis, for all non-empty
+            $\mathcal{U}\in\mathcal{O}$ there is an $n\in\mathbb{N}$ such that
+            $B_{n}\subseteq\mathcal{U}$, and hence $A_{\mathcal{U}}$ is
+            non-empty. There is thus an inverse mapping (axiom of choice)
+            $f:\mathbb{N}\rightarrow\mathcal{O}$ such that for all
+            $n\in\mathbb{N}$, $B_{n}\subseteq{f}_{n}$, and thus
+            $\Delta=\{f_{n}\}$ is a countable subcover.
+        \end{proof}
+        Def subspace, def relatively open, relatively closed.
+        \begin{fdefinition}{Topological Embedding}{Topological_Embedding}
+            A topological embedding of a topological space $\topspace[X]{X}$
+            into a topological space $\topspace[Y]{Y}$ is a continuous injective
+            function $f:X\rightarrow{Y}$ such that $\topspace{X}$ is
+            homeomorphic to $t\topspace{f[X]}{f[X]}$, where
+            $\tau_{f[X]}$ is the subspace topology in $Y$.
+        \end{fdefinition}
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a topological space, if $A\subseteq{X}$,
+            if $\tau_{A}$ is the subspace topology on $A$, if $\topspace[Y]{Y}$
+            is a topological space, and if $f:Y\rightarrow{A}$ is a function,
+            then $f$ is continuous if and only if
+            $\inclusion{A}\circ{f}:Y\rightarrow{X}$ is continuous, where
+            $\inclusion{A}\rightarrow{X}$ is the inclusion mapping.
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a topological space, if $A\subseteq{X}$,
+            if $\tau$ is a topology on $A$ such that for every topological space
+            $\topspace[Y]{Y}$ and for every continuous function
+            $f:Y\rightarrow{A}$ it is true that $\inclusion{A}\circ{f}$ is
+            continuous, then $\tau=\tau_{A}$ where $\tau_{A}$ is the subspace
+            topology.
+        \end{theorem}
+        \begin{theorem}
+            Closed in subspace $A$ if and only if $C_{A}=A\cap{C}_{X}$, where
+            $C_{X}$ is closed.
+        \end{theorem}
+        Inclusion map it top embedding, restriction of continuous is continuous,
+        subspace of Hausdorff is Hausdorff, same for first/second countable.
+        If $f:X\rightarrow{Y}$ is continuous, then it is continuous in it's
+        restriction to all subspaces of $X$. What about the converse? If
+        $f$ is continuous in it's subspaces, is it continuous?
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$ is
+            a topological space, and if $f:X\rightarrow{Y}$ is such that for
+            every point $x\in{X}$ there exists an open subset
+            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{Y}$ is continuous in the
+            subspace topology, then $f$ is continuous.
+        \end{theorem}
+        This theorem let's us make continuous functions by gluing together
+        pieces of functions that are defined on open subsets which agree on the
+        overlap.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $\mathcal{O}$ is an open cover of $X$, if
+            $\mathscr{F}:\mathcal{O}\rightarrow\funcspace[Y]{X}$ is a bijection
+            such that for all $\mathcal{U},\mathcal{V}\in\mathcal{O}$ it is true
+            that:
+            \begin{equation}
+                \mathscr{F}(\mathcal{U})|_{\mathcal{U}\cap\mathcal{V}}=
+                \mathscr{F}(\mathcal{V})|_{\mathcal{U}\cap\mathcal{V}}
+            \end{equation}
+            and such that
+            $\mathscr{F}(\mathcal{U})|_{\mathcal{U}}:\mathcal{U}\rightarrow{Y}$
+            is continuous in the subspace topology, then there is a unique
+            continuous function $f:X\rightarrow{Y}$ such that for all
+            $\mathcal{U}\in\mathscr{F}$ it is true that
+            $f|_{mathcal{U}}=\mathscr{F}(\mathcal{U})|_{\mathcal{U}}$
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace{X}$ is a topological space, if
+            $\mathcal{O}$ is a countable open cover of $X$ such that for all
+            $\mathcal{U}\in\mathcal{O}$ it is true that
+            $\topspace[\mathcal{U}]{\mathcal{U}}$ is second countable, where
+            $\tau_{\mathcal{U}}$ is the subspace topology, then $\topspace{X}$
+            is second countable.
+        \end{theorem}
+        \begin{proof}
+            For let $\mathcal{B}$ be the union of all of the bases of all of the
+            $\mathcal{U}\in\mathcal{O}$. This is countable since it is the
+            countable union of countable sets. Let $\mathcal{V}\in\tau$ be an
+            open subset of $X$. But then $\mathcal{V}\cap\mathcal{U}$ is open
+            for all $\mathcal{U}\in\mathcal{O}$ and it is relatively open in
+            $\mathcal{U}$. But $\mathcal{B}_{\mathcal{U}}$ is a basis for
+            $\mathcal{U}$, and hence there is a subset
+            $\Delta_{\mathcal{V}}\subseteq\mathcal{B}_{\mathcal{U}}$ such that
+            $\cap\mathcal{U}=\bigcup\Delta_{\mathcal{V}}$. But then:
+            \begin{equation}
+                \mathcal{V}=\mathcal{V}\cap{X}=
+                \mathcal{V}\cap\Big(\bigcup\mathcal{U}\Big)
+                =\bigcup\big(\mathcal{V}\cap\mathcal{U}\big)
+                =\bigcup\Big(\bigcup\Delta_{\mathcal{V}}\Big)
+            \end{equation}
+            which is the union of elements of $\mathcal{B}$, and hence this is a
+            basis for $\tau$.
+        \end{proof}
+        Product topology, projection map, continuous iff components are
+        continuous. The roduct topology is unique topology with this property.
+        Projections are continuious. Product maps. Product of continuous maps
+        is continuous. Subspace topology is the same as product topology of
+        subspaces. That is, $A_{1}\times{A}_{2}$, doesn't matter if we consider
+        subspace topology of product or product topology of subspaces.
+        Open rectangles form basis in finite products.
+        \par\hfill\par
+        Def disjoint union, canonical injective map.
+        \begin{fdefinition}{Disjoint Union Topology}{Disjoint_Union_Topology}
+            The disjoint union topology generated by the disjoint union of a
+            set of topological spaces $\mathscr{T}$ is subset
+            $\tau_{T}\subseteq\mathcal{P}(\coprod\mathscr{T})$ defined by
+            declaring $\mathcal{U}$ open if and only if for all $\alpha$,
+            $\pi_{\alpha}(\mathcal{U})$ is open in $X_{\alpha}$.
+        \end{fdefinition}
+        Function fro disjoint union to $Y$ is continuous if and only if
+        $F\circ\inclusion{\alpha}$ is continuous for all $\alpha$ where
+        $\inclusion{\alpha}$ is the canonical inclusion map. Disjoint union
+        topology is unique topology with this trait. Canonical inclusions are
+        embeddings. Disjoint union of Hausdorff is Hausdorff, similarly for
+        firsct countable. Disjoint unions of countably many second countable
+        spaces is second countable.
+        \begin{fdefinition}{Quotient Map}{Quotient_Map}
+            A quotient map form a topological space $\topspace[X]{X}$ to a
+            topological $\topspace[Y]{Y}$ is a surjective continuous function
+            $q:X\rightarrow{Y}$ and such that for all
+            $\mathcal{V}\subseteq{Y}$ such that
+            $q^{\minus{1}}[\mathcal{V}]\in\tau_{X}$, it is true that
+            $\mathcal{V}\in\tau_{Y}$
+        \end{fdefinition}
+        That is, the quotient map $q$ is continuous, surjective, and uniquely
+        defines the topology on $Y$. A common confusion is that a quotient map
+        is not necessarily an open mapping. The reverse direction is a true
+        statement.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            and if $f:X\rightarrow{Y}$ is a continuous surjective open map,
+            then $f$ is a quotient map.
+        \end{theorem}
+        \begin{proof}
+            For if $\mathcal{V}\in\tau_{Y}$, then since $f$ is continuous it is
+            true that $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. Moreover, if
+            $\mathcal{V}\subseteq{Y}$ is such that
+            $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$, then since $f$ is
+            surjective it is true that
+            $f\big[f^{\minus{1}}[\mathcal{V}]\big]=\mathcal{V}$. But
+            by hypothesis $f$ is an open mapping, and
+            $f^{\minus{1}}[\mathcal{V}]$ and an open subset of $X$, and
+            therefore $\mathcal{V}$ is an open subset of $Y$. Thus, for all
+            $\mathcal{V}\subseteq{Y}$ it is true that $\mathcal{V}$ is open if
+            and only if $f^{\minus{1}}[\mathcal{V}]$ is open in $X$. Thus,
+            $f$ is a quotient map.
+        \end{proof}
+        \begin{fdefinition}{Quotient Topology}{Quotient_Topology}
+            The quotient topology on a set $Y$ induced by a topological space
+            $\topspace[X]{X}$ under a surjective function $q:X\rightarrow{Y}$
+            is the set:
+            \begin{equation*}
+                \tau_{Y}=\{\,\mathcal{V}\in\powset{Y}\;|\;
+                    q^{\minus{1}}[\mathcal{V}]\in\tau_{X}\,\}
+            \end{equation*}
+        \end{fdefinition}
+        The most common way of constructing quotient spaces is by means of an
+        equivalence relation.
+        \begin{fdefinition}{Quotient Space of Equivalence Relation}
+                           {Quotient_Space_of_Equiv_Rel}
+            The quotient space induced by an equivalence relation $R$ on a set
+            $X$ with respect to a topology $\tau$ on $X$ is the topological
+            space $\topspace[R]{X/R}$ where $X/R$ is the quotient set of $X$
+            under $R$ and $\tau_{R}$ is the quotient topology induced by the
+            natural projection mapping $q:X\rightarrow{X}/R$ defined by
+            $q(x)=[x]$.
+        \end{fdefinition}
+        \begin{fdefinition}{Adjunction Space}{Adjunction_Space}
+            The adjunction space of a topological space $\topspace[X]{X}$
+            with respect to a topological space $\topspace[Y]{X}$ under a
+            continuous function $f:A\rightarrow{X}$ from a closed subset
+            $A\subseteq{Y}$ into $X$ is the quotient space
+            $\adjspace{X}{Y}$ formed by the equivalence relation $R$ on
+            $X\coprod{Y}$ generated by the relation:
+            \begin{equation*}
+                \tilde{R}=
+                    \Big\{\,
+                        \big((x,0),(y,1)\big)\in\big(X\coprod{Y}\big)^{2}\;|\;
+                        y\in{A}\textrm{ and }x=f(y),0\,
+                    \Big\}
+            \end{equation*}
+        \end{fdefinition}
+        Pictorially, we have a copy of $X$ and a copy of $Y$ in some ambient
+        space, and we glue $A\subseteq{Y}$ along $f[A]\subseteq{X}$.
+        \begin{fdefinition}{Saturated Subset}{Saturated_Subset}
+            A saturated subset of a set $X$ with respect to a set $Y$ under a
+            function $f:X\rightarrow{Y}$ is a subset $A\subseteq{X}$ such that:
+            \begin{equation*}
+                f^{\minus{1}}\big[f[A]\big]=A
+            \end{equation*}
+        \end{fdefinition}
+        \begin{theorem}
+            If $X$ and $Y$ are sets, if $f:A\rightarrow{Y}$ is a function, and
+            if $A\subseteq{X}$, then $A$ is saturated in $X$ if and only if
+            there is a subset $B\subseteq{Y}$ such that:
+            \begin{equation}
+                A=\bigcup_{y\in{B}}f^{\minus{1}}[\{y\}]
+            \end{equation}
+            That is, $A$ is the union of fibers.
+        \end{theorem}
+        \begin{proof}
+            For if $A$ is the union of the fibers of $B$, then
+            $f[A]=B$. But then $A=f^{\minus{1}}[b]=f^{\minus{1}}\big[f[A]\big]$,
+            and hence $A$ is saturated. If $A$ is saturated, let $B=f[A]$ and
+            let $y\in{B}$. Then $f^{\minus{1}}[\{b\}]\subseteq{A}$ since $A$ is
+            saturated. Thus, $A$ is the union of fibers.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $q:X\rightarrow{Y}$ is a quotient map, and if
+            $\topspace[Z]{Z}$ is a topological space, then for any continuous
+            function $f:Y\rightarrow{Z}$, $f\circ{q}:X\rightarrow{Z}$ is
+            continuous.
+        \end{theorem}
+        The quotient topology is the unique topology with this property. Closed
+        if and only if $q^{\minus{1}}[\mathcal{V}]$ is closed. Injective
+        quotient map is a homeomorphism. The restriction of quotient map to
+        saturated subset is a quotient map onto it's image. Composition of
+        quotient maps is a quotient map.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $q:X\rightarrow{Y}$ is a continuous surjective function, then
+            $q$ is a quotient map if and only if for every open saturated subset
+            $\mathcal{U}\subseteq{X}$, $q[\mathcal{U}]$ is open in $Y$.
+        \end{theorem}
+        \begin{proof}
+            For if $q$ is a quotient map, then $\mathcal{V}\subseteq{Y}$ is
+            open if and only if $q^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. But
+            if $\mathcal{U}\in\tau_{X}$ is open and saturated, then
+            $q^{\minus{1}}[q[\mathcal{U}]]=\mathcal{U}$. But then
+            $q[\mathcal{U}]$ is such that it's pre-image under $q$ is open, and
+            thus $q[\mathcal{U}]$ is open. On the other hand, suppose $q$ maps
+            open saturated sets to open sets and let $\mathcal{V}\subseteq{Y}$
+            be such that $q^{\minus{1}}[\mathcal{V}]$ is open. Let
+            $\mathcal{U}=q^{\minus{1}}[\mathcal{V}]$. But then $\mathcal{U}$ is
+            the union of fibers and is hence saturated. But then $\mathcal{U}$
+            is open and saturated, and thus $q[\mathcal{U}]$ is open. But
+            $q[\mathcal{U}]=\mathcal{V}$, and thus $\mathcal{V}$ is open. Thus,
+            $q$ is a quotient map.
+        \end{proof}
+        Same theorem for closed subsets.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $q:X\rightarrow{Y}$ is a quotient map, if $\topspace[Z]{Z}$ is a
+            topological space, and if $f:X\rightarrow{Z}$ is a continuous
+            function such that for all $x_{1},x_{2}\in{X}$ such that
+            $q(x_{1})=q(x_{2})$ it is true that $f(x_{1})=f(x_{2})$, then there
+            is a unique continuous function $\tilde{f}:Y\rightarrow{Z}$ such
+            that $f=\tilde{f}\circ{q}$.
+        \end{theorem}
+        \begin{proof}
+            For since $q$ is a quotient map, it is surjective. Thus for all
+            $y\in{Y}$, $q^{\minus{1}}[\{y\}]$ is non-empty. Thus, by the axiom
+            of choice, there is a function $p:Y\rightarrow{X}$ such
+            that $p(y)\in{q}^{\minus{1}}[\{y\}]$ for all $y\in{Y}$. That is,
+            $p(y)$ is a representative for the equivalence class $[p(y)]$ of
+            points in $X$ that map to $y$. Let $\tilde{f}:Y\rightarrow{Z}$ be
+            defined by $\tilde{f}=f\circ{p}$. But by hypothesis for all
+            $x_{1},x_{2}\in{q}^{\minus{1}}[\{y\}]$ it is true that
+            $f(x_{1})=f(x_{2})$. But then:
+            \begin{equation}
+                f(x)=f(p(y))=\tilde{f}(y)
+            \end{equation}
+            and thus $f=\tilde{f}\circ{q}$. But $f$ is continuous, and thus by
+            the characteristic property of quotient spaces, $\tilde{f}$ is
+            continuous.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace[X]{X}$, $\topspace[Y]{Y}$, and $\topspace[Z]{Z}$ are
+            topological spaces, if $q_{Y}:X\rightarrow{Y}$ and
+            $q_{Z}:X\rightarrow{Z}$ are quotient maps, and if for all
+            $x_{1},x_{2}\in{X}$ it is true that $q_{Y}(x_{1})=q_{Y}(x_{2})$ if
+            and only if $q_{Z}(x_{1})=q_{Z}(x_{2})$, then there is a unique
+            homeomorphism $\varphi:Y\rightarrow{Z}$ such that
+            $\varphi\circ{q_{Y}}=q_{Z}$.
+        \end{theorem}
+        Projection maps are open mappings. Canonical injective mappings into
+        disjoint union topology are closed and open mappings. Local hoemo is
+        open map. Bijective local homeo is homeo.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $q:X\rightarrow{Y}$ is a quotient map, and if
+            $R\subseteq{X}\times{X}$ defined by:
+            \begin{equation}
+                R=\{\,(x_{1},x_{2})\in{X}\times{X}\;|\;q(x_{1})=q(x_{2})\,\}
+            \end{equation}
+            is a closed subset of $X\times{X}$ in the product topology, then
+            $Y$ is Hausdorff.
+        \end{theorem}
+        \begin{theorem}
+            $f:X\rightarrow{Y}$ is an open mapping if and only if for all
+            $B\subseteq{Y}$ it is true that:
+            \begin{equation}
+                \interior[\tau_{X}]{f^{\minus{1}}[B]}\subseteq
+                f^{\minus{1}}\big[\interior[\tau_{Y}]{B}\big]
+            \end{equation}
+        \end{theorem}
+        Similarly for closed mappings.
+        \begin{theorem}
+            If $q:X\rightarrow{Y}$ is a continuous surjective open function,
+            then it is a quotient map.
+        \end{theorem}
+        \begin{theorem}
+            If $q:X\rightarrow{Y}$ is a continuous injective open function,
+            then it is a topological embedding.
+        \end{theorem}
+        \begin{theorem}
+            If $f:X\rightarrow{Y}$ is a continuous bijective open function,
+            then it is a homeomorphism.
+        \end{theorem}
+        Def connected space, connected component, continuous image of connected
+        is connected.
+        \begin{theorem}
+            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$ is a
+            connected subset, then there is a unique connected component
+            $B$ of $X$ such that $A\subseteq{B}$.
+        \end{theorem}
+        \begin{proof}
+            For let $(C,\subseteq)$ be the partial ordered set of connected
+            subsets of $X$ ordered by inclusion and let $\mathcal{U}_{J}$ be a
+            chain. Suppose $\bigcup\mathcal{U}_{j}$ is disconnected. Then there
+            are disjoint non-empty open sets $\mathcal{V}_{1},\mathcal{V}_{2}$
+            such that
+            $\mathcal{V}_{1}\cup\mathcal{V}_{2}=\bigcup\mathcal{U}_{J}$, and
+            such that $\mathcal{V}_{i}\cap\bigcup\mathcal{U}_{j}\ne\emptyset$.
+            But then there is an $x_{1}\in\mathcal{V}_{1}$ such that
+            $x_{1}\in\bigcup\mathcal{U}_{J}$ and an $x_{2}\in\mathcal{V}_{2}$
+            such that $x_{2}\in\bigcup\mathcal{U}_{J}$. But if
+            $x_{1}\in\mathcal{U}_{J}$ there is some $\alpha\in{J}$ such that
+            $x_{1}\in\mathcal{U}_{\alpha}$, and similarly
+            $x_{2}\in\mathcal{U}_{\beta}$. But since the $\mathcal{U}_{J}$ form
+            a chain, either $\mathcal{U}_{\alpha}\subseteq\mathcal{U}_{\beta}$
+            or $\mathcal{U}_{\beta}\subseteq\mathcal{U}_{\alpha}$. But then
+            $\mathcal{V}_{1}$ and $\mathcal{V}_{2}$ are not disjoint, a
+            contradiction, and hence $\bigcup\mathcal{U}_{J}$ is connected.
+            Thus by Zorn's lemma, there is a maximal element $B\in{C}$ that is
+            comporable to $A$. That is, $B$ is maximal and $A\subseteq{B}$.
+            If $B'$ is a different maximal element, and
+            $B\cup{B}'$ would be connected and strictly larger, contradicting
+            maximality.
+        \end{proof}
+        \begin{theorem}
+            The connected components of $X$ are closed non-empty disjoint sets
+            that partition $X$.
+        \end{theorem}
+        \begin{theorem}
+            Product of connected is connected (in product topology).
+        \end{theorem}
+        The product of connected need not be connected in the box topology.
+        \begin{theorem}
+            The quotient of connected is connected.
+        \end{theorem}
+        \begin{fdefinition}{Locally Path Connected}{Locally_Path_Connected}
+            A locally path connected topological space is a topological space
+            $\topspace{X}$ such that there exists a basis $\mathcal{B}$ of
+            $\tau$ such that for all $\mathcal{U}\in\mathcal{B}$ it is true that
+            $\mathcal{U}$ is path connected.
+        \end{fdefinition}
+        \begin{example}
+            Paradoxically, path connected does not imply locally path connected.
+            The Warsaw Circle, which is the topologist's sine curve wrapped
+            around with an arc to form a path connected space, is not locally
+            path connected.
+        \end{example}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally path connected topological space, and
+            if $A\subseteq{X}$ is a connected component of $X$, then $A$ is
+            open.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is locally path connected, there is a basis
+            $\mathcal{B}$ of $\tau$ of connected open sets. But then for all
+            $x\in{A}$, there is an open set $\mathcal{U}_{x}\in\mathcal{B}$
+            such that $x\in\mathcal{U}_{x}$. But by hypothesis
+            $\mathcal{U}_{x}$ is open and $A$ is a connected component, and
+            hence $\mathcal{U}_{x}\subseteq{A}$. But then
+            $A=\bigcup\mathcal{U}_{x}$, which is open, and thus $A$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally path connected topological space, and
+            if $A\subseteq{X}$ is a connected component, then it is a path
+            connected component.
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally path connected topological space,
+            and if $\topspace{X}$ is connected, then it is path connected.
+        \end{theorem}
+        Def compact, cont image of compact is compact, EVT, finite union of
+        compact is compact, disjoint compact subsets of a Hausdorff space can be
+        separated by disjoint open sets. Closed subset of compact is compact.
+        Compact Hausdorff is closed. Compact in metric if and only if complete
+        and totally bounded. Product of compact is compact. Quotient of compact
+        is compact. Def uni cont, Lipschitz cont, locally Lipschitz cont.
+        Lipschitz cont -> uni cont -> cont (metric space). Cont on compact is
+        uni cont. Locally Lipschitz cont on compact is Lipschitz cont.
+        Implications don't reverse: Try $\sqrt{x}$ and $x^{2}$.
+        \begin{theorem}
+            If $\topspace{X}$ is first countable and countably compact,
+            then it is sequentially compact.
+        \end{theorem}
+        \begin{fdefinition}{Point Finite Cover}{Point_Finite_Cover}
+            A point finite cover of a topological space $\topspace{X}$ is a
+            cover $\mathcal{O}$ of $X$ such that for all $x\in{X}$ the set
+            $\mathcal{O}_{x}$ defined by:
+            \begin{equation*}
+                \mathcal{O}_{x}=\{\,\mathcal{U}\in\mathcal{O}\;|\;
+                    x\in\mathcal{U}\,\}
+            \end{equation*}
+            is finite.
+        \end{fdefinition}
+        \begin{fdefinition}{Metacompact}{Metacompact}
+            A metacompact topological space is a topological space
+            $\topspace{X}$ such that for every open cover $\mathcal{O}$ of $X$
+            there exists a point finite refinement $\Delta$ of $\mathcal{O}$.
+        \end{fdefinition}
+        One useful theorem about metacompact sets is how it related sequentially
+        compact spaces to compact spaces. In general, these two need not be
+        equivalent. The classsic examples are the long line (which is
+        sequentially compact but not compact) and the product space of the
+        closed unit interval $[0,1]$ with itself uncountably many times
+        (which is compact but not sequentially compact). If the space is both
+        metacompact and countably compact, then it is compact. Since metacompact
+        is implied by paracompactness, and since every metric space is
+        paracompact, we can combine all of this to get a nice theorem: A metric
+        space is compact if and only if it is sequentially compact. A more
+        general version says that sequentially compact metacompact spaces are
+        also compact.
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a compact topological space, if
+            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
+            $f:X\rightarrow{Y}$ is a continuous function, then it is a closed
+            mapping.
+        \end{theorem}
+        \begin{proof}
+            For if $C\subseteq{X}$ is closed, then it is compact since $X$ is
+            compact. But the continuous image of a compact set is compact, and
+            hence $f[C]$ is a compact subset of $Y$. But $Y$ is Hausdorff, and
+            thus compact subsets are closed. Thus, the image of closed sets is
+            closed and hence $f$ is a closed mapping.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a compact topological space, if
+            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
+            $f:X\rightarrow{Y}$ is a continuous bijection, then it is a
+            homeomorphism.
+        \end{theorem}
+        \begin{theorem}
+            For $f$ is then a continuous bijective closed mapping, and hence
+            is a homeomorphism.
+        \end{theorem}
+        Weakening bijective to injective or surjective obtains topological
+        embeddings and quotient maps, respectively.
+        \begin{fdefinition}{Proper Function}{Proper_Function}
+            A proper function from a topological space $\topspace[X]{X}$ to a
+            topological space $\topspace[Y]{Y}$ is a function
+            $f:X\rightarrow{Y}$ such that for every compact subset
+            $C\subseteq{Y}$, the pre-image $f^{\minus{1}}[C]$ is a compact
+            subset of $X$
+        \end{fdefinition}
+        Note that the definition of a proper function does not actually require
+        $f$ to be continuous. Such functions play roles in the theory of
+        groupoids, in analysis, and in the study of smooth manifolds. If the
+        target space $Y$ is locally compact and Hausdorff, there's a simple
+        theorem that can accompony this definition.
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $f:X\rightarrow{Y}$ is a continuous closed function, and if for
+            all $y\in{Y}$ it is true that $f^{\minus{1}}[\{y\}]$ is a compact
+            subset of $X$, then $f$ is a proper function.
+        \end{theorem}
+        \begin{proof}
+            For let $C\subseteq{Y}$ be compact and let $K=f^{\minus{1}}[C]$.
+            Suppose $K$ is not compact. Then there is an open cover
+            $\mathcal{O}$ of $K$ such that no finite subcover exists.
+        \end{proof}
+        There's a rewording of a previous theorem in terms of proper functions.
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a compact topological space, if
+            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
+            $f:X\rightarrow{Y}$ is a continuous function, then it is a proper
+            function.
+        \end{theorem}
+        \begin{proof}
+            For if $C\subseteq{Y}$ is compact, then it is closed since $Y$ is
+            Hausdorff. But the pre-image of a closed subset under a continuous
+            function is closed. Thus, $f^{\minus{1}}[C]$ is a closed subset of
+            $X$. But closed subsets of compact sets are compact, and hence
+            $f^{\minus{1}}[C]$ is compact.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$
+            is a Hausdorff topological space, if $f:X\rightarrow{Y}$ is
+            continuous, and if $g:Y\rightarrow{X}$ is a continuous left inverse
+            of $f$, then $f$ is proper.
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $f:X\rightarrow{Y}$ is a continuous proper function, if
+            $A\subseteq{X}$ is a saturated subset of $X$ with respect to $f$,
+            and if $f|_{A}:A\rightarrow{Y}$ is the restriction of $f$ to $A$,
+            then $f$ is proper in the subspace topology on $A$.
+        \end{theorem}
+        \begin{ltheorem}{Tube Lemma}
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            if $A\subseteq{X}$ is compact, if $B\subseteq{Y}$ is compact,
+            if $\topspace[X\times{Y}]{X\times{Y}}$ is the product topological
+            space, and if $\mathscr{O}\subseteq{X}\times{Y}$ is and open subset
+            in the product topology such that $A\times{B}\subseteq\mathscr{O}$,
+            then there exists open subsets $\mathcal{U}\in\tau_{X}$ and
+            $\mathcal{V}\in\tau_{Y}$ such that
+            $A\times{B}\subseteq\mathcal{U}\times\mathcal{V}$ and
+            $\mathcal{U}\times\mathcal{V}\subseteq\mathscr{O}$.
+        \end{ltheorem}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally compact Hausdorff space, and if
+            $x\in{X}$, then there is a precompact subset $\mathcal{U}\in\tau$
+            such that $x\in\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is locally compact and if $x\in{X}$, then
+            there is an open set $\mathcal{U}\in\tau$ and a compact set
+            $K\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{K}$. But $X$ is Hausdorff, and thus if $K$ is
+            compact, then $K$ is closed. But then
+            $\closure{\mathcal{U}}\subseteq{K}$. But then $\closure{U}$ is a
+            closed subset of a compact set, and is therefore closed. Hence,
+            $\mathcal{U}\in\tau$ is a precompact open set that contains $x$.
+        \end{proof}
+        \begin{theorem}
+            If $\topspace{X}$ is a locally compact Hausdorff space then there
+            exists a basis $\mathcal{B}$ for $\tau$ such that for all
+            $\mathcal{U}\in\mathcal{B}$ it is true that $\mathcal{U}$ is
+            precompact.
+        \end{theorem}
+        \begin{proof}
+            For if $\topspace{X}$ is locally compact and Hausdorff, then for all
+            $x\in{X}$ there is a precompact open subset $\mathcal{U}_{x}$
+            such that $x\in\mathcal{U}_{x}$. Let $\mathcal{B}$ be defined by:
+            \begin{equation}
+                \mathcal{B}=\{\,\mathcal{V}\in\tau\;|\;
+                    \exists_{x\in{X}}(\mathcal{V}\subseteq\mathcal{U}_{x})\,\}
+            \end{equation}
+            Then every element of $\mathcal{V}$ is precompact since
+            $\closure{\mathcal{V}}\subseteq\closure{\mathcal{U}_{x}}$, which
+            is compact, and closed subsets of compact sets are compact.
+            Moreover, $\mathcal{B}$ is a basis for $\tau$. For if
+            $\mathcal{O}\in\tau$ is open, then $\mathcal{U}_{x}\cap\mathcal{O}$
+            is open for all $x\in{X}$. And this is a subset of $\mathcal{U}_{x}$
+            and hence contained in $\mathcal{B}$. But then:
+            \begin{equation}
+                \mathcal{O}=\mathcal{O}\cap{X}
+                =\mathcal{O}\cap\Big(\bigcup_{x\in{X}}\mathcal{U}_{x}\Big)
+                =\bigcup_{x\in{X}}\big(\mathcal{O}\cap\mathcal{U}_{x}\big)
+            \end{equation}
+            Thus, $\mathcal{B}$ is a basis.
+        \end{proof}
+        \begin{theorem}
+            Every open or closed subspace of a locally commpact Hausdorff space
+            is again locally compact Hausdorff.
+        \end{theorem}
+        \begin{theorem}
+            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$ is
+            a locally compact Hausdorff space, if $f:X\rightarrow{Y}$ is
+            continuous proper function, then $f$ is a closed map.
+        \end{theorem}
+        \begin{proof}
+            For let $C\subseteq{X}$ be closed. Suppose $f[C]$ is not closed.
+            Then there exists a convergent sequence $a:\mathbb{N}\rightarrow{X}$
+            with a limit $x\in{X}\setminus{A}$ such that for all
+            $n\in\mathbb{N}$ it is true that $a_{n}\in{A}$. But $f$ is
+            continuous and therefore $f(a_{n})\rightarrow{f}(x)$. But
+            $Y$ is locally compact and Hausdorff and thus there is a precompact
+            open subset $\mathcal{V}\in\tau_{Y}$ such that $f(x)\in\mathcal{V}$.
+            But $f$ is proper, and therefore
+            $f^{\minus{1}}[\closure[Y]{\mathcal{V}}]$ is a compact subset of
+            $X$. But then $C\cap{f}^{\minus{1}}[\mathcal{V}]$ is a closed
+            subset of a compact set, and is therefore compact. But then
+            $f(x)\in{f}[C]$, a contradiction. Thus, $C$ is closed.
+        \end{proof}
+        One of the most important theorems in the study of metric and locally
+        compact Hausdorff spaces is the Baire category theorem. It comes in
+        three flavors.
+        \begin{ftheorem}{The First Baire Category Theorem}
+                        {First_Baire_Category_Theorem}
+            If $\topspace{X}$ is a completely metrizable topological space,
+            then it is a Baire space.
+        \end{ftheorem}
+        \begin{ftheorem}{The Second Baire Category Theorem}
+                        {Second_Baire_Category_Theorem}
+            If $\topspace{X}$ is a locally compact Hausdorff space, then it is
+            a Baire space.
+        \end{ftheorem}
+        \begin{ftheorem}{The Third Baire Category Theorem}
+                        {Third_Baire_Category_Theorem}
+            If $\topspace{X}$ is a completely metrizable topological space,
+            if $C:\mathbb{N}\rightarrow\powset{X}$ is a sequence of closed sets,
+            and if $\bigcup{C}=X$, then there exists an $N\in\mathbb{N}$ such
+            that $\interior{C_{N}}\ne\emptyset$.
+        \end{ftheorem}
+        \begin{theorem}
+            If $\topspace{X}$ is a Baire space, if and if $C\subseteq{X}$ is a
+            countable closed subset of $X$, then there exists an isolated point
+            $x\in{C}$.
+        \end{theorem}
+        \begin{fdefinition}{Compact Exhaustion}{Compact_Exhaustion}
+            A compact exhaustion of a topological space $\topspace{X}$ is a
+            sequence of compact sets $K:\mathbb{N}\rightarrow\mathcal{P}(X)$
+            such that for all $n\in\mathbb{N}$ it is true that:
+            \begin{equation*}
+                K_{n}\subseteq\interior{{K}_{n+1}}
+            \end{equation*}
+            and such that $X=\bigcup{K}_{n}$.
+        \end{fdefinition}
+        \begin{ftheorem}{Existence of Compact Exhaustions}
+                        {Existence_of_Compact_Exhaustions}
+            If $\topspace{X}$ is a second countable locally compact Hausdorff
+            topological space, then there exists a compact exhaustion of $X$.
+        \end{ftheorem}
+        \begin{bproof}
+            Since $\topspace{X}$ is locally compact and Hausdorff, there is a
+            basis of precompact open sets. But a second countable space is
+            Lindel\"{o}f, and hence there is a countable subcover. Let
+            $K_{n}=\bigcup\closure{\mathcal{U}_{k}}$.
+        \end{bproof}
+        \subsection{Algebraic Topology}
+            Def homotopy, homotopic. Path homotopic functions in a topological
+            space $X$ are paths $\gamma_{1},\gamma_{2}:[0,1]\rightarrow{X}$
+            which are homotopic relative to the set $\{0,1\}$. Path homotopy
+            forms an equivalence relation on the set of all paths between two
+            points, $x,y\in{X}$. Given two pahts $f,g:[0,1]\rightarrow{X}$
+            such that $f(1)=g(0)$, their product is the new path that
+            concatenates these two travelling as twice the \textit{speed}.
+            \begin{equation}
+                (f\star{g})(t)=
+                \begin{cases}
+                    f(2t),&0\leq{t}\leq\frac{1}{2}\\
+                    g(2t-1),&\frac{1}{2}<t\leq{1}
+                \end{cases}
+            \end{equation}
+            Since $f(1)=g(0)$, $f\star{g}$ is continuous at $1/2$ and is
+            therefore a path. If $f,f',g,g'$ are paths such that $f$ and $f'$
+            are path homotopic, and $g$ and $g'$ are path homotopic, then
+            $f\star{g}$ and $f'\star{g}'$ will be path homotopic as well.
+            Multiplication of paths is \textit{not} associative
+            (draw a picture). Def loop ($f:[0,1]\rightarrow{X}$ vs
+            $f:\nsphere[1]\rightarrow{X}$). Def fundamental group. Identity is
+            constant map, inverse of $f(t)$ is $f(1-t)$.
+            \begin{theorem}
+                If $\topspace{X}$ is a path connected topological space and if
+                $x,y\in{X}$, then the fundamental groups $\homotopygroup{X}{x}$
+                and $\homotopygroup{X}{y}$ are isomorphic.
+            \end{theorem}
+            \begin{fdefinition}{Simply Connected}{Simply_Connected}
+                A simply connected topological space is a topological space
+                $\topspace{X}$ such that for all $p\in{X}$ it is true that the
+                fundamental group $\homotopygroup{X}{x}$ is isomorphic to the
+                trivial group.
+            \end{fdefinition}
+            \begin{theorem}
+                If $\topspace{X}$ is a path connected topological space, then
+                it is simply connected if and only if for all $x,y\in{X}$ and
+                all paths $\gamma_{1},\gamma_{2}:[0,1]\rightarrow{X}$ such that
+                $\gamma_{1}(0)=x$, $\gamma_{2}(0)=x$ and such that
+                $\gamma_{1}(1)=y$ and $\gamma_{2}(1)=y$, it is true that
+                $\gamma_{1}$ and $\gamma_{2}$ are path homotopic.
+            \end{theorem}
+            \begin{proof}
+                For let $h=\gamma_{1}\star\gamma_{2}^{\minus{1}}$. Since $X$ is
+                simply connected, there is a homotopy $H$ between $h$ and the
+                path $\gamma_{2}\star\gamma_{2}^{\minus{1}}$.
+            \end{proof}
+            \begin{theorem}
+                If $f_{1},f_{2}:X\rightarrow{Y}$, $g_{1},g_{2}:Y\rightarrow{Z}$
+                are continuous, $f_{1}$ homotopy to $f_{2}$, $g_{1}$ homotopic
+                to $g_{2}$, then $g_{1}\circ{f_{1}}$ is homotopic to
+                $g_{2}\circ{f}_{2}$.
+            \end{theorem}
+            \begin{fdefinition}{Induced Homomorphism of $\pi_{1}$}
+                               {Induced_Homo_Fun_Group}
+                The induced homomorphism from a the fundamental group
+                of a topological space $\topspace[X]{X}$ at a point $x\in{X}$
+                into the fundamental group of a topological space
+                $\topspace[Y]{Y}$ about a point $y\in{Y}$ by a continuous
+                function $f:X\rightarrow{Y}$ such that $f(x)=y$ is the function
+                $f_{*}:\homotopygroup{X}{x}\rightarrow\homotopygroup{Y}{y}$
+                defined by:
+                \begin{equation*}
+                    f_{*}[\gamma]=[f\circ\gamma]
+                \end{equation*}
+            \end{fdefinition}
+            Avoiding proof by 
+            \begin{theorem}
+                The induced homomorphism is a homomorphism.
+            \end{theorem}
+            \begin{theorem}
+                If $\topspace[X]{X}$, $\topspace[Y]{Y}$, and $\topspace[Z]{Z}$
+                are topological spaces, if $f:X\rightarrow{Y}$ and
+                $g:Y\rightarrow{Z}$ are continuous, if $x\in{X}$, if
+                $y=f(x)$, and if $z=g(z)$, then:
+                \begin{equation}
+                    (g\circ{f})_{*}=g_{*}\circ{f}_{*}
+                \end{equation}
+                where $h_{*}$ denotes the induced homotopy between fundamental
+                groups.
+            \end{theorem}
+            \begin{theorem}
+                If $\topspace{X}$ is a topological space, if $x\in{X}$, and if
+                $\identity{X}$ is the identity map, then
+                ${\identity{X}}_{*}$ is the unital element of
+                $\homotopygroup{X}{x}$.
+            \end{theorem}
+            Homeomorphic topological spaces have isomorphic fundamental groups.
+            There's a weakening of the notion of convexity that is useful in the
+            study of fundamental groups.
+            \begin{fdefinition}{Star Shaped}{Star_Shaped}
+                A start shaped subset of a vector space $\monoid[+]{V}$ over a
+                field $\ring{F}$ is a subset $\mathcal{U}\subseteq{V}$ such that
+                there exists a point $\vector{x}\in\mathcal{U}$ such that for
+                all $\vector{y}\in\mathcal{U}$ the straight line between
+                $\vector{x}$ and $\vector{y}$ is contained in $\mathcal{U}$.
+            \end{fdefinition}
+            Thus, every convex body is star shaped but the converse is false.
+            Indeed, a \textit{star} is star shaped by not convex since the
+            line between the outer vertices leaves the body.
+            \begin{theorem}
+                If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is star shaped, then it
+                is simply connected.
+            \end{theorem}
+            \begin{proof}
+                Use the straight-line homotopy between the central point
+                $\vector{x}$ and any other point $\vector{y}$.
+            \end{proof}
+            Fundamental group of $\nsphere[1]$ is $\mathbb{Z}$, all higher
+            spheres are simply connected. Fundamental group of product is
+            product of fundamental groups. Thus, fundamental group of torus is
+            $\mathbb{Z}^{2}$.
+            Homotopy equivalence $f:X\rightarrow{Y}$, homotopy inverse
+            $g:Y\rightarrow{X}$, homotopy equivalent spaces.
+            \begin{theorem}
+                If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological
+                spaces, if $f:X\rightarrow{Y}$ is a homotopy equivalence, if
+                $x_{0}\in{X}$, and if $y_{0}=f(x_{0})$, then the induced
+                homomorphism
+                $f_{*}:\homotopygroup{X}{x_{0}}\rightarrow%
+                 \homotopygroup{Y}{y_{0}}$ is an isomorphism.
+            \end{theorem}
+            \begin{proof}
+                For it suffices to show that $f_{*}$ is bijective. Suppose
+                $[\gamma_{1}],[\gamma_{2}]\in\homotopygroup{X}{x}$ are distinct
+                equivalence classes. Since $f$ is a homotopy equivalence, there
+                exists a homotopy inverse $g:X\rightarrow{Y}$. But then
+                $g\circ{f}$ is homotopic to $\identity{X}$, and so there is a
+                homotopy $H_{X}$ between them. Thus, if
+                $f_{*}([\gamma_{1}])=f_{*}([\gamma_{2}])$, then there is a
+                homotopy $H_{Y}$ between them. But then
+                $G_{X}$ defined by:
+            \end{proof}
+            Covering maps are local homeo, open, and quotient maps. Injective
+            covering map is a homeo. Fibers have the same cardinality, called
+            the number of sheets of the covering. Covering map is proper if and
+            only if it is finite sheeted. Finite product of covering maps is
+            covering map.
+            \begin{fdefinition}{Lift To Covering Spaces}
+                A lift of a continuous function $f:X\rightarrow{Y}$ from a
+                topological space $\topspace[X]{X}$ to topological space
+                $\topspace[Y]{Y}$ to a covering space $\topspace{E}$ of $Y$ is a
+                continuous function $\tilde{f}:X\rightarrow{E}$ such that
+                $\pi\circ\tilde{f}=f$, where $\pi$ is the covering map
+                $\pi:E\rightarrow{Y}$.
+            \end{fdefinition}
+            \begin{theorem}
+                If $B$ is connected, $f:B\rightarrow{X}$ continuous, and if
+                $\tilde{f}_{1},\tilde{f}_{2}$ are lifts to $E$, then if
+                they are equal at one point, they are equal everywhere.
+            \end{theorem}
+            \begin{theorem}
+                If $f:I\rightarrow{X}$ is a path, $e\in{E}$, $\pi(e)=f(0)$,
+                then there is a unique lift $\tilde{f}:I\rightarrow{E}$ such
+                that $\tilde{f}(0)=e$.
+            \end{theorem}
+            \begin{theorem}[Monodromy Theorem]
+                If $f,g:I\rightarrow{X}$ are path-homotopic paths, and
+                $\tilde{f},\tilde{g}$ are lifts that are equal at some point
+                $e\in{E}$, then the lifts are path homotopic.
+            \end{theorem}
+            \begin{theorem}[Lifting Criterion]
+                If $\pi:E\rightarrow{X}$ is a covering map, if $Y$ is connected
+                and locally path connected, and if $f:Y\rightarrow{X}$ is
+                continuous, and if $y\in{Y}$, $e\in{E}$ are such that
+                $\pi(e)=f(y)$, then there is a lift $\tilde{f}:Y\rightarrow{E}$
+                such that $\tilde{f}(y)=e$ if and only if the induced
+                homomorphism $f_{*}[\homotopygroup{Y}{y}]\subseteq%
+                \pi_{*}[\homotopygroup{E}{e}]$.
+            \end{theorem}
+            \begin{theorem}
+                If $X$ is simply connected, and if $\pi:E\rightarrow{X}$ is a
+                covering map, then it is a homeomorphism.
+            \end{theorem}
+            \begin{theorem}
+                If $X$ is connected, locally path connected, and semi-locally
+                simply connected, then there is a universal cover.
+            \end{theorem}
     \section{Homogeneous Spaces}
         \begin{fdefinition}{Topologically Homogeneous Space}
                            {Topologically_Homogeneous_Space}
@@ -91,9 +1610,9 @@
         \end{fdefinition}
         Homogeneous spaces are ones where any point $x$ looks locally like
         any other point. There is a related notion called the
-        \textit{homogeneous spaces of a Lie group}, which relate to Lie groups.
-        The naming is quite unfortunate, and we will attempt to differentiate
-        the two clearly.
+        \textit{homogeneous spaces of a Lie group}, but the definitions are not
+        equivalent. The naming is quite unfortunate, and we will attempt to
+        differentiate the two clearly.
         \begin{example}
             For any $n\in\mathbb{N}$, the Euclidean space $\nspace$ is
             homogeneous. Given $\vector{x},\vector{y}\in\nspace$, define
@@ -125,12 +1644,13 @@
             of $a$ with respect to $*$, is continuous.
         \end{fdefinition}
         \begin{example}
-            The classic examples of topological groups are Abelian groups
-            $\monoid[][+]{\nspace}$ equipped with the standard topology.
-            $\vector{x}+\vector{y}$ is continuous, as is
-            $\vector{x}\mapsto\minus\vector{x}$.
+            The simplest example of a topological group is the Abelian group
+            structure $\monoid[][+]{\nspace}$ equipped with the standard
+            topology for some $n\in\mathbb{N}^{+}$. $\vector{x}+\vector{y}$ is
+            continuous, as is $\vector{x}\mapsto\minus\vector{x}$, showing that
+            $\topgroup[+][]{\nspace}$ is a topological group.
         \end{example}
-        Every group $\monoid{G}$ can be given a group structure.
+        Every group $\monoid{G}$ can be given a topological group structure.
         \begin{theorem}
             \label{thm:Disc_Group_is_Top_Group}%
             If $\monoid{G}$ is a group, and if $\tau=\powset{G}$, then
@@ -148,6 +1668,35 @@
             continuous. Thus, $\topgroup{G}$ is a topological group
             (Def.~\ref{def:Topological_Group}).
         \end{proof}
+        Every non-trivial group can also be given a non-Hausdorff group
+        structure.
+        \begin{theorem}
+            \label{thm:Trivial_Top_is_Top_Group}%
+            If $\monoid{G}$ is a group, if $\tau=\{\emptyset,G\}$ is the trivial
+            topology, then $\topgroup{G}$ is a topological group.
+        \end{theorem}
+        \begin{proof}
+            For it $\topspace{G}$ is a trivial topological space, and if
+            $f:G\rightarrow{G}$ is a function, then $f$ is continuous. Thus
+            $\nu:G\rightarrow{G}$ defined by $\nu(a)=a^{\minus{1}}$ is
+            continuous. If if $\tau$ is trivial, then
+            $(G\times{G},\tau\times\tau)$ is the trivial topological space on
+            $G\times{G}$. But then for any function $g:G\times{G}\rightarrow{G}$
+            it is true that $g$ is continuous, and thus $g(a,b)=a*b$ is
+            continuous. Therefore, $\topspace{G}$ is a topological group
+            (Def.~\ref{def:Topological_Group}).
+        \end{proof}
+        Thus, so long as $\monoid{G}$ is not the trivial group, then
+        $\topgroup{G}$, where $\tau$ is the trivial topology, is a topological
+        group and $\topgroup{G}$ is non-Hausdorff. Indeed, such spaces won't
+        even be Kolmogorov ($T_{0}$). It is very convenient to study $T_{0}$
+        topological groups, since many other separation properties then come for
+        free. That is, if $\topgroup{G}$ is $T_{0}$, then it is 
+        is automatically accessible ($T_{1}$), Hausdorff ($T_{2}$), regular
+        Hausdorff ($T_{3}$), and completely regular Hausdorff
+        ($T_{3\frac{1}{2}}$). Quite a lot from the mere assumption of being
+        $T_{0}$! To prove this we must first show that topological groups are
+        homogeneous.
         \begin{theorem}
             \label{thm:Top_Group_Inverse_is_Homeo}%
             If $\topgroup{G}$ is a topological group, and if
@@ -156,11 +1705,11 @@
         \end{theorem}
         \begin{proof}
             For since $\topgroup{G}$ is a topological group, $\nu$ is continuous
-            (Def.~\ref{def:Topological_Group}). But $\nu$ is bijective inverses
-            are unique and every element of a group has an inverse. Moreover,
-            $\nu^{\minus{1}}(a)=(a^{\minus{1}})^{\minus{1}}=a$, and hence
-            $\nu^{\minus{1}}=\identity{G}$, which is continuous. Thus, $\nu$ is
-            a homemorphism.
+            (Def.~\ref{def:Topological_Group}). But $\nu$ is bijective since
+            inverses are unique and every element of a group has an inverse.
+            Moreover, $\nu^{\minus{1}}(a)=(a^{\minus{1}})^{\minus{1}}=a$, and
+            hence $\nu^{\minus{1}}=\identity{G}$, which is continuous. Thus,
+            $\nu$ is a homemorphism.
         \end{proof}
         \begin{theorem}
             \label{thm:Left_Mult_in_Top_Group_is_Homeo}%
@@ -193,11 +1742,11 @@
             \begin{equation}
                 f(a)=r*a=(b*a^{\minus{1}})*a=b*(a^{\minus{1}}*a)=b*e=b
             \end{equation}
-            and thus $f$ is a homeomorphism such that $f(a)=b$. Therefore, $f$
+            and thus $f$ is a homeomorphism such that $f(a)=b$. Therefore, $G$
             is topologically homogeneous
             (Def.~\ref{def:Topologically_Homogeneous_Space}).
         \end{proof}
-        Thus, every topological group serves as an example of a topologically
+        Hence every topological group is an example of a topologically
         homogeneous space.
         \begin{example}
             The circle $\nsphere[1]$ with the operation $*$ defined by:
@@ -211,7 +1760,7 @@
         \begin{example}
             The general linear group $\GLnR{\nspace}$ is a topological group,
             with $\tau$ be the subspace topology given by viewing
-            $\GLnR{\nspace}$ as a subset of $\nspace{n^{2}}$. In a similar vein,
+            $\GLnR{\nspace}$ as a subset of $\nspace[n^{2}]$. In a similar vein,
             the orthogonal group $\orthgroup{\nspace}$ is a topological group.
             Moreover, $\orthgroup{\nspace}$ is a compact topological group since
             it is a closed subspace and every element is bounded by 1. Hence,
@@ -221,8 +1770,127 @@
             The rational numbers with the subspace topology and usual addition
             form a topological group.
         \end{example}
-        Not every space is homogeneous. We'll need a brief discussion on
-        ordered spaces to demonstrate this.
+        \begin{fdefinition}{Quotient Topology}{Quotient_Topology}
+            The quotient topology of a topological space $\topspace{X}$ by an
+            equivalence relation $R$ on $X$ is the initial topology on the
+            quotient set $X/R$ generated by the canonical projection mapping
+            $q:X\rightarrow{X}/R$ defined by $q(x)=[x]$, where $[x]$ is the
+            equivalence class of $x$ with respect to $R$.
+        \end{fdefinition}
+        A standard example of the quotient topology comes from considering
+        a group $\monoid{G}$ and a topological space $\topspace{X}$. It
+        $\Theta:G\times{X}\rightarrow{X}$ is a group action of $G$ on $X$, then
+        the orbits of $X$ under $\Theta$ form an equivalence relation on $X$.
+        That is, the sets:
+        \begin{equation}
+            \Theta_{x}=\{\,\Theta(x,g)\in{X}\;|\;g\in{G}\,\}
+        \end{equation}
+        form an equivalence relation. The important case of $\monoid{G}$ being a
+        topological group gives rise to the notion of a \textit{continuous}
+        group action.
+        \begin{fdefinition}{Continuous Group Action}{Continuous_Group_Action}
+            A continuous group action of a topological group $(G,*,\tau_{G})$ on
+            a topological space $\topspace[X]{X}$ is a group action
+            $\Theta:G\times{X}\rightarrow{X}$ such that $\Theta$ is
+            a continuous function with respect to the product topology
+            $\tau_{G}\times\tau_{X}$.
+        \end{fdefinition}
+        We often write $\Theta$ as $\cdot$, even though $\Theta$ is not actually
+        a binary operation since $G$ and $X$ may be different sets. Recall from
+        group theory that a group action $\cdot$ satisfies the two following
+        properties:
+        \begin{align}
+            (g_{1}*{g}_{2})\cdot{x}&=g_{1}\cdot(g_{2}\cdot{x})\\
+            e*x&=x
+        \end{align}
+        In the case when the quotient space is formed by a topological group, we
+        use the following notation:
+        \begin{fnotation}{Quotient by Topological Group}{Quotient_by_Top_Group}
+            If $\topgroup{G}$ is a topological group, if $\topspace{X}$ is a
+            topological space, and if $\Theta:G\times{X}\rightarrow{X}$ is a
+            continuous group action, then we denote $X/G$ as the quotient set
+            formed by the equivalence relation $R$ on $X$ where $xRy$ if and
+            only if $x$ and $y$ are in the same orbit of $\Theta$.
+        \end{fnotation}
+        \begin{example}
+            Consider $\monoid[][+]{\mathbb{Z}}$ with its usual group structure.
+            The subspace topology $\tau_{\mathbb{Z}}$ inherited from $\nspace[]$
+            is simply the power set $\powset{\mathbb{Z}}$. Thus, by
+            Thm.~\ref{thm:Disc_Group_is_Top_Group}
+            $(\mathbb{Z},+,\tau_{\mathbb{Z}})$ is a topological group. It acts
+            on $\topspace[\mathbb{R}]{\nspace[]}$ in the familiar way:
+            \begin{equation}
+                \Theta(n,x)=n+x
+            \end{equation}
+            the orbits of $\Theta$ on $X$ forms the equivalence relation $R$
+            where $xRy$ if and only if $x-y\in\mathbb{Z}$. The quotient space is
+            homeomorphic to the circle $\nsphere[1]$ under the homeomorphism
+            $f:\nspace[]/\mathbb{Z}\rightarrow\nsphere[1]$ defined by:
+            \begin{equation}
+                f([x])=\exp(2\pi{i}x)
+            \end{equation}
+            this is well defined since for all $y\in[x]$ there is an
+            $n\in\mathbb{Z}$ with $y=x+n$. Hence:
+            \begin{subequations}
+                \par
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{align}
+                        f([y])&=\exp(2\pi{i}y)\\
+                            &=\exp\big(2\pi{i}(x+n)\big)\\
+                            &=\exp(2\pi{i}x+2\pi{i}n)
+                    \end{align}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \begin{align}
+                        &=\exp(2\pi{i}x)\exp(2\pi{i}n)\\
+                        &=\exp(2\pi{i}x)\\
+                        &=f([x])
+                    \end{align}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+            This is bijective and bicontinuous, and therefore a homeomorphism.
+        \end{example}
+        \begin{example}
+            Consider the sphere $\nsphere[2]$ and the group
+            $\monoid{\nsphere[1]}$ where
+            \begin{equation}
+                \exp(i\theta)*\exp(i\phi)=\exp\big(i(\theta+\phi)\big)
+            \end{equation}
+            This acts on $\nsphere[2]$ with
+            $\Theta:\nsphere[1]\times\nsphere[2]\rightarrow\nsphere[2]$ defined
+            by:
+            \begin{equation}
+                \Theta\big(\theta,(\varphi,\psi)\big)=(\varphi+\theta,\psi)
+            \end{equation}
+            that is, we rotate azimuthally by $\theta$. The orbits are circles
+            concentric with the $z$ axis, and hence $\nsphere[2]/\nsphere[1]$ is
+            the interval $[\minus{1},1]$ (see Fig.~\ref{fig:Quotient_S2_by_S1}).
+        \end{example}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Sphere_Mod_Circle.tex}
+            \caption{The Quotient of $\nsphere[2]$ by $\nsphere[1]$}
+            \label{fig:Quotient_S2_by_S1}
+        \end{figure}
+        Not every space is homogeneous.
+        \begin{example}
+            The space $X=\{0\}\cup(1,2)$, with the subspace topology is not
+            homogeneous. $0$ is an isolated point, and since homomorphisms
+            preserve such a notion, there can be no homomorphism
+            $f:X\rightarrow{X}$ such that $f(0)\in(1,2)$.
+        \end{example}
+        More interesting examples arise when we study locally Euclidean spaces,
+        and in particular manifolds. Manifolds are locally Euclidean Hausdorff
+        topological spaces that are second countable, and every connected
+        manifold is homogeneous. If we rid ourselves of the Hausdorff
+        requirement we can show that there does indeed exist non-Hausdorff
+        locally Euclidean second countable connected spaces, and moreover we
+        can show that they may or may not be homogeneous, paradoxically. Such
+        examples arise from the study of the order topology.
         \begin{fdefinition}{Order Topology}{Order_Topology}
             The order topology from a totally ordered set $(X,\leq)$ is
             the topology $\tau$ generated by sets of the form:
@@ -1650,30 +3318,30 @@
                     Then this map commutes with $\pi$ with $\tilde{\varphi}$:
                     $\tilde{\varphi}=\varphi\circ\pi$.
                 \end{example}
-    \section{Topological Groups}
-        \begin{definition}
-            A topological Lie group is a group $(G,*)$ with a topology $\tau$ on
-            $G$ such that $\nu:G\rightarrow{G}$ defined by
-            $\nu(g)=g^{\minus{1}}$ is continuous $*:G\times{G}\rightarrow{G}$ is
-            continuous in the product topology, and $(G,\tau)$ is a topological
-            manifold.
-        \end{definition}
-        \begin{theorem}
-            $GL_{n}(\mathbb{R})$ is a topological Lie group of dimension
-            $n^{2}$.
-        \end{theorem}
-        \begin{proof}
-            For we have:
-            \begin{equation}
-                GL_{n}(\mathbb{R})=
-                \textrm{det}^{\minus{1}}(\mathbb{R}\setminus\{0\})
-            \end{equation}
-            and since $\textrm{det}$ is continuous (it's a polynomial), it's
-            thus an open subset of $\mathbb{R}^{n^{2}}$ (we can identify
-            $n\times{n}$ matrices with points in $\mathbb{R}^{n^{2}}$). Moreover
-            multiplication is continuous since it's continuous in every slot,
-            it's a polynomial. The inverse function
-        \end{proof}
+
+    \begin{definition}
+        A topological Lie group is a group $(G,*)$ with a topology $\tau$ on
+        $G$ such that $\nu:G\rightarrow{G}$ defined by
+        $\nu(g)=g^{\minus{1}}$ is continuous $*:G\times{G}\rightarrow{G}$ is
+        continuous in the product topology, and $(G,\tau)$ is a topological
+        manifold.
+    \end{definition}
+    \begin{theorem}
+        $GL_{n}(\mathbb{R})$ is a topological Lie group of dimension
+        $n^{2}$.
+    \end{theorem}
+    \begin{proof}
+        For we have:
+        \begin{equation}
+            GL_{n}(\mathbb{R})=
+            \textrm{det}^{\minus{1}}(\mathbb{R}\setminus\{0\})
+        \end{equation}
+        and since $\textrm{det}$ is continuous (it's a polynomial), it's
+        thus an open subset of $\mathbb{R}^{n^{2}}$ (we can identify
+        $n\times{n}$ matrices with points in $\mathbb{R}^{n^{2}}$). Moreover
+        multiplication is continuous since it's continuous in every slot,
+        it's a polynomial. The inverse function
+    \end{proof}
     \section{More on Topological Manifolds}
         \begin{definition}
             A precompact subset of a topological space $(X,\tau)$ is a subset
@@ -2307,1217 +3975,6 @@
         \begin{proof}
             It do be like that some times though.
         \end{proof}
-    \section{Reading From Lee (Topology Review)}
-        Define topological space, open sets, neighborhoods, closed sets.
-        \begin{fdefinition}{Interior Point}{Interior_Point}
-            An interior point of a subset $A\subseteq{X}$ of a topological space
-            $\topspace{X}$ is a point $p\in{A}$ such that there exists an open
-            set $\mathcal{U}\in\tau$ such that $\mathcal{U}\subseteq{A}$ and
-            $p\in\mathcal{U}$.
-        \end{fdefinition}
-        \begin{fdefinition}{Interior of Set}{Interior_of_Set}
-            The interior of a subset $A\subseteq{X}$ of a topological
-            $\topspace{X}$, denoted $\interior[\tau]{A}$ is the set of all
-            interior points of $A$. That is:
-            \begin{equation*}
-                \interior[\tau]{A}=\{\,p\in{X}\;|\;p
-                    \textrm{ is an interior point of }A\,\}
-            \end{equation*}
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, if
-            $\tau_{A}$ is the set of all subset of $\tau$ that are subsets of
-            in $A$, and if $\interior[\tau]{A}$ is the interior of $A$, then:
-            \begin{equation}
-                \interior[\tau]{A}=
-                    \bigcup_{\mathcal{U}\in\tau_{A}}\mathcal{U}
-            \end{equation}
-        \end{theorem}
-        \begin{proof}
-            For if $p\in\interior[\tau]{A}$, then $p$ is an interior point of
-            $A$ (Def.~\ref{def:Interior_of_Set}) and hence there is an open
-            subset $\mathcal{U}\subseteq{A}$ such that $p\in\mathcal{U}$
-            (Def.~\ref{def:Interior_Point}). But then by hypothesis
-            $\mathcal{U}\in\tau_{A}$, and hence $p\in\bigcup\tau_{A}$. Thus,
-            $\interior[\tau]{A}\subseteq\bigcup\tau_{A}$. If
-            $p\in\bigcup\tau_{A}$, then there is a $\mathcal{U}\in\tau_{A}$
-            such that $p\in\mathcal{U}$. But by hypothesis if
-            $\mathcal{U}\in\tau_{A}$, then $\mathcal{U}\subseteq{A}$, and hence
-            $p$ is an interior point of $A$. Thus, $p\in\interior[\tau]{A}$.
-            Therefore, $\interior[\tau]{A}=\bigcup\tau_{A}$.
-        \end{proof}
-        Thus, an equivalent formulation of the interior of a set is the union
-        of all open sets that are contained in $A$. There's a similar notion for
-        exterior points and the exterior of a set.
-        \begin{fdefinition}{Exterior Point}{Exterior_Point}
-            An exterior point of a subset $A\subseteq{X}$ of a topological
-            spacec $\topspace{X}$ is a point $p\in{X}\setminus{A}$ such that
-            there exists an open set $\mathcal{U}\in\tau$ such that
-            $\mathcal{U}\subseteq{A}\setminus{A}$ and $p\in\mathcal{U}$.
-        \end{fdefinition}
-        \begin{fdefinition}{Exterior of a Set}{Exterior_of_a_Set}
-            The exterior of a subset $A\subseteq{X}$ in a topological space
-            $\topspace{X}$, denoted $\exterior[\tau]{A}$, is the set of all
-            exterior points of $A$. That is:
-            \begin{equation*}
-                \exterior{A}=\{\,p\in{X}\;|\;
-                    p\textrm{ is an exterior point of }X\,\}
-            \end{equation*}
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, if $A\subseteq{A}$, if
-            $\tau_{A^{C}}$ is the set of all open subsets contained in
-            $X\setminus{A}$, then:
-            \begin{equation}
-                \exterior{A}=\bigcup_{\mathcal{U}\in\tau_{A}^{C}}\mathcal{U}
-            \end{equation}
-        \end{theorem}
-        \begin{proof}
-            For if $p\in\exterior{A}$, then there is an open subset
-            $\mathcal{U}\in\tau$ such that $\mathcal{U}\subseteq{X}\setminus{A}$
-            and $p\in\mathcal{U}$. But then $\mathcal{U}\in\tau_{A^{C}}$, and
-            hence $p\in\bigcup\tau_{A^{C}}$. Thus,
-            $\exterior[\tau]{A}\subseteq\bigcup\tau_{A^{C}}$. Similarly in the
-            other direction.
-        \end{proof}
-        \begin{fdefinition}{Boundary of a Set}{Boundary_of_Set}
-            The boundary of a subset $A\subseteq{X}$ in a topological space
-            $\topspace{X}$ is the set $\partial{A}$ defined by:
-            \begin{equation*}
-                \partial{A}=\closure{A}\setminus\interior{A}
-            \end{equation*}
-            Where $\closure{A}$ is the closure of $A$ and $\interior{A}$ is its
-            interior.
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, then:
-            \begin{equation}
-                \partial{A}=X\setminus\big(\interior{A}\cup\exterior{A}\big)
-            \end{equation}
-        \end{theorem}
-        \begin{fdefinition}{Isolated Point}{Isolated_Point}
-            An isolated point of a subset $A\subseteq{X}$ in a topological space
-            $\topspace{X}$ is a point $p\in{A}$ such that there exists an
-            open set $\mathcal{U}\in\tau$ such that $\mathcal{U}\cap{A}=\{p\}$.
-        \end{fdefinition}
-        \begin{fdefinition}{Limit Point}{Limit_Point}
-            A limit point of a subset $A\subseteq{X}$ in a topological space
-            $\topspace{X}$ is a point $p\in{X}$ such that
-            $p\in\closure{A}$ and $p$ is not an isolated point of $A$.
-        \end{fdefinition}
-        That is, limit points can be approximated arbitrarily well by points in
-        $A$, other than the point $p$ itself.
-        \begin{fdefinition}{Dense Subset}{Dense_Subset}
-            A dense subset of a topological space $\topspace{X}$ is a subset
-            $A\subseteq{X}$ such that $\closure{A}=X$
-        \end{fdefinition}
-        \begin{fdefinition}{Nowhere Dense}{Nowhere_Dense}
-            A nowhere dense subset of a topological space $\topspace{X}$ is a
-            subset $A\subseteq{A}$ such that:
-            \begin{equation*}
-                \interior{\closure{A}}=\emptyset
-            \end{equation*}
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, then $A\subseteq{X}$ is
-            nowhere dense if and only if for every non-empty open subset
-            $\mathcal{U}\in\tau$, $A$ is not dense in the subspace topology of
-            $\mathcal{U}$.
-        \end{theorem}
-        \begin{proof}
-            For if suppose not and suppose $\mathcal{U}\in\tau$ is such that
-            $A$ is dense in $\mathcal{U}$ in the subspace topology. But then:
-            \begin{equation}
-                \mathcal{U}=\interior{\mathcal{U}}
-                    \subseteq\interior{\closure{A}}
-            \end{equation}
-            But $A$ is nowhere dense, and hence
-            $\interior{\closure{A}}=\emptyset$, a contradiction. In the other
-            direction, suppose $\interior{\closure{A}}\ne\emptyset$. But the
-            interior of any set is open, and hence $A$ is dense in
-            $\interior{\closure{A}}$, a contradiction.
-        \end{proof}
-        Def continuous, def homeomorphism.
-        \begin{fdefinition}{Local Homeomorphism}{Local_Homeomorphism}
-            A local homeomorphism from a topological space $\topspace[X]{X}$ to
-            a topological space $\topspace[Y]{Y}$ is a function
-            $f:X\rightarrow{Y}$ such that for all $x\in{X}$ there exists and
-            open set $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
-            $f|_{\mathcal{U}}$ is a continuous bijective open mapping.
-        \end{fdefinition}
-        Def convergent sequence.
-        \begin{ftheorem}{Kuratowski's Continuity Theorem}
-                        {Kuratowski_Continuity_Theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            then $f:X\rightarrow{Y}$ is continuous if and only if for all
-            $A\subseteq{X}$ it is true that:
-            \begin{equation*}
-                f\big[\closure[\tau_{X}]{A}\big]\subseteq
-                \closure[\tau_{Y}]{f[A]}
-            \end{equation*}
-        \end{ftheorem}
-        \begin{bproof}
-            For suppore $f:X\rightarrow{Y}$ is continuous. Since
-            $\closure[\tau_{Y}]{f[A]}$ is closed and $f$ is continuous,
-            $f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]$ is closed.
-            But $f[A]\subseteq\closure[\tau_{Y}]{f[a]}$, and thus
-            $A\subseteq{f}^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]$,
-            and therefore:
-            \begin{equation}
-                \closure[\tau_{X}]{A}\subseteq
-                \closure[\tau_{X}]
-                    {{f}^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]}
-            \end{equation}
-            But the closure of a closed set is the original set, and hence:
-            \begin{equation}
-                \closure[\tau_{X}]{A}\subseteq
-                    f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]
-            \end{equation}
-            But then:
-            \begin{equation}
-                f\big[\closure[\tau_{X}]{A}\big]\subseteq
-                f\Big[f^{\minus{1}}\big[\closure[\tau_{Y}]{f[A]}\big]\Big]
-                \subseteq\closure[\tau_{Y}]{f[A]}
-            \end{equation}
-            In other direction, let $C\subseteq{Y}$ be closed. Let
-            $x\in\closure[\tau_{X}]{f^{\minus{1}}[C]}$. But then by hypothesis
-            $f(x)\in\closure[\tau_{Y}]{f\big[f^{\minus{1}}[C]\big]}$ and so
-            $f(x)\in\closure[\tau_{Y}]{C}$. But $C$ is closed, and hence
-            $\closure[\tau_{Y}]{C}=C$, and therefore $f(x)\in{C}$. But then
-            $x\in{f}^{\minus{1}}[C]$, and thus
-            $\closure[\tau_{X}]{f^{\minus{1}}[c]}\subseteq{f}^{\minus{1}}[C]$,
-            and thus $f^{\minus{1}}[C]$ is closed. Hence, $f$ is continuous.
-        \end{bproof}
-        There's a dual theorem for the interior operator.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            then $f:X\rightarrow{Y}$ is continuous if and only if for all
-            $B\subseteq{Y}$ it is true that:
-            \begin{equation}
-                f^{\minus{1}}\big[\interior[\tau_{Y}]{B}\big]
-                \subseteq\interior[\tau_{X}]{f^{\minus{1}}[B]}
-            \end{equation}
-        \end{theorem}
-        Identity map is continuous, constant maps are continuous, composition is
-        continuous.
-        \begin{fdefinition}{Sequentially Continuous}{Sequentially_Continuous}
-            A sequentially continuous function from a topological space
-            $\topspace[X]{X}$ to a topological space $\topspace[Y]{Y}$ is a
-            function $f:X\rightarrow{Y}$ such that for every convergent sequence
-            $a:\mathbb{N}\rightarrow{X}$ and for every limit $x$ of $a$ it is
-            true that $f(a_{n})\rightarrow{f}(x)$.
-        \end{fdefinition}
-        \begin{fdefinition}{Sequential Topological Space}
-                           {Sequential_Topological_Space}
-            A sequential topological space is a topological space $\topspace{X}$
-            such that for every topological space $\topspace{Y}$ and for every
-            sequentially continuous function $f:X\rightarrow{Y}$, it is true
-            that $f$ is continuous.
-        \end{fdefinition}
-        Without sufficient separation properties (such as being Hausdorff) we
-        don't know if the limits of sequences are unique, hence the phrasing
-        \textit{for every limit}.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $f:X\rightarrow{Y}$ is continuous, then it is sequentially
-            continuous.
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally compact Lindel\"{o}f topological
-            space, then it is $\sigma$ compact.
-        \end{theorem}
-        \begin{proof}
-            For every $x\in{X}$ there exists compact $K_{x}$ and an open
-            $\mathcal{U}_{x}$ such that $x\in\mathcal{U}_{x}$ and
-            $\mathcal{U}_{x}\subseteq{K}_{x}$. But then $\{\mathcal{U}_{x}\}$ is
-            a cover of $X$, and since $\topspace{X}$ is Lindel\"{o}f there
-            exists a countable subcover $\mathcal{U}_{n}$. Then
-            $\mathcal{U}_{n}\subseteq{K}_{n}$, and thus $K_{n}$ is a countable
-            covering of $X$ by compact sets, hence $X$ is $\sigma$ compact.
-        \end{proof}
-        \begin{theorem}
-            Limits in Hausdorff are unique.
-        \end{theorem}
-        \begin{proof}
-            Suppose $a_{n}\rightarrow{x}$ and $a_{n}\rightarrow{y}$, $x\ne{y}$.
-            Then there are disjoint non-empty $\mathcal{U}_{x}$,
-            $\mathcal{U}_{y}$. But then there exists $N_{x},N_{y}$ such that
-            $n>N_{x}$ implies $a_{n}\in\mathcal{U}_{x}$ and $n>N_{y}$ implies
-            $a_{n}\in\mathcal{U}_{y}$. Choose $N=\max\{N_{x},N_{y}\}$, a
-            contradiction.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a Hausdorff topological spacec, and if
-            $x\in{X}$, then $\{x\}$ is a closed subset of $X$.
-        \end{theorem}
-        \begin{proof}
-            For all $y\in{X}$, $y\ne{x}$, there is a $\mathcal{U}_{y}\in\tau$
-            such that $y\in\mathcal{U}_{y}$ and $x\notin\mathcal{U}_{y}$. But
-            then $X\setminus\{x\}=\bigcup\mathcal{U}_{y}$, and $\{x\}$ is
-            the complement of an open set and is therefore closed.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a Hausdorff topological space, and if
-            $A\subseteq{X}$ is finite, then $A$ is closed.
-        \end{theorem}
-        \begin{proof}
-            For $A$ is the union of finitely many closed sets, and thus closed.
-        \end{proof}
-        \begin{fdefinition}{Neighborhood Basis}{Neighborhood_Basis}
-            A neighborhood basis for a point $x$ in a topological space
-            $\topspace{X}$ is a subset $\mathcal{B}_{x}\subseteq\tau$ such that
-            for all $\mathcal{V}\in\mathcal{B}_{x}$ it is true that
-            $x\in\mathcal{V}$, and for all $\mathcal{U}\in\tau$ such that
-            $x\in\mathcal{U}$ there exists $\mathcal{V}\in\mathcal{B}_{x}$ such
-            that $\mathcal{V}\subseteq\mathcal{U}$.
-        \end{fdefinition}
-        \begin{fdefinition}{First Countable Topological Space}
-                           {First_Countable_Topological_Space}
-            A first countable topological space is a topological space
-            $\topspace{X}$ such that all $x\in{X}$ there exists a countable
-            neighborhood basis $\mathcal{B}$ of $x$.
-        \end{fdefinition}
-        \begin{example}
-            Any metric space.
-        \end{example}
-        \begin{fdefinition}{Second Countable Topological Space}
-                           {Second_Countable_Topological_Space}
-            A second countable topological space is a topological space
-            $\topspace{X}$ such that there exists a countable basis
-            $\mathcal{B}$ for $\tau$.
-        \end{fdefinition}
-        \begin{theorem}
-            Second countable implies first countable.
-        \end{theorem}
-        \begin{example}
-            This does not reverse, take the discrete metric on $\mathbb{R}$.
-        \end{example}
-        \begin{theorem}
-            If $\topspace{X}$ is a first countable topological space, if
-            $A\subseteq{X}$, and if $x\in{X}$, then $x\in\closure{A}$, if and
-            only if there is a sequence $a:\mathbb{N}\rightarrow{X}$ such that
-            $a_{n}\rightarrow{x}$ and for all $n\in\mathbb{N}$ it is true that
-            $a_{n}\in{A}$.
-        \end{theorem}
-        \begin{proof}
-            For suppose $x\in\closure{A}$. Since $\topspace{X}$ is first
-            countable, there exists a countable neighborhood basis $\mathcal{B}$
-            of $x$. Since $\mathcal{B}$ is countable, there exists a surjection
-            $B:\mathbb{N}\rightarrow\mathcal{B}$. Let
-            $\mathcal{U}:\mathbb{N}\rightarrow\tau$ be defined by:
-            \begin{equation}
-                \mathcal{U}_{n}=\bigcap_{k\in\mathbb{Z}_{n+1}}B_{k}
-            \end{equation}
-            Since $x\in\closure{A}$, for every open subset $\mathcal{U}\in\tau$
-            that contains $x$ there exists a point $y\in{A}$ such that
-            $y\in\mathcal{U}$. But then for all $n\in\mathbb{N}$ the set
-            $A_{n}$ defined by:
-            \begin{equation}
-                A_{n}=\{\,y\in{A}\;|\;y\in\mathcal{U}_{n}\}
-            \end{equation}
-            is non-empty. Thus by the axiom of choice there is a choice function
-            $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\in{A}_{n}$. From the
-            definition of $\mathcal{U}_{n}$, $a_{n}\rightarrow{X}$. The other
-            direction is the definition of convergence and closure
-            (no first countability needed).
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a first countable topological space, if
-            $A\subseteq{X}$, and if $x\in{X}$, then $x\in\interior{A}$ if and
-            only if for every sequence $a:\mathbb{N}\rightarrow{X}$ such that
-            $a_{n}\rightarrow{x}$ there exists an $N\in\mathbb{N}$ such that for
-            all $n>N$, $a_{n}\in{A}$.
-        \end{theorem}
-        \begin{proof}
-            For if $x\in\interior{A}$, and if $a:\mathbb{N}\rightarrow{X}$ is a
-            sequence such that $a_{n}\rightarrow{x}$, then for every open subset
-            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ there exists an
-            $N\in\mathbb{N}$ such that $n>N$ implies $a_{n}\in\mathcal{U}$.
-            But $\interior{A}$ is open and $\interior{A}\subseteq{A}$. Going the
-            other way, suppose $x\in{A}$ is such that for every sequence
-            $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\rightarrow{x}$ there
-            exists an $N\in\mathbb{N}$ such that for all $n>N$ it is true that
-            $a_{n}\in{A}$. Suppose $x\notin\interior{A}$. Since $\topspace{X}$
-            is first countable, there is a countable neighborhood basis
-            $\mathcal{B}_{x}$ of $x$. Let $B:\mathbb{N}\rightarrow\mathcal{B}$
-            be a surjection and let $\mathcal{U}_{n}$ be defined by:
-            \begin{equation}
-                \mathcal{U}_{n}=\bigcap_{k\in\mathbb{Z}_{n+1}}B_{k}
-            \end{equation}
-            But if $xn\notin\interior{A}$ then for all $n\in\mathcal{N}$ there
-            is a $y\in\mathcal{U}_{n}$ such that $y\notin{A}$. By the axiom of
-            choice there is a sequence $y:\mathbb{N}\rightarrow{X}$ such that
-            $y_{n}\in\mathcal{U}_{n}$ and $y_{n}\notin{A}$. But then
-            $y_{n}\rightarrow{x}$ and $y_{n}$ is never in $A$, a contradiction.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a first countable topological space, and if
-            $A\subseteq{X}$, then $A$ is open if and only if for every sequence
-            $a:\mathbb{N}\rightarrow{X}$ such that there exists an $x\in{A}$
-            such that $a_{n}\rightarrow{x}$, then there is an $N\in\mathbb{N}$
-            such that for all $n>N$, $a_{n}\in{A}$.
-        \end{theorem}
-        \begin{proof}
-            One direction is the definition of convergence in a topological
-            space. Suppose for every sequence $a:\mathbb{N}\rightarrow{X}$ such
-            that there exists $x\in{A}$ such that $a_{n}\rightarrow{x}$, it is
-            true that there exists an $N\in\mathbb{N}$ such that $n>N$ implies
-            $a_{n}\in{A}$. Then for every $x\in{A}$ there is an open subset
-            $\mathcal{U}_{x}\subseteq{A}$ such that $x\in\mathcal{U}_{x}$. For
-            suppose not, and let $x\in{A}$ be such that there is not open
-            neighborhood $\mathcal{U}_{x}\in\tau$ such that
-            $x\in\mathcal{U}_{x}$ and $\mathcal{U}_{x}\subseteq{A}$. But
-            $\topspace{X}$ is first countable and thus there is a countable
-            neighborhood basis $\mathcal{B}_{x}$ about $x$. Let
-            $B:\mathbb{N}\rightarrow\mathcal{B}$ be a surjection and let
-            $\mathcal{U}_{n}$ be the intersection of $B_{0},\dots,B_{n}$. Since
-            none of these are contained in $A$, by hypothesis, there exists a
-            $y_{n}\in\mathcal{U}_{n}$ such that $y_{n}\notin{A}$. But then
-            $y_{n}\rightarrow{x}$, a contradiction.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a first countable topological space, and if
-            $A\subseteq{X}$, then $A$ is closed if and only for every convergent
-            sequence $a:\mathbb{N}\rightarrow{X}$ with limit $x\in{X}$ such that
-            for all $n\in\mathbb{N}$ it is true that $a_{n}\in{A}$, then
-            $x\in{A}$.
-        \end{theorem}
-        \begin{proof}
-            For if $A$ is closed, and if $a:\mathbb{N}\rightarrow{A}$ is such
-            that $a_{n}\rightarrow{x}$, suppose $x\notin{A}$. Then since $A$ is
-            closed, $X\setminus{A}$ is open. But if $a_{n}\rightarrow{x}$ then
-            for all $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$, there is
-            and $N\in\mathbb{N}$ such that for all $n>N$ it is true that
-            $a_{n}\in\mathcal{U}$. But $X\setminus{A}$ is open and
-            $x\in{X}\setminus{A}$, a contradiction since $a_{n}\in{A}$ for all
-            $n$. In the other direction, a set is closed if and only if it is
-            equal to it's closure, hence apply the previous theorem.
-        \end{proof}
-        \begin{fdefinition}{Lindel\"{o}f Topological Space}
-                           {Lindelof_Topological_Space}
-            A Lindel\"{o}f topological space is a topological $\topspace{X}$
-            such that for every open cover $\mathcal{O}$ of $X$ there exists a
-            countable subcover $\Delta$.
-        \end{fdefinition}
-        This is a weaker version of compactness, but it has it's uses.
-        \begin{theorem}
-            If $\topspace{X}$ is a second countable topological space, then it
-            is Lindel\"{o}f.
-        \end{theorem}
-        \begin{proof}
-            For let $\mathcal{O}$ be an open cover of $X$. Since $\topspace{X}$
-            is second countable, there exists a countable basis $\mathcal{B}$
-            for $\tau$. Let $B:\mathbb{N}\rightarrow\mathcal{B}$ be a
-            surjection. For all $\mathcal{U}\in\mathcal{O}$, define:
-            \begin{equation}
-                A_{\mathcal{U}}=
-                    \{\,n\in\mathbb{N}\;|\;B_{n}\subseteq\mathcal{U}\}
-            \end{equation}
-            Since $\mathcal{B}$ is a basis, for all non-empty
-            $\mathcal{U}\in\mathcal{O}$ there is an $n\in\mathbb{N}$ such that
-            $B_{n}\subseteq\mathcal{U}$, and hence $A_{\mathcal{U}}$ is
-            non-empty. There is thus an inverse mapping (axiom of choice)
-            $f:\mathbb{N}\rightarrow\mathcal{O}$ such that for all
-            $n\in\mathbb{N}$, $B_{n}\subseteq{f}_{n}$, and thus
-            $\Delta=\{f_{n}\}$ is a countable subcover.
-        \end{proof}
-        Def subspace, def relatively open, relatively closed.
-        \begin{fdefinition}{Topological Embedding}{Topological_Embedding}
-            A topological embedding of a topological space $\topspace[X]{X}$
-            into a topological space $\topspace[Y]{Y}$ is a continuous injective
-            function $f:X\rightarrow{Y}$ such that $\topspace{X}$ is
-            homeomorphic to $t\topspace{f[X]}{f[X]}$, where
-            $\tau_{f[X]}$ is the subspace topology in $Y$.
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a topological space, if $A\subseteq{X}$,
-            if $\tau_{A}$ is the subspace topology on $A$, if $\topspace[Y]{Y}$
-            is a topological space, and if $f:Y\rightarrow{A}$ is a function,
-            then $f$ is continuous if and only if
-            $\inclusion{A}\circ{f}:Y\rightarrow{X}$ is continuous, where
-            $\inclusion{A}\rightarrow{X}$ is the inclusion mapping.
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a topological space, if $A\subseteq{X}$,
-            if $\tau$ is a topology on $A$ such that for every topological space
-            $\topspace[Y]{Y}$ and for every continuous function
-            $f:Y\rightarrow{A}$ it is true that $\inclusion{A}\circ{f}$ is
-            continuous, then $\tau=\tau_{A}$ where $\tau_{A}$ is the subspace
-            topology.
-        \end{theorem}
-        \begin{theorem}
-            Closed in subspace $A$ if and only if $C_{A}=A\cap{C}_{X}$, where
-            $C_{X}$ is closed.
-        \end{theorem}
-        Inclusion map it top embedding, restriction of continuous is continuous,
-        subspace of Hausdorff is Hausdorff, same for first/second countable.
-        If $f:X\rightarrow{Y}$ is continuous, then it is continuous in it's
-        restriction to all subspaces of $X$. What about the converse? If
-        $f$ is continuous in it's subspaces, is it continuous?
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$ is
-            a topological space, and if $f:X\rightarrow{Y}$ is such that for
-            every point $x\in{X}$ there exists an open subset
-            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
-            $f|_{\mathcal{U}}:\mathcal{U}\rightarrow{Y}$ is continuous in the
-            subspace topology, then $f$ is continuous.
-        \end{theorem}
-        This theorem let's us make continuous functions by gluing together
-        pieces of functions that are defined on open subsets which agree on the
-        overlap.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $\mathcal{O}$ is an open cover of $X$, if
-            $\mathscr{F}:\mathcal{O}\rightarrow\funcspace[Y]{X}$ is a bijection
-            such that for all $\mathcal{U},\mathcal{V}\in\mathcal{O}$ it is true
-            that:
-            \begin{equation}
-                \mathscr{F}(\mathcal{U})|_{\mathcal{U}\cap\mathcal{V}}=
-                \mathscr{F}(\mathcal{V})|_{\mathcal{U}\cap\mathcal{V}}
-            \end{equation}
-            and such that
-            $\mathscr{F}(\mathcal{U})|_{\mathcal{U}}:\mathcal{U}\rightarrow{Y}$
-            is continuous in the subspace topology, then there is a unique
-            continuous function $f:X\rightarrow{Y}$ such that for all
-            $\mathcal{U}\in\mathscr{F}$ it is true that
-            $f|_{mathcal{U}}=\mathscr{F}(\mathcal{U})|_{\mathcal{U}}$
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, if
-            $\mathcal{O}$ is a countable open cover of $X$ such that for all
-            $\mathcal{U}\in\mathcal{O}$ it is true that
-            $\topspace[\mathcal{U}]{\mathcal{U}}$ is second countable, where
-            $\tau_{\mathcal{U}}$ is the subspace topology, then $\topspace{X}$
-            is second countable.
-        \end{theorem}
-        \begin{proof}
-            For let $\mathcal{B}$ be the union of all of the bases of all of the
-            $\mathcal{U}\in\mathcal{O}$. This is countable since it is the
-            countable union of countable sets. Let $\mathcal{V}\in\tau$ be an
-            open subset of $X$. But then $\mathcal{V}\cap\mathcal{U}$ is open
-            for all $\mathcal{U}\in\mathcal{O}$ and it is relatively open in
-            $\mathcal{U}$. But $\mathcal{B}_{\mathcal{U}}$ is a basis for
-            $\mathcal{U}$, and hence there is a subset
-            $\Delta_{\mathcal{V}}\subseteq\mathcal{B}_{\mathcal{U}}$ such that
-            $\cap\mathcal{U}=\bigcup\Delta_{\mathcal{V}}$. But then:
-            \begin{equation}
-                \mathcal{V}=\mathcal{V}\cap{X}=
-                \mathcal{V}\cap\Big(\bigcup\mathcal{U}\Big)
-                =\bigcup\big(\mathcal{V}\cap\mathcal{U}\big)
-                =\bigcup\Big(\bigcup\Delta_{\mathcal{V}}\Big)
-            \end{equation}
-            which is the union of elements of $\mathcal{B}$, and hence this is a
-            basis for $\tau$.
-        \end{proof}
-        Product topology, projection map, continuous iff components are
-        continuous. The roduct topology is unique topology with this property.
-        Projections are continuious. Product maps. Product of continuous maps
-        is continuous. Subspace topology is the same as product topology of
-        subspaces. That is, $A_{1}\times{A}_{2}$, doesn't matter if we consider
-        subspace topology of product or product topology of subspaces.
-        Open rectangles form basis in finite products.
-        \par\hfill\par
-        Def disjoint union, canonical injective map.
-        \begin{fdefinition}{Disjoint Union Topology}{Disjoint_Union_Topology}
-            The disjoint union topology generated by the disjoint union of a
-            set of topological spaces $\mathscr{T}$ is subset
-            $\tau_{T}\subseteq\mathcal{P}(\coprod\mathscr{T})$ defined by
-            declaring $\mathcal{U}$ open if and only if for all $\alpha$,
-            $\pi_{\alpha}(\mathcal{U})$ is open in $X_{\alpha}$.
-        \end{fdefinition}
-        Function fro disjoint union to $Y$ is continuous if and only if
-        $F\circ\inclusion{\alpha}$ is continuous for all $\alpha$ where
-        $\inclusion{\alpha}$ is the canonical inclusion map. Disjoint union
-        topology is unique topology with this trait. Canonical inclusions are
-        embeddings. Disjoint union of Hausdorff is Hausdorff, similarly for
-        firsct countable. Disjoint unions of countably many second countable
-        spaces is second countable.
-        \begin{fdefinition}{Quotient Map}{Quotient_Map}
-            A quotient map form a topological space $\topspace[X]{X}$ to a
-            topological $\topspace[Y]{Y}$ is a surjective continuous function
-            $q:X\rightarrow{Y}$ and such that for all
-            $\mathcal{V}\subseteq{Y}$ such that
-            $q^{\minus{1}}[\mathcal{V}]\in\tau_{X}$, it is true that
-            $\mathcal{V}\in\tau_{Y}$
-        \end{fdefinition}
-        That is, the quotient map $q$ is continuous, surjective, and uniquely
-        defines the topology on $Y$. A common confusion is that a quotient map
-        is not necessarily an open mapping. The reverse direction is a true
-        statement.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            and if $f:X\rightarrow{Y}$ is a continuous surjective open map,
-            then $f$ is a quotient map.
-        \end{theorem}
-        \begin{proof}
-            For if $\mathcal{V}\in\tau_{Y}$, then since $f$ is continuous it is
-            true that $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. Moreover, if
-            $\mathcal{V}\subseteq{Y}$ is such that
-            $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$, then since $f$ is
-            surjective it is true that
-            $f\big[f^{\minus{1}}[\mathcal{V}]\big]=\mathcal{V}$. But
-            by hypothesis $f$ is an open mapping, and
-            $f^{\minus{1}}[\mathcal{V}]$ and an open subset of $X$, and
-            therefore $\mathcal{V}$ is an open subset of $Y$. Thus, for all
-            $\mathcal{V}\subseteq{Y}$ it is true that $\mathcal{V}$ is open if
-            and only if $f^{\minus{1}}[\mathcal{V}]$ is open in $X$. Thus,
-            $f$ is a quotient map.
-        \end{proof}
-        \begin{fdefinition}{Quotient Topology}{Quotient_Topology}
-            The quotient topology on a set $Y$ induced by a topological space
-            $\topspace[X]{X}$ under a surjective function $q:X\rightarrow{Y}$
-            is the set:
-            \begin{equation*}
-                \tau_{Y}=\{\,\mathcal{V}\in\powset{Y}\;|\;
-                    q^{\minus{1}}[\mathcal{V}]\in\tau_{X}\,\}
-            \end{equation*}
-        \end{fdefinition}
-        The most common way of constructing quotient spaces is by means of an
-        equivalence relation.
-        \begin{fdefinition}{Quotient Space of Equivalence Relation}
-                           {Quotient_Space_of_Equiv_Rel}
-            The quotient space induced by an equivalence relation $R$ on a set
-            $X$ with respect to a topology $\tau$ on $X$ is the topological
-            space $\topspace[R]{X/R}$ where $X/R$ is the quotient set of $X$
-            under $R$ and $\tau_{R}$ is the quotient topology induced by the
-            natural projection mapping $q:X\rightarrow{X}/R$ defined by
-            $q(x)=[x]$.
-        \end{fdefinition}
-        \begin{fdefinition}{Adjunction Space}{Adjunction_Space}
-            The adjunction space of a topological space $\topspace[X]{X}$
-            with respect to a topological space $\topspace[Y]{X}$ under a
-            continuous function $f:A\rightarrow{X}$ from a closed subset
-            $A\subseteq{Y}$ into $X$ is the quotient space
-            $\adjspace{X}{Y}$ formed by the equivalence relation $R$ on
-            $X\coprod{Y}$ generated by the relation:
-            \begin{equation*}
-                \tilde{R}=
-                    \Big\{\,
-                        \big((x,0),(y,1)\big)\in\big(X\coprod{Y}\big)^{2}\;|\;
-                        y\in{A}\textrm{ and }x=f(y),0\,
-                    \Big\}
-            \end{equation*}
-        \end{fdefinition}
-        Pictorially, we have a copy of $X$ and a copy of $Y$ in some ambient
-        space, and we glue $A\subseteq{Y}$ along $f[A]\subseteq{X}$.
-        \begin{fdefinition}{Saturated Subset}{Saturated_Subset}
-            A saturated subset of a set $X$ with respect to a set $Y$ under a
-            function $f:X\rightarrow{Y}$ is a subset $A\subseteq{X}$ such that:
-            \begin{equation*}
-                f^{\minus{1}}\big[f[A]\big]=A
-            \end{equation*}
-        \end{fdefinition}
-        \begin{theorem}
-            If $X$ and $Y$ are sets, if $f:A\rightarrow{Y}$ is a function, and
-            if $A\subseteq{X}$, then $A$ is saturated in $X$ if and only if
-            there is a subset $B\subseteq{Y}$ such that:
-            \begin{equation}
-                A=\bigcup_{y\in{B}}f^{\minus{1}}[\{y\}]
-            \end{equation}
-            That is, $A$ is the union of fibers.
-        \end{theorem}
-        \begin{proof}
-            For if $A$ is the union of the fibers of $B$, then
-            $f[A]=B$. But then $A=f^{\minus{1}}[b]=f^{\minus{1}}\big[f[A]\big]$,
-            and hence $A$ is saturated. If $A$ is saturated, let $B=f[A]$ and
-            let $y\in{B}$. Then $f^{\minus{1}}[\{b\}]\subseteq{A}$ since $A$ is
-            saturated. Thus, $A$ is the union of fibers.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $q:X\rightarrow{Y}$ is a quotient map, and if
-            $\topspace[Z]{Z}$ is a topological space, then for any continuous
-            function $f:Y\rightarrow{Z}$, $f\circ{q}:X\rightarrow{Z}$ is
-            continuous.
-        \end{theorem}
-        The quotient topology is the unique topology with this property. Closed
-        if and only if $q^{\minus{1}}[\mathcal{V}]$ is closed. Injective
-        quotient map is a homeomorphism. The restriction of quotient map to
-        saturated subset is a quotient map onto it's image. Composition of
-        quotient maps is a quotient map.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $q:X\rightarrow{Y}$ is a continuous surjective function, then
-            $q$ is a quotient map if and only if for every open saturated subset
-            $\mathcal{U}\subseteq{X}$, $q[\mathcal{U}]$ is open in $Y$.
-        \end{theorem}
-        \begin{proof}
-            For if $q$ is a quotient map, then $\mathcal{V}\subseteq{Y}$ is
-            open if and only if $q^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. But
-            if $\mathcal{U}\in\tau_{X}$ is open and saturated, then
-            $q^{\minus{1}}[q[\mathcal{U}]]=\mathcal{U}$. But then
-            $q[\mathcal{U}]$ is such that it's pre-image under $q$ is open, and
-            thus $q[\mathcal{U}]$ is open. On the other hand, suppose $q$ maps
-            open saturated sets to open sets and let $\mathcal{V}\subseteq{Y}$
-            be such that $q^{\minus{1}}[\mathcal{V}]$ is open. Let
-            $\mathcal{U}=q^{\minus{1}}[\mathcal{V}]$. But then $\mathcal{U}$ is
-            the union of fibers and is hence saturated. But then $\mathcal{U}$
-            is open and saturated, and thus $q[\mathcal{U}]$ is open. But
-            $q[\mathcal{U}]=\mathcal{V}$, and thus $\mathcal{V}$ is open. Thus,
-            $q$ is a quotient map.
-        \end{proof}
-        Same theorem for closed subsets.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $q:X\rightarrow{Y}$ is a quotient map, if $\topspace[Z]{Z}$ is a
-            topological space, and if $f:X\rightarrow{Z}$ is a continuous
-            function such that for all $x_{1},x_{2}\in{X}$ such that
-            $q(x_{1})=q(x_{2})$ it is true that $f(x_{1})=f(x_{2})$, then there
-            is a unique continuous function $\tilde{f}:Y\rightarrow{Z}$ such
-            that $f=\tilde{f}\circ{q}$.
-        \end{theorem}
-        \begin{proof}
-            For since $q$ is a quotient map, it is surjective. Thus for all
-            $y\in{Y}$, $q^{\minus{1}}[\{y\}]$ is non-empty. Thus, by the axiom
-            of choice, there is a function $p:Y\rightarrow{X}$ such
-            that $p(y)\in{q}^{\minus{1}}[\{y\}]$ for all $y\in{Y}$. That is,
-            $p(y)$ is a representative for the equivalence class $[p(y)]$ of
-            points in $X$ that map to $y$. Let $\tilde{f}:Y\rightarrow{Z}$ be
-            defined by $\tilde{f}=f\circ{p}$. But by hypothesis for all
-            $x_{1},x_{2}\in{q}^{\minus{1}}[\{y\}]$ it is true that
-            $f(x_{1})=f(x_{2})$. But then:
-            \begin{equation}
-                f(x)=f(p(y))=\tilde{f}(y)
-            \end{equation}
-            and thus $f=\tilde{f}\circ{q}$. But $f$ is continuous, and thus by
-            the characteristic property of quotient spaces, $\tilde{f}$ is
-            continuous.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace[X]{X}$, $\topspace[Y]{Y}$, and $\topspace[Z]{Z}$ are
-            topological spaces, if $q_{Y}:X\rightarrow{Y}$ and
-            $q_{Z}:X\rightarrow{Z}$ are quotient maps, and if for all
-            $x_{1},x_{2}\in{X}$ it is true that $q_{Y}(x_{1})=q_{Y}(x_{2})$ if
-            and only if $q_{Z}(x_{1})=q_{Z}(x_{2})$, then there is a unique
-            homeomorphism $\varphi:Y\rightarrow{Z}$ such that
-            $\varphi\circ{q_{Y}}=q_{Z}$.
-        \end{theorem}
-        Projection maps are open mappings. Canonical injective mappings into
-        disjoint union topology are closed and open mappings. Local hoemo is
-        open map. Bijective local homeo is homeo.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $q:X\rightarrow{Y}$ is a quotient map, and if
-            $R\subseteq{X}\times{X}$ defined by:
-            \begin{equation}
-                R=\{\,(x_{1},x_{2})\in{X}\times{X}\;|\;q(x_{1})=q(x_{2})\,\}
-            \end{equation}
-            is a closed subset of $X\times{X}$ in the product topology, then
-            $Y$ is Hausdorff.
-        \end{theorem}
-        \begin{theorem}
-            $f:X\rightarrow{Y}$ is an open mapping if and only if for all
-            $B\subseteq{Y}$ it is true that:
-            \begin{equation}
-                \interior[\tau_{X}]{f^{\minus{1}}[B]}\subseteq
-                f^{\minus{1}}\big[\interior[\tau_{Y}]{B}\big]
-            \end{equation}
-        \end{theorem}
-        Similarly for closed mappings.
-        \begin{theorem}
-            If $q:X\rightarrow{Y}$ is a continuous surjective open function,
-            then it is a quotient map.
-        \end{theorem}
-        \begin{theorem}
-            If $q:X\rightarrow{Y}$ is a continuous injective open function,
-            then it is a topological embedding.
-        \end{theorem}
-        \begin{theorem}
-            If $f:X\rightarrow{Y}$ is a continuous bijective open function,
-            then it is a homeomorphism.
-        \end{theorem}
-        Def connected space, connected component, continuous image of connected
-        is connected.
-        \begin{theorem}
-            If $\topspace{X}$ is a topological space, if $A\subseteq{X}$ is a
-            connected subset, then there is a unique connected component
-            $B$ of $X$ such that $A\subseteq{B}$.
-        \end{theorem}
-        \begin{proof}
-            For let $(C,\subseteq)$ be the partial ordered set of connected
-            subsets of $X$ ordered by inclusion and let $\mathcal{U}_{J}$ be a
-            chain. Suppose $\bigcup\mathcal{U}_{j}$ is disconnected. Then there
-            are disjoint non-empty open sets $\mathcal{V}_{1},\mathcal{V}_{2}$
-            such that
-            $\mathcal{V}_{1}\cup\mathcal{V}_{2}=\bigcup\mathcal{U}_{J}$, and
-            such that $\mathcal{V}_{i}\cap\bigcup\mathcal{U}_{j}\ne\emptyset$.
-            But then there is an $x_{1}\in\mathcal{V}_{1}$ such that
-            $x_{1}\in\bigcup\mathcal{U}_{J}$ and an $x_{2}\in\mathcal{V}_{2}$
-            such that $x_{2}\in\bigcup\mathcal{U}_{J}$. But if
-            $x_{1}\in\mathcal{U}_{J}$ there is some $\alpha\in{J}$ such that
-            $x_{1}\in\mathcal{U}_{\alpha}$, and similarly
-            $x_{2}\in\mathcal{U}_{\beta}$. But since the $\mathcal{U}_{J}$ form
-            a chain, either $\mathcal{U}_{\alpha}\subseteq\mathcal{U}_{\beta}$
-            or $\mathcal{U}_{\beta}\subseteq\mathcal{U}_{\alpha}$. But then
-            $\mathcal{V}_{1}$ and $\mathcal{V}_{2}$ are not disjoint, a
-            contradiction, and hence $\bigcup\mathcal{U}_{J}$ is connected.
-            Thus by Zorn's lemma, there is a maximal element $B\in{C}$ that is
-            comporable to $A$. That is, $B$ is maximal and $A\subseteq{B}$.
-            If $B'$ is a different maximal element, and
-            $B\cup{B}'$ would be connected and strictly larger, contradicting
-            maximality.
-        \end{proof}
-        \begin{theorem}
-            The connected components of $X$ are closed non-empty disjoint sets
-            that partition $X$.
-        \end{theorem}
-        \begin{theorem}
-            Product of connected is connected (in product topology).
-        \end{theorem}
-        The product of connected need not be connected in the box topology.
-        \begin{theorem}
-            The quotient of connected is connected.
-        \end{theorem}
-        \begin{fdefinition}{Locally Path Connected}{Locally_Path_Connected}
-            A locally path connected topological space is a topological space
-            $\topspace{X}$ such that there exists a basis $\mathcal{B}$ of
-            $\tau$ such that for all $\mathcal{U}\in\mathcal{B}$ it is true that
-            $\mathcal{U}$ is path connected.
-        \end{fdefinition}
-        \begin{example}
-            Paradoxically, path connected does not imply locally path connected.
-            The Warsaw Circle, which is the topologist's sine curve wrapped
-            around with an arc to form a path connected space, is not locally
-            path connected.
-        \end{example}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally path connected topological space, and
-            if $A\subseteq{X}$ is a connected component of $X$, then $A$ is
-            open.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally path connected, there is a basis
-            $\mathcal{B}$ of $\tau$ of connected open sets. But then for all
-            $x\in{A}$, there is an open set $\mathcal{U}_{x}\in\mathcal{B}$
-            such that $x\in\mathcal{U}_{x}$. But by hypothesis
-            $\mathcal{U}_{x}$ is open and $A$ is a connected component, and
-            hence $\mathcal{U}_{x}\subseteq{A}$. But then
-            $A=\bigcup\mathcal{U}_{x}$, which is open, and thus $A$ is open.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally path connected topological space, and
-            if $A\subseteq{X}$ is a connected component, then it is a path
-            connected component.
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally path connected topological space,
-            and if $\topspace{X}$ is connected, then it is path connected.
-        \end{theorem}
-        Def compact, cont image of compact is compact, EVT, finite union of
-        compact is compact, disjoint compact subsets of a Hausdorff space can be
-        separated by disjoint open sets. Closed subset of compact is compact.
-        Compact Hausdorff is closed. Compact in metric if and only if complete
-        and totally bounded. Product of compact is compact. Quotient of compact
-        is compact. Def uni cont, Lipschitz cont, locally Lipschitz cont.
-        Lipschitz cont -> uni cont -> cont (metric space). Cont on compact is
-        uni cont. Locally Lipschitz cont on compact is Lipschitz cont.
-        Implications don't reverse: Try $\sqrt{x}$ and $x^{2}$.
-        \begin{theorem}
-            If $\topspace{X}$ is first countable and countably compact,
-            then it is sequentially compact.
-        \end{theorem}
-        \begin{fdefinition}{Point Finite Cover}{Point_Finite_Cover}
-            A point finite cover of a topological space $\topspace{X}$ is a
-            cover $\mathcal{O}$ of $X$ such that for all $x\in{X}$ the set
-            $\mathcal{O}_{x}$ defined by:
-            \begin{equation*}
-                \mathcal{O}_{x}=\{\,\mathcal{U}\in\mathcal{O}\;|\;
-                    x\in\mathcal{U}\,\}
-            \end{equation*}
-            is finite.
-        \end{fdefinition}
-        \begin{fdefinition}{Metacompact}{Metacompact}
-            A metacompact topological space is a topological space
-            $\topspace{X}$ such that for every open cover $\mathcal{O}$ of $X$
-            there exists a point finite refinement $\Delta$ of $\mathcal{O}$.
-        \end{fdefinition}
-        One useful theorem about metacompact sets is how it related sequentially
-        compact spaces to compact spaces. In general, these two need not be
-        equivalent. The classsic examples are the long line (which is
-        sequentially compact but not compact) and the product space of the
-        closed unit interval $[0,1]$ with itself uncountably many times
-        (which is compact but not sequentially compact). If the space is both
-        metacompact and countably compact, then it is compact. Since metacompact
-        is implied by paracompactness, and since every metric space is
-        paracompact, we can combine all of this to get a nice theorem: A metric
-        space is compact if and only if it is sequentially compact. A more
-        general version says that sequentially compact metacompact spaces are
-        also compact.
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a compact topological space, if
-            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
-            $f:X\rightarrow{Y}$ is a continuous function, then it is a closed
-            mapping.
-        \end{theorem}
-        \begin{proof}
-            For if $C\subseteq{X}$ is closed, then it is compact since $X$ is
-            compact. But the continuous image of a compact set is compact, and
-            hence $f[C]$ is a compact subset of $Y$. But $Y$ is Hausdorff, and
-            thus compact subsets are closed. Thus, the image of closed sets is
-            closed and hence $f$ is a closed mapping.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a compact topological space, if
-            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
-            $f:X\rightarrow{Y}$ is a continuous bijection, then it is a
-            homeomorphism.
-        \end{theorem}
-        \begin{theorem}
-            For $f$ is then a continuous bijective closed mapping, and hence
-            is a homeomorphism.
-        \end{theorem}
-        Weakening bijective to injective or surjective obtains topological
-        embeddings and quotient maps, respectively.
-        \begin{fdefinition}{Proper Function}{Proper_Function}
-            A proper function from a topological space $\topspace[X]{X}$ to a
-            topological space $\topspace[Y]{Y}$ is a function
-            $f:X\rightarrow{Y}$ such that for every compact subset
-            $C\subseteq{Y}$, the pre-image $f^{\minus{1}}[C]$ is a compact
-            subset of $X$
-        \end{fdefinition}
-        Note that the definition of a proper function does not actually require
-        $f$ to be continuous. Such functions play roles in the theory of
-        groupoids, in analysis, and in the study of smooth manifolds. If the
-        target space $Y$ is locally compact and Hausdorff, there's a simple
-        theorem that can accompony this definition.
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $f:X\rightarrow{Y}$ is a continuous closed function, and if for
-            all $y\in{Y}$ it is true that $f^{\minus{1}}[\{y\}]$ is a compact
-            subset of $X$, then $f$ is a proper function.
-        \end{theorem}
-        \begin{proof}
-            For let $C\subseteq{Y}$ be compact and let $K=f^{\minus{1}}[C]$.
-            Suppose $K$ is not compact. Then there is an open cover
-            $\mathcal{O}$ of $K$ such that no finite subcover exists.
-        \end{proof}
-        There's a rewording of a previous theorem in terms of proper functions.
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a compact topological space, if
-            $\topspace[Y]{Y}$ is a Hausdorff topological space, and if
-            $f:X\rightarrow{Y}$ is a continuous function, then it is a proper
-            function.
-        \end{theorem}
-        \begin{proof}
-            For if $C\subseteq{Y}$ is compact, then it is closed since $Y$ is
-            Hausdorff. But the pre-image of a closed subset under a continuous
-            function is closed. Thus, $f^{\minus{1}}[C]$ is a closed subset of
-            $X$. But closed subsets of compact sets are compact, and hence
-            $f^{\minus{1}}[C]$ is compact.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$
-            is a Hausdorff topological space, if $f:X\rightarrow{Y}$ is
-            continuous, and if $g:Y\rightarrow{X}$ is a continuous left inverse
-            of $f$, then $f$ is proper.
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $f:X\rightarrow{Y}$ is a continuous proper function, if
-            $A\subseteq{X}$ is a saturated subset of $X$ with respect to $f$,
-            and if $f|_{A}:A\rightarrow{Y}$ is the restriction of $f$ to $A$,
-            then $f$ is proper in the subspace topology on $A$.
-        \end{theorem}
-        \begin{ltheorem}{Tube Lemma}
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            if $A\subseteq{X}$ is compact, if $B\subseteq{Y}$ is compact,
-            if $\topspace[X\times{Y}]{X\times{Y}}$ is the product topological
-            space, and if $\mathscr{O}\subseteq{X}\times{Y}$ is and open subset
-            in the product topology such that $A\times{B}\subseteq\mathscr{O}$,
-            then there exists open subsets $\mathcal{U}\in\tau_{X}$ and
-            $\mathcal{V}\in\tau_{Y}$ such that
-            $A\times{B}\subseteq\mathcal{U}\times\mathcal{V}$ and
-            $\mathcal{U}\times\mathcal{V}\subseteq\mathscr{O}$.
-        \end{ltheorem}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally compact Hausdorff space, and if
-            $x\in{X}$, then there is a precompact subset $\mathcal{U}\in\tau$
-            such that $x\in\mathcal{U}$.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally compact and if $x\in{X}$, then
-            there is an open set $\mathcal{U}\in\tau$ and a compact set
-            $K\subseteq{X}$ such that $x\in\mathcal{U}$ and
-            $\mathcal{U}\subseteq{K}$. But $X$ is Hausdorff, and thus if $K$ is
-            compact, then $K$ is closed. But then
-            $\closure{\mathcal{U}}\subseteq{K}$. But then $\closure{U}$ is a
-            closed subset of a compact set, and is therefore closed. Hence,
-            $\mathcal{U}\in\tau$ is a precompact open set that contains $x$.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a locally compact Hausdorff space then there
-            exists a basis $\mathcal{B}$ for $\tau$ such that for all
-            $\mathcal{U}\in\mathcal{B}$ it is true that $\mathcal{U}$ is
-            precompact.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally compact and Hausdorff, then for all
-            $x\in{X}$ there is a precompact open subset $\mathcal{U}_{x}$
-            such that $x\in\mathcal{U}_{x}$. Let $\mathcal{B}$ be defined by:
-            \begin{equation}
-                \mathcal{B}=\{\,\mathcal{V}\in\tau\;|\;
-                    \exists_{x\in{X}}(\mathcal{V}\subseteq\mathcal{U}_{x})\,\}
-            \end{equation}
-            Then every element of $\mathcal{V}$ is precompact since
-            $\closure{\mathcal{V}}\subseteq\closure{\mathcal{U}_{x}}$, which
-            is compact, and closed subsets of compact sets are compact.
-            Moreover, $\mathcal{B}$ is a basis for $\tau$. For if
-            $\mathcal{O}\in\tau$ is open, then $\mathcal{U}_{x}\cap\mathcal{O}$
-            is open for all $x\in{X}$. And this is a subset of $\mathcal{U}_{x}$
-            and hence contained in $\mathcal{B}$. But then:
-            \begin{equation}
-                \mathcal{O}=\mathcal{O}\cap{X}
-                =\mathcal{O}\cap\Big(\bigcup_{x\in{X}}\mathcal{U}_{x}\Big)
-                =\bigcup_{x\in{X}}\big(\mathcal{O}\cap\mathcal{U}_{x}\big)
-            \end{equation}
-            Thus, $\mathcal{B}$ is a basis.
-        \end{proof}
-        \begin{theorem}
-            Every open or closed subspace of a locally commpact Hausdorff space
-            is again locally compact Hausdorff.
-        \end{theorem}
-        \begin{theorem}
-            If $\topspace[X]{X}$ is a topological space, if $\topspace[Y]{Y}$ is
-            a locally compact Hausdorff space, if $f:X\rightarrow{Y}$ is
-            continuous proper function, then $f$ is a closed map.
-        \end{theorem}
-        \begin{proof}
-            For let $C\subseteq{X}$ be closed. Suppose $f[C]$ is not closed.
-            Then there exists a convergent sequence $a:\mathbb{N}\rightarrow{X}$
-            with a limit $x\in{X}\setminus{A}$ such that for all
-            $n\in\mathbb{N}$ it is true that $a_{n}\in{A}$. But $f$ is
-            continuous and therefore $f(a_{n})\rightarrow{f}(x)$. But
-            $Y$ is locally compact and Hausdorff and thus there is a precompact
-            open subset $\mathcal{V}\in\tau_{Y}$ such that $f(x)\in\mathcal{V}$.
-            But $f$ is proper, and therefore
-            $f^{\minus{1}}[\closure[Y]{\mathcal{V}}]$ is a compact subset of
-            $X$. But then $C\cap{f}^{\minus{1}}[\mathcal{V}]$ is a closed
-            subset of a compact set, and is therefore compact. But then
-            $f(x)\in{f}[C]$, a contradiction. Thus, $C$ is closed.
-        \end{proof}
-        One of the most important theorems in the study of metric and locally
-        compact Hausdorff spaces is the Baire category theorem. It comes in
-        three flavors.
-        \begin{ftheorem}{The First Baire Category Theorem}
-                        {First_Baire_Category_Theorem}
-            If $\topspace{X}$ is a completely metrizable topological space,
-            then it is a Baire space.
-        \end{ftheorem}
-        \begin{ftheorem}{The Second Baire Category Theorem}
-                        {Second_Baire_Category_Theorem}
-            If $\topspace{X}$ is a locally compact Hausdorff space, then it is
-            a Baire space.
-        \end{ftheorem}
-        \begin{ftheorem}{The Third Baire Category Theorem}
-                        {Third_Baire_Category_Theorem}
-            If $\topspace{X}$ is a completely metrizable topological space,
-            if $C:\mathbb{N}\rightarrow\powset{X}$ is a sequence of closed sets,
-            and if $\bigcup{C}=X$, then there exists an $N\in\mathbb{N}$ such
-            that $\interior{C_{N}}\ne\emptyset$.
-        \end{ftheorem}
-        \begin{theorem}
-            If $\topspace{X}$ is a Baire space, if and if $C\subseteq{X}$ is a
-            countable closed subset of $X$, then there exists an isolated point
-            $x\in{C}$.
-        \end{theorem}
-        \begin{fdefinition}{Compact Exhaustion}{Compact_Exhaustion}
-            A compact exhaustion of a topological space $\topspace{X}$ is a
-            sequence of compact sets $K:\mathbb{N}\rightarrow\mathcal{P}(X)$
-            such that for all $n\in\mathbb{N}$ it is true that:
-            \begin{equation*}
-                K_{n}\subseteq\interior{{K}_{n+1}}
-            \end{equation*}
-            and such that $X=\bigcup{K}_{n}$.
-        \end{fdefinition}
-        \begin{ftheorem}{Existence of Compact Exhaustions}
-                        {Existence_of_Compact_Exhaustions}
-            If $\topspace{X}$ is a second countable locally compact Hausdorff
-            topological space, then there exists a compact exhaustion of $X$.
-        \end{ftheorem}
-        \begin{bproof}
-            Since $\topspace{X}$ is locally compact and Hausdorff, there is a
-            basis of precompact open sets. But a second countable space is
-            Lindel\"{o}f, and hence there is a countable subcover. Let
-            $K_{n}=\bigcup\closure{\mathcal{U}_{k}}$.
-        \end{bproof}
-        \subsection{Algebraic Topology}
-            Def homotopy, homotopic. Path homotopic functions in a topological
-            space $X$ are paths $\gamma_{1},\gamma_{2}:[0,1]\rightarrow{X}$
-            which are homotopic relative to the set $\{0,1\}$. Path homotopy
-            forms an equivalence relation on the set of all paths between two
-            points, $x,y\in{X}$. Given two pahts $f,g:[0,1]\rightarrow{X}$
-            such that $f(1)=g(0)$, their product is the new path that
-            concatenates these two travelling as twice the \textit{speed}.
-            \begin{equation}
-                (f\star{g})(t)=
-                \begin{cases}
-                    f(2t),&0\leq{t}\leq\frac{1}{2}\\
-                    g(2t-1),&\frac{1}{2}<t\leq{1}
-                \end{cases}
-            \end{equation}
-            Since $f(1)=g(0)$, $f\star{g}$ is continuous at $1/2$ and is
-            therefore a path. If $f,f',g,g'$ are paths such that $f$ and $f'$
-            are path homotopic, and $g$ and $g'$ are path homotopic, then
-            $f\star{g}$ and $f'\star{g}'$ will be path homotopic as well.
-            Multiplication of paths is \textit{not} associative
-            (draw a picture). Def loop ($f:[0,1]\rightarrow{X}$ vs
-            $f:\nsphere[1]\rightarrow{X}$). Def fundamental group. Identity is
-            constant map, inverse of $f(t)$ is $f(1-t)$.
-            \begin{theorem}
-                If $\topspace{X}$ is a path connected topological space and if
-                $x,y\in{X}$, then the fundamental groups $\homotopygroup{X}{x}$
-                and $\homotopygroup{X}{y}$ are isomorphic.
-            \end{theorem}
-            \begin{fdefinition}{Simply Connected}{Simply_Connected}
-                A simply connected topological space is a topological space
-                $\topspace{X}$ such that for all $p\in{X}$ it is true that the
-                fundamental group $\homotopygroup{X}{x}$ is isomorphic to the
-                trivial group.
-            \end{fdefinition}
-            \begin{theorem}
-                If $\topspace{X}$ is a path connected topological space, then
-                it is simply connected if and only if for all $x,y\in{X}$ and
-                all paths $\gamma_{1},\gamma_{2}:[0,1]\rightarrow{X}$ such that
-                $\gamma_{1}(0)=x$, $\gamma_{2}(0)=x$ and such that
-                $\gamma_{1}(1)=y$ and $\gamma_{2}(1)=y$, it is true that
-                $\gamma_{1}$ and $\gamma_{2}$ are path homotopic.
-            \end{theorem}
-            \begin{proof}
-                For let $h=\gamma_{1}\star\gamma_{2}^{\minus{1}}$. Since $X$ is
-                simply connected, there is a homotopy $H$ between $h$ and the
-                path $\gamma_{2}\star\gamma_{2}^{\minus{1}}$.
-            \end{proof}
-            \begin{theorem}
-                If $f_{1},f_{2}:X\rightarrow{Y}$, $g_{1},g_{2}:Y\rightarrow{Z}$
-                are continuous, $f_{1}$ homotopy to $f_{2}$, $g_{1}$ homotopic
-                to $g_{2}$, then $g_{1}\circ{f_{1}}$ is homotopic to
-                $g_{2}\circ{f}_{2}$.
-            \end{theorem}
-            \begin{fdefinition}{Induced Homomorphism of $\pi_{1}$}
-                               {Induced_Homo_Fun_Group}
-                The induced homomorphism from a the fundamental group
-                of a topological space $\topspace[X]{X}$ at a point $x\in{X}$
-                into the fundamental group of a topological space
-                $\topspace[Y]{Y}$ about a point $y\in{Y}$ by a continuous
-                function $f:X\rightarrow{Y}$ such that $f(x)=y$ is the function
-                $f_{*}:\homotopygroup{X}{x}\rightarrow\homotopygroup{Y}{y}$
-                defined by:
-                \begin{equation*}
-                    f_{*}[\gamma]=[f\circ\gamma]
-                \end{equation*}
-            \end{fdefinition}
-            Avoiding proof by 
-            \begin{theorem}
-                The induced homomorphism is a homomorphism.
-            \end{theorem}
-            \begin{theorem}
-                If $\topspace[X]{X}$, $\topspace[Y]{Y}$, and $\topspace[Z]{Z}$
-                are topological spaces, if $f:X\rightarrow{Y}$ and
-                $g:Y\rightarrow{Z}$ are continuous, if $x\in{X}$, if
-                $y=f(x)$, and if $z=g(z)$, then:
-                \begin{equation}
-                    (g\circ{f})_{*}=g_{*}\circ{f}_{*}
-                \end{equation}
-                where $h_{*}$ denotes the induced homotopy between fundamental
-                groups.
-            \end{theorem}
-            \begin{theorem}
-                If $\topspace{X}$ is a topological space, if $x\in{X}$, and if
-                $\identity{X}$ is the identity map, then
-                ${\identity{X}}_{*}$ is the unital element of
-                $\homotopygroup{X}{x}$.
-            \end{theorem}
-            Homeomorphic topological spaces have isomorphic fundamental groups.
-            There's a weakening of the notion of convexity that is useful in the
-            study of fundamental groups.
-            \begin{fdefinition}{Star Shaped}{Star_Shaped}
-                A start shaped subset of a vector space $\monoid[+]{V}$ over a
-                field $\ring{F}$ is a subset $\mathcal{U}\subseteq{V}$ such that
-                there exists a point $\vector{x}\in\mathcal{U}$ such that for
-                all $\vector{y}\in\mathcal{U}$ the straight line between
-                $\vector{x}$ and $\vector{y}$ is contained in $\mathcal{U}$.
-            \end{fdefinition}
-            Thus, every convex body is star shaped but the converse is false.
-            Indeed, a \textit{star} is star shaped by not convex since the
-            line between the outer vertices leaves the body.
-            \begin{theorem}
-                If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is star shaped, then it
-                is simply connected.
-            \end{theorem}
-            \begin{proof}
-                Use the straight-line homotopy between the central point
-                $\vector{x}$ and any other point $\vector{y}$.
-            \end{proof}
-            Fundamental group of $\nsphere[1]$ is $\mathbb{Z}$, all higher
-            spheres are simply connected. Fundamental group of product is
-            product of fundamental groups. Thus, fundamental group of torus is
-            $\mathbb{Z}^{2}$.
-            Homotopy equivalence $f:X\rightarrow{Y}$, homotopy inverse
-            $g:Y\rightarrow{X}$, homotopy equivalent spaces.
-            \begin{theorem}
-                If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological
-                spaces, if $f:X\rightarrow{Y}$ is a homotopy equivalence, if
-                $x_{0}\in{X}$, and if $y_{0}=f(x_{0})$, then the induced
-                homomorphism
-                $f_{*}:\homotopygroup{X}{x_{0}}\rightarrow%
-                 \homotopygroup{Y}{y_{0}}$ is an isomorphism.
-            \end{theorem}
-            \begin{proof}
-                For it suffices to show that $f_{*}$ is bijective. Suppose
-                $[\gamma_{1}],[\gamma_{2}]\in\homotopygroup{X}{x}$ are distinct
-                equivalence classes. Since $f$ is a homotopy equivalence, there
-                exists a homotopy inverse $g:X\rightarrow{Y}$. But then
-                $g\circ{f}$ is homotopic to $\identity{X}$, and so there is a
-                homotopy $H_{X}$ between them. Thus, if
-                $f_{*}([\gamma_{1}])=f_{*}([\gamma_{2}])$, then there is a
-                homotopy $H_{Y}$ between them. But then
-                $G_{X}$ defined by:
-            \end{proof}
-            Covering maps are local homeo, open, and quotient maps. Injective
-            covering map is a homeo. Fibers have the same cardinality, called
-            the number of sheets of the covering. Covering map is proper if and
-            only if it is finite sheeted. Finite product of covering maps is
-            covering map.
-            \begin{fdefinition}{Lift To Covering Spaces}
-                A lift of a continuous function $f:X\rightarrow{Y}$ from a
-                topological space $\topspace[X]{X}$ to topological space
-                $\topspace[Y]{Y}$ to a covering space $\topspace{E}$ of $Y$ is a
-                continuous function $\tilde{f}:X\rightarrow{E}$ such that
-                $\pi\circ\tilde{f}=f$, where $\pi$ is the covering map
-                $\pi:E\rightarrow{Y}$.
-            \end{fdefinition}
-            \begin{theorem}
-                If $B$ is connected, $f:B\rightarrow{X}$ continuous, and if
-                $\tilde{f}_{1},\tilde{f}_{2}$ are lifts to $E$, then if
-                they are equal at one point, they are equal everywhere.
-            \end{theorem}
-            \begin{theorem}
-                If $f:I\rightarrow{X}$ is a path, $e\in{E}$, $\pi(e)=f(0)$,
-                then there is a unique lift $\tilde{f}:I\rightarrow{E}$ such
-                that $\tilde{f}(0)=e$.
-            \end{theorem}
-            \begin{theorem}[Monodromy Theorem]
-                If $f,g:I\rightarrow{X}$ are path-homotopic paths, and
-                $\tilde{f},\tilde{g}$ are lifts that are equal at some point
-                $e\in{E}$, then the lifts are path homotopic.
-            \end{theorem}
-            \begin{theorem}[Lifting Criterion]
-                If $\pi:E\rightarrow{X}$ is a covering map, if $Y$ is connected
-                and locally path connected, and if $f:Y\rightarrow{X}$ is
-                continuous, and if $y\in{Y}$, $e\in{E}$ are such that
-                $\pi(e)=f(y)$, then there is a lift $\tilde{f}:Y\rightarrow{E}$
-                such that $\tilde{f}(y)=e$ if and only if the induced
-                homomorphism $f_{*}[\homotopygroup{Y}{y}]\subseteq%
-                \pi_{*}[\homotopygroup{E}{e}]$.
-            \end{theorem}
-            \begin{theorem}
-                If $X$ is simply connected, and if $\pi:E\rightarrow{X}$ is a
-                covering map, then it is a homeomorphism.
-            \end{theorem}
-            \begin{theorem}
-                If $X$ is connected, locally path connected, and semi-locally
-                simply connected, then there is a universal cover.
-            \end{theorem}
     \section{Reading From Lee (Chapter 1)}
         Smoothness cannot be a topological property. To see this, note that the
         circle and the square are homeomorphic to each other, and thus topology
@@ -6011,8 +6468,6 @@
             \end{proof}
             Non-orientable space is not simply connected since it is not its own
             universal cover since double cover is connected.
-    \section{Notes from Hirsch (Chapter 1)}
-        Manifolds are things.
     \section{Manifolds Review}
         \begin{definition}
             A locally Euclidean topological space is a topological space
