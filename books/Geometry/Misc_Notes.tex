@@ -247,38 +247,61 @@
             $x\in\interior{A\cap{B}}$. Therefore
             $\interior{A\cap{B}}=\interior{A}\cap\interior{B}$.
         \end{proof}
-        The theorems proved here can actually completely characterize a
-        topological space. Kuratowski famously did this with the notion of the
-        \textit{closure} of a set, but interior works as well. That is, if we
-        have a function $\sigma:\powset{X}\rightarrow\powset{X}$ such that:
-        \par
-        \begin{subequations}
-            \begin{minipage}[b]{0.49\textwidth}
-                \centering
-                \begin{align}
-                    \sigma(A)&\subseteq{A}\\
-                    \sigma\big(\sigma(A)\big)&=\sigma(A)
-                \end{align}
-            \end{minipage}
-            \hfill
-            \begin{minipage}[b]{0.49\textwidth}
-                \centering
-                \begin{align}
-                    \sigma(A\cap{B})&=\sigma(A)\cap\sigma(B)\\
-                    \label{eqn:Int_Op_Sigma_of_X_is_X}%
-                    \sigma(X)&=X
-                \end{align}
-            \end{minipage}
-        \end{subequations}
-        \par\vspace{2.5ex}
-        We define the topology $\tau$ on $X$ by declaring $\mathcal{U}\in\tau$
-        if and only if $\sigma(\mathcal{U})=\mathcal{U}$. That is, the topology
-        is the set of all fixed points of $\sigma$. A topology gives a unique
-        interior operator, and an interior operator gives a unique topology.
-        Thus, all of topology could be done by considering such a function. We
-        still need the notion of \textit{morphism}, and in the ordinary study of
-        topology we have continuous functions. The following theorem gives an
-        equivalent definition of continuity in terms of interior.
+        The theorems proved here can completely characterize topological spaces.
+        Kuratowski famously did this with the notion of the \textit{closure} of
+        a set, but interior works as well. That is, we define an
+        \textit{interior operator} on a set as follows:
+        \begin{fdefinition}{Interior Operator}{Interior_Operator}
+            An interior operator on a set $X$ is a function
+            $\sigma:\powset{X}\rightarrow\powset{X}$, where $\powset{X}$ is the
+            power set of $X$, such that:
+            \par
+            \begin{subequations}
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{align}
+                        \label{eqn:Int_Op_Inclusion}%
+                        \sigma(A)&\subseteq{A}
+                        \tag{1}\\
+                        \label{eqn:Int_Op_Idemp}%
+                        \sigma\big(\sigma(A)\big)&=\sigma(A)
+                        \tag{2}
+                    \end{align}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[b]{0.49\textwidth}
+                    \centering
+                    \begin{align}
+                        \label{eqn:Int_Op_Intersect}%
+                        \sigma(A\cap{B})&=\sigma(A)\cap\sigma(B)
+                        \tag{3}\\
+                        \label{eqn:Int_Op_Preserve_X}%
+                        \sigma(X)&=X\tag{4}
+                    \end{align}
+                \end{minipage}
+            \end{subequations}
+            \par\vspace{2.5ex}
+        \end{fdefinition}
+        Eqn.~\ref{eqn:Int_Op_Intersect} has an equivalent formulation called
+        \textit{isotonicity}. We will need this later.
+        \begin{theorem}
+            \label{thm:Int_Op_Isoton}%
+            If $X$ is a set, if $\sigma:\powset{X}\rightarrow\powset{X}$ is an
+            interior operator, if $A,B\subseteq{X}$, and if $A\subseteq{B}$,
+            then $\sigma(A)\subseteq\sigma(B)$.
+        \end{theorem}
+        \begin{proof}
+            For if $A\subseteq{B}$, then $A\cap{B}=A$, and therefore
+            $\sigma(A)=\sigma(A\cap{B})$. But
+            $\sigma(A\cap{B})=\sigma(A)\cap\sigma(B)$
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Intersect}).
+            Therefore, $\sigma(A)\subseteq\sigma(B)$.
+        \end{proof}
+        A topology gives a unique interior operator that preserves the open
+        sets, and an interior operator gives a unique topology. We still need
+        the notion of \textit{morphism}, and in the ordinary study of topology
+        we have continuous functions. The following theorem gives an equivalent
+        definition of continuity in terms of interior.
         \begin{ftheorem}{Kuratowski's Interior Theorem}{Kuratowski_Interior_Thm}
             If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
             and if $f:X\rightarrow{Y}$ is a function, then $f$ is continuous if
@@ -321,32 +344,23 @@
             $f$ is continuous.
         \end{bproof}
         With this, we now prove our claim that the interior operator is an
-        equivalent formulation of topology. The four equations defined before
-        give a complete algebraic axiomization of the notion of topologies on a
-        set. One may be tempted to think that these four set of equations
-        satisfy a \textit{unique} interior operator (that is,
-        $\sigma=\textrm{Int}_{\tau}$), but there's a different distinct
+        equivalent formulation of topology. Def.~\ref{def:Interior_Operator}
+        gives a complete algebraic axiomization of the notion of topologies on a
+        set. One may be tempted to think that these four equations satisfy a
+        \textit{unique} interior operator
+        (that is, $\sigma=\textrm{Int}_{\tau}$), but there's a different distinct
         interior operator for every topology $\tau$ on a set $X$. Thus, to prove
         any form of uniqueness we must greatly strengthen
-        Eqn.~\ref{eqn:Int_Op_Sigma_of_X_is_X} so that $\sigma$ pertains to a
+        Eqn.~\ref{eqn:Int_Op_Preserve_X} so that $\sigma$ pertains to a
         single topology. We do this by requiring the
         $\sigma(\mathcal{U})=\mathcal{U}$ if and only if $\mathcal{U}$ is open.
         This new requirement gives us a bijection between interior operators
-        on $X$ and topologies.
+        and topologies.
         \begin{ftheorem}{Interior Operator of a Topological Space}
                         {Interior_Operator_of_a_Topological_Space}
             If $\topspace{X}$ is a topological space, if
-            $\sigma:\powset{X}\rightarrow\powset{X}$ is such that for all
-            $A\in\powset{X}$ it is true that:
-            \begin{align}
-                \label{eqn:Int_Op_Inclusion}%
-                \sigma(A)&\subseteq{A}\tag{1}\\
-                \label{eqn:Int_Op_Idempotence}%
-                \sigma\big(\sigma(A)\big)&=\sigma(A)\tag{2}\\
-                \label{eqn:Int_Op_Inter_Preserve}%
-                \sigma(A\cap{B})&=\sigma(A)\cap\sigma(B)\tag{3}
-            \end{align}
-            and if $\mathcal{U}\in\tau$ if and only if
+            $\sigma:\powset{X}\rightarrow\powset{X}$ is an interior operator on
+            $X$, and if $\mathcal{U}\in\tau$ if and only if
             $\sigma(\mathcal{U})=\mathcal{U}$, then $\sigma(A)=\interior{A}$.
         \end{ftheorem}
         \begin{bproof}
@@ -358,26 +372,99 @@
             $\interior{A}\subseteq{A}$ (Thm.~\ref{thm:Interior_is_Smaller})
             and therefore $\interior{A}=A\cap\interior{A}$. But
             $\sigma(A\cap\interior{A})=\sigma(A)\cap\sigma(\interior{A})$
-            (\ref{eqn:Int_Op_Inter_Preserve}) and
-            $\sigma(A)\cap\sigma(\interior{A})=\sigma(A)\cap\interior{A}$.
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Intersect})
+            and $\sigma(A)\cap\sigma(\interior{A})=\sigma(A)\cap\interior{A}$.
             Therefore by the transitivity of equality we obtain
             $\interior{A}=\sigma(A)\cap\interior{A}$, and therefore
             $\interior{A}\subseteq\sigma(A)$. But $\sigma(\sigma(A))=\sigma(A)$
-            (\ref{eqn:Int_Op_Idempotence}), and thus by hypothesis
-            $\sigma(A)$ is open. But since $\sigma(A)\subseteq{A}$
-            (\ref{eqn:Int_Op_Inclusion}), if $\sigma(A)$ is open, then
-            $\sigma(A)\subseteq\interior{A}$
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Idemp}),
+            and thus by hypothesis $\sigma(A)$ is open. But since
+            $\sigma(A)\subseteq{A}$
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Inclusion}),
+            if $\sigma(A)$ is open, then $\sigma(A)\subseteq\interior{A}$
             (Thm.~\ref{thm:Open_Subset_of_A_is_Subset_of_Interior}). Therefore
             $\sigma(A)=\interior{A}$, a contradiction. Hence, for all
             $A\subseteq{X}$ it is true that $\sigma(A)=\interior{A}$.
         \end{bproof}
-        There's a similar notion for exterior points and the exterior of a set.
+        We now define the induced topology of an interior operator, and show
+        that it is indeed a topology.
+        \begin{fdefinition}{Induced Topology of an Interior Operator}
+                           {Induced_Topology_of_an_Interior_Operator}
+            The induced topology of and interior operator
+            $\sigma:\powset{X}\rightarrow\powset{X}$ on a set $X$ is the set
+            of all $\mathcal{U}\in\powset{X}$ such that
+            $\sigma(\mathcal{U})=\mathcal{U}$. That is:
+            \begin{equation*}
+                \tau_{\sigma}=\big\{\,\mathcal{U}\in\powset{X}\;|\;
+                    \sigma(\mathcal{U})=\mathcal{U}\,\}
+            \end{equation*}
+        \end{fdefinition}
+        Just because we're calling this thing a topology doesn't mean it is. We
+        now prove that the induced topology of an interior operator is indeed
+        a topology, and thus $\topspace[\sigma]{X}$ is a topological space.
+        \begin{theorem}
+            \label{thm:Top_Induced_by_Int_Op_is_Top}%
+            If $X$ is a set, if $\sigma:\powset{X}\rightarrow\powset{X}$ is an
+            interior operator on $X$, and if $\tau_{\sigma}$ is the induced
+            topology of $\sigma$, then $\tau_{\sigma}$ is a topology on $X$.
+        \end{theorem}
+        \begin{proof}
+            For if $\sigma$ is an interior operator, then $\sigma(X)=X$
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Preserve_X})
+            and thus $X\in\tau_{\sigma}$. Moreover, since
+            $\sigma(\emptyset)\subseteq\emptyset$
+            (Def.~\ref{def:Interior_Operator} Eqn.~\ref{eqn:Int_Op_Inclusion}),
+            it is therefore true that $\emptyset\in\tau_{\sigma}$. If
+            $\mathcal{U},\mathcal{V}\in\tau_{\sigma}$, then:
+            \begin{align}
+                \sigma(\mathcal{U}\cap\mathcal{V})
+                    &=\sigma(\mathcal{U})\cap\sigma(\mathcal{V})
+                    \tag{Def.~\ref{def:Interior_Operator}
+                         Eqn.~\ref{eqn:Int_Op_Intersect}}\\
+                    &=\mathcal{U}\cap\mathcal{V}
+                    \tag{Hypothesis}
+            \end{align}
+            and hence $\mathcal{U}\cap\mathcal{V}\in\tau_{\sigma}$. Lastly,
+            if $\mathcal{O}\subseteq\tau_{\sigma}$, then:
+            \begin{equation}
+                \sigma\Big(\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}\Big)
+                    \subseteq\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
+                \tag{Def.~\ref{def:Interior_Operator}
+                     Eqn.~\ref{eqn:Int_Op_Inclusion}}
+            \end{equation}
+            But for all $\mathcal{U}\in\mathcal{O}$,
+            $\mathcal{U}\subseteq\bigcup\mathcal{O}$ and therefore
+            $\sigma(\mathcal{U})\subseteq\sigma(\bigcup\mathcal{O})$
+            (Thm.~\ref{thm:Int_Op_Isoton}). But then:
+            \begin{equation}
+                \bigcup_{\mathcal{U}\in\mathcal{O}}\sigma(\mathcal{U})\subseteq
+                \sigma\Big(\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}\Big)
+            \end{equation}
+            By hypothesis $\sigma(\mathcal{U})=\mathcal{U}$, and so
+            $\bigcup\mathcal{O}\subseteq\sigma(\bigcup\mathcal{O})$. But
+            $\sigma(\bigcup\mathcal{O})\subseteq\bigcup\mathcal{O}$,
+            and therefore $\sigma(\bigcup\mathcal{O})=\bigcup\mathcal{O}$.
+            Hence, $\bigcup\mathcal{O}\in\tau_{\sigma}$ and $\tau_{\sigma}$ is a
+            topology on $X$.
+        \end{proof}
+        There's a related notion called \textit{exterior}. Like the interior, we
+        define the exterior in terms of exterior points.
         \begin{fdefinition}{Exterior Point}{Exterior_Point}
             An exterior point of a subset $A\subseteq{X}$ of a topological
             spacec $\topspace{X}$ is a point $p\in{X}\setminus{A}$ such that
-            there exists an open set $\mathcal{U}\in\tau$ such that
-            $\mathcal{U}\subseteq{A}\setminus{A}$ and $p\in\mathcal{U}$.
+            there exists an open set $\mathcal{U}\in\tau$ with
+            $\mathcal{U}\subseteq{X}\setminus{A}$ and $p\in\mathcal{U}$.
         \end{fdefinition}
+        As one might expect from the definition, there's nothing new here and
+        exterior points can be related to interior points be means of
+        complement.
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Exterior_Point_of_Set.tex}
+            \caption{Exterior Point of a Set}
+            \label{fig:Exterior_Points}
+        \end{figure}
         \begin{theorem}
             \label{thm:Equiv_Def_Exterior_Point_of_Set}%
             If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, and if
@@ -395,7 +482,7 @@
             then there is an open subset $\mathcal{U}\in\tau$ such that
             $p\in\mathcal{U}$ and $\mathcal{U}\subseteq{X}\setminus{A}$. But
             then $p$ is an exterior point of $A$
-            (Def.~\ref{def:Exterior_Point}), completing the proof.
+            (Def.~\ref{def:Exterior_Point}).
         \end{proof}
         \begin{example}
             Using Thm.~\ref{thm:Equiv_Def_Exterior_Point_of_Set} we have that
@@ -437,6 +524,18 @@
             though $\mathbb{Q}$ is dense in $\nspace[]$, which is quite
             paradoxical.
         \end{example}
+        This example shows that the exterior of a set is not just the
+        complement. There are three parts to a set: Interior, exterior, and
+        boundary. This shows that, whatever boundary is defined to be, the
+        boundary of $\mathbb{Q}$ is the entirety of $\mathbb{R}$, which again
+        may be at odds with intuition.
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Exterior_of_Set.tex}
+            \caption{Exterior a Set}
+            \label{fig:Exterior_of_Set}
+        \end{figure}
         \begin{theorem}
             \label{thm:Alt_Equiv_Def_Exterior_of_Set}%
             If $\topspace{X}$ is a topological space, if $A\subseteq{X}$, if
@@ -453,10 +552,13 @@
             (Thm.~\ref{thm:Equiv_Def_Interior_of_Set}) and therefore
             $\exterior{A}=\bigcup\tau_{A^{C}}$.
         \end{proof}
-        Kuratowski's main interest were in the closure axioms that could be used
-        to define topological spaces. Closure is the \textit{dual} notion to
-        interior and is a used in many contexts. Like interior, closure is
-        defined in terms of closure points.
+        We attempt to define boundary in an intuitive manner. To do this needs
+        the notion of \textit{closure}, which is somewhat the \textit{dual}
+        concept of interior. Kuratowski's interests were in the closure axioms
+        that could be used to define topological spaces, and indeed in his two
+        volume treatise on topology he takes as the definition of a topological
+        space a set $X$ with a closure operator $\sigma$. Like interior, closure
+        is defined in terms of closure points.
         \begin{fdefinition}{Point of Closure}{Point_of_Closure}
             A point of closure of a subset $A\subseteq{X}$ in a topological
             space $\topspace{X}$ is a point $p\in{X}$ such that for every open
