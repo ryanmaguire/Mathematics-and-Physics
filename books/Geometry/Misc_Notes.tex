@@ -14,8 +14,114 @@
     \tableofcontents
     \listoffigures
     \newpage
-    \section{Reading From Lee (Topology Review)}
-        Define topological space, open sets, neighborhoods, closed sets.
+    \section{Topology}
+        \begin{fdefinition}{Topological Space}{Topological_Space}
+            A topological space is a set $X$ with a topology
+            $\tau\subseteq\powset{X}$ such that $\emptyset\in\tau$, $X\in\tau$,
+            for all $\mathcal{U},\mathcal{V}\in\tau$ it is true that
+            $\mathcal{U}\cap\mathcal{V}\in\tau$, and for all
+            $\mathcal{O}\subseteq\tau$ it is true that
+            $\bigcup\mathcal{O}\in\tau$.
+        \end{fdefinition}
+        That is, topologies are closed to finite intersections, arbitrary
+        unions, and contain both the empty set and the entire space. Elements of
+        a topology are called the \textit{open} subsets of $X$. A closed subset
+        is the complement of an open subset. That is, $C\subseteq{X}$ is closed
+        if there exists an open set $\mathcal{U}\in\tau$ such that
+        $C=X\setminus\mathcal{U}$.
+        \begin{example}
+            If $X$ is a set, and if $\tau=\{\emptyset,X\}$, then
+            $\topspace{X}$ is a topological space. This is called the trivial
+            topology, but it is also known as the indiscrete topology or the
+            chaotic topology.
+        \end{example}
+        \begin{example}
+            If $X$ is a set, and if $\tau=\powset{X}$, the power set of $X$,
+            then $\topspace{X}$ is a topological space. This is called the
+            discrete topology on $X$.
+        \end{example}
+        \begin{fdefinition}{Continuous Function}{Continuous_Function}
+            A continuous function from a topological space $\topspace[X]{X}$ to
+            a topological space $\topspace[Y]{Y}$ is a function
+            $f:X\rightarrow{Y}$ such that for all $\mathcal{V}\in\tau_{Y}$ it is
+            true that $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. That is, the
+            pre-image of open sets is open.
+        \end{fdefinition}
+        \begin{example}
+            If $\topspace{X}$ is a topological space, if $\topspace[Y]{Y}$
+            is a topological space where $\tau_{Y}$ is the indiscrete (trivial)
+            topology, and if $f:X\rightarrow{Y}$ is any function, then it is
+            continuous. There are only two open sets to check, $\emptyset$ and
+            $Y$, and $f^{\minus{1}}[\emptyset]=\emptyset$, which is open, and
+            $f^{\minus{1}}[Y]=X$, which is also open. Hence, $f$ is continuous.
+            This is one justification for the name \textit{chaotic} topology.
+            It makes everything continuous, which is quite chaotic.
+        \end{example}
+        \begin{example}
+            If $\topspace{Y}$ is a topological space, if $\topspace[X]{X}$ is a
+            topological space with $\tau_{X}=\powset{X}$, and if
+            $f:X\rightarrow{Y}$ is a function, then it is continuous. Since,
+            given any subset $\mathcal{V}\subseteq{Y}$,
+            $f^{\minus{1}}[\mathcal{V}]$ is a subset of $X$ and is thus
+            contained in $\tau_{X}$. In particular, the pre-image of any open
+            subset will fall inside of $\tau_{X}$ and is therefore open.
+        \end{example}
+        These are the two extreme examples of continuous functions. From
+        analysis one talks about continuity by means of sequences. In an ideal
+        world these two notions would coincide, but topological spaces can be
+        quite pathalogical. One of our goals is to provide any hypothesis on a
+        space so that we can allow our familiar notions from calculus to apply.
+        We first define sequentially continuous functions and sequential spaces.
+        To do so needs a notion of convergence. In analysis we say that
+        $a_{n}\rightarrow{x}$ if for all $\varepsilon>0$ there is an
+        $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$ with $n>N$ it is
+        true that $|x-a_{n}|<\varepsilon$. One can picture this by drawing an
+        interval of radius $\varepsilon$ about the point $x$ and showing that
+        eventually all of the points $a_{n}$ lie within this interval. To
+        generalize to topological space, we replace intervals with open sets.
+        \begin{fdefinition}{Convergent Sequence}{Convergent_Sequence}
+            A convergent sequence in a topological space $\topspace{X}$ is a
+            sequence $a:\mathbb{N}\rightarrow{X}$ such that there exists an
+            $x\in{X}$ such that for all $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ there exists an $N\in\mathbb{N}$ such that for all
+            $n\in\mathbb{N}$ with $n>N$ it is true that $a_{n}\in\mathcal{U}$.
+            We denote this by $a_{n}\rightarrow{x}$.
+        \end{fdefinition}
+        One of the firsts things one does in analysis when discussing sequences
+        is prove that limits are unique. In topology this is false. Consider the
+        chaotic topology on the real numbers $\nspace[]$. Then given any
+        sequence $a:\mathbb{N}\rightarrow\nspace[]$ and any point
+        $x\in\nspace[]$ it is true that $a_{n}\rightarrow{x}$. We can see this
+        since there is only one non-empty subset, and that is the entirety of
+        $\nspace[]$. And for all $n\in\mathbb{N}$ it is true that
+        $a_{n}\in\nspace[]$ by the definition of $a$ being a sequence. Hence,
+        $a_{n}$ converges to any point $x\in\nspace[]$ by the definition of
+        convergence (Def.~\ref{def:Convergent_Sequence}). This doesn't mean that
+        we've stumbled upon a poor definition of convergence, but rather that
+        the trivial topology on a set is a rather poor topological space. To rid
+        oneself of these oddities one must require spaces to have various
+        separation properties. The most common to impose is the Hausdorff
+        condition, and we will discuss this after defining sequentially
+        continuous functions.
+        \begin{fdefinition}{Sequentially Continuous Function}
+                           {Sequentially_Continuous_Function}
+            A sequentially continuous function from a topological space
+            $\topspace[X]{X}$ to a topological space $\topspace[Y]{Y}$ is a
+            function $f:X\rightarrow{Y}$ such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ and for every $x\in{X}$ such that
+            $a_{n}\rightarrow{x}$, it is true that $f(a_{n})\rightarrow{f}(x)$.
+        \end{fdefinition}
+        We say for \textit{every} $x\in{X}$ since, as discussed before,
+        limits may not be unique. As stated before, it is not necessarily true
+        that sequentially continuous functions are continuous. We need to impose
+        certain properties on the space to guarentee this. This converse,
+        however, is true.
+        \begin{theorem}
+            \label{thm:Cont_is_Seq_Cont}%
+            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+            and if $f:X\rightarrow{Y}$ is continuous, then it is sequentially
+            continuous.
+        \end{theorem}
         \begin{fdefinition}{Interior Point}{Interior_Point}
             An interior point of a subset $A\subseteq{X}$ of a topological space
             $\topspace{X}$ is a point $p\in{A}$ such that there exists an open
@@ -2746,6 +2852,21 @@
             Hausdorff locally Euclidean topological space of dimension $n$
             that is second countable.
         \end{fdefinition}
+        \begin{example}
+            Open subsets of $\mathbb{R}^{n}$ are $n$ dimensional manifolds.
+            Moreover, any open subset of an $n$ dimensional manifold, given the
+            subspace topology, will again be an $n$ dimensional manifold.
+        \end{example}
+        \begin{example}
+            The graphs of continuous functions $f:X\rightarrow{Y}$ from
+            topological manifolds of dimension $n$ and $m$, repsectively, are
+            manifolds. That is, if $\mathcal{U}\subseteq{X}$ is open, and
+            $f|_{\mathcal{U}}$ is the restriction of $f$, then
+            $\{(p,f(p)|p\in\mathcal{U}\}$, equipped with the subspace topology
+            induced by the product topology on $X\times{Y}$, is a topological
+            manifold of dimesnion $n$. It is Hausdorff and second countable
+            since it is the subspace of such spaces.
+        \end{example}
         \begin{fdefinition}{Atlas}{Atlas}
             An atlas on a topological space $(X,\tau)$ is a set
             $\mathcal{A}$ such that for all $z\in\mathcal{U}$ it is true
@@ -2757,6 +2878,224 @@
         An atlas for a connected space necessarily has a constant and well
         defined dimension, whereas the by definition of a manifold, any
         atlas on a manifold must have the same dimension.
+        \subsection{Subspace Topology}
+            Let $X$ be a topological space with topology $\tau$. For any
+            $S\subseteq{X}$ let $\tau_{S}$ be the subspace topology:
+            \begin{equation}
+                \tau_{S}=\{\mathcal{U}\cap{S}\;|\;\mathcal{U}\in\tau\}
+            \end{equation}
+            Then $\tau_{S}$ is a topology on $S$, called the subspace
+            topology. The restriction of a continuous map
+            $f:X\rightarrow{Y}$ to $S$ is continuous with respect to the
+            subspace topology on $f(S)\subseteq{Y}$. If $f|_{S}$ is
+            continuous, then $f:X\rightarrow{f}(X)$ is continuous with the
+            subspace topology.
+        \subsection{Basis for a Topology}
+            Let $\mathscr{B}$ be a bsis for a topology on $X$. Then:
+            \begin{equation}
+                \tau(\mathscr{B})=\{\mathcal{U}\subseteq{X}\;|\;
+                    \forall_{x\in\mathcal{U}}\exists_B\in\mathscr{B}:
+                    x\in{B}\subseteq\mathcal{U}\}
+            \end{equation}
+            is a topology on $X$, and this is the topology generated by
+            $\mathscr{B}$. If $X_{1},\dots,X_{n}$ are topological spaces,
+            $X=\prod{X}_{k}$ is the product space generated by the
+            \textit{open rectangles} in the $X_{i}$.
+        \subsection{Continuous Maps and Products}
+            Let $X$, $Y_{1},\dots,Y_{n}$ be topological spaces, and let
+            $Y=\prod_{k}Y_{k}$ be the product topological space. For each
+            $k$ let $\pi_{k}:Y\rightarrow{Y}_{k}$ be the projection mapping
+            sending $\mathbf{y}\in{Y}$ to $y_{k}$, then $k^{th}$ component
+            of $\mathbf{y}$. Then $f:X\rightarrow{Y}$ is continuous if and
+            only if $\pi_{k}\circ{f}$ is continuous for each $k$. Going the
+            other way, if $X=\prod_{k}X_{k}$ and $F:X\rightarrow{Y}$,
+            $F=f_{1}\times\cdots\times{f}_{n}$, then it is continuous if and
+            only if $f_{k}$ is continuous for all $k$. Let
+            $f:X\rightarrow{Y}$ be a continuous function. Note that from the
+            definition of a function, $f\subseteq{X}\times{Y}$. Thus we can
+            endow $f$ with the subspace topology on the product topology of
+            $X\times{Y}$. This is occasionally called the \textit{graph} of
+            $f$. If $X$ and $Y$ are Hausdorff and second countable, then
+            $X\times{Y}$ is, and thus any subspace of $X\times{Y}$ is
+            also Hausdorff and second countable. Hence the graph of $f$ is
+            a second countable Hausdorff topological space.
+            \begin{example}
+                The $n$ sphere $S^{n}$ is the subset of $\mathbb{R}^{n+1}$
+                such that $\norm{\mathbf{x}}_{2}=1$, equipped with the
+                subspace topology. We can make it into a manifold with the
+                charts $(\mathcal{U}_{k}^{\pm},\phi_{k}^{\pm})$ where
+                $\mathcal{U}_{k}^{\pm}$ is the $k^{th}$ upper (or lower)
+                hemisphere, and $\phi_{k}^{\pm}$ is simply the projection
+                mapping onto the hyperplane $\mathbb{R}^{n}$. We can also
+                cover this with two simpler coordinate charts, the
+                two stereographic projections about the north and south
+                pole.
+            \end{example}
+            \begin{example}
+                The real projective space $\mathbb{RP}^{n}$ is another
+                manifold. For any $x,y\in\mathbb{R}^{n+1}\setminus\{0\}$,
+                we write $xRy$ if there is a $t\in\mathbb{R}$ such that
+                $x=ty$. That is, $x$ and why are equivalent if they lie on
+                the same line through the origin. We define
+                $\mathbb{RP}^{n}$ by $\mathbb{R}^{n+1}\setminus\{0\}/R$,
+                equipped with the quotient topology. That is, a subset is
+                open if and only if $\pi^{\minus{1}}(\mathcal{U})$ is open
+                where $\pi$ is the quotient map (the natural projection).
+                For any $k=1,\dots,n$, let $\tilde{\mathcal{U}}_{j}$ be the
+                $(x_{1},\dots,x_{n+1})\in\mathbb{R}^{n+1}\setminus\{0\}$
+                such that $x_{j}\ne{0}$. This is an open subset and it is
+                saturated with respect to $\pi$. That is, for all
+                $[x]\in\mathbb{RP}^{n}$,
+                $\pi^{\minus{1}}([x])\cap\tilde{\mathcal{U}}_{j}\ne\emptyset$
+                if and only if $\pi^{\minus{1}}([x])\subseteq\tilde{\mathcal{U}}_{j}$.
+                Now let $\mathcal{U}=\pi(\tilde{\mathcal{U}}_{j})$. Then
+                since $\tilde{\mathcal{U}}_{j}$ is saturated it is equal
+                to $\pi^{\minus{1}}(\mathcal{U}_{j})$ and is therefore
+                open in the quotient topology. Define $\varphi_{j}$ by:
+                \begin{equation}
+                    \varphi_{j}\big([(x_{1},\dots,x_{n+1})]\big)
+                    =\big(\frac{x_{1}}{x_{j}},\dots,
+                        \frac{x_{j-1}}{x_{j}},\frac{x_{j+1}}{x_{j}},\dots,
+                        \frac{x_{n+1}}{x_{j}}\big)
+                \end{equation}
+                Then this map commutes with $\pi$ with $\tilde{\varphi}$:
+                $\tilde{\varphi}=\varphi\circ\pi$.
+            \end{example}
+        \begin{definition}
+            A topological Lie group is a group $(G,*)$ with a topology $\tau$ on
+            $G$ such that $\nu:G\rightarrow{G}$ defined by
+            $\nu(g)=g^{\minus{1}}$ is continuous $*:G\times{G}\rightarrow{G}$ is
+            continuous in the product topology, and $(G,\tau)$ is a topological
+            manifold.
+        \end{definition}
+        \begin{theorem}
+            $GL_{n}(\mathbb{R})$ is a topological Lie group of dimension
+            $n^{2}$.
+        \end{theorem}
+        \begin{proof}
+            For we have:
+            \begin{equation}
+                GL_{n}(\mathbb{R})=
+                \textrm{det}^{\minus{1}}(\mathbb{R}\setminus\{0\})
+            \end{equation}
+            and since $\textrm{det}$ is continuous (it's a polynomial), it's
+            thus an open subset of $\mathbb{R}^{n^{2}}$ (we can identify
+            $n\times{n}$ matrices with points in $\mathbb{R}^{n^{2}}$). Moreover
+            multiplication is continuous since it's continuous in every slot,
+            it's a polynomial. The inverse function
+        \end{proof}
+        \begin{definition}
+            A precompact subset of a topological space $(X,\tau)$ is a subset
+            $\mathcal{U}\subseteq{X}$ such that $\textrm{Cl}(\mathcal{U})$
+            is compact.
+        \end{definition}
+        \begin{theorem}
+            Every topological $n$ manifold has a countable basis of precompact
+            coordinate balls.
+        \end{theorem}
+        \begin{proof}
+            Let $(X,\tau)$ be a topological manifold and
+            $\{(\mathcal{U}_{\alpha},\varphi_{\alpha})\}$ a cover by coordinate
+            charts. Since second countable spaces are Lindelof, there is a
+            countable subcover. Since each $\varphi_{k}$ is an open mapping,
+            $\varphi_{k}(\mathcal{U}_{k})$ is an open subset of
+            $\mathbb{R}^{n}$.
+        \end{proof}
+        \begin{definition}
+            A locally path connected topological space is a topological space
+            $(X,\tau)$ such that there exists a basis of path connected open
+            sets.
+        \end{definition}
+        \begin{definition}
+            A locally compact topological space is such that for all $x\in{X}$
+            there is an open $\mathcal{U}\subseteq{X}$ and a compact
+            $K\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\subseteq{K}$.
+        \end{definition}
+        \begin{definition}
+            A connected component of $X$ is a maximal connected subset of $X$.
+        \end{definition}
+        Connected components partition the space. If two connected sets have
+        a point in common, their union is connected.
+        \begin{definition}
+            A path connected component s a maximal path component.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold, then $M$ is locally path
+            connected, locally compact, and the path components and connected
+            components are identical. Moreover, $M$ has countably many connected
+            components, each of which is open.
+        \end{theorem}
+        \begin{proof}
+            Locally path connected and connected implies path connected, hence
+            connected components and path connected components are the same.
+            Locally compact since compact coordinate balls about each point
+            suffice. Countably many connected components since second countable.
+        \end{proof}
+        \begin{definition}
+            A locally finite subset $\mathcal{O}\subseteq\mathcal{P}(X)$ is a
+            collection such that for all $x\in{X}$ there is a neighborhood
+            $\mathcal{U}\in\tau$ such that $\mathcal{U}$ intersects at most
+            finitely many elements of $\mathcal{O}$.
+        \end{definition}
+        \begin{definition}
+            A refinitement of a collection $\mathcal{O}\subseteq\mathcal{P}(X)$
+            is a collection $\mathcal{D}\subseteq\mathcal{P}(X)$ such that for
+            all $\mathcal{V}\in\mathcal{D}$ there is a
+            $\mathcal{U}\in\mathcal{O}$ such that
+            $\mathcal{V}\subseteq\mathcal{U}$.
+        \end{definition}
+        \begin{definition}
+            A paracompact space is a space such that every open cover has a
+            locally finite refinement.
+        \end{definition}
+        \begin{theorem}
+            If $\mathcal{O}$ is a locally finite collection of subsets of $X$,
+            then the collection of the closures is locally finite and the union
+            of the closures is the closure of the unions.
+        \end{theorem}
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold, then it is paracompact.
+        \end{theorem}
+        Thus far we have been looking at universes without walls or edges. For
+        example, the torus, sphere, real projective spaces, and open subsets of
+        $\mathbb{R}^{n}$. However, we can consider subsets of $\mathbb{R}^{2}$
+        such as the closed unit disc. The interior is homeomorphic to all of
+        $\mathbb{R}^{2}$< but the bounding circle makes the entire space not
+        open to any open subset since it is compact and no open subset of
+        $\mathbb{R}^{n}$ can be compact. However, the points on the bounding
+        circle are homeomorphic to the closed half plane in $\mathbb{R}^{2}$.
+        This gives rise to the notion of a smooth manifold with boundary.
+        Let $\mathbb{H}^{n}$ be the set of all $\mathbb{x}\in\mathbb{R}^{n}$
+        such that $x_{n}\geq{0}$.
+        \begin{definition}
+            A manifold with boundary is a second countable Hausdorff topological
+            space such that every point $x$ has an open neighborhood about it
+            that is homeomorphic to an open subset of $\mathbb{R}^{n}$ or a
+            relatively open subset of $\mathbb{H}^{n}$.
+        \end{definition}
+        \begin{definition}
+            A boundary point is a point on the boundary.
+        \end{definition}
+        \begin{theorem}
+            If $M$ is a topological manifold with boundary, then every point is
+            either an interior point or a boundary point.
+        \end{theorem}
+        \begin{definition}
+            A closed manifold is a compact manifold without boundary.
+        \end{definition}
+        \begin{theorem}
+            If $M$ is a topological manifold with boundary then the interior is
+            an open subset of $M$ is an open subset and the boundary is a
+            closed subset.
+        \end{theorem}
+        \begin{theorem}
+            If $M$ is a topological manifold with boundary, then $M$ has a
+            countable basis of precompact coordinate balls and half balls.
+            $M$ is locally compact. $M$ is locally path connected. $M$ has
+            countably many components, each of which is open and connected.
+            Moreover, $\pi_{1}(M)$ is countable.
+        \end{theorem}
     \section{Smooth Manifolds}
         Smooth manifolds are topological manifolds with a smooth structure
         on them so that one can do calculus. Such objects first require a
@@ -3203,7 +3542,6 @@
                 exists a topology $\tau_{A}$ and an atlas $\mathcal{A}_{A}$
                 on $X$ such that $f$ is a diffeomorphism.
             \end{theorem}
-    \section{Manifolds}
         \begin{definition}
             An $n$ dimensional smooth manifold is a topological space $(M,\tau)$
             equipped with a collection $\mathcal{A}$ or ordered pairs
@@ -3305,220 +3643,6 @@
             dimensional manifold $M$, $TM$ is usual \textbf{not} equal to
             $M\times\mathbb{R}^{m}$. It will always have dimension $2m$.
         \end{example}
-    \section{Topological Manifold}
-        \begin{definition}
-            A topological space is said to be an $n$ dimensional topological
-            manifold if the following hold:
-            \begin{itemize}
-                \item $M$ is Hausdorff.
-                \item $M$ is second countable.
-                \item $M$ is locally Euclidean of dimension $n$. For all
-                      $p\in{M}$ there is an open set $\mathcal{U}$ and a
-                      homeomorphism $\varphi:\mathcal{U}\rightarrow\mathcal{V}$
-                      to an open subset $\mathcal{V}\subseteq\mathbb{R}^{n}$.
-            \end{itemize}
-            The pair $(\mathcal{U},\varphi)$ is called a chart. If the image of
-            $\mathcal{U}$ by $\varphi$ is an open ball in $\mathbb{R}^{n}$ we
-            call this a coordinate ball.
-        \end{definition}
-        \begin{example}
-            Open subsets of $\mathbb{R}^{n}$ are $n$ dimensional manifolds.
-            Moreover, any open subset of an $n$ dimensional manifold, given the
-            subspace topology, will again be an $n$ dimensional manifold.
-        \end{example}
-        \begin{example}
-            The graphs of continuous functions $f:X\rightarrow{Y}$ from
-            topological manifolds of dimension $n$ and $m$, repsectively, are
-            manifolds. That is, if $\mathcal{U}\subseteq{X}$ is open, and
-            $f|_{\mathcal{U}}$ is the restriction of $f$, then
-            $\{(p,f(p)|p\in\mathcal{U}\}$, equipped with the subspace topology
-            induced by the product topology on $X\times{Y}$, is a topological
-            manifold of dimesnion $n$. It is Hausdorff and second countable
-            since it is the subspace of such spaces.
-        \end{example}
-        \subsection{Review of Previous Lecture}
-            \subsubsection{Subspace Topology}
-                Let $X$ be a topological space with topology $\tau$. For any
-                $S\subseteq{X}$ let $\tau_{S}$ be the subspace topology:
-                \begin{equation}
-                    \tau_{S}=\{\mathcal{U}\cap{S}\;|\;\mathcal{U}\in\tau\}
-                \end{equation}
-                Then $\tau_{S}$ is a topology on $S$, called the subspace
-                topology. The restriction of a continuous map
-                $f:X\rightarrow{Y}$ to $S$ is continuous with respect to the
-                subspace topology on $f(S)\subseteq{Y}$. If $f|_{S}$ is
-                continuous, then $f:X\rightarrow{f}(X)$ is continuous with the
-                subspace topology.
-            \subsubsection{Basis for a Topology}
-                Let $\mathscr{B}$ be a bsis for a topology on $X$. Then:
-                \begin{equation}
-                    \tau(\mathscr{B})=\{\mathcal{U}\subseteq{X}\;|\;
-                        \forall_{x\in\mathcal{U}}\exists_B\in\mathscr{B}:
-                        x\in{B}\subseteq\mathcal{U}\}
-                \end{equation}
-                is a topology on $X$, and this is the topology generated by
-                $\mathscr{B}$. If $X_{1},\dots,X_{n}$ are topological spaces,
-                $X=\prod{X}_{k}$ is the product space generated by the
-                \textit{open rectangles} in the $X_{i}$.
-            \subsection{Continuous Maps and Products}
-                Let $X$, $Y_{1},\dots,Y_{n}$ be topological spaces, and let
-                $Y=\prod_{k}Y_{k}$ be the product topological space. For each
-                $k$ let $\pi_{k}:Y\rightarrow{Y}_{k}$ be the projection mapping
-                sending $\mathbf{y}\in{Y}$ to $y_{k}$, then $k^{th}$ component
-                of $\mathbf{y}$. Then $f:X\rightarrow{Y}$ is continuous if and
-                only if $\pi_{k}\circ{f}$ is continuous for each $k$. Going the
-                other way, if $X=\prod_{k}X_{k}$ and $F:X\rightarrow{Y}$,
-                $F=f_{1}\times\cdots\times{f}_{n}$, then it is continuous if and
-                only if $f_{k}$ is continuous for all $k$. Let
-                $f:X\rightarrow{Y}$ be a continuous function. Note that from the
-                definition of a function, $f\subseteq{X}\times{Y}$. Thus we can
-                endow $f$ with the subspace topology on the product topology of
-                $X\times{Y}$. This is occasionally called the \textit{graph} of
-                $f$. If $X$ and $Y$ are Hausdorff and second countable, then
-                $X\times{Y}$ is, and thus any subspace of $X\times{Y}$ is
-                also Hausdorff and second countable. Hence the graph of $f$ is
-                a second countable Hausdorff topological space.
-                \begin{example}
-                    The $n$ sphere $S^{n}$ is the subset of $\mathbb{R}^{n+1}$
-                    such that $\norm{\mathbf{x}}_{2}=1$, equipped with the
-                    subspace topology. We can make it into a manifold with the
-                    charts $(\mathcal{U}_{k}^{\pm},\phi_{k}^{\pm})$ where
-                    $\mathcal{U}_{k}^{\pm}$ is the $k^{th}$ upper (or lower)
-                    hemisphere, and $\phi_{k}^{\pm}$ is simply the projection
-                    mapping onto the hyperplane $\mathbb{R}^{n}$. We can also
-                    cover this with two simpler coordinate charts, the
-                    two stereographic projections about the north and south
-                    pole.
-                \end{example}
-                \begin{example}
-                    The real projective space $\mathbb{RP}^{n}$ is another
-                    manifold. For any $x,y\in\mathbb{R}^{n+1}\setminus\{0\}$,
-                    we write $xRy$ if there is a $t\in\mathbb{R}$ such that
-                    $x=ty$. That is, $x$ and why are equivalent if they lie on
-                    the same line through the origin. We define
-                    $\mathbb{RP}^{n}$ by $\mathbb{R}^{n+1}\setminus\{0\}/R$,
-                    equipped with the quotient topology. That is, a subset is
-                    open if and only if $\pi^{\minus{1}}(\mathcal{U})$ is open
-                    where $\pi$ is the quotient map (the natural projection).
-                    For any $k=1,\dots,n$, let $\tilde{\mathcal{U}}_{j}$ be the
-                    $(x_{1},\dots,x_{n+1})\in\mathbb{R}^{n+1}\setminus\{0\}$
-                    such that $x_{j}\ne{0}$. This is an open subset and it is
-                    saturated with respect to $\pi$. That is, for all
-                    $[x]\in\mathbb{RP}^{n}$,
-                    $\pi^{\minus{1}}([x])\cap\tilde{\mathcal{U}}_{j}\ne\emptyset$
-                    if and only if $\pi^{\minus{1}}([x])\subseteq\tilde{\mathcal{U}}_{j}$.
-                    Now let $\mathcal{U}=\pi(\tilde{\mathcal{U}}_{j})$. Then
-                    since $\tilde{\mathcal{U}}_{j}$ is saturated it is equal
-                    to $\pi^{\minus{1}}(\mathcal{U}_{j})$ and is therefore
-                    open in the quotient topology. Define $\varphi_{j}$ by:
-                    \begin{equation}
-                        \varphi_{j}\big([(x_{1},\dots,x_{n+1})]\big)
-                        =\big(\frac{x_{1}}{x_{j}},\dots,
-                            \frac{x_{j-1}}{x_{j}},\frac{x_{j+1}}{x_{j}},\dots,
-                            \frac{x_{n+1}}{x_{j}}\big)
-                    \end{equation}
-                    Then this map commutes with $\pi$ with $\tilde{\varphi}$:
-                    $\tilde{\varphi}=\varphi\circ\pi$.
-                \end{example}
-
-    \begin{definition}
-        A topological Lie group is a group $(G,*)$ with a topology $\tau$ on
-        $G$ such that $\nu:G\rightarrow{G}$ defined by
-        $\nu(g)=g^{\minus{1}}$ is continuous $*:G\times{G}\rightarrow{G}$ is
-        continuous in the product topology, and $(G,\tau)$ is a topological
-        manifold.
-    \end{definition}
-    \begin{theorem}
-        $GL_{n}(\mathbb{R})$ is a topological Lie group of dimension
-        $n^{2}$.
-    \end{theorem}
-    \begin{proof}
-        For we have:
-        \begin{equation}
-            GL_{n}(\mathbb{R})=
-            \textrm{det}^{\minus{1}}(\mathbb{R}\setminus\{0\})
-        \end{equation}
-        and since $\textrm{det}$ is continuous (it's a polynomial), it's
-        thus an open subset of $\mathbb{R}^{n^{2}}$ (we can identify
-        $n\times{n}$ matrices with points in $\mathbb{R}^{n^{2}}$). Moreover
-        multiplication is continuous since it's continuous in every slot,
-        it's a polynomial. The inverse function
-    \end{proof}
-    \section{More on Topological Manifolds}
-        \begin{definition}
-            A precompact subset of a topological space $(X,\tau)$ is a subset
-            $\mathcal{U}\subseteq{X}$ such that $\textrm{Cl}(\mathcal{U})$
-            is compact.
-        \end{definition}
-        \begin{theorem}
-            Every topological $n$ manifold has a countable basis of precompact
-            coordinate balls.
-        \end{theorem}
-        \begin{proof}
-            Let $(X,\tau)$ be a topological manifold and
-            $\{(\mathcal{U}_{\alpha},\varphi_{\alpha})\}$ a cover by coordinate
-            charts. Since second countable spaces are Lindelof, there is a
-            countable subcover. Since each $\varphi_{k}$ is an open mapping,
-            $\varphi_{k}(\mathcal{U}_{k})$ is an open subset of
-            $\mathbb{R}^{n}$.
-        \end{proof}
-        \begin{definition}
-            A locally path connected topological space is a topological space
-            $(X,\tau)$ such that there exists a basis of path connected open
-            sets.
-        \end{definition}
-        \begin{definition}
-            A locally compact topological space is such that for all $x\in{X}$
-            there is an open $\mathcal{U}\subseteq{X}$ and a compact
-            $K\subseteq{X}$ such that $x\in\mathcal{U}$ and
-            $\mathcal{U}\subseteq{K}$.
-        \end{definition}
-        \begin{definition}
-            A connected component of $X$ is a maximal connected subset of $X$.
-        \end{definition}
-        Connected components partition the space. If two connected sets have
-        a point in common, their union is connected.
-        \begin{definition}
-            A path connected component s a maximal path component.
-        \end{definition}
-        \begin{theorem}
-            If $(X,\tau)$ is a topological manifold, then $M$ is locally path
-            connected, locally compact, and the path components and connected
-            components are identical. Moreover, $M$ has countably many connected
-            components, each of which is open.
-        \end{theorem}
-        \begin{proof}
-            Locally path connected and connected implies path connected, hence
-            connected components and path connected components are the same.
-            Locally compact since compact coordinate balls about each point
-            suffice. Countably many connected components since second countable.
-        \end{proof}
-        \begin{definition}
-            A locally finite subset $\mathcal{O}\subseteq\mathcal{P}(X)$ is a
-            collection such that for all $x\in{X}$ there is a neighborhood
-            $\mathcal{U}\in\tau$ such that $\mathcal{U}$ intersects at most
-            finitely many elements of $\mathcal{O}$.
-        \end{definition}
-        \begin{definition}
-            A refinitement of a collection $\mathcal{O}\subseteq\mathcal{P}(X)$
-            is a collection $\mathcal{D}\subseteq\mathcal{P}(X)$ such that for
-            all $\mathcal{V}\in\mathcal{D}$ there is a
-            $\mathcal{U}\in\mathcal{O}$ such that
-            $\mathcal{V}\subseteq\mathcal{U}$.
-        \end{definition}
-        \begin{definition}
-            A paracompact space is a space such that every open cover has a
-            locally finite refinement.
-        \end{definition}
-        \begin{theorem}
-            If $\mathcal{O}$ is a locally finite collection of subsets of $X$,
-            then the collection of the closures is locally finite and the union
-            of the closures is the closure of the unions.
-        \end{theorem}
-        \begin{theorem}
-            If $(X,\tau)$ is a topological manifold, then it is paracompact.
-        \end{theorem}
-    \section{Smooth Manifolds}
         \begin{definition}
             A diffeomprhism from an open subset
             $\mathcal{U}\subseteq\mathbb{R}^{n}$ to an open subset
@@ -3551,7 +3675,6 @@
             maximal atlas $\mathcal{A}'$ such that
             $\mathcal{A}\subseteq\mathcal{A}'$.
         \end{theorem}
-    \section{More on Smooth Manifolds}
         Given a smooth manifold $(X,\tau,\mathcal{A})$, $\mathcal{A}$ a maximal
         smooth atlas, a chart $(\mathcal{U},\varphi)\in\mathcal{A}$ is called
         smooth, $\mathcal{U}$ is called a coordinate domain, and $\varphi$ is
@@ -3594,7 +3717,6 @@
             Thus $\textrm{GL}_{n}(\mathbb{R})$ is an open subset of a smooth
             manifold, and hence is a smooth manifold itself.
         \end{example}
-    \section{Even More on Smooth Manifolds}
         An $n$ dimensional manifold is a topological manifold $(M,\tau)$ with a
         smooth differentiable structure $\mathcal{A}$. In particular, for charts
         $(\mathcal{U},\varphi)$ and $\mathcal{V},\psi)$ such that
@@ -3644,7 +3766,6 @@
             manifold of dimension $k(n-k)$ with a certain topology and smooth
             structure.
         \end{example}
-    \section{Grassmannian}
         \begin{theorem}[Smooth Manifold Chart Lemma]
             Let $M$ be a set, $\{\mathcal{U}_{\alpha}\}$ a collection of subsets
             of $M$, with a collection of maps
@@ -3687,46 +3808,6 @@
             $W\in\mathcal{U}_{Q}$. Then $\pi_{P}:W\rightarrow{P}$ is an
             isomorphism and $L=\pi_{Q}\circ\pi^{\minus{1}}:P\rightarrow{Q}$.
         \end{example}
-    \section{Manifolds with Boundary}
-        Thus far we have been looking at universes without walls or edges. For
-        example, the torus, sphere, real projective spaces, and open subsets of
-        $\mathbb{R}^{n}$. However, we can consider subsets of $\mathbb{R}^{2}$
-        such as the closed unit disc. The interior is homeomorphic to all of
-        $\mathbb{R}^{2}$< but the bounding circle makes the entire space not
-        open to any open subset since it is compact and no open subset of
-        $\mathbb{R}^{n}$ can be compact. However, the points on the bounding
-        circle are homeomorphic to the closed half plane in $\mathbb{R}^{2}$.
-        This gives rise to the notion of a smooth manifold with boundary.
-        Let $\mathbb{H}^{n}$ be the set of all $\mathbb{x}\in\mathbb{R}^{n}$
-        such that $x_{n}\geq{0}$.
-        \begin{definition}
-            A manifold with boundary is a second countable Hausdorff topological
-            space such that every point $x$ has an open neighborhood about it
-            that is homeomorphic to an open subset of $\mathbb{R}^{n}$ or a
-            relatively open subset of $\mathbb{H}^{n}$.
-        \end{definition}
-        \begin{definition}
-            A boundary point is a point on the boundary.
-        \end{definition}
-        \begin{theorem}
-            If $M$ is a topological manifold with boundary, then every point is
-            either an interior point or a boundary point.
-        \end{theorem}
-        \begin{definition}
-            A closed manifold is a compact manifold without boundary.
-        \end{definition}
-        \begin{theorem}
-            If $M$ is a topological manifold with boundary then the interior is
-            an open subset of $M$ is an open subset and the boundary is a
-            closed subset.
-        \end{theorem}
-        \begin{theorem}
-            If $M$ is a topological manifold with boundary, then $M$ has a
-            countable basis of precompact coordinate balls and half balls.
-            $M$ is locally compact. $M$ is locally path connected. $M$ has
-            countably many components, each of which is open and connected.
-            Moreover, $\pi_{1}(M)$ is countable.
-        \end{theorem}
     \section{Smooth Manifolds with Boundary}
         First we defined smoothness on arbitrary subsets of $\mathbb{R}^{n}$.
         Given $A\subseteq\mathbb{R}^{n}$ and $f:A\rightarrow\mathbb{R}^{k}$ we
