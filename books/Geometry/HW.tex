@@ -12,1367 +12,1441 @@
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
-    \section{Preliminary Stuff}
-        \begin{fdefinition}{Sequentially Continuous}{Sequentially_Continuous}
-            A sequentially continuous function from a topological space
-            $(X,\tau_{X})$ to a topological space $(Y,\tau_{Y})$ is a
-            function $f:X\rightarrow{Y}$ such that for every convergent sequence
-            $a:\mathbb{N}\rightarrow{X}$ and for every $x\in{X}$ such that
-            $a_{n}\rightarrow{x}$, it is true that $f(a_{n})\rightarrow{f}(x)$.
-        \end{fdefinition}
-        We say \textit{for every x} since limits need not be unique in spaces
-        that aren't at least $T_{1}$ (an \textit{accessible} space).
-        \begin{theorem}
-            \label{thm:cont_implies_seq_cont}%
-            If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
-            and if $f:X\rightarrow{Y}$ is a continuous function, then it is
-            sequentially continuous.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there is a sequence
-            $a:\mathbb{N}\rightarrow{X}$ and a point $x\in{X}$ such that
-            $a_{n}\rightarrow{x}$, but $f(a_{n})\not\rightarrow{f}(x)$
-            (Def.~\ref{def:Sequentially_Continuous}). But then there exists
-            an open subset $\mathcal{V}\in\tau_{Y}$ such that
-            $f(x)\in\mathcal{V}$, and for all $N\in\mathbb{N}$ there exists an
-            $n\in\mathbb{N}$ such that $n>N$ and
-            $f(a_{n})\notin\mathcal{V}$. But $f$ is continuous, and therefore
-            $f^{\minus{1}}[\mathcal{V}]$ is an open subset of $X$. And since
-            $f(x)\in\mathcal{V}$ it is true that
-            $x\in{f}^{\minus{1}}[\mathcal{V}]$. But $a_{n}\rightarrow{x}$, and
-            thus there is an $N\in\mathbb{N}$ such that for all
-            $n\in\mathbb{N}$ with $n>N$ it is true that
-            $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$. But then for all $n>N$ it is
-            true that $f(a_{n})\in\mathcal{V}$, a contradiction. Therefore, $f$
-            is sequentially continuous.
-        \end{proof}
-        This theorem does not reverse.
-        \begin{example}
-            Let $X$ be the order topology on the ordinal $\omega_{1}+1$, where
-            $\omega_{1}$ is the first uncountable ordinal. Define
-            $f:X\rightarrow\nspace[]$ by:
-            \begin{equation}
-                f(x)=
-                \begin{cases}
-                    0,&x\ne\omega_{1}\\
-                    1,&x=\omega_{1}
-                \end{cases}
-            \end{equation}
-            then $f$ is sequentially continuous, but not continuous. If
-            $a:\mathbb{N}\rightarrow{X}$ is any sequence, either it coverges to
-            $\omega_{1}$ or it is not. In the latter case the limit of
-            $f(a_{n})$ will be zero, and in the former case there is an
-            $N\in\mathbb{N}$ such that for all $n>N$ it is true that
-            $a_{n}=\omega_{1}$, and hence $f(a_{n})\rightarrow{1}$. In both
-            scenarios, $f$ is sequentially continuous. It is not continuous
-            since $\{\omega_{1}\}$ is not an isolated point of $X$, yet
-            $f^{\minus{1}}[(0,\infty)]=\{\omega_{1}\}$.
-        \end{example}
-        The problem with this space is that it is not first countable. First
-        countability implies that sequentially continuous and continuous are
-        identical concepts. There's a weaker such notion, called sequential
-        spaces.
-        \begin{fdefinition}{Sequentially Open}{Sequentially_Open}
-            A sequentially open subset of a topological space $\topspace{X}$
-            is a subset $\mathcal{U}\subseteq{X}$ such that for every sequence
-            $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to an element
-            $x\in\mathcal{U}$ there exists an $N\in\mathbb{N}$ such that for all
-            $n\in\mathbb{N}$ with $n>N$, it is true that $a_{n}\in\mathcal{U}$.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Open_is_Seq_Open}%
-            If $\topspace{X}$ is a topological space, if $\mathcal{U}\in\tau$ is
-            an open subset of $X$, then $\mathcal{U}$ is sequentially open.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there is a sequence
-            $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to a point
-            $x\in\mathcal{U}$, but for all $N\in\mathbb{N}$ there is an
-            $n\in\mathbb{N}$ such that $n>N$ and $a_{n}\notin\mathcal{U}$
-            (Def.~\ref{def:Sequentially_Open}). But if $\mathcal{U}$ is an open
-            subset containing $x$, and if $a_{n}\rightarrow{x}$, then there is
-            an $N\in\mathbb{N}$ such that for all $n>N$ it is true that
-            $a_{n}\in\mathcal{U}$, a contradiction.
-        \end{proof}
-        \begin{fdefinition}{Sequential Space}{Sequential_Space}
-            A sequential topological space is a topological space
-            $\topspace{X}$ such that for every sequentially open subset
-            $\mathcal{U}\subseteq{X}$ it is true that $\mathcal{U}\in\tau$.
-        \end{fdefinition}
-        As the name suggests, the usefulness of sequential spaces stems from the
-        fact that continuity and sequential continuity are equivalent. One
-        direction is true of any topological space
-        (Thm.~\ref{thm:cont_implies_seq_cont}). We now prove the other direction
-        in the setting of a sequential space.
-        \begin{theorem}
-            \label{thm:seq_space_seq_cont_eqiv_cont}%
-            If $\topspace[X]{X}$ is a sequential topological space, if
-            $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
-            is a sequentially continuous function, then $f$ is continuous.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there is a open subset
-            $\mathcal{V}\in\tau_{Y}$ such that $f^{\minus{1}}[\mathcal{V}]$ is
-            not open. But $\topspace[X]{X}$ is sequential, and thus if
-            $f^{\minus{1}}[\mathcal{V}]$ is not open, then it is not
-            sequentially open (Def.~\ref{def:Sequential_Space}). But then there
-            is a sequence $a:\mathbb{N}\rightarrow{X}$ and a point
-            $x\in{f}^{\minus{1}}[\mathcal{V}]$ such that $a_{n}\rightarrow{x}$
-            but for all $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ with
-            $n>N$ such that $a_{n}\notin{f}^{\minus{1}}[\mathcal{V}]$
-            (Def.~\ref{def:Sequentially_Open}). But $f$ is sequentially
-            continuous, and thus if $a_{n}\rightarrow{x}$, then
-            $f(a_{n})\rightarrow{f}(x)$
-            (Def.~\ref{def:Sequentially_Continuous}). But $\mathcal{V}$ is open
-            and $f(x)\in\mathcal{V}$. Therefore if $f(a_{n})\rightarrow{f}(x)$,
-            then there is an $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$
-            with $n>N$, it is true that $f(a_{n})\in\mathcal{V}$. But then for
-            all $n>N$ it is true that $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$, a
-            contradiction. Therefore, $f$ is continuous.
-        \end{proof}
-        Two amazing equivalent definitions of sequential spaces that we will not
-        prove since these will not be used.
-        \begin{itemize}
-            \item $\topspace{X}$ is sequential if and only if it is the quotient
-                  of a first countable space.
-            \item $\topspace{X}$ is sequential if and only if it is the quotient
-                  of a metrizable space.
-        \end{itemize}
-        In just about every setting we will be working with first countable
-        spaces. It would be nice to know that first countable spaces are
-        sequential, and indeed they are.
-        \begin{theorem}
-            \label{thm:First_Countable_Implies_Sequential}%
-            If $\topspace{X}$ is a first countable topological space, then it
-            is a sequential topological space.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there is a sequentially open subset
-            $\mathcal{U}\subseteq{X}$ such that $\mathcal{U}$ is not open
-            (Def.~\ref{def:Sequential_Space}). But since $\topspace{X}$ is first
-            countable, for all $x\in\mathcal{U}$ there is a countable
-            neighborhood basis. By the axiom of choice there is a
-            function $\mathcal{B}:\mathcal{U}\rightarrow\powset{\tau}$ such that
-            for all $x\in\mathcal{U}$, $\mathcal{B}_{x}$ is a countable
-            neighborhood basis of $x$. But if for all $x\in\mathcal{U}$ it is
-            true that $\mathcal{B}_{x}$ is countable, then there is surjective
-            function $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$.
-            Then there exists an $N\in\mathbb{N}$ such that
-            $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. For suppose not and let
-            $B:\mathbb{N}\rightarrow{X}$ be defined by:
-            \begin{equation}
-                B_{n}=\bigcap_{k\in\mathbb{Z}_{n}}\mathcal{V}_{x,k}
-            \end{equation}
-            Since $B_{n}$ is the intersection of finitely many open sets, it is
-            open. Moreover it is non-empty since $x\in{B}_{n}$ for all $n$.
-            But then $B_{n}$ is an open neighborhood about $x$, and since
-            $\mathcal{B}_{x}$ is a neighborhood basis there is an element
-            $V\in\mathcal{B}_{x}$ such that $V\subseteq{B}_{n}$. But
-            $\mathcal{V}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ is a surjection,
-            and hence there is an $N\in\mathbb{N}$ such that
-            $\mathcal{V}_{x,N}=V$. But by hypothesis,
-            $\mathcal{V}_{x,N}\nsubseteq\mathcal{U}$ and hence there is an
-            element $y\in\mathcal{V}_{x,N}$ such that $y\notin\mathcal{U}$.
-            Therefore we have shown that the sequence $A_{n}$ defined by:
-            \begin{equation}
-                A_{n}=\{\,y\in{B}_{n}\;|\;y\not\in\mathcal{U}\,\}
-            \end{equation}
-            is non-empty for all $n\in\mathbb{N}$, and hence by the axiom of
-            (countable) choice there is a sequence $y:\mathbb{N}\rightarrow{X}$
-            such that $y_{n}\in{A}_{n}$ for all $n\in\mathbb{N}$. That is,
-            for all $n\in\mathbb{N}$, $y_{n}\in{B}_{n}$ and
-            $y_{n}\notin\mathcal{U}$. But if $y_{n}\in{B}_{n}$ for all
-            $n\in\mathbb{N}$, then $y_{n}\rightarrow{x}$. For if not, then there
-            is an open set $U\in\tau$ such that $x\in{U}$ and for all
-            $N\in\mathbb{N}$ there exists an $n>N$ such that $y_{n}\notin{U}$.
-            But $\mathcal{B}_{x}$ is a neighborhood basis of $x$, and hence
-            there is a $V\in\mathcal{B}_{x}$ such that $V\subseteq{U}$. But
-            $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ is a
-            surjection, and hence there is an $N\in\mathbb{N}$ such that
-            $\mathcal{V}_{x,N}=V$. But then for all $n>N$,
-            $B_{n}\subseteq\mathcal{V}_{x,N}$ and thus $B_{n}\subseteq{U}$.
-            But then for all $n>N$, $y_{n}\in{U}$, a contradiction. Hence,
-            $y_{n}\rightarrow{x}$. But for all $n\in\mathbb{N}$,
-            $y_{n}\notin\mathcal{U}$. Thus $y_{n}$ is a sequence such that
-            $y_{n}\rightarrow{x}$, but for all $N\in\mathbb{N}$ there is an
-            $n\in\mathbb{N}$ with $n>N$ such that $y_{n}\notin\mathcal{U}$, a
-            contradiction since $x\in\mathcal{U}$ and $\mathcal{U}$ is
-            sequentially open (Def.~\ref{def:Sequentially_Open}). Thus, for all
-            $x\in\mathcal{U}$ there is an open subset $\mathcal{V}_{x,N}$ such
-            that $x\in\mathcal{V}_{x,N}$ and
-            $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. But then $\mathcal{U}$ is
-            simply the union over all of these open sets, and is thus open,
-            a contradiction. Hence, $\topspace{X}$ is sequential.
-        \end{proof}
-        And now, our useful corollary.
-        \begin{theorem}
-            \label{thm:First_Countable_Implies_Seq_Cont_is_Cont}%
-            If $\topspace[X]{X}$ is a first countable topological space, if
-            $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
-            is sequential continuous, then $f$ is continuous.
-        \end{theorem}
-        \begin{proof}
-            For since $\topspace[X]{X}$ is first countable, it is sequential
-            (Thm.~\ref{thm:First_Countable_Implies_Sequential}). But if
-            $\topspace[X]{X}$ is a sequential topological space and if $f$ is
-            sequentially continuous, then $f$ is continuous
-            (Thm.~\ref{thm:seq_space_seq_cont_eqiv_cont}). Therefore, $f$ is
-            continuous.
-        \end{proof}
-        It's laborious to show a certain space is first countable, especially in
-        the case of manifold theory, and so we rely on the following theorems.
-        \begin{theorem}
-            \label{thm:Locally_Metrizable_is_First_Countable}%
-            If $\topspace{X}$ is a locally metrizable topological space, then it
-            is first countable.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there is a point $x\in{X}$ with no countable
-            neighborhood basis. But if $\topspace{X}$ is locally metrizable,
-            then there is an open subset $\mathcal{U}$ such that
-            $x\in\mathcal{U}$ and $\topspace[\mathcal{U}]{\mathcal{U}}$ is
-            metrizable, where $\tau_{\mathcal{U}}$ is the subspace topology. But
-            then there is a metric
-            $d:\mathcal{U}\times\mathcal{U}\rightarrow\nspace[]$ such that
-            $d$ induces $\tau_{\mathcal{U}}$. Let $\mathcal{B}\subseteq\tau$ be
-            defined by:
-            \begin{equation}
-                \mathcal{B}=\{\,\rball{n^{\minus{1}}}{\metspace{\mathcal{U}}}{x}
-                    \;|\;n\in\mathbb{N}^{+}\}
-            \end{equation}
-            That is, the set of all open balls about $x$ of radius $1/n$.
-            Suppose $\mathcal{V}\in\tau$ is such that $x\in\mathcal{V}$. But
-            then $x\in\mathcal{V}\cap\mathcal{U}$. But
-            $\mathcal{V}\cap\mathcal{U}$ is an open subset of $\mathcal{U}$, and
-            thus there is an $r>0$ such that:
-            \begin{equation}
-                \rball{r}{\metspace{\mathcal{U}}}{x}\subseteq\mathcal{V}
-            \end{equation}
-            but by Archimede's Theorem, there is an $N\in\mathbb{N}$ such that
-            $N>r$. But it is true that
-            $\rball{N^{\minus{1}}}{\metspace{\mathcal{U}}}{x}\in\mathcal{B}$,
-            and hence $\mathcal{B}$ is a countable neighborhood basis of $x$,
-            a contradiction. Thus, $\topspace{X}$ is first countable.
-        \end{proof}
-        \begin{fdefinition}{$\sigma$ Compact}{Sigma_Compact}
-            A $\sigma$ compact topological space is a topological space
-            $\topspace{X}$ such that there exists a sequence
-            $K:\mathbb{N}\rightarrow\powset{X}$ of compact subsets of $X$ such
-            that:
-            \begin{equation*}
-                X=\bigcup_{n\in\mathbb{N}}K_{n}
-            \end{equation*}
-        \end{fdefinition}
-        This definition gives the following triviality.
-        \begin{theorem}
-            \label{thm:Compact_Implies_Sigma_Compact}%
-            If $\topspace{X}$ is a compact topological space, then it is
-            $\sigma$ compact.
-        \end{theorem}
-        \begin{proof}
-            For let $K:\mathbb{N}\rightarrow\powset{X}$ be defined by
-            $K_{n}=X$. Then $K_{n}$ is compact for all $n$ and
-            $\bigcup{K}_{n}=X$. Thus, $\topspace{X}$ is $\sigma$ compact
-            (Def.~\ref{def:Sigma_Compact}).
-        \end{proof}
-        \begin{fdefinition}{Lindel\"{o}f Topological Space}{Lindelof_Space}
-            A Lindel\"{o}f topological space is a topological space $(X,\tau)$
-            such that for every open cover $\mathcal{O}$ of $X$ there exists a
-            countable subcover.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Second_Countable_Implies_Lindelof}%
-            If $\topspace{X}$ is a second countable topological space, then it
-            is Lindel\"{o}f.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there exists an open cover $\mathcal{O}$ with
-            no countable subcover. But if $\topspace{X}$ is second countable,
-            then there is a countable basis $\mathcal{B}$ of $\tau$. But if
-            $\mathcal{B}$ is a basis, since $\mathcal{O}$ is an open cover, for
-            all $\mathcal{V}\in\mathcal{O}$ it is true that $\mathcal{V}$ is
-            open and thus there is an element $\mathcal{U}\in\mathcal{B}$ such
-            that $\mathcal{U}\subseteq\mathcal{V}$. That is, the function
-            $F:\mathcal{O}\rightarrow\powset{\mathcal{B}}$ defined by:
-            \begin{equation}
-                F(\mathcal{V})=\{\,\mathcal{U}\in\mathcal{B}\;|\;
-                    \mathcal{U}\subseteq\mathcal{V}\,\}
-            \end{equation}
-            is such that $F(\mathcal{V})\ne\emptyset$ for all
-            $\mathcal{V}\in\mathcal{O}$. But then
-            $F[\mathcal{O}]\subseteq\powset{\mathcal{B}}$ is a non-empty subset
-            of $\powset{B}$ such that $\emptyset\notin{F}[\mathcal{O}]$. Hence
-            by the axiom of choice there is a function
-            $G:F[\mathcal{O}]\rightarrow\mathcal{B}$ such that for all
-            $\Delta\in{F}[\mathcal{O}]$, $G(\Delta)\in\Delta$. Let
-            $B=G\big[F[\mathcal{O}]\big]$. But $\mathcal{B}$ is countable and
-            $B\subseteq\mathcal{B}$, and thus $B$ is countable. Moreover,
-            $F\circ{G}:\mathcal{O}\rightarrow{B}$ is surjective by the
-            definition of $B$ and hence there exists a right inverse
-            $H:B\rightarrow\mathcal{O}$. And since $B$ is countable,
-            $H[B]$ is a countable subset of $\mathcal{O}$. But $\mathcal{O}$ has
-            no countable subcover, and hence there is an $x\in{X}$ such that
-            $x\notin\bigcup{H}[B]$. But $\mathcal{O}$ is a cover of $X$, and
-            thus there is a $\mathcal{V}\in\mathcal{O}$ such that
-            $x\in\mathcal{V}$. And since $\mathcal{B}$ is a basis, there is an
-            element $\mathcal{U}_{1}\in\mathcal{B}$ such that
-            $x\in\mathcal{U}_{1}$. But then $x\in\mathcal{U}_{1}\cap\mathcal{V}$
-            and since $\mathcal{B}$ is a basis, there is an element
-            $\mathcal{U}_{2}\in\mathcal{B}$ such that $x\in\mathcal{U}_{2}$ and
-            $\mathcal{U}_{2}\subseteq\mathcal{U}_{1}\cap\mathcal{V}$. But then
-            $H(\mathcal{U}_{2})$ is an element of $H[B]$ such that
-            $\mathcal{U}_{2}\subseteq{H}(\mathcal{U}_{2})$, and hence
-            $x\in{H}[\mathcal{U}_{2}]$. A contradiction, since
-            $x\notin\bigcup{H}[B]$. Therefore, $\topspace{X}$ is Lindel\"{o}f.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Sigma_Compact_Implies_Lindelof}%
-            If $\topspace{X}$ is a $\sigma$ compact topological space, then it
-            is Lindel\"{o}f.
-        \end{theorem}
-        \begin{proof}
-            For suppose not. Then there exists an open cover $\mathcal{O}$ of
-            $X$ with no countable subcover. But $X$ is $\sigma$ compact, and
-            hence there is a sequence $K:\mathbb{N}\rightarrow\powset{X}$ of
-            compact sets such that $X=\bigcup{K}_{n}$
-            (Def.~\ref{def:Sigma_Compact}). But then for all $n\in\mathbb{N}$,
-            $K_{n}$ is a subset of $X$, and hence $\mathcal{O}$ is an open cover
-            of $K_{n}$. But by hypothesis, $K_{n}$ is compact and hence there is
-            a finite subcover $\mathscr{D}\subseteq\mathcal{O}$ of $K_{n}$. That
-            is, if we define the sequence
-            $A_{n}:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ by:
-            \begin{equation}
-                A_{n}=\{\mathscr{D}\in\powset{\mathcal{O}}\;|\;
-                    \mathscr{D}\textrm{ is finite and }
-                    K_{n}\subseteq\bigcup\mathscr{D}\,\}
-            \end{equation}
-            then for all $n\in\mathbb{N}$, $A_{n}$ is non-empty. Hence by the
-            axiom of (countable) choice, there is a choice function
-            $\Delta:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ such that for all
-            $n\in\mathbb{N}$, $\Delta_{n}$ is a finite open subcover of $K_{n}$.
-            But then the union of all $\Delta_{n}$ is the countable union of
-            finite collections, and is hence countable. But then this collection
-            covers $K_{n}$ for all $n\in\mathbb{N}$, and hence covers
-            $\bigcup{K}_{n}$. But $\bigcup{K}_{n}=X$, a contradiction since
-            $\mathcal{O}$ has no countable subcover. Thus, $\topspace{X}$ is
-            Lindel\"{o}f.
-        \end{proof}
-        This theorem reverses if we add locally compact. The requirement of
-        local compactness can be seen by examining the irrational numbers with
-        the subspace topology. This is Lindel\"{o}f (since it is second
-        countable), but it is not $\sigma$ compact. For any compact subset of
-        the irrationals must have empty interior, and by the Baire category
-        theorem the irrationals cannot be written as the countable union of
-        nowhere dense subsets. Hence they cannot possibly $\sigma$ compact.
-        \begin{fdefinition}{Locally Compact Topological Space}{Locally_Compact}
-            A locally compact topological space is a topological space
-            $\topspace{X}$ such that for all $x\in{X}$ there exists a compact
-            subset $K\subseteq{X}$ and an open set $\mathcal{U}\in\tau$ such
-            that $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}%
-            If $\topspace{X}$ is a locally compact Lindel\"{o}f space, then it
-            is $\sigma$ compact.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally compact, then for all $x\in{X}$
-            there is a compact set $K\subseteq{X}$ and an open set
-            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
-            $\mathcal{U}\subseteq{K}$ (Def.~\ref{def:Locally_Compact}). Invoking
-            the axiom of choice, there is a function
-            $A:X\rightarrow\tau\times\powset{X}$ such that for all $x\in{X}$,
-            $A_{x}=(\mathcal{U},K)$ where $x\in\mathcal{U}$ and
-            $\mathcal{U}\subseteq{K}$, where $K$ is compact. But then the
-            collection of all such $\mathcal{U}$ is an open cover of $X$. But
-            $X$ is Lindel\"{o}f and hence there is a countable subcover. But
-            then the subcollection of all $K$ form a countable collection of
-            compact sets that cover $X$. Hence, $\topspace{X}$ is $\sigma$
+    \section{Preliminary}
+        \subsection{Sequential Spaces}
+            \begin{fdefinition}{Sequentially Continuous}{Sequentially_Continuous}
+                A sequentially continuous function from a topological space
+                $(X,\tau_{X})$ to a topological space $(Y,\tau_{Y})$ is a
+                function $f:X\rightarrow{Y}$ such that for every convergent sequence
+                $a:\mathbb{N}\rightarrow{X}$ and for every $x\in{X}$ such that
+                $a_{n}\rightarrow{x}$, it is true that $f(a_{n})\rightarrow{f}(x)$.
+            \end{fdefinition}
+            We say \textit{for every x} since limits need not be unique in spaces
+            that aren't at least $T_{1}$ (an \textit{accessible} space).
+            \begin{theorem}
+                \label{thm:cont_implies_seq_cont}%
+                If $\topspace[X]{X}$ and $\topspace[Y]{Y}$ are topological spaces,
+                and if $f:X\rightarrow{Y}$ is a continuous function, then it is
+                sequentially continuous.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there is a sequence
+                $a:\mathbb{N}\rightarrow{X}$ and a point $x\in{X}$ such that
+                $a_{n}\rightarrow{x}$, but $f(a_{n})\not\rightarrow{f}(x)$
+                (Def.~\ref{def:Sequentially_Continuous}). But then there exists
+                an open subset $\mathcal{V}\in\tau_{Y}$ such that
+                $f(x)\in\mathcal{V}$, and for all $N\in\mathbb{N}$ there exists an
+                $n\in\mathbb{N}$ such that $n>N$ and
+                $f(a_{n})\notin\mathcal{V}$. But $f$ is continuous, and therefore
+                $f^{\minus{1}}[\mathcal{V}]$ is an open subset of $X$. And since
+                $f(x)\in\mathcal{V}$ it is true that
+                $x\in{f}^{\minus{1}}[\mathcal{V}]$. But $a_{n}\rightarrow{x}$, and
+                thus there is an $N\in\mathbb{N}$ such that for all
+                $n\in\mathbb{N}$ with $n>N$ it is true that
+                $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$. But then for all $n>N$ it is
+                true that $f(a_{n})\in\mathcal{V}$, a contradiction. Therefore, $f$
+                is sequentially continuous.
+            \end{proof}
+            This theorem does not reverse.
+            \begin{example}
+                Let $X$ be the order topology on the ordinal $\omega_{1}+1$, where
+                $\omega_{1}$ is the first uncountable ordinal. Define
+                $f:X\rightarrow\nspace[]$ by:
+                \begin{equation}
+                    f(x)=
+                    \begin{cases}
+                        0,&x\ne\omega_{1}\\
+                        1,&x=\omega_{1}
+                    \end{cases}
+                \end{equation}
+                then $f$ is sequentially continuous, but not continuous. If
+                $a:\mathbb{N}\rightarrow{X}$ is any sequence, either it coverges to
+                $\omega_{1}$ or it is not. In the latter case the limit of
+                $f(a_{n})$ will be zero, and in the former case there is an
+                $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+                $a_{n}=\omega_{1}$, and hence $f(a_{n})\rightarrow{1}$. In both
+                scenarios, $f$ is sequentially continuous. It is not continuous
+                since $\{\omega_{1}\}$ is not an isolated point of $X$, yet
+                $f^{\minus{1}}[(0,\infty)]=\{\omega_{1}\}$.
+            \end{example}
+            The problem with this space is that it is not first countable. First
+            countability implies that sequentially continuous and continuous are
+            identical concepts. There's a weaker such notion, called sequential
+            spaces.
+            \begin{fdefinition}{Sequentially Open}{Sequentially_Open}
+                A sequentially open subset of a topological space $\topspace{X}$
+                is a subset $\mathcal{U}\subseteq{X}$ such that for every sequence
+                $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to an element
+                $x\in\mathcal{U}$ there exists an $N\in\mathbb{N}$ such that for all
+                $n\in\mathbb{N}$ with $n>N$, it is true that $a_{n}\in\mathcal{U}$.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Open_is_Seq_Open}%
+                If $\topspace{X}$ is a topological space, if $\mathcal{U}\in\tau$ is
+                an open subset of $X$, then $\mathcal{U}$ is sequentially open.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there is a sequence
+                $a:\mathbb{N}\rightarrow{X}$ such that $a$ converges to a point
+                $x\in\mathcal{U}$, but for all $N\in\mathbb{N}$ there is an
+                $n\in\mathbb{N}$ such that $n>N$ and $a_{n}\notin\mathcal{U}$
+                (Def.~\ref{def:Sequentially_Open}). But if $\mathcal{U}$ is an open
+                subset containing $x$, and if $a_{n}\rightarrow{x}$, then there is
+                an $N\in\mathbb{N}$ such that for all $n>N$ it is true that
+                $a_{n}\in\mathcal{U}$, a contradiction.
+            \end{proof}
+            \begin{fdefinition}{Sequential Space}{Sequential_Space}
+                A sequential topological space is a topological space
+                $\topspace{X}$ such that for every sequentially open subset
+                $\mathcal{U}\subseteq{X}$ it is true that $\mathcal{U}\in\tau$.
+            \end{fdefinition}
+            As the name suggests, the usefulness of sequential spaces stems from the
+            fact that continuity and sequential continuity are equivalent. One
+            direction is true of any topological space
+            (Thm.~\ref{thm:cont_implies_seq_cont}). We now prove the other direction
+            in the setting of a sequential space.
+            \begin{theorem}
+                \label{thm:seq_space_seq_cont_eqiv_cont}%
+                If $\topspace[X]{X}$ is a sequential topological space, if
+                $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
+                is a sequentially continuous function, then $f$ is continuous.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there is a open subset
+                $\mathcal{V}\in\tau_{Y}$ such that $f^{\minus{1}}[\mathcal{V}]$ is
+                not open. But $\topspace[X]{X}$ is sequential, and thus if
+                $f^{\minus{1}}[\mathcal{V}]$ is not open, then it is not
+                sequentially open (Def.~\ref{def:Sequential_Space}). But then there
+                is a sequence $a:\mathbb{N}\rightarrow{X}$ and a point
+                $x\in{f}^{\minus{1}}[\mathcal{V}]$ such that $a_{n}\rightarrow{x}$
+                but for all $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ with
+                $n>N$ such that $a_{n}\notin{f}^{\minus{1}}[\mathcal{V}]$
+                (Def.~\ref{def:Sequentially_Open}). But $f$ is sequentially
+                continuous, and thus if $a_{n}\rightarrow{x}$, then
+                $f(a_{n})\rightarrow{f}(x)$
+                (Def.~\ref{def:Sequentially_Continuous}). But $\mathcal{V}$ is open
+                and $f(x)\in\mathcal{V}$. Therefore if $f(a_{n})\rightarrow{f}(x)$,
+                then there is an $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$
+                with $n>N$, it is true that $f(a_{n})\in\mathcal{V}$. But then for
+                all $n>N$ it is true that $a_{n}\in{f}^{\minus{1}}[\mathcal{V}]$, a
+                contradiction. Therefore, $f$ is continuous.
+            \end{proof}
+            Two amazing equivalent definitions of sequential spaces that we will not
+            prove since these will not be used.
+            \begin{itemize}
+                \item $\topspace{X}$ is sequential if and only if it is the quotient
+                    of a first countable space.
+                \item $\topspace{X}$ is sequential if and only if it is the quotient
+                    of a metrizable space.
+            \end{itemize}
+            In just about every setting we will be working with first countable
+            spaces. It would be nice to know that first countable spaces are
+            sequential, and indeed they are.
+            \begin{theorem}
+                \label{thm:First_Countable_Implies_Sequential}%
+                If $\topspace{X}$ is a first countable topological space, then it
+                is a sequential topological space.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there is a sequentially open subset
+                $\mathcal{U}\subseteq{X}$ such that $\mathcal{U}$ is not open
+                (Def.~\ref{def:Sequential_Space}). But since $\topspace{X}$ is first
+                countable, for all $x\in\mathcal{U}$ there is a countable
+                neighborhood basis. By the axiom of choice there is a
+                function $\mathcal{B}:\mathcal{U}\rightarrow\powset{\tau}$ such that
+                for all $x\in\mathcal{U}$, $\mathcal{B}_{x}$ is a countable
+                neighborhood basis of $x$. But if for all $x\in\mathcal{U}$ it is
+                true that $\mathcal{B}_{x}$ is countable, then there is surjective
+                function $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$.
+                Then there exists an $N\in\mathbb{N}$ such that
+                $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. For suppose not and let
+                $B:\mathbb{N}\rightarrow{X}$ be defined by:
+                \begin{equation}
+                    B_{n}=\bigcap_{k\in\mathbb{Z}_{n}}\mathcal{V}_{x,k}
+                \end{equation}
+                Since $B_{n}$ is the intersection of finitely many open sets, it is
+                open. Moreover it is non-empty since $x\in{B}_{n}$ for all $n$.
+                But then $B_{n}$ is an open neighborhood about $x$, and since
+                $\mathcal{B}_{x}$ is a neighborhood basis there is an element
+                $V\in\mathcal{B}_{x}$ such that $V\subseteq{B}_{n}$. But
+                $\mathcal{V}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ is a surjection,
+                and hence there is an $N\in\mathbb{N}$ such that
+                $\mathcal{V}_{x,N}=V$. But by hypothesis,
+                $\mathcal{V}_{x,N}\nsubseteq\mathcal{U}$ and hence there is an
+                element $y\in\mathcal{V}_{x,N}$ such that $y\notin\mathcal{U}$.
+                Therefore we have shown that the sequence $A_{n}$ defined by:
+                \begin{equation}
+                    A_{n}=\{\,y\in{B}_{n}\;|\;y\not\in\mathcal{U}\,\}
+                \end{equation}
+                is non-empty for all $n\in\mathbb{N}$, and hence by the axiom of
+                (countable) choice there is a sequence $y:\mathbb{N}\rightarrow{X}$
+                such that $y_{n}\in{A}_{n}$ for all $n\in\mathbb{N}$. That is,
+                for all $n\in\mathbb{N}$, $y_{n}\in{B}_{n}$ and
+                $y_{n}\notin\mathcal{U}$. But if $y_{n}\in{B}_{n}$ for all
+                $n\in\mathbb{N}$, then $y_{n}\rightarrow{x}$. For if not, then there
+                is an open set $U\in\tau$ such that $x\in{U}$ and for all
+                $N\in\mathbb{N}$ there exists an $n>N$ such that $y_{n}\notin{U}$.
+                But $\mathcal{B}_{x}$ is a neighborhood basis of $x$, and hence
+                there is a $V\in\mathcal{B}_{x}$ such that $V\subseteq{U}$. But
+                $\mathcal{V}_{x}:\mathbb{N}\rightarrow\mathcal{B}_{x}$ is a
+                surjection, and hence there is an $N\in\mathbb{N}$ such that
+                $\mathcal{V}_{x,N}=V$. But then for all $n>N$,
+                $B_{n}\subseteq\mathcal{V}_{x,N}$ and thus $B_{n}\subseteq{U}$.
+                But then for all $n>N$, $y_{n}\in{U}$, a contradiction. Hence,
+                $y_{n}\rightarrow{x}$. But for all $n\in\mathbb{N}$,
+                $y_{n}\notin\mathcal{U}$. Thus $y_{n}$ is a sequence such that
+                $y_{n}\rightarrow{x}$, but for all $N\in\mathbb{N}$ there is an
+                $n\in\mathbb{N}$ with $n>N$ such that $y_{n}\notin\mathcal{U}$, a
+                contradiction since $x\in\mathcal{U}$ and $\mathcal{U}$ is
+                sequentially open (Def.~\ref{def:Sequentially_Open}). Thus, for all
+                $x\in\mathcal{U}$ there is an open subset $\mathcal{V}_{x,N}$ such
+                that $x\in\mathcal{V}_{x,N}$ and
+                $\mathcal{V}_{x,N}\subseteq\mathcal{U}$. But then $\mathcal{U}$ is
+                simply the union over all of these open sets, and is thus open,
+                a contradiction. Hence, $\topspace{X}$ is sequential.
+            \end{proof}
+            And now, our useful corollary.
+            \begin{theorem}
+                \label{thm:First_Countable_Implies_Seq_Cont_is_Cont}%
+                If $\topspace[X]{X}$ is a first countable topological space, if
+                $\topspace[Y]{Y}$ is a topological space, and if $f:X\rightarrow{Y}$
+                is sequential continuous, then $f$ is continuous.
+            \end{theorem}
+            \begin{proof}
+                For since $\topspace[X]{X}$ is first countable, it is sequential
+                (Thm.~\ref{thm:First_Countable_Implies_Sequential}). But if
+                $\topspace[X]{X}$ is a sequential topological space and if $f$ is
+                sequentially continuous, then $f$ is continuous
+                (Thm.~\ref{thm:seq_space_seq_cont_eqiv_cont}). Therefore, $f$ is
+                continuous.
+            \end{proof}
+            It's laborious to show a certain space is first countable, especially in
+            the case of manifold theory, and so we rely on the following theorems.
+            \begin{theorem}
+                \label{thm:Locally_Metrizable_is_First_Countable}%
+                If $\topspace{X}$ is a locally metrizable topological space, then it
+                is first countable.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there is a point $x\in{X}$ with no countable
+                neighborhood basis. But if $\topspace{X}$ is locally metrizable,
+                then there is an open subset $\mathcal{U}$ such that
+                $x\in\mathcal{U}$ and $\topspace[\mathcal{U}]{\mathcal{U}}$ is
+                metrizable, where $\tau_{\mathcal{U}}$ is the subspace topology. But
+                then there is a metric
+                $d:\mathcal{U}\times\mathcal{U}\rightarrow\nspace[]$ such that
+                $d$ induces $\tau_{\mathcal{U}}$. Let $\mathcal{B}\subseteq\tau$ be
+                defined by:
+                \begin{equation}
+                    \mathcal{B}=\{\,\rball{n^{\minus{1}}}{\metspace{\mathcal{U}}}{x}
+                        \;|\;n\in\mathbb{N}^{+}\}
+                \end{equation}
+                That is, the set of all open balls about $x$ of radius $1/n$.
+                Suppose $\mathcal{V}\in\tau$ is such that $x\in\mathcal{V}$. But
+                then $x\in\mathcal{V}\cap\mathcal{U}$. But
+                $\mathcal{V}\cap\mathcal{U}$ is an open subset of $\mathcal{U}$, and
+                thus there is an $r>0$ such that:
+                \begin{equation}
+                    \rball{r}{\metspace{\mathcal{U}}}{x}\subseteq\mathcal{V}
+                \end{equation}
+                but by Archimede's Theorem, there is an $N\in\mathbb{N}$ such that
+                $N>r$. But it is true that
+                $\rball{N^{\minus{1}}}{\metspace{\mathcal{U}}}{x}\in\mathcal{B}$,
+                and hence $\mathcal{B}$ is a countable neighborhood basis of $x$,
+                a contradiction. Thus, $\topspace{X}$ is first countable.
+            \end{proof}
+        \subsection{Various Types of Compactness}
+            \begin{fdefinition}{$\sigma$ Compact}{Sigma_Compact}
+                A $\sigma$ compact topological space is a topological space
+                $\topspace{X}$ such that there exists a sequence
+                $K:\mathbb{N}\rightarrow\powset{X}$ of compact subsets of $X$ such
+                that:
+                \begin{equation*}
+                    X=\bigcup_{n\in\mathbb{N}}K_{n}
+                \end{equation*}
+            \end{fdefinition}
+            This definition gives the following triviality.
+            \begin{theorem}
+                \label{thm:Compact_Implies_Sigma_Compact}%
+                If $\topspace{X}$ is a compact topological space, then it is
+                $\sigma$ compact.
+            \end{theorem}
+            \begin{proof}
+                For let $K:\mathbb{N}\rightarrow\powset{X}$ be defined by
+                $K_{n}=X$. Then $K_{n}$ is compact for all $n$ and
+                $\bigcup{K}_{n}=X$. Thus, $\topspace{X}$ is $\sigma$ compact
+                (Def.~\ref{def:Sigma_Compact}).
+            \end{proof}
+            \begin{fdefinition}{Lindel\"{o}f Topological Space}{Lindelof_Space}
+                A Lindel\"{o}f topological space is a topological space $(X,\tau)$
+                such that for every open cover $\mathcal{O}$ of $X$ there exists a
+                countable subcover.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Second_Countable_Implies_Lindelof}%
+                If $\topspace{X}$ is a second countable topological space, then it
+                is Lindel\"{o}f.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there exists an open cover $\mathcal{O}$ with
+                no countable subcover. But if $\topspace{X}$ is second countable,
+                then there is a countable basis $\mathcal{B}$ of $\tau$. But if
+                $\mathcal{B}$ is a basis, since $\mathcal{O}$ is an open cover, for
+                all $\mathcal{V}\in\mathcal{O}$ it is true that $\mathcal{V}$ is
+                open and thus there is an element $\mathcal{U}\in\mathcal{B}$ such
+                that $\mathcal{U}\subseteq\mathcal{V}$. That is, the function
+                $F:\mathcal{O}\rightarrow\powset{\mathcal{B}}$ defined by:
+                \begin{equation}
+                    F(\mathcal{V})=\{\,\mathcal{U}\in\mathcal{B}\;|\;
+                        \mathcal{U}\subseteq\mathcal{V}\,\}
+                \end{equation}
+                is such that $F(\mathcal{V})\ne\emptyset$ for all
+                $\mathcal{V}\in\mathcal{O}$. But then
+                $F[\mathcal{O}]\subseteq\powset{\mathcal{B}}$ is a non-empty subset
+                of $\powset{B}$ such that $\emptyset\notin{F}[\mathcal{O}]$. Hence
+                by the axiom of choice there is a function
+                $G:F[\mathcal{O}]\rightarrow\mathcal{B}$ such that for all
+                $\Delta\in{F}[\mathcal{O}]$, $G(\Delta)\in\Delta$. Let
+                $B=G\big[F[\mathcal{O}]\big]$. But $\mathcal{B}$ is countable and
+                $B\subseteq\mathcal{B}$, and thus $B$ is countable. Moreover,
+                $F\circ{G}:\mathcal{O}\rightarrow{B}$ is surjective by the
+                definition of $B$ and hence there exists a right inverse
+                $H:B\rightarrow\mathcal{O}$. And since $B$ is countable,
+                $H[B]$ is a countable subset of $\mathcal{O}$. But $\mathcal{O}$ has
+                no countable subcover, and hence there is an $x\in{X}$ such that
+                $x\notin\bigcup{H}[B]$. But $\mathcal{O}$ is a cover of $X$, and
+                thus there is a $\mathcal{V}\in\mathcal{O}$ such that
+                $x\in\mathcal{V}$. And since $\mathcal{B}$ is a basis, there is an
+                element $\mathcal{U}_{1}\in\mathcal{B}$ such that
+                $x\in\mathcal{U}_{1}$. But then $x\in\mathcal{U}_{1}\cap\mathcal{V}$
+                and since $\mathcal{B}$ is a basis, there is an element
+                $\mathcal{U}_{2}\in\mathcal{B}$ such that $x\in\mathcal{U}_{2}$ and
+                $\mathcal{U}_{2}\subseteq\mathcal{U}_{1}\cap\mathcal{V}$. But then
+                $H(\mathcal{U}_{2})$ is an element of $H[B]$ such that
+                $\mathcal{U}_{2}\subseteq{H}(\mathcal{U}_{2})$, and hence
+                $x\in{H}[\mathcal{U}_{2}]$. A contradiction, since
+                $x\notin\bigcup{H}[B]$. Therefore, $\topspace{X}$ is Lindel\"{o}f.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Sigma_Compact_Implies_Lindelof}%
+                If $\topspace{X}$ is a $\sigma$ compact topological space, then it
+                is Lindel\"{o}f.
+            \end{theorem}
+            \begin{proof}
+                For suppose not. Then there exists an open cover $\mathcal{O}$ of
+                $X$ with no countable subcover. But $X$ is $\sigma$ compact, and
+                hence there is a sequence $K:\mathbb{N}\rightarrow\powset{X}$ of
+                compact sets such that $X=\bigcup{K}_{n}$
+                (Def.~\ref{def:Sigma_Compact}). But then for all $n\in\mathbb{N}$,
+                $K_{n}$ is a subset of $X$, and hence $\mathcal{O}$ is an open cover
+                of $K_{n}$. But by hypothesis, $K_{n}$ is compact and hence there is
+                a finite subcover $\mathscr{D}\subseteq\mathcal{O}$ of $K_{n}$. That
+                is, if we define the sequence
+                $A_{n}:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ by:
+                \begin{equation}
+                    A_{n}=\{\mathscr{D}\in\powset{\mathcal{O}}\;|\;
+                        \mathscr{D}\textrm{ is finite and }
+                        K_{n}\subseteq\bigcup\mathscr{D}\,\}
+                \end{equation}
+                then for all $n\in\mathbb{N}$, $A_{n}$ is non-empty. Hence by the
+                axiom of (countable) choice, there is a choice function
+                $\Delta:\mathbb{N}\rightarrow\powset{\mathcal{O}}$ such that for all
+                $n\in\mathbb{N}$, $\Delta_{n}$ is a finite open subcover of $K_{n}$.
+                But then the union of all $\Delta_{n}$ is the countable union of
+                finite collections, and is hence countable. But then this collection
+                covers $K_{n}$ for all $n\in\mathbb{N}$, and hence covers
+                $\bigcup{K}_{n}$. But $\bigcup{K}_{n}=X$, a contradiction since
+                $\mathcal{O}$ has no countable subcover. Thus, $\topspace{X}$ is
+                Lindel\"{o}f.
+            \end{proof}
+            This theorem reverses if we add locally compact. The requirement of
+            local compactness can be seen by examining the irrational numbers with
+            the subspace topology. This is Lindel\"{o}f (since it is second
+            countable), but it is not $\sigma$ compact. For any compact subset of
+            the irrationals must have empty interior, and by the Baire category
+            theorem the irrationals cannot be written as the countable union of
+            nowhere dense subsets. Hence they cannot possibly $\sigma$ compact.
+            \begin{fdefinition}{Locally Compact Topological Space}{Locally_Compact}
+                A locally compact topological space is a topological space
+                $\topspace{X}$ such that for all $x\in{X}$ there exists a compact
+                subset $K\subseteq{X}$ and an open set $\mathcal{U}\in\tau$ such
+                that $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}%
+                If $\topspace{X}$ is a locally compact Lindel\"{o}f space, then it
+                is $\sigma$ compact.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally compact, then for all $x\in{X}$
+                there is a compact set $K\subseteq{X}$ and an open set
+                $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+                $\mathcal{U}\subseteq{K}$ (Def.~\ref{def:Locally_Compact}). Invoking
+                the axiom of choice, there is a function
+                $A:X\rightarrow\tau\times\powset{X}$ such that for all $x\in{X}$,
+                $A_{x}=(\mathcal{U},K)$ where $x\in\mathcal{U}$ and
+                $\mathcal{U}\subseteq{K}$, where $K$ is compact. But then the
+                collection of all such $\mathcal{U}$ is an open cover of $X$. But
+                $X$ is Lindel\"{o}f and hence there is a countable subcover. But
+                then the subcollection of all $K$ form a countable collection of
+                compact sets that cover $X$. Hence, $\topspace{X}$ is $\sigma$
+                compact.
+            \end{proof}
+            \begin{fdefinition}{Sequentially Compact}{Sequentially_Compact}
+                A sequentially compact topological space is a topological space
+                $\topspace{X}$ such that for every sequence
+                $a:\mathbb{N}\rightarrow{X}$ there exists a strictly increasing
+                sequence $k:\mathbb{N}\rightarrow\mathbb{N}$ such that
+                $a\circ{k}:\mathbb{N}\rightarrow{X}$ converges.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Met_Space_Seq_Compact_iff_Compact}%
+                If $\topspace{X}$ is metrizable, and if $\mathcal{C}\subseteq{X}$,
+                then $\mathcal{C}$ is compact if and only if it is sequentially
+                compact.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace[X]{X}$ is metrizable, then there is a metric
+                $d:X\times{X}\rightarrow\nspace[]$ that induces the topology $\tau$.
+                Suppose $X$ is compact and not sequentially compact. Then there is a
+                sequence $a:\mathbb{N}\rightarrow{X}$ with no convergent
+                subsequence. Then for al $x\in{X}$ there is an $r>0$ such that the
+                open ball of radius $r$ about $x$ is such that only finitely many
+                $n\in\mathbb{N}$ imply $a_{n}$ lies inside the ball. Invoking
+                choice, we get a function $r:X\rightarrow\mathbb{R}^{+}$. Let
+                $\mathcal{O}$ be defined by:
+                \begin{equation}
+                    \mathcal{O}=\{\,\rball{r_{x}}{\metspace{X}}{x}\;|\;x\in{X}\,\}
+                \end{equation}
+                Then $\mathcal{O}$ is an open cover of $X$. But $X$ is compact, and
+                therefore there is a finite subcover $\Delta$. But for each
+                $\mathcal{U}\in\Delta$, there are only finite many
+                $n\in\mathbb{N}$ such that $a_{n}\in\mathcal{U}$. But every
+                $n\in\mathbb{N}$ is such that $a_{n}\in\mathcal{U}$ for at least
+                one $\mathcal{U}$ since these cover $X$, a contradiction since
+                $\mathbb{N}$ is not finite. Thus, $\topspace{X}$ is sequentially
+                compact. In the other direction, sequential compactness implies
+                complete and totally bounded, which implies compact by the
+                generalized Heine-Borel theorem.
+            \end{proof}
+            This is not true in general. The long ling is sequentially compact but
+            not compact, whereas the space of all functions
+            $f:[0,1]\rightarrow[0,1]$ is compact (by Tychonoff) but not sequentially
             compact.
-        \end{proof}
-        \begin{fdefinition}{Sequentially Compact}{Sequentially_Compact}
-            A sequentially compact topological space is a topological space
-            $\topspace{X}$ such that for every sequence
-            $a:\mathbb{N}\rightarrow{X}$ there exists a strictly increasing
-            sequence $k:\mathbb{N}\rightarrow\mathbb{N}$ such that
-            $a\circ{k}:\mathbb{N}\rightarrow{X}$ converges.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Met_Space_Seq_Compact_iff_Compact}%
-            If $\topspace{X}$ is metrizable, and if $\mathcal{C}\subseteq{X}$,
-            then $\mathcal{C}$ is compact if and only if it is sequentially
-            compact.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace[X]{X}$ is metrizable, then there is a metric
-            $d:X\times{X}\rightarrow\nspace[]$ that induces the topology $\tau$.
-            Suppose $X$ is compact and not sequentially compact. Then there is a
-            sequence $a:\mathbb{N}\rightarrow{X}$ with no convergent
-            subsequence. Then for al $x\in{X}$ there is an $r>0$ such that the
-            open ball of radius $r$ about $x$ is such that only finitely many
-            $n\in\mathbb{N}$ imply $a_{n}$ lies inside the ball. Invoking
-            choice, we get a function $r:X\rightarrow\mathbb{R}^{+}$. Let
-            $\mathcal{O}$ be defined by:
-            \begin{equation}
-                \mathcal{O}=\{\,\rball{r_{x}}{\metspace{X}}{x}\;|\;x\in{X}\,\}
-            \end{equation}
-            Then $\mathcal{O}$ is an open cover of $X$. But $X$ is compact, and
-            therefore there is a finite subcover $\Delta$. But for each
-            $\mathcal{U}\in\Delta$, there are only finite many
-            $n\in\mathbb{N}$ such that $a_{n}\in\mathcal{U}$. But every
-            $n\in\mathbb{N}$ is such that $a_{n}\in\mathcal{U}$ for at least
-            one $\mathcal{U}$ since these cover $X$, a contradiction since
-            $\mathbb{N}$ is not finite. Thus, $\topspace{X}$ is sequentially
-            compact. In the other direction, sequential compactness implies
-            complete and totally bounded, which implies compact by the
-            generalized Heine-Borel theorem.
-        \end{proof}
-        This is not true in general. The long ling is sequentially compact but
-        not compact, whereas the space of all functions
-        $f:[0,1]\rightarrow[0,1]$ is compact (by Tychonoff) but not sequentially
-        compact.
-        \begin{fdefinition}{$\sigma$ locally finite basis}
-                           {Sigma_Loc_Fin_Basis}
-            A $\sigma$ locally finite basis of a topological space
-            $\topspace{X}$ is a basis $\mathcal{B}$ of $X$ such that
-            $\mathcal{B}$ is $\sigma$ locally finite. That is, there exists
-            a sequence $B:\mathbb{N}\rightarrow\powset{X}$ such that
-            $\mathcal{B}=\bigcup\{B_{n}\}$, and for all $n\in\mathbb{N}$ it is
-            true that $B_{n}$ is locally finite.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Second_Countable_Implies_Sigma_Loc_Fin_Basis}%
-            If $\topspace{X}$ is second countable, then it is has a $\sigma$
-            locally finite basis.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is has a countable basis $\mathcal{B}$. But
-            then there is a surjection $B:\mathbb{N}\rightarrow\mathcal{B}$.
-            But then for all $n\in\mathbb{N}$, $\{B_{n}\}$ is a finite subset
-            of $\powset{X}$, and is hence locally finite, and
-            $\mathcal{B}=\bigcup\{B_{n}\}$. Thus, $X$ has a $\sigma$ locally
-            finite basis.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Compact_Hausdorff_is_Regular}%
-            If $\topspace{X}$ is a compact Hausdorff topological space, then it
-            is regular.
-        \end{theorem}
-        \begin{proof}
-            For suppose $C\subseteq{X}$ is closed, and $x\in{X}\setminus{C}$.
-            But closed subsets of compact spaces are compact, and thus $C$ is
-            compact. And since $X$ is Hausdorff, for all $y\in{C}$ there are
-            open subsets $\mathcal{U}_{y},\mathcal{V}_{y}$ such that
-            $x\in\mathcal{U}_{y}$, $y\in\mathcal{V}_{y}$, and
-            $\mathcal{U}_{y}\cap\mathcal{V}_{y}=\emptyset$. But the
-            $\mathcal{V}_{y}$ cover $C$, and hence there is a finite subcover
-            $\mathcal{V}_{n}$. Let $\mathcal{U}=\bigcap\mathcal{U}_{n}$ and
-            $\mathcal{V}=\bigcup\mathcal{V}_{n}$. Then since
-            $\mathcal{U}$ is the finite intersection of open subsets, it is
-            open. And since $\mathcal{V}$ is the union of open subsets, it is
-            open. But $x\in\mathcal{U}$, $C\subseteq\mathcal{V}$, and
-            $\mathcal{U}\cap\mathcal{V}=\emptyset$. Hence, $\topspace{X}$ is
-            regular.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Comp_and_Hausdorff_is_Regular}%
-            If $\topspace{X}$ is locally compact and Hausdorff, then it is
-            regular.
-        \end{theorem}
-        \begin{proof}
-            For let $C\subseteq{X}$ be closed and $x\in{X}\setminus{C}$. Since
-            $X$ is locally compact there is an open subset
-            $\mathcal{U}\in\tau$ and a compact subset $K\subseteq{X}$ such that
-            $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$
-            (Def.~\ref{def:Locally_Compact}). But since $K$ is compact and $X$
-            is Hausdorff, $K$ is closed. But $C$ is closed, and therefore
-            $C\cap{K}$ is closed. If $C\cap{K}=\emptyset$, let
-            $\mathcal{V}=X\setminus{K}$. Since $K$ is closed,  $\mathcal{V}$ is
-            therefore open. But $C\subseteq\mathcal{V}$ and
-            $\mathcal{U}\cap\mathcal{V}=\emptyset$, thus separating $x$ and $C$.
-            If $C\cap{K}\ne\emptyset$, then since $X$ is Hausdorff, $\{x\}$ is
-            closed. But then $(C\cap{K})\cup\{x\}$ is a closed subset of a
-            compact set, and is hence compact. But compact Hausdorff spaces are
-            regular (Thm.~\ref{thm:Compact_Hausdorff_is_Regular}). Thus there is
-            are open subsets $\mathcal{U}_{0},\mathcal{V}_{0}$ such that
-            $x\in\mathcal{U}_{0}$, $C\cap{K}\subseteq\mathcal{V}_{0}$ and
-            $\mathcal{U}_{0}\cap\mathcal{V}_{0}=\emptyset$.
-            Let $\mathcal{V}=\mathcal{V}_{0}\cup(X\setminus{K})$. Then
-            $C\subseteq\mathcal{V}$, and
-            $\mathcal{V}\cap\mathcal{U}_{0}=\emptyset$, hence separating
-            $x$ and $C$.
-        \end{proof}
-        \begin{fdefinition}{Paracompact}{Paracompact}
-            A paracompact topological space is a topological space
-            $\topspace{X}$ such that for every open cover $\mathcal{O}$ of $X$,
-            there exists a locally finite refinement $\Delta$ of $\mathcal{O}$.
-        \end{fdefinition}
-        \begin{ftheorem}{Urysohn's Metrization Theorem}
-                        {Urysohn_Metrization_Theorem}
-            If $\topspace{X}$ is a regular second countable Hausdorff
-            topological space, then it is metrizable.
-        \end{ftheorem}
-        \begin{ftheorem}{Stone's Paracompactness Theorem}
-                        {Stones_Paracompactness_Theorem}
-            If $\topspace{X}$ is a metrizable topological space, then it is
-            paracompact.
-        \end{ftheorem}
-        \begin{ftheorem}{Smirnov Metrization Theorem}
-                        {Smirnov_Metrization_Theorem}
-            If $\topspace{X}$ is locally metrizable and paracompact, then it is
-            metrizbale.
-        \end{ftheorem}
-        \begin{theorem}
-            \label{thm:Count_Open_Cover_of_Sec_Count_Implies_Sec_Count}%
-            If $\topspace{X}$ is a topological space, if
-            $\mathcal{O}\subseteq\tau$ is a countable subset of open sets such
-            that for all $\mathcal{U}\in\mathcal{O}$,
-            $\topspace[\mathcal{U}]{\mathcal{U}}$ is second countable, where
-            $\tau_{\mathcal{U}}$ is the subspace topology, then $\topspace{X}$
-            is second countable.
-        \end{theorem}
-        \begin{proof}
-            For let $\mathcal{B}$ be the collection of all of the bases for all
-            of the $\mathcal{U}\in\mathcal{O}$. Since it is the countable union
-            of countable sets, it is countable. But since $\mathcal{U}$ is open
-            for all $\mathcal{U}\in\mathcal{O}$, this is a countable open cover
-            of $X$. It suffices to show that it is a basis. Let
-            $\mathcal{V}\in\tau$ be an open subset. But then:
-            \begin{align}
-                \mathcal{V}&=\mathcal{V}\cap{X}\\
-                &=\mathcal{V}\cap\Big(
-                    \bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
-                \Big)\\
-                &=\bigcup_{\mathcal{U}\in\mathcal{O}}
-                    \big(\mathcal{V}\cap\mathcal{U}\big)
-            \end{align}
-            But $\mathcal{V}\cap\mathcal{U}$ is an open subset of the subspace
-            $\topspace[\mathcal{U}]{\mathcal{U}}$, and hence there is a subset
-            of $\Delta_{\mathcal{V}}\subseteq\mathcal{B}_{\mathcal{U}}$ such
-            that $\mathcal{V}\cap\mathcal{U}=\bigcup\Delta_{\mathcal{V}}$. But
-            then the entire of $\mathcal{V}$ is the union of all such
-            collections, each of which is contained in $\mathcal{B}$, and hence
-            $\mathcal{V}$ can be written as the union of elements of
-            $\mathcal{B}$. Thus, $\mathcal{B}$ is a basis.
-        \end{proof}
-        The requirement that the covering collection be open subspaces is
-        crucial. The quotient space $\mathbb{R}/R$, where $R$ is the equivalence
-        relation generated by $nRm$ for all $n,m\in\mathbb{Z}$, can be thought
-        of as a countable collection of rings all glued together at the origin.
-        Hence, it can be covered by countably many closed subspaces, each of
-        which is homeomorphic to $\nsphere[1]$ in the subspace topology, and
-        hence each of which is second countable. However, this space
-        $\mathbb{R}/R$ is not even first countable, let alone second countable.
-        The point $[0]\in\mathbb{R}/R$ has no countable neighborhood basis.
-        \begin{theorem}
-            \label{thm:loc_path_con_imply_path_comps_open}%
-            If $\topspace{X}$ is locally path connected, if $x\in{X}$, and if
-            $\mathcal{U}\subseteq{X}$ is a path connected component of $X$,
-            then $\mathcal{U}$ is open.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally path connected, there is a basis
-            $\mathcal{B}$ of open and path connected subsets of $X$. But if
-            $\mathcal{U}\subseteq{X}$ is a path connected component, then for
-            all $x,y\in\mathcal{U}$ there is a path
-            $\gamma:[0,1]\rightarrow\mathcal{U}$ connecting $x$ and $y$, and for
-            all $z\in{X}$ such that $z\notin\mathcal{U}$, there is no path
-            between $x$ and $z$. But $\mathcal{B}$ is a basis, and hence for
-            all $x\in\mathcal{U}$ there is a $B\in\mathcal{B}$ such that
-            $x\in{B}$. By choice, we get a function
-            $B:\mathcal{U}\rightarrow\mathcal{B}$. Moreover, since
-            $B\in\mathcal{B}$, it is path connected. But then for all
-            $x\in\mathcal{U}$, $x\in{B}_{x}$, and since $B_{x}$ is path
-            connected it is true that $B_{x}\subseteq\mathcal{U}$ since
-            $\mathcal{U}$ is a path connected component. But then
-            $\mathcal{U}=\bigcup{B}_{x}$, which is the union of open sets, and
-            hence $\mathcal{U}$ is open.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Path_and_Con_Imply_Path_Con}
-            If $\topspace{X}$ is locally path connected and connected, then it
-            is path connected.
-        \end{theorem}
-        \begin{proof}
-            For if not then there are two points $x,y\in{X}$ with no path
-            between them. But the since $\topspace{X}$ is locally path
-            connected, the path connected components of $x$ and $y$ are open
-            (Thm.~\ref{thm:loc_path_con_imply_path_comps_open}). But let
-            $\mathcal{U}$ be the path connected component containing $x$, and
-            let $\mathcal{V}$ be the union of all other path connected
-            components. Then $\mathcal{V}$ is non-empty since $y\in\mathcal{V}$,
-            and hence $\mathcal{U}$ and $\mathcal{V}$ are non-empty disjoint
-            open subsets that cover $X$, a contradiction since $X$ is connected.
-        \end{proof}
-        \begin{fdefinition}{Locally Euclidean}{Locally_Euclidean}
-            A locally Euclidean topological space is a topological space
-            $\topspace{X}$ such that for all $x\in{X}$ there exists an open
-            subset $\mathcal{U}\in\tau$ and an $n\in\mathbb{N}$ such that
-            $x\in\mathcal{U}$ and $\mathcal{U}$ is homeomorphic to an open
-            subset of $\nspace$.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Equiv_Def_Loc_Euclidean}%
-            If $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$ there
-            is an open subset $\mathcal{U}\in\tau$ and an $n\in\mathbb{N}$ such
-            that $\mathcal{U}$ is homeomorphic to $\nspace$.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
-            there is an open subset $\mathcal{V}\in\tau$ and an $n\in\mathbb{N}$
-            such that $x\in\mathcal{V}$ and $\mathcal{V}$ is homeomorphic to an
-            open subset of $\nspace$. But then there is an injective continuous
-            open mapping $\varphi:\mathcal{V}\rightarrow\nspace$. Let
-            $\vector{y}=\varphi(x)$. But since $\varphi$ is an open mapping,
-            and since $\mathcal{V}$ is open, $\varphi[\mathcal{V}]$ is an open
-            subset of $\nspace$. But $\vector{y}=\varphi(x)$, and hence
-            $\vector{y}\in\varphi[\mathcal{V}]$. But if $\varphi[\mathcal{V}]$
-            is open and $\vector{y}\in\varphi[\mathcal{V}]$, then there is an
-            $r>0$ such that the open ball $B$ defined by:
-            \begin{equation}
-                B=\rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}{\vector{y}}
-            \end{equation}
-            is contained in $\varphi[\mathcal{V}]$. But $\varphi$ is continuous,
-            and open balls are open, and hence
-            $\varphi^{\minus{1}}[B]$ is an open subset of $\mathcal{V}$.
-            Moreover, since $\vector{y}\in{B}$,
-            $x\in\varphi^{\minus{1}}[B]$.
-            But $\varphi$ is an injective continuous open mapping, and thus the
-            restriction of $\varphi$ to an open subset is an injective
-            continuous open mapping. Hence, $\varphi|_{\varphi^{\minus{1}}[B]}$
-            is a homeomorphism onto it's image, which is $B$. And since open
-            balls in $\nspace$ are homeomorphic to $\nspace$,
-            $\varphi^{\minus{1}}[B]$ is homeomorphic to $\nspace$. Thus, there
-            is an open subset $\varphi^{\minus{1}}[B]$ containing $x$ and an
-            $n\in\mathbb{N}$ such that $\varphi^{\minus{1}}[B]$ is homeomorphic
-            to $\nspace$.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Existence_of_Basis_of_nspace_Sets}%
-            If $\topspace{X}$ is a locally Euclidean topological space, then
-            there exists a basis $\mathcal{B}$ such that for all
-            $\mathcal{U}\in\mathcal{B}$ there is an $n\in\mathbb{N}$ such that
-            $\mathcal{U}$ is homeomorphic to $\nspace$.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
-            there is an open subset $\mathcal{U}_{x}\in\tau$ and an
-            $n\in\mathbb{N}$ such that $\mathcal{U}_{x}$ is homeomorphic to
-            $\nspace$ (Thm.~\ref{thm:Equiv_Def_Loc_Euclidean}). Let
-            $\varphi_{x}:\mathcal{U}_{x}\rightarrow\nspace$ be such a
-            homeomorphism, and let $\mathcal{B}_{x}$ be the set:
-            \begin{equation}
-                \mathcal{B}_{x}=\{\,
-                    \varphi_{x}^{\minus{1}}\big[
-                        \rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}
-                        {\vector{y}}\big]
-                    \;|\;r>0,\,\vector{y}\in\nspace\,\}
-            \end{equation}
-            Then by construction, every element of $\mathcal{B}_{x}$ is
-            homeomorphic to $\nspace$. Let $\mathcal{B}$ be the collection of
-            all such sets for all $x\in{X}$. If $\mathcal{U}$, $\mathcal{V}$ are
-            elements of $\mathcal{B}$, then there is an $x\in{X}$ such that
-            $\mathcal{U}\in\mathcal{B}_{x}$. Let
-            $y\in\mathcal{U}\cap\mathcal{V}$ and let $\vector{y}$ be the image
-            of $y$ under $\varphi_{x}$. But $\mathcal{U}\cap\mathcal{V}$ is
-            open, and hence there is an $r>0$ such that the ball about
-            $\vector{y}$ is contained in the image of
-            $\varphi_{x}[\mathcal{U}\cap\mathcal{V}]$. But this $r$ ball is
-            contained in $\mathcal{B}$. Hence, $\mathcal{B}$ is a basis.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}%
-            If $\topspace{X}$ is a locally Euclidean topological space, then
-            there is a basis $\mathcal{B}$ such that for all
-            $\mathcal{U}\in\mathcal{B}$ it is true that $\mathcal{U}$ is
-            precompact in $\tau$ and such that there exists an $n\in\mathbb{N}$
-            such that $\mathcal{U}$ is homeomorphic to $\nspace$.
-        \end{theorem}
-        \begin{proof}
-            For by Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_nspace_Sets},
-            there is a basis $\mathcal{B}$ of $\tau$ such that for all
-            $\mathcal{U}\in\mathcal{B}$ there is an $n\in\mathbb{N}$ such that
-            $\mathcal{U}$ is homeomorphic to $\nspace$. Let
-            $\varphi_{\mathcal{U}}:\mathcal{U}\rightarrow\nspace$ be such a
-            homeomorphism. Define $\mathcal{B}_{x}$ by:
-            \begin{equation}
-                \mathcal{B}_{x}=\{\,
-                    \varphi_{\mathcal{U}}^{\minus{1}}\big[
-                        \rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}
-                        {\vector{y}}\big]\;|\;r>0,\,\vector{y}\in\nspace\,\}
-            \end{equation}
-            But by the Heine-Borel theorem, for all
-            $\mathcal{V}\in\mathcal{B}_{x}$,
-            $\closure[\nspace]{\varphi_{\mathcal{U}}[\mathcal{V}]}$ is compact
-            in $\nspace$, and since $\varphi_{\mathcal{U}}$ is a homeomorphism,
-            $\closure{\mathcal{V}}$ is compact in $\mathcal{U}$. But then
-            $\closure{\mathcal{V}}$ is compact in $X$. The collection of all
-            such $\mathcal{B}_{x}$ is thus a basis of precompact subsets that
-            are homeomorphic to open balls in $\nspace$, which are homeomorphic
-            to $\nspace$.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_is_Loc_Compact}%
-            If $\topspace{X}$ is locally Euclidean, then it is locally compact.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then there exists a
-            basis $\mathcal{B}$ of precompact coordinate balls
-            (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}). But
-            then for all $x\in{X}$ there is a $\mathcal{U}\in\mathcal{B}$ such
-            that $x\in\mathcal{U}$ and $\closure{\mathcal{U}}$ is compact. Thus,
-            $\topspace{X}$ is locally compact (Def.~\ref{def:Locally_Compact}).
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Implies_Loc_Met}%
-            If $\topspace{X}$ is locally Euclidean, then it is locally
-            metrizable.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
-            there is an $n\in\mathbb{N}$ and a $\mathcal{U}\in\tau$ such that
-            $x\in\mathcal{U}$ and $\mathcal{U}$ is homeomorphic to
-            $\nspace$ (Thm.~\ref{thm:Equiv_Def_Loc_Euclidean}). But
-            $\nspace$ is metrizable, and thus $\mathcal{U}$ is metrizable.
-            Hence, $X$ is locally metrizable.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Haus_is_Regular}%
-            If $\topspace{X}$ is locally Euclidean and Hausdorff, then it is
-            regular.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then it is locally
-            compact (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But locally
-            compact Hausdorff spaces are regular
-            (Thm.~\ref{thm:Loc_Comp_and_Hausdorff_is_Regular}). Thus,
-            $X$ is regular.
-        \end{proof}
-        \begin{fdefinition}{Topological Manifold}{Topological_Manifold}
-            A topological manifold is a locally Euclidean, Hausdorff, second
-            countable topological space of constant dimension.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Manifolds_are_Lindelof}%
-            If $\topspace{X}$ is a topological manifold, then it is
-            Lindel\"{o}f.
-        \end{theorem}
-        \begin{proof}
-            For if $X$ is a topological manifold, then it is second countable
-            (Def.~\ref{def:Topological_Manifold}). But second countable
-            topological spaces are Lindel\"{o}f
-            (Thm.~\ref{thm:Second_Countable_Implies_Lindelof}). Thus,
-            $\topspace{X}$ is Lindel\"{o}f.
-        \end{proof}
-        \begin{theorem}
-            If $\topspace{X}$ is a topological manifold, then it is $\sigma$
-            compact.
-        \end{theorem}
-        \begin{proof}
-            For if $X$ is a topological manifold, then it is Lindel\"{o}f
-            (Thm.~\ref{thm:Manifolds_are_Lindelof}). But topological manifolds
-            are locally Euclidean (Def.~\ref{def:Locally_Euclidean}) and locally
-            Euclidean spaces are locally compact
-            (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But if $\topspace{X}$ is
-            locally compact and Lindel\"{o}f, then it is $\sigma$ compact
-            (Thm.~\ref{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}).
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}%
-            If $\topspace{X}$ is a locally Euclidean Hausdorff topological
-            space that is $\sigma$ compact, then it is a topological manifold.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then there is a basis
-            $\mathcal{B}$ of precompact coordinate balls
-            (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}).
-            But if $X$ is $\sigma$ compact, then it is Lindel\"{o}f
-            (Thm.~\ref{thm:Sigma_Compact_Implies_Lindelof}). But $\mathcal{B}$
-            is an open cover of $X$, and hence there is a countable subcover
-            $\Delta$. But then $\Delta$ is a countable collection of open
-            subspaces of $X$, each of which is homeomorphic to
-            $\nspace$ and hence second countable. Hence $X$ is second countable
-            (Thm.~\ref{thm:Count_Open_Cover_of_Sec_Count_Implies_Sec_Count}).
-            But if $X$ is locally Euclidean, Hausdorff, and second countable,
-            then it is a topological manifold
-            (Def.~\ref{def:Topological_Manifold}).
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Loc_Euc_Hausdorff_Lindelof_is_Manifold}%
-            If $\topspace{X}$ is a locally Euclidean Hausdorff topological space
-            that is Lindel\"{o}f, then $X$ is a topological manifold.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is locally Euclidean, then it is locally
-            compact (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But locally compact
-            Lindel\"{o}f spaces are $\sigma$ compact
-            (Thm.~\ref{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}). But
-            locally Euclidean Hausdorff topological spaces that are $\sigma$
-            compact are topological manifolds
-            (Thm.~\ref{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}). Therefore,
-            $\topspace{X}$ is a topological manifold.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Top_Man_is_Metrizable}%
-            If $\topspace{X}$ is a topological manifold, then it is metrizable.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is a topological manifold, then it is locally
-            Euclidean and Hausdorff (Def.~\ref{def:Topological_Manifold}). But
-            locally Euclidean Hausdorff spaces are regular
-            (Thm.~\ref{thm:Loc_Euc_Haus_is_Regular}). But topological manifolds
-            are also second countable (Def.~\ref{def:Topological_Manifold}) and
-            regular second countable Hausdorff spaces are metrizable by
-            Urysohn's metrization theorem 
-            Thm.~\ref{thm:Urysohn_Metrization_Theorem}). Thus, $\topspace{X}$ is
-            metrizable.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Top_Man_is_Paracompact}%
-            If $\topspace{X}$ is a topological manifold, then it is paracompact.
-        \end{theorem}
-        \begin{proof}
-            For if $\topspace{X}$ is a topological manifold, then it is
-            metrizable (Thm.~\ref{thm:Top_Man_is_Metrizable}). But by Stone's
-            paracompactness theorem, metrizable spaces are paracompact
-            (Thm.~\ref{thm:Stones_Paracompactness_Theorem}). Hence,
-            $\topspace{X}$ is paracompact.
-        \end{proof}
-        \begin{fdefinition}{Topological Group}{Topological_Group}
-            A topological group, denoted $\topgroup{G}$, is a topological space
-            $\topspace{G}$ and a binary operation $*$ such that $\monoid{G}$ is
-            a group, and such that $g:G\times{G}\rightarrow{G}$ defined by
-            $g(a,b)=a*b$ is continuous with respect to the product topology on
-            $G$, and such that $\nu:G\rightarrow{G}$ defined by
-            $\nu(a)=a^{\minus{1}}$, where $a^{\minus{1}}$ is the inverse element
-            of $a$ under $*$, is continuous.
-        \end{fdefinition}
-        \begin{fdefinition}{Continuous Group Action}{Continuous_Group_Action}
-            A continuous group action of a topological group $\topgroup{G}$
-            on a topological space $\topspace[X]{X}$ is a function
-            $\Theta:G\times{X}\rightarrow{X}$ such that for all $x\in{X}$ and
-            for all $a,b\in{G}$, the following are true:
-            \begin{align*}
-                \Theta(e,x)&=x\\
-                \Theta\big(a,\Theta(b,x)\big)&=\Theta(a*b,x)
-            \end{align*}
-            where $e$ is the unital element of $G$, and such that $\Theta$ is
-            continuous with respect to the product topology.
-        \end{fdefinition}
-        \begin{theorem}
-            \label{thm:Quotient_by_Compact_T2_Group_Preserves_T2}%
-            If $\topspace[X]{X}$ is a Hausdorff topological space, if
-            $\topgroup{G}$ is a compact Hausdorff topological group, if
-            $\Theta$ is a continuous group action of $G$ on $X$, and if
-            $\topspace[q]{X/G}$ is the quotient topology formed by the orbits
-            of $\Theta$, then $X/G$ is Hausdorff.
-        \end{theorem}
-        \begin{proof}
-            Need to fill in.
-        \end{proof}
-        \begin{theorem}
-            \label{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}%
-            If $\topspace[X]{X}$ is a second countable topological space, if
-            $\topgroup{G}$ is a compact Hausdorff topological group, if
-            $\Theta$ is a continuous group action of $G$ on $X$, and if
-            $\topspace[q]{X/G}$ is the quotient topology formed by the orbits
-            of $\Theta$, then $X/G$ is second countable.
-        \end{theorem}
-        \begin{proof}
-            Also need to fill in.
-        \end{proof}
-    \section{Homework I: Part A}
-        \begin{problem}
-            Show that $\mathbb{RP}^{n}$ is Hausdorff and second countable.
-        \end{problem}
-        \begin{solution}
-            For $\mathbb{RP}^{n}$ is homeomorphic to the quotient space of
-            $\nsphere$ by the multiplicative group $G=\{\minus{1},1\}$ with the
-            group action $\Theta:G\times\nsphere\rightarrow\nsphere$ defined by
-            $\Theta(n,\vector{s})=n\cdot\vector{s}$ (this is well defined since
-            $n=\pm{1}$, and hence $\norm{n\cdot\vector{s}}=1$ and thus
-            $n\cdot\vector{s}$ still lies in $\nsphere$). Equipping $G$ with the
-            discrete topology makes $\topgroup{G}$ a topological group, and
-            $\Theta$ a continuous group action on $\nsphere$. But $G$ is finite,
-            and hence compact, and moreover it is Hausdorff since the discrete
-            topology is always Hausdorff (it is metrizable, in fact). Thus
-            $\nsphere/G$ is the quotient of a second countable Hausdorff space
-            by a compact Hausdorff group, and is therefore Hausdorff
-            (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_T2}) and
-            second countable
-            (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}).
-            Thus, $\mathbb{RP}^{n}$ is Hausdorff and second countable.
-        \end{solution}
-        \begin{problem}
-            Show that if $\topspace{X}$ is a locally Euclidean connected
-            Hausdorff space, then it is a manifold if and only if it is
-            paracompact.
-        \end{problem}
-        \begin{solution}
-            For topological manifolds are paracompact
-            (Thm.~\ref{thm:Top_Man_is_Paracompact}). Going the other way, if $X$
-            is locally Euclidean, then there is a basis of precompact open
-            subsets $\mathcal{B}$, each of which is homeomorphic to $\nspace$
-            (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}). But
-            $X$ is paracompact, and hence there is a locally finite refinement
-            $\Delta$ of $\mathcal{B}$ (Def.~\ref{def:Paracompact}). Let
-            $\mathcal{U}_{0}$ be an element of $\Delta$. Since $\Delta$ is a
-            refinement of $\mathcal{B}$, there is an element
-            $\mathcal{V}\in\mathcal{B}$ such that
-            $\mathcal{U}_{0}\subseteq\mathcal{V}$. But then
-            $\closure{\mathcal{U}_{0}}\subseteq\closure{\mathcal{V}}$, and
-            $\mathcal{V}$ is precompact, and thus $\closure{\mathcal{V}}$
-            is compact. But then $\closure{\mathcal{U}_{0}}$ is a closed subset
-            of a compact set, and is hence compact. For all $n\in\mathbb{N}$,
-            define $\mathcal{U}_{n}$ by:
-            \begin{equation}
-                \mathcal{U}_{n}=\Big\{\,x\in{X}\;|\;
-                    \exists_{A:\mathbb{Z}_{n}\rightarrow\Delta}\big(
-                        \mathcal{U}_{0}=A_{0},\,x\in{A}_{n-1}\textrm{ and }
-                        \forall_{i<n-1}(A_{i}\cap{A}_{i+1}\ne\emptyset)
-                    \big)\,\Big\}
-            \end{equation}
-            That is, the set of all points that are separated from
-            $\mathcal{U}_{0}$ by at most $n$ consecutive elements of $\Delta$.
-            Then $\mathcal{U}_{n}$ is precompact. We prove by induction. The
-            base case of $\mathcal{U}_{0}$ is true from the previous paragraph.
-            Suppose it is true for $n\in\mathbb{N}$. Since $X$ is locally
-            Euclidean, it is locally metrizable
-            (Thm.\ref{thm:Loc_Euc_Implies_Loc_Met}). But then $X$ is locally
-            metrizable, Hausdorff, and paracompact, and is therefore metrizable
-            by the Smirnov metrization theorem
-            (Thm.~\ref{thm:Smirnov_Metrization_Theorem}). But then if
-            $\mathcal{C}\subseteq{X}$, then $\mathcal{C}$ is compact if and only
-            if it is sequentially compact
-            (Thm.~\ref{thm:Met_Space_Seq_Compact_iff_Compact}). But
-            $\mathcal{U}_{n+1}$ is the union of $\closure{\mathcal{U}_{n}}$ and
-            elements of $\mathcal{V}\in\Delta$ such that
-            $\mathcal{V}\cap\mathcal{U}_{n}\ne\emptyset$. But every element of
-            $\Delta$ is precompact, and since $\closure{\mathcal{U}_{n+1}}$ is
-            not compact, there must be infinitely many such $\mathcal{V}$. But
-            $\mathcal{V}\cap\mathcal{U}_{n}$ is non
-            empty for all such $\mathcal{V}$, and hence by the axiom of choice
-            there is a sequence $a:\mathbb{N}\rightarrow\mathcal{U}_{n}$ such
-            that $a_{j}$ lies in a distinct $\mathcal{V}$ for all
-            $j\in\mathbb{N}$. But $\closure{\mathcal{U}_{n}}$ is compact, and
-            hence sequentially compact, and thus there is a convergent
-            subsequence $a_{k}:\mathbb{N}\rightarrow\closure{\mathcal{U}_{n}}$
-            with a limit $x$. But $x\in\closure{\mathcal{U}_{n}}$ and hence
-            there is an open set $V\in\tau$ that has non-empty intersection with
-            only finitely many elements of $\Delta$, since $\Delta$ is a locally
-            finite refinement. But since $a_{k}$ converges to an element of $V$,
-            there is an $N\in\mathbb{N}$ such that for all $j>N$,
-            $a_{k_{j}}\in{V}$. But each $a_{k_{j}}$ lies in a different
-            $\mathcal{V}\in\Delta$, and hence infinitely many elements of
-            $\Delta$ have non-empty intersection with $V$, a contradiction.
-            Hence, $\mathcal{U}_{n+1}$ is covered by finitely many elements of
-            $\Delta$ and is therefore precompact. Moreover,
-            $\bigcup\closure{\mathcal{U}_{n}}=X$. For if $y\in{X}$, let
-            $x\in\mathcal{U}_{0}$ be any point. Then since $X$ is locally path
-            connected and connected, it is path connected
-            (Thm.~\ref{thm:Loc_Path_and_Con_Imply_Path_Con}).
-            Let $\gamma:[0,1]\rightarrow{X}$ be a path from $x$ to $y$. But
-            $[0,1]$ is compact and hence $\gamma\big[[0,1]\big]$ is a compact
-            subset of $X$. But then it is covered by only finitely many elements
-            of $\Delta$, and hence $y$ is contained in one of the
-            $\mathcal{U}_{n}$. Thus $X$ is $\sigma$ compact
-            (Def.~\ref{def:Sigma_Compact}). But locally Euclidean $\sigma$
-            compact Hausdorff spaces are topological manifolds
-            (Thm.~\ref{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}).
-        \end{solution}
-        \begin{problem}
-            Lee Problem 1-7.
-        \end{problem}
-        \begin{solution}
-            Let $\vector{x}\in\nsphere\setminus{N}$, where $N$ is the north
-            pole. Let $\Gamma$ be the line through $N$ and $\vector{x}$. We can
-            parameterize this as follows:
-            \begin{equation}
-                \Gamma(t)=tN+(1-t)\vector{x}
-            \end{equation}
-            To find when this lies on the $\nspace$ hyperplane of $\nspace[n+1]$
-            defined by $(x_{1},\dots,x_{n},0)$ we simply need to find
-            $t$ such that $\Gamma(t)=(x_{1},\dots,x_{n},0)$. Solving for the
-            last coordinate, we get (Since $N=(0,\dots,0,1)$):
-            \begin{equation}
-                t+(1-t)x_{n+1}=0
-                \Longrightarrow
-                t(1-x_{n+1})=\minus{x}_{n+1}
-                \Longrightarrow
-                t=\frac{x_{n+1}}{x_{n+1}-1}
-            \end{equation}
-            evaluating $\Gamma$ at this particular time obtains:
-            \begin{equation}
-                \Gamma\Big(\frac{x_{n+1}}{x_{n+1}-1}\Big)
-                    =\frac{1}{1-x_{n+1}}(x_{1},\dots,x_{n},0)
-            \end{equation}
-            in agreement with $\sigma$. For the south pole we repeat the
-            argument, obtaining the curve $\Lambda$ defined by:
-            \begin{equation}
-                \Lambda(t)=tS+(1-t)\vector{x}
-            \end{equation}
-            Solving for $\Lambda(t)=(x_{1},\dots,x_{n},0)$, we look at the last
-            component and set this equal to zero:
-            \begin{equation}
-                \minus{t}+(1-t)x_{n+1}=0
-                \Longrightarrow
-                \minus{t}(1+x_{n+1})=\minus{x}_{n+1}
-                \Longrightarrow
-                t=\frac{x_{n+1}}{1+x_{n+1}}
-            \end{equation}
-            Evaluating this $t$ into $\Lambda$ gives:
-            \begin{align*}
-                \Lambda\Big(\frac{x_{n+1}}{1+x_{n+1}}\Big)
-                &=\Big(0,\dots,0,\frac{\minus{x}_{n+1}}{1+x_{n+1}}\Big)
-                    +\Big(1-\frac{x_{n+1}}{1+x_{n+1}}\Big)
-                    (x_{1},\dots,x_{n},x_{n+1})\\
-                &=\Big(0,\dots,0,\frac{\minus{x}_{n+1}}{1+x_{n+1}}\Big)+
-                    \Big(\frac{1}{1+x_{n+1}}\Big)(x_{1},\dots,x_{n},x_{n+1})\\
-                &=\frac{(x_{1},\dots,x_{n},0)}{1+x_{n+1}}
-            \end{align*}
-            To show that $\sigma$ is bijective, it suffices to show that
-            $\sigma\circ\sigma^{\minus{1}}$ and $\sigma^{\minus{1}}\circ\sigma$
-            are the identity mappings, where:
-            \begin{equation}
-                \sigma^{\minus{1}}(X_{1},\dots,X_{n})=
-                    \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
-                         {\norm{\vector{X}}^{2}+1}
-            \end{equation}
-            But:
-            \begin{align*}
-                (\sigma\circ\sigma^{\minus{1}})(\vector{X})&=
-                \sigma\Big(
-                    \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
-                         {\norm{\vector{X}}^{2}+1}
-                \Big)\\
-                &=\frac{1}
-                    {1-\frac{\norm{\vector{X}}^{2}-1}{\norm{\vector{X}}^{2}+1}}
-                    \Big(\frac{2X_{1}}{\norm{\vector{X}}^{2}+1)},\dots,
-                    \frac{2X_{n}}{\norm{\vector{X}}^{2}+1)}\Big)\\
-                &=\frac{1}{\norm{\vector{X}^{2}}+1}\cdot
-                    \frac{1}
-                    {1-\frac{\norm{\vector{X}}^{2}-1}{\norm{\vector{X}}^{2}+1}}
-                    (2X_{1},\dots,2X_{n})\\
-                &=\frac{1}{\norm{\vector{X}}^{2}+1-\norm{\vector{X}}^{2}+1}
-                    (2X_{1},\dots,2X_{n})\\
-                &=\frac{1}{2}(2X_{1},\dots,2X_{n})\\
-                &=(X_{1},\dots,X_{n})\\
-                &=\vector{X}
-            \end{align*}
-            and therefore $\sigma\circ\sigma^{\minus{1}}$ is the identity. Going
-            the other way, for $\vector{x}\in\nsphere\setminus\{N\}$ we have:
-            \begin{align*}
-                (\sigma^{\minus{1}}\circ\sigma)(\vector{x})
-                &=\sigma^{\minus{1}}\Big(
-                    \frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}
-                \Big)\\
-                &=\frac{1}{\norm{\frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}}^{2}+1}
-                    \Big(
+            \begin{fdefinition}{$\sigma$ locally finite basis}
+                            {Sigma_Loc_Fin_Basis}
+                A $\sigma$ locally finite basis of a topological space
+                $\topspace{X}$ is a basis $\mathcal{B}$ of $X$ such that
+                $\mathcal{B}$ is $\sigma$ locally finite. That is, there exists
+                a sequence $B:\mathbb{N}\rightarrow\powset{X}$ such that
+                $\mathcal{B}=\bigcup\{B_{n}\}$, and for all $n\in\mathbb{N}$ it is
+                true that $B_{n}$ is locally finite.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Second_Countable_Implies_Sigma_Loc_Fin_Basis}%
+                If $\topspace{X}$ is second countable, then it is has a $\sigma$
+                locally finite basis.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is has a countable basis $\mathcal{B}$. But
+                then there is a surjection $B:\mathbb{N}\rightarrow\mathcal{B}$.
+                But then for all $n\in\mathbb{N}$, $\{B_{n}\}$ is a finite subset
+                of $\powset{X}$, and is hence locally finite, and
+                $\mathcal{B}=\bigcup\{B_{n}\}$. Thus, $X$ has a $\sigma$ locally
+                finite basis.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Compact_Hausdorff_is_Regular}%
+                If $\topspace{X}$ is a compact Hausdorff topological space, then it
+                is regular.
+            \end{theorem}
+            \begin{proof}
+                For suppose $C\subseteq{X}$ is closed, and $x\in{X}\setminus{C}$.
+                But closed subsets of compact spaces are compact, and thus $C$ is
+                compact. And since $X$ is Hausdorff, for all $y\in{C}$ there are
+                open subsets $\mathcal{U}_{y},\mathcal{V}_{y}$ such that
+                $x\in\mathcal{U}_{y}$, $y\in\mathcal{V}_{y}$, and
+                $\mathcal{U}_{y}\cap\mathcal{V}_{y}=\emptyset$. But the
+                $\mathcal{V}_{y}$ cover $C$, and hence there is a finite subcover
+                $\mathcal{V}_{n}$. Let $\mathcal{U}=\bigcap\mathcal{U}_{n}$ and
+                $\mathcal{V}=\bigcup\mathcal{V}_{n}$. Then since
+                $\mathcal{U}$ is the finite intersection of open subsets, it is
+                open. And since $\mathcal{V}$ is the union of open subsets, it is
+                open. But $x\in\mathcal{U}$, $C\subseteq\mathcal{V}$, and
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$. Hence, $\topspace{X}$ is
+                regular.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Comp_and_Hausdorff_is_Regular}%
+                If $\topspace{X}$ is locally compact and Hausdorff, then it is
+                regular.
+            \end{theorem}
+            \begin{proof}
+                For let $C\subseteq{X}$ be closed and $x\in{X}\setminus{C}$. Since
+                $X$ is locally compact there is an open subset
+                $\mathcal{U}\in\tau$ and a compact subset $K\subseteq{X}$ such that
+                $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$
+                (Def.~\ref{def:Locally_Compact}). But since $K$ is compact and $X$
+                is Hausdorff, $K$ is closed. But $C$ is closed, and therefore
+                $C\cap{K}$ is closed. If $C\cap{K}=\emptyset$, let
+                $\mathcal{V}=X\setminus{K}$. Since $K$ is closed,  $\mathcal{V}$ is
+                therefore open. But $C\subseteq\mathcal{V}$ and
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$, thus separating $x$ and $C$.
+                If $C\cap{K}\ne\emptyset$, then since $X$ is Hausdorff, $\{x\}$ is
+                closed. But then $(C\cap{K})\cup\{x\}$ is a closed subset of a
+                compact set, and is hence compact. But compact Hausdorff spaces are
+                regular (Thm.~\ref{thm:Compact_Hausdorff_is_Regular}). Thus there is
+                are open subsets $\mathcal{U}_{0},\mathcal{V}_{0}$ such that
+                $x\in\mathcal{U}_{0}$, $C\cap{K}\subseteq\mathcal{V}_{0}$ and
+                $\mathcal{U}_{0}\cap\mathcal{V}_{0}=\emptyset$.
+                Let $\mathcal{V}=\mathcal{V}_{0}\cup(X\setminus{K})$. Then
+                $C\subseteq\mathcal{V}$, and
+                $\mathcal{V}\cap\mathcal{U}_{0}=\emptyset$, hence separating
+                $x$ and $C$.
+            \end{proof}
+            \begin{fdefinition}{Paracompact}{Paracompact}
+                A paracompact topological space is a topological space
+                $\topspace{X}$ such that for every open cover $\mathcal{O}$ of $X$,
+                there exists a locally finite refinement $\Delta$ of $\mathcal{O}$.
+            \end{fdefinition}
+            \begin{ftheorem}{Urysohn's Metrization Theorem}
+                            {Urysohn_Metrization_Theorem}
+                If $\topspace{X}$ is a regular second countable Hausdorff
+                topological space, then it is metrizable.
+            \end{ftheorem}
+            \begin{ftheorem}{Stone's Paracompactness Theorem}
+                            {Stones_Paracompactness_Theorem}
+                If $\topspace{X}$ is a metrizable topological space, then it is
+                paracompact.
+            \end{ftheorem}
+            \begin{ftheorem}{Smirnov Metrization Theorem}
+                            {Smirnov_Metrization_Theorem}
+                If $\topspace{X}$ is locally metrizable and paracompact, then it is
+                metrizbale.
+            \end{ftheorem}
+            \begin{theorem}
+                \label{thm:Count_Open_Cover_of_Sec_Count_Implies_Sec_Count}%
+                If $\topspace{X}$ is a topological space, if
+                $\mathcal{O}\subseteq\tau$ is a countable subset of open sets such
+                that for all $\mathcal{U}\in\mathcal{O}$,
+                $\topspace[\mathcal{U}]{\mathcal{U}}$ is second countable, where
+                $\tau_{\mathcal{U}}$ is the subspace topology, then $\topspace{X}$
+                is second countable.
+            \end{theorem}
+            \begin{proof}
+                For let $\mathcal{B}$ be the collection of all of the bases for all
+                of the $\mathcal{U}\in\mathcal{O}$. Since it is the countable union
+                of countable sets, it is countable. But since $\mathcal{U}$ is open
+                for all $\mathcal{U}\in\mathcal{O}$, this is a countable open cover
+                of $X$. It suffices to show that it is a basis. Let
+                $\mathcal{V}\in\tau$ be an open subset. But then:
+                \begin{align}
+                    \mathcal{V}&=\mathcal{V}\cap{X}\\
+                    &=\mathcal{V}\cap\Big(
+                        \bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
+                    \Big)\\
+                    &=\bigcup_{\mathcal{U}\in\mathcal{O}}
+                        \big(\mathcal{V}\cap\mathcal{U}\big)
+                \end{align}
+                But $\mathcal{V}\cap\mathcal{U}$ is an open subset of the subspace
+                $\topspace[\mathcal{U}]{\mathcal{U}}$, and hence there is a subset
+                of $\Delta_{\mathcal{V}}\subseteq\mathcal{B}_{\mathcal{U}}$ such
+                that $\mathcal{V}\cap\mathcal{U}=\bigcup\Delta_{\mathcal{V}}$. But
+                then the entire of $\mathcal{V}$ is the union of all such
+                collections, each of which is contained in $\mathcal{B}$, and hence
+                $\mathcal{V}$ can be written as the union of elements of
+                $\mathcal{B}$. Thus, $\mathcal{B}$ is a basis.
+            \end{proof}
+            The requirement that the covering collection be open subspaces is
+            crucial. The quotient space $\mathbb{R}/R$, where $R$ is the equivalence
+            relation generated by $nRm$ for all $n,m\in\mathbb{Z}$, can be thought
+            of as a countable collection of rings all glued together at the origin.
+            Hence, it can be covered by countably many closed subspaces, each of
+            which is homeomorphic to $\nsphere[1]$ in the subspace topology, and
+            hence each of which is second countable. However, this space
+            $\mathbb{R}/R$ is not even first countable, let alone second countable.
+            The point $[0]\in\mathbb{R}/R$ has no countable neighborhood basis.
+        \subsection{Connectedness}
+            \begin{theorem}
+                \label{thm:loc_path_con_imply_path_comps_open}%
+                If $\topspace{X}$ is locally path connected, if $x\in{X}$, and if
+                $\mathcal{U}\subseteq{X}$ is a path connected component of $X$,
+                then $\mathcal{U}$ is open.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally path connected, there is a basis
+                $\mathcal{B}$ of open and path connected subsets of $X$. But if
+                $\mathcal{U}\subseteq{X}$ is a path connected component, then for
+                all $x,y\in\mathcal{U}$ there is a path
+                $\gamma:[0,1]\rightarrow\mathcal{U}$ connecting $x$ and $y$, and for
+                all $z\in{X}$ such that $z\notin\mathcal{U}$, there is no path
+                between $x$ and $z$. But $\mathcal{B}$ is a basis, and hence for
+                all $x\in\mathcal{U}$ there is a $B\in\mathcal{B}$ such that
+                $x\in{B}$. By choice, we get a function
+                $B:\mathcal{U}\rightarrow\mathcal{B}$. Moreover, since
+                $B\in\mathcal{B}$, it is path connected. But then for all
+                $x\in\mathcal{U}$, $x\in{B}_{x}$, and since $B_{x}$ is path
+                connected it is true that $B_{x}\subseteq\mathcal{U}$ since
+                $\mathcal{U}$ is a path connected component. But then
+                $\mathcal{U}=\bigcup{B}_{x}$, which is the union of open sets, and
+                hence $\mathcal{U}$ is open.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Path_and_Con_Imply_Path_Con}
+                If $\topspace{X}$ is locally path connected and connected, then it
+                is path connected.
+            \end{theorem}
+            \begin{proof}
+                For if not then there are two points $x,y\in{X}$ with no path
+                between them. But the since $\topspace{X}$ is locally path
+                connected, the path connected components of $x$ and $y$ are open
+                (Thm.~\ref{thm:loc_path_con_imply_path_comps_open}). But let
+                $\mathcal{U}$ be the path connected component containing $x$, and
+                let $\mathcal{V}$ be the union of all other path connected
+                components. Then $\mathcal{V}$ is non-empty since $y\in\mathcal{V}$,
+                and hence $\mathcal{U}$ and $\mathcal{V}$ are non-empty disjoint
+                open subsets that cover $X$, a contradiction since $X$ is connected.
+            \end{proof}
+        \subsection{Topological Manifolds}
+            \begin{fdefinition}{Locally Euclidean}{Locally_Euclidean}
+                A locally Euclidean topological space is a topological space
+                $\topspace{X}$ such that for all $x\in{X}$ there exists an open
+                subset $\mathcal{U}\in\tau$ and an $n\in\mathbb{N}$ such that
+                $x\in\mathcal{U}$ and $\mathcal{U}$ is homeomorphic to an open
+                subset of $\nspace$.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Equiv_Def_Loc_Euclidean}%
+                If $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$ there
+                is an open subset $\mathcal{U}\in\tau$ and an $n\in\mathbb{N}$ such
+                that $\mathcal{U}$ is homeomorphic to $\nspace$.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
+                there is an open subset $\mathcal{V}\in\tau$ and an $n\in\mathbb{N}$
+                such that $x\in\mathcal{V}$ and $\mathcal{V}$ is homeomorphic to an
+                open subset of $\nspace$. But then there is an injective continuous
+                open mapping $\varphi:\mathcal{V}\rightarrow\nspace$. Let
+                $\vector{y}=\varphi(x)$. But since $\varphi$ is an open mapping,
+                and since $\mathcal{V}$ is open, $\varphi[\mathcal{V}]$ is an open
+                subset of $\nspace$. But $\vector{y}=\varphi(x)$, and hence
+                $\vector{y}\in\varphi[\mathcal{V}]$. But if $\varphi[\mathcal{V}]$
+                is open and $\vector{y}\in\varphi[\mathcal{V}]$, then there is an
+                $r>0$ such that the open ball $B$ defined by:
+                \begin{equation}
+                    B=\rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}{\vector{y}}
+                \end{equation}
+                is contained in $\varphi[\mathcal{V}]$. But $\varphi$ is continuous,
+                and open balls are open, and hence
+                $\varphi^{\minus{1}}[B]$ is an open subset of $\mathcal{V}$.
+                Moreover, since $\vector{y}\in{B}$,
+                $x\in\varphi^{\minus{1}}[B]$.
+                But $\varphi$ is an injective continuous open mapping, and thus the
+                restriction of $\varphi$ to an open subset is an injective
+                continuous open mapping. Hence, $\varphi|_{\varphi^{\minus{1}}[B]}$
+                is a homeomorphism onto it's image, which is $B$. And since open
+                balls in $\nspace$ are homeomorphic to $\nspace$,
+                $\varphi^{\minus{1}}[B]$ is homeomorphic to $\nspace$. Thus, there
+                is an open subset $\varphi^{\minus{1}}[B]$ containing $x$ and an
+                $n\in\mathbb{N}$ such that $\varphi^{\minus{1}}[B]$ is homeomorphic
+                to $\nspace$.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Existence_of_Basis_of_nspace_Sets}%
+                If $\topspace{X}$ is a locally Euclidean topological space, then
+                there exists a basis $\mathcal{B}$ such that for all
+                $\mathcal{U}\in\mathcal{B}$ there is an $n\in\mathbb{N}$ such that
+                $\mathcal{U}$ is homeomorphic to $\nspace$.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
+                there is an open subset $\mathcal{U}_{x}\in\tau$ and an
+                $n\in\mathbb{N}$ such that $\mathcal{U}_{x}$ is homeomorphic to
+                $\nspace$ (Thm.~\ref{thm:Equiv_Def_Loc_Euclidean}). Let
+                $\varphi_{x}:\mathcal{U}_{x}\rightarrow\nspace$ be such a
+                homeomorphism, and let $\mathcal{B}_{x}$ be the set:
+                \begin{equation}
+                    \mathcal{B}_{x}=\{\,
+                        \varphi_{x}^{\minus{1}}\big[
+                            \rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}
+                            {\vector{y}}\big]
+                        \;|\;r>0,\,\vector{y}\in\nspace\,\}
+                \end{equation}
+                Then by construction, every element of $\mathcal{B}_{x}$ is
+                homeomorphic to $\nspace$. Let $\mathcal{B}$ be the collection of
+                all such sets for all $x\in{X}$. If $\mathcal{U}$, $\mathcal{V}$ are
+                elements of $\mathcal{B}$, then there is an $x\in{X}$ such that
+                $\mathcal{U}\in\mathcal{B}_{x}$. Let
+                $y\in\mathcal{U}\cap\mathcal{V}$ and let $\vector{y}$ be the image
+                of $y$ under $\varphi_{x}$. But $\mathcal{U}\cap\mathcal{V}$ is
+                open, and hence there is an $r>0$ such that the ball about
+                $\vector{y}$ is contained in the image of
+                $\varphi_{x}[\mathcal{U}\cap\mathcal{V}]$. But this $r$ ball is
+                contained in $\mathcal{B}$. Hence, $\mathcal{B}$ is a basis.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}%
+                If $\topspace{X}$ is a locally Euclidean topological space, then
+                there is a basis $\mathcal{B}$ such that for all
+                $\mathcal{U}\in\mathcal{B}$ it is true that $\mathcal{U}$ is
+                precompact in $\tau$ and such that there exists an $n\in\mathbb{N}$
+                such that $\mathcal{U}$ is homeomorphic to $\nspace$.
+            \end{theorem}
+            \begin{proof}
+                For by Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_nspace_Sets},
+                there is a basis $\mathcal{B}$ of $\tau$ such that for all
+                $\mathcal{U}\in\mathcal{B}$ there is an $n\in\mathbb{N}$ such that
+                $\mathcal{U}$ is homeomorphic to $\nspace$. Let
+                $\varphi_{\mathcal{U}}:\mathcal{U}\rightarrow\nspace$ be such a
+                homeomorphism. Define $\mathcal{B}_{x}$ by:
+                \begin{equation}
+                    \mathcal{B}_{x}=\{\,
+                        \varphi_{\mathcal{U}}^{\minus{1}}\big[
+                            \rball{r}{\metspace[\norm{\cdot}_{2}]{\nspace}}
+                            {\vector{y}}\big]\;|\;r>0,\,\vector{y}\in\nspace\,\}
+                \end{equation}
+                But by the Heine-Borel theorem, for all
+                $\mathcal{V}\in\mathcal{B}_{x}$,
+                $\closure[\nspace]{\varphi_{\mathcal{U}}[\mathcal{V}]}$ is compact
+                in $\nspace$, and since $\varphi_{\mathcal{U}}$ is a homeomorphism,
+                $\closure{\mathcal{V}}$ is compact in $\mathcal{U}$. But then
+                $\closure{\mathcal{V}}$ is compact in $X$. The collection of all
+                such $\mathcal{B}_{x}$ is thus a basis of precompact subsets that
+                are homeomorphic to open balls in $\nspace$, which are homeomorphic
+                to $\nspace$.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_is_Loc_Compact}%
+                If $\topspace{X}$ is locally Euclidean, then it is locally compact.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then there exists a
+                basis $\mathcal{B}$ of precompact coordinate balls
+                (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}). But
+                then for all $x\in{X}$ there is a $\mathcal{U}\in\mathcal{B}$ such
+                that $x\in\mathcal{U}$ and $\closure{\mathcal{U}}$ is compact. Thus,
+                $\topspace{X}$ is locally compact (Def.~\ref{def:Locally_Compact}).
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Implies_Loc_Met}%
+                If $\topspace{X}$ is locally Euclidean, then it is locally
+                metrizable.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then for all $x\in{X}$
+                there is an $n\in\mathbb{N}$ and a $\mathcal{U}\in\tau$ such that
+                $x\in\mathcal{U}$ and $\mathcal{U}$ is homeomorphic to
+                $\nspace$ (Thm.~\ref{thm:Equiv_Def_Loc_Euclidean}). But
+                $\nspace$ is metrizable, and thus $\mathcal{U}$ is metrizable.
+                Hence, $X$ is locally metrizable.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Haus_is_Regular}%
+                If $\topspace{X}$ is locally Euclidean and Hausdorff, then it is
+                regular.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then it is locally
+                compact (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But locally
+                compact Hausdorff spaces are regular
+                (Thm.~\ref{thm:Loc_Comp_and_Hausdorff_is_Regular}). Thus,
+                $X$ is regular.
+            \end{proof}
+            \begin{fdefinition}{Topological Manifold}{Topological_Manifold}
+                A topological manifold is a locally Euclidean, Hausdorff, second
+                countable topological space of constant dimension.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Manifolds_are_Lindelof}%
+                If $\topspace{X}$ is a topological manifold, then it is
+                Lindel\"{o}f.
+            \end{theorem}
+            \begin{proof}
+                For if $X$ is a topological manifold, then it is second countable
+                (Def.~\ref{def:Topological_Manifold}). But second countable
+                topological spaces are Lindel\"{o}f
+                (Thm.~\ref{thm:Second_Countable_Implies_Lindelof}). Thus,
+                $\topspace{X}$ is Lindel\"{o}f.
+            \end{proof}
+            \begin{theorem}
+                If $\topspace{X}$ is a topological manifold, then it is $\sigma$
+                compact.
+            \end{theorem}
+            \begin{proof}
+                For if $X$ is a topological manifold, then it is Lindel\"{o}f
+                (Thm.~\ref{thm:Manifolds_are_Lindelof}). But topological manifolds
+                are locally Euclidean (Def.~\ref{def:Locally_Euclidean}) and locally
+                Euclidean spaces are locally compact
+                (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But if $\topspace{X}$ is
+                locally compact and Lindel\"{o}f, then it is $\sigma$ compact
+                (Thm.~\ref{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}).
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}%
+                If $\topspace{X}$ is a locally Euclidean Hausdorff topological
+                space that is $\sigma$ compact, then it is a topological manifold.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then there is a basis
+                $\mathcal{B}$ of precompact coordinate balls
+                (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}).
+                But if $X$ is $\sigma$ compact, then it is Lindel\"{o}f
+                (Thm.~\ref{thm:Sigma_Compact_Implies_Lindelof}). But $\mathcal{B}$
+                is an open cover of $X$, and hence there is a countable subcover
+                $\Delta$. But then $\Delta$ is a countable collection of open
+                subspaces of $X$, each of which is homeomorphic to
+                $\nspace$ and hence second countable. Hence $X$ is second countable
+                (Thm.~\ref{thm:Count_Open_Cover_of_Sec_Count_Implies_Sec_Count}).
+                But if $X$ is locally Euclidean, Hausdorff, and second countable,
+                then it is a topological manifold
+                (Def.~\ref{def:Topological_Manifold}).
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Loc_Euc_Hausdorff_Lindelof_is_Manifold}%
+                If $\topspace{X}$ is a locally Euclidean Hausdorff topological space
+                that is Lindel\"{o}f, then $X$ is a topological manifold.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is locally Euclidean, then it is locally
+                compact (Thm.~\ref{thm:Loc_Euc_is_Loc_Compact}). But locally compact
+                Lindel\"{o}f spaces are $\sigma$ compact
+                (Thm.~\ref{thm:Loc_Comp_and_Lindelof_Implies_Sigma_Comp}). But
+                locally Euclidean Hausdorff topological spaces that are $\sigma$
+                compact are topological manifolds
+                (Thm.~\ref{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}). Therefore,
+                $\topspace{X}$ is a topological manifold.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Top_Man_is_Metrizable}%
+                If $\topspace{X}$ is a topological manifold, then it is metrizable.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is a topological manifold, then it is locally
+                Euclidean and Hausdorff (Def.~\ref{def:Topological_Manifold}). But
+                locally Euclidean Hausdorff spaces are regular
+                (Thm.~\ref{thm:Loc_Euc_Haus_is_Regular}). But topological manifolds
+                are also second countable (Def.~\ref{def:Topological_Manifold}) and
+                regular second countable Hausdorff spaces are metrizable by
+                Urysohn's metrization theorem 
+                Thm.~\ref{thm:Urysohn_Metrization_Theorem}). Thus, $\topspace{X}$ is
+                metrizable.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Top_Man_is_Paracompact}%
+                If $\topspace{X}$ is a topological manifold, then it is paracompact.
+            \end{theorem}
+            \begin{proof}
+                For if $\topspace{X}$ is a topological manifold, then it is
+                metrizable (Thm.~\ref{thm:Top_Man_is_Metrizable}). But by Stone's
+                paracompactness theorem, metrizable spaces are paracompact
+                (Thm.~\ref{thm:Stones_Paracompactness_Theorem}). Hence,
+                $\topspace{X}$ is paracompact.
+            \end{proof}
+            \begin{fdefinition}{Topological Group}{Topological_Group}
+                A topological group, denoted $\topgroup{G}$, is a topological space
+                $\topspace{G}$ and a binary operation $*$ such that $\monoid{G}$ is
+                a group, and such that $g:G\times{G}\rightarrow{G}$ defined by
+                $g(a,b)=a*b$ is continuous with respect to the product topology on
+                $G$, and such that $\nu:G\rightarrow{G}$ defined by
+                $\nu(a)=a^{\minus{1}}$, where $a^{\minus{1}}$ is the inverse element
+                of $a$ under $*$, is continuous.
+            \end{fdefinition}
+            \begin{fdefinition}{Continuous Group Action}{Continuous_Group_Action}
+                A continuous group action of a topological group $\topgroup{G}$
+                on a topological space $\topspace[X]{X}$ is a function
+                $\Theta:G\times{X}\rightarrow{X}$ such that for all $x\in{X}$ and
+                for all $a,b\in{G}$, the following are true:
+                \begin{align*}
+                    \Theta(e,x)&=x\\
+                    \Theta\big(a,\Theta(b,x)\big)&=\Theta(a*b,x)
+                \end{align*}
+                where $e$ is the unital element of $G$, and such that $\Theta$ is
+                continuous with respect to the product topology.
+            \end{fdefinition}
+            \begin{theorem}
+                \label{thm:Quotient_by_Compact_T2_Group_Preserves_T2}%
+                If $\topspace[X]{X}$ is a Hausdorff topological space, if
+                $\topgroup{G}$ is a compact Hausdorff topological group, if
+                $\Theta$ is a continuous group action of $G$ on $X$, and if
+                $\topspace[q]{X/G}$ is the quotient topology formed by the orbits
+                of $\Theta$, then $X/G$ is Hausdorff.
+            \end{theorem}
+            \begin{proof}
+                Need to fill in.
+            \end{proof}
+            \begin{theorem}
+                \label{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}%
+                If $\topspace[X]{X}$ is a second countable topological space, if
+                $\topgroup{G}$ is a compact Hausdorff topological group, if
+                $\Theta$ is a continuous group action of $G$ on $X$, and if
+                $\topspace[q]{X/G}$ is the quotient topology formed by the orbits
+                of $\Theta$, then $X/G$ is second countable.
+            \end{theorem}
+            \begin{proof}
+                Also need to fill in.
+            \end{proof}
+    \section{Homework I}
+        \subsection{Part A}
+            \begin{problem}
+                (Lee Exercise 1.6) Show that $\mathbb{RP}^{n}$ is Hausdorff and
+                second countable.
+            \end{problem}
+            \begin{solution}
+                For $\mathbb{RP}^{n}$ is homeomorphic to the quotient space of
+                $\nsphere$ by the multiplicative group $G=\{\minus{1},1\}$ with the
+                group action $\Theta:G\times\nsphere\rightarrow\nsphere$ defined by
+                $\Theta(n,\vector{s})=n\cdot\vector{s}$ (this is well defined since
+                $n=\pm{1}$, and hence $\norm{n\cdot\vector{s}}=1$ and thus
+                $n\cdot\vector{s}$ still lies in $\nsphere$). Equipping $G$ with the
+                discrete topology makes $\topgroup{G}$ a topological group, and
+                $\Theta$ a continuous group action on $\nsphere$. But $G$ is finite,
+                and hence compact, and moreover it is Hausdorff since the discrete
+                topology is always Hausdorff (it is metrizable, in fact). Thus
+                $\nsphere/G$ is the quotient of a second countable Hausdorff space
+                by a compact Hausdorff group, and is therefore Hausdorff
+                (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_T2}) and
+                second countable
+                (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}).
+                Thus, $\mathbb{RP}^{n}$ is Hausdorff and second countable.
+            \end{solution}
+            \begin{problem}
+                (Lee Problem 1.5) Show that if $\topspace{X}$ is a locally Euclidean
+                connected Hausdorff space, then it is a manifold if and only if it
+                is paracompact.
+            \end{problem}
+            \begin{solution}
+                For topological manifolds are paracompact
+                (Thm.~\ref{thm:Top_Man_is_Paracompact}). Going the other way, if $X$
+                is locally Euclidean, then there is a basis of precompact open
+                subsets $\mathcal{B}$, each of which is homeomorphic to $\nspace$
+                (Thm.~\ref{thm:Loc_Euc_Existence_of_Basis_of_Precompact_Balls}). But
+                $X$ is paracompact, and hence there is a locally finite refinement
+                $\Delta$ of $\mathcal{B}$ (Def.~\ref{def:Paracompact}). Let
+                $\mathcal{U}_{0}$ be an element of $\Delta$. Since $\Delta$ is a
+                refinement of $\mathcal{B}$, there is an element
+                $\mathcal{V}\in\mathcal{B}$ such that
+                $\mathcal{U}_{0}\subseteq\mathcal{V}$. But then
+                $\closure{\mathcal{U}_{0}}\subseteq\closure{\mathcal{V}}$, and
+                $\mathcal{V}$ is precompact, and thus $\closure{\mathcal{V}}$
+                is compact. But then $\closure{\mathcal{U}_{0}}$ is a closed subset
+                of a compact set, and is hence compact. For all $n\in\mathbb{N}$,
+                define $\mathcal{U}_{n}$ by:
+                \begin{equation}
+                    \mathcal{U}_{n}=\Big\{\,x\in{X}\;|\;
+                        \exists_{A:\mathbb{Z}_{n}\rightarrow\Delta}\big(
+                            \mathcal{U}_{0}=A_{0},\,x\in{A}_{n-1}\textrm{ and }
+                            \forall_{i<n-1}(A_{i}\cap{A}_{i+1}\ne\emptyset)
+                        \big)\,\Big\}
+                \end{equation}
+                That is, the set of all points that are separated from
+                $\mathcal{U}_{0}$ by at most $n$ consecutive elements of $\Delta$.
+                Then $\mathcal{U}_{n}$ is precompact. We prove by induction. The
+                base case of $\mathcal{U}_{0}$ is true from the previous paragraph.
+                Suppose it is true for $n\in\mathbb{N}$. Since $X$ is locally
+                Euclidean, it is locally metrizable
+                (Thm.\ref{thm:Loc_Euc_Implies_Loc_Met}). But then $X$ is locally
+                metrizable, Hausdorff, and paracompact, and is therefore metrizable
+                by the Smirnov metrization theorem
+                (Thm.~\ref{thm:Smirnov_Metrization_Theorem}). But then if
+                $\mathcal{C}\subseteq{X}$, then $\mathcal{C}$ is compact if and only
+                if it is sequentially compact
+                (Thm.~\ref{thm:Met_Space_Seq_Compact_iff_Compact}). But
+                $\mathcal{U}_{n+1}$ is the union of $\closure{\mathcal{U}_{n}}$ and
+                elements of $\mathcal{V}\in\Delta$ such that
+                $\mathcal{V}\cap\mathcal{U}_{n}\ne\emptyset$. But every element of
+                $\Delta$ is precompact, and since $\closure{\mathcal{U}_{n+1}}$ is
+                not compact, there must be infinitely many such $\mathcal{V}$. But
+                $\mathcal{V}\cap\mathcal{U}_{n}$ is non
+                empty for all such $\mathcal{V}$, and hence by the axiom of choice
+                there is a sequence $a:\mathbb{N}\rightarrow\mathcal{U}_{n}$ such
+                that $a_{j}$ lies in a distinct $\mathcal{V}$ for all
+                $j\in\mathbb{N}$. But $\closure{\mathcal{U}_{n}}$ is compact, and
+                hence sequentially compact, and thus there is a convergent
+                subsequence $a_{k}:\mathbb{N}\rightarrow\closure{\mathcal{U}_{n}}$
+                with a limit $x$. But $x\in\closure{\mathcal{U}_{n}}$ and hence
+                there is an open set $V\in\tau$ that has non-empty intersection with
+                only finitely many elements of $\Delta$, since $\Delta$ is a locally
+                finite refinement. But since $a_{k}$ converges to an element of $V$,
+                there is an $N\in\mathbb{N}$ such that for all $j>N$,
+                $a_{k_{j}}\in{V}$. But each $a_{k_{j}}$ lies in a different
+                $\mathcal{V}\in\Delta$, and hence infinitely many elements of
+                $\Delta$ have non-empty intersection with $V$, a contradiction.
+                Hence, $\mathcal{U}_{n+1}$ is covered by finitely many elements of
+                $\Delta$ and is therefore precompact. Moreover,
+                $\bigcup\closure{\mathcal{U}_{n}}=X$. For if $y\in{X}$, let
+                $x\in\mathcal{U}_{0}$ be any point. Then since $X$ is locally path
+                connected and connected, it is path connected
+                (Thm.~\ref{thm:Loc_Path_and_Con_Imply_Path_Con}).
+                Let $\gamma:[0,1]\rightarrow{X}$ be a path from $x$ to $y$. But
+                $[0,1]$ is compact and hence $\gamma\big[[0,1]\big]$ is a compact
+                subset of $X$. But then it is covered by only finitely many elements
+                of $\Delta$, and hence $y$ is contained in one of the
+                $\mathcal{U}_{n}$. Thus $X$ is $\sigma$ compact
+                (Def.~\ref{def:Sigma_Compact}). But locally Euclidean $\sigma$
+                compact Hausdorff spaces are topological manifolds
+                (Thm.~\ref{thm:Loc_Euc_Haus_Sigma_Comp_is_Manifold}).
+            \end{solution}
+            \begin{problem}
+                Lee Problem 1-7.
+            \end{problem}
+            \begin{solution}
+                Let $\vector{x}\in\nsphere\setminus{N}$, where $N$ is the north
+                pole. Let $\Gamma$ be the line through $N$ and $\vector{x}$. We can
+                parameterize this as follows:
+                \begin{equation}
+                    \Gamma(t)=tN+(1-t)\vector{x}
+                \end{equation}
+                To find when this lies on the $\nspace$ hyperplane of $\nspace[n+1]$
+                defined by $(x_{1},\dots,x_{n},0)$ we simply need to find
+                $t$ such that $\Gamma(t)=(x_{1},\dots,x_{n},0)$. Solving for the
+                last coordinate, we get (Since $N=(0,\dots,0,1)$):
+                \begin{equation}
+                    t+(1-t)x_{n+1}=0
+                    \Longrightarrow
+                    t(1-x_{n+1})=\minus{x}_{n+1}
+                    \Longrightarrow
+                    t=\frac{x_{n+1}}{x_{n+1}-1}
+                \end{equation}
+                evaluating $\Gamma$ at this particular time obtains:
+                \begin{equation}
+                    \Gamma\Big(\frac{x_{n+1}}{x_{n+1}-1}\Big)
+                        =\frac{1}{1-x_{n+1}}(x_{1},\dots,x_{n},0)
+                \end{equation}
+                in agreement with $\sigma$. For the south pole we repeat the
+                argument, obtaining the curve $\Lambda$ defined by:
+                \begin{equation}
+                    \Lambda(t)=tS+(1-t)\vector{x}
+                \end{equation}
+                Solving for $\Lambda(t)=(x_{1},\dots,x_{n},0)$, we look at the last
+                component and set this equal to zero:
+                \begin{equation}
+                    \minus{t}+(1-t)x_{n+1}=0
+                    \Longrightarrow
+                    \minus{t}(1+x_{n+1})=\minus{x}_{n+1}
+                    \Longrightarrow
+                    t=\frac{x_{n+1}}{1+x_{n+1}}
+                \end{equation}
+                Evaluating this $t$ into $\Lambda$ gives:
+                \begin{align*}
+                    \Lambda\Big(\frac{x_{n+1}}{1+x_{n+1}}\Big)
+                    &=\Big(0,\dots,0,\frac{\minus{x}_{n+1}}{1+x_{n+1}}\Big)
+                        +\Big(1-\frac{x_{n+1}}{1+x_{n+1}}\Big)
+                        (x_{1},\dots,x_{n},x_{n+1})\\
+                    &=\Big(0,\dots,0,\frac{\minus{x}_{n+1}}{1+x_{n+1}}\Big)+
+                        \Big(\frac{1}{1+x_{n+1}}\Big)(x_{1},\dots,x_{n},x_{n+1})\\
+                    &=\frac{(x_{1},\dots,x_{n},0)}{1+x_{n+1}}
+                \end{align*}
+                To show that $\sigma$ is bijective, it suffices to show that
+                $\sigma\circ\sigma^{\minus{1}}$ and $\sigma^{\minus{1}}\circ\sigma$
+                are the identity mappings, where:
+                \begin{equation}
+                    \sigma^{\minus{1}}(X_{1},\dots,X_{n})=
+                        \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
+                            {\norm{\vector{X}}^{2}+1}
+                \end{equation}
+                But:
+                \begin{align*}
+                    (\sigma\circ\sigma^{\minus{1}})(\vector{X})&=
+                    \sigma\Big(
+                        \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
+                            {\norm{\vector{X}}^{2}+1}
+                    \Big)\\
+                    &=\frac{1}
+                        {1-\frac{\norm{\vector{X}}^{2}-1}{\norm{\vector{X}}^{2}+1}}
+                        \Big(\frac{2X_{1}}{\norm{\vector{X}}^{2}+1)},\dots,
+                        \frac{2X_{n}}{\norm{\vector{X}}^{2}+1)}\Big)\\
+                    &=\frac{1}{\norm{\vector{X}^{2}}+1}\cdot
+                        \frac{1}
+                        {1-\frac{\norm{\vector{X}}^{2}-1}{\norm{\vector{X}}^{2}+1}}
+                        (2X_{1},\dots,2X_{n})\\
+                    &=\frac{1}{\norm{\vector{X}}^{2}+1-\norm{\vector{X}}^{2}+1}
+                        (2X_{1},\dots,2X_{n})\\
+                    &=\frac{1}{2}(2X_{1},\dots,2X_{n})\\
+                    &=(X_{1},\dots,X_{n})\\
+                    &=\vector{X}
+                \end{align*}
+                and therefore $\sigma\circ\sigma^{\minus{1}}$ is the identity. Going
+                the other way, for $\vector{x}\in\nsphere\setminus\{N\}$ we have:
+                \begin{align*}
+                    (\sigma^{\minus{1}}\circ\sigma)(\vector{x})
+                    &=\sigma^{\minus{1}}\Big(
+                        \frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}
+                    \Big)\\
+                    &=\frac{1}{\norm{\frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}}^{2}+1}
+                        \Big(
+                            \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
+                            \frac{\norm{(x_{1},\dots,x_{n})}^{2}}{(1-x_{n+1})^{2}}-1
+                        \Big)
+                \end{align*}
+                But since $\vector{x}\in\nsphere{S}\setminus\{N\}$,
+                $\norm{\vector{x}}=1$. And:
+                \begin{align*}
+                    \frac{1}{\norm{\frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}}^{2}}
+                    &=\frac{(1-x_{n+1})^{2}}
+                        {\norm{(x_{1},\dots,x_{n})}^{2}+(1-x_{n+1})^{2}}\\
+                    &=\frac{(1-x_{n+1})^{2}}{\norm{\vector{x}}^{2}+1-2x_{n+1}}\\
+                    &=\frac{(1-x_{n+1})^{2}}{1+1-2x_{n+1}}\\
+                    &=\frac{(1-x_{n+1})^{2}}{2(1-x_{n+1})}\\
+                    &=\frac{1-x_{n+1}}{2}
+                \end{align*}
+                returning to the problem, we then get:
+                \begin{align*}
+                    (\sigma^{\minus{1}}\circ\sigma)(\vector{x})
+                    &=\frac{1-x_{n+1}}{2}\Big(
                         \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
                         \frac{\norm{(x_{1},\dots,x_{n})}^{2}}{(1-x_{n+1})^{2}}-1
-                    \Big)
-            \end{align*}
-            But since $\vector{x}\in\nsphere{S}\setminus\{N\}$,
-            $\norm{\vector{x}}=1$. And:
-            \begin{align*}
-                \frac{1}{\norm{\frac{(x_{1},\dots,x_{n})}{1-x_{n+1}}}^{2}}
-                &=\frac{(1-x_{n+1})^{2}}
-                      {\norm{(x_{1},\dots,x_{n})}^{2}+(1-x_{n+1})^{2}}\\
-                &=\frac{(1-x_{n+1})^{2}}{\norm{\vector{x}}^{2}+1-2x_{n+1}}\\
-                &=\frac{(1-x_{n+1})^{2}}{1+1-2x_{n+1}}\\
-                &=\frac{(1-x_{n+1})^{2}}{2(1-x_{n+1})}\\
-                &=\frac{1-x_{n+1}}{2}
-            \end{align*}
-            returning to the problem, we then get:
-            \begin{align*}
-                (\sigma^{\minus{1}}\circ\sigma)(\vector{x})
-                &=\frac{1-x_{n+1}}{2}\Big(
-                    \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
-                    \frac{\norm{(x_{1},\dots,x_{n})}^{2}}{(1-x_{n+1})^{2}}-1
-                \Big)\\
-                &=\frac{1-x_{n+1}}{2}\Big(
-                    \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
-                    \frac{1-x_{n+1}^{2}}{(1-x_{n+1})^{2}}-1
-                \Big)\\
-                &=\frac{1-x_{n+1}}{2}\Big(
-                    \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
-                    \frac{1+x_{n+1}}{1-x_{n+1}}-1
-                \Big)\\
-                &=\frac{1-x_{n+1}}{2}\Big(
-                    \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
-                    \frac{2x_{n+1}}{1-x_{n+1}}
-                \Big)\\
-                &=(x_{1},\dots,x_{n},x_{n+1})
-            \end{align*}
-            and therefore, $\sigma^{\minus{1}}\sigma$ is the identity. Thus,
-            $\sigma$ and $\sigma^{\minus{1}}$ are bijections and inverses of
-            each other. The transition map
-            $\tilde{\sigma}\circ\sigma^{\minus{1}}$, where $\tilde{\sigma}$ is
-            the stereographic graphic projection from the south pole, can be
-            computed as follows:
-            \begin{align*}
-                (\tilde{\sigma}\circ\sigma^{\minus{1}})(\vector{X})
-                &=\tilde{\sigma}\Big(
-                    \frac{2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1}
-                         {\norm{\vector{X}}^{2}+1}
                     \Big)\\
-                &=\frac{1}{1+\frac{\norm{\vector{X}}^{2}-1}
-                                  {\norm{\vector{X}}^{2}+1}}
-                    \Big(\frac{2X_{1}}{\norm{\vector{X}}^{2}+1},\dots,
-                         \frac{2X_{n}}{\norm{\vector{X}}^{2}+1}\Big)\\
-                &=\frac{1}{\norm{\vector{X}}^{2}}(X_{1},\dots,X_{n})\\
-                &=\frac{\vector{X}}{\norm{\vector{X}}^{2}}
-            \end{align*}
-            Since $N$ and $S$ are not included, $\vector{0}$ is not in the
-            domain of $\tilde{\sigma}\circ\sigma^{\minus{1}}$, and hence this
-            is well defined everywhere and smooth. By symmetry,
-            $\sigma\circ\tilde{\sigma}^{\minus{1}}$ is smooth. Hence, these two
-            charts constitute a smooth atlas on $\nsphere$ since they cover
-            the set and overlap smoothly. Lastly, show that the standard smooth
-            structure on $\nsphere$ and the stereographic one are compatible.
-            For $i\in\mathbb{Z}_{n}$, let $\varphi_{i}$ be the projection
-            mapping of $\mathcal{U}_{i}^{+}$ down to $\nsphere$. We have:
-            \begin{align*}
-                (\varphi_{i}\circ\sigma^{\minus{1}})(\vector{X})
-                &=\varphi_{i}\Big(
-                    \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
-                         {\norm{\vector{X}}^{2}+1}
-                \Big)\\
-                &=\frac{(2X_{1},\dots,2X_{i-1},2X_{i+1},\dots,
-                        \norm{\vector{X}}^{2}-1)}{\norm{\vector{X}}^{2}+1}
-            \end{align*}
-            which is smooth. Similarly:
-            \begin{align*}
-                (\sigma\circ\varphi_{i}^{\minus{1}})(\vector{X})
-                &=\sigma\Big(
-                    \big(x_{1},\dots,x_{i-1},\sqrt{1-\norm{\vector{X}}^{2}},
-                    x_{i},\dots,x_{n}\big)\Big)\\
-                &=\frac{(x_{1},\dots,x_{i-1},\sqrt{1-\norm{\vector{X}}^{2}},
-                        x_{i+1},\dots,x_{n-1})}{1-x_{n}}
-            \end{align*}
-            which, since the domain of $\sigma$ does not include $x_{n}=1$, this
-            is well defined and smooth. Hence, the standard smooth structure on
-            $\nsphere$ is compatible with the stereographic one.
-        \end{solution}
-        \begin{problem}
-            Show that $\mathbb{CP}^{n}$ is a smooth $2n$ dimensional manifold.
-        \end{problem}
-        \begin{solution}
-            Given a $\vector{z}$, let
-            $\uvector{z}=\vector{z}/\norm{\vector{z}}$. Then $[\vector{z}]$ is
-            the same as the orbit of $\uvector{z}$ by the rotation group
-            $U(1)$ acting on $\nsphere[2n+1]$, and similary the quotient
-            topologies are the same. But $U(1)$ is a compact topological group.
-            It is compact since it is a closed and bounded subset of Euclidean
-            space, since all of the elements of $U(1)$ have norm 1. But then
-            $\nsphere[2n+1]/U(1)$ is Hausdorff
-            (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_T2}) and
-            second countable
-            (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}).
-            Moreover, since it is the quotient of a compact topological space
-            ($\nsphere[2n+1]$ is compact), $\mathbb{CP}^{n}$ is compact as well.
-            Lastly, we must show that $\mathbb{CP}^{n}$ can be given a smooth
-            structure compatible with this quotient topology. For all
-            $i\in\mathbb{Z}_{n+1}$, let $\mathcal{U}_{i}$ be the set of all
-            $\vector{z}\in\mathbb{C}^{n+1}$ such that the $i^{th}$ component
-            $z_{i}$ is non-zero. Let $\mathcal{V}_{i}=q[\mathcal{U}_{i}]$, where
-            $q$ is the canonical projection of $\mathbb{C}^{n+1}$ down to
-            $\mathbb{CP}^{n}$ sending $\vector{z}\mapsto[\vector{z}]$. Since
-            $\mathcal{U}_{i}$ is a saturated set, $\mathcal{V}_{i}$ is therefore
-            open and the restriction of $q$ to $\mathcal{U}_{i}$ is a quotient
-            map. Let $\varphi_{i}:\mathcal{V}_{i}\rightarrow\mathbb{C}^{n}$
-            be defined by:
-            \begin{equation}
-                \varphi_{i}[\vector{z}]=\Big(
-                    \frac{z_{1}}{z_{i}},\dots,\frac{z_{i-1}}{z_{i}},
-                    \frac{z_{i+1}}{z_{i}},\dots,\frac{z_{n+1}}{z_{i}}
-                )
-            \end{equation}
-            this is well defined, for if $\vector{w}\in[\vector{z}]$,
-            then there is a $c\in\mathbb{C}$ such that
-            $\vector{w}=c\vector{z}$. But then:
-            \begin{align*}
-                \varphi_{i}[\vector{w}]&=\Big(
-                    \frac{w_{1}}{w_{i}},\dots,\frac{w_{i-1}}{w_{i}},
-                    \frac{w_{i+1}}{w_{i}},\dots,\frac{w_{n+1}}{w_{i}}
-                \Big)\\
-                &=\Big(
-                    \frac{cz_{1}}{cz_{i}},\dots,\frac{cz_{i-1}}{cz_{i}},
-                    \frac{cz_{i+1}}{cz_{i}},\dots,\frac{cz_{n+1}}{cz_{i}}
-                \Big)\\
-                &=\Big(
-                    \frac{z_{1}}{z_{i}},\dots,\frac{z_{i-1}}{z_{i}},
-                    \frac{z_{i+1}}{z_{i}},\dots,\frac{z_{n+1}}{z_{i}}
-                \Big)\\
-                &=\varphi_{i}[\vector{z}]
-            \end{align*}
-            Thus, $\varphi_{i}$ is continuous. Moreover, it is a homomorphism
-            onto it's image, with inverse:
-            \begin{equation}
-                \varphi_{i}^{\minus{1}}(z_{1},\dots,z_{n})
-                [z_{1},\dots,z_{i-1},1,z_{i+1},\dots,z_{n}]
-            \end{equation}
-            which is continuous. Thus, $\mathcal{V}_{i}$ is homeomorphic to an
-            open subset of $\mathbb{C}^{n}$. But $\mathbb{C}^{n}$ is
-            homeomorphic to $\nspace[2n]$ (Indeed, set theoretically it simply
-            \textit{is} $\nspace[2n]$). This shows that $\mathbb{CP}^{n}$ is
-            locally Euclidean, and since it is also Hausdorff and second
-            countable, it is therefore a topological manifold
-            (Def.~\ref{def:Topological_Manifold}). Lastly, we must show that
-            the $\varphi_{i}$ overlap smoothly. But:
-            \begin{align*}
-                \varphi_{i}\circ\varphi_{j}^{\minus{1}}(z_{1},\dots,z_{n})
-                &=\varphi_{i}\big(
-                    [z_{1},\dots,z_{j-1},1,z_{j+1},\dots,z_{n}]
-                \big)\\
-                &=\Big(
-                    \frac{z_{1}}{z_{i}},\dots,\frac{z_{j-1}}{z_{i}},
-                    \frac{1}{z_{i}},\frac{z_{j+1}}{z_{i}},\dots,
-                    \frac{z_{i-1}}{z_{i}},\frac{z_{i+1}}{z_{i}},\dots,
-                    \frac{z_{n}}{z_{i}}
-                \Big)
-            \end{align*}
-            which is smooth.
-        \end{solution}
-    \section{Homework I: Part B}
-        \begin{problem}
-            Show that the group action
-            $\Theta:\autgroup[]{V}\times{V}\rightarrow{V}$ given by
-            $\Theta(T,v)=Tv$ is continuous, where $V$ is an $n$ dimensional
-            vector space over $\nspace[]$, and $\autgroup[]{V}$ carries the
-            subspace topology of $\nspace[n^{2}]$.
-        \end{problem}
-        \begin{solution}
-            Both spaces are second countable, and hence first countable, and
-            thus to check continuity it suffices to show that $\Theta$ is
-            sequentially continuous
-            (Thm.~\ref{thm:First_Countable_Implies_Seq_Cont_is_Cont}).
-            Let $(T_{n},v_{n})$ be a sequence such that
-            $T_{n}\rightarrow{T}$ and $v_{n}\rightarrow{v}$. But then:
-            \begin{subequations}
-                \begin{align}
-                    \norm{T_{n}v_{n}-Tv}&=\norm{T_{n}v_{n}-T_{n}v+T_{n}v-Tv}\\
-                    &\leq\norm{T_{n}v_{n}-T_{n}v}+\norm{T_{n}v-Tv}\\
-                    &\leq\norm{T_{n}}\norm{v_{n}-v}+\norm{T_{n}-T}\norm{v}
-                \end{align}
-            \end{subequations}
-            and since $T_{n}\rightarrow{T}$ and $v_{n}\rightarrow{v}$, this
-            converges to zero. Hence, $T_{n}v_{n}\rightarrow{T}v$, and thus
-            $\Theta$ is sequentially continuous, and therefore continuous.
-            Moreover, it is a group action:
-            \begin{equation}
-                \Theta(\identity{V},v)=\identity{V}(v)=v
-            \end{equation}
-            and for $T,S\in\autgroup{V}$ we have:
-            \begin{equation}
-                \Theta\big(T,\theta(S,v)\big)=\Theta(T,Sv)
-                =T(Sv)=(TS)v=\Theta(TS,v)
-            \end{equation}
-            and thus $\Theta$ is a continuous group action
-            (Def.~\ref{def:Continuous_Group_Action}).
-        \end{solution}
-        \begin{problem}
-            Let $G$ be a topological Lie group and $V$ a finite dimensional real
-            vector space with the usual topology. A real representation of $G$
-            on $V$ is a continuous group homeomorphism
-            $\rho:G\rightarrow\autgroup{V}$. Any real representation $(V,\rho)$
-            or $G$ on $V$ defines a group action
-            $\Theta:G\times{V}\rightarrow{V}$ given by
-            $\Theta(g,v)=\rho(g)v$. Show that $\rho$ is a representation if and
-            only if $\Theta$ is a continuous group action such that
-            $\Theta_{g}=\Theta(g,\cdot)\in\autgroup{V}$ for all $g\in{G}$.
-        \end{problem}
-        \begin{proof}
-            Suppose $\rho$ is a real representation of $G$ on $V$. Since $G$ and
-            $V$ are manifolds, so is $G\times{V}$. And manifolds are locally
-            metrizable, and hence first countable
-            (Thm.~\ref{thm:Locally_Metrizable_is_First_Countable}), and
-            therefore sequential
-            (Thm.~\ref{thm:First_Countable_Implies_Sequential}). Thus, it
-            suffices to show that $\Theta$ is a group action and that it is
-            sequentially continuous
-            (Thm.~\ref{thm:seq_space_seq_cont_eqiv_cont}). It is indeed a group
-            action, for:
-            \begin{equation}
-                \Theta(e,v)=\rho(e)v=\identity{v}=v
-            \end{equation}
-            since $\rho$ is a group homeomorphism, and thus takes the identity
-            of $G$ to the identity of $\autgroup{V}$. Moreover, if
-            $g_{1},g_{2}\in{G}$, $v\in{V}$, then since $\rho$ is a group
-            homeomorphism we obtain::
-            \begin{subequations}
-                \begin{align}
-                    \Theta\big(g_{1},\Theta(g_{2},v)\big)
-                        &=\Theta\big(g_{1},\rho(g_{2})v\big)\\
-                        &=\rho(g_{1})\big(\rho(g_{2})v\big)\\
-                        &=\big(\rho(g_{1})\rho(g_{2})\big)v\\
-                        &=\rho(g_{1}*g_{2})v
-                \end{align}
-            \end{subequations}
-            and thus $\Theta$ is a group action. It is continuous, for let
-            $(g_{n},v_{n})\rightarrow(g,v)$. Then:
-            \begin{equation}
-                \Theta(g_{n},v_{n})=\rho(g_{n})v_{n}
-            \end{equation}
-            But $\rho$ is continuous, and is therefore sequentially continuous
-            (Thm.~\ref{thm:cont_implies_seq_cont}). Thus if
-            $g_{n}\rightarrow{g}$, then $\rho(g_{n})\rightarrow\rho(g)$
-            (Def.~\ref{def:Sequentially_Continuous}). But then:
-            \begin{subequations}
-                \begin{align}
-                    \norm{\Theta(g_{n},v_{n})-\Theta(g,v)}
-                    &=\norm{\rho(g_{n})v_{n}-\rho(g)v}\\
-                    &=\norm{\rho(g_{n})v_{n}-\rho(g)v_{n}
-                        +\rho(g)v_{n}-\rho(g)v}\\
-                    &\leq\norm{\rho(g_{n})v_{n}-\rho(g)v_{n}}+
-                        \norm{\rho(g)v_{n}-\rho(g)v}\\
-                    &\leq\norm{\rho(g_{n})-\rho(g)}\norm{v_{n}}
-                        +\norm{\rho(g)}\norm{v_{n}-v}
-                \end{align}
-            \end{subequations}
-            But $v_{n}$ is a convergent sequence, and is therefore bounded, and
-            hence $\norm{v_{n}}$ is bounded. Since $v_{n}\rightarrow{v}$ and
-            $\rho(g_{n})\rightarrow\rho(g)$, this whole things tends to zero.
-            Therefore, $\Theta$ is sequentially continuous and therefore
-            continuous. Moreover, if $g\in{G}$, then
-            $\Theta(g,\cdot)\in\autgroup{V}$. For
-            $\Theta(g,\cdot)=\rho(g)(\cdot)$, and $\rho(g)\in\autgroup{V}$ by
-            hypothesis. In the other direction, suppose $\Theta$ is a continuous
-            group action such that $\Theta(g,\cdot)\in\autgroup{V}$. Again,
-            since $G$ is a manifold, it suffices to show that $\rho$ is
-            sequentially continuous. If $g_{n}\rightarrow{g}$, then for all
-            $v\in{V}$, $\Theta(g_{n},v)=\rho(g_{n})v\rightarrow\rho(g)v$ since
-            $\Theta$ is continuous and therefore
-            $\Theta(g_{n},v)\rightarrow\Theta(g,v)$. But then:
-            \begin{equation}
-                \norm{\rho(g_{n})v-\rho(g)v}
-                \leq\norm{\rho(g_{n})-\rho(g)}\norm{v}
-            \end{equation}
-            and this tends to zero, showing that
-            $\rho(g_{n})\rightarrow\rho(g)$. Hence, $\rho$ is continuous.
-            Moreover, it is a group homeomorphism. For if $e\in{G}$ is the
-            identity, then for all $v\in{V}$ it is true that:
-            \begin{equation}
-                \rho(e)v=\Theta(e,v)=v
-            \end{equation}
-            since $\Theta$ is a group action. Hence, $\rho(e)$ is the identity
-            mapping. If $g_{1},g_{2}\in{G}$, then:
-            \begin{equation}
-                \rho(g_{1}*g_{2})(\cdot)=\Theta(g_{1}*g_{2},\cdot)
-                    =\Theta\big(g_{1},\Theta(g_{2},\cdot)\big)
-                    =\big(\rho(g_{1})\rho(g_{2})\big)(\cdot)
-            \end{equation}
-            and thus $\rho(g_{1}*g_{2})=\rho(g_{1})\rho(g_{2})$. Therefore,
-            $\rho$ is a group homeomorphism.
-        \end{proof}
+                    &=\frac{1-x_{n+1}}{2}\Big(
+                        \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
+                        \frac{1-x_{n+1}^{2}}{(1-x_{n+1})^{2}}-1
+                    \Big)\\
+                    &=\frac{1-x_{n+1}}{2}\Big(
+                        \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
+                        \frac{1+x_{n+1}}{1-x_{n+1}}-1
+                    \Big)\\
+                    &=\frac{1-x_{n+1}}{2}\Big(
+                        \frac{2x_{1}}{1-x_{n+1}},\dots,\frac{2x_{n}}{1-x_{n+1}},
+                        \frac{2x_{n+1}}{1-x_{n+1}}
+                    \Big)\\
+                    &=(x_{1},\dots,x_{n},x_{n+1})
+                \end{align*}
+                and therefore, $\sigma^{\minus{1}}\sigma$ is the identity. Thus,
+                $\sigma$ and $\sigma^{\minus{1}}$ are bijections and inverses of
+                each other. The transition map
+                $\tilde{\sigma}\circ\sigma^{\minus{1}}$, where $\tilde{\sigma}$ is
+                the stereographic graphic projection from the south pole, can be
+                computed as follows:
+                \begin{align*}
+                    (\tilde{\sigma}\circ\sigma^{\minus{1}})(\vector{X})
+                    &=\tilde{\sigma}\Big(
+                        \frac{2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1}
+                            {\norm{\vector{X}}^{2}+1}
+                        \Big)\\
+                    &=\frac{1}{1+\frac{\norm{\vector{X}}^{2}-1}
+                                    {\norm{\vector{X}}^{2}+1}}
+                        \Big(\frac{2X_{1}}{\norm{\vector{X}}^{2}+1},\dots,
+                            \frac{2X_{n}}{\norm{\vector{X}}^{2}+1}\Big)\\
+                    &=\frac{1}{\norm{\vector{X}}^{2}}(X_{1},\dots,X_{n})\\
+                    &=\frac{\vector{X}}{\norm{\vector{X}}^{2}}
+                \end{align*}
+                Since $N$ and $S$ are not included, $\vector{0}$ is not in the
+                domain of $\tilde{\sigma}\circ\sigma^{\minus{1}}$, and hence this
+                is well defined everywhere and smooth. By symmetry,
+                $\sigma\circ\tilde{\sigma}^{\minus{1}}$ is smooth. Hence, these two
+                charts constitute a smooth atlas on $\nsphere$ since they cover
+                the set and overlap smoothly. Lastly, show that the standard smooth
+                structure on $\nsphere$ and the stereographic one are compatible.
+                For $i\in\mathbb{Z}_{n}$, let $\varphi_{i}$ be the projection
+                mapping of $\mathcal{U}_{i}^{+}$ down to $\nsphere$. We have:
+                \begin{align*}
+                    (\varphi_{i}\circ\sigma^{\minus{1}})(\vector{X})
+                    &=\varphi_{i}\Big(
+                        \frac{(2X_{1},\dots,2X_{n},\norm{\vector{X}}^{2}-1)}
+                            {\norm{\vector{X}}^{2}+1}
+                    \Big)\\
+                    &=\frac{(2X_{1},\dots,2X_{i-1},2X_{i+1},\dots,
+                            \norm{\vector{X}}^{2}-1)}{\norm{\vector{X}}^{2}+1}
+                \end{align*}
+                which is smooth. Similarly:
+                \begin{align*}
+                    (\sigma\circ\varphi_{i}^{\minus{1}})(\vector{X})
+                    &=\sigma\Big(
+                        \big(x_{1},\dots,x_{i-1},\sqrt{1-\norm{\vector{X}}^{2}},
+                        x_{i},\dots,x_{n}\big)\Big)\\
+                    &=\frac{(x_{1},\dots,x_{i-1},\sqrt{1-\norm{\vector{X}}^{2}},
+                            x_{i+1},\dots,x_{n-1})}{1-x_{n}}
+                \end{align*}
+                which, since the domain of $\sigma$ does not include $x_{n}=1$, this
+                is well defined and smooth. Hence, the standard smooth structure on
+                $\nsphere$ is compatible with the stereographic one.
+            \end{solution}
+            \begin{problem}
+                (Lee Problem 1-9) Show that $\mathbb{CP}^{n}$ is a smooth $2n$
+                dimensional manifold.
+            \end{problem}
+            \begin{solution}
+                Given a $\vector{z}$, let
+                $\uvector{z}=\vector{z}/\norm{\vector{z}}$. Then $[\vector{z}]$ is
+                the same as the orbit of $\uvector{z}$ by the rotation group
+                $U(1)$ acting on $\nsphere[2n+1]$, and similary the quotient
+                topologies are the same. But $U(1)$ is a compact topological group.
+                It is compact since it is a closed and bounded subset of Euclidean
+                space, since all of the elements of $U(1)$ have norm 1. But then
+                $\nsphere[2n+1]/U(1)$ is Hausdorff
+                (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_T2}) and
+                second countable
+                (Thm.~\ref{thm:Quotient_by_Compact_T2_Group_Preserves_Sec_Count}).
+                Moreover, since it is the quotient of a compact topological space
+                ($\nsphere[2n+1]$ is compact), $\mathbb{CP}^{n}$ is compact as well.
+                Lastly, we must show that $\mathbb{CP}^{n}$ can be given a smooth
+                structure compatible with this quotient topology. For all
+                $i\in\mathbb{Z}_{n+1}$, let $\mathcal{U}_{i}$ be the set of all
+                $\vector{z}\in\mathbb{C}^{n+1}$ such that the $i^{th}$ component
+                $z_{i}$ is non-zero. Let $\mathcal{V}_{i}=q[\mathcal{U}_{i}]$, where
+                $q$ is the canonical projection of $\mathbb{C}^{n+1}$ down to
+                $\mathbb{CP}^{n}$ sending $\vector{z}\mapsto[\vector{z}]$. Since
+                $\mathcal{U}_{i}$ is a saturated set, $\mathcal{V}_{i}$ is therefore
+                open and the restriction of $q$ to $\mathcal{U}_{i}$ is a quotient
+                map. Let $\varphi_{i}:\mathcal{V}_{i}\rightarrow\mathbb{C}^{n}$
+                be defined by:
+                \begin{equation}
+                    \varphi_{i}[\vector{z}]=\Big(
+                        \frac{z_{1}}{z_{i}},\dots,\frac{z_{i-1}}{z_{i}},
+                        \frac{z_{i+1}}{z_{i}},\dots,\frac{z_{n+1}}{z_{i}}
+                    )
+                \end{equation}
+                this is well defined, for if $\vector{w}\in[\vector{z}]$,
+                then there is a $c\in\mathbb{C}$ such that
+                $\vector{w}=c\vector{z}$. But then:
+                \begin{align*}
+                    \varphi_{i}[\vector{w}]&=\Big(
+                        \frac{w_{1}}{w_{i}},\dots,\frac{w_{i-1}}{w_{i}},
+                        \frac{w_{i+1}}{w_{i}},\dots,\frac{w_{n+1}}{w_{i}}
+                    \Big)\\
+                    &=\Big(
+                        \frac{cz_{1}}{cz_{i}},\dots,\frac{cz_{i-1}}{cz_{i}},
+                        \frac{cz_{i+1}}{cz_{i}},\dots,\frac{cz_{n+1}}{cz_{i}}
+                    \Big)\\
+                    &=\Big(
+                        \frac{z_{1}}{z_{i}},\dots,\frac{z_{i-1}}{z_{i}},
+                        \frac{z_{i+1}}{z_{i}},\dots,\frac{z_{n+1}}{z_{i}}
+                    \Big)\\
+                    &=\varphi_{i}[\vector{z}]
+                \end{align*}
+                Thus, $\varphi_{i}$ is continuous. Moreover, it is a homomorphism
+                onto it's image, with inverse:
+                \begin{equation}
+                    \varphi_{i}^{\minus{1}}(z_{1},\dots,z_{n})
+                    [z_{1},\dots,z_{i-1},1,z_{i+1},\dots,z_{n}]
+                \end{equation}
+                which is continuous. Thus, $\mathcal{V}_{i}$ is homeomorphic to an
+                open subset of $\mathbb{C}^{n}$. But $\mathbb{C}^{n}$ is
+                homeomorphic to $\nspace[2n]$ (Indeed, set theoretically it simply
+                \textit{is} $\nspace[2n]$). This shows that $\mathbb{CP}^{n}$ is
+                locally Euclidean, and since it is also Hausdorff and second
+                countable, it is therefore a topological manifold
+                (Def.~\ref{def:Topological_Manifold}). Lastly, we must show that
+                the $\varphi_{i}$ overlap smoothly. But:
+                \begin{align*}
+                    \varphi_{i}\circ\varphi_{j}^{\minus{1}}(z_{1},\dots,z_{n})
+                    &=\varphi_{i}\big(
+                        [z_{1},\dots,z_{j-1},1,z_{j+1},\dots,z_{n}]
+                    \big)\\
+                    &=\Big(
+                        \frac{z_{1}}{z_{i}},\dots,\frac{z_{j-1}}{z_{i}},
+                        \frac{1}{z_{i}},\frac{z_{j+1}}{z_{i}},\dots,
+                        \frac{z_{i-1}}{z_{i}},\frac{z_{i+1}}{z_{i}},\dots,
+                        \frac{z_{n}}{z_{i}}
+                    \Big)
+                \end{align*}
+                which is smooth.
+            \end{solution}
+            \begin{problem}
+                (Lee Problem 1-12) Prove that the product of smooth manifolds
+                together with a manifold with boundary is a smooth manifold with
+                boundary.
+            \end{problem}
+            \begin{solution}
+                We prove by induction on the number of manifolds without boundary.
+                In the base case, let $\manifold[M]{M}$ be a smooth manifold without
+                boundary and $\manifold[N]{N}$ a smooth manifold with boundary.
+                Let $(M\times{N},\tau_{M}\times\tau_{N})$ be the product topological
+                space. Since $M$ and $N$ are second countable and Hausdorff,
+                $M\times{N}$ is. We must now show that it is locally Euclidean with
+                boundary. For all $q\in\textrm{Int}(N)$ there is an open subset
+                $\mathcal{V}\in\tau_{N}$ such that $q\in\mathcal{V}$ and
+                $\mathcal{V}$ is homeomorphic to $\nspace$. For all $p\in{M}$ there
+                is an open subset $\mathcal{U}\in\tau_{M}$ such that
+                $p\in\mathcal{U}$ and $\mathcal{U}$ is homeomorphic to $\nspace[m]$.
+                But then $(p,q)\in\mathcal{U}\times\mathcal{V}$, and by the
+                definition of the product topology,
+                $\mathcal{U}\times\mathcal{V}\in\tau_{M}\times\tau_{N}$. Moreover,
+                since $\mathcal{U}$ is homeomorphic to $\nspace[m]$ and
+                $\mathcal{V}$ is homeomorphic to $\nspace$,
+                $\mathcal{U}\times\mathcal{V}$ is homeomorphic to
+                $\nspace[m]\times\nspace$, which is homeomorphic to $\nspace[m+n]$.
+                Thus for all $(p,q)\in{M}\times\textrm{Int}(N)$ there is an open
+                subset containing $(p,q)$ that is homeomorphic to Euclidean space.
+                If $q\in\partial{N}$, then there is an open subset
+                $\mathcal{V}$ such that $q\in\mathcal{V}$ and $\mathcal{V}$ is
+                homeomorphic to $\mathbb{H}^{n}$. But then
+                $\mathcal{U}\times\mathcal{V}$ is homeomorphic to
+                $\nspace[m]\times\mathbb{H}^{n}$, which is homeomorphic to
+                $\mathbb{H}^{n+m}$. Thus, every point $(p,q)\in{M}\times{N}$ is
+                locally either $\nspace[m+n]$ or $\mathbb{H}^{m+n}$. That is,
+                $(M\times{N},\tau_{M}\times\tau_{N})$ is a topological manifold
+                with boundary. Moreover, this shows that $(p,q)$ lies on the
+                boundary of $M\times{N}$ if and only if $q\in\partial{N}$. Hence,
+                $\partial(M\times{N})=M\times\partial{N}$. We now how to show that
+                this is a smooth manifold. Give $p\in{M}$ and $q\in\textrm{Int}(N)$,
+                there are smooth charts $(\mathcal{U},\varphi)$ and
+                $(\mathcal{V},\psi)$ such that $p\in\mathcal{U}$, $q\in\mathcal{V}$,
+                $\varphi:\mathcal{U}\rightarrow\nspace[m]$ is a diffeomorphism, and
+                $\psi:\mathcal{V}\rightarrow\nspace$ is a diffeomorphism. But then
+                the product function $\varphi\times\psi$ is a diffeomorphism from
+                $\mathcal{U}\times\mathcal{V}$ to $\nspace[m]\times\nspace$. If
+                $(U,\phi)$ and $(V,\xi)$ are different charts, then
+                $\phi\times\xi$ overlaps smoothly since:
+                \begin{equation}
+                    (\varphi\times\psi)\circ(\phi\times\xi)^{\minus{1}}
+                    =(\varphi\circ\phi^{\minus{1}})\times(\psi\circ\xi^{\minus{1}})
+                \end{equation}
+                and since $M$ and $N$ are smooth manifolds, $\varphi$ and $\phi$
+                overlap smoothly, and similarly for $\phi$ and $\xi$. But then this
+                is the product of smooth functions, and hence smooth. Now if
+                $q\in\partial{N}$, then there is a smooth boundary chart
+                $(\mathcal{V},\psi)$ such that
+                $\psi:\mathcal{V}\rightarrow\mathbb{H}^{n}$ is a diffeomorphism.
+                But the $\varphi\times\psi$ is a diffeomorphism from
+                $\mathcal{U}\times\mathcal{V}$ to
+                $\nspace[m]\times\mathbb{H}^{n}$, which is diffeomorphic to
+                $\mathbb{H}^{m+n}$. Therefore, $M\times{N}$ is a smooth manifold
+                with boundary. For the general case, if $M_{1},\dots,M_{n}$ are
+                manifolds with boundary, and if $N$ is a manifold with boundary,
+                let $M=\prod{M}_{i}$. Then the product of the $M_{k}$ with $N$ is
+                homeomorphic to $M\times{N}$, which reduces us to the previous
+                problem. Thus, $M_{1}\times\dots\times{M}_{n}\times{N}$ is a smooth
+                manifold and $\partial(M\times{N})=M\times\partial{N}$.
+            \end{solution}
+        \subsection{Part B}
+            \begin{problem}
+                Show that the group action
+                $\Theta:\autgroup[]{V}\times{V}\rightarrow{V}$ given by
+                $\Theta(T,v)=Tv$ is continuous, where $V$ is an $n$ dimensional
+                vector space over $\nspace[]$, and $\autgroup[]{V}$ carries the
+                subspace topology of $\nspace[n^{2}]$.
+            \end{problem}
+            \begin{solution}
+                Both spaces are second countable, and hence first countable, and
+                thus to check continuity it suffices to show that $\Theta$ is
+                sequentially continuous
+                (Thm.~\ref{thm:First_Countable_Implies_Seq_Cont_is_Cont}).
+                Let $(T_{n},v_{n})$ be a sequence such that
+                $T_{n}\rightarrow{T}$ and $v_{n}\rightarrow{v}$. But then:
+                \begin{subequations}
+                    \begin{align}
+                        \norm{T_{n}v_{n}-Tv}&=\norm{T_{n}v_{n}-T_{n}v+T_{n}v-Tv}\\
+                        &\leq\norm{T_{n}v_{n}-T_{n}v}+\norm{T_{n}v-Tv}\\
+                        &\leq\norm{T_{n}}\norm{v_{n}-v}+\norm{T_{n}-T}\norm{v}
+                    \end{align}
+                \end{subequations}
+                and since $T_{n}\rightarrow{T}$ and $v_{n}\rightarrow{v}$, this
+                converges to zero. Hence, $T_{n}v_{n}\rightarrow{T}v$, and thus
+                $\Theta$ is sequentially continuous, and therefore continuous.
+                Moreover, it is a group action:
+                \begin{equation}
+                    \Theta(\identity{V},v)=\identity{V}(v)=v
+                \end{equation}
+                and for $T,S\in\autgroup{V}$ we have:
+                \begin{equation}
+                    \Theta\big(T,\theta(S,v)\big)=\Theta(T,Sv)
+                    =T(Sv)=(TS)v=\Theta(TS,v)
+                \end{equation}
+                and thus $\Theta$ is a continuous group action
+                (Def.~\ref{def:Continuous_Group_Action}).
+            \end{solution}
+            \begin{problem}
+                Let $G$ be a topological Lie group and $V$ a finite dimensional real
+                vector space with the usual topology. A real representation of $G$
+                on $V$ is a continuous group homeomorphism
+                $\rho:G\rightarrow\autgroup{V}$. Any real representation $(V,\rho)$
+                or $G$ on $V$ defines a group action
+                $\Theta:G\times{V}\rightarrow{V}$ given by
+                $\Theta(g,v)=\rho(g)v$. Show that $\rho$ is a representation if and
+                only if $\Theta$ is a continuous group action such that
+                $\Theta_{g}=\Theta(g,\cdot)\in\autgroup{V}$ for all $g\in{G}$.
+            \end{problem}
+            \begin{proof}
+                Suppose $\rho$ is a real representation of $G$ on $V$. Since $G$ and
+                $V$ are manifolds, so is $G\times{V}$. And manifolds are locally
+                metrizable, and hence first countable
+                (Thm.~\ref{thm:Locally_Metrizable_is_First_Countable}), and
+                therefore sequential
+                (Thm.~\ref{thm:First_Countable_Implies_Sequential}). Thus, it
+                suffices to show that $\Theta$ is a group action and that it is
+                sequentially continuous
+                (Thm.~\ref{thm:seq_space_seq_cont_eqiv_cont}). It is indeed a group
+                action, for:
+                \begin{equation}
+                    \Theta(e,v)=\rho(e)v=\identity{v}=v
+                \end{equation}
+                since $\rho$ is a group homeomorphism, and thus takes the identity
+                of $G$ to the identity of $\autgroup{V}$. Moreover, if
+                $g_{1},g_{2}\in{G}$, $v\in{V}$, then since $\rho$ is a group
+                homeomorphism we obtain::
+                \begin{subequations}
+                    \begin{align}
+                        \Theta\big(g_{1},\Theta(g_{2},v)\big)
+                            &=\Theta\big(g_{1},\rho(g_{2})v\big)\\
+                            &=\rho(g_{1})\big(\rho(g_{2})v\big)\\
+                            &=\big(\rho(g_{1})\rho(g_{2})\big)v\\
+                            &=\rho(g_{1}*g_{2})v
+                    \end{align}
+                \end{subequations}
+                and thus $\Theta$ is a group action. It is continuous, for let
+                $(g_{n},v_{n})\rightarrow(g,v)$. Then:
+                \begin{equation}
+                    \Theta(g_{n},v_{n})=\rho(g_{n})v_{n}
+                \end{equation}
+                But $\rho$ is continuous, and is therefore sequentially continuous
+                (Thm.~\ref{thm:cont_implies_seq_cont}). Thus if
+                $g_{n}\rightarrow{g}$, then $\rho(g_{n})\rightarrow\rho(g)$
+                (Def.~\ref{def:Sequentially_Continuous}). But then:
+                \begin{subequations}
+                    \begin{align}
+                        \norm{\Theta(g_{n},v_{n})-\Theta(g,v)}
+                        &=\norm{\rho(g_{n})v_{n}-\rho(g)v}\\
+                        &=\norm{\rho(g_{n})v_{n}-\rho(g)v_{n}
+                            +\rho(g)v_{n}-\rho(g)v}\\
+                        &\leq\norm{\rho(g_{n})v_{n}-\rho(g)v_{n}}+
+                            \norm{\rho(g)v_{n}-\rho(g)v}\\
+                        &\leq\norm{\rho(g_{n})-\rho(g)}\norm{v_{n}}
+                            +\norm{\rho(g)}\norm{v_{n}-v}
+                    \end{align}
+                \end{subequations}
+                But $v_{n}$ is a convergent sequence, and is therefore bounded, and
+                hence $\norm{v_{n}}$ is bounded. Since $v_{n}\rightarrow{v}$ and
+                $\rho(g_{n})\rightarrow\rho(g)$, this whole things tends to zero.
+                Therefore, $\Theta$ is sequentially continuous and therefore
+                continuous. Moreover, if $g\in{G}$, then
+                $\Theta(g,\cdot)\in\autgroup{V}$. For
+                $\Theta(g,\cdot)=\rho(g)(\cdot)$, and $\rho(g)\in\autgroup{V}$ by
+                hypothesis. In the other direction, suppose $\Theta$ is a continuous
+                group action such that $\Theta(g,\cdot)\in\autgroup{V}$. Again,
+                since $G$ is a manifold, it suffices to show that $\rho$ is
+                sequentially continuous. If $g_{n}\rightarrow{g}$, then for all
+                $v\in{V}$, $\Theta(g_{n},v)=\rho(g_{n})v\rightarrow\rho(g)v$ since
+                $\Theta$ is continuous and therefore
+                $\Theta(g_{n},v)\rightarrow\Theta(g,v)$. But then:
+                \begin{equation}
+                    \norm{\rho(g_{n})v-\rho(g)v}
+                    \leq\norm{\rho(g_{n})-\rho(g)}\norm{v}
+                \end{equation}
+                and this tends to zero, showing that
+                $\rho(g_{n})\rightarrow\rho(g)$. Hence, $\rho$ is continuous.
+                Moreover, it is a group homeomorphism. For if $e\in{G}$ is the
+                identity, then for all $v\in{V}$ it is true that:
+                \begin{equation}
+                    \rho(e)v=\Theta(e,v)=v
+                \end{equation}
+                since $\Theta$ is a group action. Hence, $\rho(e)$ is the identity
+                mapping. If $g_{1},g_{2}\in{G}$, then:
+                \begin{equation}
+                    \rho(g_{1}*g_{2})(\cdot)=\Theta(g_{1}*g_{2},\cdot)
+                        =\Theta\big(g_{1},\Theta(g_{2},\cdot)\big)
+                        =\big(\rho(g_{1})\rho(g_{2})\big)(\cdot)
+                \end{equation}
+                and thus $\rho(g_{1}*g_{2})=\rho(g_{1})\rho(g_{2})$. Therefore,
+                $\rho$ is a group homeomorphism.
+            \end{proof}
     \section{Homework II}
         \begin{problem}
-            Prove that if $M_{1},\dots,M_{k}$ are smooth manifolds with or
-            without boundary such that at most one of them has non-empty
-            boundary, if $\mathcal{M}$ is the product manifold, if $\pi_{i}$
-            is the $i^{th}$ projection mapping, then $F:N\rightarrow\mathcal{M}$
-            is smooth if and only if $\pi_{i}\circ{F}$ is smooth for all
-            $i\in\mathbb{Z}_{k}$.
+            (Lee Problem 2-2) Prove that if $M_{1},\dots,M_{k}$ are smooth
+            manifolds with or without boundary such that at most one of them has
+            non-empty boundary, if $\mathcal{M}$ is the product manifold, if
+            $\pi_{i}$ is the $i^{th}$ projection mapping, then
+            $F:N\rightarrow\mathcal{M}$ is smooth if and only if
+            $\pi_{i}\circ{F}$ is smooth for all $i\in\mathbb{Z}_{k}$.
         \end{problem}
         \begin{solution}
             First we show that $\pi_{i}$ is smooth. Let
@@ -1433,9 +1507,9 @@
              \varphi_{1}\times\varphi_{2})$ is a chart containing $F(v)$.
         \end{solution}
         \begin{problem}
-            Show that $z^{n}:\nsphere[1]\rightarrow\nsphere[1]$ is smooth, the
-            antipodal map $\vector{x}\mapsto\minus\vector{x}$, and the function
-            $f:\nsphere[3]\rightarrow\nsphere[2]$ defined by:
+            (Lee 2-3) Show that $z^{n}:\nsphere[1]\rightarrow\nsphere[1]$ is
+            smooth, the antipodal map $\vector{x}\mapsto\minus\vector{x}$, and
+            the function $f:\nsphere[3]\rightarrow\nsphere[2]$ defined by:
             \begin{equation}
                 f(w,z)=(z\overline{w}+w\overline{z},
                         iw\overline{z}-iz\overline{w},
@@ -1528,11 +1602,11 @@
             hemispheres.
         \end{solution}
         \begin{problem}
-            Show that if
+            (Lee 2-6) Show that if
             $f:\nspace[n+1]\setminus\{0\}\rightarrow\nspace[k+1]\setminus\{0\}$
-            is a smooth homogeneous of degree $d\in\mathbb{Z}$, then the induced
-            maps $\tilde{f}:\nrealproj\rightarrow\nrealproj[k]$ are well defined
-            and smooth.
+            is a smooth homogeneou function s of degree $d\in\mathbb{Z}$, then
+            the induced maps $\tilde{f}:\nrealproj\rightarrow\nrealproj[k]$ are
+            well defined and smooth.
         \end{problem}
         \begin{solution}
             It is indeed well defined, for if $\vector{x},\vector{y}$ have the
@@ -1606,8 +1680,8 @@
             are smooth if and only if $F^{*}$ is an isomorphism.
         \end{solution}
         \begin{problem}
-            Show that paracompactness and subordinate partitions of unity are
-            equivalent.
+            (Lee 2-13) Show that paracompactness and subordinate partitions of
+            unity are equivalent.
         \end{problem}
         \begin{solution}
             That paracompactness implies subordinate partitions of unity was
@@ -1631,8 +1705,8 @@
             is paracompact.
         \end{solution}
         \begin{problem}
-            Show that disjoint closed subsets can be separated by smooth
-            functions.
+            (Lee 2-14) Show that disjoint closed subsets can be separated by
+            smooth functions.
         \end{problem}
         \begin{solution}
             For manifolds are normal, and thus if $C_{1}$ and $C_{2}$ are
@@ -1650,5 +1724,171 @@
             \begin{equation}
                 F(p)=g_{1}(p)f(p)+g_{2}(p)g(p)
             \end{equation}
+        \end{solution}
+    \section{More Preliminary}
+        \begin{ftheorem}{Weierstrass Approximation Theorem}
+                        {Weierstrass Approximation Theorem}
+            If $f:[0,1]\rightarrow\nspace[]$ is a continuous function and if
+            $\varepsilon>0$, then there is a polynomial
+            $P:[0,1]\rightarrow\nspace[]$ such that
+            $\norm{P-f}_{\infty}<\infty$. That is:
+            \begin{equation*}
+                \sup\big\{\,|f(x)-P(x)|\;\big|\;x\in[0,1]\,\big\}<\varepsilon
+            \end{equation*}
+        \end{ftheorem}
+        \begin{theorem}
+            \label{thm:Weierstrass_Approx_Endpoints_Eq_Zero}%
+            If $f:[0,1]\rightarrow\nspace[]$ is a continuous function, if
+            $f(0)=0$, $f(1)=0$, and if $\varepsilon>0$, then there is a
+            polynomial $P:[0,1]\rightarrow\nspace[]$ such that $P(0)=f(0)$,
+            $P(1)=f(1)$, and $\norm{P-f}_{\infty}<\varepsilon$.
+        \end{theorem}
+        \begin{proof}
+            For by the Weierstrass approximation theorem there exists a
+            polynomial $Q:[0,1]\rightarrow\nspace[]$ such that
+            $\norm{f-Q}<\varepsilon/4$
+            (Thm.~\ref{thm:Weierstrass Approximation Theorem}. Define $P$ by:
+            \begin{equation}
+                P(x)=Q(x)-Q(0)-\big(Q(1)-Q(0)\big)x
+            \end{equation}
+            Then:
+            \begin{equation}
+                \norm{P-f}_{\infty}\leq
+                \norm{Q-f}_{\infty}+2|Q(0)|+|Q(1)|
+                <\frac{\varepsilon}{4}+\frac{\varepsilon}{2}
+                    +\frac{\varepsilon}{4}=\varepsilon
+            \end{equation}
+            and moreover, $P(0)=0$ and $P(1)=0$.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Weierstrass_Fixed_Endpoints}%
+            If $f:[0,1]\rightarrow\nspace[]$ is a continuous function, and if
+            $\varepsilon>0$, then there is a polynomial
+            $P:[0,1]\rightarrow\nspace[]$ such that $P(0)=f(0)$, $P(1)=f(1)$,
+            and $\norm{P-f}_{\infty}<\varepsilon$.
+        \end{theorem}
+        \begin{proof}
+            For let $g(x)=f(x)-f(b)x-(1-x)f(a)$. Then $g$ is continuous,
+            $g(0)=0$, $g(1)=0$, and thus there is a polynomial
+            $Q:[0,1]\rightarrow\nspace[]$ such that $Q(0)=g(0)$, $Q(1)=f(1)$,
+            and $\norm{Q-g}_{\infty}<\varepsilon$
+            (Thm.~\ref{thm:Weierstrass_Approx_Endpoints_Eq_Zero}). Let
+            $P=Q+f(b)x+(1-x)f(a)$. Then $P(0)=f(0)$, $P(1)=f(1)$, and
+            $\norm{P-f}_{\infty}<\varepsilon$.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Existence_of_Smooth_Path_in_Rn_Fixed_Endpoints}%
+            If $f:[0,1]\rightarrow\nspace$ is a smooth function, and if
+            $\varepsilon>0$, then there is a smooth function
+            $\Gamma:[0,1]\rightarrow\nspace$ such that $\Gamma(0)=f(0)$,
+            $\Gamma(1)=f(1)$, and  $\norm{\Gamma-f}_{\infty}<\varepsilon$.
+        \end{theorem}
+        \begin{proof}
+            For let $g_{k}=f\circ\pi_{k}$, where
+            $\pi_{k}:\nspace\rightarrow\nspace[]$ is the projection mapping. But
+            the projection of a continuous function is continuous, and thus
+            $g_{k}:[0,1]\rightarrow\nspace$ is continuous. By the Weierstrass
+            approximation theorem, there is a polynomial
+            $P_{k}:[0,1]\rightarrow\nspace[]$ such that
+            $\norm{g_{k}-P_{k}}_{\infty}<\varepsilon/n$, and such that
+            $P_{k}(0)=g_{k}(0)$ and $P_{k}(1)=g_{k}(1)$
+            (Thm.~\ref{thm:Existence_of_Smooth_Path_in_Rn_Fixed_Endpoints}). Let
+            $\Gamma:[0,1]\rightarrow\nspace$ be the function such that
+            $\Gamma\circ\pi_{k}=P_{k}$. Since polynomials are smooth, and since
+            $\Gamma$ is smooth in every projection, it is smooth. But then:
+            \begin{equation}
+                \norm{f-\Gamma}_{\infty}
+                \leq\sum_{k\in\mathbb{Z}_{n}}\norm{g_{k}-P_{k}}_{\infty}
+                <\sum_{k\in\mathbb{Z}_{n}}\frac{\varepsilon}{n}
+                =\varepsilon
+            \end{equation}
+            completing the proof.
+        \end{proof}
+        \begin{theorem}
+            \label{thm:Existence_of_Smooth_Path_in_Manifold}%
+            If $\manifold{M}$ is a smooth connected manifold, and if
+            $x,y\in{M}$, then there is a smooth function
+            $\Gamma:[0,1]\rightarrow{M}$ such that $\Gamma(0)=x$ and
+            $\Gamma(1)=y$.
+        \end{theorem}
+        \begin{proof}
+            For suppose not. Then there are points $x,y\in{M}$ with no smooth
+            path between them. But manifolds are locally path connected, and
+            locally path connected topological spaces that are connected are
+            also path connected
+            (Thm.~\ref{thm:Loc_Path_and_Con_Imply_Path_Con}). Hence, there is a
+            path $\gamma:[0,1]\rightarrow{M}$ such that $\gamma(0)=x$ and
+            $\gamma(1)=y$. Let $A\subseteq[0,1]$ be the set of elements $t$ such
+            that there is a smooth curve from $\gamma(0)$ to $\gamma(t)$. Then
+            $A$ is non-empty since $0\in{A}$. That is, the constant function
+            is a smooth function from $\gamma(0)$ to $\gamma(0)$. Moreover $A$
+            is bounded by 1, and hence there is a least upper bound $r$.
+            Suppose $r<1$. Since $M$ is a manifold, there is a chart
+            $(\mathcal{U},\varphi)$ such that $\gamma(r)\in\mathcal{U}$ and
+            $\mathcal{U}$ is homeomorphic to $\nspace$. Since $\mathcal{U}$ is
+            open, $\gamma^{\minus{1}}[\mathcal{U}]$ is open. Hence there exists
+            $t_{0}<r<t_{1}$ such that
+            $\gamma\big[[t_{0},t_{1}]\big]\subseteq\mathcal{U}$. But then
+            $\gamma|_{[t_{0},t_{1}]}\circ\varphi$ is the composition of
+            continuous function, and is thus a continuous function from
+            $[t_{0},t_{1}]$ to $\nspace$. And since $[t_{0},t_{1}]$ is compact,
+            it's image is compact. Hence there is an $\varepsilon>0$ such that
+            the image sits inside that $\varepsilon$ ball about the origin.
+            But then there is a smooth function $P$ such that
+            $P(t_{0})=\varphi(\gamma(t_{0}))$, $P(t)=\varphi(\gamma(t_{1}))$,
+            and $\norm{P_{1}-\varphi}\circ\gamma|_{[t_{0},t_{1}]}<\varepsilon/2$
+            and hence the image of $P$ sits inside the $\varepsilon$ ball.
+            But then the pull back of $P$ by $\varphi$ is a smooth curve
+            connecting $\gamma(t_{0})$ and $\gamma(t_{1})$. But $t_{0}<r$ and
+            hence there is a smooth curve $\Gamma_{0}:[0,1]\rightarrow{M}$
+            connecting $\gamma(0)$ and $\gamma(t_{0})$ Let
+            $\Gamma_{1}$ be the concatenation of $\Gamma_{0}$ and the pull back
+            of $P$ by $\varphi$, smoothed out at $\gamma(t_{0})$ by any
+            smoothing function ($\exp(\minus{1}/t^{2})$ will do). But then
+            $\Gamma$ is a smooth curve connecting $\gamma(0)$ and
+            $\gamma(t_{1})$, a contradiction since $r<t_{1}$ and $r$ is the
+            least upper bound of such $t$.
+        \end{proof}
+    \section{Homework III}
+        \begin{problem}
+            Lee 3-1.
+        \end{problem}
+        \begin{solution}
+            It suffices to look at a single connected component of $M$. Suppose
+            $F$ is not constant. Then there are $x,y\in{M}$ such that
+            $F(x)\ne{F}(y)$. But since $\manifold{M}$ is a smooth connected
+            manifold, there exists a smooth path $\Gamma:[0,1]\rightarrow{M}$
+            such that $\Gamma(0)=x$ and $\Gamma(1)=y$
+            (Thm.~\ref{thm:Existence_of_Smooth_Path_in_Manifold}). But for all
+            $p\in{M}$ it is true that $\diff_{p}F$ is the zero map, and thus
+            for all $t\in[0,1]$, $\diff_{\Gamma(t)}F=0$. Let
+            $\gamma:[0,1]\rightarrow{N}$ be defined by
+            $\gamma=F\circ\Gamma$. Then since $\gamma$ is the composition of
+            smooth functions, it is smooth, and moreover $\gamma(0)=F(x)$ and
+            $\gamma(1)=F(y)$. But for all $t\in[0,1]$,
+            $\dot{\gamma}(t)=0$. Thus, for all $f\in\Ckspace{\infty}{N}$ it is
+            true that $\dot{\gamma}(t)(f)=0$. But
+            $f\circ\gamma$ is a function from $[0,1]$ to $\nspace$, and if
+            $\dot{\gamma}(t)(f)=0$ then $f\circ\gamma$ is constant. Then in
+            particular, for any chart $(\mathcal{V},\psi)$ in $N$ that overlaps
+            with $\gamma\big[[0,1]\big]$, the projection maps
+            $\pi_{k}:\mathcal{V}\rightarrow\nspace[]$ are such that $\gamma$
+            is constant on $\mathcal{V}$. But then $\gamma$ is a locally
+            constant function and since $\gamma\big[[0,1]\big]$ is connected,
+            $\gamma$ is thus constant. But then $\gamma(0)=\gamma(1)$ and hence
+            $F(x)=F(y)$, a contradiction. In the other direction, if $F$ is
+            constant, let $p\in{M}$ and $v\in\tanspace{p}{M}$. Then for all
+            $f\in\Ckspace{\infty}{N}$ we have:
+            \begin{equation}
+                \diff_{p}F(v)(f)=v(f\circ{F})
+            \end{equation}
+            But $f\circ{F}$ is a constant function, and a derivation of a
+            constant is zero since:
+            \begin{equation}
+                v(1)=v(1\cdot{1})=v(1)\cdot{1}+1\cdot{v}(1)=v(1)+v(1)
+            \end{equation}
+            and hence $v(1)=0$. Then for any $c$ such that $v(c)=cv(1)=0$.
+            But then $\diff_{p}F(v)(f)=0$ for all $f\in\Ckspace{\infty}{N}$ and
+            thus $\diff_{p}F$ is the zero mapping for all $p\in{M}$.
         \end{solution}
 \end{document}
