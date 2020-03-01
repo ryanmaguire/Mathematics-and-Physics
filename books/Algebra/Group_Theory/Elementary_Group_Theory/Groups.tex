@@ -4,14 +4,16 @@
     consider.
     \begin{fdefinition}{Group}{Group}
         A group is a \gls{monoid} $(G,*)$ such that for all $g\in{G}$, $g$ is
-        an \gls{invertible element} with respect to $*$. That is:
-        \index{Group}
-        \begin{itemize}
-            \setlength\itemsep{0em}
-            \item The binary operation $*$ is associative.
-            \item There exists a unital element $e\in{G}$.
-            \item For every element $a\in{A}$, there is an inverse element.
-        \end{itemize}
+        an \gls{invertible element} with respect to $*$. That is:\index{Group}
+        \begin{align}
+            &\label{def:Group_Assoc}
+            \textrm{The binary operation }*\textrm{ is associative}\tag{1}\\
+            &\label{def:Group_Unit}
+            \textrm{There exists a unital element $e\in{G}$}\tag{2}\\
+            &\label{def:Group_Inverse}
+            \textrm{For every element }a\in{A}
+            \textrm{ there is an inverse element }a^{\minus{1}}\tag{3}
+        \end{align}
     \end{fdefinition}
     Note that it is not necessarily true that $a*b=b*a$. Such groups are called
     Abelian. There are several examples of groups that one is likely familiar
@@ -78,6 +80,248 @@
     elements (Thm.~\ref{thm:Assoc_Op_Inverses_are_Unique}). Moreover, the
     inverse of a unital element is itself
     (Thm.~\ref{thm:Unital_Elements_Are_Invertible}).
+    \begin{theorem}
+        If $n\in\mathbb{N}^{+}$, if $\tilde{+}$ is addition modulo $n$,
+        then $\monoid[][\tilde{+}]{\mathbb{Z}/n\mathbb{Z}}$ is a group.
+    \end{theorem}
+    \begin{proof}
+        For $\tilde{+}$ is associative (Thm.~\ref{thm:Mod_Add_is_Assoc}),
+        $[0]$ is a unital element
+        (Thm.~\ref{thm:Equiv_Class_of_0_is_Add_Identity_Mod_n}), and
+        for all $x\in\mathbb{Z}/n\mathbb{Z}$ there is a
+        $y\in\mathbb{Z}/n\mathbb{Z}$ such that $x\tilde{y}$ is a unital
+        element (Thm.~\ref{thm:Additive_Inv_Mod_n}). Therefore,
+        $\monoid[][\tilde{+}]{\mathbb{Z}/n\mathbb{Z}}$ is a group.
+    \end{proof}
+    \begin{theorem}
+        If $p\in\mathbb{N}^{+}$ is prime, and if $\tilde{\cdot}$ is the
+        restriction of multiplication modulo $n$ to
+        $\mathbb{Z}/n\mathbb{Z}\setminus\{[0]\}$, then
+        $\monoid[][\tilde{\cdot}]{\mathbb{Z}/n\mathbb{Z}\setminus\{[0]\}}$
+        is a group.
+    \end{theorem}
+    \begin{proof}
+        For $[1]$ is a unital element
+        (Thm.~\ref{thm:Equiv_Class_of_1_is_Mult_Identity_Mod_n}),
+        $\tilde{\cdot}$ is associative (Thm.~\ref{thm:Mod_Mult_is_Assoc}).
+        But $p$ is prime, and hence for all non-zero
+        $x\in\mathbb{Z}/p\mathbb{Z}$ there is a multiplicative inverse
+        (Thm.~\ref{thm:Invertible_Mod_n_iff_Relatively_Prime}). Hence,
+        $\monoid[][\tilde{\cdot}]{\mathbb{Z}/p\mathbb{Z}\setminus\{[0]\}}$
+        is a group.
+    \end{proof}
+    \begin{example}
+        If $G\subseteq\mathbb{C}$ is defined by:
+        \begin{equation}
+            G=\{\,z\in\mathbb{C}\;|\;
+                \textrm{ There exists }n\in\mathbb{N}^{+}
+                \textrm{ such that }z^{n}=1\,\}
+        \end{equation}
+        then $G$ is a group under multiplication. For these are just the
+        \textit{roots of unity} and using the polar representation of a
+        complex number we have $z=\exp(2\pi{i}m/n)$ for some
+        $m,n\in\mathbb{N}$. Multiplying $z\cdot{w}$ yields:
+        \begin{equation}
+            \exp\Big(\frac{2\pi{i}m}{n}\Big)
+                \exp\Big(\frac{2\pi{i}j}{k}\Big)
+            =\exp\Big(\frac{2\pi{i}(mk+nj)}{nk}\Big)
+        \end{equation}
+        showing that $G$ is closed to multiplication. The identity element
+        is contained in here since $1=1^{1}$, hence $1\in{G}$. Lastly,
+        inverses: If $z=\exp(2\pi{i}m/n)$, let
+        $z^{\minus{1}}=\exp(\minus{2}\pi{i}m/n)$. However, $G$ is not a
+        group under addition since $1+1$ is not contained in $G$.
+        That is, $1+1=2\exp(2\pi{i})$ in polar form and hence any power of
+        this will not result in one since:
+        \begin{equation}
+            \norm{\big(2\exp(2\pi{i})\big)^{n}}
+            =2^{n}\norm{\exp(2\pi{i}n)}=2^{n}
+        \end{equation}
+        and this is not equal to 1 for all $n\in\mathbb{N}^{+}$.
+    \end{example}
+    \begin{example}
+        Define $G\subseteq\mathbb{R}$ by:
+        \begin{equation}
+            G=\{\,a+b\sqrt{2}\;|\;a,b\in\mathbb{Q}\,\}
+        \end{equation}
+        Then $G$ is a group under addition. Given $x,y\in{G}$ we have:
+        \begin{equation}
+            x+y=(a+b\sqrt{2})+(c+d\sqrt{2})=(a+c)+(b+d)\sqrt{2}
+        \end{equation}
+        and hence $G$ is closed under addition. The identity element is
+        contained in $G$ since $0=0+0\sqrt{2}$, and moreover so are
+        additive inverses: Let $\minus{x}=\minus{a}-b\sqrt{2}$. Since
+        addition is also associative, we have that $G$ is a group under
+        addition. If we consider $G\setminus\{0\}$ with multiplication, then
+        this too is a group. Give $x,y\in{G}$ we have:
+        \begin{equation}
+            x\cdot{y}=(a+b\sqrt{2})(c+d\sqrt{2})
+                =(ac+2bd)+(ad+bd)\sqrt{2}
+        \end{equation}
+        since $ad+bd\in\mathbb{Q}$ and $ac+2bd\in\mathbb{Q}$, we have that
+        $x\cdot{y}$ is again an element of $\mathbb{Q}$. The identity is in
+        $G$, setting $a=1$ and $b=0$. Lastly, if $x\in{G}$ then by
+        definition $x$ is not zero, and hence if $x=a+b\sqrt{2}$ then either
+        $a$ is non-zero or $b$ is non-zero. But then $a^{2}-2b^{2}$ is
+        non-zero since $\sqrt{2}$ is irrational. Let
+        $x^{\minus{1}}=(a-b\sqrt{2})/(a^{2}-2b^{2})$. Then:
+        \begin{equation}
+            x\cdot{x}^{\minus{1}}=
+            \big(a+b\sqrt{2}\big)\big(\frac{a-b\sqrt{2}}{a^{2}-2b^{2}}\big)
+            =\frac{(a+b\sqrt{2})(a-b\sqrt{2})}{a^{2}-2b^{2}}
+            =\frac{a^{2}-2b^{2}}{a^{2}-2b^{2}}=1
+        \end{equation}
+    \end{example}
+    \begin{theorem}
+        If $\monoid{G}$ is a group, and if $g\in{G}$ has order
+        $n\in\mathbb{N}$, then $g^{\minus{1}}=g^{n-1}$.
+    \end{theorem}
+    \begin{proof}
+        For $e=g^{n}=g\cdot{g}^{n-1}$, so the uniqueness of inverses
+        $g^{n-1}=g^{\minus{1}}$.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid{G}$ is a group, if $x,y\in{G}$, and if $x$ and $y$
+        commute, then $y^{\minus{1}}*x*y=x$ and
+        $x^{\minus{1}}*y^{\minus{1}}*x*y=e$.
+    \end{theorem}
+    \begin{proof}
+        Since $x$ and $y$ commute, $x*y=y*x$. Apply the cancellation laws.
+    \end{proof}
+    \begin{theorem}[Power Laws]
+        If $\monoid{G}$ is a group, $a\in{G}$, $n,m\in\mathbb{Z}$, then:
+        \begin{align}
+            a^{n}*a^{m}&=a^{n+m}\\
+            (a^{\minus{1}})^{n}&=(a^{n})^{\minus{1}}
+        \end{align}
+    \end{theorem}
+    \begin{theorem}
+        If $x\in{G}$ has odd order, there is a $n\in\mathbb{Z}$ such that
+        $x=(x^{2})^{n+1}$.
+    \end{theorem}
+    \begin{proof}
+        For $e=x^{2n+1}=x^{2n}x$ and hence by cancellation
+        $x=x^{2n+2}=(x^{2})^{n+1}$.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid{G}$ is a group, $a\in{G}$ has order $n$, $g\in{G}$,
+        then $g^{\minus{1}}ag$ has order $n$. Also, the order of $a*b$ is
+        the order of $b*a$.
+    \end{theorem}
+    \begin{proof}
+        We show $(g^{\minus{1}}ag)^{n}=g^{\minus{1}}a^{n}g$ by induction:
+        \begin{equation}
+            (g^{\minus{1}}ag)^{n+1}=(g^{\minus{1}}ag)(g^{\minus{1}}ag)^{n}
+            =(g^{\minus{1}}ag)(g^{\minus{1}}a^{n}g)
+            =g^{\minus{1}}a^{n+1}g
+        \end{equation}
+        hence if $a$ has order $n$, applying this shows that
+        $g^{\minus{1}}ag$ has order $n$.
+    \end{proof}
+    \begin{theorem}
+        If $a,b$ commute, then $(ab)^{n}=a^{n}b^{n}$.
+    \end{theorem}
+    \begin{theorem}[Cyclic Subgroup]
+        If $\monoid{G}$ is a group, if $x\in{G}$, and if $H\subseteq{G}$ is
+        defined by:
+        \begin{equation}
+            H=\{\,x^{n}\;|\;n\in\mathbb{Z}\,\}
+        \end{equation}
+        Then $\monoid{H}$ is a group.
+    \end{theorem}
+    \begin{proof}
+        It contains the identity since $x^{0}=e$ by definition. It contains
+        inverses since $(x^{n})^{\minus{1}}=x^{\minus{n}}$. Lastly, it
+        is closed under $*$ since $x^{n}*x^{m}=x^{n+m}$. Hence, it is a
+        group.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid[A]{A}$ and $\monoid[B]{B}$ are groups, if
+        $\monoid{A\times{B}}$ is the direct product of $A$ and $B$, then
+        $\monoid{A\times{B}}$ is Abelian if and only if
+        $\monoid[A]{A}$ and $\monoid[B]{B}$ are Abelian.
+    \end{theorem}
+    \begin{proof}
+        For if $\monoid[A]{A}$ and $\monoid[B]{B}$ are Abelian,
+        $(a,b),(c,d)\in{A}\times{B}$, then:
+        \begin{equation}
+            (a,b)*(c,d)=(a*_{A}c,b*_{B}d)=
+            (c*_{A}a,d*_{B}b )=(c,d)*(a,b)
+        \end{equation}
+        and hence $\monoid{A\times{B}}$ is Abelian. The other direction is
+        similar.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid[A]{A}$ and $\monoid[B]{B}$ are groups, if $e_{A}\in{A}$
+        is the unital element of $A$, if $e_{B}\in{B}$ is the unital element
+        of $B$, if $a\in{A}$, if $b\in{B}$, and if $\monoid{A\times{B}}$
+        is the direct product of $A$ and $B$, then $(a,e_{B})$ and
+        $(e_{A},b)$ commute in $A\times{B}$.
+    \end{theorem}
+    \begin{proof}
+        For
+        \begin{equation}
+            (a,e_{B})*(e_{A},b)=(a*e_{A},e_{B}*b)
+            =(e_{A}*a,b*e_{B})=(e_{A},b)*(a,e_{B})
+        \end{equation}
+    \end{proof}
+    \begin{theorem}
+        If $\monoid[A]{A}$ and $\monoid[B]{B}$ are groups, if $a\in{A}$ has
+        order $n\in\mathbb{N}^{+}$, if $b\in{B}$ has order
+        $m\in\mathbb{N}^{+}$, and if $\monoid{A\times{B}}$ is the direct
+        product of $A$ and $B$, then $(a,b)$ has order $\LCM(n,m)$ in
+        $A\times{B}$.
+    \end{theorem}
+    \begin{proof}
+        For:
+        \begin{equation}
+            (a,b)^{N}=\big((a,e_{B})*(e_{A},b)\big)^{N}
+            =(a,e_{B})^{N}*(e_{A},b)^{N}
+            =(a^{N},e_{B})*(e_{A},b^{N})
+        \end{equation}
+        and hence the least $N$ that makes $a^{N}=e$ and $b^{N}=e$ is the
+        least $N$ such that $n|N$ and $m|N$. But this is just $\LCM(n,m)$.
+    \end{proof}
+    DF 1.1.32
+    \begin{theorem}
+        If $\monoid{G}$ is a group, $x\in{G}$ has order $n\in\mathbb{N}$,
+        and if $f:\mathbb{Z}_{n}\rightarrow{G}$ is defined by
+        $f(k)=x^{k}$, then $f$ is injective.
+    \end{theorem}
+    \begin{proof}
+        For if not then there are distinct $k_{1},k_{2}\in\mathbb{Z}_{n}$
+        such that $f(k_{1})=f(k_{2})$. Suppose $k_{1}<k_{2}$. Then
+        $x^{k_{2}}=x^{k_{1}}$ and hence $x^{k_{2}-k_{1}}=e$, a contradiction
+        since $k_{2}-k_{2}<n$ and $n$ is the least such element in
+        $\mathbb{N}^{+}$ with $x^{n}=e$.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid{G}$ is a group, if $x\in{G}$ has infinite order, and if
+        $f:\mathbb{Z}\rightarrow{G}$ is defined by $f(n)=x^{n}$, then
+        $f$ is injective.
+    \end{theorem}
+    \begin{proof}
+        For suppose not. Then $x^{m}=x^{n}$ which implies $x^{m-n}=e$,
+        a contradiction since $x$ has infinite order. Hence, $m-n=0$ and
+        thus $m=n$.
+    \end{proof}
+    \begin{theorem}
+        If $\monoid{G}$ is a group, if $n\in\mathbb{N}^{+}$, if $x\in{G}$
+        has order $n$, and if $N\in\mathbb{N}$, then there is a
+        $K\in\mathbb{Z}_{n}$ such that $x^{k}=x^{N}$.
+    \end{theorem}
+    \begin{proof}
+        For either $N=0$ or $N\ne{0}$. But if $N=0$, then since
+        $0\in\mathbb{Z}_{n}$ we have that $x^{N}=x^{0}$ and we're done.
+        Suppose $N\ne{0}$. But then $N,n\in\mathbb{Z}\setminus\{0\}$ and
+        hence by Euclid's division algorithm there exists $q\in\mathbb{Z}$
+        and $r\in\mathbb{N}$ such that $r<n$ and $N=qn+r$. But then:
+        \begin{equation}
+            x^{N}=x^{qn+r}=x^{qn}x^{r}=(x^{n})^{q}x^{r}
+            =e^{q}x^{r}=x^{r}
+        \end{equation}
+        proving the claim.
+    \end{proof}
     \begin{theorem}
         \label{thm:Group_Inverse_of_Product}%
         If $(G,*)$ is a group and $a,b\in G$, then:
@@ -892,36 +1136,7 @@
         \end{equation}
         Using these constraints, and the diagram below
         (Fig.~\ref{fig:Group_Reflections_on_a_Square}), we can once again
-        compute the Cayley table for this operation.
-        \begin{figure}[H]
-            \centering
-            \captionsetup{type=figure}
-            \begin{tikzpicture}[>=Latex]
-                \coordinate (A) at (0, 0);
-                \coordinate (B) at (4, 0);
-                \coordinate (C) at (4, 4);
-                \coordinate (D) at (0, 4);
-                \draw[densely dashed, draw=red] (-1.0, -1.0) to (5.0, 5.0);
-                \draw[densely dashed, draw=red] ( 2.0, -1.0) to (2.0, 5.0);
-                \draw[densely dashed, draw=red] (-1.0,  2.0) to (5.0, 2.0);
-                \draw[densely dashed, semithick]
-                    (A) to (B) to (C) to (D) to cycle;
-                \draw[->, thick] (A) to (0.0, 2.0);
-                \draw[->, thick] (A) to (2.0, 0.0);
-                \draw[->, thick] (A) to (1.5, 1.5);
-                \draw[fill=black] (A) circle (0.1);
-                \draw[fill=black] (B) circle (0.1);
-                \draw[fill=black] (C) circle (0.1);
-                \draw[fill=black] (D) circle (0.1);
-                \node at (A) [left]  {$A$};
-                \node at (B) [right] {$B$};
-                \node at (C) [right] {$C$};
-                \node at (D) [left]  {$D$};
-            \end{tikzpicture}
-            \caption{Reflections on a Square}
-            \label{fig:Group_Reflections_on_a_Square}
-        \end{figure}
-        The table is then given as follows:
+        compute the Cayley table for this operation. The table is given by:
         \begin{table}[H]
             \centering
             \captionsetup{type=table}
@@ -949,6 +1164,34 @@
         group. This is contrary to $D_{6}$ where we allowed both rotations and
         reflections and saw that the group is not Abelian.
     \end{lexample}
+    \begin{figure}[H]
+        \centering
+        \captionsetup{type=figure}
+        \begin{tikzpicture}[>=Latex]
+            \coordinate (A) at (0, 0);
+            \coordinate (B) at (4, 0);
+            \coordinate (C) at (4, 4);
+            \coordinate (D) at (0, 4);
+            \draw[densely dashed, draw=red] (-1.0, -1.0) to (5.0, 5.0);
+            \draw[densely dashed, draw=red] ( 2.0, -1.0) to (2.0, 5.0);
+            \draw[densely dashed, draw=red] (-1.0,  2.0) to (5.0, 2.0);
+            \draw[densely dashed, semithick]
+                (A) to (B) to (C) to (D) to cycle;
+            \draw[->, thick] (A) to (0.0, 2.0);
+            \draw[->, thick] (A) to (2.0, 0.0);
+            \draw[->, thick] (A) to (1.5, 1.5);
+            \draw[fill=black] (A) circle (0.1);
+            \draw[fill=black] (B) circle (0.1);
+            \draw[fill=black] (C) circle (0.1);
+            \draw[fill=black] (D) circle (0.1);
+            \node at (A) [left]  {$A$};
+            \node at (B) [right] {$B$};
+            \node at (C) [right] {$C$};
+            \node at (D) [left]  {$D$};
+        \end{tikzpicture}
+        \caption{Reflections on a Square}
+        \label{fig:Group_Reflections_on_a_Square}
+    \end{figure}
     \begin{lexample}{Group of Two Coins}{Group_of_Coins}
         Consider two coins located at points $A$ and $B$. We group generated by
         the following operations:
@@ -1557,18 +1800,19 @@
             Consider the Cayley diagram on the group
             $(\mathbb{Z}_{2}\times\mathbb{Z}_{2},+)$, where $+$ is pointwise
             modular addition. That is, the arithmetic that stems from the
-            direct product of $\mathbb{Z}_{2}$ with itself. We get:
-            \begin{figure}[H]
-                \centering
-                \captionsetup{type=figure}
-                \input{tikz/Cayley_Diagram_Z2_Z2.tex}
-                \caption{Cayley Diagram of $\mathbb{Z}_{2}\times\mathbb{Z}_{2}$}
-                \label{fig:Cayley_Diagram_Z2_x_Z2}
-            \end{figure}
-            Here, the dashed lines denote $+(0,1)$ and the solid lines denote
-            $+(1,0)$. Since $(1,0)+(1,0)=(1+1,0+0)=(0,0)$, and similarly for
+            direct product of $\mathbb{Z}_{2}$ with itself. We arrive at
+            Fig.~\ref{fig:Cayley_Diagram_Z2_x_Z2}. The dashed lines denote
+            $+(0,1)$ and the solid lines denote $+(1,0)$. Since
+            $(1,0)+(1,0)=(1+1,0+0)=(0,0)$, and similarly for
             $(0,1)$, there's no need to draw arrows on the diagram.
         \end{lexample}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \input{tikz/Cayley_Diagram_Z2_Z2.tex}
+            \caption{Cayley Diagram of $\mathbb{Z}_{2}\times\mathbb{Z}_{2}$}
+            \label{fig:Cayley_Diagram_Z2_x_Z2}
+        \end{figure}
         \begin{lexample}{Cayley Diagram of $S_{3}$}{Cayley_Diagram_S3}
             Let $n\in\mathbb{N}$ and $G=\mathbb{Z}_{n}$. Consider the set of all
             \textit{permutations}\index{Permutation} on $\mathbb{Z}_{n}$. That
@@ -1603,28 +1847,34 @@
             The dihedral group on $4$ points, $D_{8}$, is the group of
             symmetries on the square. If we use as generators rotation and
             reflection, with the constraints $r^{4}=f^{2}=e$, and that
-            $(rf)^{2}=e$, we arrive at the following Cayley Diagram:
-            \begin{figure}[H]
-                \centering
-                \captionsetup{type=figure}
-                \input{tikz/Cayley_Diagram_D8.tex}
-                \caption{Cayley Diagram for $D_{8}$}
-                \label{fig:Cayley_Diagram_D8}
-            \end{figure}
-            Rather than representing the symmetries of a square by rotation and
-            reflection, we can represent it by two different reflections. That
-            is, let $d$ denote diagonal reflection, and $h$ represent horizontal
-            reflection. We have the following presentation:
+            $(rf)^{2}=e$, we arrive at the Cayley Diagram shown in
+            Fig.~\subref{fig:Std_Cayley_Diagram_D8}. Rather than representing
+            the symmetries of a square by rotation and reflection, we can
+            represent it by two different reflections. That is, let $d$ denote
+            diagonal reflection, and $h$ represent horizontal reflection. We
+            have the following presentation:
             \begin{equation}
                 h^{2}=d^{2}=(hd)^{4}=e
             \end{equation}
             While this is equivalent to $D_{8}$, it presents a different, but
-            equivalent, Cayley diagram.
-            \begin{figure}[H]
-                \centering
-                \captionsetup{type=figure}
-                \input{tikz/Cayley_Diagram_D8_Alt.tex}
-                \caption{Alternate Cayley Diagram for $D_{8}$}
-                \label{fig:Alt_Cayley_Diagram_D8}
-            \end{figure}
+            equivalent, Cayley diagram
+            (Fig.~\subref{fig:Alt_Cayley_Diagram_D8}).
         \end{lexample}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \begin{subfigure}[b]{0.49\textwidth}
+                \resizebox{\textwidth}{!}{%
+                    \input{tikz/Cayley_Diagram_D8.tex}}
+                \subcaption{Standard Diagram for $D_{8}$}
+                \label{fig:Std_Cayley_Diagram_D8}
+            \end{subfigure}
+            \begin{subfigure}[b]{0.49\textwidth}
+                \resizebox{\textwidth}{!}{%
+                    \input{tikz/Cayley_Diagram_D8_Alt.tex}}
+                \subcaption{Alternate Diagram for $D_{8}$}
+                \label{fig:Alt_Cayley_Diagram_D8}
+            \end{subfigure}
+            \caption{Cayley Diagrams for $D_{8}$}
+            \label{fig:Cayley_Diagrams_D8}
+        \end{figure}

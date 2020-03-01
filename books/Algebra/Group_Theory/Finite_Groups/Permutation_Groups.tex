@@ -139,14 +139,10 @@
     \end{lexample}
     We do not have to consider \textit{all} permutations on a given group, and
     the more general \textit{group of permutations} is formed by considering
-    subgroups of a symmetric.
-    \begin{fdefinition}{Permutation Group}{Permutation_Group}
-        A permutation group of a set $A$ is a subgroup of the symmetric group
-        $(S_{A},\circ)$ on $A$.
-    \end{fdefinition}
-    What's remarkable is that \textit{every} group is a permutation group for
-    some set $A$. This result is known as Cayley's
-    Theorem\index{Cayley's Theorem} and will be proved shortly.
+    subgroups of a symmetric group. What's remarkable is that \textit{every}
+    finite group is a subgroup group of one of the symmetric groups $S_{n}$.
+    This result is known as Cayley's Theorem\index{Cayley's Theorem} and will be
+    proved shortly.
     \subsection{Finite Permutations}
         When dealing with permutations on a finite set, it is convenient to
         break up a given permutation into disjoint \textit{cycles}. For example,
@@ -162,58 +158,7 @@
         \begin{figure}[H]
             \centering
             \captionsetup{type=figure}
-            \begin{tikzpicture}[%
-                ->-/.style={%
-                    decoration={%
-                        markings,
-                        mark=at position .55 with \arrow{Stealth}
-                    },
-                    postaction={decorate}
-                }
-            ]
-                \coordinate (0) at (0.000:2);
-                \coordinate (2) at (72.00:2);
-                \coordinate (6) at (144.0:2);
-                \coordinate (3) at (216.0:2);
-                \coordinate (4) at (288.0:2);
-
-                \draw[fill=black] (0) circle (0.05);
-                \draw[fill=black] (2) circle (0.05);
-                \draw[fill=black] (6) circle (0.05);
-                \draw[fill=black] (3) circle (0.05);
-                \draw[fill=black] (4) circle (0.05);
-
-                \node at (0.000:2.3) {$0$};
-                \node at (72.00:2.3) {$2$};
-                \node at (144.0:2.3) {$6$};
-                \node at (216.0:2.3) {$3$};
-                \node at (288.0:2.3) {$4$};
-
-                % Draw the first cycle (its a pentagon)
-                \draw[->-] (0) to (2);
-                \draw[->-] (2) to (6);
-                \draw[->-] (6) to (3);
-                \draw[->-] (3) to (4);
-                \draw[->-] (4) to (0);
-
-                \begin{scope}[xshift=6cm]
-                    \coordinate (1) at (90.00:2);
-                    \coordinate (5) at (210.0:2);
-                    \coordinate (7) at (330.0:2);
-
-                    \draw[fill=black] (1) circle (0.05);
-                    \draw[fill=black] (5) circle (0.05);
-                    \draw[fill=black] (7) circle (0.05);
-
-                    \node at (90.00:2.3) {$1$};
-                    \node at (210.0:2.3) {$5$};
-                    \node at (330.0:2.3) {$7$};
-
-                    \draw[->-] (1) to (5);
-                    \draw[->-] (5) to (7);
-                    \draw[->-] (7) to (1);
-                \end{scope}
-            \end{tikzpicture}
+            \input{tikz/Cycle_Decomposition_of_Permutation_001.tex}
             \caption{Cycle Diagram for a Permutation}
             \label{fig:Cycle_Diagram_of_Permutation}
         \end{figure}
@@ -264,3 +209,41 @@
             The alternating group on a set $B$ is the subgroup of $S_{B}$
             consisting of all even permutations. It is denoted $A_{B}$.
         \end{fdefinition}
+        \begin{fnotation}{Set of Permutations}{Set_of_Permutations}
+            The set of all permutations from a set $X$ to itself is denoted
+            $S_{X}$.
+        \end{fnotation}
+        \begin{theorem}
+            \label{thm:Symmetric_Group_is_Group}%
+            If $X$ is a set, if $S_{X}$ is the set of all permutations of
+            $X$, and if $\circ$ is function composition, then
+            $\monoid[][\circ]{S_{X}}$ is a group.
+        \end{theorem}
+        \begin{proof}
+            Since $\identity{X}$ is a permutation, there exists a unital
+            element. Moreover, $\circ$ is associative. Lastly, if
+            $f\in{S}_{X}$, then since $f$ is a permutation it is a bijection
+            and hence there is an inverse function $f^{\minus{1}}$.
+            Therefore, $\monoid[][\circ]{S_{X}}$ is a group.
+        \end{proof}
+        The particularly important case is when the set $X$ is finite.
+        Indeed, historically these were the first groups to be studied.
+        The important fact about $S_{n}$, as we will soon prove, it that
+        \textit{every} finite group is just a subgroup of $S_{n}$ for some
+        appropriate $n$.
+        \begin{theorem}
+            \label{thm:Cardinality_of_Sn}%
+            If $n\in\mathbb{N}^{+}$, and if $S_{n}$ is the set of all
+            permutations of $\mathbb{Z}_{n}$, then $\cardinality{S_{n}}=n!$.
+        \end{theorem}
+        \begin{proof}
+            By induction. The base case of $n=1$ is true since the only
+            permutation of $\mathbb{Z}_{1}$ is the identity, and hence
+            $\cardinality{S_{1}}=1=1!$. Suppose it is true for
+            $n\in\mathbb{N}^{+}$. If $f$ is a permutation of
+            $\mathbb{Z}_{n+1}$, then there are $n+1$ options for $n$ to map
+            to. Restricting $f$ to $\mathbb{Z}_{n}$ and removing $f(n)$ from
+            the image gives us a permutation of $\mathbb{Z}_{n}$, and there
+            are $n!$ of those. Thus, there are $(n+1)\cdot{n}!$ total
+            permutations, and this is just $(n+1)!$.
+        \end{proof}
