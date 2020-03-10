@@ -17,7 +17,8 @@ fill( circle((0,1),0.035), red);
 filldraw( circle((0,0),0.03), white, red+1.5);
 
 // Axes.
-xaxis( Label("$x$"), Ticks(new real[]{-1,-0.5,0.5,1}), Arrow);
-yaxis( Label("$y$"), Ticks(new real[]{0.5,1}), Arrow, ymin=-0.18, ymax=1.25);
+xaxis(Label("$x$"), Ticks(new real[]{-1,-0.5,0.5,1}), Arrow);
+yaxis(Label("$y$"), Ticks(new real[]{0.5,1}), Arrow, ymin=-0.18, ymax=1.25);
+
 // Origin.
 labelx("$O$",0,SW);
