@@ -2,11 +2,10 @@ import settings;
 import tube;
 import graph3;
 import palette;
-
+settings.render=8;
 outformat="pdf";
 
-// Size of the created image.
-size(300, 300);
+size(200, 200);
 
 // Declare variable for the square root of three.
 real SQRT_3 = sqrt(3.0);
