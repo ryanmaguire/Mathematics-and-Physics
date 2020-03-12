@@ -2,11 +2,10 @@ import settings;
 import tube;
 import graph3;
 import palette;
-
+settings.render=8;
 outformat="pdf";
 
-// Size of the created image.
-size(300, 300);
+size(169, 169);
 
 currentprojection=perspective(
     camera=(5, 5, 3),
