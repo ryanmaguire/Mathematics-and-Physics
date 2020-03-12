@@ -1,20 +1,24 @@
+// Import necessary stuff, set format to PDF file.
 import graph;
 import settings;
 outformat="pdf";
 
+// Size of the output figure.
 size(256, 256);
 
+// Variables that will be used throughout.
 int i;
 int samples = 128;
 real start  = 0.05;
 real end    = start+1.0;
 real xmin   = -0.1;
-real xmax   = 1.1;
+real xmax   = 1.15;
 real ymin   = -0.35;
-real ymax   = 0.5;
+real ymax   = 0.55;
 real height = 0.4;
 real x0, x1, y, mid;
 
+// Hectic, but continuous, function that is to be plotted.
 real f(real x) {
     x = x-start;
     int i;
@@ -26,9 +30,11 @@ real f(real x) {
     return result-0.1;
 };
 
+// Plot the function.
 path g=graph(f, start, end, n=samples);
 draw(g, black);
 
+// Perform the bisection method to compute the root of f.
 for (i=0; i<6; ++i){
     if (i == 0){
         x0 = start;
@@ -52,5 +58,6 @@ for (i=0; i<6; ++i){
     label("$x_{" +string(i)+ "}$", (mid, height), N);
 }
 
+// Plot the axes.
 xaxis(Label("$x$"), Arrow, xmin=xmin, xmax=xmax);
 yaxis(Label("$y$"), Arrow, ymin=ymin, ymax=ymax);
