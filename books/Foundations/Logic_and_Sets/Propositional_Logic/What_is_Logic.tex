@@ -7,30 +7,29 @@
     early 1900s with the very core of mathematics. Arguments once considered
     sound were shattered, and contradictions were discovered. On the other hand,
     other methods of proof that are very intuitive were shown to be able to
-    prove the existence of non-intuitive and almost impossible objects.
+    prove the existence of non-intuitive and almost impossible objects. Thus our
+    goal is to discuss what forms of reasoning we shall consider valid, provide
+    examples, and propose the \textit{axioms} of mathematical logic.
     \begin{example}
-        A student of calculus most likely knows well the
-        \textit{intermediate value theorem}%
-        \index{Theorem!Intermediate Value Theorem}%
-        \index{Intermediate Value Theorem}. To those who don't, fear not, we
+        \label{ex:Logic_IVP}%
+        A student of calculus has likely heard of the intermediate value
+        theorem\index{Theorem!Intermediate Value}. Fear not those who don't, we
         shall draw pictures. Given a \textit{continuous} function $f$ of real
         numbers (roughly speaking, a curve one can draw from left to right
-        without lifting up ones pencil), if $0$ evaluates to a negative number
-        and $1$ evaluates to a positive number, then there is some number in the
-        middle which evaluates to zero. The method of proof is quite simple:
-        We first look at what happens at the point $\frac{1}{2}$. If $f$
-        is zero at this point, we are done and the theorem is proved, otherwise
-        if $f$ evaluates to a positive number then we may suspect there's a
-        point in between 0 and $\frac{1}{2}$ that evaluates to zero. If $f$ is
-        negative at the point, then there's probably a zero in between
-        $\frac{1}{2}$ and 1. In either case, we divide the range of
-        possibilities in half once again and see what happens at $\frac{1}{4}$
-        in the first case, and $\frac{3}{4}$ in the latter. We continue
-        \textit{inductively} (whatever this means) and obtain a
-        \textit{sequence} of real numbers which we then show
-        \textit{converge} to some real number between 0 and 1. We then invoke
-        continuity to show that $f$ evaluates to zero at this point, and we are
-        done (See Fig.~\ref{fig:Sketch_of_IVP}).
+        without lifting up their pencil), if 0 evaluates to a negative number
+        and 1 to a positive number, then there is some number in the middle
+        which evaluates to zero. The method of proof is quite simple: We first
+        look at what happens to the point $\frac{1}{2}$. If $f$ is zero here,
+        we are done, otherwise if $f$ evaluates to a positive number then we may
+        suspect there's a point in between 0 and $\frac{1}{2}$ that evaluates to 
+        zero. If $f$ is negative at this point, then there's probably a zero in
+        between $\frac{1}{2}$ and 1. In either case we divide the range of
+        possibilities in half and see what happens at $\frac{1}{4}$ in the first
+        case and $\frac{3}{4}$ in the latter. We continue \textit{inductively}
+        (whatever this means) and obtain a \textit{sequence} of real numbers
+        which we then show \textit{converge} to some real number between 0 and
+        1. We then invoke continuity to show that $f$ evaluates to zero at this
+        point, and we are done (see Fig.~\ref{fig:Sketch_of_IVP}).
     \end{example}
     \begin{figure}[H]
         \centering
@@ -47,6 +46,117 @@
     theorems are we relying on? For one, the existence of \textit{real number},
     a notion of \textit{continuity}, and the definition of a \textit{sequence}.
     Our exposition of logic is to make clear what is required for valid proofs.
+    \begin{example}
+        \label{ex:Logic_Gauss_Sum}%
+        It has been alleged, though as always one should exhibit skepticism,
+        that at a very early age the great mathematician Carl Friedrich
+        Gauss\index{Gauss, Carl Friedrich} (1777-1855 C.E.) demonstrated
+        to his teacher that $1+2+\dots+99+100=5050$. It's also been claimed that
+        he had revelations about the normal distribution while counting the
+        number of steps on his way to school, and that he corrected his fathers
+        mathematical calculations at the age of three. Alas, we're a few stories
+        away from forming the religion of Gauss. Nevertheless, let's see what
+        the argument is. We rearrange this sum as follows:
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{ccccccccccc}
+                &&$1$&$+$&$2$&$+$&$\cdots$&$+$&$99$&$+$&$100$\\
+                \hline\\
+                $=$&&$1$&$+$&$2$&$+$&$\cdots$&$+$&$48$&$+$&$50$\\
+                &$+$&$100$&$+$&$99$&$+$&$\cdots$&$+$&$52$&$+$&$51$\\
+                \hline\\
+                $=$&&$101$&$+$&$101$&$+$&$\cdots$&$+$&$101$&$+$&$101$\\
+                \hline\\
+                $=$&&$50$&$\times$&$101$\\
+                \hline\\
+                $=$&&$5050$
+            \end{tabular}
+            \caption{Gauss' Sum of 1 to 100}
+        \end{table}
+        While this seems to be a concrete proof of the claim, is it valid? Can
+        we generalize it? What assumptions about integers and arithmetic are we
+        making? We'll explore the axioms of arithmetic and try and resolve these
+        questions.
+    \end{example}
+    \begin{example}
+        \label{ex:Logic_Euler_Sum}%
+        Gauss is often called the prince of Mathematics, and the king is the
+        great Leonhard Euler\index{Euler, Leonhard} (1707-1783 C.E.). He too
+        studied sums and considere the bizarre series $1+2+3+4+\dots$ arriving
+        at the answer $\minus\frac{1}{12}$. It should be noted that while this
+        sum was studied in the $18^{th}$ century, there seems to be ambiguity as
+        to whether or not Euler earns the credit on this one. Anyways, let's
+        see how we can arrive at this answer. First, we consider
+        Grandi's series\index{Grandi's series} which was studied by
+        Luigi Guido Grandi\index{Grandi, Luigi Guido} (1671-1742 C.E.). We have
+        (Using $G$ for Grandi):
+        \begin{equation}
+            G=1-1+1-1+1-1+\cdots
+        \end{equation}
+        Is there a meaningful number to assign to $G$? Well, suppose there is
+        and we write:
+        \begin{subequations}
+            \begin{align}
+                1-G&=1-(1-1+1-1+1-1+\cdots)\\
+                   &=1-1+1-1+1-1+\cdots\\
+                   &=G
+            \end{align}
+        \end{subequations}
+        And hence we have $1-G=G$. Rearranging we get $2S=1$ and therefore
+        $G=\frac{1}{2}$. Next, we consider the series:
+        \begin{equation}
+            T=1-2+3-4+5-6+\cdots
+        \end{equation}
+        Again, supposing $T$ has some legal value, we apply some manipulations
+        and obtain:
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{ccccccccccc}
+                $2T$&$=$&$1$&$-$&$2$&$+$&$3$&$-$&$4$&$+$&$\cdots$\\
+                    &   &   &$+$&$1$&$-$&$2$&$+$&$3$&$-$&$\cdots$\\
+                \hline\\
+                    &$=$&$1$&$-$&$1$&$+$&$1$&$-$&$1$&$+$&$\cdots$\\
+                \hline\\
+                &$=$&$\frac{1}{2}$
+            \end{tabular}
+            \caption{The Sum of $1-2+3-4+\cdots$}
+        \end{table}
+        And hence $T=\frac{1}{4}$. With this, we now look to Euler's sum of
+        $1+2+3+4+\dots$. We'll give this the symbol $S$:
+        \begin{equation}
+            S=1+2+3+4+\dots
+        \end{equation}
+        We now subtract from $S$ the series $T$ which we computed above. We get:
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{cccccccccccc}
+                $S-T$&$=$&       &$1$&$+$&$2$&$+$&$3$&$+$&$4$&$\cdots$\\
+                     &$-$&$\Big[$&$1$&$-$&$2$&$+$&$3$&$-$&$4$&$\cdots$&$\Big]$
+                \\[1ex]
+                \hline\\
+                     &$=$&       &$0$&$+$&$4$&$+$&$0$&$+$&$8$&$\cdots$\\
+                \hline\\
+                &$=$&$4\Big[$&$1$&$+$&$2$&$+$&$3$&$+$&$4$&$\cdots$&$\Big]$\\
+                \hline\\
+                &$=$&$4S$
+            \end{tabular}
+            \caption{The Sum of $1+2+3+4+\cdots$}
+        \end{table}
+        so now we have a nice formula for $S$:
+        \begin{equation}
+            S-T=4S
+        \end{equation}
+        But $T=\frac{1}{4}$, so we have $3S=\minus{1}{4}$ and therefore
+        $S=\minus\frac{1}{12}$.
+    \end{example}
+    We now contemplate the previous examples and ask which were valid. It is
+    tempting to say that Ex.~\ref{ex:Logic_IVP} and Ex.~\ref{ex:Logic_Gauss_Sum}
+    were presented with accurate proofs, whereas Ex.~\ref{ex:Logic_Euler_Sum} is
+    garbage. For the rest of the chapter we wish to hone in on what we are to
+    consider as valid mathematics.
     \subsection{Truth}
         Since the aim of mathematics is to prove the validity of mathematical
         statements, we start with a definition of truth. We run into a wall
@@ -403,7 +513,49 @@
         That is, negaiton takes true to false and maps false to true. Negation
         and implication form our two primitive logical operations, and the other
         familiar terms (disjunction, conjunction, equivalence) can be expressed
-        using these two. The axiom of \textit{modus tollens} states that if
+        using these two. Negation allows us to define the
+        \textit{contrapositive}\index{Contrapositive} of the proposition
+        $P\Rightarrow{Q}$, which is the new proposition
+        $\neg{Q}\Rightarrow\neg{P}$. As it turns out, this is not new
+        proposition at all and is equivalent to $P\Rightarrow{Q}$. To see this,
+        note that $P\Rightarrow{Q}$ is only false when $P$ is true, yet $Q$ is
+        false. Similarly, $\neg{Q}\Rightarrow\neg{P}$ is only false when
+        $\neg{Q}$ is true and $\neg{P}$ is false. But if $\neg{Q}$ is true, then
+        $Q$ is false, and if $\neg{P}$ is false, then $P$ is true. Thus
+        $\neg{Q}\Rightarrow\neg{P}$ is only false when $P$ is true and $Q$ is
+        false. We can further examine this by the truth tables of these
+        statements.
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{cccccc}
+                $P$&$Q$&$\neg{P}$&$\neg{Q}$&$P\Rightarrow{Q}$
+                    &$\neg{Q}\Rightarrow\neg{P}$\\
+                \hline
+                0&0&1&1&1&1\\
+                0&1&1&0&1&1\\
+                1&0&0&1&0&0\\
+                1&1&0&0&1&1
+            \end{tabular}
+            \caption{Truth Table for the Contrapositive}
+            \label{tab:Truth_Table_for_Contrapositive}
+        \end{table}
+        \begin{example}
+            Suppose $a$ and $b$ are variables representing real numbers and $P$
+            is the proposition $a<1/2$ and $b<1/2$, and let $Q$ be the
+            proposition $a+b<1$. What is the contrapositive of
+            $P\Rightarrow{Q}$? This would be $\neg{Q}\Rightarrow\neg{P}$, and
+            $\neg{Q}$ is the negation of $Q$, which reads $a+b\geq{1}$.
+            Similarly, $\neg{P}$ is the statement $a\geq{1}/2$ or $b\geq{1}/2$.
+            Thus, the contrapositive says that if $a+b\geq{1}$, then either
+            $a\geq{1}/2$ or $b\geq{1}/2$ (or both). While the contrapositive of
+            a statement is always equivalent to the original statement, the
+            converse need not be. Indeed, this statement is true (once one knows
+            the order structure of real numbers), but the converse is not. The
+            converse states that if $a+b<1$, then $a<1/2$ and $b<1/2$, but
+            letting $a=2$ and $b=\minus{3}$ contradicts this claim.
+        \end{example}
+        The axiom of \textit{modus tollens} states that if
         $P\Rightarrow{Q}$, and if $\neg{Q}$ is true, then $\neg{P}$ is true. We
         are not directly adopting this axiom since it is provable from the
         axiom of \textit{modus ponens} if one accept the standard axioms of set
@@ -416,7 +568,7 @@
         $P\Rightarrow{Q}$ is equivalent to $\neg{Q}\rightarrow\neg{P}$. That is,
         if the statement $P\Rightarrow{Q}$ is true, then the
         \textit{contrapositive}\index{Contrapositive}
-        $\neq{Q}\rightarrow\neg{P}$ is also true.
+        $\neg{Q}\rightarrow\neg{P}$ is also true.
         \begin{example}
             Consider once again the description of Socrates. We start with the
             proposition \textit{all humans are mammals}. If Socrates is a human,
