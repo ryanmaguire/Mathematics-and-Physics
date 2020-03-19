@@ -6,7 +6,7 @@ settings.render = 8;
 
 outformat="pdf";
 
-size(400, 100);
+size(350);
 
 // Set camera location and orientation.
 currentprojection=perspective(camera=(1000, 0, 300), up=(0, 0, 1),
