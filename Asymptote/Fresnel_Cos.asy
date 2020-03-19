@@ -2,10 +2,7 @@
 import graph;
 import settings;
 import contour;
-import fontsize;
 outformat="pdf";
-
-defaultpen(fontsize(9pt));
 
 // Size of the output figure.
 size(256, 256);
@@ -132,7 +129,7 @@ draw((xmin, 0) -- (xmax, 0), arrow=Arrow());
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, 0) -- (i/4, -0.1));
-        label("$"+string((int)i/4)+"$", (i/4, -0.2));
+        label("$"+string((int)i/4)+"$", (i/4, -0.2), fontsize(9pt));
     }
     else draw((i/4, 0) -- (i/4, -0.05));
 }
@@ -141,7 +138,7 @@ draw((0, ymin) -- (0, ymax), arrow=Arrow());
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2) -- (-0.1, i/2));
-        label("$"+string((int)i/2)+"$", (-0.2, i/2));
+        label("$"+string((int)i/2)+"$", (-0.2, i/2), fontsize(9pt));
     }
     else draw((0, i/2) -- (-0.05, i/2));
 }
@@ -150,7 +147,7 @@ draw((xmin, yshift) -- (xmax, yshift), arrow=Arrow());
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, yshift) -- (i/4, yshift-0.1));
-        label("$"+string((int)i/4)+"$", (i/4, yshift-0.2));
+        label("$"+string((int)i/4)+"$", (i/4, yshift-0.2), fontsize(9pt));
     }
     else draw((i/4, yshift) -- (i/4, yshift-0.05));
 }
@@ -159,7 +156,7 @@ draw((0, ymin+yshift) -- (0, ymax+yshift), arrow=Arrow());
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2+yshift) -- (-0.1, i/2+yshift));
-        label("$"+string((int)i/2)+"$", (-0.2, i/2+yshift));
+        label("$"+string((int)i/2)+"$", (-0.2, i/2+yshift), fontsize(9pt));
     }
     else draw((0, i/2+yshift) -- (-0.05, i/2+yshift));
 }

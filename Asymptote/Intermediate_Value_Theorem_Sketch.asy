@@ -55,7 +55,7 @@ for (i=0; i<6; ++i){
 
     draw ((mid, height) -- (mid, y), dashed);
     dot((mid, y));
-    label("$x_{" +string(i)+ "}$", (mid, height), N);
+    label("$x_{" +string(i)+ "}$", (mid, height), N, fontsize(9pt));
 }
 
 // Plot the axes.
