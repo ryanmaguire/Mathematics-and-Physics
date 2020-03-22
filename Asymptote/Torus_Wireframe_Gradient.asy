@@ -1,12 +1,16 @@
 import settings;
 import graph3;
 import palette;
+import tube;
 settings.render=8;
 
 outformat="pdf";
-size(350);
+size(300);
 
 currentprojection=orthographic(2, 2, 1);
+currentlight = light(diffuse  = new pen[]    {white},
+                     specular = new pen[]    {0.5*white},
+                     position = new triple[] {Y+Z});
 
 pen tcolor = blue+0.3*green;
 
@@ -31,6 +35,7 @@ s2.colors(palette(s2.map(xpart),
           Gradient(tcolor, tcolor, tcolor, tcolor,
                    tcolor+opacity(0.7),
                    tcolor+opacity(0.2))));
+
 draw(s2, render(merge=true));
 
 // Draw circle inside torus.
