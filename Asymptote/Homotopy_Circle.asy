@@ -5,7 +5,7 @@ settings.render = 4;
 outformat="pdf";
 
 // Size of the output figure.
-size(300);
+size(150);
 
 int i;
 int n = 8;
@@ -14,7 +14,7 @@ path p;
 real inner  = 0.50;
 real outer  = 1.00;
 real center = 0.75;
-real arsize = 5bp;
+real arsize = 3bp;
 
 margin ArrowMargin = TrueMargin(0.0cm, 0.1cm);
 
@@ -29,8 +29,8 @@ for(i=0; i<n; ++i){
     draw(p, Arrow(arsize), ArrowMargin);
 }
 
-ArrowMargin = TrueMargin(0.1cm, 0.3cm);
+arsize      = 5bp;
 p = 1.1*expi(pi/3)--center*expi(pi/3);
-draw(Label("$\mathbb{S}^{1}$", position=0.0), p, Arrow(), ArrowMargin);
+draw(Label("$\mathbb{S}^{1}$", position=0.0), p, Arrow(arsize), ArrowMargin);
 
 label("$X$", (1.0, -1.0));

@@ -5,9 +5,12 @@ import tube;
 settings.render=8;
 
 outformat="pdf";
-size(300);
+size(150);
 
 currentprojection=orthographic(4, 0, 1);
+currentlight = light(diffuse  = new pen[]    {white},
+                     specular = new pen[]    {0.5*white},
+                     position = new triple[] {Y+Z});
 
 pen tcolor = blue+0.3*green;
 
