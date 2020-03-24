@@ -5,30 +5,29 @@ settings.outformat = "pdf";
 size(300);
 
 pen cpen = deepblue;
-pen fpen = lightgreen+opacity(0.2);
+pen fpen = lightgreen+opacity(0.2)+evenodd;
 
-pair A = (-2, 0);
-pair B = (+2, 0);
+real dist = 4;
+pair A = (-dist/2, 0);
+pair B = (+dist/2, 0);
 
 CassiniOval co, co2;
 
 int i;
+real steps = 0.5;
+int start  = 1;
+int finish = (int)(dist/steps);
 
-co=CassiniOval(A, B, 4);
+co=CassiniOval(A, B, dist);
 draw(co.curve, cpen);
 
-for(i=5; i<8; ++i){
-    co=CassiniOval(A, B, i);
-    filldraw(co.curve, fpen, cpen);
+for(i=start; i<finish; ++i){
+    co  = CassiniOval(A, B, dist+i*steps);
+    co2 = CassiniOval(A, B, dist-i*steps);
+
+    path p1 = co.curve[0];
+    path p2 = co2.curve[0];
+    path p3 = co2.curve[1];
+    path[] p = {p1, p2, p3};
+    filldraw(p, fpen, cpen);
 }
-
-co=CassiniOval(A, B, 3);
-filldraw(co.curve, white, opacity(0.0));
-filldraw(co.curve, fpen, cpen);
-
-co2=CassiniOval(A, B, 2);
-filldraw(co2.curve, white, cpen);
-filldraw(co.curve, fpen, opacity(0.0));
-
-co2=CassiniOval(A, B, 1);
-filldraw(co2.curve, white, cpen);

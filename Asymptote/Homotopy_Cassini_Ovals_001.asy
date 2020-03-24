@@ -28,11 +28,10 @@ int start = 3;
 int end   = 10;
 int step  = 1;
 
-
-
 pair unitnorm(pair Z){
     real r = sqrt(Z.x^2+Z.y^2);
-    return (Z.x/r, Z.y/r);
+    if (r != 0) return (Z.x/r, Z.y/r);
+    else return (0.0, 0.0);
 }
 
 real CassiniNorm(pair Z, real a){
