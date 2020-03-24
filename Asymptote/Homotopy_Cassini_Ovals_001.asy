@@ -7,7 +7,7 @@ settings.render = 4;
 settings.outformat = "pdf";
 
 // Size of the output image.
-size(300);
+size(200);
 
 // Pens for contours and directional lines (Flows).
 pen cpen = deepblue+linewidth(1pt);
@@ -106,8 +106,8 @@ for (i=0; i<n; ++i){
 // Cassini Oval structure defined in CassiniOval.asy
 CassiniOval co;
 
-// Draw the central Cassini oval.
-co = CassiniOval(A, -A, 2*a);
+// Draw the central Cassini oval (Figure eight).
+co = CassiniOval(A, -A, a^2);
 draw(co.curve, cpen+linewidth(2pt));
 
 // Draw the boundary (which is a different Cassini oval).

@@ -5,7 +5,7 @@ settings.render = 4;
 outformat="pdf";
 
 // Size of the output figure.
-size(300);
+size(200);
 
 // Pens used to draw lines and curves.
 pen cpen = deepblue+linewidth(1pt);
@@ -39,7 +39,6 @@ real yscale = 0.8;
 
 // Center of the two point charges (the focii).
 pair Q_1 = (xscale/2.0, 0);
-pair Q_2 = -Q_1;
 
 // Variables used throughout.
 pair AA, BB;
@@ -59,7 +58,7 @@ real sixnorm(pair Z, real xscale, real yscale){
 // The electric force (in natural units) of two point charges.
 pair Force(pair Z){
     pair R_1 = Z-Q_1;
-    pair R_2 = Z-Q_2;
+    pair R_2 = Z+Q_1;
     pair out = R_1/(norm(R_1)^3)+R_2/(norm(R_2)^3);
     return out/norm(out);
 }
@@ -69,13 +68,13 @@ p = graph(f, 0, 2pi, 300, operator ..);
 draw(p, cpen);
 
 // Draw the outer circle about the two charges, connect a line between them.
-draw(shift(Q_1)*scale(R)*unitcircle,    cpen+linewidth(2pt));
-draw(shift(Q_2)*scale(R)*unitcircle,    cpen+linewidth(2pt));
-draw(shift(-R, 0)*(Q_1)--shift(R, 0)*Q_2, cpen+linewidth(2pt));
+draw(shift(+Q_1)*scale(R)*unitcircle,        cpen+linewidth(2pt));
+draw(shift(-Q_1)*scale(R)*unitcircle,        cpen+linewidth(2pt));
+draw(shift(-R, 0)*(Q_1)--shift(R, 0)*(-Q_1), cpen+linewidth(2pt));
 
 // Fill in the inner circles about the two focii.
-filldraw(shift(Q_1)*scale(r)*unitcircle, blue+opacity(0.4), cpen);
-filldraw(shift(Q_2)*scale(r)*unitcircle, blue+opacity(0.4), cpen);
+filldraw(shift(+Q_1)*scale(r)*unitcircle, blue+opacity(0.4), cpen);
+filldraw(shift(-Q_1)*scale(r)*unitcircle, blue+opacity(0.4), cpen);
 
 // Loop over angles and perform Euler's method to draw field lines.
 for (i=start; i<n; i += step){

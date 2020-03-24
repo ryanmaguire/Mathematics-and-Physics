@@ -6,16 +6,28 @@ outformat="pdf";
 // Size of the output figure.
 size(256, 256);
 
-// Variables that will be used throughout.
+// Variable used for indexing.
 int i;
+
+// Number of samples. Make this a power of 2 since we are performing bisection.
 int samples = 128;
+
+// First and last x values to be plotted.
 real start  = 0.05;
 real end    = start+1.0;
+
+// Min and max values for the x-axis.
 real xmin   = -0.1;
 real xmax   = 1.15;
+
+// Min and max values for the y-axis.
 real ymin   = -0.35;
 real ymax   = 0.55;
+
+// Height of the dots used to label the points in the bisection sequence.
 real height = 0.4;
+
+// Variables used during the computation.
 real x0, x1, y, mid;
 
 // Hectic, but continuous, function that is to be plotted.
@@ -44,9 +56,7 @@ for (i=0; i<6; ++i){
         x1 = end;
         mid = x1;
     }
-    else {
-        mid = (x0+x1)/2;
-    }
+    else mid = (x0+x1)/2;
 
     y = f(mid);
     if      (y<0)   x0 = mid;
