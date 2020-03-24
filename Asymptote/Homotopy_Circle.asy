@@ -50,7 +50,7 @@ for(i=0; i<n; ++i){
 
 // Label the inner circle as S^2.
 arsize = 5bp;
-p = 1.1*expi(pi/3)--center*expi(pi/3);
+p = 1.1*expi(pi/5)--center*expi(pi/5);
 draw(Label("$\mathbb{S}^{1}$", position=0.0), p, Arrow(arsize), ArrowMargin);
 
 // Label the entire space X.
