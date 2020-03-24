@@ -1,14 +1,16 @@
+// This code uses an asymptote version of C code I had written for the
+// NASA Cassini radio science team as a part of rss_ringoccs. Like this
+// project, rss_ringoccs was released under the GNU GPL 3 license.
+// https://github.com/NASA-Planetary-Science/rss_ringoccs
+
 // Import necessary stuff, set format to PDF file.
 import graph;
 import settings;
-import contour;
-import fontsize;
-outformat="pdf";
-
-defaultpen(fontsize(9pt));
+settings.outformat="pdf";
+settings.render=4;
 
 // Size of the output figure.
-size(256, 256);
+size(256);
 
 // Define Coefficients for the Fresnel Sine Taylor Expansion.
 real FRESNEL_SINE_TAYLOR_00 =  0.33333333333333333333333333333;
@@ -54,19 +56,24 @@ real xmax    =  3.70;
 real ymin    = -0.10;
 real ymax    =  1.22;
 real yshift  = -2.00;
+
+// Roots of sin(x^2).
 real root1   = 1.7724538509055159;
 real root2   = 2.5066282746310002;
 real root3   = 3.0699801238394655;
 
-// Hectic, but continuous, function that is to be plotted.
+// Pen used for drawing functions.
+pen db = deepblue;
+
+// Taylor series for Fresnel sine.
 real f(real x)
 {
-    /* Variables for S(x) and powers of x, respectively. */
+    // Variables for S(x) and powers of x, respectively.
     real sx;
     real arg = x*x;
 
-    /* This Taylor Series is capable of double precision accuracy for values  *
-     * in the range -3.3 < x < 3.3. Perfect for our plot range.               */
+    // This Taylor Series is capable of double precision accuracy for values
+    // in the range -3.3 < x < 3.3. Perfect for our plot range.
     x *= arg;
     arg *= arg;
     sx = arg * FRESNEL_SINE_TAYLOR_24 + FRESNEL_SINE_TAYLOR_23;
@@ -96,25 +103,24 @@ real f(real x)
     return sx*x;
 };
 
-// Plot the function.
-path g=graph(f, start, end, n=samples1);
-draw(g, black);
-
+// Function to return sin(x^2).
 real h(real x){return sin(x*x);}
 
 // Plot the function.
 path g=graph(f, start, end, n=samples1);
-draw(g, black);
+draw(g, db);
 
+// Plots for sin(x^2) split into positive and negative regions.
 path h1 = graph(h, start, root1, n=samples2);
 path h2 = graph(h, root1, root2, n=samples2);
 path h3 = graph(h, root2, root3, n=samples2);
 path h4 = graph(h, root3, end,   n=samples2);
 
-filldraw(shift(0, yshift)*(h1 -- (root1, 0) -- (0, 0) -- cycle), lightblue);
-filldraw(shift(0, yshift)*(h2 -- (root2, 0) -- cycle), lightred);
-filldraw(shift(0, yshift)*(h3 -- (root3, 0) -- cycle), lightblue);
-filldraw(shift(0, yshift)*(h4 -- (end, 0)   -- cycle), lightred);
+// Plot the functions blue and red, indicating positive and negative.
+filldraw(shift(0, yshift)*(h1 -- (root1, 0) -- (0, 0) -- cycle), lightblue, db);
+filldraw(shift(0, yshift)*(h2 -- (root2, 0) -- cycle),           lightred,  db);
+filldraw(shift(0, yshift)*(h3 -- (root3, 0) -- cycle),           lightblue, db);
+filldraw(shift(0, yshift)*(h4 -- (end, 0)   -- cycle),           lightred,  db);
 
 // Plot the axes.
 label("$x$", (xmax, 0.0),  S);
@@ -122,18 +128,20 @@ label("$y$", (0.0,  ymax), W);
 label("$x$", (xmax, yshift),     S);
 label("$y$", (0.0,  ymax+yshift), W);
 
-real y0 = f(end);
+// Dots for the functions at the point "x".
+dot( (end,  f(end)));
+dot( (end,  h(end)+yshift));
 
-dot((end,  f(end)));
-dot((end,  h(end)+yshift));
-draw((end, f(end)) -- (end, h(end)+yshift), dashed);
+// Draw a dashed line between the first and second plots.
+draw((end,  f(end)) -- (end, h(end)+yshift), dashed);
 
+// Labels for the functions and a definition of S(x), the Fresnel sin function.
 label("$S(x)$", (3.6, 0.7));
 label("$\displaystyle{S(x)=\int_{0}^{x}\sin(t^{2})\textrm{d}t}$",
       (1.5, -0.7), fontsize(12pt));
-label("$\sin(x^{2})$", (3.6, yshift-1.0));
+label("$\sin(x^{2})$", (3.6, yshift-1.1));
 
-int i;
+// Draw the x axis for the first plot, loop over points to draw tick marks.
 draw((xmin, 0) -- (xmax, 0), arrow=Arrow());
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
@@ -143,6 +151,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
     else draw((i/4, 0) -- (i/4, -0.05));
 }
 
+// Draw the y axis for the first plot, loop over points to draw tick marks.
 draw((0, ymin) -- (0, ymax), arrow=Arrow());
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
@@ -152,6 +161,7 @@ for (i=0; i<=2*(int)ymax; ++i){
     else draw((0, i/2) -- (-0.05, i/2));
 }
 
+// Draw the x axis for the second plot, loop over points to draw tick marks.
 draw((xmin, yshift) -- (xmax, yshift), arrow=Arrow());
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
@@ -161,6 +171,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
     else draw((i/4, yshift) -- (i/4, yshift-0.05));
 }
 
+// Draw the y axis for the second plot, loop over points to draw tick marks.
 draw((0, ymin+yshift) -- (0, ymax+yshift), arrow=Arrow());
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){

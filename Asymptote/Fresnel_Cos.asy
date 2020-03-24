@@ -59,6 +59,9 @@ real root2   = 2.1708037636748028;
 real root3   = 2.8024956081989645;
 real root4   = 3.3159575219782710;
 
+// Pen used for drawing functions.
+pen db = deepblue;
+
 // Taylor series for the Fresnel cosine function.
 real f(real x)
 {
@@ -104,7 +107,7 @@ real h(real x){return cos(x*x);}
 
 // Plot the function.
 path g=graph(f, start, end, n=samples1);
-draw(g, black);
+draw(g, db);
 
 // Plots for cos(x^2) split into positive and negative regions.
 path h1 = graph(h, start, root1, n=samples2);
@@ -114,11 +117,11 @@ path h4 = graph(h, root3, root4, n=samples2);
 path h5 = graph(h, root4, end,   n=samples2);
 
 // Plot the functions blue and red, indicating positive and negative.
-filldraw(shift(0, yshift)*(h1 -- (root1, 0) -- (0, 0) -- cycle), lightblue);
-filldraw(shift(0, yshift)*(h2 -- (root2, 0) -- cycle),           lightred);
-filldraw(shift(0, yshift)*(h3 -- (root3, 0) -- cycle),           lightblue);
-filldraw(shift(0, yshift)*(h4 -- (root4, 0) -- cycle),           lightred);
-filldraw(shift(0, yshift)*(h5 -- (end,   0) -- cycle),           lightblue);
+filldraw(shift(0, yshift)*(h1 -- (root1, 0) -- (0, 0) -- cycle), lightblue, db);
+filldraw(shift(0, yshift)*(h2 -- (root2, 0) -- cycle),           lightred,  db);
+filldraw(shift(0, yshift)*(h3 -- (root3, 0) -- cycle),           lightblue, db);
+filldraw(shift(0, yshift)*(h4 -- (root4, 0) -- cycle),           lightred,  db);
+filldraw(shift(0, yshift)*(h5 -- (end,   0) -- cycle),           lightblue, db);
 
 // Plot the axes.
 label("$x$", (xmax, 0.0),  S);
