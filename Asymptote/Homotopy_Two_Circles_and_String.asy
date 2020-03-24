@@ -14,14 +14,14 @@ pen dpen = deepblue+linewidth(0.4);
 // Variable used for indexing.
 int i;
 
+// Number of steps between indices.
+int step = 4;
+
 // Starting index for looping over field lines.
-int start = 2;
+int start = 4;
 
 // Final index for field lines.
 int n = 40;
-
-// Number of steps between indices.
-int step = 5;
 
 // Variable used for computing Euler's method of solving differential equations.
 real dx = 0.001;
