@@ -7,30 +7,51 @@ outformat="pdf";
 // Size of the output figure.
 size(150);
 
+// Variable used for indexing.
 int i;
+
+// The number of spokes coming out of the circle.
 int n = 8;
+
+// Variable for drawing arrows.
 path p;
 
+// Inner and outer radii of the annulus.
 real inner  = 0.50;
 real outer  = 1.00;
-real center = 0.75;
+
+// Variable used for looping over angles.
+real phi;
+
+// THe radius of the central circle.
+real center = (inner+outer)/2.0;
+
+// Size of the arrow heads.
 real arsize = 3bp;
 
+// Margins used to give some space for the arrow heads.
 margin ArrowMargin = TrueMargin(0.0cm, 0.1cm);
 
-draw(unitcircle);
-draw(scale(0.75)*unitcircle, dashed);
-draw(scale(0.50)*unitcircle);
+// Draw the inner and outer radii.
+draw(scale(inner)*unitcircle);
+draw(scale(outer)*unitcircle);
 
+// Draw the central circle with dashed lines.
+draw(scale(center)*unitcircle, dashed);
+
+// Loop over angles and draw arrows connecting inner and outer radii to center.
 for(i=0; i<n; ++i){
-    p = inner*expi(2*pi*i/n)--center*expi(2*pi*i/n);
+    phi = 2*pi*i/n;
+    p = inner*expi(phi)--center*expi(phi);
     draw(p, Arrow(arsize), ArrowMargin);
-    p = outer*expi(2*pi*i/n)--center*expi(2*pi*i/n);
+    p = outer*expi(phi)--center*expi(phi);
     draw(p, Arrow(arsize), ArrowMargin);
 }
 
-arsize      = 5bp;
+// Label the inner circle as S^2.
+arsize = 5bp;
 p = 1.1*expi(pi/3)--center*expi(pi/3);
 draw(Label("$\mathbb{S}^{1}$", position=0.0), p, Arrow(arsize), ArrowMargin);
 
-label("$X$", (1.0, -1.0));
+// Label the entire space X.
+label("$X$", (outer, -outer));
