@@ -1,12 +1,11 @@
 // Some boiler plate stuff.
 import settings;
 import graph;
-texpreamble("\usepackage{amssymb}");
 settings.render = 4;
-outformat="pdf";
+settings.outformat="pdf";
 
 // Size of the output figure.
-size(300);
+size(200);
 
 pen cpen = deepblue+linewidth(1pt);
 pen dpen = deepblue+linewidth(0.4);
