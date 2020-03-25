@@ -83,7 +83,7 @@ L = Label("$g$", fontsize(9pt));
 stealth_arrow(L, p, S, lpen, mstart=armarg, mend=armarg, arsize=arsize);
 
 // Adjust margin.
-armarg = 0.25cm;
+armarg = 2pt;
 
 // Draw dashed lines indicating the homotopy
 p = T1{dir(90-offset)}..T2;

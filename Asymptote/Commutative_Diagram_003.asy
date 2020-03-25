@@ -1,5 +1,6 @@
 // Boilerplate stuff.
 import settings;
+import _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
 
@@ -17,13 +18,13 @@ pair C = (0.0, -2.0);
 pair D = (2.0, -2.0);
 
 // Margins for the arrows to prevent overlap with labels.
-margin ArrowMargins = TrueMargin(0.4cm, 0.4cm);
+real smarg = 0.4cm;
 
 // Draw the arrows.
-draw("$\alpha$", A -- B, arrow=Arrow(arsize), N,  margin=ArrowMargins, fpen);
-draw("$\beta$",  B -- D, arrow=Arrow(arsize), E,  margin=ArrowMargins, fpen);
-draw("$\gamma$", A -- C, arrow=Arrow(arsize), W,  margin=ArrowMargins, fpen);
-draw("$\delta$", C -- D, arrow=Arrow(arsize), S,  margin=ArrowMargins, fpen);
+sharp_arrow("$\alpha$", A--B, N, arsize=arsize, mstart=marg, mend=marg, fpen);
+sharp_arrow("$\beta$",  B--D, E, arsize=arsize, mstart=marg, mend=marg, fpen);
+sharp_arrow("$\gamma$", A--C, W, arsize=arsize, mstart=marg, mend=marg, fpen);
+sharp_arrow("$\delta$", C--D, S, arsize=arsize, mstart=marg, mend=marg, fpen);
 
 // Label the points.
 label("$A$", A);
