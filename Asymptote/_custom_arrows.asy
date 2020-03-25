@@ -74,10 +74,10 @@ void stealth_arrow(picture pic=currentpicture, Label L="", path g,
                    align align=NoAlign, pen p=currentpen,
                    real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrow(StealthHead, arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart, mend+arsize);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }
@@ -86,10 +86,10 @@ void stealth_arrows(picture pic=currentpicture, Label L="", path g,
                    align align=NoAlign, pen p=currentpen,
                    real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart-arsize, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrows(StealthHead, arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart+arsize, mend+arsize);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }
@@ -98,10 +98,10 @@ void stealth_beginarrow(picture pic=currentpicture, Label L="", path g,
                         align align=NoAlign, pen p=currentpen,
                         real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart-arsize, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, BeginArrow(StealthHead, arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart+arsize, mend);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }
@@ -110,10 +110,10 @@ void sharp_arrow(picture pic=currentpicture, Label L="", path g,
                  align align=NoAlign, pen p=currentpen,
                  real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.1), margin=margins, Arrow(arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart, mend+arsize);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }
@@ -122,10 +122,10 @@ void sharp_arrows(picture pic=currentpicture, Label L="", path g,
                   align align=NoAlign, pen p=currentpen,
                   real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart-arsize, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrows(arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart+arsize, mend+arsize);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }
@@ -134,10 +134,10 @@ void sharp_beginarrow(picture pic=currentpicture, Label L="", path g,
                       align align=NoAlign, pen p=currentpen,
                       real mstart=0, real mend=0, real arsize=0)
 {
-    margin margins = TrueMargin(mstart-arsize, mend-arsize);
+    margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, BeginArrow(arsize));
 
-    margin margins = TrueMargin(mstart, mend);
+    margin margins = TrueMargin(mstart+arsize, mend+arsize);
     draw(g, white, margin=margins);
     draw(pic, L, g, align, p, margin=margins);
 }

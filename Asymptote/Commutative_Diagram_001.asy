@@ -17,12 +17,12 @@ pair B = (0.0, -1.0);
 pair C = (1.0,  0.0);
 
 // Shrink the start and end points of the arrows.
-real armarge = 0.4cm;
+real marg = 0.4cm;
 
 // Draw the arrows.
-sharp_arrow("$f$", A--B, arsize=arsize, mstart=armarge, mend=armarge, fpen);
-sharp_arrow("$g$", B--C, arsize=arsize, mstart=armarge, mend=armarge, fpen);
-sharp_arrow("$h$", A--C, arsize=arsize, mstart=armarge, mend=armarge, fpen);
+sharp_arrow("$f$", A--B, arsize=arsize, mstart=marg, mend=marg, fpen);
+sharp_arrow("$g$", B--C, arsize=arsize, mstart=marg, mend=marg, fpen);
+sharp_arrow("$h$", A--C, arsize=arsize, mstart=marg, mend=marg, fpen);
 
 // Label the points.
 label("$A$", A);
