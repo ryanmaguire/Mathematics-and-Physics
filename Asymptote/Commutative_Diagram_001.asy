@@ -1,5 +1,6 @@
 // Seting output format to "pdf".
 import settings;
+import _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
 
@@ -16,12 +17,12 @@ pair B = (0.0, -1.0);
 pair C = (1.0,  0.0);
 
 // Shrink the start and end points of the arrows.
-margin ArrowMargins = TrueMargin(0.4cm, 0.4cm);
+real armarge = 0.4cm;
 
 // Draw the arrows.
-draw("$f$", A -- B, arrow=Arrow(arsize), W,  margin=ArrowMargins, fpen);
-draw("$h$", A -- C, arrow=Arrow(arsize), N,  margin=ArrowMargins, fpen);
-draw("$g$", B -- C, arrow=Arrow(arsize), SE, margin=ArrowMargins, fpen);
+sharp_arrow("$f$", A--B, arsize=arsize, mstart=armarge, mend=armarge, fpen);
+sharp_arrow("$g$", B--C, arsize=arsize, mstart=armarge, mend=armarge, fpen);
+sharp_arrow("$h$", A--C, arsize=arsize, mstart=armarge, mend=armarge, fpen);
 
 // Label the points.
 label("$A$", A);

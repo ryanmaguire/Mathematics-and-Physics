@@ -1,5 +1,5 @@
 // Some boiler plate stuff.
-import stealth_arrow;
+import _custom_arrows;
 import settings;
 settings.render = 8;
 outformat="pdf";
@@ -10,11 +10,10 @@ size(150);
 // Variable for drawing the blobs.
 path p;
 
-// Pen used for drawing lines.
+// Pens used for drawing lines, stealth arrows, and dashed lines.
 pen lpen = black+linewidth(1pt);
-
-// Pen used for stealth arrows.
 pen spen = black+linewidth(0.01pt);
+pen dpen = black+linewidth(0.5pt)+linetype("8 4");
 
 // Size of the arrow head;
 real arsize = 5bp;
@@ -22,9 +21,11 @@ real arsize = 5bp;
 // Variable used for the dashed arrows.
 real offset = 15;
 
-// Margins for the arrows.
-margin LineMargin  = TrueMargin(0.6cm, 0.6cm);
-margin ArrowMargin = TrueMargin(0.6cm, 0.6cm-arsize);
+// Margin for the arrows.
+real armarg = 0.6cm;
+
+// Label for the functions.
+Label L;
 
 // Define points for the left blob.
 pair A1 = (+0.0, 0.0);
@@ -54,9 +55,8 @@ pair Y = (3.0, 1.0);
 label("$X$", X);
 label("$Y$", Y);
 
-
 // Node indicating this is a homotopy.
-label("$H$", (1.5, 1.0));
+label("$H$", 0.5*(X+Y));
 
 // Coordinates for drawing arrows between curves.
 pair T1 = (1.1, 0.15);
@@ -76,22 +76,17 @@ draw(p, lpen);
 
 // Draw arrows indicating f and g.
 p = X{dir(60)}..Y;
-draw(Label("$f$", fontsize(9pt)), p, N, lpen, margin=LineMargin);
-draw(p, spen, margin=ArrowMargin, arrow=Arrow(StealthHead, arsize));
+L = Label("$f$", fontsize(9pt));
+stealth_arrow(L, p, N, lpen, mstart=armarg, mend=armarg, arsize=arsize);
 p = X{dir(-60)}..Y;
-draw(Label("$g$", fontsize(9pt)), p, S, lpen, margin=LineMargin);
-draw(p, spen, margin=ArrowMargin, arrow=Arrow(StealthHead, arsize));
+L = Label("$g$", fontsize(9pt));
+stealth_arrow(L, p, S, lpen, mstart=armarg, mend=armarg, arsize=arsize);
 
-
-// Margins for the arrows.
-LineMargin  = TrueMargin(0.25cm, 0.25cm);
-ArrowMargin = TrueMargin(0.25cm-arsize, 0.25cm-arsize);
-
-// Pen used for dashed lines.
-lpen = black+linewidth(0.5pt)+linetype("8 4");
+// Adjust margin.
+armarg = 0.25cm;
 
 // Draw dashed lines indicating the homotopy
 p = T1{dir(90-offset)}..T2;
-stealth_arrows(p, p=lpen, mstart=0.25cm, mend=0.25cm, arsize=arsize);
+stealth_arrows(p, p=dpen, mstart=armarg, mend=armarg, arsize=arsize);
 p = T3{dir(90+offset)}..T4;
-stealth_arrows(p, p=lpen, mstart=0.25cm, mend=0.25cm, arsize=arsize);
+stealth_arrows(p, dpen, mstart=armarg, mend=armarg, arsize=arsize);

@@ -1,5 +1,5 @@
 // The Cassini functions are defined in CassiniOval.asy.
-import CassiniOval;
+import _cassini_oval;
 
 // Boilerplate stuff.
 import settings;
