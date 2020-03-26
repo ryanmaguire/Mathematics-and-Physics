@@ -29,7 +29,7 @@
  *      real arsize=0                                                         *
  *          The size of the arrow head.                                       *
  ******************************************************************************/
-
+import graph3;
 
 arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
 {
@@ -70,9 +70,45 @@ arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
 }
 arrowhead StealthHead=StealthHead();
 
+arrowhead3 StealthHead3(real dir=arrowdir, real barb=arrowbarb)
+{
+  arrowhead3 a;
+  a.head=new surface(path3 g, position position=EndPoint,
+                     pen p=currentpen, real size=0, real angle=arrowangle,
+                     filltype filltype=null, bool forwards=true,
+                     projection P=currentprojection) {
+    if(size == 0) size=a.size(p);
+    
+    bool relative=position.relative;
+    real position=position.position.x;
+    if(relative) position=reltime(g,position);
+
+    path3 r=subpath(g,position,0);
+    path3 s=subpath(r,arctime(r,size),0);
+    bool straight1=length(s) == 1 && straight(g,0);
+    path3 H=path3(StealthHead(dir,barb).head((0,0)--(0,size),p,size,angle),
+                  YZplane);
+    surface head=surface(O,reverse(approach(subpath(H,1,0),7,1.5))&
+                         approach(subpath(H,1,2),4,2),Z);
+  
+    if(straight1) {
+      triple v=point(s,0);
+      triple u=point(s,1)-v;
+      return shift(v)*align(unit(u))*head;
+    } else {
+      bend(head,s,size);
+      return head;
+    }
+  };
+  a.arrowhead2=StealthHead;
+  a.gap=0.7;
+  return a;
+}
+arrowhead3 StealthHead3=StealthHead3();
+
 void stealth_arrow(picture pic=currentpicture, Label L="", path g,
                    align align=NoAlign, pen p=currentpen,
-                   real mstart=0, real mend=0, real arsize=0)
+                   real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrow(StealthHead, arsize));
@@ -84,7 +120,7 @@ void stealth_arrow(picture pic=currentpicture, Label L="", path g,
 
 void stealth_arrows(picture pic=currentpicture, Label L="", path g,
                    align align=NoAlign, pen p=currentpen,
-                   real mstart=0, real mend=0, real arsize=0)
+                   real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrows(StealthHead, arsize));
@@ -96,7 +132,7 @@ void stealth_arrows(picture pic=currentpicture, Label L="", path g,
 
 void stealth_beginarrow(picture pic=currentpicture, Label L="", path g,
                         align align=NoAlign, pen p=currentpen,
-                        real mstart=0, real mend=0, real arsize=0)
+                        real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, BeginArrow(StealthHead, arsize));
@@ -108,7 +144,7 @@ void stealth_beginarrow(picture pic=currentpicture, Label L="", path g,
 
 void sharp_arrow(picture pic=currentpicture, Label L="", path g,
                  align align=NoAlign, pen p=currentpen,
-                 real mstart=0, real mend=0, real arsize=0)
+                 real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.1), margin=margins, Arrow(arsize));
@@ -120,7 +156,7 @@ void sharp_arrow(picture pic=currentpicture, Label L="", path g,
 
 void sharp_arrows(picture pic=currentpicture, Label L="", path g,
                   align align=NoAlign, pen p=currentpen,
-                  real mstart=0, real mend=0, real arsize=0)
+                  real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, Arrows(arsize));
@@ -132,7 +168,7 @@ void sharp_arrows(picture pic=currentpicture, Label L="", path g,
 
 void sharp_beginarrow(picture pic=currentpicture, Label L="", path g,
                       align align=NoAlign, pen p=currentpen,
-                      real mstart=0, real mend=0, real arsize=0)
+                      real mstart=0, real mend=0, real arsize=5bp)
 {
     margin margins = TrueMargin(mstart, mend);
     draw(g, linewidth(0.0), margin=margins, BeginArrow(arsize));

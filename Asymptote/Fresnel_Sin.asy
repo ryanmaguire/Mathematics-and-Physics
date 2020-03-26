@@ -5,6 +5,7 @@
 
 // Import necessary stuff, set format to PDF file.
 import graph;
+import _custom_arrows;
 import settings;
 settings.outformat="pdf";
 settings.render=4;
@@ -40,22 +41,33 @@ real FRESNEL_SINE_TAYLOR_23 = -4.07013527785325672297810283986e-62;
 real FRESNEL_SINE_TAYLOR_24 =  1.66058051345108993284425792700e-65;
 real FRESNEL_SINE_TAYLOR_25 = -6.25918411694871134024677459636e-69;
 real FRESNEL_SINE_TAYLOR_26 =  2.18621042295388572102809768805e-72;
-real FRESNEL_SINE_TAYLOR_27 = -7.09571739181805357327043566663e-76;
-real FRESNEL_SINE_TAYLOR_28 =  2.14564844309633852738645079818e-79;
-real FRESNEL_SINE_TAYLOR_29 = -6.05939744697137480782877578571e-83;
-real FRESNEL_SINE_TAYLOR_30 =  1.60173329821314496897157652161e-86;
 
-// Variables that will be used throughout.
+// Variables used for indexing.
 int i;
+
+// Number of samples in the Fresnel Sine function.
 int samples1 = 200;
+
+// Number of samples for each section of sin(x^2) (there are 4).
 int samples2 = 50;
+
+// The first and last values to be plotted.
 real start   =  0.00;
 real end     =  3.40;
+
+// The start and end of the x axis.
 real xmin    = -0.10;
 real xmax    =  3.70;
+
+// The start and end of the y axis.
 real ymin    = -0.10;
 real ymax    =  1.22;
+
+// The displacement of the second graph.
 real yshift  = -2.00;
+
+// Size of the arrow heads.
+real arsize = 5bp;
 
 // Roots of sin(x^2).
 real root1   = 1.7724538509055159;
@@ -76,7 +88,9 @@ real f(real x)
     // in the range -3.3 < x < 3.3. Perfect for our plot range.
     x *= arg;
     arg *= arg;
-    sx = arg * FRESNEL_SINE_TAYLOR_24 + FRESNEL_SINE_TAYLOR_23;
+    sx = arg * FRESNEL_SINE_TAYLOR_26 + FRESNEL_SINE_TAYLOR_25;
+    sx = arg * sx + FRESNEL_SINE_TAYLOR_24;
+    sx = arg * sx + FRESNEL_SINE_TAYLOR_23;
     sx = arg * sx + FRESNEL_SINE_TAYLOR_22;
     sx = arg * sx + FRESNEL_SINE_TAYLOR_21;
     sx = arg * sx + FRESNEL_SINE_TAYLOR_20;
@@ -123,26 +137,26 @@ filldraw(shift(0, yshift)*(h3 -- (root3, 0) -- cycle),           lightblue, db);
 filldraw(shift(0, yshift)*(h4 -- (end, 0)   -- cycle),           lightred,  db);
 
 // Plot the axes.
-label("$x$", (xmax, 0.0),  S);
-label("$y$", (0.0,  ymax), W);
-label("$x$", (xmax, yshift),     S);
-label("$y$", (0.0,  ymax+yshift), W);
+label("$x$", (xmax, 0.0),         S, fontsize(9pt));
+label("$y$", (0.0,  ymax),        W, fontsize(9pt));
+label("$x$", (xmax, yshift),      S, fontsize(9pt));
+label("$y$", (0.0,  ymax+yshift), W, fontsize(9pt));
 
 // Dots for the functions at the point "x".
-dot( (end,  f(end)));
-dot( (end,  h(end)+yshift));
+dot((end, f(end)));
+dot((end, h(end)+yshift));
 
 // Draw a dashed line between the first and second plots.
-draw((end,  f(end)) -- (end, h(end)+yshift), dashed);
+draw((end, f(end)) -- (end, h(end)+yshift), dashed);
 
 // Labels for the functions and a definition of S(x), the Fresnel sin function.
 label("$S(x)$", (3.6, 0.7));
-label("$\displaystyle{S(x)=\int_{0}^{x}\sin(t^{2})\textrm{d}t}$",
+label("$\displaystyle{S(x)=\int_{0}^{x}\sin(t^{2})\,\textrm{d}t}$",
       (1.5, -0.7), fontsize(12pt));
 label("$\sin(x^{2})$", (3.6, yshift-1.1));
 
 // Draw the x axis for the first plot, loop over points to draw tick marks.
-draw((xmin, 0) -- (xmax, 0), arrow=Arrow());
+sharp_arrow((xmin, 0)--(xmax, 0), arsize=arsize);
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, 0) -- (i/4, -0.1));
@@ -152,7 +166,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the first plot, loop over points to draw tick marks.
-draw((0, ymin) -- (0, ymax), arrow=Arrow());
+sharp_arrow((0, ymin)--(0, ymax), arsize=arsize);
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2) -- (-0.1, i/2));
@@ -162,7 +176,7 @@ for (i=0; i<=2*(int)ymax; ++i){
 }
 
 // Draw the x axis for the second plot, loop over points to draw tick marks.
-draw((xmin, yshift) -- (xmax, yshift), arrow=Arrow());
+sharp_arrow((xmin, yshift)--(xmax, yshift), arsize=arsize);
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, yshift) -- (i/4, yshift-0.1));
@@ -172,7 +186,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the second plot, loop over points to draw tick marks.
-draw((0, ymin+yshift) -- (0, ymax+yshift), arrow=Arrow());
+sharp_arrow((0, ymin+yshift)--(0, ymax+yshift), arsize=arsize);
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2+yshift) -- (-0.1, i/2+yshift));

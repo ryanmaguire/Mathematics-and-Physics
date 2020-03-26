@@ -5,6 +5,7 @@
 
 // Import necessary stuff, set format to PDF file.
 import graph;
+import _custom_arrows;
 import settings;
 settings.outformat="pdf";
 settings.render=4;
@@ -41,17 +42,32 @@ real FRESNEL_COSINE_TAYLOR_24 =  8.30461450592911058167783010711e-64;
 real FRESNEL_COSINE_TAYLOR_25 = -3.25539546201302778914022841136e-67;
 real FRESNEL_COSINE_TAYLOR_26 =  1.18076183891157008799527066561e-70;
 
-// Variables that will be used throughout.
+// Variables used for indexing.
 int i;
+
+// Number of samples in the Fresnel Cosine function.
 int samples1 = 200;
+
+// Number of samples for each section of cos(x^2) (there are 5).
 int samples2 = 50;
+
+// The first and last values to be plotted.
 real start   =  0.00;
 real end     =  3.40;
+
+// The start and end of the x axis.
 real xmin    = -0.10;
 real xmax    =  3.70;
+
+// The start and end of the y axis.
 real ymin    = -0.10;
 real ymax    =  1.22;
+
+// The displacement of the second graph.
 real yshift  = -2.00;
+
+// Size of the arrow heads.
+real arsize = 5bp;
 
 // Roots of cos(x^2).
 real root1  = 1.2533141373155001;
@@ -124,10 +140,10 @@ filldraw(shift(0, yshift)*(h4 -- (root4, 0) -- cycle),           lightred,  db);
 filldraw(shift(0, yshift)*(h5 -- (end,   0) -- cycle),           lightblue, db);
 
 // Plot the axes.
-label("$x$", (xmax, 0.0),  S);
-label("$y$", (0.0,  ymax), W);
-label("$x$", (xmax, yshift),     S);
-label("$y$", (0.0,  ymax+yshift), W);
+label("$x$", (xmax, 0.0),         S, fontsize(9pt));
+label("$y$", (0.0,  ymax),        W, fontsize(9pt));
+label("$x$", (xmax, yshift),      S, fontsize(9pt));
+label("$y$", (0.0,  ymax+yshift), W, fontsize(9pt));
 
 // Dots for the functions at the point "x".
 dot((end, f(end)));
@@ -138,12 +154,12 @@ draw((end, f(end)) -- (end, h(end)+yshift), dashed);
 
 // Labels for the functions and a definition of C(x), the Fresnel cos function.
 label("$C(x)$", (3.2, 0.8));
-label("$\displaystyle{C(x)=\int_{0}^{x}\cos(t^{2})\textrm{d}t}$",
+label("$\displaystyle{C(x)=\int_{0}^{x}\cos(t^{2})\,\textrm{d}t}$",
       (1.5, -0.7), fontsize(12pt));
 label("$\cos(x^{2})$", (3.05, yshift+0.75));
 
 // Draw the x axis for the first plot, loop over points to draw tick marks.
-draw((xmin, 0) -- (xmax, 0), arrow=Arrow());
+sharp_arrow((xmin, 0)--(xmax, 0), arsize=arsize);
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, 0) -- (i/4, -0.1));
@@ -153,7 +169,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the first plot, loop over points to draw tick marks.
-draw((0, ymin) -- (0, ymax), arrow=Arrow());
+sharp_arrow((0, ymin)--(0, ymax), arsize=arsize);
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2) -- (-0.1, i/2));
@@ -163,7 +179,7 @@ for (i=0; i<=2*(int)ymax; ++i){
 }
 
 // Draw the x axis for the second plot, loop over points to draw tick marks.
-draw((xmin, yshift) -- (xmax, yshift), arrow=Arrow());
+sharp_arrow((xmin, yshift)--(xmax, yshift), arsize=arsize);
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, yshift) -- (i/4, yshift-0.1));
@@ -173,7 +189,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the second plot, loop over points to draw tick marks.
-draw((0, ymin+yshift) -- (0, ymax+yshift), arrow=Arrow());
+sharp_arrow((0, ymin+yshift)--(0, ymax+yshift), arsize=arsize);
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2+yshift) -- (-0.1, i/2+yshift));
