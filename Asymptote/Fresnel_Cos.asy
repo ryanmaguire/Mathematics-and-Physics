@@ -54,10 +54,10 @@ real ymax    =  1.22;
 real yshift  = -2.00;
 
 // Roots of cos(x^2).
-real root1   = 1.2533141373155001;
-real root2   = 2.1708037636748028;
-real root3   = 2.8024956081989645;
-real root4   = 3.3159575219782710;
+real root1  = 1.2533141373155001;
+real root2  = 2.1708037636748028;
+real root3  = 2.8024956081989645;
+real root4  = 3.3159575219782710;
 
 // Pen used for drawing functions.
 pen db = deepblue;
@@ -130,8 +130,8 @@ label("$x$", (xmax, yshift),     S);
 label("$y$", (0.0,  ymax+yshift), W);
 
 // Dots for the functions at the point "x".
-dot( (end, f(end)));
-dot( (end, h(end)+yshift));
+dot((end, f(end)));
+dot((end, h(end)+yshift));
 
 // Draw a dashed line between the first and second plots.
 draw((end, f(end)) -- (end, h(end)+yshift), dashed);
