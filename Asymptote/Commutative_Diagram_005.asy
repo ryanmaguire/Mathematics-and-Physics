@@ -4,20 +4,21 @@ import _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
 
+// Size of the output.
+size(400);
+
 // Pen used to label functions.
 pen fpen = fontsize(9pt);
 
-size(400);
-
 // Arrow size and coordinates for points.
-real ar =5bp;
+real ar = 5bp;
 pair M  = (0.0,  0.0);
 pair BO = (1.0, -1.0);
 pair BG = (1.0,  0.0);
 pair GO = (1.0,  1.0);
 
 // Margin to prevent overlap between arrows and labels.
-real m = 0.5cm;
+real m = 0.4cm;
 
 // Draw the arrows.
 sharp_arrow("$f$",               BG--BO, arsize=ar, mstart=m, mend=m, fpen);

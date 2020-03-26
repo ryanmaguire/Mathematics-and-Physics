@@ -18,7 +18,7 @@ pair C = (0.0, -2.0);
 pair D = (2.0, -2.0);
 
 // Margins for the arrows to prevent overlap with labels.
-real smarg = 0.4cm;
+real marg = 0.4cm;
 
 // Draw the arrows.
 sharp_arrow("$\alpha$", A--B, N, arsize=arsize, mstart=marg, mend=marg, fpen);
