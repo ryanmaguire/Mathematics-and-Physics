@@ -23,8 +23,8 @@ real outer  = 1.00;
 // Variable used for looping over angles.
 real phi;
 
-// THe radius of the central circle.
-real center = (inner+outer)/2.0;
+// The radius of the central circle.
+real center = (inner+outer)*0.5;
 
 // Size of the arrow heads.
 real arsize = 3bp;
