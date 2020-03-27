@@ -5,7 +5,7 @@ settings.outformat="pdf";
 settings.render=4;
 
 // Pen used to label functions.
-pen fpen = fontsize(9pt);
+pen fpen = fontsize(8pt);
 
 // Size of the output figure.
 size(100);
@@ -25,6 +25,6 @@ draw("$g$", B--C, SE, fpen, SharpArrow(arsize), margins);
 draw("$h$", A--C, N,  fpen, SharpArrow(arsize), margins);
 
 // Label the points.
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
+label("$A$", A, fontsize(10pt));
+label("$B$", B, fontsize(10pt));
+label("$C$", C, fontsize(10pt));

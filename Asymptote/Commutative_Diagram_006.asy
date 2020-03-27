@@ -5,7 +5,7 @@ settings.outformat="pdf";
 settings.render=4;
 
 // Size of output.
-size(400);
+size(350);
 
 // Pen used to label functions.
 pen fpen = fontsize(9pt);
