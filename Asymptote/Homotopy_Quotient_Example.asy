@@ -40,8 +40,7 @@ real yshift = 1.8;
 real arsize = 10bp;
 
 // Margins for the arrows.
-real smarg = 3cm;
-real emarg = 2cm;
+margin margins = TrueMargin(3cm, 2cm);
 
 // For labelling quotients.
 Label L;
@@ -79,7 +78,7 @@ draw(shift(xshift, yshift)*scale(1.0, 0.3)*arc(Origin, 1, 0, 180), dashed);
 // Draw arrow from sphere with string to kettle bettle.
 p = Origin--shift(xshift, yshift)*Origin;
 L = Label(rotate(180*atan2(yshift, xshift)/pi)*"Mod A", position=0.5);
-sharp_arrow(L, p, N, npen, arsize=arsize, mstart=smarg, mend=emarg);
+draw(L, p, N, npen, SharpArrow(arsize), margins);
 
 // Label the kettle bell.
 label("$X/A$", shift(xshift, yshift)*(scale(1.3)*expi(2pi/3)));
@@ -111,7 +110,7 @@ draw(shift(xshift+1-r, yshift-r-r_mid)*(scale(0.4, 1)*p), dashed);
 // Draw arrow from sphere with string to croissant.
 p = Origin--shift(xshift, yshift)*Origin;
 L = Label(rotate(180*atan2(yshift, xshift)/pi)*"Mod B", position=0.5);
-sharp_arrow(L, p, S, npen, arsize=arsize, mstart=smarg, mend=emarg);
+draw(L, p, S, npen, SharpArrow(arsize), margins);
 
 // Label the croissant..
 label("$X/B$", shift(xshift, yshift)*(scale(1.3)*expi(-2pi/3)));

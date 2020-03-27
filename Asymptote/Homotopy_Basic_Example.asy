@@ -10,9 +10,8 @@ size(150);
 // Variable for drawing the blobs.
 path p;
 
-// Pens used for drawing lines, stealth arrows, and dashed lines.
+// Pens used for drawing normal and dashed lines.
 pen lpen = black+linewidth(1pt);
-pen spen = black+linewidth(0.01pt);
 pen dpen = black+linewidth(0.5pt)+linetype("8 4");
 
 // Size of the arrow head;
@@ -22,7 +21,7 @@ real arsize = 5bp;
 real offset = 15;
 
 // Margin for the arrows.
-real armarg = 0.6cm;
+margin margins = TrueMargin(0.6cm, 0.6cm);
 
 // Label for the functions.
 Label L;
@@ -77,16 +76,19 @@ draw(p, lpen);
 // Draw arrows indicating f and g.
 p = X{dir(60)}..Y;
 L = Label("$f$", fontsize(9pt));
-stealth_arrow(L, p, N, lpen, mstart=armarg, mend=armarg, arsize=arsize);
+draw(L, p, N, lpen, SharpArrow(StealthHead, arsize), margins);
 p = X{dir(-60)}..Y;
 L = Label("$g$", fontsize(9pt));
-stealth_arrow(L, p, S, lpen, mstart=armarg, mend=armarg, arsize=arsize);
+draw(L, p, S, lpen, SharpArrow(StealthHead, arsize), margins);
 
 // Adjust margin.
-armarg = 2pt;
+margins = TrueMargin(2pt, 2pt);
+
+// Adjust arrow head size.
+arsize = 4bp;
 
 // Draw dashed lines indicating the homotopy
 p = T1{dir(90-offset)}..T2;
-stealth_arrows(p, p=dpen, mstart=armarg, mend=armarg, arsize=arsize);
+draw(p, dpen, SharpArrows(StealthHead, arsize), margins);
 p = T3{dir(90+offset)}..T4;
-stealth_arrows(p, dpen, mstart=armarg, mend=armarg, arsize=arsize);
+draw(p, dpen, SharpArrows(StealthHead, arsize), margins);

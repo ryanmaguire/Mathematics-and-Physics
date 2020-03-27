@@ -11,19 +11,19 @@ size(400);
 pen fpen = fontsize(9pt);
 
 // Arrow size and coordinates for points.
-real ar = 5bp;
+real arsize = 5bp;
 pair M  = (0.0,  0.0);
 pair BO = (1.0, -1.0);
 pair BG = (1.0,  0.0);
 pair GO = (1.0,  1.0);
 
-// Margin to prevent overlap between arrows and labels.
-real m = 0.4cm;
+// Margins for the arrows to prevent overlap with labels.
+margin margins = TrueMargin(0.4cm, 0.4cm);
 
 // Draw the arrows.
-sharp_arrow("$f$",               BG--BO, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$\varphi$",         M --BG, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$\tilde{\varphi}$", M --BO, arsize=ar, mstart=m, mend=m, fpen);
+draw("$f$",               BG--BO, E,  fpen, SharpArrow(arsize), margins);
+draw("$\varphi$",         M --BG, N,  fpen, SharpArrow(arsize), margins);
+draw("$\tilde{\varphi}$", M --BO, SW, fpen, SharpArrow(arsize), margins);
 
 // Label points.
 label("$M$",  M);
@@ -37,9 +37,9 @@ BG = shift(2.0, 0.0)*BG;
 GO = shift(2.0, 0.0)*GO;
 
 // Draw arrows.
-sharp_arrow("$f$",               BG--BO, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$?$",               M --BG, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$\tilde{\varphi}$", M --BO, arsize=ar, mstart=m, mend=m, fpen);
+draw("$f$",               BG--BO, E,  fpen, SharpArrow(arsize), margins);
+draw("$?$",               M --BG, N,  fpen, SharpArrow(arsize), margins);
+draw("$\tilde{\varphi}$", M --BO, SW, fpen, SharpArrow(arsize), margins);
 
 // Label coordinates.
 label("$M$",  M);
@@ -53,11 +53,11 @@ BG = shift(2.0, -0.5)*BG;
 GO = shift(2.0, -0.5)*GO;
 
 // Draw the arrows.
-sharp_arrow("$f_{1}$", M --GO, NW, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$f_{2}$", M --BG, S,  arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$f_{3}$", M --BO, SW, arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$g_{1}$", GO--BG, E,  arsize=ar, mstart=m, mend=m, fpen);
-sharp_arrow("$g_{2}$", BG--BO, E,  arsize=ar, mstart=m, mend=m, fpen);
+draw("$f_{1}$", M --GO, NW, fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", M --BG, S,  fpen, SharpArrow(arsize), margins);
+draw("$f_{3}$", M --BO, SW, fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", GO--BG, E,  fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", BG--BO, E,  fpen, SharpArrow(arsize), margins);
 
 // Label the labels.
 label("$M$",   M);

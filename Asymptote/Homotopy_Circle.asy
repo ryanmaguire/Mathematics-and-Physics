@@ -1,5 +1,6 @@
 // Some boiler plate stuff.
 import settings;
+import _custom_arrows;
 texpreamble("\usepackage{amssymb}");
 settings.render = 4;
 outformat="pdf";
@@ -30,7 +31,7 @@ real center = (inner+outer)*0.5;
 real arsize = 3bp;
 
 // Margins used to give some space for the arrow heads.
-margin ArrowMargin = TrueMargin(0.0cm, 0.1cm);
+margin margins = TrueMargin(0.0cm, 0.1cm);
 
 // Draw the inner and outer radii.
 draw(scale(inner)*unitcircle);
@@ -43,15 +44,15 @@ draw(scale(center)*unitcircle, dashed);
 for(i=0; i<n; ++i){
     phi = 2*pi*i/n;
     p = inner*expi(phi)--center*expi(phi);
-    draw(p, Arrow(arsize), ArrowMargin);
+    draw(p, Arrow(arsize), margins);
     p = outer*expi(phi)--center*expi(phi);
-    draw(p, Arrow(arsize), ArrowMargin);
+    draw(p, Arrow(arsize), margins);
 }
 
 // Label the inner circle as S^2.
 arsize = 5bp;
 p = 1.1*expi(pi/5)--center*expi(pi/5);
-draw(Label("$\mathbb{S}^{1}$", position=0.0), p, Arrow(arsize), ArrowMargin);
+draw(Label("$\mathbb{S}^{1}$", position=0.0), p, SharpArrow(arsize), margins);
 
 // Label the entire space X.
 label("$X$", (outer, -outer));
