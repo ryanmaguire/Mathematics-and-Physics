@@ -156,7 +156,7 @@ label("$\displaystyle{S(x)=\int_{0}^{x}\sin(t^{2})\,\textrm{d}t}$",
 label("$\sin(x^{2})$", (3.6, yshift-1.1));
 
 // Draw the x axis for the first plot, loop over points to draw tick marks.
-sharp_arrow((xmin, 0)--(xmax, 0), arsize=arsize);
+draw((xmin, 0)--(xmax, 0), SharpArrow(arsize));
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, 0) -- (i/4, -0.1));
@@ -166,7 +166,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the first plot, loop over points to draw tick marks.
-sharp_arrow((0, ymin)--(0, ymax), arsize=arsize);
+draw((0, ymin)--(0, ymax), SharpArrow(arsize));
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2) -- (-0.1, i/2));
@@ -176,7 +176,7 @@ for (i=0; i<=2*(int)ymax; ++i){
 }
 
 // Draw the x axis for the second plot, loop over points to draw tick marks.
-sharp_arrow((xmin, yshift)--(xmax, yshift), arsize=arsize);
+draw((xmin, yshift)--(xmax, yshift), SharpArrow(arsize));
 for (i=0; i<=4*(int)xmax+1; ++i){
     if ((i % 4) == 0){
         draw((i/4, yshift) -- (i/4, yshift-0.1));
@@ -186,7 +186,7 @@ for (i=0; i<=4*(int)xmax+1; ++i){
 }
 
 // Draw the y axis for the second plot, loop over points to draw tick marks.
-sharp_arrow((0, ymin+yshift)--(0, ymax+yshift), arsize=arsize);
+draw((0, ymin+yshift)--(0, ymax+yshift), SharpArrow(arsize));
 for (i=0; i<=2*(int)ymax; ++i){
     if ((i % 2) == 0){
         draw((0, i/2+yshift) -- (-0.1, i/2+yshift));

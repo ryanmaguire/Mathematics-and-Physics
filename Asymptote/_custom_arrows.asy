@@ -1,35 +1,6 @@
-// This little module contains functions for mimicing the tikz style of arrow
-// heads. In particular, the sharpness of detail (arrows come to a point), and
-// provides code for the stealth arrowhead which basic asymptote lacks. This
-// code is very rough but gets the job done.
-
-/***************************Defined Functions**********************************
- *  stealth_arrow, stealth_arrows, stealth_beginarrow:                        *
- *      Tikz styled steath arrow. stealth_arrows places arrows at the start   *
- *      and end of the path, stealth_beginarrow places on at the start.       *
- *  sharp_arrow, sharp_arrows, sharp_beginarrow:                              *
- *      The same of Arrows() in default asymptote be with a sharper arrowhead.*
- *      Thus it mimics the standard tikz arrow head. Particularly appealing   *
- *      for commutative diagrams and axes.                                    *
- *  inputs:                                                                   *
- *      picture pic=currentpicture                                            *
- *          Picture, if any, applied to the path.                             *
- *      Label L=""                                                            *
- *          Label used for the path.                                          *
- *      path g                                                                *
- *          The path the arrows are to be applied to.                         *
- *      align align=NoAlign                                                   *
- *          Orientation information for picture / label.                      *
- *      pen p=currentpen                                                      *
- *          The pen used to draw the path.                                    *
- *      real mstart=0                                                         *
- *          Margin applied to the start of the path (the amount trimmed off). *
- *      real mend=0                                                           *
- *          Margin applied to the end of the path.                            *
- *      real arsize=0                                                         *
- *          The size of the arrow head.                                       *
- ******************************************************************************/
-import graph3;
+// This module contains functions for mimicing the tikz style of arrow heads.
+// In particular, the sharpness of detail (arrows come to a point), and provides
+// code for the stealth arrowhead which basic asymptote lacks.
 
 arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
 {
@@ -70,110 +41,242 @@ arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
 }
 arrowhead StealthHead=StealthHead();
 
-arrowhead3 StealthHead3(real dir=arrowdir, real barb=arrowbarb)
+private real position(position currentpos, real size, path g, bool center)
 {
-  arrowhead3 a;
-  a.head=new surface(path3 g, position position=EndPoint,
-                     pen p=currentpen, real size=0, real angle=arrowangle,
-                     filltype filltype=null, bool forwards=true,
-                     projection P=currentprojection) {
-    if(size == 0) size=a.size(p);
-    
-    bool relative=position.relative;
-    real position=position.position.x;
-    if(relative) position=reltime(g,position);
-
-    path3 r=subpath(g,position,0);
-    path3 s=subpath(r,arctime(r,size),0);
-    bool straight1=length(s) == 1 && straight(g,0);
-    path3 H=path3(StealthHead(dir,barb).head((0,0)--(0,size),p,size,angle),
-                  YZplane);
-    surface head=surface(O,reverse(approach(subpath(H,1,0),7,1.5))&
-                         approach(subpath(H,1,2),4,2),Z);
-  
-    if(straight1) {
-      triple v=point(s,0);
-      triple u=point(s,1)-v;
-      return shift(v)*align(unit(u))*head;
-    } else {
-      bend(head,s,size);
-      return head;
+    // Set pos to the real value equivalent of position.
+    real pos = currentpos.position.x;
+    if(currentpos.relative) {
+        pos *= arclength(g);
+        if(center) pos += 0.5*size;
+        pos=arctime(g, pos);
     }
-  };
-  a.arrowhead2=StealthHead;
-  a.gap=0.7;
-  return a;
-}
-arrowhead3 StealthHead3=StealthHead3();
-
-void stealth_arrow(picture pic=currentpicture, Label L="", path g,
-                   align align=NoAlign, pen p=currentpen,
-                   real mstart=0, real mend=0, real arsize=5bp)
-{
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.0), margin=margins, Arrow(StealthHead, arsize));
-
-    margin margins = TrueMargin(mstart, mend+arsize);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+    else if (center)
+        pos=arctime(g, arclength(subpath(g, 0, pos))+0.5*size);
+    return pos;
 }
 
-void stealth_arrows(picture pic=currentpicture, Label L="", path g,
-                   align align=NoAlign, pen p=currentpen,
-                   real mstart=0, real mend=0, real arsize=5bp)
+private void drawsharparrow(frame f, arrowhead arhead=DefaultHead,
+                            path g, pen p=currentpen, real size=0,
+                            real angle=arrowangle, filltype fill=null,
+                            position currentpos=EndPoint, bool forwards=true,
+                            margin the_margin=NoMargin, bool center=false)
 {
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.0), margin=margins, Arrows(StealthHead, arsize));
+    // Paths for a portion of the path g and the arrow head.
+    path head, r;
 
-    margin margins = TrueMargin(mstart+arsize, mend+arsize);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+    // Boolean used when drawing the path.
+    bool endpoint;
+
+    // Integer used for the length of the path.
+    int L;
+
+    // Used for the real value equivalent of the input currentpos.
+    real pos;
+
+    // If size was not set, return size of the current pen.
+    if(size == 0) size = arhead.size(p);
+
+    // If fill was not set, use the fill type of the current pen.
+    if(fill == null) fill = arhead.defaultfilltype(p);
+
+    // Make sure the size is a legal value.
+    size = min(arrowsizelimit*arclength(g), size);
+
+    // Convert the current position into a real number.
+    pos = position(currentpos, size, g, center);
+
+    // Adjust the path by the selected margin.
+    g = the_margin(g, p).g;
+
+    // Store the length of the new path as a variable.
+    L = length(g);
+
+    // If the path should be going backwards, adjust g and pos.
+    if(!forwards) {
+        g   = reverse(g);
+        pos = L-pos;
+    }
+
+    // Get the subpath of g with respect to the position pos.
+    r = subpath(g, pos, 0);
+
+    // Again, make sure size is a legal value.
+    size = min(arrowsizelimit*arclength(r), size);
+
+    // Set information about the arrow head.
+    head = arhead.head(g, pos, p, size, angle);
+
+    endpoint = pos > L-sqrtEpsilon;
+    if(cyclic(head) && (fill == NoFill || endpoint)) {
+        if(pos > 0)   draw(f, subpath(r, arctime(r, size), length(r)), p);
+        if(!endpoint) draw(f, subpath(g, pos, L), p);
+    }
+    else draw(f, g, p);
+
+    // Fill the arrow head, setting line width to 0.0 to make it "sharp".
+    fill.fill(f, head, p+linewidth(0.0)+solid);
 }
 
-void stealth_beginarrow(picture pic=currentpicture, Label L="", path g,
-                        align align=NoAlign, pen p=currentpen,
-                        real mstart=0, real mend=0, real arsize=5bp)
+private void drawsharparrow2(frame f, arrowhead arhead=DefaultHead, path g,
+                             pen p=currentpen, real size=0,
+                             real angle=arrowangle, filltype fill=null,
+                             margin the_margin=NoMargin)
 {
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.0), margin=margins, BeginArrow(StealthHead, arsize));
+    // Paths for a portion of the path g, the arrow head, and arrow tail.
+    path head, tail, r;
 
-    margin margins = TrueMargin(mstart+arsize, mend);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+    // Integer used for the length of the path.
+    int L;
+
+    // If size was not set, return size of the current pen.
+    if(size == 0) size = arhead.size(p);
+
+    // If fill was not set, use the fill type of the current pen.
+    if(fill == null) fill = arhead.defaultfilltype(p);
+
+    // Make sure the size is a legal value.
+    size = min(arrowsizelimit*arclength(g), size);
+
+    // Adjust the path by the selected margin.
+    g = the_margin(g, p).g;
+
+    // Store the length of the new path as a variable.
+    L = length(g);
+
+    // Set r to the reverse path of g.
+    r = reverse(g);
+
+    // Set information about the arrow heads.
+    head = arhead.head(g, L, p, size, angle);
+    tail = arhead.head(r, L, p, size, angle);
+
+    if(cyclic(head))
+        draw(f, subpath(r, arctime(r, size), L-arctime(g, size)), p);
+    else draw(f,g,p);
+
+    // Fill in the head and tail ends of the path with arrows.
+    fill.fill(f,head,p+linewidth(0.0)+solid);
+    fill.fill(f,tail,p+linewidth(0.0)+solid);
 }
 
-void sharp_arrow(picture pic=currentpicture, Label L="", path g,
-                 align align=NoAlign, pen p=currentpen,
-                 real mstart=0, real mend=0, real arsize=5bp)
+private picture sharparrow(arrowhead arhead=DefaultHead,
+                           path g, pen p=currentpen, real size=0,
+                           real angle=arrowangle, filltype fill=null,
+                           position currentpos=EndPoint, bool forwards=true,
+                           margin the_margin=NoMargin, bool center=false)
 {
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.1), margin=margins, Arrow(arsize));
+    // Picture we're adding an arrow to.
+    picture pic;
 
-    margin margins = TrueMargin(mstart, mend+arsize);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+    // Real equivalent of currentpos.
+    real pos;
+
+    // Path used for reversing arrow if forwards=false is set.
+    path G;
+
+    // If size was not set, return size of the current pen.
+    if(size == 0) size = arhead.size(p);
+
+    // Add the arrow to pic.
+    pic.add(
+        new void(frame f, transform t) {
+            drawsharparrow(f, arhead, t*g, p, size, angle, fill, currentpos,
+                           forwards, the_margin, center);
+        }
+    );
+
+    // Add the path to the picture with the selected pen.
+    pic.addPath(g, p);
+
+    // Get the real value equivalent of currentpos.
+    pos = position(currentpos, size, g, center);
+
+    // If the path should be backwards, reverse it.
+    if(!forwards) {
+        G   = reverse(g);
+        pos = length(g)-pos;
+    }
+    else G = g;
+
+    // Draw the arrow on the picture.
+    addArrow(pic, arhead, G, p, size, angle, fill, pos);
+
+    return pic;
 }
 
-void sharp_arrows(picture pic=currentpicture, Label L="", path g,
-                  align align=NoAlign, pen p=currentpen,
-                  real mstart=0, real mend=0, real arsize=5bp)
+picture sharparrow2(arrowhead arhead=DefaultHead, path g, pen p=currentpen,
+                    real size=0, real angle=arrowangle, filltype fill=null,
+                    margin the_margin=NoMargin)
 {
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.0), margin=margins, Arrows(arsize));
+    // Picture we're adding an arrow to.
+    picture pic;
 
-    margin margins = TrueMargin(mstart+arsize, mend+arsize);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+    // Integer representing the length of the path.
+    int L;
+
+    // If size was not set, return size of the current pen.
+    if(size == 0) size = arhead.size(p);
+
+    pic.add(
+        new void(frame f, transform t) {
+            drawsharparrow2(f, arhead, t*g, p, size, angle, fill, the_margin);
+        }
+    );
+
+    // Add the path with the selected pen to the picture.
+    pic.addPath(g, p);
+
+    // Set L to the length of g.
+    L = length(g);
+
+    // Add an arrow to the head and tail of the path.
+    addArrow(pic, arhead, g, p, size, angle, fill, L);
+    addArrow(pic, arhead, reverse(g), p, size, angle, fill, L);
+
+    return pic;
 }
 
-void sharp_beginarrow(picture pic=currentpicture, Label L="", path g,
-                      align align=NoAlign, pen p=currentpen,
-                      real mstart=0, real mend=0, real arsize=5bp)
+arrowbar BeginSharpArrow(arrowhead arhead=DefaultHead, real size=0,
+                         real angle=arrowangle, filltype fill=null,
+                         position currentpos=BeginPoint)
 {
-    margin margins = TrueMargin(mstart, mend);
-    draw(g, linewidth(0.0), margin=margins, BeginArrow(arsize));
+    return new bool(picture pic, path g, pen p, margin the_margin) {
+        add(pic, sharparrow(arhead, g, p, size, angle, fill, currentpos,
+                            forwards=false, the_margin));
+        return false;
+    };
+}
 
-    margin margins = TrueMargin(mstart+arsize, mend+arsize);
-    draw(g, white, margin=margins);
-    draw(pic, L, g, align, p, margin=margins);
+arrowbar SharpArrow(arrowhead arhead=DefaultHead, real size=0,
+                    real angle=arrowangle, filltype fill=null,
+                    position currentpos=EndPoint)
+{
+    return new bool(picture pic, path g, pen p, margin the_margin) {
+        add(pic, sharparrow(arhead, g, p, size, angle, fill,
+                            currentpos, the_margin));
+        return false;
+    };
+}
+
+arrowbar EndSharpArrow(arrowhead arhead=DefaultHead, real size=0,
+                       real angle=arrowangle, filltype fill=null,
+                       position currentpos=EndPoint)=SharpArrow;
+
+arrowbar MidSharpArrow(arrowhead arhead=DefaultHead, real size=0,
+                       real angle=arrowangle, filltype fill=null)
+{
+    return new bool(picture pic, path g, pen p, margin the_margin) {
+        add(pic, sharparrow(arhead, g, p, size, angle, fill, MidPoint,
+                            the_margin, center=true));
+        return false;
+    };
+}
+
+arrowbar SharpArrows(arrowhead arhead=DefaultHead, real size=0,
+                     real angle=arrowangle, filltype fill=null)
+{
+    return new bool(picture pic, path g, pen p, margin the_margin) {
+        add(pic, sharparrow2(arhead, g, p, size, angle, fill, the_margin));
+        return false;
+    };
 }

@@ -18,13 +18,13 @@ pair C = (0.0, -2.0);
 pair D = (2.0, -2.0);
 
 // Margins for the arrows to prevent overlap with labels.
-real marg = 0.4cm;
+margin margins = TrueMargin(0.4cm, 0.4cm);
 
 // Draw the arrows.
-sharp_arrow("$\alpha$", A--B, N, arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$\beta$",  B--D, E, arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$\gamma$", A--C, W, arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$\delta$", C--D, S, arsize=arsize, mstart=marg, mend=marg, fpen);
+draw("$\alpha$", A--B, N, fpen, SharpArrow(arsize), margins);
+draw("$\beta$",  B--D, E, fpen, SharpArrow(arsize), margins);
+draw("$\gamma$", A--C, W, fpen, SharpArrow(arsize), margins);
+draw("$\delta$", C--D, S, fpen, SharpArrow(arsize), margins);
 
 // Label the points.
 label("$A$", A);

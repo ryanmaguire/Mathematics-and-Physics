@@ -17,15 +17,15 @@ pair B = (0.0, -1.0);
 pair C = (0.0, -2.0);
 pair D = (1.0, -1.0);
 
-// Margin for the arrows to prevent overlap with labels.
-real marg = 0.4cm;
+// Margins for the arrows to prevent overlap with labels.
+margin margins = TrueMargin(0.4cm, 0.4cm);
 
 // Draw the arrows.
-sharp_arrow("$f_{1}$", A--D, NE, arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$f_{2}$", B--D, S,  arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$f_{3}$", C--D, SE, arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$g_{1}$", A--B, W,  arsize=arsize, mstart=marg, mend=marg, fpen);
-sharp_arrow("$g_{2}$", B--C, W,  arsize=arsize, mstart=marg, mend=marg, fpen);
+draw("$f_{1}$", A--D, NE, fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", B--D, S,  fpen, SharpArrow(arsize), margins);
+draw("$f_{3}$", C--D, SE, fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", A--B, W,  fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", B--C, W,  fpen, SharpArrow(arsize), margins);
 
 // Label the points.
 label("$A$", A);
