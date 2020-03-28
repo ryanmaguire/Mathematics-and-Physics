@@ -1,8 +1,9 @@
 // Seting output format to "pdf".
 import settings;
-import _custom_arrows;
+import "../_custom_arrows.asy" as _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
+settings.prc = false;
 
 // Pen used to label functions.
 pen fpen = fontsize(8pt);
