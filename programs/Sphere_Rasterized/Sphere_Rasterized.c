@@ -21,15 +21,6 @@ double norm(double *z0, double *z1){
     return sqrtl(x*x+y*y);
 }
 
-double sixnorm(double *z0, double *z1){
-    double x, y;
-    x = z1[0] - z0[0];
-    x = powl(x, 6.0);
-    y = z1[1] - z0[1];
-    y = powl(y, 6.0);
-    return powl(x+y, 1.0/6.0);
-}
-
 int main(int argc, char *argv[])
 {
     // Pixel size of the image to be created.
