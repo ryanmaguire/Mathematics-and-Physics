@@ -4,18 +4,16 @@
 
 void color(int red, int green, int blue)
 {
-    fputc((char)red, stdout);
+    fputc((char)red,   stdout);
     fputc((char)green, stdout);
-    fputc((char)blue, stdout);
+    fputc((char)blue,  stdout);
 }
 
 int main(int argc, char *argv[])
 {
     int size = 4*1024;
-    int w = size;
-    int h = size;
     int brightness, x, y, i;
-    double pr, pi, z;
+    double pr, pi;
     double newRe, newIm, oldRe, oldIm;
     double zoom = 0.65;
     double moveX = -1.0;
