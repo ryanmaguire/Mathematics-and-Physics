@@ -1,5 +1,8 @@
 // Boilerplate stuff.
 import settings;
+
+// Make sure _custom_arrows.asy is in your $PATH.
+// This file is found in the asymptote/ folder of this project.
 import _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
