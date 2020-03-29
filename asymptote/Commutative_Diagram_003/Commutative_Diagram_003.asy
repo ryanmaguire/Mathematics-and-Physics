@@ -1,6 +1,6 @@
 // Boilerplate stuff.
 import settings;
-import _custom_arrows;
+import "../_custom_arrows" as _custom_arrows;
 settings.outformat="pdf";
 settings.render=4;
 
