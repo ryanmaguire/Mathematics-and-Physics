@@ -25,8 +25,9 @@ static void fcube(FILE *out, const int x, const int y,
                  fill=\"none\" stroke=\"black\" />\n", xc, yc-17);
 }
 
-static unsigned long rrmin = 0UL;
-static unsigned long rrmax = 0UL;
+static unsigned long rrmin = 1;
+static unsigned long rrmax = 4;
+static int           size  = 3;
 static int           center = 0;
 
 static int surface(const int x, const int y, const int z)
@@ -43,66 +44,30 @@ static int surface(const int x, const int y, const int z)
 int main(int argc, char *argv[])
 {
     int  width, height;
-    int  size, x, y, z;
-    char dummy;
-
-    if (argc != 4 || !strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
-        fprintf(stderr, "\n");
-        fprintf(stderr, "Usage: %s SIZE RRMIN RRMAX\n", argv[0]);
-        fprintf(stderr, "Where\n");
-        fprintf(stderr, "       SIZE    is the size of the voxel cube\n");
-        fprintf(stderr, "       RRMIN   is the minimum distance squared, and\n");
-        fprintf(stderr, "       RRMAX   is the maximum distance squared,\n");
-        fprintf(stderr, "               using doubled coordinates.\n");
-        fprintf(stderr, "\n");
-        fprintf(stderr, "Examples:\n");
-        fprintf(stderr, "       %s 3 1 4\n", argv[0]);
-        fprintf(stderr, "       %s 4 11 11\n", argv[0]);
-        fprintf(stderr, "       %s 5 8 16\n", argv[0]);
-        fprintf(stderr, "       %s 5 12 20\n", argv[0]);
-        fprintf(stderr, "       %s 5 16 24\n", argv[0]);
-        fprintf(stderr, "\n");
-        return EXIT_FAILURE;
-    }
-
-    if (sscanf(argv[1], " %d %c", &size, &dummy) != 1 || size < 3) {
-        fprintf(stderr, "%s: Invalid size.\n", argv[1]);
-        return EXIT_FAILURE;
-    }
-
-    if (sscanf(argv[2], " %lu %c", &rrmin, &dummy) != 1) {
-        fprintf(stderr, "%s: Invalid rrmin.\n", argv[2]);
-        return EXIT_FAILURE;
-    }
-
-    if (sscanf(argv[3], " %lu %c", &rrmax, &dummy) != 1 || rrmax < rrmin) {
-        fprintf(stderr, "%s: Invalid rrmax.\n", argv[3]);
-        return EXIT_FAILURE;
-    }
+    int  x, y, z;
 
     /* Calculate coordinate range. */
-    {   int xmin = XC(0,0,0);
-        int ymin = YC(0,0,0);
-        int xmax = XC(0,0,0);
-        int ymax = YC(0,0,0);
+    int xmin = XC(0,0,0);
+    int ymin = YC(0,0,0);
+    int xmax = XC(0,0,0);
+    int ymax = YC(0,0,0);
 
-        for (z = 0; z <= size; z++)
-            for (y = 0; y <= size; y++)
-                for (x = 0; x <= size; x++) {
-                    const int xc = XC(x,y,z);
-                    const int yc = YC(x,y,z);
-                    if (xc < xmin) xmin = xc;
-                    if (xc > xmax) xmax = xc;
-                    if (yc < ymin) ymin = yc;
-                    if (yc > ymax) ymax = yc;
-                } 
+    for (z = 0; z <= size; z++)
+        for (y = 0; y <= size; y++)
+            for (x = 0; x <= size; x++) {
+                const int xc = XC(x,y,z);
+                const int yc = YC(x,y,z);
+                if (xc < xmin) xmin = xc;
+                if (xc > xmax) xmax = xc;
+                if (yc < ymin) ymin = yc;
+                if (yc > ymax) ymax = yc;
+            }
 
-        xt = BORDER - xmin;
-        width = xmax - xmin + 2*BORDER;
+    xt = BORDER - xmin;
+    width = xmax - xmin + 2*BORDER;
 
-        yt = BORDER - ymin;
-        height = ymax - ymin + 2*BORDER;
-    }
+    yt = BORDER - ymin;
+    height = ymax - ymin + 2*BORDER;
 
     center = size - 1;
 

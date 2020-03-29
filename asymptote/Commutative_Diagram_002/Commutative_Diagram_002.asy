@@ -1,6 +1,9 @@
 // Settings for the figure.
 import settings;
-import "../_custom_arrows.asy" as _custom_arrows;
+
+// Make sure _custom_arrows.asy is in your $PATH.
+// This file is found in the asymptote/ folder of this project.
+import _custom_arrows;
 settings.outformat = "pdf";
 settings.render = 4;
 settings.prc = false;
