@@ -82,16 +82,16 @@ triple Surf1(pair t) {
 }
 
 // Draw everything.
-path3 p1=   graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
-path3 p2=   graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
-path3 p3=T1*graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
-path3 p4=T1*graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
-path3 p5=T2*graph(Tube1a, -0.5, 1.5, n=2000, operator ..);
-path3 p6=T2*graph(Tube1b, -0.5, 1.5, n=2000, operator ..);
+path3 p1=   graph(Tube1a, -0.5, 1.5, n=1000, operator ..);
+path3 p2=   graph(Tube1b, -0.5, 1.5, n=1000, operator ..);
+path3 p3=T1*graph(Tube1a, -0.5, 1.5, n=1000, operator ..);
+path3 p4=T1*graph(Tube1b, -0.5, 1.5, n=1000, operator ..);
+path3 p5=T2*graph(Tube1a, -0.5, 1.5, n=1000, operator ..);
+path3 p6=T2*graph(Tube1b, -0.5, 1.5, n=1000, operator ..);
 
-surface s1=   surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
-surface s2=T1*surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
-surface s3=T2*surface(Surf1, (0,0), (1,1), 2000, 20, Spline);
+surface s1=   surface(Surf1, (0,0), (1,1), 1000, 20, Spline);
+surface s2=T1*surface(Surf1, (0,0), (1,1), 1000, 20, Spline);
+surface s3=T2*surface(Surf1, (0,0), (1,1), 1000, 20, Spline);
 surface bot=surface(aB--bB--cB--dB--eB--fB--cycle);
 surface top=surface(aT--bT--cT--dT--eT--fT--cycle);
 
