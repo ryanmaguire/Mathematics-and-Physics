@@ -9,7 +9,7 @@ export ASYMPTOTE_DIR="$(pwd)/"
 
 # If folders for the gallery already exist, move them back to ./
 for folder in */ ; do
-
+	continue
 	# Check that the folder exists.
 	if [ -d "$folder" ]; then
 
@@ -54,7 +54,7 @@ rm -rf *.pre *.prc *.js *.tex *.pdf *.png
 
 # Create gallery pages for the images.
 for filename in ./*.asy; do
-
+	continue
 	# Extract the file name (returns file from file.asy).
 	file=$(basename -- "$filename")
 	file="${file%.*}"
@@ -76,6 +76,10 @@ for filename in ./*.asy; do
 	# Create the README file.
 	echo "Creating README..."
 	touch "$file/README.md"
+	echo "Note:" >> "$file/README.md"
+	echo "-----" >> "$file/README.md"
+	echo "The compiled example was compressed to a 256" >> "$file/README.md"
+	echo "pixel width. Actual sizes vary." >> "$file/README.md"
 	echo "Compiled Figure" >> "$file/README.md"
 	echo "---------------" >> "$file/README.md"
 	echo "![Example]($file.png)" >> "$file/README.md"
@@ -86,6 +90,7 @@ for filename in ./*.asy; do
 	echo "# To execute, run 'make Makefile make'" >> "$file/Makefile"
 	echo "SOURCE = $file" >> "$file/Makefile"
 	echo "WIDTH = 256" >> "$file/Makefile"
+	echo "DENSITY = 300" >> "$file/Makefile"
 	echo "DESTINATION = $Destination" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "make:" >> "$file/Makefile"
@@ -93,18 +98,9 @@ for filename in ./*.asy; do
 	echo -e "\trm -f \$(SOURCE).png" >> "$file/Makefile"
 	echo -e "\tasy \$(SOURCE).asy" >> "$file/Makefile"
 	echo -e "\tcp \$(SOURCE).pdf \$(DESTINATION)" >> "$file/Makefile"
-	echo -e "\tmake png" >> "$file/Makefile"
+	echo -e "\tconvert -density \$(DENSITY) \$(SOURCE).pdf"\
+			" -resize \$(WIDTH)x\$(WIDTH) \$(SOURCE).png" >> "$file/Makefile"
 	echo -e "\tmake clean" >> "$file/Makefile"
-	echo "" >> "$file/Makefile"
-	echo "png:" >> "$file/Makefile"
-	echo -e "\tmake svg" >> "$file/Makefile"
-	echo -e "\tinkscape \$(SOURCE).svg"\
-			" -w \$(WIDTH) --export-png=\$(SOURCE).png" >> "$file/Makefile"
-	echo "" >> "$file/Makefile"
-	echo "svg:" >> "$file/Makefile"
-	echo -e "\tpdf2svg \$(SOURCE).pdf \$(SOURCE).svg" >> "$file/Makefile"
-	echo -e "\tinkscape \$(SOURCE).svg"\
-			" --export-plain-svg=\$(SOURCE).svg" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "clean:" >> "$file/Makefile"
 	echo -e "\trm -rf \$(SOURCE).pdf \$(SOURCE).svg" >> "$file/Makefile"
@@ -191,6 +187,10 @@ for filename in ./*.c; do
 	# Create the README file.
 	echo "Creating README..."
 	touch "$file/README.md"
+	echo "Note:" >> "$file/README.md"
+	echo "-----" >> "$file/README.md"
+	echo "The compiled example was compressed to a 256" >> "$file/README.md"
+	echo "pixel width. Actual sizes vary." >> "$file/README.md"
 	echo "Compiled Figure" >> "$file/README.md"
 	echo "---------------" >> "$file/README.md"
 	echo "![Example]($file.png)" >> "$file/README.md"
@@ -201,6 +201,9 @@ for filename in ./*.c; do
 	echo "# To execute, run 'make Makefile make'" >> "$file/Makefile"
 	echo "SOURCE = $file" >> "$file/Makefile"
 	echo "WIDTH = 256" >> "$file/Makefile"
+	echo "DENSITY = 300" >> "$file/Makefile"
+	echo "MWIDTH = 512" >> "$file/Makefile"
+	echo "DESTINATION = $Destination" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "make:" >> "$file/Makefile"
 	echo -e "\tmake clean" >> "$file/Makefile"
@@ -219,14 +222,20 @@ for filename in ./*.c; do
 	echo -e "\tmake clean" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "png:" >> "$file/Makefile"
-	echo -e "\tinkscape \$(SOURCE).ppm"\
-			" -w \$(WIDTH) --export-png=\$(SOURCE).png" >> "$file/Makefile"
+	echo -e "\tconvert -density \$(DENSITY) \$(SOURCE).ppm"\
+			" -resize \$(MWIDTH)x\$(MWIDTH) \$(SOURCE).png" >> "$file/Makefile"
+	echo -e "\tcp \$(SOURCE).png \$(DESTINATION)" >> "$file/Makefile"
+	echo -e "\trm -f \$(SOURCE).png" >> "$file/Makefile"
+	echo -e "\tconvert -density \$(DENSITY) \$(SOURCE).ppm"\
+			" -resize \$(WIDTH)x\$(WIDTH) \$(SOURCE).png" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "svg:" >> "$file/Makefile"
-	echo -e "\tinkscape \$(SOURCE).svg"\
-			" --export-plain-svg=\$(SOURCE).svg" >> "$file/Makefile"
-	echo -e "\tinkscape \$(SOURCE).svg"\
-			" -w \$(WIDTH) --export-png=\$(SOURCE).png" >> "$file/Makefile"
+	echo -e "\tconvert -density \$(DENSITY) \$(SOURCE).svg"\
+			" -resize \$(MWIDTH)x\$(MWIDTH) \$(SOURCE).pdf" >> "$file/Makefile"
+	echo -e "\tcp \$(SOURCE).pdf \$(DESTINATION)" >> "$file/Makefile"
+	echo -e "\trm -f \$(SOURCE).pdf" >> "$file/Makefile"
+	echo -e "\tconvert -density \$(DENSITY) \$(SOURCE).svg"\
+			" -resize \$(WIDTH)x\$(WIDTH) \$(SOURCE).png" >> "$file/Makefile"
 	echo "" >> "$file/Makefile"
 	echo "clean:" >> "$file/Makefile"
 	echo -e "\trm -rf \$(SOURCE).pdf"\
