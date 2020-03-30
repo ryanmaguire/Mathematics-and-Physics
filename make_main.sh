@@ -1,4 +1,21 @@
 #!/bin/bash
+#!/bin/bash
+if [ ! "$BASH_VERSION" ] ; then
+        echo "Please use BASH to run this script ($0)" 1>&2
+        exit 1
+fi
+osstring=`uname`
+
+if [ "$osstring" = "Darwin" ]; then
+    ./make_figs_macos.sh
+elif [ "$osstring" = "Linux" ]; then
+	./make_figs_linux.sh
+else
+	echo "Operating System not recognized"
+	echo "Only MacOSX and Linux supported"
+	echo "Exiting script"
+	exit 1
+fi
 
 # Run pdflatex to create auxiliary files.
 pdflatex main.tex

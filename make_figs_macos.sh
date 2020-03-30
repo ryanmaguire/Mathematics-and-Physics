@@ -9,7 +9,7 @@ export ASYMPTOTE_DIR="$(pwd)/"
 
 # If folders for the gallery already exist, move them back to ./
 for folder in */ ; do
-	continue
+
 	# Check that the folder exists.
 	if [ -d "$folder" ]; then
 
@@ -54,7 +54,7 @@ rm -rf *.pre *.prc *.js *.tex *.pdf *.png
 
 # Create gallery pages for the images.
 for filename in ./*.asy; do
-	continue
+
 	# Extract the file name (returns file from file.asy).
 	file=$(basename -- "$filename")
 	file="${file%.*}"
