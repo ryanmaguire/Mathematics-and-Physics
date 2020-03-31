@@ -7,6 +7,7 @@
 \input{preamble.tex}                                                           %
 %----------------------------Main Document-------------------------------------%
 \begin{document}
+    \pagenumbering{roman}
     \title{MATH 114 Algebraic Topology Notes}
     \author{%
         Professor: Vladimir Chernov\\
@@ -17,6 +18,7 @@
     \tableofcontents
     \listoffigures
     \chapter{Homotopy}
+    \pagenumbering{arabic}
         \section{Lecture 1: Review}
             \subsection{Topological Spaces}
                 We start with the definition of topological spaces. We wish to
@@ -37,7 +39,7 @@
                         \item \label{def:top:Empty_and_X_Open}%
                               $\emptyset\in\tau$ and $X\in\tau$
                         \item \label{def:top:Finite_Intersections}%
-                              For all $\mathcal{U},\mathcal{U}\in\tau$ it is
+                              For all $\mathcal{U},\mathcal{V}\in\tau$ it is
                               true that $\mathcal{U}\cap\mathcal{V}\in\tau$
                         \item \label{def:top:Arbitrary_Unions}%
                               For any subset $\mathcal{O}\subseteq\tau$ it is
@@ -65,7 +67,7 @@
                 is again open so long as we declare the empty set to be open.
                 That is, $(0,1)$ and $(2,3)$ are open sets, but
                 $(0,1)\cap(2,3)=\emptyset$. This highlights the need in
-                declaring the empty set an element of the topology.
+                requiring the empty set an element of the topology.
                 \begin{figure}[H]
                     \centering
                     \captionsetup{type=figure}
@@ -107,8 +109,8 @@
                     \begin{equation}
                         \tau=\powset{X}
                     \end{equation}
-                    Again, rather trivial, this is a topology on $\nspace[]$.
-                    For those who have studied metric spaces, it is called the
+                    Again, rather trivially, this is a topology on $X$. For
+                    those who have studied metric spaces, it is called the
                     trivial topology since it is the topology induced by the
                     discrete metric:
                     \begin{equation}
@@ -162,9 +164,7 @@
                     A closed subset of a topological space $\topspace{X}$ is a
                     subset $\mathcal{C}\subseteq{X}$ such that there exists an
                     open set $\mathcal{U}\in\tau$ with:
-                    \begin{equation*}
-                        \mathcal{C}=X\setminus\mathcal{U}
-                    \end{equation*}
+                    $\mathcal{C}=X\setminus\mathcal{U}$.
                 \end{fdefinition}
                 That is, closed sets are the complements of open sets. There is
                 a common misconception that closed sets are simply \textit{not}
@@ -188,18 +188,22 @@
                 \begin{proof}
                     For if $X\setminus{C}$ is open, then
                     $X\setminus(X\setminus{C})$ is closed
-                    (Def.~\ref{def:Closed_Subset}). But
-                    $X\setminus(X\setminus{C})=C$ and hence $C$ is closed.
+                    (Def.~\ref{def:Closed_Subset}). From the idempotent law of
+                    complements, $X\setminus(X\setminus{C})=C$ and hence $C$ is
+                    closed. By a similar argument if $C$ is closed, then
+                    $X\setminus{C}$ is open.
                 \end{proof}
-                \par\hfill\par
                 Using De Morgan's laws we can define an equivalent notion of
                 topological spaces using closed sets. De Morgan's laws state for
                 sets $A,B,X$, with $A,B\subseteq{X}$, the following is true:
-                \twocolumneq{%
-                    X\setminus(A\cap{B})=(X\setminus{A})\cup(X\setminus{B})%
-                }{%
-                    X\setminus(A\cup{B})=(X\setminus{A})\cap(X\setminus{B})%
-                }
+                \begin{subequations}
+                    \begin{align}
+                        X\setminus(A\cap{B})
+                            &=(X\setminus{A})\cup(X\setminus{B})\\
+                        X\setminus(A\cup{B})
+                            &=(X\setminus{A})\cap(X\setminus{B})
+                    \end{align}
+                \end{subequations}
                 We can write this more suggestively if we let
                 $X\setminus{A}=A^{C}$ ($C$ for complement).
                 \twocolumneq{(A\cap{B})^{C}=A^{C}\cup{B}^{C}}
@@ -224,7 +228,7 @@
                     Def.~\ref{def:Topological_Space} part
                     \ref{def:top:Empty_and_X_Open} and recall that
                     $X\setminus\emptyset=X$ and $X\setminus{X}=\emptyset$. For
-                    the later parts, combine De Morgan's Laws with
+                    the latter parts, combine De Morgan's Laws with
                     Def.~\ref{def:Topological_Space} parts
                     \ref{def:top:Finite_Intersections} and
                     \ref{def:top:Arbitrary_Unions}, respectively.
@@ -235,22 +239,261 @@
             \subsection{Continuity}
                 In an analysis course one talks about continuous functions by
                 one of two equivalent means: The $\varepsilon-\delta$ definition
-                and by the limit of sequences ($f(x_{n})\rightarrow{f}(x)$ for
-                any sequence $x_{n}\rightarrow{x}$). We can also define
-                continuity more generally by means of open sets. A function
-                $f:X\rightarrow{Y}$ between topological spaces is called
-                continuous if and only if for every open subset
-                $\mathcal{V}\in{Y}$, the pre-image $f^{\minus{1}}[\mathcal{U}]$
-                is open in $X$. That is, if $\topspace[X]{X}$ and
-                $\topspace[Y]{Y}$ are our topological spaces with topologies
-                $\tau_{X}$ and $\tau_{Y}$, respectively, then
-                $f:X\rightarrow{Y}$ is continuous if and only if for all
-                $\mathcal{V}\in\tau_{Y}$, it is true that
-                $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$.
-            \subsection{Deformation Retract}
+                and by the limit of sequences ($f(a_{n})\rightarrow{f}(x)$ for
+                any sequence $a_{n}\rightarrow{x}$). Both of these are
+                pictorial, the $\epsilon-\delta$ definition saying that if we
+                move at most $\delta$ in the $x$ direction, then we will have
+                no more than $\varepsilon$ amount of error in the $y$ direction
+                (see Fig.~\ref{fig:Eps_Delta_Def_Cont}).
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Continuity_Epsilon_Delta_Def.pdf}
+                    \caption{The $\varepsilon-\delta$ Definition of Continuity}
+                    \label{fig:Eps_Delta_Def_Cont}
+                \end{figure}
+                The sequence definition says that as we get arbitrarily close to
+                $x_{0}$ by any sequence $a:\mathbb{N}\rightarrow\nspace[]$, then
+                $f(a_{n})$ approaches $f(x_{0})$
+                (see Fig.~\ref{fig:Sequence_Def_Continuity}).
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Continuity_Sequence_Definition.pdf}
+                    \caption{Sequence Definition of Continuity}
+                    \label{fig:Sequence_Def_Continuity}
+                \end{figure}
+                Both of these definitions require a metric which a general
+                topological space may not have. We can define continuity more
+                generally by means of open sets by recalling that a function
+                $f:\nspace[]\rightarrow\nspace[]$ is continuous if and only if
+                for every open subset $\mathcal{V}\subseteq\nspace[]$ it is true
+                that the \textit{pre-image} under $f$ is also an open subset.
+                That is, $f^{\minus{1}}[\mathcal{V}]\subseteq\nspace[]$ is open.
+                Since this is an if and only if we may adopt it as our
+                definition of continuity, and this only uses the notion of an
+                open set which topological spaces do have.
+                \begin{fdefinition}{Continuous Function}{Continuous_Function}
+                    A continuous function from a topological space
+                    $\topspace[X]{X}$ to a topological space $\topspace[Y]{Y}$
+                    is a function $f:X\rightarrow{Y}$ such that for every open
+                    subset $\mathcal{V}\in\tau_{Y}$ it is true that
+                    $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$. The pre-image of
+                    open sets are open.
+                \end{fdefinition}
+                \begin{example}
+                    If $\topspace{X}$ is any topological space, if
+                    $Y$ is a set, and if we choose the chaotic topology
+                    $\{\emptyset,Y\}$ on $Y$, then any function
+                    $f:X\rightarrow{Y}$ is automatically continuous. There are
+                    only two open subsets to check and we have:
+                    \twocolumneq{f^{\minus{1}}[\emptyset]=\emptyset}
+                                {f^{\minus{1}}[Y]=X}
+                    Both of which are open subsets, and hence $f$ is continuous.
+                    This is one justification for calling this the chaotic
+                    topology: Every function is continuous. There are other
+                    justifications: every sequence converges to every point
+                    simultaneously, no points can be separated, and so on.
+                \end{example}
+                \begin{example}
+                    If $\topspace{Y}$ is a topological space, if $X$ is a set,
+                    and if we choose the discrete topology $\powset{X}$ on $X$,
+                    then any function $f:X\rightarrow{Y}$ is continuous. Given
+                    any open subset $\mathcal{V}\in\tau$, the pre-image
+                    $f^{\minus{1}}[\mathcal{V}]$ is a subset of $X$ by
+                    definition and hence is an element of $\powset{X}$. That is,
+                    $f$ is continuous.
+                \end{example}
+                An important concept in topology is that of a
+                \textit{homeomorphism}. A homeomorphism is a continuous function
+                $f:X\rightarrow{Y}$ that is bijective and such that the inverse
+                function $f^{\minus{1}}:Y\rightarrow{X}$ is also continuous.
+                If there exists a homeomorphism between topological spaces
+                $\topspace[X]{X}$ and $\topspace[Y]{Y}$, then we call them
+                \textit{homeomorphic}. Topologically, homeomorphic spaces are
+                indistinguishable.
+                \begin{example}
+                    The open interval $(\minus\frac{\pi}{2},\frac{\pi}{2})$ is
+                    homeomorphic to the entire real line via the tangent
+                    function $\tan:(\minus\frac{\pi}{2},\frac{\pi}{2})%
+                    \rightarrow\nspace[]$. This is continuous, bijective, and
+                    has a continuous inverse $\arctan$. This example shows that
+                    boundedness is a metric property and not a topological one.
+                \end{example}
+                One question that often arises is when can we conclude two
+                spaces are homeomorphic. Many simple conditions that hold in
+                $\nspace[]$ do not generalize. For example, any continuous
+                bijection $f:\nspace[]\rightarrow\nspace[]$ is automatically a
+                a homeomophism since the inverse will be continuous. This is a
+                consequence of the intermediate value theorem which implies any
+                such function is then strictly monotonic. This does not
+                generalize to arbitrary topological spaces, it doesn't even
+                generalize to subspaces of $\nspace$. We can continuously and
+                bijectively map $[0,1)$ to the unit circle $\nsphere[1]$ by
+                $f(x)=\big(\cos(2\pi{x}),\sin(2\pi{x})\big)$, but the inverse is
+                not continuous. Rigorously it can't be since $\nsphere[1]$ is
+                \textit{compact} but $[0,1)$ is not, and homeomophisms preserve
+                such a notion. Intuitively, we have tied up the ends of $[0,1)$
+                continuously, but going from the unit circle to $[0,1)$ involves
+                ripping the circle somewhere, which is not continuous.
+                \par\hfill\par
+                Another common false proposition is that if $f:X\rightarrow{Y}$
+                and $g:Y\rightarrow{X}$ are continuous bijections, then the two
+                spaces are homeomorphic. This is false, and we construct a
+                counterexample to demonstrate.
+            \subsection{More Notions to Review}
+                It is hoped that the material previously discussed is all
+                review. There are other notions needed that one should quickly
+                read through if they have not seen them before, namely the
+                notion of \textit{product spaces} and \textit{quotient spaces}.
+                For product spaces we'll need to following theorem.
+                \begin{ltheorem}{The Intersections of Topologies is a Topology}
+                                {Intersection_of_Topologies_is_Topology}
+                    If $X$ is a set, and if $T\subseteq\powset{\powset{X}}$ is a
+                    non-empty collection of sets such that for all $\tau\in{T}$
+                    it is true that $\tau$ is a topology on $X$, then
+                    $\bigcap{T}$ is a topology on $X$.
+                \end{ltheorem}
+                \begin{proof}
+                    Since every element of $T$ is a topology, $\emptyset$ and
+                    $X$ are contained in all $\tau\in{T}$ and hence
+                    $\emptyset,X\in\bigcap{T}$. If we have a collection
+                    $\mathcal{O}$ of elements of $\bigcap{T}$, then each element
+                    is in every topology $\tau\in{T}$ by the definition of
+                    intersection. But then since all $\tau\in{T}$ are topologies
+                    we know that $\bigcup\mathcal{O}\in\tau$. Since this is true
+                    of all $\tau$ we conclude $\bigcup\mathcal{O}\in\bigcap{T}$.
+                    By a similar argument, $\bigcap{T}$ is closed to finite
+                    intersections. Hence, $\bigcap{T}$ is a topology on $X$.
+                \end{proof}
+                We can use this to define the product topology generated by the
+                Cartesian product of two topological spaces. If we have two
+                topological spaces $\topspace[X]{X}$ and $\topspace[Y]{Y}$ we
+                would like to place a topology on $X\times{Y}$. Moreover we
+                would like this topology to agree with product spaces we already
+                know well, such as the standard topologies on $\nspace$ or the
+                topologies induced by the product of metric spaces. We would
+                like to make life simple and set the topology to be something
+                like $\tau_{X}\times\tau_{Y}$, but this may not have the union
+                property of topologies. Indeed, if we let $X=\nspace[]$ and
+                $Y=\nspace[]$ then $\tau_{X}\times\tau_{Y}$ is the set of all
+                $\mathcal{U}\times\mathcal{V}$ where $\mathcal{U}$ and
+                $\mathcal{V}$ are open. Since open subsets of $\nspace[]$ can be
+                written as the countable union of open intervals, we can suppose
+                for the sake of visualization that $\mathcal{U}=(a,b)$ and
+                $\mathcal{V}=(c,d)$ with $a,b,c,d\in\nspace[]$. The product
+                $\mathcal{U}\times\mathcal{V}$ is an \textit{open rectangle}
+                (see Fig.~\subref{fig:Open_Rectangle_in_R2}). A blob like the
+                one in Fig.~\subref{fig:Open_Subset_Not_Product} is considered
+                open in the standard topology on $\nspace[2]$ but cannot be
+                written in the form $\mathcal{U}\times\mathcal{V}$. We use
+                Thm.~\ref{thm:Intersection_of_Topologies_is_Topology} to define
+                the product topology.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \input{tikz/Open_Rectangle_in_R2.tex}
+                        \subcaption{The Open Rectangle $(a,b)\times(c,d)$.}
+                        \label{fig:Open_Rectangle_in_R2}
+                    \end{subfigure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \begin{tikzpicture}[>=Latex]
+                            \draw[->, thick] (-0.4, 0) to (4, 0)
+                                node [above] {$x$};
+                            \draw[->, thick] (0, -0.4) to (0, 4)
+                                node [right] {$y$};
+                            \draw[fill=cyan, opacity=0.8, densely dashed]
+                                (1, 1) to (2, 1) to (2, 2) to (3, 2)
+                                       to (3, 3.5) to (1.5, 3.5)
+                                       to (1.5, 2) to (1, 2) to cycle;
+                        \end{tikzpicture}
+                        \subcaption{A Region That Cannot be Written as
+                                    $\mathcal{U}\times\mathcal{V}$.}
+                        \label{fig:Open_Subset_Not_Product}
+                    \end{subfigure}
+                    \caption{Examples of Open Subsets of $\mathbb{R}^{2}$.}
+                    \label{fig:Point_Set_Top_Open_Subsets_R2}
+                \end{figure}
+                Since the power set $\powset{X\times{Y}}$ is a topology on
+                $X\times{Y}$, the set of all topologies that contain
+                $\tau_{X}\times\tau_{Y}$ is non-empty. We thus define the
+                product topology to be the \textit{smallest} topology that
+                contains $\tau_{X}\times\tau_{Y}$. To make this precise we
+                define $\tau_{X\times{Y}}$ to be $\bigcap\Lambda$ where
+                $\Lambda$ is the set of all topologies containing
+                $\tau_{X}\times\tau_{Y}$. By
+                Thm.~\ref{thm:Intersection_of_Topologies_is_Topology} this is
+                indeed a topology on $X\times{Y}$.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Tiling_of_Open_Disc_by_Rectangle.tex}
+                    \caption{Tiling of the Open Disc by Rectangles}
+                    \label{fig:Tiling_Open_Disc_by_Rectangles}
+                \end{figure}
+                Another way of describing this is by saying it is the topology
+                \textit{generated} by all of the elements of
+                $\tau_{X}\times\tau_{Y}$. That is, we take elements of
+                $\tau_{X}\times\tau_{Y}$ and then add their unions and
+                intersections until we have a valid topology. In this way we
+                can see that the open unit disc is an open subset of the plane
+                since we can tile it with rectangles
+                (Fig.~\ref{fig:Tiling_Open_Disc_by_Rectangles}).
+                As an example, the torus can be viewed as the Cartesian product
+                of two circles equipped with the product topology
+                (see Fig.~\ref{fig:Torus_as_Prod_Space}).
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Torus_Skeleton_Product_Space.pdf}
+                    \caption{The Torus $\ntorus[]=\nsphere[1]\times\nsphere[1]$}
+                    \label{fig:Torus_as_Prod_Space}
+                \end{figure}
+                There is another standard way of viewing the torus which
+                involves quotient spaces. For quotients one should think of
+                gluing parts of a space together. Given a topological space
+                $\topspace{X}$ and an equivalence relation $R$ on $X$, we look
+                at the quotient set $X/R$. We topologize $X/R$ in the opposite
+                manner as the product topology: we choose the \textit{largest}
+                topology that makes the projection map $q:X\rightarrow{X}/R$
+                continuous. There's always a topology that makes $q$ continuous
+                since the chaotic topology $\{\emptyset,X/R\}$ does the trick,
+                but this is too small and often boring. The quotient topology is
+                defined as follows:
+                \begin{equation}
+                    \tau_{X/R}=\{\,\mathcal{V}\subseteq{X}/R\;|\;
+                        q^{\minus{1}}[\mathcal{V}]\in\tau\,\}
+                \end{equation}
+                Again, the technical details are perhaps not too important for
+                now, one should simply think of gluing together the parts
+                identified by the equivalence relation $R$. Again we return to
+                torus $\ntorus[]$, but now we define it as the quotient space
+                obtained by identifying parts of the closed unit square
+                together. Explicitly, we identify $(x,0)$ with $(x,1)$ for all
+                $x\in[0,1]$ and similarly $(0,y)$ with $(1,y)$ for $y\in[0,1]$.
+                The result of this gluing is depicted in
+                Fig.~\ref{fig:Square_to_Torus}.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Square_to_Torus.pdf}
+                    \caption{Gluing a Square into a Torus}
+                    \label{fig:Square_to_Torus}
+                \end{figure}
+        \section{Lecture 2: Deformation Retractions}
+            \subsection{Deformation Retraction}
                 A deformation retraction from a topological space $\topspace{X}$
-                onto a subset $A\subseteq{}$ is a family of continuous functions
-                $f_{t}:X\rightarrow{A}$ such that
+                onto a subset $A\subseteq{X}$ is a family of continuous
+                functions $f_{t}:X\rightarrow{A}$ indexed by the closed unit
+                interval $I=[0,1]$ such that $f_{0}=\identity{X}$,
+                $f_{1}[X]=A$, and such that $f_{t}|_{A}=\identity{A}$ for all
+                $t\in{I}$. Moreover, the function
+                $H:X\times{I}\rightarrow{X}$ defined by $H(x,t)=f_{t}(x)$ should
+                by continuous with respect to the product topology
+                ($I$ inherits it's topology from $\nspace[]$).
                 \begin{example}
                     We can take an annulus, or a punctured plane, either will
                     do, and construct a deformation retract from this onto the
@@ -260,22 +503,22 @@
                         h(\vector{x})=\frac{\vector{x}}{\norm{\vector{x}}_{2}}
                     \end{equation}
                     where $\norm{\vector{x}}_{2}$ is the \textit{Euclidean Norm}
-                    of the point $\vector{x}$, that this function maps the
-                    punctured plane $\nspace[2]\setminus\{(0,0)\}$ onto the
-                    unit sphere. To complete our deformation retraction we
-                    drag the point $\vector{x}\ne\vector{0}$ along the straight
-                    line between $\vector{x}$ and $h(\vector{x})$. We have:
+                    of the point $\vector{x}$, function maps the punctured plane
+                    $\nspace[2]\setminus\{(0,0)\}$ onto the unit circle. To
+                    complete our deformation retraction we drag the point
+                    $\vector{x}\ne\vector{0}$ along the straight line between
+                    $\vector{x}$ and $h(\vector{x})$. We have:
                     \begin{equation}
                         H(\vector{x},t)
                         =(1-t)\cdot\vector{x}+t\cdot{h}(\vector{x})
                     \end{equation}
                     This is a deformation retract since elements of the unit
                     circle are held fixed for all $t\in[0,1]$. If
-                    $\vector{s}\in\nsphere[2]$, then by definition
+                    $\vector{s}\in\nsphere[1]$, then by definition
                     $\norm{\vector{s}}_{2}=1$ and hence
                     $h(\vector{s})=\vector{s}$. Simplifying, we have:
                     \begin{equation}
-                        H(\vector{s},s)=(1-t)\cdot\vector{s}+t\cdot\vector{s}
+                        H(\vector{s},t)=(1-t)\cdot\vector{s}+t\cdot\vector{s}
                             =\vector{s}
                     \end{equation}
                     Thus $H$ gives us a deformation retraction of the punctured
@@ -290,4 +533,217 @@
                     \caption{Deformation Retraction of an Annulus to a Circle}
                     \label{fig:Def_Retract_Annulus_to_Circle}
                 \end{figure}
+                For our second example we must first define what a M\"{o}bius
+                strip is. Much the way the torus was defined by gluing together
+                parts of the unit square, so is the torus but with a twist
+                introduced. We take $[0,1]\times[0,1]$ and identify
+                $(0,y)$ with $(1,1-y)$, leaving the $x$ coordinate alone.
+                The procedure is outlined in
+                Fig.~\ref{fig:Square_to_Mobius_Strip}.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Square_to_Mobius_Strip.pdf}
+                    \caption{Gluing a Square into a M\"{o}bius Strip}
+                    \label{fig:Square_to_Mobius_Strip}
+                \end{figure}
+                For those familiar with the language, the outcome is a manifold
+                with boundary. There is an inner circle wrapping around the
+                M\"{o}bius strip that we can retract the space onto in the same
+                way that the annulus could be deformation retracted to a circle.
+                \par\hfill\par
+                The subspace which we retract our space onto need not be unique,
+                nor need they be homeomorphic. Indeed, any space can be
+                deformation retracted onto itself by the function
+                $H(x,t)=\identity{X}(x)$. The annulus is not homeomorphic to the
+                circle (they are different dimensional), but they can both be
+                deformation retracted from the same space. There are more subtle
+                exams. For example, suppose we have the plane with two holes in
+                it. We can deformation retract this space on to an abundance of
+                non-homeomorphic subspaces.
+                \begin{fdefinition}{Deformation Retraction}
+                                   {Deformation_Retraction}
+                    A deformation retraction of a topological space
+                    $\topspace{X}$ onto a subspace $\topspace[A]{A}$ is a
+                    homotopy $F:X\times{I}\rightarrow{X}$ between a deformation
+                    retract $f:X\rightarrow{A}$ and the identity function
+                    $\identity{X}$.
+                \end{fdefinition}
+                Returning to the example of the annulus
+                (Fig.~\ref{fig:Def_Retract_Annulus_to_Circle}), we can convert
+                this into a homotopy by considering the straight line homotopy
+                between $\vector{x}$ and $\uvector{x}$. We define:
+                \begin{equation}
+                    H(\vector{x},t)=(1-t)\cdot\vector{x}+
+                        t\cdot\frac{\vector{x}}{\norm{\vector{x}}}
+                \end{equation}
+                and this gives us a deformation retraction of the annulus on
+                $\nsphere[1]$. Another perhaps more difficult example is the
+                plane with two holes in it, say at $(\minus{1},0)$ and $(1,0)$.
+                There is a deformation retraction of this space onto a figure
+                eight. For the definition of a figure eight, let's start with
+                the lemniscate of Gerono, studied by the French mathematician
+                Camille-Christophe Gerono in the $19^{th}$ century C.E. The
+                defining implicit equation goes as follows:
+                \begin{equation}
+                    x^{4}-x^{2}+y^{2}=0
+                \end{equation}
+                Setting $x(\theta)=\cos(\theta)$, we have:
+                \begin{equation}
+                    y^{2}=\cos^{2}(\theta)\big(1-\cos^{2}(\theta)\big)
+                         =\cos^{2}(\theta)\sin^{2}(\theta)
+                \end{equation}
+                so we parameterize the figure eight by:
+                \begin{equation}
+                    \big(x(\theta),\,y(\theta)\big)
+                        =\big(\cos(\theta),\,\cos(\theta)\sin(\theta)\big)
+                \end{equation}
+                Now to retract the plane with two holes onto this object whilst
+                leaving the lemniscate fixed. First, suppose we've retracted all
+                far away points down to an oval, and points near the two holes
+                we've pushed out so that the holes have been enlarged from
+                points to circle. To finish the retraction we can use a bit of
+                physics and differential equations
+                (Fig.~\ref{fig:Deformation_Retraction_lemniscate_of_Gerono}).
+                \begin{figure}
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_lemniscate_of_Gerono.pdf}
+                    \caption{Deformation Retraction of the Lemniscate of Gerono}
+                    \label{fig:Deformation_Retraction_lemniscate_of_Gerono}
+                \end{figure}
+                We put two identical electric charges at the centers of the blue
+                circles. The \textit{electric field} exerted at a point
+                $\vector{x}=(x_{0},x_{1})$ in the plane is given by Coulomb's
+                law:
+                \begin{equation}
+                    F(\vector{x})=
+                    \frac{\vector{x}-\vector{r}_{1}}
+                         {\norm{\vector{x}-\vector{r}_{1}}_{2}^{3}}+
+                    \frac{\vector{x}-\vector{r}_{2}}
+                         {\norm{\vector{x}-\vector{r}_{2}}_{2}^{3}}
+                \end{equation}
+                where $\vector{r}_{1}$ and $\vector{r}_{2}$ are the coordinates
+                of the holes, we've chosen $(\minus{1},0)$ and $(1,0)$. The
+                notation $\norm{\vector{x}}_{2}^{3}$ denotes the 2-norm raised
+                to the third power. If this were an actual physics problem we
+                would need some scale factor $Q/4\pi\epsilon_{0}$, but for our
+                purposes we simply need the directions of the
+                \textit{field lines}. Given a point inside of the lemniscate, we
+                drag this point continuously outward along field lines until we
+                hit the figure eight, and for points on the outside we contract
+                inwards. All the while we leave the lemniscate fixed. The
+                outcome is a deformation retraction onto our figure eight. For
+                the sake of computation, one could use something like Euler's
+                method of solving differential equations to numerical
+                approximate this homotopy. For a more analytical approach with
+                closed form solutions, we can consider Cassini ovals. If we let
+                $a$ denote the distance from the first hole to the second, we
+                can study the family of curves satisfying the following
+                equation:
+                \begin{equation}
+                    \label{eqn:Cassini_Ovals}%
+                    \big((x-a)^{2}+y^{2}\big)\big((x+a)^{2}+y^{2}\big)=b^{4}
+                \end{equation}
+                this asks for the set of all points $P$ such that the distance
+                from $P$ to the first whole multiplied by the distance from $P$
+                to the second hole is equal to $b^{2}$. That is:
+                \begin{equation}
+                    X_{b}=\{\,\vector{x}\in\nspace[2]\;|\;
+                        \norm{\vector{x}-\vector{r}_{1}}_{2}\cdot
+                        \norm{\vector{x}-\vector{r}_{2}}_{2}=b^{2}\,\}
+                \end{equation}
+                This problem was studied by the Italian astronomer Giovanni
+                Domenico Cassini in 1680 C.E. and gives us a continuous means of
+                retracting the plane with two holes onto a figure eight. The
+                resulting figure eight is no longer the lemniscate of Gerono,
+                but rather the lemniscate of Bernoulli, studied by Jakob
+                Bernoulli in 1694 C.E. shortly after Cassini's investigations.
+                Taking the gradient of Eqn.~\ref{eqn:Cassini_Ovals} gives us a
+                vector field that once agains allows us to flow along field
+                lines until we arrive at the figure eight
+                (see Fig.~\ref{fig:Deformation_Retraction_Cassini_Ovals}). The
+                gradient is computed to be:
+                \begin{equation}
+                    \grad{f}=\big(4x(x^{2}+y^{2}-a^{2}),4y(x^{2}+y^{2}+a^2)\big)
+                \end{equation}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_Cassini_Ovals_001.pdf}
+                    \caption{Deformation Retraction Using Cassini Ovals}
+                    \label{fig:Deformation_Retraction_Cassini_Ovals}
+                \end{figure}
+                The gradient allows us to show what the paths of individual
+                points will look like, and allows us to draw
+                Fig.~\ref{fig:Deformation_Retraction_Cassini_Ovals}, but is
+                unnecessary. Cassini's equation Eqn.~\ref{eqn:Cassini_Ovals} is
+                all we need. As $b$ tends to zero we get two disconnected ovals
+                closing in on our two points. When $b$ is equal to the square
+                root of the distance between these two points we obtain our
+                lemniscate, and as $b$ grows we get a single connected object
+                that looks more and more like a circle as $b$ gets large. This
+                is precisely the description of a deformation retraction of the
+                plane with two points missing onto the figure eight and the
+                intermediate steps are shown in
+                Fig.~\ref{fig:Homotopy_Cassini_Ovals}.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_Cassini_Ovals_002.pdf}
+                    \caption{Homotopy Using Cassini Ovals}
+                    \label{fig:Homotopy_Cassini_Ovals}
+                \end{figure}
+                Now we can use our imagination to consider other possible
+                deformation retractions from the plane with two holes onto
+                smaller subspaces. For one, we can take our central lemniscate
+                of Bernoulli that was produced in
+                Fig.~\ref{fig:Deformation_Retraction_Cassini_Ovals} using
+                Cassini ovals and stretch the crossing point outwards until we
+                achieve two circles attached by a straight line
+                (see Fig.~\ref{fig:Homotopy_Two_Circles_and_String}). While the
+                retract using electric fields and the retract using Cassini
+                ovals resulted in two homeomorphic objects (the lemniscate of
+                Gerono and the lemniscate of Bernoulli are homeomorphic spaces
+                of $\nspace[2]$), this third object is \textit{not} homeomorphic
+                to either of these.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_Two_Circles_and_String.pdf}
+                    \caption{Deformation Retraction onto Two Connnected Circles}
+                    \label{fig:Homotopy_Two_Circles_and_String}
+                \end{figure}
+                We can see that these are not homeomorphic as follows. Suppose
+                $f$ is a homeomorphism from the lemniscate of Bernoulli to two
+                circles with a straight line. If we remove the center of the
+                lemniscate we are left with two objects that are homeomorphic to
+                the open unit interval $(0,1)$. However, no matter where the
+                crossing point maps to under $f$, removing a single point from
+                the latter object does not result in two homeomorphic copies of
+                the unit interval, even though homeomorphism preserve this
+                notion of subspace. So while these are both the result of
+                deformation retractions of the same space, they are \textit{not}
+                homeomorphic. Further still we can imagine stretching the
+                crossing point of our lemniscate vertically rather than
+                horizontally, obtaining Fig.~\ref{fig:Homotopy_Oval_with_Line}.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_Oval_with_Lines.pdf}
+                    \caption{Homotopy onto a Different Figure Eight}
+                    \label{fig:Homotopy_Oval_with_Line}
+                \end{figure}
+                It is perhaps easiest to see that the retraction obtained in
+                Fig.~\ref{fig:Homotopy_Oval_with_Line} is different then both
+                Fig.~\ref{fig:Deformation_Retraction_lemniscate_of_Gerono} and
+                Fig.~\ref{fig:Deformation_Retraction_Cassini_Ovals}. Removing
+                any point from this final figure eight does not disconnect the
+                space, however if one were to remove the central points from
+                either the lemniscate of Bernoulli or the circles connected by a
+                line, we disconnect these spaces into two separate parts. Since
+                homeomophisms preserve such notions, this final object is not
+                homeomorphic to either of the other two. Hence we see that none
+                of these three things are homeomorphic to each other, though
+                they are homotopy equivalent.
 \end{document}
