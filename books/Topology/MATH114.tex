@@ -1,0 +1,292 @@
+%------------------------------------------------------------------------------%
+\documentclass[oneside]{book}                                                  %
+%------------------------------Preamble----------------------------------------%
+\makeatletter                                                                  %
+    \def\input@path{{../../}}                                                  %
+\makeatother                                                                   %
+\input{preamble.tex}                                                           %
+%----------------------------Main Document-------------------------------------%
+\begin{document}
+    \title{MATH 114 Algebraic Topology Notes}
+    \author{%
+        Professor: Vladimir Chernov\\
+        Notes by: Ryan Maguire%
+    }
+    \date{\vspace{-5ex}}
+    \maketitle
+    \tableofcontents
+    \chapter{Homotopy}
+        \section{Lecture 1: Review}
+            \subsection{Topological Spaces}
+                We start with the definition of topological spaces. We wish to
+                generalize the notion of \textit{openness} that one comes across
+                in the study of metric spaces\index{Metric Space}, or more
+                concretely in the study of $\nspace$. To do this we axiomatize
+                the properties of open sets: Taking arbitrary unions of open
+                sets results in an open set, and the finite intersection of open
+                sets is still open. Furthermore, we define the entire space and
+                the empty set $\emptyset$ to be open. This gives us our
+                definition of a topological space.
+                \begin{fdefinition}{Topological Space}{Topological_Space}
+                    A topological space is a set $X$ with a collection
+                    $\tau\subseteq\powset{X}$ of subsets of $X$, called the
+                    \textit{open} subsets, such that:
+                    \index{Topological Space}\index{Open Subset}
+                    \begin{enumerate}
+                        \item \label{def:top:Empty_and_X_Open}%
+                              $\emptyset\in\tau$ and $X\in\tau$
+                        \item \label{def:top:Finite_Intersections}%
+                              For all $\mathcal{U},\mathcal{U}\in\tau$ it is
+                              true that $\mathcal{U}\cap\mathcal{V}\in\tau$
+                        \item \label{def:top:Arbitrary_Unions}%
+                              For any subset $\mathcal{O}\subseteq\tau$ it is
+                              true that $\bigcup\mathcal{O}\in\tau$
+                    \end{enumerate}
+                \end{fdefinition}
+                \begin{example}
+                    The standard metric topology on $\nspace[]$ is induced by
+                    declaring $\mathcal{U}\subseteq\nspace[]$ to be open if and
+                    only if for all $x\in\mathcal{U}$ there is an
+                    $\varepsilon>0$ such that
+                    $(x-\varepsilon,x+\varepsilon)\subseteq\mathcal{U}$. So an
+                    open interval of the form $(a,b)$ is open
+                    (see Fig.~\ref{fig:Open_Subset_of_R}).
+                \end{example}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Open_Interval_is_Open_Subset_of_R.tex}
+                    \caption{An Open Subset of $\nspace[]$}
+                    \label{fig:Open_Subset_of_R}
+                \end{figure}
+                By examining Fig.~\ref{fig:Open_Interval_Intersect_is_Open} we
+                can convince ourselves that the intersection of open intervals
+                is again open so long as we declare the empty set to be open.
+                That is, $(0,1)$ and $(2,3)$ are open sets, but
+                $(0,1)\cap(2,3)=\emptyset$. This highlights the need in
+                declaring the empty set an element of the topology.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Open_Interval_Intersection_Is_Open_Interval.tex}
+                    \caption{The Intersection of Open Intervals is Open}
+                    \label{fig:Open_Interval_Intersect_is_Open}
+                \end{figure}
+                \begin{example}
+                    Given a metric space $\metspace{X}$, the metric topology is
+                    defined by stating that $\mathcal{U}\subseteq{X}$ is open if
+                    and only if for all $x\in\mathcal{U}$ there is an
+                    $\varepsilon>0$ such that the $\varepsilon$ ball centered
+                    about $x$ is contained in $\mathcal{U}$:
+                    $\rball{\varepsilon}{\metspace{X}}{x}\subseteq\mathcal{U}$
+                    (see Fig.~\ref{fig:Open_Subset_Metric_Space}).
+                \end{example}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Open_Set_in_a_Metric_Space.pdf}
+                    \caption{Open Subset of a Metric Space}
+                    \label{fig:Open_Subset_Metric_Space}
+                \end{figure}
+                This metric topology on $\nspace[]$ is often called the
+                \textit{standard} topology, but it is not the only one we can
+                place on it.
+                \begin{example}
+                    The chaotic topology, also called the trivial topology or
+                    the indiscrete topology, is the simplest topology one can
+                    define on a set. We write:
+                    \begin{equation}
+                        \tau=\{\,\emptyset,\,X\,\}
+                    \end{equation}
+                    This is a topology since it trivially satisfies the three
+                    properties enumerated in Def.~\ref{def:Topological_Space}.
+                \end{example}
+                \begin{example}
+                    The largest topology one can define is the entire power set:
+                    \begin{equation}
+                        \tau=\powset{X}
+                    \end{equation}
+                    Again, rather trivial, this is a topology on $\nspace[]$.
+                    For those who have studied metric spaces, it is called the
+                    trivial topology since it is the topology induced by the
+                    discrete metric:
+                    \begin{equation}
+                        d(x,y)=
+                        \begin{cases}
+                            0,&x=y\\
+                            1,&x\ne{y}
+                        \end{cases}
+                    \end{equation}
+                \end{example}
+                The closed interval $[a,b]$ is \textit{not} open in the standard
+                topology (see Fig.~\ref{fig:Closed_Interval_Not_Open}), but it
+                \textit{is} open with the discrete topology since everything is
+                open in that topology. Because of this there is possible
+                ambiguity with saying $\mathcal{U}$ is open if one has not
+                specified the topology. Thankfully with most spaces one is
+                interested in there is a standard or natural topology, and we
+                usually choose this one without saying so. For metric spaces we
+                almost always choose the metric topology.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Closed_Interval_is_Not_Open}
+                    \caption{Closed Intervals are Not Open}
+                    \label{fig:Closed_Interval_Not_Open}
+                \end{figure}
+                With the real line the intersection of finitely many open sets
+                is still open, whereas we've only required the intersection of
+                two open sets to still be open. We extend this to any finite
+                collection by induction.
+                \begin{theorem}
+                    \label{thm:Finite_Intersections_Is_Open}%
+                    If $\topspace{X}$ is a topological space and
+                    $\mathcal{O}\subseteq\tau$ finite, then
+                    $\bigcap\mathcal{O}\in\tau$.
+                \end{theorem}
+                \begin{proof}
+                    Apply induction to Def.~\ref{def:Topological_Space}
+                    part \ref{def:top:Finite_Intersections}.
+                \end{proof}
+                Now that we've presented some examples, we define what it means
+                for a set to be closed. In analysis we defined a closed set to
+                be a set that has all of its limit points. For topology this is
+                not general enough (topological spaces where sequences suffice
+                to define closedness are called \textit{sequential spaces}).
+                There is a standard theorem one comes across that a subset of
+                $\nspace[]$ is closed if and only if its complement is open. We
+                take this theorem and adopt it as the definition of what it
+                means to be a closed set in a general topological space.
+                \begin{fdefinition}{Closed Subset}{Closed_Subset}
+                    A closed subset of a topological space $\topspace{X}$ is a
+                    subset $\mathcal{C}\subseteq{X}$ such that there exists an
+                    open set $\mathcal{U}\in\tau$ with:
+                    \begin{equation*}
+                        \mathcal{C}=X\setminus\mathcal{U}
+                    \end{equation*}
+                \end{fdefinition}
+                That is, closed sets are the complements of open sets. There is
+                a common misconception that closed sets are simply \textit{not}
+                open sets, and vice-versa, but this is not so. In the discrete
+                topology every set is open, and hence every set is closed. In
+                the indiscrete topology there are no non-empty proper open
+                subsets, and hence most sets are neither open nor closed. These
+                examples show that openness and closedness are
+                \textit{a priori} unrelated notions. If we know $A\subseteq{X}$
+                is open and nothing more, we cannot conclude whether or not $A$
+                is closed, and similarly if we know $B\subseteq{X}$ is closed
+                and nothing more, then we cannot conclude whether or not $B$ is
+                open. Using the idempotent laws of complement, we obtain the
+                following:
+                \begin{theorem}
+                    \label{thm:Closed_Iff_Comp_is_Open}%
+                    If $\topspace{X}$ is a topological space and
+                    $C\subseteq{X}$, then $C$ is closed if and only if
+                    $X\setminus{C}$ is open.
+                \end{theorem}
+                \begin{proof}
+                    For if $X\setminus{C}$ is open, then
+                    $X\setminus(X\setminus{C})$ is closed
+                    (Def.~\ref{def:Closed_Subset}). But
+                    $X\setminus(X\setminus{C})=C$ and hence $C$ is closed.
+                \end{proof}
+                \par\hfill\par
+                Using De Morgan's laws we can define an equivalent notion of
+                topological spaces using closed sets. De Morgan's laws state for
+                sets $A,B,X$, with $A,B\subseteq{X}$, the following is true:
+                \twocolumneq{%
+                    X\setminus(A\cap{B})=(X\setminus{A})\cup(X\setminus{B})%
+                }{%
+                    X\setminus(A\cup{B})=(X\setminus{A})\cap(X\setminus{B})%
+                }
+                We can write this more suggestively if we let
+                $X\setminus{A}=A^{C}$ ($C$ for complement).
+                \twocolumneq{(A\cap{B})^{C}=A^{C}\cup{B}^{C}}
+                            {(A\cup{B})^{C}=A^{C}\cap{B}^{C}}
+                De Morgan's laws hold for arbitrary unions and intersections:
+                \twocolumneq{%
+                    \Big(\bigcap\mathcal{U}\Big)^{C}=\bigcup\mathcal{U}^{C}%
+                }{%
+                    \Big(\bigcup\mathcal{U}\Big)^{C}=\bigcap\mathcal{U}^{C}%
+                }
+                With this we may prove the following.
+                \begin{theorem}
+                    If $\topspace{X}$ is a topological space, then $\emptyset$
+                    and $X$ are closed, if $\mathcal{C},\mathcal{D}\subseteq{X}$
+                    are closed, then $\mathcal{C}\cup\mathcal{D}$ is closed, and
+                    if $\Lambda\subseteq\powset{X}$ is a collection of closed
+                    subsets of $X$, then $\bigcap\Lambda$ is closed.
+                \end{theorem}
+                \begin{proof}
+                    For the first part, apply the definition of closed subsets
+                    (Def.~\ref{def:Closed_Subset}) to
+                    Def.~\ref{def:Topological_Space} part
+                    \ref{def:top:Empty_and_X_Open} and recall that
+                    $X\setminus\emptyset=X$ and $X\setminus{X}=\emptyset$. For
+                    the later parts, combine De Morgan's Laws with
+                    Def.~\ref{def:Topological_Space} parts
+                    \ref{def:top:Finite_Intersections} and
+                    \ref{def:top:Arbitrary_Unions}, respectively.
+                \end{proof}
+                We may expand the union of two closed sets to the unions of
+                finitely many closed sets inductively as we did in
+                Thm.~\ref{thm:Finite_Intersections_Is_Open}.
+            \subsection{Continuity}
+                In an analysis course one talks about continuous functions by
+                one of two equivalent means: The $\varepsilon-\delta$ definition
+                and by the limit of sequences ($f(x_{n})\rightarrow{f}(x)$ for
+                any sequence $x_{n}\rightarrow{x}$). We can also define
+                continuity more generally by means of open sets. A function
+                $f:X\rightarrow{Y}$ between topological spaces is called
+                continuous if and only if for every open subset
+                $\mathcal{V}\in{Y}$, the pre-image $f^{\minus{1}}[\mathcal{U}]$
+                is open in $X$. That is, if $\topspace[X]{X}$ and
+                $\topspace[Y]{Y}$ are our topological spaces with topologies
+                $\tau_{X}$ and $\tau_{Y}$, respectively, then
+                $f:X\rightarrow{Y}$ is continuous if and only if for all
+                $\mathcal{V}\in\tau_{Y}$, it is true that
+                $f^{\minus{1}}[\mathcal{V}]\in\tau_{X}$.
+            \subsection{Deformation Retract}
+                A deformation retraction from a topological space $\topspace{X}$
+                onto a subset $A\subseteq{}$ is a family of continuous functions
+                $f_{t}:X\rightarrow{A}$ such that
+                \begin{example}
+                    We can take an annulus, or a punctured plane, either will
+                    do, and construct a deformation retract from this onto the
+                    unit circle $\nsphere[1]$. We do this by noting the function
+                    $h$ defined on $\nspace[2]\setminus\{(0,0)\}$ by:
+                    \begin{equation}
+                        h(\vector{x})=\frac{\vector{x}}{\norm{\vector{x}}_{2}}
+                    \end{equation}
+                    where $\norm{\vector{x}}_{2}$ is the \textit{Euclidean Norm}
+                    of the point $\vector{x}$, that this function maps the
+                    punctured plane $\nspace[2]\setminus\{(0,0)\}$ onto the
+                    unit sphere. To complete our deformation retraction we
+                    drag the point $\vector{x}\ne\vector{0}$ along the straight
+                    line between $\vector{x}$ and $h(\vector{x})$. We have:
+                    \begin{equation}
+                        H(\vector{x},t)
+                        =(1-t)\cdot\vector{x}+t\cdot{h}(\vector{x})
+                    \end{equation}
+                    This is a deformation retract since elements of the unit
+                    circle are held fixed for all $t\in[0,1]$. If
+                    $\vector{s}\in\nsphere[2]$, then by definition
+                    $\norm{\vector{s}}_{2}=1$ and hence
+                    $h(\vector{s})=\vector{s}$. Simplifying, we have:
+                    \begin{equation}
+                        H(\vector{s},s)=(1-t)\cdot\vector{s}+t\cdot\vector{s}
+                            =\vector{s}
+                    \end{equation}
+                    Thus $H$ gives us a deformation retraction of the punctured
+                    plane onto the unit circle. We can do the same deformation
+                    retraction with an annulus if we simply restrict $h$ to that
+                    domain (see Fig.~\ref{fig:Def_Retract_Annulus_to_Circle}).
+                \end{example}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Homotopy_Circle.pdf}
+                    \caption{Deformation Retraction of an Annulus onto a Circle}
+                    \label{fig:Def_Retract_Annulus_to_Circle}
+                \end{figure}
+\end{document}
