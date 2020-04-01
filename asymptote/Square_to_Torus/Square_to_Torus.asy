@@ -70,8 +70,9 @@ p = scale(1.0, 2.0)*arc((1.0, 0), 0.1, 0, 360);
 draw(shift(xshift, yshift)*p, BeginArrow(arsize, pos1),
                               BeginArrow(arsize, pos2));
 
-p = scale(1.0, 2.0)*arc((1.4, 0), 0.1, -180, 180);
-draw(shift(xshift, yshift)*p, Arrow(arsize, pos1), Arrow(arsize, pos2));
+p = reflect((1.2, 0), (1.2, 1))*p;
+draw(shift(xshift, yshift)*p, BeginArrow(arsize, pos1),
+                              BeginArrow(arsize, pos2));
 
 p = (1.0, -0.2) {dir(170)}..(0.2, 0.1){NW}..
     (1.2,  0.8) {dir(0)}..  (2.2, 0.1){SW}..(1.4, -0.2){dir(190)};
