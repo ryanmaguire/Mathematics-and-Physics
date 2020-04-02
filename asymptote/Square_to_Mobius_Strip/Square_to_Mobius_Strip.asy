@@ -77,7 +77,7 @@ draw(shift(xshift, yshift)*p, white+4, margins);
 draw(shift(xshift, yshift)*p);
 
 // Shift for the fourth drawing.
-xshift =  1.5;
+xshift =  1.8;
 yshift = -1.5;
 
 // Scales for the fourth object.
