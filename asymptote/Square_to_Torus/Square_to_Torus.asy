@@ -1,7 +1,7 @@
 // Some boiler plate stuff.
 import settings;
 settings.render = 4;
-outformat="pdf";
+settings.outformat="pdf";
 
 // Size of the output figure.
 size(350);
