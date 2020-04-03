@@ -2,7 +2,7 @@
 import _custom_arrows;
 import settings;
 settings.render = 8;
-outformat="pdf";
+settings.outformat="pdf";
 
 // Size of the output figure.
 size(150);

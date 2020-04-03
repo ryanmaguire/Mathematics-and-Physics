@@ -78,4 +78,4 @@ label("$\mathbb{S}^{1}$", (xshift-r, 0.7*r));
 label("$\mathbb{S}^{1}\times{I}$", (xshift-1.4*r, 0), fontsize(8pt));
 
 label("$\mathbb{R}^{2}$", (0.8*r, 0.8*r));
-label("$f[\mathbb{S}^{2}]$", (-0.7*r, 0.7*r), dpen+fontsize(8pt));
+label("$f[\mathbb{S}^{1}]$", (-0.7*r, 0.7*r), dpen+fontsize(8pt));
