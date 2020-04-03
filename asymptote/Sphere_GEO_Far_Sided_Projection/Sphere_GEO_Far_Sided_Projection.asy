@@ -1,10 +1,11 @@
 // Some boiler plate stuff.
 import settings;
+import _custom_arrows;
 settings.render = 8;
-outformat="pdf";
+settings.outformat="pdf";
 
 // Size of the output figure.
-size(300);
+size(256);
 
 // Variables used throughout to draw circles, cones, and ellipses.
 real AngleA = 170;
@@ -34,8 +35,8 @@ pair lCone = (-2.856, -2.0);
 path p;
 
 // Axes for the floor.
-draw(Label("$y$", pos, align=N),  F--yend, Arrow(arsize));
-draw(Label("$x$", pos, align=NW), F--xend, Arrow(arsize));
+draw(Label("$y$", pos, align=N),  F--yend, SharpArrow(arsize));
+draw(Label("$x$", pos, align=NW), F--xend, SharpArrow(arsize));
 
 // Path for the cone representing the observer.
 p = V--lCone--shift(F)*scale(2.856, 0.8)*arc(O, 1.0, 180, 360)--rCone--cycle;

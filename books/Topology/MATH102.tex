@@ -7,6 +7,7 @@
 \input{preamble.tex}                                                           %
 %----------------------------Main Document-------------------------------------%
 \begin{document}
+    \pagenumbering{roman}
     \title{MATH 102 Geometry Notes}
     \author{%
         Professor: Carolyn Gordon\\
@@ -15,137 +16,683 @@
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
+    \listoffigures
     \chapter{Lie Groups and Lie Algebras}
-        \section{Lecture 0: Review}
+    \pagenumbering{arabic}
+        \section{Lecture 1: Review}
             \subsection{Coordinate Charts in a Manifold}
+                A coordinate chart in a manifold $M$ is an open subset
+                $\mathcal{U}\subseteq{M}$ together with a homomorphism
+                $\varphi:\mathcal{U}\rightarrow\mathcal{V}$ where $\mathcal{V}$
+                is an open subset of $\nspace$ for some $n\in\mathbb{N}$.
+                Equivalently, $\varphi:\mathcal{U}\rightarrow\nspace$ is a
+                continuous injective open mapping
+                (Fig.~\ref{fig:Coordinate_Chart}).
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Chart_in_a_Manifold.pdf}
+                    \caption{A Coordinate Chart in a Manifold}
+                    \label{fig:Coordinate_Chart}
+                \end{figure}
+                \begin{example}
+                    We can form a coordinate chart on the sphere by mapping the
+                    upper hemisphere down to the plane. That is, if we consider
+                    points $(x,y,z)\in\nsphere[2]$ such that $z>0$, we can take
+                    this open set $\mathcal{U}^{+}$ and map it to $\nspace[2]$
+                    by $\varphi(x,y,z)=(x,y)$. This is a continuous injective
+                    open mapping, satisfying the criterion for a coordinate
+                    chart. This type of chart is called an \textit{orthographic}
+                    projection and is shown in
+                    Fig.~\ref{fig:Sphere_Orthographic_Projection}.
+                \end{example}
+                \begin{figure}
+                    \centering
+                    \captionsetup{type=figure}
+                    \resizebox{!}{0.8\height}{
+                    \includegraphics{images/Sphere_Orthographic_Projection.pdf}
+                    }
+                    \caption{Orthographic Projection of a Sphere}
+                    \label{fig:Sphere_Orthographic_Projection}
+                \end{figure}
+                The orthographic projection can be defined by taking an observer
+                at the north pole and bringing them off to infinity in the
+                \textit{up} direction. The orthographic projection is then what
+                they would see if they had an amazing telescope. If we stop at
+                some finite distance we wouldn't get the whole northern
+                hemisphere (if you climb a small latter at the north pole you
+                would not be able to see the equator). These
+                \textit{near-sided} projections give us different coordinate
+                charts. Suppose our observer is at Geosynchronous orbit which is
+                fairly far away. The resulting coordinate chart is shown in
+                Fig.~\subref{fig:Near_Sided_Proj}. Further still we can imagine
+                removing what the observer can see, hollowing out the Earth, and
+                then projecting what is left onto
+                the plane. This results in the \textit{far-sided} projection
+                and is shown in Fig.~\subref{fig:Far_Sided_Proj}.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \captionsetup{type=figure}
+                        \resizebox{!}{0.8\height}{
+                            \includegraphics{%
+                                images/Sphere_GEO_Near_Sided_Projection.pdf%
+                            }
+                        }
+                        \subcaption{Near-Sided Projection}
+                        \label{fig:Near_Sided_Proj}
+                    \end{subfigure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \captionsetup{type=figure}
+                        \resizebox{!}{0.8\height}{
+                            \includegraphics{%
+                                images/Sphere_GEO_Far_Sided_Projection.pdf%
+                            }
+                        }
+                        \subcaption{Far-Sided Projection}
+                        \label{fig:Far_Sided_Proj}
+                    \end{subfigure}
+                    \caption{Different Projections of a Sphere}
+                \end{figure}
+                All of these are valid coordinate charts on the sphere
+                $\nsphere[2]$.
             \subsection{Tangent Spaces}
+                There are three ways we can think of the tangent space
+                $\tanspace{\vector{x}}{\nspace}$ given a point
+                $\vector{x}\in\nspace$. Firstly we can think of the classical
+                calculus manner of tangent spaces, which is just a collection of
+                vectors starting at $\vector{x}$. We can also use derivations.
+                If we let $\Ckspace{\infty}{\nspace}$ denote the set of all
+                smooth functions $f:\nspace\rightarrow\nspace[]$, then a
+                \textit{derivation} is a function
+                $D:\Ckspace{\infty}{\nspace}\rightarrow\nspace[]$ that is linear
+                and Liebnizian. That is, for all $a,b\in\nspace[]$ and
+                $f,g\in\Ckspace{\infty}{\nspace}$ the following holds:
+                \begin{subequations}
+                    \begin{align}
+                        D(af+bg)&=aD(f)+bD(g)\\
+                        D(fg)&=D(f)g(p)+f(p)D(g)
+                    \end{align}
+                \end{subequations}
+                There is a basis for the space of derivations consisting of the
+                partial derivatives at $\vector{x}$. Lastly, we can think of
+                equivalence classes of smooth curves passing through the point
+                $\vector{x}$. Using $\nspace[2]$ as an example, the three curves
+                in figure Fig.~\ref{fig:Tan_Vec_as_Curves} passing through the
+                point $p\in\nspace[2]$ belong to the same equivalence classe
+                since they have the same tangent vector at $p$.
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Tangent_Vector_as_Equiv_Curves.pdf}
+                    \caption{Tangent Vectors as Curves}
+                    \label{fig:Tan_Vec_as_Curves}
+                \end{figure}
+                There's a relationship between these three modes of thought.
+                Given a vector $\vector{v}$ at $\vector{x}$ we can form a
+                derivation $D$ by the equation:
+                \begin{equation}
+                    D_{\vector{v}}(f)=
+                        \frac{\diff}{\diff{t}}\Big|_{t=0}
+                        \big(f(\vector{x}+t\vector{v})\big)
+                \end{equation}
+                That is, we take $D$ to be the \textit{directional derivative}.
+                A curve also gives rise to a derivation since a curve is simply
+                a function $\gamma:(0,1)\rightarrow\nspace$. Given
+                $f\in\Ckspace{\infty}{\nspace}$ we can compose
+                $f\circ\gamma:(0,1)\rightarrow\nspace[]$, and on this we can
+                perform ordinary calculus. We define the derivation by:
+                \begin{equation}
+                    D_{\gamma}(f)=\frac{\diff}{\diff{t}}\Big|_{t=t_{0}}
+                        \big(f\circ\gamma\big)
+                \end{equation}
+                where $t_{0}$ is the time when $\gamma$ passes through $p$. This
+                derivation corresponds to the equivalence class of curves with
+                the same slope as the curve $\Gamma(t)=\vector{x}+t\vector{v}$.
+                \par\hfill\par
+                In the manifold setting we may lose the vector space structure
+                offered in $\nspace$ and hence may not be able to use the first
+                manner of tangent vectors, but the latter two are still well
+                defined. Given a manifold $M$ and a point $p\in{M}$ one can
+                obtain a basis for $\tanspace{p}{M}$ by taking a coordinate chart
+                $(\mathcal{U},\varphi)$ with $p\in\mathcal{U}$ and defining the
+                \textit{partials} at $p$ with respect to this chart. If we have
+                a smooth real value function $f\in\Ckspace{\infty}{M}$ we can
+                compose this with $\varphi^{\minus{1}}$ which gives us a
+                function from an open subset of $\nspace$ to the real line 
+                (Fig.~\ref{fig:Partials_on_Manifold}).
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Smooth_Real_Valued_Function_on_a_Manifold.tex}
+                    \caption{Smooth Real-Valued Function on a Manifold}
+                    \label{fig:Partials_on_Manifold}
+                \end{figure}
+                We define the partial derivative with respect to the
+                $i^{th}$ coordinate as follows:
+                \begin{equation}
+                    \frac{\partial}{\partial{\varphi}_{i}}\Big|_{p}f
+                    =\frac{\partial}{\partial{x}_{i}}\Big|_{\varphi(p)}
+                        \big(f\circ\varphi^{\minus{1}}\big)
+                \end{equation}
+                where $x_{i}=\pi_{i}\circ\varphi$ with $\pi_{i}$ being the
+                $i^{th}$ projection mapping.
             \subsection{Differentiation in Euclidean Space}
+                Let $f:\nspace[m]\rightarrow\nspace$ be a function. We say that
+                $f$ is differentiable at a point $\vector{x}\in\nspace[m]$ if
+                there is a linear map $T:\nspace[m]\rightarrow\nspace$ such
+                that:
+                \begin{equation}
+                    \underset{\vector{h}\rightarrow\vector{0}}{\lim}
+                    \frac{\norm{f(\vector{x}+\vector{h})-
+                        f(\vector{x})-T\vector{h}}_{2}^{n}}
+                        {\norm{\vector{h}}_{2}^{m}}=0
+                \end{equation}
+                where $\norm{\cdot}_{2}^{k}$ denotes the \textit{Euclidean norm}
+                in $\nspace[k]$. We denote $T$ by $f_{*_{\vector{x}}}$.
+                \begin{theorem}
+                    If $f:\nspace[m]\rightarrow\nspace$ is a linear function,
+                    and if $\vector{x}\in\nspace[m]$, then $f$ is differentiable
+                    at $\vector{x}$ and
+                    $f_{*_{\vector{x}}}(\vector{u})=f(\vector{u})$
+                \end{theorem}
+                \begin{proof}
+                    For if $f$ is linear, let $T:\nspace[m]\rightarrow\nspace$
+                    be the linear operator $T\vector{h}=f(\vector{h})$. Then:
+                    \begin{subequations}
+                        \begin{align}
+                            \underset{\vector{h}\rightarrow\vector{0}}{\lim}
+                            \frac{%
+                                \norm{%
+                                    f(\vector{x}+\vector{h})-
+                                    f(\vector{x})-
+                                    T\vector{h}%
+                                }_{2}^{n}%
+                            }%
+                            {%
+                                \norm{\vector{h}}_{2}^{m}%
+                            }
+                            &=\underset{\vector{h}\rightarrow\vector{0}}{\lim}
+                            \frac{%
+                                \norm{%
+                                    f(\vector{x})+
+                                    f(\vector{h})-
+                                    f(\vector{x})-
+                                    T\vector{h}%
+                                }_{2}^{n}%
+                            }%
+                            {%
+                                \norm{\vector{h}}_{2}^{m}%
+                            }\\
+                            &=\underset{\vector{h}\rightarrow\vector{0}}{\lim}
+                            \frac{%
+                                \norm{%
+                                    f(\vector{h})-
+                                    T\vector{h}%
+                                }_{2}^{n}%
+                            }%
+                            {%
+                                \norm{\vector{h}}_{2}^{m}%
+                            }\\
+                            &=\underset{\vector{h}\rightarrow\vector{0}}{\lim}
+                            \frac{\norm{\vector{0}}_{2}^{n}}
+                                 {\norm{\vector{x}}_{2}^{m}}\\
+                            &=0
+                        \end{align}
+                    \end{subequations}
+                    and hence $f$ is differetiable. By definition
+                    $f_{*_{\vector{x}}}(\vector{u})=T\vector{u}$ and
+                    $T\vector{u}=f(\vector{u})$.
+                \end{proof}
+                If we consider the curve $\gamma(t)=\vector{x}+t\vector{v}$,
+                then we see:
+                \begin{equation}
+                    f_{*_{\vector{x}}}(\vector{v})=D_{\gamma}f\big|_{\vector{x}}
+                \end{equation}
+                If $\vector{e}_{i}$ denotes the standard $i^{th}$ basis vector,
+                then we have:
+                \begin{equation}
+                    f_{*}(\vector{e}_{i})=\frac{\partial}{\partial{x}_{i}}
+                \end{equation}
+                The matrix corresponding to $f_{*}$ is given by:
+                \begingroup
+                    \renewcommand*{\arraystretch}{1.5}
+                    \begin{equation}
+                        J=
+                        \begin{bmatrix}
+                            \frac{\partial{f}_{1}}{\partial{x}_{1}}&
+                            \frac{\partial{f}_{1}}{\partial{x}_{2}}
+                            &\dots&
+                            \frac{\partial{f}_{1}}{\partial{x}_{n}}\\
+                            \frac{\partial{f}_{2}}{\partial{x}_{1}}&
+                            \frac{\partial{f}_{2}}{\partial{x}_{2}}
+                            &\dots&
+                            \frac{\partial{f}_{2}}{\partial{x}_{n}}\\
+                            \vdots&\vdots&\ddots&\vdots&\\
+                            \frac{\partial{f}_{m}}{\partial{x}_{1}}&
+                            \frac{\partial{f}_{m}}{\partial{x}_{2}}
+                            &\dots&
+                            \frac{\partial{f}_{m}}{\partial{x}_{n}}
+                        \end{bmatrix}
+                    \end{equation}
+                \endgroup
+                \begin{example}
+                    Let $m,n,p\in\mathbb{N}^{+}$ be positive integers and
+                    $B:\nspace[m]\times\nspace\rightarrow\nspace[p]$ a bilinear
+                    function. Given
+                    $(\vector{u},\vector{v})\in%
+                    \tanspace{(\vector{a},\vector{b})}{\nspace[m]\times\nspace}$
+                    we can compute the derivative of $B$ as follows:
+                    \begin{equation}
+                        D_{(\vector{u},\vector{v})}B(\vector{a},\vector{b})=
+                        \frac{\diff}{\diff{t}}\Big|_{t_{0}}
+                        B(\vector{a}+t\vector{u},\vector{b}+t\vector{v})
+                    \end{equation}
+                    But since $B$ is bilinear we can factor the first variable
+                    as follows:
+                    \begin{equation}
+                        D_{(\vector{u},\vector{v})}B(\vector{a},\vector{b})=
+                        \frac{\diff}{\diff{t}}\Big|_{t_{0}}\Big(
+                            B(\vector{a},\vector{b}+t\vector{v})+
+                            tB(\vector{u},\vector{b}+t\vector{v})
+                        \Big)
+                    \end{equation}
+                    But again from bilinearity we can simplify the second
+                    slot, obtaining:
+                    \begin{subequations}
+                        \begin{align}
+                            D_{(\vector{u},\vector{v})}B(\vector{a},\vector{b})
+                            &=\frac{\diff}{\diff{t}}\Big|_{t_{0}}\Big(
+                                B(\vector{a},\vector{b})+
+                                tB(\vector{a},\vector{v})+
+                                tB(\vector{u},\vector{b})+
+                                t^{2}B(\vector{u},\vector{v})
+                            \Big)\\
+                            &=B(\vector{a},\vector{v})+B(\vector{u},\vector{b})
+                                +2t_{0}B(\vector{u},\vector{v})
+                        \end{align}
+                    \end{subequations}
+                    For this problem we have $t_{0}=0$, and so we arrive at the
+                    result:
+                    \begin{equation}
+                        B_{*_{(\vector{a},\vector{b})}}(\vector{u},\vector{v})
+                        =B(\vector{a},\vector{v})+B(\vector{u},\vector{b})
+                    \end{equation}
+                \end{example}
+                \begin{ftheorem}{The Chain Rule}{Chain_Rule}
+                    If $f:\nspace[m]\rightarrow\nspace$ is differentiable at a
+                    point $\vector{x}\in\nspace[m]$, and if
+                    $g:\nspace\rightarrow\nspace[p]$ is differentiable at
+                    $f(\vector{x})\in\nspace$, then $g\circ{f}$ is
+                    differentiable at $\vector{x}$ and:
+                    \begin{equation*}
+                        (g\circ{f})_{*_{p}}=g_{*_{f(p)}}\circ{f}_{*_{p}}
+                    \end{equation*}
+                \end{ftheorem}
+                Our first use of this is with the Liebniz rule.
+                \begin{ltheorem}{Liebniz Rule}{Liebniz_Rule}
+                    If $B:\nspace[m]\times\nspace\rightarrow\nspace[p]$ is a
+                    bilinear function, if
+                    $F_{1}:\nspace[k]\rightarrow\nspace[m]$ and
+                    $F_{2}:\nspace[k]\rightarrow\nspace[n]$ are differentiable
+                    functions, and if $\vector{x}_{0}\in\nspace[k]$, then the
+                    function $H:\nspace[k]\rightarrow\nspace[p]$ defined by:
+                    \begin{equation*}
+                        H(\vector{x})=
+                            B\big(F_{1}(\vector{x}),F_{2}(\vector{x})\big)
+                    \end{equation*}
+                    then $H$ is differentiable at $\vector{x}_{0}$ and:
+                    \begin{equation*}
+                        H_{*_{p}}(\vector{u})=
+                        B\big(%
+                            F_{1_{*_{\vector{x}_{0}}}}(\vector{u}),\,%
+                            F_{2}(\vector{u})\big)+
+                        B\big(%
+                            F_{1}(\vector{u}),\,%
+                            F_{1_{*_{\vector{x}}}}(\vector{u})\big)
+                    \end{equation*}
+                \end{ltheorem}
+                \begin{proof}
+                    For let $G(x)=(F_{1}(x),F_{2}(x))$ and apply the chain rule
+                    to $B\circ{G}$.
+                \end{proof}
+                \begin{example}
+                    Let $\matspace{\nspace[]}$ denote the set of all
+                    $n\times{n}$ matrices with entries in $\nspace[]$ and
+                    $\GLnR{\nspace[]}$ the set of all invertible $n\times{n}$
+                    matrices. That is, the set of all matrices with non-zero
+                    determinant. Let
+                    $F:\GLnR{\nspace[]}\rightarrow\GLnR{\nspace[]}$ be given by
+                    $F(X)=X^{\minus{1}}$. Let's compute $F_{*_{A}}(U)$ for
+                    $A\in\GLnR{\nspace[]}$ and
+                    $U\in\tanspace{A}{\matspace{\nspace[]}}$. We'll use the fact
+                    that $XX^{\minus{1}}=I$ is the identity matrix, and write
+                    $G(X)=X$. Then $G(X)F(X)=I$ and hence by the Liebniz rule we
+                    get:
+                    \begin{equation}
+                        G_{*_{A}}(U)F(A)+G(A)F_{*_{A}}(U)=0
+                    \end{equation}
+                    But $G$ is linear and hence $G_{*_{A}}(U)=G(U)=U$. Moreover,
+                    $F(A)=A^{\minus{1}}$. Combining we get:
+                    \begin{equation}
+                        AF_{*_{A}}(U)=\minus{U}A^{\minus{1}}
+                    \end{equation}
+                    But $A\in\GLnR{\nspace[]}$ is invertible, and so we can
+                    bring this to the other side obtaining:
+                    \begin{equation}
+                        F_{*_{A}}(U)=\minus{A}^{\minus{1}}UA^{\minus{1}}
+                    \end{equation}
+                \end{example}
+                \begin{example}
+                    Let $F:\matspace{\nspace[]}\rightarrow\matspace{\nspace[]}$
+                    be defined by:
+                    \begin{equation}
+                        F(X)=AXA^{\minus{1}}
+                    \end{equation}
+                    where $A\in\GLnR{\nspace[]}$ is some invertible matrix.
+                    Find $F_{*_{B}}$ given a matrix $B$. Since $F$ is linear we
+                    know that $F_{*_{B}}(U)=F(U)$ for all $U$, and hence:
+                    \begin{equation}
+                        F_{*_{B}}(U)=AUA^{\minus{1}}
+                    \end{equation}
+                \end{example}
+                \begin{example}
+                    Let $H:\GLnR{\nspace[]}\rightarrow\GLnR{\nspace[]}$ be
+                    defined by:
+                    \begin{equation}
+                        H(X)=XAX^{\minus{1}}
+                    \end{equation}
+                    with $A\in\matspace{\nspace[]}$. Compute $H_{*_{B}}$ for
+                    $B\in\GLnR{\nspace[]}$. We can use the Liebniz rule if we
+                    let $F(X)=XA$ and $G(X)=X^{\minus{1}}$. The derivative
+                    becomes:
+                    \begin{equation}
+                        H_{*_{B}}(U)=F_{*_{B}}(U)G(B)+F(B)G_{*_{B}}(U)
+                    \end{equation}
+                    But $F$ is linear and hence $F_{*_{B}}(U)=F(U)$. Also we've
+                    already computed the derivative of $X^{\minus{1}}$ so
+                    $G_{*_{B}}(U)=\minus{B}^{\minus{1}}UB^{\minus{1}}$.
+                    Combining, we get:
+                    \begin{equation}
+                        H_{*_{B}}=UAB^{\minus{1}}-BAB^{\minus{1}}UB^{\minus{1}}
+                    \end{equation}
+                \end{example}
+                \begin{example}
+                    Let $F:\matspace{\nspace[]}\rightarrow\matspace{\nspace[]}$
+                    be defined by:
+                    \begin{equation}
+                        F(X)=X^{T}X
+                    \end{equation}
+                    where $X^{T}$ denotes the transpose of $X$. Compute
+                    $F_{*_{A}}$. Let $G_{1}(X)=X^{T}$ and $G_{2}(X)=X$. By the
+                    Liebniz property, we get:
+                    \begin{equation}
+                        F_{*_{A}}(U)=G_{1_{*_{A}}}(U)G_{2}(A)+
+                            G_{1}(A)G_{2_{*_{A}}}(U)
+                    \end{equation}
+                    But the transpose is a linear operation, and hence
+                    $G_{1_{*_{A}}}(U)=G_{1}(U)=U^{T}$. Similarly $G_{2}$ is
+                    linear, and thus:
+                    \begin{equation}
+                        F_{*_{A}}(U)=U^{T}A+A^{T}U
+                    \end{equation}
+                \end{example}
+                The function $F(X)=X^{T}X$ has it's image in the set of all
+                symmetric matrices. If $Y\in{F}[\matspace{\nspace[]}]$, then
+                $Y=F(X)$ for some $X\in\matspace{\nspace[]}$ and hence:
+                \begin{equation}
+                    Y^{T}=(X^{T}X)^{T}=X^{T}X=Y
+                \end{equation}
+                If $A\in\orthgroup{\nspace[]}$, the group of orthogonal
+                matrices, then $F_{*_{A}}$ is surjective with respect to $P$,
+                the set of symmetric matrices. For if $Y\in{P}$, then let
+                $U=\frac{1}{2}AY$. Then:
+                \begin{subequations}
+                    \begin{minipage}[b]{0.56\textwidth}
+                        \centering
+                        \begin{align}
+                            F_{*_{A}}(U)&=U^{T}A+A^{T}U\\
+                                &=(\frac{1}{2}AY)^{T}A+A^{T}(\frac{1}{2}AY)\\
+                                &=\frac{1}{2}\big(Y^{T}A^{T}A+A^{T}AY\big)
+                        \end{align}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}[b]{0.43\textwidth}
+                        \centering
+                        \begin{align}
+                            &=\frac{1}{2}\big(Y^{T}I+IY\big)\\
+                            &=\frac{1}{2}(2Y)\\
+                            &=Y
+                        \end{align}
+                    \end{minipage}
+                \end{subequations}
             \subsection{Submanifolds}
                 An immersed submanifold is given by an inective immersion
                 $f:N\rightarrow{M}$. We write that $(N,f)$ is a submanifold of
                 $M$ and usually identify $N$ with $f[N]$. If $f$ is an
                 embedding, then we say $(N,f)$ is an embedded submanifold or a
-                regular submanifold.
-        \section{Lecture 1}
-    \chapter{Lie Group Structure Theory}
-        \begin{fdefinition}{Topological Group}{Topological_Group}
-            A topological group is a topological space $\topspace{G}$ with a
-            binary operation $*$ such that $\monoid{G}$ is a group and and
-            the functions $h:G\times{G}\rightarrow{G}$ and $\nu:G\rightarrow{G}$
-            defined by $h(x,y)=x*y$ and $\nu(g)=g^{\minus{1}}$ are continuous.
-        \end{fdefinition}
-        A topological subgroup of a topological group is a subgroup with the
-        subspace topology.
-        \begin{example}
-            Given any group $\monoid{G}$, if we endow $G$ with the trivial
-            topology $\tau=\{\emptyset,G\}$ then $\topgroup{G}$ is a topological
-            group.
-        \end{example}
-        \begin{example}
-            As another trivial example, if we endow a group $\monoid{G}$ with
-            the discrete topology $\tau=\powset{G}$, then $\topgroup{G}$ is a
-            topologyical group. 
-        \end{example}
-        \begin{fdefinition}{Lie Group}{Lie_Group}
-            A Lie group is a smooth manifold $\manifold{G}$ with a binary
-            operation $*$ such that $\monoid{G}$ is a group, and the functions
-            $h:G\times{G}\rightarrow{G}$ and $\nu:G\rightarrow{G}$ defined by
-            $h(x,y)=x*y$ and $\nu(g)=g^{\minus{1}}$ are smooth.
-        \end{fdefinition}
-        \begin{example}
-            Taking the additive structure from the well known vector spaces
-            $\nspace$ and $\mathbb{C}^{n}$ give rise to Lie groups. The topology
-            on $\mathbb{C}^{n}$ is the same as the topology on $\nspace[2n]$.
-        \end{example}
-        \begin{example}
-            The unit circle $\nsphere[1]$ with the \textit{rotation} operation:
+                regular submanifold. The topology we endow $f[N]$ with is not
+                necessarily the subspace topology, but rather the topology that
+                makes $f$ a homeomorphism onto its image. An embedding is when
+                this topology agrees with the subspace topology.
+                \begin{example}
+                    The first example of an immersed submanifold that is not
+                    embedded comes from the function
+                    $f:(\minus{1}.2,1)\rightarrow\nspace[2]$ defined by:
+                    \begin{equation}
+                        f(t)=\big(t^{2}-1,\,t^{3}-t\big)
+                    \end{equation}
+                    The graph of this parametric equation is shown in
+                    Fig.~\ref{fig:Immersed_Submanifold_001}. This is not an
+                    embedded submanifold since the subspace topology does not
+                    give rise to a manifold. The origin locally looks like the
+                    letter \textit{T}, which is not possible for topological
+                    manifolds.
+                \end{example}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \includegraphics{images/Immersed_Not_Embedded_003.pdf}
+                    \caption{An Immersed Submanifold}
+                    \label{fig:Immersed_Submanifold_001}
+                \end{figure}
+                \begin{example}
+                    A \textit{lemniscate} gives rise to another immersed
+                    manifold. If we let $f$ be defined by:
+                    \begin{equation}
+                        f(t)=\big(\sin(t),\,\sin(2t)\big)
+                    \end{equation}
+                    If we set the domain to be $(-\pi,\pi)$, we obtain the
+                    lemniscate shown in
+                    Fig.~\subref{fig:Immersed_Not_Embedded_002}.
+                \end{example}
+                \begin{figure}[H]
+                    \centering
+                    \captionsetup{type=figure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \captionsetup{type=figure}
+                        \includegraphics{images/Immersed_Not_Embedded_001.pdf}
+                        \subcaption{Lemniscate with Domain $(-\pi,\,\pi)$}
+                        \label{fig:Immersed_Not_Embedded_002}
+                    \end{subfigure}
+                    \begin{subfigure}[b]{0.49\textwidth}
+                        \centering
+                        \captionsetup{type=figure}
+                        \includegraphics{images/Immersed_Not_Embedded_002.pdf}
+                        \subcaption{Lemniscate with Domain $(0,\,2\pi)$}
+                        \label{fig:Immersed_Not_Embedded_003}
+                    \end{subfigure}
+                    \caption{Immersed Lemniscates that are not Embeddings}
+                    \label{fig:Immersed_Not_Embedded}
+                \end{figure}
+        \section{Lecture 2}
+            \begin{fdefinition}{Topological Group}{Topological_Group}
+                A topological group is a topological space $\topspace{G}$ with a
+                binary operation $*$ such that $\monoid{G}$ is a group and and
+                the functions $h:G\times{G}\rightarrow{G}$ and
+                $\nu:G\rightarrow{G}$ defined by $h(x,y)=x*y$ and
+                $\nu(g)=g^{\minus{1}}$ are continuous.
+            \end{fdefinition}
+            \begin{example}
+                \label{ex:Top_Group_Indiscrete}%
+                Given any group $\monoid{G}$, if we endow $G$ with the trivial
+                topology $\tau=\{\emptyset,G\}$ then $\topgroup{G}$ is a
+                topological group.
+            \end{example}
+            \begin{example}
+                As another trivial example, if we endow a group $\monoid{G}$
+                with the discrete topology $\tau=\powset{G}$, then
+                $\topgroup{G}$ is a topological group. 
+            \end{example}
+            There's often the requirement that a topological group be Hausdorff.
+            This is not completely unfounded since it is a remarkable fact that
+            if the topology of your topology group is $T_{0}$ (points are
+            topologically distinguishable), then the group structure allows you
+            to prove that it is automatically $T_{2}$ (also known as Hausdorff).
+            Since $T_{0}$ is a \textit{very} weak assumption, there's no harm in
+            supposing topological groups are Hausdorff. But, as
+            Ex.~\ref{ex:Top_Group_Indiscrete} shows it is possible to find
+            counterexamples.
+            \begin{fdefinition}{Topological Subgroup}{Topological_Subgroup}
+                A topological subgroup of a topological group is a subgroup with
+                the subspace topology.
+            \end{fdefinition}
+            \begin{example}
+                If we let $\nspace[]$ have its usual topology and additive
+                operation $+$, then $\mathbb{Q}$ is a topological subgroup. The
+                subspace topology is the standard metric topology that makes it
+                dense in $\nspace[]$.
+            \end{example}
+            If the topological space is locally Euclidean, then it is $T_{1}$
+            and hence by the previous comment our topological group will be
+            Hausdorff. Hence, so long as we consider second countable spaces,
+            locally Euclidean topological groups are topological manifolds for
+            free. With this we transition to Lie groups, which are topological
+            groups with a smooth manifold structure.
+            \begin{fdefinition}{Lie Group}{Lie_Group}
+                A Lie group is a smooth manifold $\manifold{G}$ with a binary
+                operation $*$ such that $\monoid{G}$ is a group, and the
+                functions $h:G\times{G}\rightarrow{G}$ and $\nu:G\rightarrow{G}$
+                defined by $h(x,y)=x*y$ and $\nu(g)=g^{\minus{1}}$ are smooth.
+            \end{fdefinition}
+            \begin{example}
+                Taking the additive structure from the well known vector spaces
+                $\nspace$ and $\mathbb{C}^{n}$ give rise to Lie groups.
+                Topologically, $\mathbb{C}^{n}$ is homeomorphic to
+                $\nspace[2n]$.
+            \end{example}
+            \begin{example}
+                The unit circle $\nsphere[1]$ with the \textit{rotation}
+                operation:
+                \begin{equation}
+                    \exp(i\theta_{1})*\exp(\theta_{2})
+                        =\exp(i(\theta_{1}+\theta_{2}))
+                \end{equation}
+                Using this we can see that the $n$ torus $\ntorus$ is also a
+                Lie group since it is the product of circles. We may endow it
+                with the algebraic structure of $\nspace/\mathbb{Z}^{n}$.
+            \end{example}
+            \begin{example}
+                Letting $H$ denote the quaternions, the topological structure is
+                homeomorphic to $\nspace[4]$. Thus we may embed the 3-sphere
+                $\nsphere[3]$ into $H$ by considering quaternions with norm 1.
+                This shows that $\nsphere[3]$ has a Lie group structure.
+            \end{example}
+            \begin{example}
+                The matrix groups $GL_{n}(\nspace[])$ are all examples of Lie
+                groups when equipped with the topology of $\nspace[n^{2}]$.
+            \end{example}
+            The following question was posed by Hilbert in his famous list of
+            problems released at the turn of the $20^{th}$ century. This is
+            known as Hilbert's Fifth Problem.
             \begin{equation}
-                \exp(i\theta_{1})*\exp(\theta_{2})
-                    =\exp(i(\theta_{1}+\theta_{2}))
+                \begin{split}
+                    &\text{If }\topgroup{X}
+                    \text{ is a topological group such that }
+                    \topspace{X}\text{ is a topological}\\
+                    &\text{manifold, then is this a Lie group?}
+                \end{split}
             \end{equation}
-            Using this we can also see that the $n$ torus $\ntorus$ is also a
-            Lie group since it is the product of circles.
-        \end{example}
-        \begin{example}
-            Letting $H$ denote the quaternions, the topological structure is
-            homeomorphic to $\nspace[4]$. Thus we may embed the 3-sphere
-            $\nsphere[3]$ into $H$ by considering quaternions with norm 1. This
-            shows that $\nsphere[3]$ has a Lie group structure.
-        \end{example}
-        \begin{example}
-            The matrix groups $GL_{n}(\nspace[])$.
-        \end{example}
-        The following question was posed by Hilbert in his famous list of
-        problems released at the turn of the $20^{th}$ century. This is known as
-        Hilbert's Fifth Problem.
-        \begin{equation}
-            \begin{split}
-                &\text{If }\topgroup{X}\text{ is a topological group such that }
-                \topspace{X}\text{ is a topological}\\
-                &\text{manifold, then is this a Lie group?}
-            \end{split}
-        \end{equation}
-        The answer is yes, the proof came in the 1950s.
-        \begin{fdefinition}{Lie Group Homomorphism}{Lie_Group_Homomorphism}
-            A Lie group homomorphism from a Lie group
-            $\topgroup[1]{G}$ to a Lie group $\topgroup[2]{G}$ is a smooth
-            function $\phi:G_{1}\rightarrow{G}_{2}$ such that $\phi$ is a
-            group homomorphism with respect to $\monoid[1]{G}$ and
-            $\monoid[2]{G}$.
-        \end{fdefinition}
-        \begin{theorem}
-            If $\topgroup[1]{G}$ and $\topgroup[2]{G}$ are Lie groups and if
-            $\phi:G_{1}\rightarrow{G}_{2}$ is a Lie group homomorphism, then
-            $\phi$ is a map of constant rank.
-        \end{theorem}
-        \begin{proof}
-            For $a\in{G}_{1}$, let $L_{a}$ be defined by $x\mapsto{a}*x$. This
-            is a diffeomorphism.
-        \end{proof}
-        \begin{theorem}
-            If $\phi:G_{1}\rightarrow{G}_{2}$ is a bijective Lie group
-            homomorphism, then it is an isomorphism.
-        \end{theorem}
-        \begin{proof}
-            By the inverse function theorem, together with the fact that the map
-            has constant rank.
-        \end{proof}
-        \begin{fdefinition}{Lie Subgroup}{Lie Subgroup}
-            A Lie subgroup of a Lie group $\topgroup[*][G]{G}$ is a Lie group
-            $\topgroup[*][H]{H}$ and an injective Lie homomorphism
-            $f:H\rightarrow{G}$, denoted $(H,f)$.
-        \end{fdefinition}
-        Note, given a Lie subgroup $(H,f)$ of a Lie group $G$ we often say that
-        $f[H]$, the image of $H$ in $G$, is a Lie subgroup of $G$. This
-        definition is well founded since a Lie subgroup is an immersed
-        submanifold of $G$. This is because a Lie group homomorphism has
-        constant rank, and if $f$ is injective then it must be an immersion by
-        the theorem on rank. Note that a Lie subgroup of some Lie group $G$ need
-        \textit{not} be a topological subgroup. A topological subgroup is a
-        subgroup endowed with the subspace topology. Hence a Lie subgroup
-        $(H,f)$ yields a topological subgroup if and only if $f$ is an embedding
-        of $H$ into $G$.
-        \begin{example}
-            A line of irrational slope on a torus is an example of a Lie
-            subgroup that is not a topological subgroup. It is an immersed
-            submanifold, but not an embedded submanifold. If we take a line of
-            \textit{rational} slope then we again obtain a Lie subgroup that is
-            also a topological subgroup. This is homeomorphic to $\nsphere[1]$.
-        \end{example}
-        We'll need the following results:
-        \begin{theorem}
-            If $\iota:N\rightarrow{M}$ is an immersion, if $P$ is a manifold,
-            and if $f:P\rightarrow{N}$ is a continuous function such that
-            $\iota\circ{f}$ is smooth, then $f$ is smooth.
-        \end{theorem}
-        \begin{theorem}
-            If $\iota:N\rightarrow{M}$ is an embedding, and if $\iota\circ{f}$
-            is smooth, then $f$ is smooth.
-        \end{theorem}
-        With this we may prove the following:
-        \begin{theorem}
-            If $\topgroup{G}$ is a Lie group, and if $(H,f)$ is a Lie subgroup
-            such that $f:H\rightarrow{G}$ is an embedding, then
-            $\topgroup[*][H]{H}$ is a Lie group.
-        \end{theorem}
+            The answer is yes, the proof came in the 1950s. Moreover, the
+            smooth structure is unique. This means there is no harm in defining
+            a Lie group to be a a topological group with a topological manifold
+            topology even though \textit{a priori} this seems weaker.
+            \begin{fdefinition}{Lie Group Homomorphism}{Lie_Group_Homomorphism}
+                A Lie group homomorphism from a Lie group
+                $\topgroup[1]{G}$ to a Lie group $\topgroup[2]{G}$ is a smooth
+                function $\phi:G_{1}\rightarrow{G}_{2}$ such that $\phi$ is a
+                group homomorphism with respect to $\monoid[1]{G}$ and
+                $\monoid[2]{G}$.
+            \end{fdefinition}
+            \begin{example}
+                The exponential function gives rise to a Lie group homomorphism
+                $\exp:\nspace[]\rightarrow\nsphere[1]$ by mapping
+                $\theta\mapsto\exp(i\theta)$. Topologically this also a covering
+                map.
+            \end{example}
+            \begin{example}
+                Given a Lie group $G$ and an element $a\in{G}$, the inner
+                automorphism $x\mapsto{a}*x*a^{\minus{1}}$ gives us a Lie group
+                homomorphism.
+            \end{example}
+            \begin{theorem}
+                If $\topgroup[1]{G}$ and $\topgroup[2]{G}$ are Lie groups and if
+                $\phi:G_{1}\rightarrow{G}_{2}$ is a Lie group homomorphism, then
+                $\phi$ is a map of constant rank.
+            \end{theorem}
+            \begin{proof}
+                For $a\in{G}_{1}$, let $L_{a}$ be defined by $x\mapsto{a}*x$.
+                This is a diffeomorphism.
+            \end{proof}
+            \begin{theorem}
+                If $\phi:G_{1}\rightarrow{G}_{2}$ is a bijective Lie group
+                homomorphism, then it is an isomorphism.
+            \end{theorem}
+            \begin{proof}
+                By the inverse function theorem, together with the fact that the
+                map has constant rank.
+            \end{proof}
+            \begin{fdefinition}{Lie Subgroup}{Lie Subgroup}
+                A Lie subgroup of a Lie group $\topgroup[*][G]{G}$ is a Lie
+                group $\topgroup[*][H]{H}$ and an injective Lie homomorphism
+                $f:H\rightarrow{G}$, denoted $(H,f)$.
+            \end{fdefinition}
+            Note, given a Lie subgroup $(H,f)$ of a Lie group $G$ we often say
+            tjat $f[H]$, the image of $H$ in $G$, is a Lie subgroup of $G$. This
+            definition is well founded since a Lie subgroup is an immersed
+            submanifold of $G$. This is because a Lie group homomorphism has
+            constant rank, and if $f$ is injective then it must be an immersion
+            by the theorem on rank. Note that a Lie subgroup of some Lie group
+            $G$ need \textit{not} be a topological subgroup. A topological
+            subgroup is a subgroup endowed with the subspace topology. Hence a
+            Lie subgroup $(H,f)$ yields a topological subgroup if and only if
+            $f$ is an embedding of $H$ into $G$.
+            \begin{example}
+                A line of irrational slope on a torus is an example of a Lie
+                subgroup that is not a topological subgroup. It is an immersed
+                submanifold, but not an embedded submanifold. If we take a line
+                of \textit{rational} slope then we again obtain a Lie subgroup
+                that is also a topological subgroup. This is homeomorphic to
+                $\nsphere[1]$.
+            \end{example}
+            We'll need the following results:
+            \begin{theorem}
+                If $\iota:N\rightarrow{M}$ is an immersion, if $P$ is a
+                manifold, and if $f:P\rightarrow{N}$ is a continuous function
+                such that $\iota\circ{f}$ is smooth, then $f$ is smooth.
+            \end{theorem}
+            \begin{theorem}
+                If $\iota:N\rightarrow{M}$ is an embedding, and if
+                $\iota\circ{f}$ is smooth, then $f$ is smooth.
+            \end{theorem}
+            With this we may prove the following:
+            \begin{theorem}
+                If $\topgroup{G}$ is a Lie group, and if $(H,f)$ is a Lie
+                subgroup such that $f:H\rightarrow{G}$ is an embedding, then
+                $\topgroup[*][H]{H}$ is a Lie group.
+            \end{theorem}
 \end{document}
