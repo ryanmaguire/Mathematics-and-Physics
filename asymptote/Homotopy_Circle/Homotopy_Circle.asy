@@ -3,7 +3,7 @@ import settings;
 import _custom_arrows;
 texpreamble("\usepackage{amssymb}");
 settings.render = 4;
-outformat="pdf";
+settings.outformat="pdf";
 
 // Size of the output figure.
 size(150);
