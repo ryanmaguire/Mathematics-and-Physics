@@ -1,12 +1,14 @@
 %------------------------------------------------------------------------------%
-\documentclass[oneside]{book}                                                  %
+\documentclass{book}                                                            %
 %------------------------------Preamble----------------------------------------%
 \makeatletter                                                                  %
     \def\input@path{{../../}}                                                  %
 \makeatother                                                                   %
 \input{preamble.tex}                                                           %
+\makeindex[intoc]                                                              %
 %----------------------------Main Document-------------------------------------%
 \begin{document}
+    \pagenumbering{gobble}
     \pagenumbering{roman}
     \title{MATH 102 Geometry Notes}
     \author{%
@@ -16,6 +18,7 @@
     \date{\vspace{-5ex}}
     \maketitle
     \tableofcontents
+    \pagenumbering{roman}
     \listoffigures
     \chapter{Lie Groups and Lie Algebras}
     \pagenumbering{arabic}
@@ -36,22 +39,47 @@
                     \label{fig:Coordinate_Chart}
                 \end{figure}
                 \begin{example}
+                    Given $n\in\mathbb{N}$, the Euclidean space $\nspace$ can be
+                    given a manifold structure by a single coordinate chart. Let
+                    $\mathcal{U}=\nspace$ and $\varphi=\identity{\nspace}$.
+                    Since the identity is always an autohomeomorphism for any
+                    topological space, this shows $(\nspace,\identity{\nspace})$
+                    is a coordinate chart.
+                \end{example}
+                \begin{example}
+                    Slightly more general, if $\mathcal{U}$ is an open subset of
+                    $\nspace$, then the inclusion mapping
+                    $\iota:\mathcal{U}\rightarrow\nspace$ is a homeomorphism
+                    onto it's image. The image of $\iota$ being $\mathcal{U}$,
+                    and $\identity{\mathcal{U}}$ is a homeomorphism. Thus
+                    $(\mathcal{U},\iota)$ is a chart for $\mathcal{U}$ making
+                    $\mathcal{U}$ an open submanifold of $\nspace$.
+                \end{example}
+                \begin{example}
                     We can form a coordinate chart on the sphere by mapping the
                     upper hemisphere down to the plane. That is, if we consider
                     points $(x,y,z)\in\nsphere[2]$ such that $z>0$, we can take
                     this open set $\mathcal{U}^{+}$ and map it to $\nspace[2]$
-                    by $\varphi(x,y,z)=(x,y)$. This is a continuous injective
-                    open mapping, satisfying the criterion for a coordinate
-                    chart. This type of chart is called an \textit{orthographic}
-                    projection and is shown in
-                    Fig.~\ref{fig:Sphere_Orthographic_Projection}.
+                    by:
+                    \begin{equation}
+                        \varphi(x,\,y,\,z)=(x,\,y)
+                    \end{equation}
+                    This is a continuous injective open mapping, satisfying the
+                    criterion for a coordinate chart. This type of chart is
+                    called an \textit{orthographic} projection and is shown in
+                    Fig.~\ref{fig:Sphere_Orthographic_Projection}. We see
+                    $\varphi$ has a continuous inverse on it's image given by:
+                    \begin{equation}
+                        \varphi^{\minus{1}}(X,\,Y)=
+                            \big(X,\,Y,\,\sqrt{1-X^{2}-Y^{2}}\big)
+                    \end{equation}
+                    Using six such charts shows that the sphere is a topological
+                    manifold.
                 \end{example}
-                \begin{figure}
+                \begin{figure}[H]
                     \centering
                     \captionsetup{type=figure}
-                    \resizebox{!}{0.8\height}{
                     \includegraphics{images/Sphere_Orthographic_Projection.pdf}
-                    }
                     \caption{Orthographic Projection of a Sphere}
                     \label{fig:Sphere_Orthographic_Projection}
                 \end{figure}
@@ -59,15 +87,15 @@
                 at the north pole and bringing them off to infinity in the
                 \textit{up} direction. The orthographic projection is then what
                 they would see if they had an amazing telescope. If we stop at
-                some finite distance we wouldn't get the whole northern
+                some finite distance we wouldn't get the entire northern
                 hemisphere (if you climb a small latter at the north pole you
-                would not be able to see the equator). These
-                \textit{near-sided} projections give us different coordinate
-                charts. Suppose our observer is at Geosynchronous orbit which is
-                fairly far away. The resulting coordinate chart is shown in
-                Fig.~\subref{fig:Near_Sided_Proj}. Further still we can imagine
-                removing what the observer can see, hollowing out the Earth, and
-                then projecting what is left onto
+                would not be able to see the equator). Instead we obtain a
+                \textit{near-sided} projection. This gives us different
+                coordinate charts on the sphere. Suppose our observer is at
+                geosynchronous orbit which is fairly far away. The resulting
+                coordinate chart is shown in Fig.~\subref{fig:Near_Sided_Proj}.
+                Further still we can imagine removing what the observer can see,
+                hollowing out the Earth, and then projecting what is left onto
                 the plane. This results in the \textit{far-sided} projection
                 and is shown in Fig.~\subref{fig:Far_Sided_Proj}.
                 \begin{figure}[H]
@@ -97,8 +125,38 @@
                     \end{subfigure}
                     \caption{Different Projections of a Sphere}
                 \end{figure}
-                All of these are valid coordinate charts on the sphere
-                $\nsphere[2]$.
+                While the near sided projection reveals more of the sphere as
+                one moves further away, the far-sided projection shows less. In
+                the extreme case where the observer is lying on the ground the
+                far-sided projection becomes the \textit{stereographic}
+                projection. This is a particularly attractive coordinate chart
+                since it allows use to easily cover the sphere with only two
+                charts. The stereographic projection from the north pole has the
+                following function:
+                \begin{equation}
+                    \varphi(x,\,y,\,z)=\Big(\frac{x}{1-z},\,\frac{y}{1-z}\Big)
+                \end{equation}
+                The inverse is continuous and given by:
+                \begin{equation}
+                    \varphi^{\minus{1}}(X,\,Y)=
+                    \Big(\frac{2X}{1+X^{2}+Y^{2}},\,
+                         \frac{2Y}{1+X^{2}+Y^{2}},\,
+                         \frac{\minus{1}+X^{2}+Y^{2}}{1+X^{2}+Y^{2}}\Big)
+                \end{equation}
+                The result is shown in Fig.~\ref{fig:Stereo_Proj}. All of these
+                are valid coordinate charts on the sphere $\nsphere[2]$.
+                Moreover, they are \textit{smooth} charts which overlap
+                smoothly. The smooth structure on a smooth manifold is the
+                collection of \textit{all} smoothly overlapping coordinate
+                charts. The few charts we've shown all belong to the smooth
+                structure of the sphere.
+                \begin{figure}
+                    \centering
+                    \captionsetup{type=figure}
+                    \input{tikz/Stereographic_Projection.tex}
+                    \caption{Stereographic Projection of the Sphere}
+                    \label{fig:Stereo_Proj}
+                \end{figure}
             \subsection{Tangent Spaces}
                 There are three ways we can think of the tangent space
                 $\tanspace{\vector{x}}{\nspace}$ given a point
@@ -124,7 +182,7 @@
                 in figure Fig.~\ref{fig:Tan_Vec_as_Curves} passing through the
                 point $p\in\nspace[2]$ belong to the same equivalence classe
                 since they have the same tangent vector at $p$.
-                \begin{figure}[H]
+                \begin{figure}
                     \centering
                     \captionsetup{type=figure}
                     \includegraphics{images/Tangent_Vector_as_Equiv_Curves.pdf}
@@ -164,7 +222,7 @@
                 compose this with $\varphi^{\minus{1}}$ which gives us a
                 function from an open subset of $\nspace$ to the real line 
                 (Fig.~\ref{fig:Partials_on_Manifold}).
-                \begin{figure}[H]
+                \begin{figure}
                     \centering
                     \captionsetup{type=figure}
                     \input{tikz/Smooth_Real_Valued_Function_on_a_Manifold.tex}
@@ -450,22 +508,25 @@
                 matrices, then $F_{*_{A}}$ is surjective with respect to $P$,
                 the set of symmetric matrices. For if $Y\in{P}$, then let
                 $U=\frac{1}{2}AY$. Then:
+                \par
                 \begin{subequations}
-                    \begin{minipage}[b]{0.56\textwidth}
+                    \begin{minipage}[b]{0.58\textwidth}
                         \centering
                         \begin{align}
-                            F_{*_{A}}(U)&=U^{T}A+A^{T}U\\
-                                &=(\frac{1}{2}AY)^{T}A+A^{T}(\frac{1}{2}AY)\\
+                            F_{*_{A}}(U)&=U^{T}A+A^{T}U\vphantom{\frac{1}{2}}\\
+                                &=(\frac{1}{2}AY)^{T}A+A^{T}(\frac{1}{2}AY)
+                                \vphantom{\frac{1}{2}}\\
                                 &=\frac{1}{2}\big(Y^{T}A^{T}A+A^{T}AY\big)
+                                \vphantom{\frac{1}{2}}
                         \end{align}
                     \end{minipage}
                     \hfill
-                    \begin{minipage}[b]{0.43\textwidth}
+                    \begin{minipage}[b]{0.41\textwidth}
                         \centering
                         \begin{align}
                             &=\frac{1}{2}\big(Y^{T}I+IY\big)\\
-                            &=\frac{1}{2}(2Y)\\
-                            &=Y
+                            &=\frac{1}{2}(2Y)\vphantom{\frac{1}{2}}\\
+                            &=Y\vphantom{\frac{1}{2}}
                         \end{align}
                     \end{minipage}
                 \end{subequations}
@@ -817,4 +878,86 @@
                     is a connected component. Let $L_{a}$ be the left
                     multiplication function, $f(x)=a*x$ with $a\in{G}_{0}$.
                 \end{proof}
+        \section{Lie Algebras}
+                Let $\mathbb{F}=\mathbb{R}$ or $\mathbb{C}$. A Lie algebra over
+                $\mathbb{F}$ is a vector space $\mathfrak{g}$ together with a
+                Lie brackek $\bracket{}{}:\mathfrak{g}\times\mathfrak{g}%
+                \rightarrow\mathfrak{g}$ such that $\bracket{}{}$ is bilinear,
+                anti-symmetric, and satisfies the Jacobi identity. A subalgebra
+                is a subspace $\mathfrak{h}$ that is closed under the Lie
+                bracket:
+                $\bracket{\mathfrak{h}}{\mathfrak{h}}\subseteq\mathfrak{h}$. The
+                notation $\bracket{\mathfrak{h},\mathfrak{h}}$ denotes the span
+                of all elements of the form $[X,Y]$, $X,Y\in\mathfrak{g}$. A
+                subalgebra is an ideal if
+                $\bracket{\mathfrak{g},\mathfrak{h}}\subseteq\mathfrak{h}$.
+                \begin{example}
+                    An Abelian Lie algebra is a vector space $\mathfrak{g}$ with
+                    $\bracket{X}{Y}=0$ for all $X,Y\in\mathfrak{g}$. That is,
+                    the Lie bracket is symmetric. Since the Lie bracket is also
+                    required to be anti-symmetric, it must then be the zero
+                    function.
+                \end{example}
+                \begin{example}
+                    Let $M$ be a smooth manifold and $\smoothvecf{M}$ the set of
+                    all smooth vector fields on $M$. Then
+                    $\bracket{\cdot}{\cdot}$ defined by:
+                    \begin{equation}
+                        \bracket{V}{W}=VW-WV
+                    \end{equation}
+                    is a Lie bracket on this space. This space is infinite
+                    dimensional.
+                \end{example}
+                \begin{example}
+                    If $V$ is a vector space, then $\Endomorphisms{V}$ can be
+                    made into a Lie algebra with bracket:
+                    \begin{equation}
+                        \bracket{f}{g}=f\circ{g}-g\circ{f}
+                    \end{equation}
+                    If the dimension of $V$ is $n$ then this space is isomorphic
+                    to $\matspace{\mathbb{F}}$ with the bracket:
+                    \begin{equation}
+                        \bracket{A}{B}=AB-BA
+                    \end{equation}
+                    The space $sl_{n}(\mathbb{F})$ of matrices with trace equal
+                    to zero gives a subalgebra. Similarly $so_{n}(\mathbb{F})$
+                    which is the set of all matrices $A$ such that
+                    $A^{T}+A=0$.
+                \end{example}
+                \begin{example}
+                    If $\mathfrak{g}$ is a Lie algebra, then the set
+                    $\bracket{\mathfrak{g}}{\mathfrak{g}}$ is called the derived
+                    algebra and is an ideal.
+                \end{example}
+                \begin{example}
+                    The center of $\mathfrak{g}$, which is the set of all
+                    $X\in\mathfrak{g}$ such that $\bracket{X,Y}=0$ for all
+                    $Y\in\mathfrak{g}$.
+                \end{example}
+                \begin{example}
+                    The Heisenberg Algebra.
+                \end{example}
+                More generally, let $V$ and $W$ be vector spaces and
+                $B:V\times{V}\rightarrow{W}$ be a bilinear map. Let
+                $\mathfrak{g}=V\oplus{W}$ with the bracket:
+                \begin{equation}
+                    \bracket{X_{1}+W_{1}}{X_{2}+W_{2}}=B(X_{1},X_{2})
+                \end{equation}
+                A Lie algebra representation $(\rho,V)$ of a Lie Algebra
+                $\mathfrak{g}$ is a Lie algebra homomorphism
+                $\rho:\mathfrak{g}\rightarrow\Endomorphisms{V}$. A derivation of
+                a Lie algebra $\mathfrak{g}$ is a Linear map
+                $D:\mathfrak{g}\rightarrow\mathfrak{g}$ such that:
+                \begin{equation}
+                    D(\bracket{X}{Y})=\bracket{D(X)}{Y}+\bracket{X}{D(Y)}
+                \end{equation}
+                The set $Der(\mathfrak{g})$ is the space of all derivations.
+                There are some interpretations of the Jacobi identity. If $V$ is
+                a vector space and $B:V\times{V}\rightarrow{V}$ is a bilinear
+                map, then $B$ gives rise to a map
+                $\alpha:V\rightarrow\Endomorphisms{V}$ by
+                $\alpha(v)=B(v,\cdot)$. In the case of a Lie algebra with
+                $B=\bracket{\cdot}{\cdot}$ the map $\alpha(X)$ is called the
+                adjoint of $X$, $\adX:\mathfrak{g}\rightarrow\mathfrak{g}$
+                defined by $\adX(Y)=\bracket{X}{Y}$.
 \end{document}

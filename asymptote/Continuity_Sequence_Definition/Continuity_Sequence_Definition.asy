@@ -2,12 +2,21 @@
 import settings;
 import graph;
 
+if(settings.render < 0)    settings.render    = 4;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
+
 // Make sure _custom_arrows.asy is in your $PATH.
 // This file is found in the asymptote/ folder of this project.
 import _custom_arrows;
-settings.outformat = "pdf";
-settings.render = 4;
-settings.prc = false;
 
 // Size of the output figure.
 size(200);
@@ -54,15 +63,15 @@ real x0, y0, xn, yn;
 
 // Plot the axes.
 g = (xmin, 0.0)--(xmax, 0.0);
-draw(Label("$x$", position=1), g, S, apen, SharpArrow(arsize));
+draw(Label("$x$", position=1, fontsize(10pt)), g, S, apen, SharpArrow(arsize));
 g = (0.0, ymin)--(0.0, ymax);
-draw(Label("$y$", position=1), g, W, SharpArrow(arsize));
+draw(Label("$y$", position=1, fontsize(10pt)), g, W, apen, SharpArrow(arsize));
 
 // Add tick marks to the x axis.
 for (i=1; i<=4*(int)xmax; ++i){
     if ((i % 4) == 0){
         draw((i/4, 0) -- (i/4, -0.05));
-        label("$"+string((int)i/4)+"$", (i/4, -0.1), fontsize(9pt));
+        label("$"+string((int)i/4)+"$", (i/4, -0.1), fontsize(7pt));
     }
     else draw((i/4, 0) -- (i/4, -0.025));
 }
@@ -71,7 +80,7 @@ for (i=1; i<=4*(int)xmax; ++i){
 for (i=1; i<=4*(int)ymax; ++i){
     if ((i % 4) == 0){
         draw((0, i/4) -- (-0.05, i/4));
-        label("$"+string((int)i/4)+"$", (-0.1, i/4), fontsize(9pt));
+        label("$"+string((int)i/4)+"$", (-0.1, i/4), fontsize(7pt));
     }
     else draw((0, i/4) -- (-0.025, i/4));
 }
@@ -96,10 +105,10 @@ for (i=0; i<n; ++i){
 }
 
 // Label the y axis.
-label("$y_{0}$", (0, y0), W, fontsize(9pt));
+label("$y_{0}$", (-0.03, y0), W, fontsize(8pt));
 
 // Label the x axis.
-label("$x_{0}$", (x0, 0), S, fontsize(9pt));
+label("$x_{0}$", (x0, -0.03), S, fontsize(8pt));
 
 // Place a dot at the point of interest.
 dot((x0, y0));
