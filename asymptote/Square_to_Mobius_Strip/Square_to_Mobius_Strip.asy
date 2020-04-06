@@ -1,11 +1,21 @@
-// Some boiler plate stuff.
+// Seting output format to "pdf".
 import settings;
-settings.render = 4;
-settings.outformat="pdf";
-settings.prc=false;
+import graph;
+
+if(settings.render < 0)    settings.render    = 4;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
 
 // Size of the output figure.
-size(350);
+size(300);
 
 // Variable for drawing stuff.
 path p;
@@ -77,7 +87,7 @@ draw(shift(xshift, yshift)*p, white+4, margins);
 draw(shift(xshift, yshift)*p);
 
 // Shift for the fourth drawing.
-xshift =  1.8;
+xshift =  1.7;
 yshift = -1.5;
 
 // Scales for the fourth object.
@@ -98,7 +108,7 @@ draw(shift(xshift, yshift)*p, white+4, margins);
 draw(shift(xshift, yshift)*p);
 
 // Shift for the fifth drawing.
-xshift += 2.5;
+xshift += 2.6;
 
 p = (0.0, 0.7*ylength) -- (0.0, 0.0);
 draw(shift(xshift, yshift)*p, MidArrow(arsize));

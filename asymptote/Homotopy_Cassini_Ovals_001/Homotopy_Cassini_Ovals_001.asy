@@ -1,12 +1,23 @@
 // The Cassini functions are defined in CassiniOval.asy.
 import _cassini_oval;
 
-// Boilerplate stuff.
+// Seting output format to "pdf".
 import settings;
-settings.render = 4;
-settings.outformat = "pdf";
+import graph;
 
-// Size of the output image.
+if(settings.render < 0)    settings.render    = 4;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
+
+// Size of the output.
 size(200);
 
 // Pens for contours and directional lines (Flows).

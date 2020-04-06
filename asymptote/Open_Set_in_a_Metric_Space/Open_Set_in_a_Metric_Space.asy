@@ -1,15 +1,24 @@
 // Seting output format to "pdf".
 import settings;
+import graph;
+
+if(settings.render < 0)    settings.render    = 4;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
 
 // Needed for the use of mathbb and mathcal commands.
 texpreamble("\usepackage{amssymb}");
 
-settings.outformat = "pdf";
-settings.render = 4;
-settings.prc = false;
-
 // Size of the output figure.
-size(256);
+size(240);
 
 // Used for drawing paths.
 path g;
