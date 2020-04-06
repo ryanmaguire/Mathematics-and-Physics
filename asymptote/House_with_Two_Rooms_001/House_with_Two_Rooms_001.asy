@@ -1,14 +1,14 @@
 // Some boiler plate stuff.
 import settings;
 
-if(!settings.multipleView)  settings.batchView=false;
-if(settings.render < 0)     settings.render=4;
+if(!settings.multipleView)  settings.batchView = false;
+if(settings.render < 0)     settings.render = 4;
 
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-settings.prc=false;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
 
 // Size of the output figure.
 size(256);

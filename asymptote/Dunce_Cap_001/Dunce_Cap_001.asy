@@ -47,8 +47,8 @@ p = scale(1.0, yscale)*arc((0.5*a, -0.1), ellipse_scale*a, 360, 290)--
 draw(shift(xshift, yshift)*p, Arrow(arsize, position=1.5),
                               BeginArrow(arsize, position=0.5));
 
-xshift =  0.0;
-yshift = -1.5;
+xshift = 4.0;
+yshift = 0.0;
 
 p = (a, 0.0) -- (0.5*a, h) -- (0.0, 0.0)--
     scale(1.0, yscale)*arc((0.5*a, -0.1), ellipse_scale*a, 170, 370);
@@ -58,7 +58,7 @@ draw(shift(xshift, yshift)*p, Arrow(arsize, position=5.0),
 p = scale(1.0, yscale)*arc((0.5*a, -0.1), ellipse_scale*a, 10, 170);
 draw(shift(xshift, yshift)*p, dashed);
 
-xshift =  2.0;
+xshift = 6.0;
 
 p = scale(1.0, yscale)*arc((0.5*a, -0.1), ellipse_scale*a, 170, 370);
 draw(shift(xshift, yshift)*p, MidArrow(arsize));
