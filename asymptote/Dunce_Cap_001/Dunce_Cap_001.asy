@@ -4,7 +4,7 @@ settings.render = 4;
 settings.outformat="pdf";
 
 // Size of the output figure.
-size(350);
+size(300);
 
 pair A;
 
