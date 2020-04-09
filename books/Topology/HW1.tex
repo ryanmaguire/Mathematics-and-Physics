@@ -1,0 +1,200 @@
+%------------------------------------------------------------------------------%
+\documentclass{article}                                                        %
+%------------------------------Preamble----------------------------------------%
+\makeatletter                                                                  %
+    \def\input@path{{../../}}                                                  %
+\makeatother                                                                   %
+\input{preamble.tex}                                                           %
+\makeindex[intoc]                                                              %
+%----------------------------Main Document-------------------------------------%
+\begin{document}
+    \pagenumbering{gobble}
+    \title{MATH 114 Algebraic Topology - Assignment 1}
+    \author{Ryan Maguire}
+    \date{\vspace{-5ex}}
+    \maketitle
+    \pagenumbering{roman}
+    \pagenumbering{arabic}
+    \setcounter{section}{1}
+    \begin{problem}
+        Construct an explicit deformation retraction of
+        $\nspace\setminus\{\vector{0}\}$ to $\nsphere[n-1]$.
+    \end{problem}
+    \begin{solution}
+        Let $X=\nspace\setminus\{\vector{0}\}$ and define $r:X\rightarrow{X}$
+        by:
+        \begin{equation}
+            r(\vector{x})=\frac{\vector{x}}{\norm{\vector{x}}_{2}}
+        \end{equation}
+        This is well defined since for all $\vector{x}\in{X}$ we have
+        $\vector{x}\ne\vector{0}$ and hence $\norm{\vector{x}}_{2}\ne{0}$.
+        Moreover, it is a retract of $X$ to $\nsphere[n-1]$. For if
+        $\vector{s}\in\nsphere[n-1]$ then by definition
+        $\norm{\vector{s}}_{2}=1$. But then:
+        \begin{equation}
+            r(\vector{s})=\frac{\vector{s}}{\norm{\vector{s}}_{2}}
+                =\vector{s}
+                =\identity{\nsphere[n-1]}(\vector{s})
+        \end{equation}
+        Hence $r|_{\nsphere[n-1]}=\identity{\nsphere[n-1]}$. Moreover, the
+        image of $r$ is $\nsphere[n-1]$ since:
+        \begin{equation}
+            \norm{r(\vector{x})}_{2}
+                =\norm[\bigg]{\frac{\vector{x}}{\norm{\vector{x}}_{2}}}_{2}
+                =\frac{\norm{\vector{x}}_{2}}{\norm{\vector{x}}_{2}}
+                =1
+        \end{equation}
+        Therefore $r$ satisfies the criterion of a retract. Let
+        $H:X\times{I}\rightarrow{X}$ be the straight-line homotopy:
+        \begin{equation}
+            H(\vector{x},\,t)
+                =(1-t)\cdot\identity{X}(\vector{x})+t\cdot{r}(\vector{x})
+        \end{equation}
+        This is well defined since for all $\vector{x}\in{X}$ and $t\in[0,1]$
+        we have:
+        \begin{subequations}
+            \begin{align}
+                \norm{H(\vector{x},\,t)}_{2}&=
+                \norm{(1-t)\cdot\vector{x}+t\cdot{r}(\vector{x})}_{2}\\
+                &\geq\min\{\norm{\vector{x}}_{2},\,\norm{r(\vector{x})}_{2}\}\\
+                &>0
+            \end{align}
+        \end{subequations}
+        Intuitively, $H(\vector{x},t)$ is the straight line from
+        $\vector{x}$ to $r(\vector{x})$ and this never crosses the origin.
+        Hence, $H(\vector{x},t)$ is well defined and moreover is a homotopy
+        between the identity map and $r$. It is a deformation retraction since
+        for all $\vector{s}\in\nspace[n-1]$ and $t\in[0,1]$ we have:
+        \begin{equation}
+            H(\vector{s},\,t)=(1-t)\cdot{t}+t\cdot\vector{s}=\vector{s}
+        \end{equation}
+    \end{solution}
+    \begin{problem}
+        A deformation retraction in the weak sense of a space $X$ to a subspace
+        $A$ is a homotopy $H:X\times{I}\rightarrow{X}$ between $\identity{X}$
+        and a function $g:X\rightarrow{X}$ such that $g[X]\subseteq{A}$ and
+        such that for all $t\in[0,1]$ and $a\in{A}$, $H(a,t)\in{A}$. Show that
+        if $X$ deformation retracts to $A$ in the weak sense, then the
+        inclusion mapping $\iota:A\rightarrow{X}$ is a homotopy equivalence.
+    \end{problem}
+    \begin{solution}
+        We need to find a homotopy inverse $g:X\rightarrow{A}$ of
+        $\iota:A\rightarrow{X}$. That is, a function $g$ such that
+        $g\circ\iota$ is homotopic to $\identity{A}$ and $\iota\circ{g}$ is
+        homotopic to $\identity{X}$. Let $g:X\rightarrow{A}$ be the function
+        the homotopy $H$ drags $\identity{X}$ to. That is, $g(x)=H(x,1)$.
+        Then $(g\circ\iota)(a)=g(a)$ for all $a\in{A}$. But then
+        $H|_{A\times{I}}$ is a homotopy between $g\circ\iota$ and
+        $\identity{A}$. That is, $H|_{A\times{I}}:A\times{I}\rightarrow{A}$ is
+        a continuous function, the image is in $A$ since by hypothesis for all
+        $a\in{A}$ and $t\in{I}$, $H(a,t)\in{A}$, and lastly:
+        \begin{equation}
+            H(a,\,0)=\identity{X}(a)=a=\identity{A}(a)
+        \end{equation}
+        and also $H(a,\,1)=g(a)$. Similarly, since the image of $g$ lies in $A$,
+        $\iota\circ{g}=g$ and hence $H$ is a homotopy between
+        $\iota\circ{g}$ and $\identity{X}$. Thus, $g$ is a homotopy inverse of
+        $\iota$ and hence $\iota$ is a homotopy equivalence.
+    \end{solution}
+    Before the next problem, we prove the following theorem to make life easier.
+    \begin{theorem}
+        If $\topspace{X}$ is a topological space, then it is
+        contractible if and only if $\identity{X}$ is nullhomotopic.
+    \end{theorem}
+    \begin{proof}
+        If $\topspace{X}$ is contractible, then there is a homotopy
+        equivalence $f:X\rightarrow{Y}$ where $Y=\{0\}$ is the
+        one point space. But if $f$ is a homotopy equivalence, then
+        there is a homotopy inverse $g:Y\rightarrow{X}$. But then
+        $g\circ{f}$ is homotopic to $\identity{X}$. But $Y$ has only
+        one point, and hence $f(x)=0$ for all $x\in{X}$. Let
+        $x_{0}=g(0)$. Then $g\circ{f}:X\rightarrow{X}$ is the
+        mapping $x\mapsto{x}_{0}$. But $\identity{X}$ is homotopic
+        to this, and is therefore nullhomotopic. In the other
+        direction, if $\identity{X}$ is nullhomotopic, then there is
+        a point $x_{0}\in{X}$ such that $\identity{X}$ is homotopic
+        to the function $f:X\rightarrow{X}$ defined by $f(x)=x_{0}$.
+        Let $Y=\{x_{0}\}$ be given the subspace topology. Since
+        there is only one topology on a space with one point, this
+        is homeomorphic to the one point space. But then $f$ is a
+        homotopy equivalence since the function $g:Y\rightarrow{X}$
+        given by $g(x_{0})=x_{0}$ is a homotopy inverse of $f$. That
+        is, since $\identity{X}$ is homotopic to $f$,
+        $g\circ{f}$ is homotopic to $\identity{X}$ since
+        $g\circ{f}=f$. But also $f\circ{g}=\identity{Y}$. Hence $f$
+        is an homotopy equivalence and $\topspace{X}$ is
+        contractible.
+    \end{proof}
+    \begin{problem}
+        Show that a retract of a contracible space is contracible.
+    \end{problem}
+    \begin{solution}
+        For $\topspace{X}$ is contractible if and only if
+        $\identity{X}$ is nullhomotopic. That is, there is a point
+        $x_{0}\in{X}$ such that $\identity{X}$ is homotopic to the
+        function $g:X\rightarrow{X}$ defined by $g(x)=x_{0}$. Let $H$ be such a
+        homotopy. But if $f:X\rightarrow{A}$ is a retract, then
+        $f|_{A}=\identity{A}$. Hence $f\circ{H}|_{A\times{I}}$ is a
+        homotopy between $\identity{A}$ and $f(x_{0})$. That is,
+        $f\circ{H}|_{A\times{I}}$ is the composition of continuous functions and
+        is therefore continuous. Moreover,
+        \begin{subequations}
+            \begin{align}
+                (f\circ{H}|_{A\times{I}})(a,0)=f\big(H|_{A\times{I}}(a,0)\big)
+                    =f\big(\identity{X}(a)\big)
+                    =f(a)
+                    =a
+            \end{align}
+        \end{subequations}
+        But also:
+        \begin{equation}
+            (f\circ{H}|_{A\times{I}})(a,1)=f\big(H|_{A\times{I}}(a,1)\big)
+                =f\big(g(a)\big)
+                =f(x_{0})
+        \end{equation}
+        Therefore $\identity{A}$ is nullhomotopic and $A$ is contracible.
+    \end{solution}
+    \begin{problem}
+        Show that every mapping cylinder for any continuous function
+        $f:\nsphere[1]\rightarrow\nsphere[1]$ is a CW complex. Construct a
+        CW complex that has the annulus and M\"{o}bius band as deformation
+        retracts.
+    \end{problem}
+    \begin{solution}
+        We start with two points in our 0-cell and then attach three 1-cells.
+        We wrap two copies of $(0,1)$ around in circles about the two points,
+        and the final one connects the two points. Hence we have two copies of
+        $\nsphere[1]$ and one copy of $[0,1]$. From here we glue the square
+        $[0,1]\times[0,1]$ into this by mapping $(x,1)$ to $\exp(2\pi{i}x)$ in
+        the top circle, $(0,y)$ and $(1,y)$ to the closed interval part of our
+        $X^{1}$ skeleton. Lastly we attach $(x,0)$ to $f(\exp(2\pi{i}x))$ in
+        the bottom circle. The result is a mapping cylinder for $f$ consisting
+        of two 0-cells, three 1-cells, and one 2-cell.
+        \par\hfill\par
+        As noted in Hatcher's text, both the annulus and the M\"{o}bius strip
+        can be deformation retracted to a circle by means of a mapping cylinder.
+        We use the above assertion to construct a CW complex that contains the
+        annulus and a M\"{o}bius strip as retracts
+        (Fig.~\ref{fig:CW_Comp_Annulus_Mobius}). We start with an actual
+        cylinder obtained from the mapping cylinder of the function
+        $\identity{\nsphere[1]}$. The result is homeomorphic to an annulus. We
+        then use the M\"{o}bius band function
+        $f:\nsphere[1]\rightarrow\nsphere[1]$ to obtain the M\"{o}bius strip as
+        the mapping cylinder $M_{f}$. We glue the bottom of the mapping cylinder
+        of the identity map to the top of the mapping cylinder of the M\"{o}bius
+        strip. The result is a CW complex with three 0-cells, five 1-cells, and
+        two 2-cells. To deformation retract to the annulus we first use the
+        mapping cylinder of the M\"{o}bius band and squeeze this down, leaving
+        the annulus untouched. Easier to visualize, to obtain the M\"{o}bius
+        band we simply push the cylinder part of
+        Fig.~\ref{fig:CW_Comp_Annulus_Mobius} down, leaving the M\"{o}bius band
+        untouched.
+    \end{solution}
+    \begin{figure}[H]
+        \centering
+        \captionsetup{type=figure}
+        \includegraphics{images/Mobius_Strip_Annulus_Def_Retract.pdf}
+        \caption{CW Complex Containing an Annulus and a M\"{o}bius Band}
+        \label{fig:CW_Comp_Annulus_Mobius}
+    \end{figure}
+\end{document}
