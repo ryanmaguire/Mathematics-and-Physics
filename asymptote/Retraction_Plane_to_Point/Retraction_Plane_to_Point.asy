@@ -22,6 +22,9 @@ size(128);
 // Size of the arrow head.
 real arsize = 5bp;
 
+// Font size for labels.
+real fsize = 9pt;
+
 // Label for the axes.
 Label L;
 
@@ -58,10 +61,10 @@ real ax = 3.0;
 radialshade(scale(R)*unitcircle, gpen, O, 0.0, white, O, R);
 
 // Draw the x axos.
-L = Label("$x$", position = 1.0, S);
+L = Label("$x$", position = 1.0, S, fontsize(fsize));
 draw(L, (-ax, 0.0)--(ax, 0.0), dpen, SharpArrow(arsize));
 
-L = Label("$y$", position = 1.0, W);
+L = Label("$y$", position = 1.0, W, fontsize(fsize));
 draw(L, (0.0, -ax)--(0.0, ax), dpen, SharpArrow(arsize));
 
 // Set the arrow head to be larger for the gray arrows.

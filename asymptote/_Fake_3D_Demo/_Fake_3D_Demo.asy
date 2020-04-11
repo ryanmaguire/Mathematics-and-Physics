@@ -2,6 +2,8 @@
 import settings;
 import _custom_arrows;
 import graph;
+import palette;
+import contour;
 settings.outformat="pdf";
 settings.render=4;
 
@@ -11,7 +13,7 @@ size(150);
 // Various pens used throughout (axes, curves, perpendiculars).
 pen apen = black+linewidth(0.8pt);
 pen cpen = black+linewidth(0.4pt);
-pen ppen = black+linewidth(0.2pt)+linetype("8 4");
+pen dpen = black+linewidth(0.1pt)+linetype("8 8");
 
 // Paths for drawing.
 path g;
@@ -55,6 +57,36 @@ pair f1(real t){
     return xyzpoint(xt, yt, 0.0);
 }
 
+pen cpen(real phi){;
+    phi -= pi/4;
+    return (sin(phi/2)^2)*gray(0.6)+(cos(phi/2)^2)*black;
+}
+
+pair A, B;
+
+phi = 2*pi*100/400;
+A = f0(phi);
+
+for (i=100; i<=500; ++i){
+    phi = 2*pi*i/400;
+    B = f0(phi);
+    pen p = cpen(phi);
+    draw(A--B, p);
+    A = B;
+}
+
+//g = graph(f0, 0, 2pi, 400, operator ..);
+//draw(g, cpen);
+
+g = graph(f1, 0, 2pi, 100, operator ..);
+draw(g, dpen);
+
+for (i=0; i<n; ++i){
+    phi = 2*pi*i/n;
+    g = f0(phi)--f1(phi);
+    draw(g, dpen);
+}
+
 g = O--X;
 L = Label("$x$", position=1.0, SW);
 draw(L, g, apen, SharpArrow(StealthHead, arsize));
@@ -66,15 +98,3 @@ draw(L, g, apen, SharpArrow(StealthHead, arsize));
 g = O--Z;
 L = Label("$z$", position=1.0, N);
 draw(L, g, apen, SharpArrow(StealthHead, arsize));
-
-g = graph(f0, 0, 2pi, 400, operator ..);
-draw(g, cpen);
-
-g = graph(f1, 0, 2pi, 100, operator ..);
-draw(g, cpen+dashed);
-
-for (i=0; i<n; ++i){
-    phi = 2*pi*i/n;
-    g = f0(phi)--f1(phi);
-    draw(g, ppen);
-}

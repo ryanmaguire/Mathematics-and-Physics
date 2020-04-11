@@ -1,11 +1,22 @@
+// Boilerplate stuff.
 import settings;
 import graph3;
 import palette;
-import tube;
-settings.render=8;
 
-outformat="pdf";
-size(300);
+if(!settings.multipleView)  settings.batchView=false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+
+viewportmargin = (2, 2);
+
+size(256);
+
+currentprojection=orthographic(4, 0, 1);
+currentlight=light(gray(0.8), specularfactor=2, viewport=true, (2.0, 2.0, 2.0));
 
 currentprojection=orthographic(2, 2, 1);
 currentlight = light(diffuse  = new pen[]    {white},
