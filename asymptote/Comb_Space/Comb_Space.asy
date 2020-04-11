@@ -1,11 +1,19 @@
-// Some boiler plate stuff.
-import _custom_arrows;
+// Seting output format to "pdf".
 import settings;
-settings.render = 8;
-outformat="pdf";
+
+if(settings.render < 0)    settings.render    = 8;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
 
 // Size of the output figure.
-size(150);
+size(128);
 
 // Variable for drawing the blobs.
 path p;

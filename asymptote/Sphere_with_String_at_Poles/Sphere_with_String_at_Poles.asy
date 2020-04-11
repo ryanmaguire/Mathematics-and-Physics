@@ -1,16 +1,23 @@
+// Boilerplate stuff.
 import settings;
 import graph3;
 import palette;
 import tube;
-settings.render=8;
 
-outformat="pdf";
-size(150);
+if(!settings.multipleView)  settings.batchView=false;
+
+settings.render      = 8;
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+
+viewportmargin = (2, 2);
+
+size(128);
 
 currentprojection=orthographic(4, 0, 1);
-currentlight = light(diffuse  = new pen[]    {white},
-                     specular = new pen[]    {0.5*white},
-                     position = new triple[] {Y+Z});
+currentlight=light(gray(0.8), specularfactor=2, viewport=true, (2.0, 2.0, 2.0));
 
 pen tcolor = blue+0.3*green;
 
@@ -22,7 +29,7 @@ path3 p;
 s2 = scale(R, R, R)*surface(unitsphere);
 s2.colors(palette(s2.map(xpart), Gradient(tcolor, tcolor)));
 
-p  = (0, 0, R){(0, 0, 0.3)}..(0, 1.5*R, 0)..(0, 0, -R){(0, 0, 0.3)};
+p  = (0, 0, R){(0, 0, 1)}..(0, 1.5*R, 0)..(0, 0, -R){(0, 0, 1)};
 s1 = surface(tube(p, scale(0.1)*unitcircle, relstep=0.01));
 s1.colors(palette(s1.map(xpart), Gradient(tcolor, tcolor)));
 

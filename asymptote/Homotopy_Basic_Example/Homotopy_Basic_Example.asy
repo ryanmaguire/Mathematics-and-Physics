@@ -5,7 +5,7 @@ settings.render = 8;
 settings.outformat="pdf";
 
 // Size of the output figure.
-size(150);
+size(128);
 
 // Variable for drawing the blobs.
 path p;
