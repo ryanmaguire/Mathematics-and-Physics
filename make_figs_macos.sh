@@ -150,6 +150,8 @@ for folder in */ ; do
 			rm -f *.png
 			rm -f *.svg
 			rm -f *.pdf
+			rm -f .DS_Store
+			rm -f $folder/.DS_Store
 
 			# Check that the above line worked and the folder is emtpty.
 			if [ "$(ls -A $folder)" ]; then
