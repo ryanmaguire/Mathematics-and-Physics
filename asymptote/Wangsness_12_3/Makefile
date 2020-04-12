@@ -1,5 +1,5 @@
 # To execute, run 'make Makefile make'
-SOURCE = Wangsness_10_13
+SOURCE = Wangsness_12_3
 WIDTH = 256
 DENSITY = 300
 DESTINATION = ../../images/
