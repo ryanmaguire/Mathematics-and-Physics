@@ -15,9 +15,6 @@ viewportmargin = (2, 2);
 // Size of the output figure.
 size(128);
 
-// Variable for drawing the blobs.
-path p;
-
 // Pens used for drawing lines.
 pen dpen = black+linewidth(0.3pt);
 
@@ -27,14 +24,9 @@ int i;
 // The number of comb spikes to draw.
 int n = 500;
 
-// Coordinates for labelling the blobs.
-p = (0, 0)--(1, 0);
-draw(p, dpen);
+// Draw the bottom and left of the comb.
+draw((0, 0)--(1, 0), dpen);
+draw((0, 1)--(0, 0), dpen);
 
-for (i=1; i<=n; ++i){
-    p = (1/i, 1)--(1/i, 0);
-    draw(p, dpen);
-}
-
-p = (0, 1)--(0, 0);
-draw(p, dpen);
+// Draw all of the teeth.
+for (i=1; i<=n; ++i) draw((1/i, 1)--(1/i, 0), dpen);

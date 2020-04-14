@@ -63,7 +63,7 @@ for filename in ./*.asy; do
 
 	# Various modules should not be processed, skip them.
 	if [ "$file" == "_custom_arrows" ] || [ "$file" == "_cassini_oval" ] \
-	|| [ "$file" == "_mimic_three" ] ; then
+	|| [ "$file" == "_mimic_three" ]   || [ "$file" == "_euc_geo" ] ; then
 		continue
 	fi
 
