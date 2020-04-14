@@ -1,6 +1,5 @@
 // Boilerplate stuff.
 import settings;
-import graph;
 
 // Make sure _custom_arrows.asy and _mimic_three.asy are in your ASYMPTOTE_DIR
 // environment variable. These files are found in the asymptote/ folder.
@@ -21,7 +20,10 @@ viewportmargin = (2, 2);
 // Size of output.
 size(128);
 
-// Various pens used throughout (axes, curves, perpendiculars).
+// Default pen used for drawing.
+defaultpen(black+linewidth(0.1pt));
+
+// Various pens used throughout (axes, curves, dashed-perpendiculars).
 pen apen = black+linewidth(0.8pt);
 pen dpen = black+linewidth(0.1pt)+linetype("8 8");
 pen cpen(real phi){
@@ -37,18 +39,24 @@ path g;
 // Label for the axes.
 Label L;
 
-// Variable used for 3D-to-2D drawing.
-xyzpoint xyzP;
+// Variables used for 3D-to-2D drawing.
+xyzpoint A, B;
 
-// Variables for indexing and angles.
+// Variable for indexing.
 int i;
+
+// Used for looping over angles.
 real phi;
-real phi_start = 0.5*pi;
-int i_start    = 100;
-int i_end      = 500;
+
+// Start and end index.
+int i_start = 100;
+int i_end   = 500;
+
+// Use above variables to compute the number of samples.
 int i_samples  = i_end-i_start;
+
+// Number of perpendicular lines to draw.
 int n_perps    = 8;
-int f_samples  = 20;
 
 // 2D curve drawn using the fake 3D function xyzpoint.
 xyzpoint f0(real t){
@@ -58,31 +66,23 @@ xyzpoint f0(real t){
     return xyzpoint(xt, yt, zt);
 }
 
-// Function for the floor of f0.
-pair floor(real t){return f0(t).ProjZ;}
-
-// Pairs used to draw the curve and give it a gradient color.
-pair A = f0(phi_start).P;
-pair B;
+// Starting point on the curve we're drawing.
+A = f0(2*pi*i_start/i_samples);
 
 // Draw the main curve.
-for (i=i_start; i<=i_end; ++i){
+for (i=i_start+1; i<=i_end; ++i){
     phi = 2*pi*i/i_samples;
-    B = f0(phi).P;
-    draw(A--B, cpen(phi));
+    B = f0(phi);
+    draw(A.P--B.P, cpen(phi));
+
+    // Draw the projection of the curve in the z direction.
+    draw(A.ProjZ--B.ProjZ);
+
+    // Drop dashed perpendicular lines at various points.
+    if ((n_perps*i/i_samples % 1) == 0.0) draw(B.P--B.ProjZ, dpen);
+
+    // Reset A to the new point.
     A = B;
-}
-
-// Draw the floor.
-g = graph(floor, 0, 2pi, f_samples, operator ..);
-draw(g, dpen);
-
-// Drop dashed perpendicular lines at various points.
-for (i=0; i<n_perps; ++i){
-    phi = 2*pi*i/n_perps;
-    xyzP = f0(phi);
-    g = xyzP.P--xyzP.ProjZ;
-    draw(g, dpen);
 }
 
 // Draw and label the axes.

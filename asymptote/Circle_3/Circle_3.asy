@@ -22,8 +22,8 @@ defaultpen(fontsize(7pt));
 // Size of the output figure.
 size(128);
 
-// Axes pen.
-pen ap = black+linewidth(0.8pt);
+// Default pen used for the axes.
+defaultpen(black+linewidth(0.8pt));
 
 // Pen for the circle and triangles.
 pen cpen = black+linewidth(0.4pt);
@@ -33,7 +33,7 @@ pen tpen = black+linewidth(0.2pt);
 pen fpen = red+opacity(0.5);
 
 // Size of the arrow head.
-real ar = 5bp;
+real arsize = 5bp;
 
 // The origin.
 pair O = (0.0, 0.0);
@@ -48,8 +48,8 @@ real len = 1.2;
 draw(circle(O, R), cpen);
 
 // Draw and label the axes.
-draw(Label("$x$", position=1), (-len, 0.0)--(len, 0.0), S, ap, SharpArrows(ar));
-draw(Label("$y$", position=1), (0.0, -len)--(0.0, len), W, ap, SharpArrows(ar));
+draw(Label("$x$", position=1), (-len, 0.0)--(len, 0.0), S, SharpArrows(arsize));
+draw(Label("$y$", position=1), (0.0, -len)--(0.0, len), W, SharpArrows(arsize));
 
 // And draw the object inside of the circle.
 path g = scale(R)*expi(pi/4)--scale(R)*expi(5pi/4)--
