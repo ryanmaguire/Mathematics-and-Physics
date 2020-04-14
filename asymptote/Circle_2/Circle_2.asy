@@ -1,12 +1,11 @@
-// Seting output format to "pdf".
+// Boilerplate stuff.
 import settings;
 import graph;
 import _custom_arrows;
 
-if(settings.render < 0)    settings.render    = 4;
+if(settings.render < 0)    settings.render    = 8;
 if(!settings.multipleView) settings.batchView = false;
 
-settings.render      = 8;
 settings.outformat   = "pdf";
 settings.inlineimage = true;
 settings.embed       = true;

@@ -61,8 +61,9 @@ for filename in ./*.asy; do
 	file=$(basename -- "$filename")
 	file="${file%.*}"
 
-	# The _custom_arrows module should not be processed, skip it.
-	if [ "$file" == "_custom_arrows" ] || [ "$file" == "_cassini_oval" ] ; then
+	# Various modules should not be processed, skip them.
+	if [ "$file" == "_custom_arrows" ] || [ "$file" == "_cassini_oval" ] \
+	|| [ "$file" == "_mimic_three" ] ; then
 		continue
 	fi
 

@@ -1,100 +1,96 @@
-// Seting output format to "pdf".
+// Boilerplate stuff.
 import settings;
-import _custom_arrows;
 import graph;
-import palette;
-import contour;
-settings.outformat="pdf";
-settings.render=4;
+
+// Make sure _custom_arrows.asy and _mimic_three.asy are in your ASYMPTOTE_DIR
+// environment variable. These files are found in the asymptote/ folder.
+import _custom_arrows;
+import _mimic_three;
+
+if(settings.render < 0)    settings.render    = 8;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+
+viewportmargin = (2, 2);
 
 // Size of output.
-size(150);
+size(128);
 
 // Various pens used throughout (axes, curves, perpendiculars).
 pen apen = black+linewidth(0.8pt);
-pen cpen = black+linewidth(0.4pt);
 pen dpen = black+linewidth(0.1pt)+linetype("8 8");
-
-// Paths for drawing.
-path g;
-
-// Mimic 3D drawing with these.
-pair O = (0.0, 0.0);
-pair X = scale(1/sqrt(2))*(-1.0, -1.0);
-pair Y = (1.0, 0.0);
-pair Z = (0.0, 1.0);
-
-// Label for the axes.
-Label L;
-
-// Variable for indexing and angles.
-int i;
-real phi;
-
-// Number of perpendiculars to drop.
-int n = 8;
+pen cpen(real phi){
+    return (sin(phi/2)^2)*gray(0.6) + (cos(phi/2)^2)*black+linewidth(0.4pt);
+}
 
 // Size of the arrow head.
 real arsize = 5bp;
 
-// Used for mimicing 3D drawing.
-pair xyzpoint(real a, real b, real c){
-    return scale(a)*X+scale(b)*Y+scale(c)*Z;
-}
+// Path for drawing.
+path g;
 
-// 3D curve.
-pair f0(real t){
+// Label for the axes.
+Label L;
+
+// Variable used for 3D-to-2D drawing.
+xyzpoint xyzP;
+
+// Variables for indexing and angles.
+int i;
+real phi;
+real phi_start = 0.5*pi;
+int i_start    = 100;
+int i_end      = 500;
+int i_samples  = i_end-i_start;
+int n_perps    = 8;
+int f_samples  = 20;
+
+// 2D curve drawn using the fake 3D function xyzpoint.
+xyzpoint f0(real t){
     real xt = 0.4*cos(t);
     real yt = 0.4*sin(t);
     real zt = 0.4*cos(4.0*t);
     return xyzpoint(xt, yt, zt);
 }
 
-// Projection of 3D curve.
-pair f1(real t){
-    real xt = 0.4*cos(t);
-    real yt = 0.4*sin(t);
-    return xyzpoint(xt, yt, 0.0);
-}
+// Function for the floor of f0.
+pair floor(real t){return f0(t).ProjZ;}
 
-pen cpen(real phi){;
-    phi -= pi/4;
-    return (sin(phi/2)^2)*gray(0.6)+(cos(phi/2)^2)*black;
-}
+// Pairs used to draw the curve and give it a gradient color.
+pair A = f0(phi_start).P;
+pair B;
 
-pair A, B;
-
-phi = 2*pi*100/400;
-A = f0(phi);
-
-for (i=100; i<=500; ++i){
-    phi = 2*pi*i/400;
-    B = f0(phi);
-    pen p = cpen(phi);
-    draw(A--B, p);
+// Draw the main curve.
+for (i=i_start; i<=i_end; ++i){
+    phi = 2*pi*i/i_samples;
+    B = f0(phi).P;
+    draw(A--B, cpen(phi));
     A = B;
 }
 
-//g = graph(f0, 0, 2pi, 400, operator ..);
-//draw(g, cpen);
-
-g = graph(f1, 0, 2pi, 100, operator ..);
+// Draw the floor.
+g = graph(floor, 0, 2pi, f_samples, operator ..);
 draw(g, dpen);
 
-for (i=0; i<n; ++i){
-    phi = 2*pi*i/n;
-    g = f0(phi)--f1(phi);
+// Drop dashed perpendicular lines at various points.
+for (i=0; i<n_perps; ++i){
+    phi = 2*pi*i/n_perps;
+    xyzP = f0(phi);
+    g = xyzP.P--xyzP.ProjZ;
     draw(g, dpen);
 }
 
-g = O--X;
+// Draw and label the axes.
 L = Label("$x$", position=1.0, SW);
-draw(L, g, apen, SharpArrow(StealthHead, arsize));
+draw(L, xyzO--xyzX, apen, SharpArrow(StealthHead, arsize));
 
-g = O--Y;
 L = Label("$y$", position=1.0, E);
-draw(L, g, apen, SharpArrow(StealthHead, arsize));
+draw(L, xyzO--xyzY, apen, SharpArrow(StealthHead, arsize));
 
-g = O--Z;
 L = Label("$z$", position=1.0, N);
-draw(L, g, apen, SharpArrow(StealthHead, arsize));
+draw(L, xyzO--xyzZ, apen, SharpArrow(StealthHead, arsize));
