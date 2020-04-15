@@ -38,11 +38,11 @@ int n = 4;
 path g;
 
 // Inner and outer radii of the arrows.
-real ir = 0.7;
-real or = 2.3;
+real ir = 0.5;
+real or = 1.5;
 
 // Radius of the image.
-real R = 3.0;
+real R = 1.9;
 
 // Variable for looping over angles.
 pair phi;
@@ -55,7 +55,7 @@ pen dpen = black+linewidth(0.5pt);
 pen gpen = gray(0.5)+linewidth(1pt);
 
 // Size of the axes.
-real ax = 3.0;
+real ax = 2.0;
 
 // Background for the plane.
 radialshade(scale(R)*unitcircle, gpen, O, 0.0, white, O, R);

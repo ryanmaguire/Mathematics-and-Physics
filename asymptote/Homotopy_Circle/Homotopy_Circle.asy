@@ -5,8 +5,10 @@ texpreamble("\usepackage{amssymb}");
 settings.render = 4;
 settings.outformat="pdf";
 
+defaultpen(fontsize(10pt));
+
 // Size of the output figure.
-size(150);
+size(128);
 
 // Variable used for indexing.
 int i;
@@ -18,8 +20,8 @@ int n = 8;
 path p;
 
 // Inner and outer radii of the annulus.
-real inner  = 0.50;
-real outer  = 1.00;
+real inner  = 0.25;
+real outer  = 0.50;
 
 // Variable used for looping over angles.
 real phi;
@@ -51,8 +53,8 @@ for(i=0; i<n; ++i){
 
 // Label the inner circle as S^2.
 arsize = 5bp;
-p = 1.1*expi(pi/5)--center*expi(pi/5);
+p = scale(1.1*outer)*expi(pi/5)--center*expi(pi/5);
 draw(Label("$\mathbb{S}^{1}$", position=0.0), p, SharpArrow(arsize), margins);
 
 // Label the entire space X.
-label("$X$", (outer, -outer));
+label("$X$", scale(1.2*outer)*expi(7pi/4));
