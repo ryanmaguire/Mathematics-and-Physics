@@ -32,5 +32,5 @@ position pos2 = 0.57;
 
 draw("$a$", A--B, MidArrow(arsize));
 draw("$a$", C--D, MidArrow(arsize));
-draw("$b$", B--C, Arrow(arsize, pos1), Arrow(arsize, pos2));
+draw("$b$", C--B, Arrow(arsize, pos1), Arrow(arsize, pos2));
 draw("$b$", D--A, Arrow(arsize, pos1), Arrow(arsize, pos2));
