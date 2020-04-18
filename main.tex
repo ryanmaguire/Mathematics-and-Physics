@@ -9,9 +9,20 @@
 \makeindex[intoc]                                                              %
 %--------------------------------Main Document---------------------------------%
 \newcommand*{\TOPPATH}{books}
+\newcommand*{\PARPATH}{\TOPPATH/}
 \newcommand*{\PATH}{\TOPPATH/}
 \newcounter{endpage}
 \definecolor{CoverPage}{RGB}{204,212,255}
+
+\def\compilefigures{0}
+\def\compilefoundations{1}
+\def\compilealgebra{0}
+\def\compiletopology{0}
+\def\compileanalysis{0}
+\def\compilegeometry{0}
+\def\compilegeotop{0}
+\def\compilephysics{0}
+
 \begin{document}
     \pagenumbering{gobble}
     \pagecolor{CoverPage}
@@ -41,32 +52,108 @@
     \clearpage
 
     \pagenumbering{gobble}
-    \book{Foundations}
-        \label{book:Foundations}
-        \pagenumbering{arabic}
-        \renewcommand{\PATH}{\TOPPATH/Foundations}
+    \book{Foundations}    
+    \label{book:Foundations}%
+    \pagenumbering{arabic}
+
+    \if\compilefoundations1
+        \renewcommand{\PARPATH}{\TOPPATH/Foundations/Logic_and_Sets}
         \part{Logic and Sets}
-            \input{\PATH/Logic_and_Sets/Logic_and_Sets.tex}
+            \chapter{Propositional Logic}
+                \renewcommand{\PATH}{\PARPATH/Propositional_Logic}
+                \label{chapt:Propositional_Logic}%
+                \input{\PATH/What_is_Logic.tex}
+                \input{\PATH/Hilbert_Systems.tex}
+            \chapter{Predicate Calculus}
+                \renewcommand{\PATH}{\PARPATH/Predicate_Calculus}
+                \label{chapt:Predicate_Calculus}%
+                \input{\PATH/Quantifiers.tex}
+            \chapter{Zermelo-Fraenkel Set Theory}
+                \renewcommand{\PATH}{\PARPATH/Elementary_Set_Theory}
+                \label{chapt:Zermelo_Fraenkel_Set_Theory}%
+                \input{\PATH/Zermelo_Fraenkel.tex}
+                \input{\PATH/The_Structure_of_Sets.tex}
+                \input{\PATH/Relations.tex}
+            \chapter{The Real Numbers}
+                \renewcommand{\PATH}{\PARPATH/Real_Numbers}
+                \label{chapt:The_Real_Numbers}%
+                \input{\PATH/Real_Numbers.tex}
+            \chapter{Function Theory}
+                \renewcommand{\PATH}{\PARPATH/Function_Theory}
+                \label{chapt:Function_Theory}%
+                \input{\PATH/Definitions.tex}
+                \input{\PATH/Binary_Operations.tex}
+                \input{\PATH/Boolean_Algebras.tex}
+                \input{\PATH/Sequences_and_Matrices.tex}
+            \chapter{Arithmetic}
+                \renewcommand{\PATH}{\PARPATH/Arithmetic}
+                \label{chapt:Arithmetic}%
+                \input{\PATH/Elementary_Number_Theory.tex}
+                \input{\PATH/Modulo_Arithmetic.tex}
+            \chapter{Cardinality}
+                \renewcommand{\PATH}{\PARPATH/Cardinality}
+                \label{chapt:Cardinality}%
+                \input{\PATH/Cardinality.tex}
         \part{Lattice Theory}
-            \input{\PATH/Lattice_Theory/Lattice_Theory.tex}
+            \renewcommand{\PARPATH}{\TOPPATH/Foundations/Lattice_Theory}
+            \chapter{Relations of Order}
+                \renewcommand{\PATH}{\PARPATH/Relations_of_Order}
+                \label{chapt:Relations_of_Order}%
+                \input{\PATH/Order_Theory.tex}
+                \input{\PATH/Zorns_Lemma.tex}
+            \chapter{Graph Theory}
+                \renewcommand{\PATH}{\PARPATH/Graph_Theory}
+                \label{chapt:Graph_Theory}%
+                \input{\PATH/Graph_Theory.tex}
         \part{Categories and Models}
-            \input{\PATH/Categories_and_Models/Categories_and_Models.tex}
+            \renewcommand{\PARPATH}{\TOPPATH/Foundations/Categories_and_Models}
+            \chapter{Category Theory}
+                \renewcommand{\PATH}{\PARPATH}
+                \label{chapt:Category_Theory}%
+                \input{\PATH/Categories_and_Models.tex}
+    \else
+        \part{Logic and Sets}
+            \chapter{Propositional Logic}
+                \label{chapt:Propositional_Logic}%
+            \chapter{Predicate Calculus}
+                \label{chapt:Predicate_Calculus}%
+            \chapter{Zermelo-Fraenkel Set Theory}
+                \label{chapt:Zermelo_Fraenkel_Set_Theory}%
+            \chapter{The Real Numbers}
+                \label{chapt:The_Real_Numbers}%
+            \chapter{Function Theory}
+                \label{chapt:Function_Theory}%
+            \chapter{Arithmetic}
+                \label{chapt:Arithmetic}%
+            \chapter{Cardinality}
+                \label{chapt:Cardinality}%
+        \part{Lattice Theory}
+            \chapter{Relations of Order}
+                \label{chapt:Relations_of_Order}%
+            \chapter{Graph Theory}
+                \label{chapt:Graph_Theory}%
+        \part{Categories and Models}
+            \chapter{Category Theory}
+                \label{chapt:Category_Theory}%
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Algebra}
-        \label{book:Algebra}%
-        \renewcommand{\PATH}{\TOPPATH/Algebra}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Algebra}%
+    \renewcommand{\PATH}{\TOPPATH/Algebra}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compilealgebra1
         \part{Group Theory}
             \input{\PATH/Group_Theory/Group_Theory.tex}
         \part{Ring Theory}
             \input{\PATH/Ring_Theory/Ring_Theory.tex}
         \part{Modules}
-           \input{\PATH/Modules/Modules.tex}
+        \input{\PATH/Modules/Modules.tex}
         \part{Galois Theory}
             \input{\PATH/Galois_Theory/Galois_Theory.tex}
         \part{Unsorted Stuff}
@@ -75,16 +162,25 @@
             \input{books/Algebra/Linear_Algebra.tex}
             \input{books/Algebra/Algebraic_Geometry.tex}
             \input{books/Algebra/Lie_Algebras.tex}
+    \else
+        \part{Group Theory}
+        \part{Ring Theory}
+        \part{Modules}
+        \part{Galois Theory}
+        \part{Unsorted Stuff}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Topology}
-        \label{book:Topology}%
-        \renewcommand{\PATH}{\TOPPATH/Topology}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Topology}%
+    \renewcommand{\PATH}{\TOPPATH/Topology}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compiletopology1
         \part{Point-Set Topology}
             \input{\PATH/Point_Set_Topology/Topological_Spaces.tex}
             \input{\PATH/Misc_Notes.tex}
@@ -93,16 +189,25 @@
             \input{\PATH/Algebraic_Topology/Algebraic_Topology.tex}
         \part{Homology}
         \part{Cohomology}
+    \else
+        \part{Point-Set Topology}
+        \part{Metric Spaces}
+        \part{Homotopy}
+        \part{Homology}
+        \part{Cohomology}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Analysis}
-        \label{book:Analysis}
-        \renewcommand{\PATH}{\TOPPATH/Analysis}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Analysis}%
+    \renewcommand{\PATH}{\TOPPATH/Analysis}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compileanalysis1
         \part{Measure Theory}
             \input{\PATH/Measure_Theory/Measure_Theory.tex}
         \part{Probability Theory}
@@ -119,46 +224,70 @@
         \part{Special Functions}
             \input{\PATH/Special_Functions/Numerical_Analysis.tex}
             \input{\PATH/Special_Functions/Special_Functions.tex}
+    \else
+        \part{Measure Theory}
+        \part{Probability Theory}
+        \part{Complex Analysis}
+        \part{Calculus on Normed Spaces}
+        \part{Functional Analysis}
+        \part{Fourier Analysis}
+        \part{Special Functions}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Geometry}
-        \label{book:Geometry}
-        \renewcommand{\PATH}{\TOPPATH/Geometry}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Geometry}%
+    \renewcommand{\PATH}{\TOPPATH/Geometry}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compilegeometry
         \part{Manifolds}
             \input{\PATH/Manifolds/Manifolds.tex}
         \part{Euclidean Geometry}
             \input{\PATH/Euclidean_Geometry/Euclidean_Geometry.tex}
         \part{Riemannian Geometry}
             \input{\PATH/Riemannian_Geometry/Riemannian_Geometry.tex}
+    \else
+        \part{Manifolds}
+        \part{Euclidean Geometry}
+        \part{Riemannian Geometry}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Geometric Topology}
-        \label{book:Geometric_Topology}
-        \renewcommand{\PATH}{\TOPPATH/Geometric_Topology}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Geometric_Topology}%
+    \renewcommand{\PATH}{\TOPPATH/Geometric_Topology}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compilegeotop
         \part{Surgery Theory}
             \input{\PATH/Surgery_Theory.tex}
         \part{Knot Theory}
             \input{\PATH/Knot_Theory.tex}
+    \else
+        \part{Surgery Theory}
+        \part{Knot Theory}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
     \setcounter{endpage}{\thepage}
     \pagenumbering{gobble}
     \book{Physics}
-        \label{book:Physics}
-        \renewcommand{\PATH}{\TOPPATH/Physics}
-        \pagenumbering{arabic}
-        \setcounter{page}{\value{endpage}}
+    \label{book:Physics}
+    \renewcommand{\PATH}{\TOPPATH/Physics}
+    \pagenumbering{arabic}
+    \setcounter{page}{\value{endpage}}
+
+    \if\compilephysics
         \part{Classical Mechanics}
             \input{\PATH/Classical_Mechanics/Classical_Mechanics.tex}
         \part{Diffraction Theory}
@@ -167,6 +296,11 @@
             \input{\PATH/Diffraction_Theory/Occultation_Observations}
         \part{Electromagnetism}
            \input{\PATH/Electromagnetism/Electromagnetism.tex}
+    \else
+        \part{Classical Mechanics}
+        \part{Diffraction Theory}
+        \part{Electromagnetism}
+    \fi
     \addtocontents{toc}{\protect\newpage}
     \clearpage
 
