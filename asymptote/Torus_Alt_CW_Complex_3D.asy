@@ -48,11 +48,11 @@ real dotR = 0.2;
 real pipR = 0.05;
 
 // Material of the pretzel and the sphere.
-material blob1 = material(diffusepen=blue+0.25*green,
+material blob1 = material(diffusepen=gray(0.3),
                           emissivepen=gray(0.2),
                           specularpen=gray(0.2));
 
-material blob2 = material(diffusepen=green,
+material blob2 = material(diffusepen=gray(0.7),
                           emissivepen=gray(0.2),
                           specularpen=gray(0.2));
 
@@ -60,11 +60,11 @@ material orb = material(diffusepen=blue+lightgreen,
                         emissivepen=gray(0.2),
                         specularpen=gray(0.2));
 
-material pipe0 = material(diffusepen=deepred,
+material pipe0 = material(diffusepen=red,
                           emissivepen=gray(0.2),
                           specularpen=gray(0.2));
 
-material pipe1 = material(diffusepen=deepblue,
+material pipe1 = material(diffusepen=blue,
                           emissivepen=gray(0.2),
                           specularpen=gray(0.2));
 
@@ -114,7 +114,7 @@ draw(s, surfacepen=blob1, render(merge=true));
 s = surface(g2, (0,0), (2pi,2pi), samplex, sampley, Spline);
 draw(s, surfacepen=blob2, render(merge=true));
 
-path3 q=graph(c0, 0, 2pi, 50, operator ..);
+path3 q=graph(c0, 0, 2pi, 100, operator ..);
 draw(tube(q, scale(pipR)*unitcircle), surfacepen=pipe0, render(merge=true));
 
 path3 q=graph(c1, 0, 2pi, 200, operator ..);
