@@ -26,6 +26,9 @@ pair B = (1.0, 1.0);
 pair C = (1.0, 0.0);
 pair D = (0.0, 0.0);
 
+filldraw(A--B--D--cycle, gray(0.3)+opacity(0.5), nullpen);
+filldraw(B--D--C--cycle, gray(0.7)+opacity(0.5), nullpen);
+
 draw(A--B, MidArrow(arsize));
 draw(D--C, MidArrow(arsize));
 
