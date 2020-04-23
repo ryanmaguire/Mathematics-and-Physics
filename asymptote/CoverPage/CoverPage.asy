@@ -2,11 +2,19 @@
 import settings;
 import tube;
 import graph3;
-settings.render=4;
-settings.outformat="pdf";
+
+if(settings.render < 0)    settings.render    = 8;
+if(!settings.multipleView) settings.batchView = false;
+
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
 
 // See comment below about size.
 settings.maxtile = (256, 256);
+
+viewportmargin = (2, 2);
 
 // Size of output. Should be power of two or strange black lines appear. This
 // problem seems device specific (Appears with Debian, not with OSX). Known
