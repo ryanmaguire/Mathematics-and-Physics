@@ -3,9 +3,9 @@ import settings;
 import graph3;
 import tube;
 
-if(!settings.multipleView)  settings.batchView=false;
+if(settings.render < 0)    settings.render    = 8;
+if(!settings.multipleView) settings.batchView = false;
 
-settings.render=8;
 settings.outformat="pdf";
 settings.inlineimage=true;
 settings.embed=true;
