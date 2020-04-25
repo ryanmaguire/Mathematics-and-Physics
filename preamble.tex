@@ -50,7 +50,6 @@
 }                           % Colors for hyperref.
 \usepackage[toc,acronym,nogroupskip,nopostdot]{glossaries}
 \usepackage{glossary-mcols}
-
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
@@ -256,8 +255,7 @@
 }{thm}
 
 %--------------------Declared Math Operators--------------------%
-\DeclareMathOperator{\adjoint}{adj}         % Adjoint.
-\DeclareMathOperator{\Card}{Card}           % Cardinality.
+\DeclareMathOperator{\Card}{curl}           % Curl.
 \DeclareMathOperator{\curl}{curl}           % Curl.
 \DeclareMathOperator{\diam}{diam}           % Diameter.
 \DeclareMathOperator{\dist}{dist}           % Distance.
@@ -287,9 +285,6 @@
 %--------------------Declared Math Symbols--------------------%
 \DeclareMathSymbol{\minus}{\mathbin}{AMSa}{"39} % Unary minus sign.
 %------------------------New Commands---------------------------%
-\DeclarePairedDelimiterX{\norm}[1]{\lVert}{\rVert}{#1}
-\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
-\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
 \renewcommand*{\glstextformat}[1]{\textcolor{RoyalBlue}{#1}}
@@ -300,8 +295,11 @@
 \addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
 \numberwithin{equation}{section}
 
-% For the sake of consistency across the document, common notations are commands
+% For the sake of consistency across the document common notations are commands.
 \renewcommand{\vector}[1]{\boldsymbol{\mathrm{#1}}}
+\newcommand{\norm}[2][]{#1\lVert#2#1\rVert}
+\newcommand{\ceil}[2][]{#1\lceil#2#1\rceil}
+\newcommand{\floor}[2][]{#1\lfloor#2#1\rfloor}
 \newcommand{\vecadd}[1][]{\boldsymbol{+}_{#1}}
 \newcommand{\uvector}[1]{\boldsymbol{\hat{\mathrm{#1}}}}
 \newcommand{\topspace}[2][]{(#2,\tau_{#1})}
@@ -405,36 +403,32 @@
         {\monoid@ii{#1}}
         {\monoid@ii{#1}[*]}%
 }
-\def\monoid@ii#1[#2]#3{(#3,\,#2_{#1})}
+
 \def\module{%
-    \@ifnextchar[%
-        {\module@i}
-        {\module@i[]}%
+    \@ifnextchar[{\module@i}{\module@i[]}%
 }
 \def\module@i[#1]{%
-    \@ifnextchar[%
-        {\module@ii{#1}}
-        {\module@ii{#1}[]}%
+    \@ifnextchar[{\module@ii{#1}}{\module@ii{#1}[]}%
 }
-\def\module@ii#1[#2]#3{(#3,\,+_{#1},\,\star_{#2})}
-\def\monoid@ii#1[#2]#3{(#3,\,#2_{#1})}
+
 \def\topgroup{%
-    \@ifnextchar[%
-        {\topgroup@i}
-        {\topgroup@i[*]}%
+    \@ifnextchar[{\topgroup@i}{\topgroup@i[*]}%
 }
 \def\topgroup@i[#1]{%
-    \@ifnextchar[%
-        {\topgroup@ii{#1}}
-        {\topgroup@ii{#1}[]}%
+    \@ifnextchar[{\topgroup@ii{#1}}{\topgroup@ii{#1}[]}%
 }
+
+\def\monoid@ii#1[#2]#3{(#3,\,#2_{#1})}
+\def\module@ii#1[#2]#3{(#3,\,+_{#1},\,\star_{#2})}
 \def\topgroup@ii#1[#2]#3{(#3,#1_{#2},\tau_{#2})}
 \makeatother
+
 %------------------------Book Command---------------------------%
 \makeatletter
 \renewcommand\@pnumwidth{1cm}
 \newcounter{book}
-\renewcommand\thebook{\@Roman\c@book}
+\newcommand\bookname{Book}
+\renewcommand{\thebook}{\texorpdfstring{\Numberstring{book}}{book}}
 \newcommand\book{%
     \if@openright
         \cleardoublepage
@@ -454,21 +448,25 @@
 \def\@book[#1]#2{%
     \refstepcounter{book}
     \addcontentsline{toc}{book}{\bookname\ \thebook:\hspace{1em}#1}
-    \markboth{}{}
-    {\centering
-     \interlinepenalty\@M
-     \normalfont
-     \huge\bfseries\bookname\nobreakspace\thebook
-     \par
-     \vskip 20\p@
-     \Huge\bfseries#2\par}%
+    \markboth{}{}{%
+        \centering
+        \interlinepenalty\@M
+        \normalfont
+        \huge\bfseries\bookname\nobreakspace\thebook
+        \par
+        \vskip 20\p@
+        \Huge\bfseries#2\par
+    }%
     \@endbook}
 \def\@sbook#1{%
-    {\centering
-     \interlinepenalty \@M
-     \normalfont
-     \Huge\bfseries#1\par}%
-    \@endbook}
+    {%
+        \centering
+        \interlinepenalty \@M
+        \normalfont
+        \Huge\bfseries#1\par%
+    }%
+    \@endbook%
+}
 \def\@endbook{
     \vfil\newpage
         \if@twoside
@@ -499,10 +497,10 @@
             \global\@nobreaktrue
             \everypar{\global\@nobreakfalse\everypar{}}%
         \endgroup
-    \fi}
-\newcommand\bookname{Book}
-\renewcommand{\thebook}{\texorpdfstring{\Numberstring{book}}{book}}
+    \fi%
+}
 \providecommand*{\toclevel@book}{-2}
+
 \makeatother
 \titleformat{\part}[display]
     {\Large\bfseries}
@@ -523,6 +521,7 @@
     {\bfseries\Large}
     {\filleft\MakeUppercase{\chaptertitlename} \thechapter}
     {2ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]
+
 \newglossarystyle{longpara}{%
     \setglossarystyle{long}%
     \renewenvironment{theglossary}{%
@@ -535,10 +534,17 @@
         \tabularnewline
     }%
 }
+
 \newglossary[not-glg]{notation}{not-gls}{not-glo}{Notation}
+
 \newcommand*{\newnotation}[4][]{%
-    \newglossaryentry{#2}{type=notation, name={\textbf{#3}, },
-                          text={#4}, description={#4},#1}%
+    \newglossaryentry{#2}{%
+        type=notation,
+        name={\textbf{#3}, },
+        text={#4},
+        description={#4},
+        #1%
+    }%
 }
 %--------------------------LENGTHS------------------------------%
 % Spacings for the Table of Contents.
