@@ -2,7 +2,7 @@
 import settings;
 import graph3;
 import tube;
-import Palette;
+import palette;
 
 if(settings.render < 0)    settings.render    = 8;
 if(!settings.multipleView) settings.batchView = false;
