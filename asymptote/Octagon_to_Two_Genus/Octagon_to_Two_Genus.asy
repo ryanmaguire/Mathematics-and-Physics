@@ -161,32 +161,32 @@ for (i=0; i<n; ++i){
 xshift = 1.3;
 yshift = -2.8;
 
-g = (0.0, 0.7){W}..(-0.7, 1.0)..(-2.0, 0.0)..(-0.7, -1.0)..(0.0, -0.7){E};
+g = (0.0, 0.8){W}..(-0.8, 1.0)..(-2.0, 0.0)..(-0.8, -1.0)..(0.0, -0.8){E};
 draw(shift(xshift, yshift)*g);
 draw(shift(xshift+1.0, yshift)*(reflect((0.0, 1.0), (0.0, -1.0))*g));
-draw(shift(xshift, yshift)*((0.0,  0.7)--(1.0,  0.7)), dashed);
-draw(shift(xshift, yshift)*((0.0, -0.7)--(1.0, -0.7)), dashed);
+draw(shift(xshift, yshift)*((0.0,  0.8)--(1.0,  0.8)), dashed);
+draw(shift(xshift, yshift)*((0.0, -0.8)--(1.0, -0.8)), dashed);
 
 // Add donut holes.
-g =  (1.1, 0.0){dir(-50)}..{dir(50)}(2.4, 0.0);
+g =  (1.2, 0.0){dir(-50)}..{dir(50)}(2.3, 0.0);
 draw(shift(xshift, yshift)*g);
 draw(shift(xshift-2.45, yshift)*g);
 
-g = (1.2, -0.1){dir(50)}..{dir(-50)}(2.3, -0.1);
+g = (1.3, -0.1){dir(50)}..{dir(-50)}(2.2, -0.1);
 draw(shift(xshift, yshift)*g);
 draw(shift(xshift-2.45, yshift)*g);
 
 xshift += 6.3;
 
-g = (0.0,  0.7){W}..(-0.7,  1.0)..(-2.0, 0.0)..(-0.7, -1.0)..
-    (0.0, -0.7){E}..( 0.7, -1.0)..( 2.0, 0.0)..( 0.7,  1.0)..cycle;
+g = (0.0,  0.8){W}..(-0.8,  1.0)..(-2.0, 0.0)..(-0.8, -1.0)..
+    (0.0, -0.8){E}..( 0.8, -1.0)..( 2.0, 0.0)..( 0.8,  1.0)..cycle;
 draw(shift(xshift, yshift)*g);
 
 // Add donut holes.
-g =  (0.35, 0.0){dir(-50)}..{dir(50)}(1.65, 0.0);
+g =  (0.45, 0.0){dir(-50)}..{dir(50)}(1.55, 0.0);
 draw(shift(xshift, yshift)*g);
 draw(shift(xshift-2, yshift)*g);
 
-g = (0.45, -0.1){dir(50)}..{dir(-50)}(1.55, -0.1);
+g = (0.55, -0.1){dir(50)}..{dir(-50)}(1.45, -0.1);
 draw(shift(xshift, yshift)*g);
 draw(shift(xshift-2, yshift)*g);
