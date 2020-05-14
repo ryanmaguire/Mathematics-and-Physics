@@ -5,7 +5,7 @@ settings.render = 4;
 settings.outformat="pdf";
 
 // Size of the output figure.
-size(300);
+size(256);
 
 // Circle with string.
 pair Origin  = (0.0,  0.0);
