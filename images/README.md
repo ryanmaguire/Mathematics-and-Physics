@@ -8,37 +8,26 @@ are the only tools used). There are shell scripts at the top-level of this
 repository for creating the necessary images and dumping them into this folder.
 
 ## Linux Users
-Both `pdf2svg` and `inkscape` are used to run the shell script. These can be
-installed with `apt-get` or whatever package manager your distribution uses.
+`ImageMagick` is needed to installation. This can be installed via `apt-get` or
+whatever package manager your distribution uses (`apt-get` is standard for
+Debian and Debian-based distrobutions like Ubuntu).
 ```Bash
-    sudo apt-get install pdf2svg
-    sudo apt-get install inkscape
+    sudo apt-get install imagemagick
 ```
-Next, at the top-level run the install script. If you need to add permissions,
-you may do so as follows:
-```Bash
-    chmod +x make_figs_linux.sh
-```
-Then run the script.
-```Bash
-    ./make_figs_linux.sh
-```
+Once this is successfully installed return to the main setup instructions found
+in the READMA.
 
 ## MacOS Users
 The `ImageMagick` software is used in the install script and this comes
 installed on MacOS (standard for High Sierra, Mojave, and Catalina). Simply run
-the setup script. If you need to add permissions, do so as follows:
-```Bash
-    chmod +x make_figs_macos.sh
-```
-Then run the script.
-```Bash
-    ./make_figs_macos.sh
-```
+the setup script. If for some reason you do not have `ImageMagick` installed,
+navigate to the download page and follow the setup:
+[https://imagemagick.org/script/download.php](https://imagemagick.org/script/download.php)
+
 
 ## Notes for Both
 It should take a while to run since there are quite a lot of figures. You will
 need asymptote (which comes installed with tex-live and most other latex
 distributions) as well as the C compiler `gcc` to successfully run this. Linux
-users can install this with `apt-get`, mac users will need to install `xcode`
-which is Apple's developer toolkit.
+users can install this with `apt-get` (or whatever package manager they use),
+mac users will need to install `xcode` which is Apple's developer toolkit.

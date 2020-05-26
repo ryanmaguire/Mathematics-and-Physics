@@ -1,8 +1,8 @@
 # Mathematics_and_Physics
 Various notes on mathematics and physics organized in several volumes. **This
 project is currently incomplete and will remain so for quite some time**. I am
-actively working on it, but the end goal is big. Recently I've updated the
-geometry to be A5 paper with 14mm margins and some of the older notes that
+actively working on it, but the end goal is rather big. Recently I've updated
+the geometry to be A5 paper with 14mm margins and some of the older notes that
 I have not yet gotten to will have equations falling out of the page. I've
 also rewritten several environments for displaying and emphasizing theorems and
 definitions, but this means some of the older ones will be poorly formatted. I
@@ -54,28 +54,27 @@ code. All of the images are made from code (tikz, asymptote, and the C
 programming language). To run the setup scripts you will need `gcc` which is the
 standard C compiler, and a latex distribution which has asympote (tex-live and
 mactex both provide the `asy` command). In creating and organizing figures,
-Linux users will need `pdf2svg` and `inkscape`. See the README in `images/` to
-installation instructions. MacOS users need `ImageMagick` which is installed by
-default. If you are not interested in the code, but simply want access to the
-document, see `The Easiest Method`.
+Linux users will need `ImageMagick`, which is free and open source. Mac users
+will also need this, but it comes standard with OSX. See the README in `images/`
+to installation instructions. If you are not interested in the code, but simply
+want access to the document, see `The Easiest Method`.
 
 ## The Easiest Method
 Download Mathematics_and_Physics.pdf file and read away. Note, you will not be
 able to compile `main.tex` or have access to the high resolution standalone
-figures (The figures themselves will be in the PDF document, however).
+figures (The figures will be in the PDF document, however).
 
 ## Full Installation
 **You will need:**
   1. `gcc` The GNU Compiler Collection (Only C compiler is needed).
   2. `asy` The Asymptote Compiler (Comes with tex-live and mactex).
-  3. (Mac Users) `ImageMagick` comes standard with OSX.
-  4. (Linux Users) `pdf2svg` and `inkscape`.
+  3. `ImageMagick` (comes standard with OSX).
 
 See `images/README.md` for installation instructions. Once these are installed:
   1. Cloan or Download the repository onto your computer.
   2. Navigate to where it's located (ex: /Documents/Mathematics_and_Physics)
   ```Bash
-    Ryans-iMac:~ ryan$ cd ~/Documents/Research/Mathematics_and_Physics/
+    Ryans-iMac:~ ryan$ cd ~/GitHub/Mathematics_and_Physics/
   ```
   3. Make sure `make_main.sh` has executable permissions:
   ```Bash
@@ -85,3 +84,4 @@ See `images/README.md` for installation instructions. Once these are installed:
   ```Bash
     Ryans-iMac:Mathematics_and_Physics ryan$ ./make_main.sh
   ```
+Since there are a lot of figures to generate this will take about 10 minutes.
