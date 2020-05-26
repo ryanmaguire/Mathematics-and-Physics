@@ -2,7 +2,6 @@
 top="$(pwd)"
 Destination="$top/images/"
 
-
 # Make the asymptote files.
 cd "$top/asymptote/"
 
@@ -102,14 +101,10 @@ for folder in */ ; do
 			echo "$file"$
 
 			# Clear out older files while keeping the .c one.
-			rm -f Makefile
-			rm -f README.md
+			rm -f Makefile README.md
 
 			# Make sure to remove the compiled binary file.
-			rm -f "$folder/$file"
-			rm -f *.png
-			rm -f *.svg
-			rm -f *.pdf
+			rm -f "$folder/$file" *.png *.svg *.pdf
 
 			# Check that the above line worked and the folder is emtpty.
 			if [ "$(ls -A $folder)" ]; then
