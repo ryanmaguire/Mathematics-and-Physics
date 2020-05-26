@@ -42,6 +42,7 @@ rm -f main.fdb_latexmk
 rm -f main.fls
 rm -f main.ind
 rm -f main.idx
+rm -f main.listing
 
 # Change the name of the output pdf file.
 mv main.pdf Mathematics_and_Physics.pdf
