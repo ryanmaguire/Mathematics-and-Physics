@@ -2,7 +2,7 @@
     In the set theory we will be working with there are a few words and symbols
     that are left undefined. As stated, this is unavoidable since defining
     everything would be circular, and we try to use the fewest number of
-    \textit{primitive}. The main undefined symbol in set theory is that of
+    \textit{primitives}. The main undefined symbol in set theory is that of
     \textit{containment} (\gls{containmentsymb})
     (see Not.~\ref{not:Element_Notation}), a type of
     \textit{\gls{predicate}}\index{Predicate} of the form \textit{x is in A}.
@@ -16,7 +16,59 @@
     start with conjunction, which gives meaning the logical term \textit{and}.
     \subsection{Connectives}
         The symbol $\land$ is used to represent the word \textit{and} in a
-        mathematical way. 
+        mathematical way. We want it to represent the following truth table:
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{ccc}
+                $P$&$Q$&$P\land{Q}$\\
+                \hline
+                0&0&0\\
+                0&1&0\\
+                1&0&0\\
+                1&1&1
+            \end{tabular}
+            \caption{Truth Table for Conjunction}
+            \label{tab:Truth_Table_for_Conjunction}
+        \end{table}
+        We could simply accept conjunction as another primitive, but it is
+        possible to avoid this by defining it in terms of negation and
+        implication. To define new symbols in terms of old we need some
+        notation. There are several standards for the \textit{definition} symbol
+        such as $:=$, $=:$, and $\doteq$. We will adopt the following, which
+        seems to have widespread use in various areas of mathematics.
+        \begin{fnotation}{Definition Symbol}{Definition_Symbol}
+            We denote that a new symbol $x$ is defined by a combination of
+            previously defined symbols $a_{0},\dots,a_{n}$ via some formula $F$
+            by writing:
+            \begin{equation*}
+                x\equiv{F}(a_{1},\dots,a_{n})
+            \end{equation*}
+        \end{fnotation}
+        We adopt this symbol (\gls{equiv}) as a new primitive, and hence we have
+        four: Three logical ones, and one set theoretic
+        (implication \gls{implicationsymb}, negation \gls{negationsymb},
+        definition \gls{equiv}, and set containment \gls{containmentsymb}). We
+        now wish to define conjunction in terms of negation and implication. We
+        do this first by looking at the following truth table:
+        \begin{table}[H]
+            \centering
+            \captionsetup{type=table}
+            \begin{tabular}{ccccccc}
+                $P$&$Q$&$\neg{P}$&$\neg{Q}$&$P\Rightarrow\neg{Q}$
+                    &$\neg(P\Rightarrow\neg{Q})$&$P\land{Q}$\\
+                \hline
+                0&0&1&1&1&0&0\\
+                0&1&1&0&1&0&0\\
+                1&0&0&1&1&0&0\\
+                1&1&0&0&0&1&1
+            \end{tabular}
+            \caption{Defining Conjunction by Implication and Negation}
+            \label{tab:Def_Conj_by_Imp_and_Neg}
+        \end{table}
+        Here we see that $\neg(P\Rightarrow\neg{Q})$ and $P\land{Q}$ have the
+        exact same truth table. Using this we need not create a new primitive
+        but can simply adopt the following definition of conjunction.
         \begin{fdefinition}{Conjunction}{Conjunction}
             The conjunction of propositions $P$ and $Q$ is the statement $P$ and
             $Q$ defined by the formula:\index{Conjunction}
@@ -36,73 +88,58 @@
                 P\lor{Q}\equiv(P\Rightarrow{Q})\Rightarrow{P}
             \end{equation*}
         \end{fdefinition}
-    We have relied on the word \textit{statement} being already defined, and
-    similarly for the words \textit{parameter} or \textit{variable}. For most
-    this is not an issue, but it may irk others. From our undefined symbol $\in$
-    we build new symbols by expressing them in terms of a
-    \textit{formula}\index{Formula}, which is simply a finite
-    sequence of symbols. Here the word \textit{sequence} is meant to imply that
-    the \textit{order} in which we combine these symbols is important and that
-    rearranging said order may create a different inequivalent formula. We build
-    formulas by defining a few symbols that stand as placeholders for standard
-    words in English. There are four symbols, called
-    \textit{\glspl{connective}}\index{Connective (Logic)}, that we use.
-    From this we see that we have introduced 6 new words that are undefined but
-    require comment. The words are \textit{and, or, if, then, true}, and
-    \textit{false}. There are other symbols we could adopt, such as
-    \textit{equivalence}:
-    \begin{equation*}
-        a\Leftrightarrow{b}
-    \end{equation*}
-    But from how we shall define these notions, this new symbol is equivalent to
-    a combination of the previous ones:
-    \begin{equation*}
-        \Big(\big(a\Leftrightarrow{b}\big)\Rightarrow
-             \big((a\Rightarrow{b})\land(b\Rightarrow{a})\big)\Big)
-        \land\Big(\big((a\Rightarrow{b})\land(b\Rightarrow{A})\big)
-            \Rightarrow\big(a\Leftrightarrow{b}\big)\Big)
-    \end{equation*}
-    That is, $a\Leftrightarrow{b}$ if and only if $a$ is true if and only if $b$
-    is true. Similarly, we could define \textit{does not imply}:
-    \begin{equation*}
-        a\not\Rightarrow{b}
-    \end{equation*}
-    But this is the same as:
-    \begin{equation*}
-        a\not\Rightarrow{b}\Longleftrightarrow
-        \neg(a\Rightarrow{b})
-        \Longleftrightarrow
-        a\land\neg{b}
-    \end{equation*}
-    The words true and false are assumed to be well defined. They are also
-    assumed to be opposites of each other (which we will define in terms of
-    negation). We will use truth tables\index{Truth Table} to define what
-    various connectives mean when it is known that certain propositions are true
-    or false. In such tables the symbol 0 represents that a proposition is false
-    and the symbol 1 represents truth.
-    \par\hfill\par
-    The other four words can be ambiguous in their everyday usage which we
-    cannot allow for in mathematics. As such we must specify what we mean when
-    we use these words and rid of any such ambiguity.
-    \subsection{Conjunction}
+        We have relied on the word \textit{statement} being already defined, and
+        similarly for the words \textit{parameter} or \textit{variable}. For most
+        this is not an issue, but it may irk others. From our undefined symbol $\in$
+        we build new symbols by expressing them in terms of a
+        \textit{formula}\index{Formula}, which is simply a finite
+        sequence of symbols. Here the word \textit{sequence} is meant to imply that
+        the \textit{order} in which we combine these symbols is important and that
+        rearranging said order may create a different inequivalent formula. We build
+        formulas by defining a few symbols that stand as placeholders for standard
+        words in English. There are four symbols, called
+        \textit{\glspl{connective}}\index{Connective (Logic)}, that we use.
+        From this we see that we have introduced 6 new words that are undefined but
+        require comment. The words are \textit{and, or, if, then, true}, and
+        \textit{false}. There are other symbols we could adopt, such as
+        \textit{equivalence}:
+        \begin{equation*}
+            a\Leftrightarrow{b}
+        \end{equation*}
+        But from how we shall define these notions, this new symbol is equivalent to
+        a combination of the previous ones:
+        \begin{equation*}
+            \Big(\big(a\Leftrightarrow{b}\big)\Rightarrow
+                \big((a\Rightarrow{b})\land(b\Rightarrow{a})\big)\Big)
+            \land\Big(\big((a\Rightarrow{b})\land(b\Rightarrow{A})\big)
+                \Rightarrow\big(a\Leftrightarrow{b}\big)\Big)
+        \end{equation*}
+        That is, $a\Leftrightarrow{b}$ if and only if $a$ is true if and only if $b$
+        is true. Similarly, we could define \textit{does not imply}:
+        \begin{equation*}
+            a\not\Rightarrow{b}
+        \end{equation*}
+        But this is the same as:
+        \begin{equation*}
+            a\not\Rightarrow{b}\Longleftrightarrow
+            \neg(a\Rightarrow{b})
+            \Longleftrightarrow
+            a\land\neg{b}
+        \end{equation*}
+        The words true and false are assumed to be well defined. They are also
+        assumed to be opposites of each other (which we will define in terms of
+        negation). We will use truth tables\index{Truth Table} to define what
+        various connectives mean when it is known that certain propositions are true
+        or false. In such tables the symbol 0 represents that a proposition is false
+        and the symbol 1 represents truth.
+        \par\hfill\par
+        The other four words can be ambiguous in their everyday usage which we
+        cannot allow for in mathematics. As such we must specify what we mean when
+        we use these words and rid of any such ambiguity.
         The conjunction connective (\gls{conjunctionsymb}) is used to denote the
         word \textit{and}. Given two propositions $P$ and $Q$, $P\land{Q}$ is a true
         statement if and only if both $P$ and $Q$ are true. That is, we
         associate to $\land$ the following truth table:
-        \begin{table}[H]
-            \centering
-            \captionsetup{type=table}
-            \begin{tabular}{ccc}
-                $P$&$Q$&$P\land{Q}$\\
-                \hline
-                0&0&0\\
-                0&1&0\\
-                1&0&0\\
-                1&1&1
-            \end{tabular}
-            \caption{Truth Table for Conjunction}
-            \label{tab:Truth_Table_for_Conjunction}
-        \end{table}
         There are several \textit{axioms} of conjunctions that are intuitively
         obvious, but must be stated since their use is wide spread.
         \begin{faxiom}{Axioms of Conjunction}{Axioms_of_Conjunction}
