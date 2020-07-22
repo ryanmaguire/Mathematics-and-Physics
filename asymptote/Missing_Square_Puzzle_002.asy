@@ -18,7 +18,7 @@ viewportmargin = (2, 2);
 defaultpen(fontsize(7pt));
 
 // Size of the output figure.
-size(256);
+size(300);
 
 // Pens used throughout the drawing.
 pen graypen = gray(0.7)+linewidth(0.4pt);

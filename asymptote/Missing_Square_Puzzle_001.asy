@@ -18,7 +18,7 @@ viewportmargin = (2, 2);
 defaultpen(fontsize(7pt));
 
 // Size of the output figure.
-size(300);
+size(320);
 
 // Pens used throughout the drawing.
 pen graypen = gray(0.7)+linewidth(0.4pt);
@@ -68,9 +68,15 @@ for (i = 0; i <= nx+shift; ++i){
     draw((x, -0.5)--(x, ny+0.5), graypen);
 }
 
+for (i = 0; i<= nx; ++i){
+    label("$"+string(i)+"$", (i, -0.7), fontsize(7pt));
+    label("$"+string(i)+"$", (i+shift, -0.7), fontsize(7pt));
+}
+
 for (i = 0; i <= ny; ++i){
     y = (real)i;
     draw((-0.5, y)--(nx+shift+0.5, y), graypen);
+    label("$"+string(i)+"$", (-0.7, i), fontsize(7pt));
 }
 
 // Fill in the shapes with color.
