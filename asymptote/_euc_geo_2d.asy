@@ -1,9 +1,3 @@
-// DEPRECATED FILE TO BE REMOVED SOON.
-
-// Being replaced with _euc_geo_2d.asy to split 2D and 3D functions into
-// separate file. Leaving here for now to allow older images to process without
-// error when running setup scripts.
-
 // Find midpoint given two points in the plane.
 pair MidPointTwo(pair A, pair B){return scale(0.5)*(A+B);}
 
@@ -22,4 +16,16 @@ pair FindCenterTwo(pair A, pair B, pair C){
     real t0 = (c*(V.y-U.y)-d*(V.x-U.x))/(b*c-a*d);
     real t1 = (a*(V.y-U.y)-b*(V.x-U.x))/(b*c-a*d);
     return (U.x+t0*a, U.y+t0*b);
+}
+
+path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, int ArSize, bool closed){
+    assert(ArSize>1);
+    path g;
+    int i;
+    g = Pts[0]{dir(Dirs[0])}..Pts[1]{dir(Dirs[1])};
+    for (i=2; i<ArSize; ++i){
+        g = g..Pts[i]{dir(Dirs[i])};
+    }
+    if (closed) g = g..cycle;
+    return g;
 }
