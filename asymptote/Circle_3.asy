@@ -1,57 +1,37 @@
-// Boilerplate stuff.
-import settings;
-
-// Make sure _custom_arrows.asy is in your ASYMPTOTE_DIR environment variable.
-// This file is found in the asymptote/ folder.
+// Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in your
+// ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
+import _asy_preamble_2d;
 import _custom_arrows;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
-
-// Pen used for labels and drawing.
-defaultpen(fontsize(7pt));
+import _euc_geo_2d;
 
 // Size of the output figure.
 size(128);
 
-// Default pen used for the axes.
-defaultpen(black+linewidth(0.8pt));
-
-// Pen for the circle and triangles.
-pen cpen = black+linewidth(0.4pt);
-pen tpen = black+linewidth(0.2pt);
-
 // Filler for the triangles.
-pen fpen = red+opacity(0.5);
+pen fillp = red+opacity(0.5);
 
-// Size of the arrow head.
-real arsize = 5bp;
-
-// The origin.
-pair O = (0.0, 0.0);
-
-// Radius of the circle.
+// Radius of the circle and length of the axes.
 real R = 1.0;
-
-// Length of the axes.
 real len = 1.2;
 
+// Transform for scaling by radius.
+transform T = scale(R, R);
+
+// The origin and points for the x and y axes.
+pair O   = (0.0, 0.0);
+pair[] X = {(-len, 0.0), (len, 0.0)};
+pair[] Y = {(0.0, -len), (0.0, len)};
+
+// Points for the object inside circle.
+pair[] ObjPts = {T*expi(pi/4), T*expi(5pi/4), T*expi(3pi/4), T*expi(7pi/4)};
+int ObjN = 4;
+
 // Draw the circle.
-draw(circle(O, R), cpen);
+draw(circle(O, R));
 
 // Draw and label the axes.
-draw(Label("$x$", position=1), (-len, 0.0)--(len, 0.0), S, SharpArrows(arsize));
-draw(Label("$y$", position=1), (0.0, -len)--(0.0, len), W, SharpArrows(arsize));
+draw(Label("$x$", position=1), X[0]--X[1], S, axesp, SharpArrows(arsize));
+draw(Label("$y$", position=1), Y[0]--Y[1], W, axesp, SharpArrows(arsize));
 
 // And draw the object inside of the circle.
-path g = scale(R)*expi(pi/4)--scale(R)*expi(5pi/4)--
-         scale(R)*expi(3pi/4)--scale(R)*expi(7pi/4)--cycle;
-filldraw(g, fpen, tpen);
+filldraw(PolyFromPoints(ObjPts, ObjN, true), fillp, thinp);
