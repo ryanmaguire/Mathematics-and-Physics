@@ -33,3 +33,26 @@ bluepipe = material(
 triple TorusEquation(pair t, real iR, real oR) {
     return ((oR+iR*cos(t.y))*cos(t.x), (oR+iR*cos(t.y))*sin(t.x), iR*sin(t.y));
 }
+
+triple TrefoilEquation(real t){
+    return (2*sin(2*t)-sin(t), 2*cos(2*t)+cos(t), sin(3*t));
+}
+
+real BumpFunction(real t){
+    if (t>0) return exp(-1.0/t);
+    else return 0.0;
+}
+
+real CutOff(real t, real r1, real r2){
+    assert(r2>r1);
+    return BumpFunction(r2-t)/(BumpFunction(r2-t)+BumpFunction(t-r1));
+}
+
+real DoubleCutoff(real t, real r1, real r2, real r3, real r4){
+    assert(r1<r2);
+    assert(r2<r3);
+    assert(r3<r4);
+    real v1 = CutOff(t, r1, r2);
+    real v2 = 1.0-CutOff(t, r3, r4);
+    return v1+v2;
+}
