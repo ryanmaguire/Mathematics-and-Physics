@@ -1,8 +1,8 @@
 %------------------------------------------------------------------------------%
-\documentclass[crop=false,class=article]{standalone}                           %
+\documentclass[crop=false,class=book]{standalone}                              %
 %------------------------------Preamble----------------------------------------%
 \makeatletter                                                                  %
-    \def\input@path{{../../../../}}                                            %
+    \def\input@path{{../../}}                                                  %
 \makeatother                                                                   %
 \input{preamble.tex}                                                           %
 %----------------------------Main Document-------------------------------------%
@@ -15,7 +15,7 @@
     \tableofcontents
     \vspace{10ex}
     \pagenumbering{arabic}
-    \part{Measure Theory}
+    \chapter{Measure Theory}
     \section{Riemannian Integration}
         \begin{fdefinition}{Partition}{Partition}
             A partition of an interval $[a,b]$ is a sequence
@@ -1253,7 +1253,7 @@
             \end{equation}
             And the $A_{k}$ are mutually disjoint.
         \end{bproof}
-    \part{Complex Analysis}
+    \chapter{Complex Analysis}
     \section{Analyticity}
         A domain is an open subset of $\mathbb{C}$. A region is a non-empty
         connected domain. Def of connected. Def of connected component of a
@@ -1502,4 +1502,358 @@
             $\minus\gamma$ are the same, and such that their integrals are
             opposite.
         \end{theorem}
+    \section{Final}
+        \begin{problem}
+            \label{Final_Problem_1}%
+            Let $z_{0}\in\mathbb{C}$, $r>0$, and let $A_{r}(z_{0})$ be defined by:
+            \begin{equation}
+                A_{r}(z_{0})=\{\,z\in\mathbb{C}\;|\;r<|z-z_{0}|\,\}
+            \end{equation}
+            In other words,
+            $A_{r}(z_{0})=\mathbb{C}\setminus\textrm{Cl}(B_{r}(z_{0}))$, where
+            $B_{r}(z_{0})$ is the open ball of radius $r$ centered about $z_{0}$.
+            Suppose $b:\mathbb{N}\rightarrow\mathbb{C}$ is a sequence such that,
+            for all $z\in{A}_{r}(z_{0})$, the following sum converges:
+            \begin{equation}
+                g(z)=\sum_{n=1}^{\infty}\frac{b_{n}}{(z-z_{0})^{n}}
+            \end{equation}
+            Show that $g$ and $g'$ are holomorphic on $A_{r}(z_{0})$ and that:
+            \begin{equation}
+                \dot{g}(z)=\sum_{n=1}^{\infty}\frac{\minus{n}b_{n}}{(z-z_{0})^{n+1}}
+            \end{equation}
+        \end{problem}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \begin{tikzpicture}[>=Latex]
+                \coordinate (z0) at (2.000, 2.000);
+                \coordinate (C)  at (3.300, 3.300);
+                \coordinate (r)  at (2.707, 2.707);
+                \fill[fill=cyan,opacity=0.5] (-2.2, -2.2) rectangle (4.2, 4.2);
+                \draw[densely dashed,fill=white] (z0) circle (1);
+                \draw[<->] (-2.2,  0.0) to (4.2, 0.0) node[below left]  {$\Re(z)$};
+                \draw[<->] ( 0.0, -2.2) to (0.0, 4.2) node[below right] {$\Im(z)$};
+                \draw[densely dashed] (2.0, 0.0) to (z0);
+                \draw[densely dashed] (0.0, 2.0) to (z0);
+                \draw[fill=black] (z0) circle (0.5mm);
+                \draw (z0) to node[below] {$r$} (r);
+                \node at (z0) [below left] {$z_{0}$};
+                \node at (C) {\Large{$\mathbb{C}$}};
+            \end{tikzpicture}
+            \caption{Drawing for Problem~\ref{Final_Problem_1}}
+            \label{fig:Problem_1}
+        \end{figure}
+        \begin{solution}
+            For the convergence can be proven to be almost uniform. Indeed, if
+            $R>r$ and $|z-z_{0}|\geq{R}$, then:
+            \begin{equation}
+                \Big|\sum_{n=1}^{\infty}\frac{b_{n}}{(z-z_{0})^{n}}\Big|
+                \leq\sum_{n=1}^{\infty}\Big|\frac{b_{n}}{(z-z_{0})^{n}}\Big|
+                \leq\sum_{n=1}^{\infty}\frac{|b_{n}|}{R^{n}}
+            \end{equation}
+            But the sum converges, and thus by Cauchy's convergence criterion, for
+            all $z\in{A}_{r}(z_{0})$, the following is true:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}\frac{b_{n}}{(z-z_{0})^{n}}=0
+            \end{equation}
+            We can thus take the modulus of this, showing:
+            \begin{equation}
+                \underset{n\rightarrow\infty}{\lim}
+                \Big|\frac{b_{n}}{(z-z_{0})^{n}}\Big|=
+                \underset{n\rightarrow\infty}{\lim}
+                \frac{|b_{n}|}{|z-z_{0}|^{n}}\leq
+                \underset{n\rightarrow\infty}{\lim}
+                \frac{|b_{n}|}{R^{n}}=0
+            \end{equation}
+            But this is true for all $R>r$, and thus it is true of $(R+r)/2$.
+            But then:
+            \begin{equation}
+                \Big|\sum_{n=1}^{\infty}\frac{b_{n}}{(z-z_{0})^{n}}\Big|
+                \leq\sum_{n=1}^{\infty}\frac{(R+r)^{n}}{2^{n}R^{n}}
+            \end{equation}
+            And by the ratio test, this converges. Thus, by the Weierstrass M test,
+            for all $R>r$ the sum converges uniformly on $A_{R}(z_{0})$, and since
+            $\mu(A_{R}(z_{0})\setminus{A}_{r}(z_{0}))=\pi(R^{2}-r^{2})$ can be made
+            arbitrarily small, the convergence is almost uniform. More precisely,
+            for all $R>r$ the convergence is uniform on $A_{R}(z_{0})$ and the
+            uniform limit of holomorphic functions is holomorphic, and thus
+            $g(z)$ is holomorphic on $A_{R}(z_{0})$. But $R>r$ is arbitrary, and
+            thus $g(z)$ is holomorphic on $A_{r}(z_{0})$. Similarly, let:
+            \begin{equation}
+                F(z)=\sum_{n=1}^{\infty}\frac{\minus{n}b_{n}}{(z-z_{0})^{n+1}}
+            \end{equation}
+            By a similar argument, this sum converges uniformly and thus $F(z)$
+            is holomorphic. But uniform limits of functions may be integrated
+            term by term. Applying the fundamental theorem of line integrals thus
+            shows that $F(z)=\dot{g}(z)$.
+            \par\hfill\par
+            We can also apply Theorem 23, since we've shown that the convergence is
+            uniform, it will thus be uniform on every compact subset of $\Omega$.
+            Thus $g$ is holomorphic, and we may obtain $g'$ be differentiating
+            term by term.
+        \end{solution}
+        \clearpage
+        \begin{problem}
+            Let $u:\Omega\rightarrow\mathbb{R}$ be a non-constant harmonic function
+            on a convex open subset $\Omega\subseteq\mathbb{R}^{2}$. Show that $u$
+            cannot have a local maximum.
+        \end{problem}
+        \begin{solution}
+            For if $u$ is harmonic, then $u_{xx}+u_{yy}=0$.
+            Let $F(z)=u_{x}(x,y)-iu_{y}(x,y)$. Then $F$ is holomorphic since it
+            satisfies the Cauchy-Riemann equations:
+            \begin{equation}
+                \frac{\partial{u}_{x}}{\partial{x}}-
+                \frac{\partial(\minus{u}_{y})}{\partial{y}}
+                =\frac{\partial^{2}u}{\partial{x}^{2}}
+                +\frac{\partial^{2}u}{\partial{y}^{2}}
+                =0
+            \end{equation}
+            And thus the first Cauchy-Riemann equation is satisfied, and similarly
+            for the second. But $\Omega$ is convex, and thus if $F$ is holomorphic
+            on $\Omega$ then there is an antiderivative $f$ of $F$. That is, a
+            function $f:\Omega\rightarrow\mathbb{C}$ such that $f'=F$. But then
+            $\Re(f)=u_{x}+C$ for some constant $C$. We can take this to be zero.
+            Let $g(z)=\exp(f(z))$. Then $g$ is holomorphic, and thus by the
+            maximum modulus principle, $|g|$ has no local maximum. But
+            $|g|=|\exp(f)|=\exp(\Re(f))=\exp(u)$, and thus $\exp(u)$ has no local
+            maximum. But then $u$ has no local maximum since the exponential
+            function is monotonic on $\mathbb{R}$.
+        \end{solution}
+        \clearpage
+        \begin{problem}
+            Suppose $f\in{H}(\Omega\setminus\{a\})$ has a pole of order $m$ at $a$.
+            Prove that:
+            \begin{itemize}
+                \item[(a)]  $\underset{z\rightarrow{a}}{\lim}|(z-a)^{k}f(z)|=\infty$
+                            for $0\leq{k}<m$.
+                \item[(b)]  $\underset{z\rightarrow{a}}{\lim}|(z-a)^{m}f(z)|=L\ne0$ 
+            \end{itemize} 
+        \end{problem}
+        \begin{solution}
+            By the definition of a pole of order $m$, the function:
+            \begin{equation}
+                g(z)=f(z)-\sum_{n=1}^{m}\frac{b_{n}}{(z-a)^{n}}
+            \end{equation}
+            has a removable singularity at $a$ and $b_{m}\ne{0}$. That is,
+            $\lim_{z\rightarrow{a}}g(z)$ exists. But then:
+            \begin{equation}
+                |(z-a)^{k}f(z)|=
+                \Big|g(z)(z-a)^{k}+\sum_{n=1}^{m}b_{n}(z-a)^{k-n}\Big|
+            \end{equation}
+            Thus, if $0\leq{k}<m$ the right side tends to infinity, and thus so
+            does the left. That is, since $|g(z)|$ is holomorphic, it is necessarily
+            bounded in a small neighborhood around $a$. And similarly,
+            $|(z-a)^{k}g(z)|$ will be bounded in a small neighborhood around $a$ for
+            all $k\in\mathbb{N}$. But for $k<m$, the sum is not bounded in any
+            neighborhood around $a$, otherwise the pole would be removeable, which
+            it is not for $k<m$. If $k=m$ the limit is $|b_{m}|$, which is non-zero.
+        \end{solution}
+        \clearpage
+        \begin{problem}
+            Let $\Omega$ be a region and $a\in\Omega$. Suppose that
+            $g\in{H}(\Omega\setminus\{a\})$ and that $g$ has a pole of order $m$ at
+            $a$. Show that there is an $h\in{H}(\Omega)$ such that $h(a)\ne{0}$ and:
+            \begin{equation}
+                g(z)=\frac{h(z)}{(z-a)^{m}}
+                \quad\quad
+                z\in\Omega\setminus\{a\}
+            \end{equation}
+            Show that $f\in{H}(\Omega)$ has a zero of order $m$ at $a$ if and only
+            if $1/f$ has a pole of order $m$ at $a$.
+        \end{problem}
+        \begin{solution}
+            For if $g$ has a pole of order $m$ at $a$, then the function:
+            \begin{equation}
+                f(z)=g(z)-\sum_{k=1}^{m}\frac{b_{k}}{(z-a)^{k}}
+            \end{equation}
+            has a removable singularity at $a$, and $b_{m}\ne0$.
+            But then for $z\ne{a}$:
+            \begin{equation}
+                g(z)=\frac{1}{(z-a)^{m}}
+                    \Big(f(z)(z-a)^{m}+\sum_{k=1}^{m}b_{k}(z-a)^{m-k}\Big)
+            \end{equation}
+            Let $h(z)$ be the numerator. Then $h(a)=b_{m}\ne{0}$, and moreover
+            $h\in{H}(\Omega)$. This is because $f\in{H}(\Omega\setminus\{a\})$, and
+            $f$ is continuous at $a$. But if $f$ is continuous at $a$, then
+            $f(z)(z-a)^{m}$ is differentiable at $a$, and hence
+            $f(z)(z-a)^{m}$ is differentiable for all $z\in\Omega$. Thus $h$ is the
+            sum of a holomorphic function and a polynomial, and is therefore
+            holomorphic.
+            \par\hfill\par
+            If $f\in{H}(\Omega)$ has a zero of order $m$ at $a$, then:
+            \begin{equation}
+                f(z)=\sum_{k=m}^{\infty}a_{k}(z-a)^{k}
+                =(z-a)^{m}\sum_{k=0}^{\infty}a_{k+m}(z-a)^{k}
+                \equiv(z-a)^{m}g(z)
+            \end{equation}
+            where $a_{m}\ne{0}$. But $g(a)\ne{0}$, and thus $1/g$ is well defined.
+            And the reciprocal of a differentiable function is differentiable, and
+            thus $1/g$ is differentiable in a neighborhood of $a$ and is therefore
+            holomorphic. But then:
+            \begin{equation}
+                \frac{1}{f(z)}=\frac{\frac{1}{g(z)}}{(z-a)^{m}}
+            \end{equation}
+            which is the reciprocal of a holomorphic function and a power of
+            $z-a$, and thus by the previous part of the problem, $1/f$ has a pole of
+            order $m$ at $z=a$. Going the other way is a simple flip of this
+            argument. If $f$ has a pole of order $m$, there is a holomorphic
+            function $h$ such that:
+            \begin{equation}
+                f(z)=\frac{h(z)}{(z-a)^{m}}
+            \end{equation}
+            such that $h(a)\ne{0}$. But then
+            $1/f(z)=(z-a)^{m}/h(z)$, and since $h(a)\ne{0}$, there is a neighborhood
+            about $a$ such that $h(z)\ne{0}$ for all $z$ in that neighborhood. Thus,
+            $1/f$ has a zero of order $m$ at $z=a$.
+        \end{solution}
+        \clearpage
+        \begin{problem}
+            Show that if $f\in{L}^{1}(\mathbb{R})$, and if $y\in\mathbb{R}$, then:
+            \begin{equation}
+                \int_{\mathbb{R}}f(x)\diff\mu(x)
+                =\int_{\mathbb{R}}f(x-y)\diff\mu(x)
+            \end{equation}
+            Then show that $\phi_{y}(f)(x)=f(x-y)$ is a continuous function from
+            $\mathbb{R}$ to $L^{1}(\mathbb{R})$.
+        \end{problem}
+        \begin{solution}
+            For if $f\in{L}^{1}(\mathbb{R})$, then:
+            \begin{equation}
+                \int_{\mathbb{R}}|f|\diff\mu<\infty
+            \end{equation}
+            But if $f$ is absolutely integrable, then it is integrable, and thus:
+            \begin{equation}
+                \Big|\int_{\mathbb{R}}f\diff\mu\Big|<\infty
+            \end{equation}
+            But then, for all $\varepsilon>0$ there is an $R\in\mathbb{R}^{+}$ such
+            that for all $r_{1},r_{2}>R$:
+            \begin{equation}
+                \Big|\int_{\mathbb{R}}f\diff\mu-
+                     \int_{[\minus{r}_{1},r_{2}]}f\diff\mu\Big|
+                <\varepsilon
+            \end{equation}
+            But by the invariance of translation, for any $r\in\mathbb{R}$ we have:
+            \begin{equation}
+                \Big|\int_{\mathbb{R}}f\diff\mu
+                    -\int_{[\minus{r},r]}f(x-y)\diff\mu(x)\Big|
+                =\Big|\int_{\mathbb{R}}f\diff\mu
+                -\int_{[\minus{r-y},r-y]}f\diff\mu\Big|
+            \end{equation}
+            Let $M=R+|y|$. Then $M-y\geq{R}$ and $M+y\geq{R}$, and thus we obtain:
+            \begin{equation}
+                \Big|\int_{\mathbb{R}}f\diff\mu
+                -\int_{[\minus{M-y},M-y]}f\diff\mu\Big|<\varepsilon
+            \end{equation}
+            Thus proving the first claim. For the second part, first suppose $f$ is
+            continuous and suppose $y_{n}\rightarrow{y}$. Let $\varepsilon>0$ be
+            given and let $g(x)=f(x-y)$. Then, since $f\in{L}^{1}(\mathbb{R})$, it
+            is true that $g\in{L}^{1}(\mathbb{R})$ and thus there is an
+            $R\in\mathbb{R}^{+}$ such that for all $r_{1},r_{2}>R$ the following
+            holds:
+            \begin{equation}
+                \Big|\int_{\mathbb{R}}g\diff\mu-
+                     \int_{[\minus{r}_{1},r_{2}]}g\diff\mu\Big|
+                <\frac{\varepsilon}{2}
+            \end{equation}
+            Let $M=R+|y|$ and let $x_{n}=x+y-y_{n}$. Then since
+            $y_{n}\rightarrow{y}$, is is true that $x_{n}\rightarrow{x}$. But $f$
+            is continuous, and $g$ is the composition of continuous functions, and
+            is therefore continuous. But then $g(x_{n})\rightarrow{g}(x)$. Moreover,
+            if $g$ is continuous, since $[\minus{M},M]$ is compact by the
+            Heine-Borel theorem, it is then true that $g$ is uniformly continuous
+            since continuous functions on compact sets are uniformly continuous. But
+            then, for all $\varepsilon>0$ there is a $\delta>0$ such that, for all
+            $x\in[\minus{M},M]$ and for all $x_{0}\in[\minus{M},M]$ such that
+            $|x-x_{0}|<\delta$, it is true that:
+            \begin{equation}
+                |g(x)-g(x_{0})|<\frac{\varepsilon}{4M}
+            \end{equation}
+            But $x_{n}\rightarrow{x}$ and thus there is an $N\in\mathbb{N}$ such
+            that, for all $n>N$ it is true that $|x-x_{n}|<\delta$. But then, for
+            all $n>N$:
+            \begin{subequations}
+                \begin{align}
+                    \int_{\mathbb{R}}|f(x-y)-f(x-y_{n})|\diff\mu
+                    &=\int_{[\minus{M},M]^{C}}|f(x-y)-f(x-y_{n})|\diff\mu\\
+                    &\nonumber\quad\quad\quad
+                        +\int_{[\minus{M},M]}|f(x-y)-f(x-y_{n})|\diff\mu\\
+                    &<\frac{\varepsilon}{2}+
+                        \int_{[\minus{M},M]}|g(x)-g(x_{n})|\diff\mu\\
+                    &\leq\frac{\varepsilon}{2}+
+                        \frac{\varepsilon}{4M}\int_{[\minus{M},M]}\diff\mu\\
+                    &=\frac{\varepsilon}{2}+
+                        \frac{\varepsilon}{4M}\mu([\minus{M},M])\\
+                    &=\varepsilon
+                \end{align}
+            \end{subequations}
+            Now in general if $g\in{L}^{1}(\mathbb{R})$, then there is a continuous
+            function $G\in{L}^{1}(\mathbb{R})$ such that
+            $\norm{g-G}_{1}<\varepsilon/3$. That is, continuous functions are dense
+            in $L^{1}(\mathbb{R})$. But then:
+            \begin{align}
+                \int|g(x)-g(x_{n})|\diff\mu
+                &\leq\int|g(x)-G(x)|\diff\mu+\\
+                \nonumber&\quad\quad\quad\int|G(x)-G(x_{n})|
+                    +\int|G(x_{n})-g(x_{n})|\diff\mu\\
+            \end{align}
+            But the first and last integrals are bounded by $\varepsilon/3$ by
+            choice of $G$, and since the integral is translation invariant. The
+            middle integral can be made less than $\varepsilon/3$ as well since
+            $G$ is continuous, and thus the sum is bounded by $\varepsilon$.
+            By the definition of continuity,
+            $\phi:\mathbb{R}\rightarrow{L}^{1}(\mathbb{R})$ is continuous.
+        \end{solution}
+        \clearpage
+        \begin{problem}
+            Show that:
+            \begin{equation}
+                \mathcal{B}(\mathbb{R}^{2})
+                =\mathcal{B}(\mathbb{R})\otimes\mathcal(\mathbb{R})
+            \end{equation}
+        \end{problem}
+        \begin{solution}
+            For it suffices to show that both of these contain the same generating
+            sets. $\mathcal(\mathbb{R}^{2})$ is generated by the topology on
+            $\mathbb{R}^{2}$, which is second countable, and the open balls on
+            rational points with rational radii form a basis. The basis of
+            $\mathcal{B}(\mathbb{R})\otimes\mathcal{B}(\mathbb{R})$ are the open
+            rectangles $(a,b)\times(c,d)$. But open rectangles are open in
+            $\mathbb{R}^{2}$, and thus:
+            \begin{equation}
+                \mathcal{B}(\mathbb{R})\times\mathcal{B}(\mathbb{R})
+                \subseteq\mathcal{B}(\mathbb{R}^{2})
+            \end{equation}
+            Going the other way, since any open ball can be written as the countable
+            union of open rectangles, and since any open subset of $\mathbb{R}^{2}$
+            can be written as the countable union of open balls with rational
+            centers and rational radii, it is thus true that every open set can be
+            written as the countable union of open rectangles. But
+            $\sigma\textrm{-Algebras}$ are closed to countable unions, and thus
+            every open subset of $\mathbb{R}^{2}$ is contained in
+            $\mathcal{B}(\mathbb{R})\otimes\mathcal{B}(\mathbb{R})$. Thus:
+            \begin{equation}
+                \mathcal{B}(\mathbb{R}^{2})\subseteq
+                \mathcal{B}(\mathbb{R})\times\mathcal{B}(\mathbb{R})
+            \end{equation}
+            Thus, the two $\sigma\textrm{-Algebras}$ are equal.
+        \end{solution}
+    \chapter{Seminar Notes}
+        \section{Danie van Wyk Seminar 2020/07/16}
+            Examples of labelled spaces:
+            \begin{itemize}
+                \item Directed graphs
+                \item Ultra graphs.
+                \item Shift spaces.
+            \end{itemize}
+            \begin{definition}
+                A directed graph $E=(E^{0},E^{1},r,s)$ consists of two
+                non-empty sets, the vertices $E^{0}$, edges $E^{1}$, a range
+                map $r:E^{1}\rightarrow{E}^{0}$, and a source map
+                $s:E^{1}\rightarrow{E}^{0}$.
+            \end{definition}
+            \begin{definition}
+                A $C^{*}$ algebra is a Banach star algebra such that
+                $\norm{aa^{*}}=\norm{a}^{2}$.
+            \end{definition}
 \end{document}
