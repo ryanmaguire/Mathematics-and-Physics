@@ -4,6 +4,15 @@ pair MidPointTwo(pair A, pair B){return scale(0.5)*(A+B);}
 // Returns the Euclidean norm of a 2-dimensional point.
 real EucNormTwo(pair A){return sqrt(A.x^2+A.y^2);}
 
+// Returns the angle between X and Y relative to the point O.
+real RelAngleTwo(pair O, pair X, pair Y){
+    pair P = X-O;
+    pair Q = Y-O;
+    real dot_prod = P.x*Q.x+P.y*Q.y;
+    real abs_prod = abs(P)*abs(Q);
+    return acos(dot_prod/abs_prod);
+}
+
 // Given three non-colinear points in the plane, returns center of their circle.
 pair FindCenterTwo(pair A, pair B, pair C){
     pair U = MidPointTwo(A, B);

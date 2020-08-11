@@ -26,4 +26,4 @@ pen thinp  = black + linewidth(0.3pt);
 pen labelp = defaultpen + fontsize(10pt);
 
 // Size used for drawing dots.
-real rDot = 0.02;
+real rDot = 0.025;
