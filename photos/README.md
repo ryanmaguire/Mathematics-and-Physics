@@ -7,14 +7,10 @@ them later.
 All photos are works that are in the public domain, or released under the GNU
 Free Documentation License.
 
-# File Information.
-## Note
+# File Information
+### Note
 Anything listed as "unknown" means it is unknown to me and I
 could not find the information, not that is unknown to others.
-
-![Tarski](
-https://github.com/ryanmaguire/Mathematics-and-Physics/tree/master/photos/AlfredTarski1968.jpeg "Alfred Tarski"
-)
 
    Filename: AlfredTarski1968  
    License: GNU Free Documentation License Version 1.2 Only.  
@@ -23,23 +19,23 @@ https://github.com/ryanmaguire/Mathematics-and-Physics/tree/master/photos/Alfred
    Resolution: 400x271  
    Description Photograph of Alfred Tarski, colorized.  
 
-Filename: CarlFriedrichGaussByJensen.jpg
-License: Public Domain
-Artist: Christian Albrecht Jensen
-Date: 1840 C.E.
-Resolution: 470x599
-Description: Painting of Carl Friedrich Gauss.
+   Filename: CarlFriedrichGaussByJensen.jpg  
+   License: Public Domain  
+   Artist: Christian Albrecht Jensen  
+   Date: 1840 C.E.  
+   Resolution: 470x599  
+   Description: Painting of Carl Friedrich Gauss.  
 
-Filename: EuclideOfAlexandria
-License: Public Domain
-Artist: Unknown
-Date: Unknown
-Resolution: 262x311
-Description: Painting of Euclid of Alexandria working on The ELements.
+   Filename: EuclideOfAlexandria  
+   License: Public Domain  
+   Artist: Unknown  
+   Date: Unknown  
+   Resolution: 262x311  
+   Description: Painting of Euclid of Alexandria working on The Elements.  
 
-Filename: GuidoGrandi.jpg
-License: Public Domain
-Artist: Unknown
-Date: Unknown
-Resolution: 450x600
-Description: Painting of Luigi Guido Grandi (1671-1742 C.E.).
+   Filename: GuidoGrandi.jpg  
+   License: Public Domain  
+   Artist: Unknown  
+   Date: Unknown  
+   Resolution: 450x600  
+   Description: Painting of Luigi Guido Grandi (1671-1742 C.E.).  
