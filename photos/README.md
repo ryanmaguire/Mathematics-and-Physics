@@ -17,7 +17,7 @@ could not find the information, not that is unknown to others.
    Photographer: George M. Bergman  
    Date: 1968 C.E.  
    Resolution: 400x271  
-   Description Photograph of Alfred Tarski, colorized.  
+   Description: Photograph of Alfred Tarski, colorized.  
 
    Filename: CarlFriedrichGaussByJensen.jpg  
    License: Public Domain  
