@@ -13,7 +13,7 @@ Anything listed as "unknown" means it is unknown to me and I
 could not find the information, not that is unknown to others.
 
 ![Tarski](
-https://github.com/ryanmaguire/Mathematics-and-Physics/tree/master/photos/AlfredTarski1968.jpeg
+https://github.com/ryanmaguire/Mathematics-and-Physics/tree/master/photos/AlfredTarski1968.jpeg "Alfred Tarski"
 )
 
    Filename: AlfredTarski1968  
