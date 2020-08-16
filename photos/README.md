@@ -13,15 +13,15 @@ Anything listed as "unknown" means it is unknown to me and I
 could not find the information, not that is unknown to others.
 
 ![Tarski](
-https://github.com/ryanmaguire/Mathematics-and-Physics/
+	https://github.com/ryanmaguire/Mathematics-and-Physics/
 tree/master/photos/AlfredTarski1968.jpeg
 )
-Filename: AlfredTarski1968
-License: GNU Free Documentation License Version 1.2 Only.
-Photographer: George M. Bergman
-Date: 1968 C.E.
-Resolution: 400x271
-Description Photograph of Alfred Tarski, colorized.
+   Filename: AlfredTarski1968
+   License: GNU Free Documentation License Version 1.2 Only.
+   Photographer: George M. Bergman
+   Date: 1968 C.E.
+   Resolution: 400x271
+   Description Photograph of Alfred Tarski, colorized.
 
 Filename: CarlFriedrichGaussByJensen.jpg
 License: Public Domain
