@@ -1,6 +1,10 @@
 import settings;
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
+if(settings.render < 0)
+    settings.render    = 8;
+
+if(!settings.multipleView)
+    settings.batchView = false;
+
 settings.outformat   = "pdf";
 settings.inlineimage = true;
 settings.embed       = true;
