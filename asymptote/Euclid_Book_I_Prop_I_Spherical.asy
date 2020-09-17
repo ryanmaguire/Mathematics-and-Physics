@@ -1,6 +1,5 @@
 // Boilerplate stuff.
 import settings;
-import smoothcontour3;
 import graph3;
 
 if(!settings.multipleView)  settings.batchView=false;
@@ -26,8 +25,8 @@ size(128);
 // Radius of the dot and pipes.
 real dotR = 0.08;
 
-triple A = (sqrt(0.5),  sqrt(0.5), 0);
-triple B = (sqrt(0.5), -sqrt(0.5), 0);
+triple A = (sqrt(0.5), -sqrt(0.5), 0);
+triple B = (sqrt(0.5),  sqrt(0.5), 0);
 triple C = (0, 0, 1);
 
 triple great_circle(real t, triple P, triple Q){
@@ -39,12 +38,6 @@ triple great_circle(real t, triple P, triple Q){
 triple c1(real t){return great_circle(t, A, B);}
 triple c2(real t){return great_circle(t, B, C);}
 triple c3(real t){return great_circle(t, C, A);}
-
-guide3 q1=graph(c1, 0, pi/2, 100, operator ..);
-guide3 q2=graph(c2, 0, pi/2, 100, operator ..);
-guide3 q3=graph(c3, 0, pi/2, 100, operator ..);
-guide3 g=q1--q2--q3--cycle;
-filldraw(project(g), green);
 
 radialshade(
     project(
@@ -73,6 +66,6 @@ dot(project(A));
 dot(project(B));
 dot(project(C));
 
-label("$A$", project(A), NW);
-label("$B$", project(B), NE);
+label("$A$", project(A), NE);
+label("$B$", project(B), NW);
 label("$C$", project(C), S);
