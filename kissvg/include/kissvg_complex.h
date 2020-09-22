@@ -68,7 +68,7 @@ typedef double _Complex kissvg_ComplexDouble;
  *      complex.h, then kissvg_ComplexDouble is just an alias for the         *
  *      built-in double _Complex type. Secondly, functions for accessing and  *
  *      manipulating the data are provided and their use adds clarity to code.*/
-typedef struct {
+typedef struct kissvg_ComplexDouble {
     double dat[2];
 } kissvg_ComplexDouble;
 
