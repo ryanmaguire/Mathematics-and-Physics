@@ -50,7 +50,7 @@ typedef struct kissvg_TwoVector {
 } kissvg_TwoVector;
 
 typedef struct kissvg_TwoMatrix {
-    double dat[4];
+    double dat[2][2];
 } kissvg_TwoMatrix;
 
 /*  Three-Vectors (i.e. points in R^3) are defined similarly.                 */
@@ -125,6 +125,20 @@ extern kissvg_TwoMatrix kissvg_NewTwoMatrix(double a, double b,
 extern kissvg_TwoVector kissvg_TwoVectorMatrixTransform(kissvg_TwoMatrix A,
                                                         kissvg_TwoVector P);
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      kissvg_RotationMatrix2D                                               *
+ *  Purpose:                                                                  *
+ *      Returns the rotation matrix corresponding to the angle theta.         *
+ *  Arguments:                                                                *
+ *      double theta:                                                         *
+ *          A real number, the angle to rotate by.                            *
+ *  Outputs:                                                                  *
+ *      kissvg_TwoVector R:                                                   *
+ *          The rotation matrix.                                              *
+ *  Location:                                                                 *
+ *      The source code is contained in src/kissvg_euclidean.c                *
+ ******************************************************************************/
 extern kissvg_TwoMatrix kissvg_RotationMatrix2D(double theta);
 
 /******************************************************************************
@@ -173,7 +187,7 @@ extern kissvg_TwoMatrix kissvg_RotationMatrix2D(double theta);
  *      double out:                                                           *
  *          The (m,n) component of the kissvg_TwoMatrix                       *
  ******************************************************************************/
-#define kissvg_TwoMatrixComponent(P, m, n) (P.dat[2*m+n])
+#define kissvg_TwoMatrixComponent(P, m, n) (P.dat[m][n])
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -395,9 +409,10 @@ typedef struct kissvg_Path2D {
     kissvg_bool has_arrow;
     char *kissvg_error_message;
     double linewidth;
-    double red;
-    double green;
-    double blue;
+    double arrow_fill_color[3];
+    double arrow_color[3];
+    double fill_color[3];
+    double line_color[3];
     double arrowsize;
 } kissvg_Path2D;
 
@@ -408,9 +423,8 @@ typedef struct kissvg_Path2D {
 #define kissvg_Path2DIsClosed(path) (path->is_closed)
 #define kissvg_Path2DSetFillDraw(path) (path->filldraw = kissvg_true)
 #define kissvg_Path2DIsFill(path) (path->filldraw)
-#define kissvg_Path2DRed(path) (path->red)
-#define kissvg_Path2DGreen(path) (path->green)
-#define kissvg_Path2DBlue(path) (path->blue)
+#define kissvg_Path2DFillColor(path) (path->fill_color)
+#define kissvg_Path2DLineColor(path) (path->line_color)
 #define kissvg_Path2DLineWidth(path) (path->linewidth)
 #define kissvg_Path2DHasArrow(path) (path->has_arrow)
 #define kissvg_Path2DCreateArrow(path) (path->has_arrow = kissvg_true)
@@ -425,10 +439,10 @@ extern void kissvg_Path2DSetArrowSize(kissvg_Path2D *path, double linewidth);
 extern kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start);
 extern void kissvg_DestroyPath2D(kissvg_Path2D *path);
 
-extern void kissvg_Path2DSetColors(kissvg_Path2D *path,
-                                   double red,
-                                   double green,
-                                   double blue);
+extern void kissvg_Path2DSetFillColors(kissvg_Path2D *path,
+                                       double red,
+                                       double green,
+                                       double blue);
 
 extern void kissvg_AppendPath2D(kissvg_Path2D *path,
                                 kissvg_TwoVector P);
