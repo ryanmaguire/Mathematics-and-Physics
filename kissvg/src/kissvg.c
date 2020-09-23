@@ -30,10 +30,10 @@ kissvg_TwoMatrix kissvg_NewTwoMatrix(double a, double b,
 {
     kissvg_TwoMatrix A;
 
-    A.dat[0] = a;
-    A.dat[1] = b;
-    A.dat[2] = c;
-    A.dat[3] = d;
+    A.dat[0][0] = a;
+    A.dat[0][1] = b;
+    A.dat[1][0] = c;
+    A.dat[1][1] = d;
 
     return A;
 }
@@ -345,10 +345,27 @@ kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start)
     path->N_Pts = 1;
     path->is_closed = kissvg_false;
     path->has_arrow = kissvg_false;
+
+    path->kissvg_error_occured = kissvg_false;
+    path->filldraw = kissvg_false;
+
+    /*  Default arrowsize is zero so no arrow is drawn.                       */
     path->arrowsize = 0.0;
-    path->red   = 0.0;
-    path->green = 0.0;
-    path->blue  = 0.0;
+    path->linewidth = 1.0;
+
+    /*  By default, all colors are set to black which has rgb = (0, 0, 0).    */
+    path->arrow_fill_color[0] = 0.0;
+    path->arrow_fill_color[1] = 0.0;
+    path->arrow_fill_color[2] = 0.0;
+    path->arrow_color[0] = 0.0;
+    path->arrow_color[1] = 0.0;
+    path->arrow_color[2] = 0.0;
+    path->fill_color[0] = 0.0;
+    path->fill_color[1] = 0.0;
+    path->fill_color[2] = 0.0;
+    path->line_color[0] = 0.0;
+    path->line_color[1] = 0.0;
+    path->line_color[2] = 0.0;
 
     return path;
 }
@@ -381,13 +398,6 @@ void kissvg_AppendPath2D(kissvg_Path2D *path, kissvg_TwoVector P)
         path->N_Pts = new_path_size;
     }
 
-    path->is_closed = kissvg_false;
-    path->kissvg_error_occured = kissvg_false;
-    path->filldraw = kissvg_false;
-    path->linewidth = 3;
-    path->red   = 0.0;
-    path->green = 0.0;
-    path->blue  = 0.0;
     return;
 }
 
@@ -398,14 +408,14 @@ void kissvg_DestroyPath2D(kissvg_Path2D *path)
     return;
 }
 
-void kissvg_Path2DSetColors(kissvg_Path2D *path,
-                            double red,
-                            double green,
-                            double blue)
+void kissvg_Path2DSetFillColors(kissvg_Path2D *path,
+                                double red,
+                                double green,
+                                double blue)
 {
-    path->red = red;
-    path->green = green;
-    path->blue = blue;
+    path->fill_color[0] = red;
+    path->fill_color[1] = green;
+    path->fill_color[2] = blue;
     return;
 }
 
@@ -571,9 +581,9 @@ void kissvg_FillDrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
     cairo_close_path(cr);
     cairo_save(cr);
     cairo_set_source_rgb(cr,
-                         kissvg_Path2DRed(path),
-                         kissvg_Path2DGreen(path),
-                         kissvg_Path2DBlue(path));
+                         kissvg_Path2DFillColor(path)[0],
+                         kissvg_Path2DFillColor(path)[1],
+                         kissvg_Path2DFillColor(path)[2]);
     cairo_fill_preserve(cr);
     cairo_restore(cr);
 

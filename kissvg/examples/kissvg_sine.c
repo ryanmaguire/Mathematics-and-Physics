@@ -1,12 +1,13 @@
 /*
  *  To Compile:
  *      gcc -I../../ -L./ $(pkg-config --cflags --libs cairo) \
- *      kissvg_circle.c -o test -lcairo -lkissvg
+ *      kissvg_sine.c -o test -lcairo -lkissvg
  */
 
 #include <stdio.h>
 #include <math.h>
 #include <kissvg/include/kissvg.h>
+#include <kissvg/include/kissvg_Colors.h>
 #include <cairo-ps.h>
 
 #define X_MIN -0.5
@@ -64,7 +65,7 @@ void draw(cairo_t *cr)
     }
 
     /*  Set this region to Blue, with a bit of green in it.                   */
-    kissvg_Path2DSetColors(pathP, 0.0, 0.5, 10.0);
+    kissvg_Path2DSetFillColors(pathP, kissvg_Blue);
 
     /*  Set the line width for the bounding curve of the region.              */
     kissvg_Path2DSetLineWidth(pathP, 0.8);
@@ -73,7 +74,7 @@ void draw(cairo_t *cr)
     kissvg_Path2DClosePath(pathP);
 
     /*  Set this region to red.                                               */
-    kissvg_Path2DSetColors(pathQ, 10.0, 0.2, 0.0);
+    kissvg_Path2DSetFillColors(pathQ, kissvg_Red);
 
     /*  Set the line width for the bounding curve of the region.              */
     kissvg_Path2DSetLineWidth(pathQ, 0.8);
