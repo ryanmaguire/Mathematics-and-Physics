@@ -1,3 +1,12 @@
+/*
+ *  Compile with:
+ *      gcc-10 -std=c89 -pedantic -pedantic-errors -Wall -Wextra -I../../ \
+ *      -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
+ *      $(pkg-config --cflags --libs cairo) -c kissvg.c
+ *
+ *      gcc kissvg.o -shared -o libkissvg.so -lcairo
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -15,6 +24,55 @@ kissvg_TwoVector kissvg_NewTwoVector(double x, double y)
 
     return NewVector;
 }
+
+kissvg_TwoMatrix kissvg_NewTwoMatrix(double a, double b,
+                                     double c, double d)
+{
+    kissvg_TwoMatrix A;
+
+    A.dat[0] = a;
+    A.dat[1] = b;
+    A.dat[2] = c;
+    A.dat[3] = d;
+
+    return A;
+}
+
+kissvg_TwoVector kissvg_TwoVectorMatrixTransform(kissvg_TwoMatrix A,
+                                                 kissvg_TwoVector P)
+{
+    kissvg_TwoVector out;
+    double x_new, y_new;
+    double x0, y0;
+    double a, b, c, d;
+
+    x0 = kissvg_TwoVectorXComponent(P);
+    y0 = kissvg_TwoVectorYComponent(P);
+
+    a = kissvg_TwoMatrixComponent(A, 0, 0);
+    b = kissvg_TwoMatrixComponent(A, 0, 1);
+    c = kissvg_TwoMatrixComponent(A, 1, 0);
+    d = kissvg_TwoMatrixComponent(A, 1, 1);
+
+    x_new = a*x0 + b*y0;
+    y_new = c*x0 + d*y0;
+
+    out = kissvg_NewTwoVector(x_new, y_new);
+    return out;
+}
+
+kissvg_TwoMatrix kissvg_RotationMatrix2D(double theta)
+{
+    double cos_theta, sin_theta;
+    kissvg_TwoMatrix R;
+
+    cos_theta = cos(theta);
+    sin_theta = sin(theta);
+
+    R = kissvg_NewTwoMatrix(cos_theta, -sin_theta, sin_theta, cos_theta);
+    return R;
+}
+
 
 kissvg_TwoVector kissvg_TwoVectorAdd(kissvg_TwoVector P, kissvg_TwoVector Q)
 {
@@ -35,6 +93,22 @@ kissvg_TwoVector kissvg_TwoVectorSubtract(kissvg_TwoVector P,
     sum.dat[1] = kissvg_TwoVectorYComponent(P)-kissvg_TwoVectorYComponent(Q);
 
     return sum;
+}
+
+kissvg_TwoVector kissvg_TwoVectorScale(double r, kissvg_TwoVector P)
+{
+    kissvg_TwoVector out;
+    double x_new, y_new;
+    double x0, y0;
+
+    x0 = kissvg_TwoVectorXComponent(P);
+    y0 = kissvg_TwoVectorYComponent(P);
+
+    x_new = r*x0;
+    y_new = r*y0;
+
+    out = kissvg_NewTwoVector(x_new, y_new);
+    return out;
 }
 
 double kissvg_EuclideanNorm2D(kissvg_TwoVector P)
@@ -270,6 +344,11 @@ kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start)
     path->data[0] = start;
     path->N_Pts = 1;
     path->is_closed = kissvg_false;
+    path->has_arrow = kissvg_false;
+    path->arrowsize = 0.0;
+    path->red   = 0.0;
+    path->green = 0.0;
+    path->blue  = 0.0;
 
     return path;
 }
@@ -336,6 +415,83 @@ void kissvg_Path2DSetLineWidth(kissvg_Path2D *path, double linewidth)
     return;
 }
 
+void kissvg_Path2DSetArrowSize(kissvg_Path2D *path, double arrowsize)
+{
+    path->arrowsize = arrowsize;
+    return;
+}
+
+static void kissvg_DrawEndArrow(cairo_t *cr, kissvg_Path2D *path)
+{
+    kissvg_TwoVector Q;
+    kissvg_TwoVector P0, P1;
+    kissvg_TwoVector A0, A1, A2;
+    kissvg_TwoMatrix R;
+    double norm;
+    double x, y;
+    long N;
+
+    N = kissvg_Path2DSize(path);
+
+    P0 = kissvg_Path2DData(path)[N-2];
+    P1 = kissvg_Path2DData(path)[N-1];
+
+    Q = kissvg_TwoVectorSubtract(P1, P0);
+
+    norm = kissvg_EuclideanNorm2D(Q);
+
+    if (norm == 0)
+    {
+        puts(
+            "Error Encountered: KissVG\n"
+            "\tkissvg_DrawEndArrow\n\n"
+            "The last two points in the input path are the same.\n"
+            "Cannot compute the tangent vector at the end of the path.\n"
+        );
+        exit(0);
+    }
+
+    Q  = kissvg_TwoVectorScale(1.0/norm, Q);
+    A0 = kissvg_TwoVectorScale(kissvg_Path2DArrowSize(path), Q);
+
+    R  = kissvg_RotationMatrix2D(5.0*M_PI/6.0);
+    A1 = kissvg_TwoVectorMatrixTransform(R, A0);
+
+    R  = kissvg_RotationMatrix2D(7.0*M_PI/6.0);
+    A2 = kissvg_TwoVectorMatrixTransform(R, A0);
+
+    A0 = kissvg_TwoVectorAdd(A0, P1);
+    A1 = kissvg_TwoVectorAdd(A1, P1);
+    A2 = kissvg_TwoVectorAdd(A2, P1);
+
+    x = kissvg_TwoVectorXComponent(A0);
+    y = kissvg_TwoVectorYComponent(A0);
+    cairo_move_to(cr, x, y);
+
+    x = kissvg_TwoVectorXComponent(A1);
+    y = kissvg_TwoVectorYComponent(A1);
+    cairo_line_to(cr, x, y);
+
+    x = kissvg_TwoVectorXComponent(P1);
+    y = kissvg_TwoVectorYComponent(P1);
+    cairo_line_to(cr, x, y);
+
+    x = kissvg_TwoVectorXComponent(A2);
+    y = kissvg_TwoVectorYComponent(A2);
+    cairo_line_to(cr, x, y);
+
+    cairo_close_path(cr);
+
+    cairo_save(cr);
+    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+    cairo_fill_preserve(cr);
+    cairo_restore(cr);
+
+    cairo_set_line_width(cr, 0.5);
+    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+    cairo_stroke(cr);
+
+}
 
 void kissvg_DrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
 {
@@ -375,6 +531,9 @@ void kissvg_DrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
     cairo_set_line_width(cr, kissvg_Path2DLineWidth(path));
     cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
     cairo_stroke(cr);
+
+    if (kissvg_Path2DHasArrow(path))
+        kissvg_DrawEndArrow(cr, path);
 }
 
 void kissvg_FillDrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)

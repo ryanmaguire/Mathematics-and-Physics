@@ -49,6 +49,10 @@ typedef struct kissvg_TwoVector {
     double dat[2];
 } kissvg_TwoVector;
 
+typedef struct kissvg_TwoMatrix {
+    double dat[4];
+} kissvg_TwoMatrix;
+
 /*  Three-Vectors (i.e. points in R^3) are defined similarly.                 */
 typedef struct kissvg_ThreeVector {
     double dat[3];
@@ -82,12 +86,55 @@ extern kissvg_TwoVector kissvg_NewTwoVector(double x, double y);
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      kissvg_NewTwoMatrix                                                   *
+ *  Purpose:                                                                  *
+ *      Create a new kissvg_TwoMatrix from four doubles. This returns:        *
+ *           -       -                                                        *
+ *          |  a   b  |                                                       *
+ *          |  c   d  |                                                       *
+ *           -       -                                                        *
+ *  Arguments:                                                                *
+ *      double a:                                                             *
+ *      double b:                                                             *
+ *      double c:                                                             *
+ *      double d:                                                             *
+ *  Outputs:                                                                  *
+ *      kissvg_TwoMatrix:                                                     *
+ *  Location:                                                                 *
+ *      The source code is contained in src/kissvg_euclidean.c                *
+ ******************************************************************************/
+extern kissvg_TwoMatrix kissvg_NewTwoMatrix(double a, double b,
+                                            double c, double d);
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      kissvg_TwoVectorMatrixTransform                                       *
+ *  Purpose:                                                                  *
+ *      Given a matrix A and a vector P, computes AP.                         *
+ *  Arguments:                                                                *
+ *      kissvg_TwoMatrix A:                                                   *
+ *          A 2x2 matrix.                                                     *
+ *      kissvg_TwoVector P:                                                   *
+ *          A two element vector.                                             *
+ *  Outputs:                                                                  *
+ *      kissvg_TwoVector out:                                                 *
+ *          The vector P transformed by A.                                    *
+ *  Location:                                                                 *
+ *      The source code is contained in src/kissvg_euclidean.c                *
+ ******************************************************************************/
+extern kissvg_TwoVector kissvg_TwoVectorMatrixTransform(kissvg_TwoMatrix A,
+                                                        kissvg_TwoVector P);
+
+extern kissvg_TwoMatrix kissvg_RotationMatrix2D(double theta);
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      kissvg_TwoVectorXComponent                                            *
  *  Purpose:                                                                  *
  *      Returns the x component of a kissvg_TwoVector. This is equivalent to  *
  *      the mathematical concept of projecting a vector along the y-axis.     *
  *  Arguments:                                                                *
- *      kissvg_TwoVector *P:                                                  *
+ *      kissvg_TwoVector P:                                                   *
  *  Outputs:                                                                  *
  *      double x:                                                             *
  *          The x component of the kissvg_TwoVector P. If we represent P by   *
@@ -102,7 +149,7 @@ extern kissvg_TwoVector kissvg_NewTwoVector(double x, double y);
  *      Returns the y component of a kissvg_TwoVector. This is equivalent to  *
  *      the mathematical concept of projecting a vector along the x-axis.     *
  *  Arguments:                                                                *
- *      kissvg_TwoVector *P:                                                  *
+ *      kissvg_TwoVector P:                                                   *
  *  Outputs:                                                                  *
  *      double y:                                                             *
  *          The y component of the kissvg_TwoVector P. If we represent P by   *
@@ -112,13 +159,31 @@ extern kissvg_TwoVector kissvg_NewTwoVector(double x, double y);
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      kissvg_TwoMatrixComponent                                             *
+ *  Purpose:                                                                  *
+ *      Returns the (m,n) element of a 2x2 matrix.                            *
+ *  Arguments:                                                                *
+ *      kissvg_TwoMatrix A:                                                   *
+ *          A 2x2 matrix.                                                     *
+ *      int m:                                                                *
+ *          The first index of the element.                                   *
+ *      int n:                                                                *
+ *          The second index of the element.                                  *
+ *  Outputs:                                                                  *
+ *      double out:                                                           *
+ *          The (m,n) component of the kissvg_TwoMatrix                       *
+ ******************************************************************************/
+#define kissvg_TwoMatrixComponent(P, m, n) (P.dat[2*m+n])
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      kissvg_TwoVectorAdd                                                   *
  *  Purpose:                                                                  *
  *      Given two kissvg_TwoVector's, compute the vector sum of them.         *
  *  Arguments:                                                                *
- *      kissvg_TwoVector *P:                                                  *
+ *      kissvg_TwoVector P:                                                   *
  *          An arbitrary kissvg_TwoVector.                                    *
- *      kissvg_TwoVector *Q:                                                  *
+ *      kissvg_TwoVector Q:                                                   *
  *          The vector we wish to add to P.                                   *
  *  Outputs:                                                                  *
  *      kissvg_TwoVector sum:                                                 *
@@ -151,6 +216,24 @@ extern kissvg_TwoVector kissvg_TwoVectorAdd(kissvg_TwoVector P,
  ******************************************************************************/
 extern kissvg_TwoVector kissvg_TwoVectorSubtract(kissvg_TwoVector P,
                                                  kissvg_TwoVector Q);
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      kissvg_TwoVectorScale                                                 *
+ *  Purpose:                                                                  *
+ *      Scale a vector P by a scalar (real number) r.                         *
+ *  Arguments:                                                                *
+ *      double r:                                                             *
+ *          An arbitrary real number.                                         *
+ *      kissvg_TwoVector P:                                                  *
+ *          The vector we wish to scale by r.                                 *
+ *  Outputs:                                                                  *
+ *      kissvg_TwoVector sum:                                                 *
+ *          The vector sum P+Q.                                               *
+ *  Location:                                                                 *
+ *      The source code is contained in src/kissvg_euclidean.c                *
+ ******************************************************************************/
+extern kissvg_TwoVector kissvg_TwoVectorScale(double r, kissvg_TwoVector P);
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -309,11 +392,13 @@ typedef struct kissvg_Path2D {
     kissvg_bool is_closed;
     kissvg_bool kissvg_error_occured;
     kissvg_bool filldraw;
+    kissvg_bool has_arrow;
     char *kissvg_error_message;
     double linewidth;
     double red;
     double green;
     double blue;
+    double arrowsize;
 } kissvg_Path2D;
 
 #define kissvg_Path2DSize(path) (path->N_Pts)
@@ -327,11 +412,15 @@ typedef struct kissvg_Path2D {
 #define kissvg_Path2DGreen(path) (path->green)
 #define kissvg_Path2DBlue(path) (path->blue)
 #define kissvg_Path2DLineWidth(path) (path->linewidth)
+#define kissvg_Path2DHasArrow(path) (path->has_arrow)
+#define kissvg_Path2DCreateArrow(path) (path->has_arrow = kissvg_true)
+#define kissvg_Path2DArrowSize(path) (path->arrowsize)
 
 #define kissvg_Path2DSetErrorMessage(path, message)                            \
     (strcpy(path->kissvg_error_message, message))
 
 extern void kissvg_Path2DSetLineWidth(kissvg_Path2D *path, double linewidth);
+extern void kissvg_Path2DSetArrowSize(kissvg_Path2D *path, double linewidth);
 
 extern kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start);
 extern void kissvg_DestroyPath2D(kissvg_Path2D *path);
