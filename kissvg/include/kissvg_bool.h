@@ -3,7 +3,7 @@
 #ifndef _KISSVG_BOOL_H
 #define _KISSVG_BOOL_H
 
-typedef enum {kissvg_false, kissvg_true} kissvg_bool;
+typedef enum {kissvg_False, kissvg_True} kissvg_Bool;
 
 #endif
 /*  End of include guard.                                                     */
