@@ -44,6 +44,7 @@ static const double shifts[2] = {__x_shift, __y_shift};
 void draw(cairo_t *cr)
 {
     kissvg_TwoVector P, Q, A;
+    kissvg_Circle *C1, *C2;
     kissvg_TwoVector *intersection;
     kissvg_Canvas2D *canvas;
     kissvg_Path2D *path;
@@ -59,9 +60,12 @@ void draw(cairo_t *cr)
 
     radius = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(P, Q));
 
-    intersection = kissvg_CircleCircleIntersection(P, radius, Q, radius);
+    C1 = kissvg_CreateCircle(P, radius, canvas);
+    C2 = kissvg_CreateCircle(Q, radius, canvas);
 
-    if (CircleCircleIntersectionIsEmpty(intersection))
+    intersection = kissvg_CircleCircleIntersection(C1, C2);
+
+    if (intersection == NULL)
     {
         puts(
             "Error Encountered: KissVG\n"
@@ -82,16 +86,21 @@ void draw(cairo_t *cr)
     kissvg_Path2DSetLineWidth(path, thin_width);
     kissvg_Path2DClosePath(path);
 
-    kissvg_FillDrawPolygon2D(cr, path);
-
-    kissvg_DestroyPath2D(path);
-
     /*  kissvg_CircleCircleIntersection allocates memory for the pointer, so  *
      *  we need to free it.                                                   */
     free(intersection);
 
-    kissvg_DrawCircle2D(cr, P, radius, thick_width, kissvg_Black, canvas);
-    kissvg_DrawCircle2D(cr, Q, radius, thick_width, kissvg_Black, canvas);
+    kissvg_CircleCreateArrow(C2, 0.2, kissvg_DefaultArrow, kissvg_Green, kissvg_Black, kissvg_False);
+    kissvg_CircleSetFillColor(C2, kissvg_White);
+
+    kissvg_DrawCircle2D(cr, C1);
+    kissvg_DrawCircle2D(cr, C2);
+    kissvg_FillDrawPolygon2D(cr, path);
+
+    kissvg_DestroyCircle(C1);
+    kissvg_DestroyCircle(C2);
+    kissvg_DestroyCanvas2D(canvas);
+    kissvg_DestroyPath2D(path);
 
     return;
 }
