@@ -93,6 +93,8 @@ void draw(cairo_t *cr)
     P = kissvg_NewTwoVector(0.0, -1.2);
     Q = kissvg_NewTwoVector(0.0,  1.2);
     axis = kissvg_CreateAxis2D(P, Q, canvas);
+    kissvg_Axis2DAddArrow(axis, 0.0, kissvg_DefaultArrow, kissvg_Black,
+                          kissvg_Black, kissvg_True);
 
     P = kissvg_NewTwoVector(0.0, -1.0);
     Q = kissvg_NewTwoVector(0.0,  1.0);
@@ -104,6 +106,7 @@ void draw(cairo_t *cr)
     kissvg_Axis2DSetTickSemiSemiHeight(axis, 0.1);
 
     kissvg_Axis2DUseDownTicks(axis);
+    kissvg_Axis2DSetArrowType(axis, kissvg_TriangularArrow);
 
     kissvg_DrawAxis2D(cr, axis);
 
@@ -121,7 +124,20 @@ void draw(cairo_t *cr)
     kissvg_Axis2DSetTickSemiSemiHeight(axis, 0.1);
 
     kissvg_Axis2DUseUpTicks(axis);
+    kissvg_DrawAxis2D(cr, axis);
 
+    P = kissvg_NewTwoVector(0.5, 1.2);
+    Q = kissvg_NewTwoVector(4.0, 1.2);
+
+    kissvg_ResetAxis2D(axis, P, Q);
+    kissvg_Axis2DSetTicks(axis, kissvg_False);
+    kissvg_Axis2DSetLineWidth(axis, 0.5*kissvg_DefaultPen);
+    kissvg_Axis2DSetArrowType(axis, kissvg_StealthArrow);
+
+    kissvg_Axis2DAddArrow(axis, 0.4, kissvg_DefaultArrow, kissvg_Black,
+                          kissvg_Black, kissvg_True);
+    kissvg_Axis2DAddArrow(axis, 0.6, kissvg_DefaultArrow, kissvg_Black,
+                          kissvg_Black, kissvg_False);
     kissvg_DrawAxis2D(cr, axis);
 
     kissvg_DestroyAxis2D(axis);
