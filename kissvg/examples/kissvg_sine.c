@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <kissvg/include/kissvg.h>
+#include <kissvg/include/kissvg_math.h>
 #include <cairo-ps.h>
 
 #define X_MIN -0.5
@@ -39,9 +40,6 @@ void draw(cairo_t *cr)
     double x0, y0;
     double x1, y1;
     double dx;
-    double radius;
-
-    radius = 0.5;
 
     canvas = kissvg_CreateCanvas2D(scales, shifts);
 

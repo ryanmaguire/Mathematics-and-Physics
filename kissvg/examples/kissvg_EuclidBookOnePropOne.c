@@ -49,10 +49,7 @@ void draw(cairo_t *cr)
     kissvg_Canvas2D *canvas;
     kissvg_Path2D *path;
     double radius;
-    double thin_width, thick_width;
 
-    thin_width = 0.5;
-    thick_width = 0.8;
     canvas = kissvg_CreateCanvas2D(scales, shifts);
 
     P = kissvg_NewTwoVector(-1.0, 0.0);
@@ -83,15 +80,12 @@ void draw(cairo_t *cr)
 
     kissvg_Path2DSetFillColor(path, kissvg_Green);
     kissvg_Path2DSetLineColor(path, kissvg_Black);
-    kissvg_Path2DSetLineWidth(path, thin_width);
+    kissvg_Path2DSetLineWidth(path, kissvg_DefaultPen);
     kissvg_Path2DClosePath(path);
 
     /*  kissvg_CircleCircleIntersection allocates memory for the pointer, so  *
      *  we need to free it.                                                   */
     free(intersection);
-
-    kissvg_CircleCreateArrow(C2, 0.2, kissvg_DefaultArrow, kissvg_Green, kissvg_Black, kissvg_False);
-    kissvg_CircleSetFillColor(C2, kissvg_White);
 
     kissvg_DrawCircle2D(cr, C1);
     kissvg_DrawCircle2D(cr, C2);
