@@ -114,6 +114,10 @@
  *  functions we ever use in rss_ringoccs, sin, cos, fabs, exp, atan2.        */
 #include <math.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 /*  And this header file contains macros for the smallest and largest allowed *
  *  values for your system.                                                   */
 #include <float.h>
