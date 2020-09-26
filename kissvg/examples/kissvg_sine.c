@@ -1,9 +1,3 @@
-/*
- *  To Compile:
- *      gcc -I../../ -L./ $(pkg-config --cflags --libs cairo) \
- *      kissvg_sine.c -o test -lcairo -lkissvg
- */
-
 #include <stdio.h>
 #include <math.h>
 #include <kissvg/include/kissvg.h>
@@ -27,7 +21,7 @@ static const double x_shift   = 0.5*X_INCHES - 0.5*(X_MIN + X_MAX)*x_scale;
 static const double y_shift   = 0.5*Y_INCHES - 0.5*(Y_MIN + Y_MAX)*y_scale;
 static const double shifts[2] = {x_shift, y_shift};
 
-#define FILENAME "kissvg_sine.ps"
+#define FILENAME "kissvg_Sine.ps"
 
 void draw(cairo_t *cr)
 {
@@ -73,13 +67,13 @@ void draw(cairo_t *cr)
     kissvg_Path2DSetFillColor(pathP, kissvg_Blue);
 
     /*  Close the path since we want to fill it in.                           */
-    kissvg_Path2DClosePath(pathP);
+    kissvg_Path2DSetClosePath(pathP, kissvg_True);
 
     /*  Set this region to red.                                               */
     kissvg_Path2DSetFillColor(pathQ, kissvg_Red);
 
     /*  Again, we close the path to fill it in.                               */
-    kissvg_Path2DClosePath(pathQ);
+    kissvg_Path2DSetClosePath(pathQ, kissvg_True);
 
     kissvg_FillDrawPolygon2D(cr, pathP);
     kissvg_FillDrawPolygon2D(cr, pathQ);
@@ -91,8 +85,9 @@ void draw(cairo_t *cr)
     P = kissvg_NewTwoVector(0.0, -1.2);
     Q = kissvg_NewTwoVector(0.0,  1.2);
     axis = kissvg_CreateAxis2D(P, Q, canvas);
-    kissvg_Axis2DAddArrow(axis, 0.0, kissvg_DefaultArrow, kissvg_Black,
-                          kissvg_Black, kissvg_True);
+    kissvg_Axis2DAddArrow(axis, 0.0, kissvg_DefaultArrowSize, kissvg_Black,
+                          kissvg_Black, kissvg_True, kissvg_StealthArrow,
+                          kissvg_DefaultArrowLineWidth);
 
     P = kissvg_NewTwoVector(0.0, -1.0);
     Q = kissvg_NewTwoVector(0.0,  1.0);
@@ -104,7 +99,6 @@ void draw(cairo_t *cr)
     kissvg_Axis2DSetTickSemiSemiHeight(axis, 0.1);
 
     kissvg_Axis2DUseDownTicks(axis);
-    kissvg_Axis2DSetArrowType(axis, kissvg_TriangularArrow);
 
     kissvg_DrawAxis2D(cr, axis);
 
@@ -130,12 +124,13 @@ void draw(cairo_t *cr)
     kissvg_ResetAxis2D(axis, P, Q);
     kissvg_Axis2DSetTicks(axis, kissvg_False);
     kissvg_Axis2DSetLineWidth(axis, 0.5*kissvg_DefaultPen);
-    kissvg_Axis2DSetArrowType(axis, kissvg_StealthArrow);
 
-    kissvg_Axis2DAddArrow(axis, 0.4, kissvg_DefaultArrow, kissvg_Black,
-                          kissvg_Black, kissvg_True);
-    kissvg_Axis2DAddArrow(axis, 0.6, kissvg_DefaultArrow, kissvg_Black,
-                          kissvg_Black, kissvg_False);
+    kissvg_Axis2DAddArrow(axis, 0.4, kissvg_DefaultArrowSize, kissvg_Green,
+                          kissvg_Black, kissvg_True, kissvg_StealthArrow,
+                          kissvg_DefaultArrowLineWidth);
+    kissvg_Axis2DAddArrow(axis, 0.6, kissvg_DefaultArrowSize, kissvg_Green,
+                          kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                          kissvg_DefaultArrowLineWidth);
     kissvg_DrawAxis2D(cr, axis);
 
     kissvg_DestroyAxis2D(axis);

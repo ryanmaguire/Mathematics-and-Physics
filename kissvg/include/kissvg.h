@@ -42,7 +42,8 @@
 
 #define kissvg_DefaultPen 0.6
 #define kissvg_DefaultAxes 1.0
-#define kissvg_DefaultArrow 0.08
+#define kissvg_DefaultArrowSize 0.08
+#define kissvg_DefaultArrowLineWidth 0.05
 #define kissvg_DefaultTickSize 0.2
 #define kissvg_DefaultTickHeight 0.1
 #define kissvg_DefaultTickDist 1.0
@@ -89,9 +90,37 @@ typedef struct kissvg_Color {
 } kissvg_Color;
 
 typedef enum {
+    kissvg_NoArrow,
     kissvg_StealthArrow,
     kissvg_TriangularArrow
 } kissvg_ArrowType;
+
+/*  Struct containing all of the information for arrows. This struct is       *
+ *  contained in the Path2D, Circle, and Axis2D structs.                      */
+typedef struct kissvg_Arrow {
+    /*  Booleans for the directions of the arrows.                            */
+    kissvg_Bool reverse_arrow;
+
+    /*  The type of arrow to draw. (Stealth, triangle, or LaTeX).             */
+    kissvg_ArrowType arrow_type;
+
+    /*  The positions of the arrows, which should be number between 0 and 1.  */
+    double arrow_pos;
+
+    /*  The colors of the interior of the arrows drawn.                       */
+    kissvg_Color *arrow_fill_color;
+
+    /*  The colors of the outline of the arrows.                              */
+    kissvg_Color *arrow_color;
+
+    /*  The radius of the arrow heads. The arrow head is defined by three     *
+     *  points on a circle about the point corresponding to the arrow_pos.    */
+    double arrow_size;
+
+    /*  The width of the boundary of the arrow. This only matters if the fill *
+     *  colors is different than the line color.                              */
+    double arrow_line_width;
+} kissvg_Arrow;
 
 /*  This is the primary data type used for drawing 2 dimensional figures. It  *
  *  contains a lot of information, and various functions and macros are       *
@@ -121,27 +150,11 @@ typedef struct kissvg_Path2D {
     /*  Boolean for determining if the path has arrows on it.                 */
     kissvg_Bool has_arrow;
 
-    /*  Booleans for the directions of the arrows.                            */
-    kissvg_Bool *reverse_arrow;
-
-    /*  The type of arrow to draw.                                            */
-    int arrow_type;
-
-    /*  Pointer to values between 0 and 1 specifying the location of arrows.  */
-    double *arrow_pos;
+    /*  Pointer to the arrows stored on the path.                             */
+    kissvg_Arrow **arrows;
 
     /*  The number of arrow.                                                  */
     long N_Arrows;
-
-    /*  The colors of the interior of the arrows drawn. The nth color should  *
-     *  correspond to the nth element of arrow_pos.                           */
-    kissvg_Color **arrow_fill_color;
-
-    /*  The colors of the outline of the arrows. The nth color should also    *
-     *  correspond to the nth element of arrow_pos. Note that if the arrow is *
-     *  not placed at the end point and the arrow color differs from the line *
-     *  color it may look strange.                                            */
-    kissvg_Color **arrow_color;
 
     /*  The color of the interior of the region encloded by the path. This is *
      *  only used if the fill_draw Boolean is set.                            */
@@ -152,10 +165,6 @@ typedef struct kissvg_Path2D {
 
     /*  The width of the path.                                                */
     double line_width;
-
-    /*  The radius of the arrow heads. The arrow head is defined by three     *
-     *  points on a circle about the point corresponding to the arrow_pos.    */
-    double *arrow_size;
 
     /*  The canvas for the entire drawing. Note this should be a constant for *
      *  the entire drawing and should not vary between paths.                 */
@@ -182,11 +191,14 @@ typedef struct kissvg_Axis2D {
     /*  Where the tick marks stop.                                            */
     kissvg_TwoVector tick_finish;
 
-    /*  Boolean for determining if an arrow head should be placed on the axis.*/
+    /*  Boolean for determining if the path has arrows on it.                 */
     kissvg_Bool has_arrow;
 
-    /*  Booleans for the directions of the arrows.                            */
-    kissvg_Bool *reverse_arrow;
+    /*  Pointer to the arrows stored on the path.                             */
+    kissvg_Arrow **arrows;
+
+    /*  The number of arrow.                                                  */
+    long N_Arrows;
 
     /*  Boolean for use of tick marks. Default is False.                      */
     kissvg_Bool has_ticks;
@@ -232,21 +244,6 @@ typedef struct kissvg_Axis2D {
      *  |_______|_______|_______|_______|_______|_______|_______|_______|     *
      **************************************************************************/
 
-    /*  The positions of the arrows, which should be number between 0 and 1.  */
-    double *arrow_pos;
-
-    /*  The number of arrows the axis contains.                               */
-    long N_Arrows;
-
-    /*  The type of arrow to draw.                                            */
-    int arrow_type;
-
-    /*  The fill colors of the arrow heads. Defaults are black.               */
-    kissvg_Color **arrow_fill_color;
-
-    /*  The colors of the outline of the arrow heads. Defaults are black.     */
-    kissvg_Color **arrow_color;
-
     /*  The color of the axis. Default is black.                              */
     kissvg_Color *line_color;
 
@@ -255,9 +252,6 @@ typedef struct kissvg_Axis2D {
 
     /*  The thickness of the axis. Default is the macro kissvg_DefaultAxes.   */
     double line_width;
-
-    /*  The size of the arrow heads. Default is the macor kissvg_DefaultArrow.*/
-    double *arrow_size;
 
     /*  The size of the ticks. Default is zero since ticks are not drawn by   *
      *  default and need to be set by the user.                               */
@@ -283,8 +277,11 @@ typedef struct kissvg_Circle {
      *  below are not set.                                                    */
     kissvg_Bool has_arrow;
 
-    /*  Booleans for the directions of the arrows.                            */
-    kissvg_Bool *reverse_arrow;
+    /*  Pointer to the arrows stored on the path.                             */
+    kissvg_Arrow **arrows;
+
+    /*  The number of arrow.                                                  */
+    long N_Arrows;
 
     /*  Boolean for determining if the region enclosed should be filled in.   *
      *  Default is set to false.                                              */
@@ -294,29 +291,11 @@ typedef struct kissvg_Circle {
      *  only used if the fill_draw Boolean is set.                            */
     kissvg_Color *fill_color;
 
-    /*  The positions of the arrows, which should be numbers between 0 and 1. */
-    double *arrow_pos;
-
-    /*  The number of arrows the axis contains.                               */
-    long N_Arrows;
-
-    /*  The type of arrow to draw.                                            */
-    int arrow_type;
-
-    /*  The fill colors of the arrow heads. Defaults are black.               */
-    kissvg_Color **arrow_fill_color;
-
-    /*  The colors of the outline of the arrow heads. Defaults are black.     */
-    kissvg_Color **arrow_color;
-
     /*  The color of the axis. Default is black.                              */
     kissvg_Color *line_color;
 
     /*  The thickness of the axis. Default is the macro kissvg_DefaultAxes.   */
     double line_width;
-
-    /*  The size of the arrow heads. Default is the macor kissvg_DefaultArrow.*/
-    double *arrow_size;
 
     /*  The canvas of the entire drawing.                                     */
     kissvg_Canvas2D *canvas;
@@ -779,14 +758,35 @@ extern void kissvg_DestroyCanvas2D(kissvg_Canvas2D *canvas);
  ******************************************************************************/
 
 /*  The following are pre-defined colors for ease of use.                     */
-static kissvg_Color __kissvg_Blue      = {{0.0, 0.2, 1.0}};
-static kissvg_Color __kissvg_Green     = {{0.0, 1.0, 0.1}};
-static kissvg_Color __kissvg_Red       = {{1.0, 0.1, 0.1}};
-static kissvg_Color __kissvg_Black     = {{0.0, 0.0, 0.0}};
-static kissvg_Color __kissvg_DarkGray  = {{0.3, 0.3, 0.3}};
-static kissvg_Color __kissvg_Gray      = {{0.6, 0.6, 0.6}};
-static kissvg_Color __kissvg_LightGray = {{0.8, 0.8, 0.8}};
-static kissvg_Color __kissvg_White     = {{1.0, 1.0, 1.0}};
+static kissvg_Color __kissvg_Blue      = {{0.000, 0.200, 1.000}};
+static kissvg_Color __kissvg_Green     = {{0.000, 1.000, 0.100}};
+static kissvg_Color __kissvg_Red       = {{1.000, 0.100, 0.100}};
+static kissvg_Color __kissvg_Black     = {{0.000, 0.000, 0.000}};
+static kissvg_Color __kissvg_DarkGray  = {{0.300, 0.300, 0.300}};
+static kissvg_Color __kissvg_Gray      = {{0.600, 0.600, 0.600}};
+static kissvg_Color __kissvg_LightGray = {{0.800, 0.800, 0.800}};
+static kissvg_Color __kissvg_White     = {{1.000, 1.000, 1.000}};
+static kissvg_Color __kissvg_Aqua      = {{0.100, 1.000, 1.000}};
+static kissvg_Color __kissvg_Purple    = {{0.700, 0.000, 1.000}};
+static kissvg_Color __kissvg_Violet    = {{0.501, 0.000, 1.000}};
+static kissvg_Color __kissvg_Pink      = {{1.000, 0.400, 1.000}};
+static kissvg_Color __kissvg_Yellow    = {{1.000, 1.000, 0.200}};
+static kissvg_Color __kissvg_Crimson   = {{0.800, 0.000, 0.133}};
+static kissvg_Color __kissvg_DarkGreen = {{0.250, 0.500, 0.000}};
+static kissvg_Color __kissvg_Orange    = {{1.000, 0.400, 0.100}};
+static kissvg_Color __kissvg_LightBlue = {{0.600, 0.800, 1.000}};
+static kissvg_Color __kissvg_Teal      = {{0.000, 0.500, 0.500}};
+static kissvg_Color __kissvg_DarkBlue  = {{0.000, 0.000, 0.600}};
+static kissvg_Color __kissvg_Lavender  = {{0.800, 0.830, 1.000}};
+static kissvg_Color __kissvg_Magenta   = {{1.000, 0.110, 0.810}};
+static kissvg_Color __kissvg_DeepPink  = {{1.000, 0.080, 0.580}};
+static kissvg_Color __kissvg_Marine    = {{0.300, 0.300, 1.000}};
+static kissvg_Color __kissvg_Lime      = {{0.750, 0.900, 0.000}};
+static kissvg_Color __kissvg_Carrot    = {{1.000, 0.650, 0.300}};
+static kissvg_Color __kissvg_Brown     = {{0.300, 0.150, 0.000}};
+static kissvg_Color __kissvg_Azure     = {{0.000, 0.500, 1.000}};
+static kissvg_Color __kissvg_Silver    = {{0.750, 0.750, 0.750}};
+static kissvg_Color __kissvg_Sand      = {{0.930, 0.840, 0.250}};
 
 /*  Set the kissvg_ColorName pointers to point to __kissvg_ColorName.         */
 kissvg_Color *kissvg_Blue      = &__kissvg_Blue;
@@ -797,6 +797,27 @@ kissvg_Color *kissvg_DarkGray  = &__kissvg_DarkGray;
 kissvg_Color *kissvg_Gray      = &__kissvg_Gray;
 kissvg_Color *kissvg_LightGray = &__kissvg_LightGray;
 kissvg_Color *kissvg_White     = &__kissvg_White;
+kissvg_Color *kissvg_Aqua      = &__kissvg_Aqua;
+kissvg_Color *kissvg_Purple    = &__kissvg_Purple;
+kissvg_Color *kissvg_Violet    = &__kissvg_Violet;
+kissvg_Color *kissvg_Pink      = &__kissvg_Pink;
+kissvg_Color *kissvg_Yellow    = &__kissvg_Yellow;
+kissvg_Color *kissvg_Crimson   = &__kissvg_Crimson;
+kissvg_Color *kissvg_DarkGreen = &__kissvg_DarkGreen;
+kissvg_Color *kissvg_Orange    = &__kissvg_Orange;
+kissvg_Color *kissvg_LightBlue = &__kissvg_LightBlue;
+kissvg_Color *kissvg_Teal      = &__kissvg_Teal;
+kissvg_Color *kissvg_DarkBlue  = &__kissvg_DarkBlue;
+kissvg_Color *kissvg_Lavender  = &__kissvg_Lavender;
+kissvg_Color *kissvg_Magenta   = &__kissvg_Magenta;
+kissvg_Color *kissvg_DeepPink  = &__kissvg_DeepPink;
+kissvg_Color *kissvg_Marine    = &__kissvg_Marine;
+kissvg_Color *kissvg_Lime      = &__kissvg_Lime;
+kissvg_Color *kissvg_Carrot    = &__kissvg_Carrot;
+kissvg_Color *kissvg_Brown     = &__kissvg_Brown;
+kissvg_Color *kissvg_Azure     = &__kissvg_Azure;
+kissvg_Color *kissvg_Silver    = &__kissvg_Silver;
+kissvg_Color *kissvg_Sand      = &__kissvg_Sand;
 
 /*  Macros for accessing the data in the kissvg_Color struct.                 */
 #define kissvg_RedColor(color) (color->dat[0])
@@ -846,6 +867,46 @@ extern void kissvg_DestroyColor(kissvg_Color *color);
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
+ *                     Begin kissvg_Arrow Functions                           *
+ *                                                                            *
+ ******************************************************************************
+ ******************************************************************************/
+
+#define kissvg_ArrowIsReversed(arrow) (arrow->reverse_arrow)
+#define kissvg_ArrowType(arrow) (arrow->arrow_type)
+#define kissvg_ArrowPosition(arrow) (arrow->arrow_pos)
+#define kissvg_ArrowFillColor(arrow) (arrow->arrow_fill_color)
+#define kissvg_ArrowLineColor(arrow) (arrow->arrow_color)
+#define kissvg_ArrowSize(arrow) (arrow->arrow_size)
+#define kissvg_ArrowLineWidth(arrow) (arrow->arrow_line_width)
+
+extern void kissvg_ArrowSetReverse(kissvg_Arrow *arrow, kissvg_Bool reverse);
+extern void kissvg_ArrowSetType(kissvg_Arrow *arrow, kissvg_ArrowType type);
+extern void kissvg_ArrowSetPos(kissvg_Arrow *arrow, double pos);
+
+extern void kissvg_ArrowSetFillColor(kissvg_Arrow *arrow,
+                                     kissvg_Color *fill_color);
+
+extern void kissvg_ArrowSetLineColor(kissvg_Arrow *arrow,
+                                     kissvg_Color *line_color);
+
+extern void kissvg_ArrowSetSize(kissvg_Arrow *arrow, double size);
+
+extern void kissvg_ArrowSetLineWidth(kissvg_Arrow *arrow, double width);
+
+extern kissvg_Arrow *kissvg_CreateArrow(double pos,
+                                        double arrow_size,
+                                        kissvg_Color *arrow_fill_color,
+                                        kissvg_Color *arrow_color,
+                                        kissvg_Bool reverse_arrow,
+                                        kissvg_ArrowType type,
+                                        double arrow_line_width);
+
+extern void kissvg_DestroyArrow(kissvg_Arrow *arrow);
+
+/******************************************************************************
+ ******************************************************************************
+ *                                                                            *
  *                    Begin kissvg_Path2D Functions                           *
  *                                                                            *
  ******************************************************************************
@@ -853,23 +914,13 @@ extern void kissvg_DestroyColor(kissvg_Color *color);
 
 #define kissvg_Path2DData(path) (path->data)
 #define kissvg_Path2DSize(path) (path->N_Pts)
-
 #define kissvg_Path2DIsClosed(path) (path->is_closed)
 #define kissvg_Path2DIsFill(path) (path->fill_draw)
 #define kissvg_Path2DHasArrow(path) (path->has_arrow)
 #define kissvg_Path2DHasError(path) (path->error_occured)
-#define kissvg_Path2DArrowType(path) (path->arrow_type)
-
-#define kissvg_Path2DClosePath(path) (path->is_closed = kissvg_True)
-#define kissvg_Path2DSetFillDraw(path) (path->filldraw = kissvg_True)
-#define kissvg_Path2DSetError(path) (path->error_occured = kissvg_True)
 
 #define kissvg_Path2DNumberOfArrows(path) (path->N_Arrows)
-
-#define kissvg_Path2DArrowPos(path, n) (path->arrow_pos[n])
-#define kissvg_Path2DArrowColor(path, n) (path->arrow_color[n])
-#define kissvg_Path2DArrowFillColor(path, n) (path->arrow_fill_color[n])
-#define kissvg_Path2DReverseArrow(path, n) (path->reverse_arrow[n])
+#define kissvg_Path2DnthArrow(path, n) (path->arrows[n])
 
 #define kissvg_Path2DFillColor(path) (path->fill_color)
 #define kissvg_Path2DLineColor(path) (path->line_color)
@@ -884,6 +935,9 @@ extern void kissvg_DestroyColor(kissvg_Color *color);
 #define kissvg_Path2DXShift(path) (kissvg_Canvas2DXShift(path->canvas))
 #define kissvg_Path2DYShift(path) (kissvg_Canvas2DYShift(path->canvas))
 
+extern void kissvg_Path2DSetClosePath(kissvg_Path2D *path, kissvg_Bool closed);
+extern void kissvg_Path2DSetFillDraw(kissvg_Path2D *path, kissvg_Bool fill);
+extern void kissvg_Path2DSetError(kissvg_Path2D *path);
 extern void kissvg_Path2DSetErrorMessage(kissvg_Path2D *path, char *message);
 extern void kissvg_Path2DSetLineWidth(kissvg_Path2D *path, double linewidth);
 extern void kissvg_Path2DSetLineColor(kissvg_Path2D *path, kissvg_Color *color);
@@ -894,13 +948,17 @@ extern void kissvg_Path2DCreateArrow(kissvg_Path2D *path, double pos,
                                      double arrow_size,
                                      kissvg_Color *arrow_fill_color,
                                      kissvg_Color *arrow_color,
-                                     kissvg_Bool reverse_arrow);
+                                     kissvg_Bool reverse_arrow,
+                                     kissvg_ArrowType type,
+                                     double arrow_line_width);
 
 extern void kissvg_Path2DAddArrow(kissvg_Path2D *path, double pos,
                                   double arrow_size,
                                   kissvg_Color *arrow_fill_color,
                                   kissvg_Color *arrow_color,
-                                  kissvg_Bool reverse_arrow);
+                                  kissvg_Bool reverse_arrow,
+                                  kissvg_ArrowType type,
+                                  double arrow_line_width);
 
 extern kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start,
                                           kissvg_Canvas2D *canvas);
@@ -916,7 +974,9 @@ extern void kissvg_DestroyPath2D(kissvg_Path2D *path);
  ******************************************************************************
  ******************************************************************************/
 
-#define kissvg_Axis2DArrowType(axis) (axis->arrow_type)
+#define kissvg_Axis2DHasArrow(axis) (axis->has_arrow)
+#define kissvg_Axis2DNumberOfArrows(axis) (axis->N_Arrows)
+#define kissvg_Axis2DnthArrow(axis, n) (axis->arrows[n])
 
 extern void kissvg_Axis2DSetTicks(kissvg_Axis2D *axis, kissvg_Bool ticks);
 extern void kissvg_Axis2DUseUpTicks(kissvg_Axis2D *axis);
@@ -936,7 +996,6 @@ extern void kissvg_Axis2DSetAxisStart(kissvg_Axis2D *axis, kissvg_TwoVector P);
 extern void kissvg_Axis2DSetAxisFinish(kissvg_Axis2D *axis, kissvg_TwoVector P);
 extern void kissvg_Axis2DSetCanvas(kissvg_Axis2D *axis,
                                    kissvg_Canvas2D *canvas);
-extern void kissvg_Axis2DSetArrowType(kissvg_Axis2D *axis, int arrow_type);
 
 extern void kissvg_Axis2DSetTickSemiSemiHeight(kissvg_Axis2D *axis,
                                                double tick_semi_semi_height);
@@ -949,17 +1008,29 @@ extern void kissvg_Axis2DCreateArrow(kissvg_Axis2D *axis, double pos,
                                      double arrow_size,
                                      kissvg_Color *arrow_fill_color,
                                      kissvg_Color *arrow_color,
-                                     kissvg_Bool reverse_arrow);
+                                     kissvg_Bool reverse_arrow,
+                                     kissvg_ArrowType type,
+                                     double arrow_line_width);
 
 extern void kissvg_Axis2DAddArrow(kissvg_Axis2D *axis, double pos,
                                   double arrow_size,
                                   kissvg_Color *arrow_fill_color,
                                   kissvg_Color *arrow_color,
-                                  kissvg_Bool reverse_arrow);
+                                  kissvg_Bool reverse_arrow,
+                                  kissvg_ArrowType type,
+                                  double arrow_line_width);
 
 extern kissvg_Axis2D *kissvg_CreateAxis2D(kissvg_TwoVector start,
                                           kissvg_TwoVector finish,
                                           kissvg_Canvas2D *canvas);
+
+extern void kissvg_Axis2DChangeEndArrow(kissvg_Axis2D *axis, double pos,
+                                        double arrow_size,
+                                        kissvg_Color *arrow_fill_color,
+                                        kissvg_Color *arrow_color,
+                                        kissvg_Bool reverse_arrow,
+                                        kissvg_ArrowType type,
+                                        double arrow_line_width);
 
 extern void kissvg_ResetAxis2D(kissvg_Axis2D* axis,
                                kissvg_TwoVector start,
@@ -981,7 +1052,6 @@ extern void kissvg_DestroyAxis2D(kissvg_Axis2D *axis);
 extern void kissvg_CircleSetCanvas(kissvg_Circle *circle,
                                    kissvg_Canvas2D *canvas);
 
-extern void kissvg_CircleSetArrowType(kissvg_Circle *circle, int arrow_type);
 extern void kissvg_CircleSetLineWidth(kissvg_Circle *circle, double linewidth);
 extern void kissvg_CircleSetLineColor(kissvg_Circle *circle,
                                       kissvg_Color *color);
@@ -992,13 +1062,17 @@ extern void kissvg_CircleCreateArrow(kissvg_Circle *path, double pos,
                                      double arrow_size,
                                      kissvg_Color *arrow_fill_color,
                                      kissvg_Color *arrow_color,
-                                     kissvg_Bool reverse_arrow);
+                                     kissvg_Bool reverse_arrow,
+                                     kissvg_ArrowType type,
+                                     double arrow_line_width);
 
 extern void kissvg_CircleAddArrow(kissvg_Circle *path, double pos,
                                   double arrow_size,
                                   kissvg_Color *arrow_fill_color,
                                   kissvg_Color *arrow_color,
-                                  kissvg_Bool reverse_arrow);
+                                  kissvg_Bool reverse_arrow,
+                                  kissvg_ArrowType type,
+                                  double arrow_line_width);
 
 extern kissvg_Circle *kissvg_CreateCircle(kissvg_TwoVector P, double r,
                                           kissvg_Canvas2D *canvas);
@@ -1009,8 +1083,7 @@ extern kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C1,
 
 extern kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
                                                 kissvg_Circle *circle2,
-                                                kissvg_Circle *circle3,
-                                                kissvg_Canvas2D *canvas);
+                                                kissvg_Circle *circle3);
 
 /******************************************************************************
  ******************************************************************************
@@ -1019,7 +1092,6 @@ extern kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
  *                                                                            *
  ******************************************************************************
  ******************************************************************************/
-
 
 extern void kissvg_DrawPolygon2D(cairo_t *cr, kissvg_Path2D *path);
 extern void kissvg_FillDrawPolygon2D(cairo_t *cr, kissvg_Path2D *path);

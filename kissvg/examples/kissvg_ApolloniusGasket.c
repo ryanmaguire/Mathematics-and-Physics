@@ -42,6 +42,17 @@ static const double shifts[2] = {__x_shift, __y_shift};
 
 #define FILENAME "kissvg_ApolloniusProblem.ps"
 
+static void print_circle(kissvg_Circle *circle)
+{
+    printf(
+        "%f\t%f\t%f\n",
+        kissvg_TwoVectorXComponent(kissvg_CircleCenter(circle)),
+        kissvg_TwoVectorYComponent(kissvg_CircleCenter(circle)),
+        kissvg_CircleRadius(circle)
+    );
+    return;
+}
+
 void draw(cairo_t *cr)
 {
     kissvg_TwoVector center;
@@ -49,44 +60,50 @@ void draw(cairo_t *cr)
     kissvg_Circle **apo;
     kissvg_Canvas2D *canvas;
     double radius;
-    double thick_width;
     long n, m, N;
     N = 8;
 
-    thick_width = 1.0;
-
     canvas = kissvg_CreateCanvas2D(scales, shifts);
+
+    radius = 0.5;
+
+    center = kissvg_NewTwoVector(0.0, 0.5);
+    C2 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_DrawCircle2D(cr, C2);
+
+    center = kissvg_NewTwoVector(0, -0.5);
+    C3 = kissvg_CreateCircle(center, radius, canvas);
+
+    kissvg_DrawCircle2D(cr, C3);
+
+    radius = 1.0;
+    center = kissvg_NewTwoVector(2.0, 0.0);
+    C1 = kissvg_CreateCircle(center, radius, canvas);
+
+    apo = kissvg_ApolloniusProblem(C1, C2, C3);
+    C3 = apo[0];
 
     center = kissvg_NewTwoVector(0.0, 0.0);
     radius = 1.0;
-    C1 = kissvg_CreateCircle(center, radius);
-    kissvg_DrawCircle2D(cr, center, radius, thick_width, kissvg_Black, canvas);
+    C1 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_DrawCircle2D(cr, C1);
+    kissvg_DrawCircle2D(cr, C3);
 
-    center = kissvg_NewTwoVector(0.0, 0.5);
-    radius = 0.5;
-    C2 = kissvg_CreateCircle(center, radius);
-    kissvg_DrawCircle2D(cr, center, radius, thick_width, kissvg_Black, canvas);
+    for (n=0; n<N; ++n)
+    {
+        for (m=0; m<N; ++m)
+            kissvg_DestroyCircle(apo[m]);
 
-    center = kissvg_NewTwoVector(0, -0.5);
-    radius = 0.5;
-    C3 = kissvg_CreateCircle(center, radius);
+        apo = kissvg_ApolloniusProblem(C1, C2, C3);
+        C2 = C3;
 
-    kissvg_DrawCircle2D(cr, center, radius, thick_width, kissvg_Black, canvas);
-
-    center = kissvg_NewTwoVector(2.0, 0.0);
-    radius = 1.0;
-    C1 = kissvg_CreateCircle(center, radius);
-
-    apo = kissvg_ApolloniusProblem(C1, C2, C3);
-
-    n = 0;
-    C3 = apo[n];
-    center = kissvg_CircleCenter(C3);
-    radius = kissvg_CircleRadius(C3);
-    kissvg_DrawCircle2D(cr, center, radius, thick_width, kissvg_Black, canvas);
-
-    for (m=0; m<8; ++m)
-        kissvg_DestroyCircle(apo[m]);
+        for (m=0; m<N; ++m)
+        {
+            C3 = apo[m];
+            print_circle(C3);
+        }
+        kissvg_DrawCircle2D(cr, C3);
+    }
 
     free(apo);
     return;
