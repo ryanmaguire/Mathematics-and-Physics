@@ -47,45 +47,42 @@ void draw(cairo_t *cr)
     kissvg_Circle *C1, *C2, *C3;
     kissvg_Circle **apo;
     kissvg_Canvas2D *canvas;
-    kissvg_Color *my_color;
     double radius;
-    double thick_width;
     long n, N;
     N = 8;
-
-
-    my_color = kissvg_CreateColor(0.1, 1.0, 2.0);
-
-    thick_width = 1.0;
 
     canvas = kissvg_CreateCanvas2D(scales, shifts);
 
     center = kissvg_NewTwoVector(1.0, 1.0);
     radius = 0.5;
-    C1 = kissvg_CreateCircle(center, radius);
-    kissvg_FillDrawCircle2D(cr, center, radius, thick_width, my_color, kissvg_Black, canvas);
+    C1 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_CircleSetFillColor(C1, kissvg_Aqua);
+    kissvg_FillDrawCircle2D(cr, C1);
 
     center = kissvg_NewTwoVector(-1.0, 1.0);
     radius = 0.5;
-    C2 = kissvg_CreateCircle(center, radius);
-    kissvg_FillDrawCircle2D(cr, center, radius, thick_width, my_color, kissvg_Black, canvas);
+    C2 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_CircleSetFillColor(C2, kissvg_Aqua);
+    kissvg_FillDrawCircle2D(cr, C2);
 
     center = kissvg_NewTwoVector(0, -1.0);
     radius = 0.5;
-    C3 = kissvg_CreateCircle(center, radius);
-    kissvg_FillDrawCircle2D(cr, center, radius, thick_width, my_color, kissvg_Black, canvas);
+    C3 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_CircleSetFillColor(C3, kissvg_Aqua);
+    kissvg_FillDrawCircle2D(cr, C3);
 
     apo = kissvg_ApolloniusProblem(C1, C2, C3);
 
     for (n=0; n<N; ++n)
     {
         C1 = apo[n];
-        center = kissvg_CircleCenter(C1);
-        radius = kissvg_CircleRadius(C1);
-        kissvg_DrawCircle2D(cr, center, radius, thick_width,
-                            kissvg_Black, canvas);
+        kissvg_DrawCircle2D(cr, C1);
     }
 
+    kissvg_DestroyCanvas2D(canvas);
+    kissvg_DestroyCircle(C1);
+    kissvg_DestroyCircle(C2);
+    kissvg_DestroyCircle(C3);
     return;
 }
 

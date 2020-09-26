@@ -81,11 +81,31 @@ void draw(cairo_t *cr)
     kissvg_Path2DSetFillColor(path, kissvg_Green);
     kissvg_Path2DSetLineColor(path, kissvg_Black);
     kissvg_Path2DSetLineWidth(path, kissvg_DefaultPen);
-    kissvg_Path2DClosePath(path);
+    kissvg_Path2DSetClosePath(path, kissvg_True);
 
     /*  kissvg_CircleCircleIntersection allocates memory for the pointer, so  *
      *  we need to free it.                                                   */
     free(intersection);
+
+    kissvg_CircleCreateArrow(C1, 0.1, kissvg_DefaultArrowSize, kissvg_Green,
+                             kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                             kissvg_DefaultArrowLineWidth);
+
+    kissvg_CircleAddArrow(C1, 0.2, kissvg_DefaultArrowSize, kissvg_Green,
+                             kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                             kissvg_DefaultArrowLineWidth);
+
+    kissvg_CircleAddArrow(C1, 0.3, kissvg_DefaultArrowSize, kissvg_Green,
+                             kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                             kissvg_DefaultArrowLineWidth);
+
+    kissvg_CircleAddArrow(C1, 0.4, kissvg_DefaultArrowSize, kissvg_Green,
+                             kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                             kissvg_DefaultArrowLineWidth);
+
+    kissvg_CircleAddArrow(C1, 0.5, kissvg_DefaultArrowSize, kissvg_Green,
+                             kissvg_Black, kissvg_False, kissvg_StealthArrow,
+                             kissvg_DefaultArrowLineWidth);
 
     kissvg_DrawCircle2D(cr, C1);
     kissvg_DrawCircle2D(cr, C2);

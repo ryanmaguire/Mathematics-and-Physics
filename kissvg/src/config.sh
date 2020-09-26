@@ -1,12 +1,34 @@
 #!/bin/bash
 
-gcc -std=c89 -pedantic -pedantic-errors -Wall -Wextra \
--I/usr/include/cairo/ -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes \
+osstring=`uname`
+
+if [ "$osstring" = "Darwin" ]; then
+	CC=gcc-10
+	CAIROPATH=$(pkg-config --cflags --libs cairo)
+	CAIROLIB=-L/usr/local/Cellar/cairo/1.16.0_2/lib
+elif [ "$osstring" = "Linux" ]; then
+	CC=gcc
+	CAIROPATH=-I/usr/include/cairo/
+	CAIROLIB=-L/usr/lib/
+else
+    echo "Operating System not recognized"
+    echo "Only MacOSX and Linux supported"
+    echo "Exiting script"
+    exit 1
+fi
+
+
+rm -f *.so
+rm -f *.o
+
+$CC -std=c89 -pedantic -pedantic-errors -Wall -Wextra \
+$CAIROPATH -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes \
 -Wmissing-prototypes -Wold-style-definition -O2 -c kissvg.c
 
-gcc kissvg.o -shared -o libkissvg.so -lcairo
+$CC $CAIROLIB kissvg.o -shared -o libkissvg.so -lcairo
 
-sudo cp libkissvg.so /usr/local/lib/libkissvg.so
+sudo mv libkissvg.so /usr/local/lib/libkissvg.so
 
+rm -f kissvg.o
 
 
