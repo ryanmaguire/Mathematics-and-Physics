@@ -21,9 +21,11 @@ fi
 rm -f *.so
 rm -f *.o
 
-$CC -std=c89 -pedantic -pedantic-errors -Wall -Wextra \
-$CAIROPATH -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes \
--Wmissing-prototypes -Wold-style-definition -O2 -c kissvg.c
+-Wall -Wextra -Wpedantic -pedantic -pedantic-errors -Wmisleading-indentation 
+
+$CC -std=c89 -pedantic -pedantic-errors -Wall -Wextra -Wpedantic \
+-Wmisleading-indentation -Wmissing-prototypes -Wold-style-definition \
+$CAIROPATH -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes -O2 -c kissvg.c
 
 $CC $CAIROLIB kissvg.o -shared -o libkissvg.so -lcairo
 
