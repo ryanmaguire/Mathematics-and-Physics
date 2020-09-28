@@ -76,9 +76,12 @@
 #include <cairo.h>
 
 /*  Various defaults for things like line width and arrow sizes.              */
-#define kissvg_DefaultPen 0.6
+#define kissvg_DefaultPen 0.5
+#define kissvg_ThinPen 0.2
+#define kissvg_ThickPen 0.8
 #define kissvg_DefaultAxes 1.0
-#define kissvg_DefaultArrowSize 0.08
+#define kissvg_DefaultTickWidth 0.08
+#define kissvg_DefaultArrowSize 0.1
 #define kissvg_DefaultArrowLineWidth 0.05
 #define kissvg_DefaultTickSize 0.2
 #define kissvg_DefaultTickHeight 0.1
@@ -419,16 +422,22 @@ typedef struct kissvg_Line2D {
 #define kissvg_NumberOfArrows(kissvg_struct) (kissvg_struct->N_Arrows)
 #define kissvg_nthArrow(kissvg_struct, n) (kissvg_struct->arrows[n])
 #define kissvg_LineColor(kissvg_struct) (kissvg_struct->line_color)
-#define kissvg_LineWIdth(kissvg_struct) (kissvg_struct->line_width)
+#define kissvg_LineWidth(kissvg_struct) (kissvg_struct->line_width)
 #define kissvg_FillColor(kissvg_struct) (kissvg_struct->fill_color)
 #define kissvg_HasError(kissvg_struct) (kissvg_struct->error_occured)
 #define kissvg_ErrorMessage(kissvg_struct) (kissvg_struct->error_message)
 
-#define kissvg_SetError(kissvg_struct, errmes)              \
-    (strcmp(kissvg_struct, errmes))
+#define kissvg_SetErrorMessage(kissvg_struct, errmes)       \
+    (strcpy(kissvg_struct->error_message, errmes))
 
-#define kissvg_SetFillDraw (kissvg_struct, fill)            \
+#define kissvg_SetError(kissvg_struct, error)               \
+    (kissvg_struct->error_occured = error)
+
+#define kissvg_SetFillDraw(kissvg_struct, fill)             \
     (kissvg_struct->has_filldraw = fill)
+
+#define kissvg_SetHasArrows(kissvg_struct, arrow)           \
+    (kissvg_struct->has_arrows = arrow)
 
 #define kissvg_SetLineWidth(kissvg_struct, width)           \
     (kissvg_struct->line_width = width)
@@ -685,7 +694,21 @@ extern kissvg_Bool kissvg_IsCollinear(kissvg_TwoVector A,
                                       kissvg_TwoVector B,
                                       kissvg_TwoVector C);
 
-extern kissvg_Line2D kissvg_OrthogonalVector2D(kissvg_TwoVector V);
+/******************************************************************************
+ *  Function:                                                                 *
+ *      kissvg_OrthogonalVector2D                                             *
+ *  Purpose:                                                                  *
+ *      Compute a vector which is orthogonal to the input.                    *
+ *  Arguments:                                                                *
+ *      kissvg_TwoVector V:                                                   *
+ *          A kissvg_TwoVector.                                               *
+ *  Outputs:                                                                  *
+ *      kissvg_TwoVector orth:                                                *
+ *          A vector orthogonal to V.                                         *
+ *  Location:                                                                 *
+ *      The source code is contained in src/kissvg.c                          *
+ ******************************************************************************/
+extern kissvg_TwoVector kissvg_OrthogonalVector2D(kissvg_TwoVector V);
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -702,16 +725,16 @@ extern kissvg_Line2D kissvg_OrthogonalVector2D(kissvg_TwoVector V);
  *      kissvg_TwoVector C:                                                   *
  *          A third vector.                                                   *
  *  Outputs:                                                                  *
- *      kissvg_TwoVector center:                                              *
- *          The center of A, B, C. That is, the point such that there exists  *
- *          a circle centered about it that contains the points A, B, C. If   *
- *          A, B, and C are collinear, center is (inf, inf).                  *
+ *      kissvg_Circle circle:                                                 *
+ *          The circle containing A, B, and C. If A, B, and C are collinear,  *
+ *          the circle is set to the line containing them. If all three are   *
+ *          equal an error_occured Boolean is set to true.                    *
  *  Location:                                                                 *
  *      The source code is contained in src/kissvg.c                          *
  ******************************************************************************/
-extern kissvg_TwoVector kissvg_FindCenter2D(kissvg_TwoVector A,
-                                            kissvg_TwoVector B,
-                                            kissvg_TwoVector C);
+extern kissvg_Circle *kissvg_FindCenter2D(kissvg_TwoVector A,
+                                          kissvg_TwoVector B,
+                                          kissvg_TwoVector C);
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -956,6 +979,20 @@ extern kissvg_Color *kissvg_CreateColor(double red, double green, double blue,
  ******************************************************************************/
 extern void kissvg_DestroyColor(kissvg_Color *color);
 
+/*  The following are pre-defined colors for ease of use.                     */
+static kissvg_Color __kissvg_Blue  = {{0.00, 0.20, 1.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_Green = {{0.00, 1.00, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Red   = {{1.00, 0.10, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Black = {{0.00, 0.00, 0.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_White = {{1.00, 1.00, 1.00}, 0, kissvg_False};
+
+/*  Set the kissvg_ColorName pointers to point to __kissvg_ColorName.         */
+kissvg_Color *kissvg_Blue  = &__kissvg_Blue;
+kissvg_Color *kissvg_Green = &__kissvg_Green;
+kissvg_Color *kissvg_Red   = &__kissvg_Red;
+kissvg_Color *kissvg_Black = &__kissvg_Black;
+kissvg_Color *kissvg_White = &__kissvg_White;
+
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
@@ -993,7 +1030,7 @@ extern void kissvg_DestroyArrow(kissvg_Arrow *arrow);
  ******************************************************************************/
 
 #define kissvg_Path2DData(path) (path->data)
-#define kissvg_Path2DSize(path) (path->N_Pts)
+#define kissvg_Path2DNumberOfPoints(path) (path->N_Pts)
 #define kissvg_Path2DIsClosed(path) (path->is_closed)
 
 extern void kissvg_Path2DCreateArrow(kissvg_Path2D *path, double pos,
@@ -1033,7 +1070,7 @@ extern void kissvg_DestroyPath2D(kissvg_Path2D *path);
 #define kissvg_Axis2DFinish(axis) (axis->finish)
 #define kissvg_Axis2DTickStart(axis) (axis->tick_start)
 #define kissvg_Axis2DTickFinish(axis) (axis->tick_finish)
-#define kissvg_Axis2DTickDistance(axis) (axis->ticks_dx)
+#define kissvg_Axis2DTickDistance(axis) (axis->tick_dx)
 #define kissvg_Axis2DTickHeight(axis) (axis->tick_height)
 #define kissvg_Axis2DTickSemiHeight(axis) (axis->tick_semi_height)
 #define kissvg_Axis2DTickSemiSemiHeight(axis) (axis->tick_semi_semi_height)
@@ -1048,6 +1085,7 @@ extern void kissvg_Axis2DCreateTicks(kissvg_Axis2D *axis,
                                      kissvg_TwoVector tick_start,
                                      kissvg_TwoVector tick_finish);
 
+extern void kissvg_Axis2DSetTickColor(kissvg_Axis2D *axis, kissvg_Color *color);
 extern void kissvg_Axis2DSetTickWidth(kissvg_Axis2D *axis, double tick_width);
 extern void kissvg_Axis2DSetTickDistance(kissvg_Axis2D *axis, double tick_dist);
 extern void kissvg_Axis2DSetTickHeight(kissvg_Axis2D *axis, double tick_height);
@@ -1104,6 +1142,13 @@ extern void kissvg_DestroyAxis2D(kissvg_Axis2D *axis);
 
 #define kissvg_CircleCenter(circle) (circle->center)
 #define kissvg_CircleRadius(circle) (circle->radius)
+#define kissvg_CircleIsLine(circle) (circle->is_line)
+#define kissvg_CirclePoint(circle) (circle->P)
+#define kissvg_CircleTangent(circle) (circle->V)
+
+#define kissvg_CircleSetIsLine(circle, line) (circle->is_line = line)
+#define kissvg_CircleSetPoint(circle, point) (circle->P = point)
+#define kissvg_CircleSetVelocity(circle, tangent) (circle->P = tangent)
 
 extern void kissvg_CircleCreateArrow(kissvg_Circle *path, double pos,
                                      double arrow_size,
@@ -1145,12 +1190,14 @@ extern kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
 #define kissvg_Line2DTangent(L) (L->V)
 
 extern kissvg_Line2D *kissvg_CreateLineFromTwoPoints(kissvg_TwoVector P,
-                                                     kissvg_TwoVector Q);
+                                                     kissvg_TwoVector Q,
+                                                     kissvg_Canvas2D *canvas);
 
-extern kissvg_Line2D *kissvg_CreateLineFromPointAndTangent(kissvg_TwoVector P,
-                                                           kissvg_TwoVector V);
+extern kissvg_Line2D *kissvg_CreateLineFromPointAndTangent(
+    kissvg_TwoVector P, kissvg_TwoVector V, kissvg_Canvas2D *canvas
+);
 
-extern void kissvg_DestroyLine(kissvg_Line2D *L);
+extern void kissvg_DestroyLine2D(kissvg_Line2D *L);
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -1183,8 +1230,6 @@ extern kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
 
 extern kissvg_Circle *kissvg_InversiveGeometryCircle(kissvg_Circle *C0,
                                                      kissvg_Circle *C1);
-
-extern kissvg_
 
 /******************************************************************************
  ******************************************************************************

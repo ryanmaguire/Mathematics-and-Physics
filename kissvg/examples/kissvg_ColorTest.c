@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
+#include <kissvg/include/kissvg_colors.h>
 #include <cairo-ps.h>
 
 /*  The limits of the coordinates in our computations. These correspond the   *
@@ -53,181 +54,181 @@ void draw(cairo_t *cr)
 
     center = kissvg_NewTwoVector(-2.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Blue);
+    kissvg_SetFillColor(C1, kissvg_Blue);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-1.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Green);
+    kissvg_SetFillColor(C1, kissvg_Green);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(0.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Red);
+    kissvg_SetFillColor(C1, kissvg_Red);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Black);
+    kissvg_SetFillColor(C1, kissvg_Black);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Black);
+    kissvg_SetFillColor(C1, kissvg_Black);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(2.0, 2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_DarkGray);
+    kissvg_SetFillColor(C1, kissvg_DarkGray);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-2.0, 1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Gray);
+    kissvg_SetFillColor(C1, kissvg_Gray);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-1.0, 1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_LightGray);
+    kissvg_SetFillColor(C1, kissvg_LightGray);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(0.0, 1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_White);
+    kissvg_SetFillColor(C1, kissvg_White);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, 1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Aqua);
+    kissvg_SetFillColor(C1, kissvg_Aqua);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(2.0, 1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Purple);
+    kissvg_SetFillColor(C1, kissvg_Purple);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-2.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Violet);
+    kissvg_SetFillColor(C1, kissvg_Violet);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-1.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Pink);
+    kissvg_SetFillColor(C1, kissvg_Pink);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(0.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Yellow);
+    kissvg_SetFillColor(C1, kissvg_Yellow);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Crimson);
+    kissvg_SetFillColor(C1, kissvg_Crimson);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(2.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_DarkGreen);
+    kissvg_SetFillColor(C1, kissvg_DarkGreen);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-2.0, -1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Orange);
+    kissvg_SetFillColor(C1, kissvg_Orange);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-1.0, -1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_LightBlue);
+    kissvg_SetFillColor(C1, kissvg_LightBlue);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(0.0, -1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Teal);
+    kissvg_SetFillColor(C1, kissvg_Teal);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, -1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_DarkBlue);
+    kissvg_SetFillColor(C1, kissvg_DarkBlue);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(2.0, -1.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Lavender);
+    kissvg_SetFillColor(C1, kissvg_Lavender);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-2.0, -2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Magenta);
+    kissvg_SetFillColor(C1, kissvg_Magenta);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-1.0, -2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_DeepPink);
+    kissvg_SetFillColor(C1, kissvg_DeepPink);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(0.0, -2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Azure);
+    kissvg_SetFillColor(C1, kissvg_Azure);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(1.0, -2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Silver);
+    kissvg_SetFillColor(C1, kissvg_Silver);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(2.0, -2.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Sand);
+    kissvg_SetFillColor(C1, kissvg_Sand);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-3.0, -0.5);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Marine);
+    kissvg_SetFillColor(C1, kissvg_Marine);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(-3.0, 0.5);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Lime);
+    kissvg_SetFillColor(C1, kissvg_Lime);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(3.0, -0.5);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Carrot);
+    kissvg_SetFillColor(C1, kissvg_Carrot);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
     center = kissvg_NewTwoVector(3.0, 0.5);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_CircleSetFillColor(C1, kissvg_Brown);
+    kissvg_SetFillColor(C1, kissvg_Brown);
     kissvg_FillDrawCircle2D(cr, C1);
     kissvg_DestroyCircle(C1);
 
