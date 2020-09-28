@@ -21,8 +21,6 @@ fi
 rm -f *.so
 rm -f *.o
 
--Wall -Wextra -Wpedantic -pedantic -pedantic-errors -Wmisleading-indentation 
-
 $CC -std=c89 -pedantic -pedantic-errors -Wall -Wextra -Wpedantic \
 -Wmisleading-indentation -Wmissing-prototypes -Wold-style-definition \
 $CAIROPATH -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes -O2 -c kissvg.c
