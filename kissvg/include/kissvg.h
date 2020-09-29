@@ -585,8 +585,10 @@ extern kissvg_TwoByTwoMatrix kissvg_InverseTwoByTwoMatrix(
  *      Malloc is used in this file to allocate the appropriate memory. You   *
  *      must called kissvg_DestroyCanvas2D when you are done with the canvas. *
  ******************************************************************************/
-extern kissvg_Canvas2D *kissvg_CreateCanvas2D(const double scales[2],
-                                              const double shifts[2]);
+extern kissvg_Canvas2D *kissvg_CreateCanvas2D(
+    double x_inches, double y_inches, double x_min, double x_max,
+    double y_min, double y_max, kissvg_Bool one_to_one_apect_ratio
+);
 
 /******************************************************************************
  *  Function:                                                                 *

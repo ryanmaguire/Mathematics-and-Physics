@@ -125,17 +125,45 @@ kissvg_TwoByTwoMatrix kissvg_InverseTwoByTwoMatrix(kissvg_TwoByTwoMatrix A)
  ******************************************************************************
  ******************************************************************************/
 
-kissvg_Canvas2D *kissvg_CreateCanvas2D(const double scales[2],
-                                       const double shifts[2])
+static double __kissvg_CanvasTransformX(kissvg_Canvas2D *canvas, double x)
+{
+    return kissvg_Canvas2DXShift(canvas) + kissvg_Canvas2DXScale(canvas) * x;
+}
+
+static double __kissvg_CanvasTransformY(kissvg_Canvas2D *canvas, double y)
+{
+    return kissvg_Canvas2DYShift(canvas) - kissvg_Canvas2DYScale(canvas) * y;
+}
+
+kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
+                                       double x_min, double x_max,
+                                       double y_min, double y_max,
+                                       kissvg_Bool one_to_one_apect_ratio)
 {
     kissvg_Canvas2D *canvas;
+    double xshift, yshift, xscale, yscale;
 
     canvas = malloc(sizeof(*canvas));
 
-    canvas->x_scale = scales[0];
-    canvas->y_scale = scales[1];
-    canvas->x_shift = shifts[0];
-    canvas->y_shift = shifts[1];
+    xscale = x_inches/(x_max - x_min);
+    yscale = y_inches/(y_max - y_min);
+
+    if (one_to_one_apect_ratio)
+    {
+        xscale = (xscale < yscale ? xscale : yscale);
+        yscale = xscale;
+    }
+
+    xshift = 0.5*x_inches - 0.5*(x_min + x_max)*xscale;
+    yshift = 0.5*y_inches - 0.5*(y_min + y_max)*yscale;
+
+    canvas->x_scale = xscale;
+    canvas->y_scale = yscale;
+    canvas->x_shift = xshift;
+    canvas->y_shift = yshift;
+
+    canvas->TransformX = &__kissvg_CanvasTransformX;
+    canvas->TransformY = &__kissvg_CanvasTransformY;
 
     return canvas;
 }
@@ -1073,35 +1101,20 @@ static void kissvg_DrawStealthArrow(cairo_t *cr,
     A1 = kissvg_TwoVectorAdd(A1, P1);
     A2 = kissvg_TwoVectorAdd(A2, P1);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A0));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A0));
     cairo_move_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A1);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A1);
-
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A1));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A1));
     cairo_line_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(P1);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(P1);
-
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(P1));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(P1));
     cairo_line_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A2);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A2);
-
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A2));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A2));
     cairo_line_to(cr, x, y);
 
     cairo_close_path(cr);
@@ -1125,7 +1138,6 @@ static void kissvg_DrawStealthArrow(cairo_t *cr,
 
     cairo_fill_preserve(cr);
     cairo_restore(cr);
-
     cairo_set_line_width(cr, line_width);
 
     if (kissvg_ColorIsTransparent(line_color))
@@ -1172,31 +1184,19 @@ static void kissvg_DrawTriangularArrow(cairo_t *cr,
     A1 = kissvg_TwoVectorAdd(A1, P1);
     A2 = kissvg_TwoVectorAdd(A2, P1);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A0));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A0));
     cairo_move_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A1);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A1);
-
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A1));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A1));
     cairo_line_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A2);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A2);
-
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A2));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A2));
     cairo_line_to(cr, x, y);
 
     cairo_close_path(cr);
-
     cairo_save(cr);
 
     if (kissvg_ColorIsTransparent(fill_color))
@@ -1285,47 +1285,29 @@ static void kissvg_DrawLatexArrow(cairo_t *cr,
 
     O = kissvg_EuclideanMidPoint2D(P1, A0);
 
-    ox = kissvg_Canvas2DXShift(canvas) +
-         kissvg_TwoVectorXComponent(O) * kissvg_Canvas2DXScale(canvas);
-    oy = kissvg_Canvas2DYShift(canvas) -
-         kissvg_TwoVectorYComponent(O) * kissvg_Canvas2DYScale(canvas);
+    ox = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(O));
+    oy = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(O));
 
-    bx0 = kissvg_Canvas2DXShift(canvas) +
-          kissvg_TwoVectorXComponent(B0) * kissvg_Canvas2DXScale(canvas);
-    by0 = kissvg_Canvas2DYShift(canvas) -
-          kissvg_TwoVectorYComponent(B0) * kissvg_Canvas2DYScale(canvas);
+    bx0 = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(B0));
+    by0 = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(B0));
 
-    bx1 = kissvg_Canvas2DXShift(canvas) +
-          kissvg_TwoVectorXComponent(B1) * kissvg_Canvas2DXScale(canvas);
-    by1 = kissvg_Canvas2DYShift(canvas) -
-          kissvg_TwoVectorYComponent(B1) * kissvg_Canvas2DYScale(canvas);
+    bx1 = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(B1));
+    by1 = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(B1));
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A0));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A0));
     cairo_move_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A1);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A1);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A1));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A1));
     cairo_curve_to(cr, ox, oy, bx0, by0, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A2);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A2);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A2));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A2));
     cairo_line_to(cr, x, y);
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(A0));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(A0));
     cairo_curve_to(cr, bx1, by1, ox, oy, x, y);
 
     cairo_close_path(cr);
@@ -1577,24 +1559,16 @@ void kissvg_DrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
 
     Pn = kissvg_Path2DData(path)[0];
 
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(Pn);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(Pn);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(Pn));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(Pn));
 
     cairo_move_to(cr, x, y);
 
     for (n=1; n<path_size; ++n)
     {
         Pn = kissvg_Path2DData(path)[n];
-
-        x = kissvg_Canvas2DXShift(canvas) +
-            kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(Pn);
-
-        y = kissvg_Canvas2DYShift(canvas) -
-            kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(Pn);
-
+        x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(Pn));
+        y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(Pn));
         cairo_line_to(cr, x, y);
     }
 
@@ -1649,22 +1623,16 @@ void kissvg_FillDrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
     }
 
     Pn = kissvg_Path2DData(path)[0];
-    x = kissvg_Canvas2DXShift(canvas) +
-        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(Pn);
-
-    y = kissvg_Canvas2DYShift(canvas) -
-        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(Pn);
+    x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(Pn));
+    y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(Pn));
 
     cairo_move_to(cr, x, y);
 
     for (n=1; n<path_size; ++n)
     {
         Pn = kissvg_Path2DData(path)[n];
-        x = kissvg_Canvas2DXShift(canvas) +
-            kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(Pn);
-
-        y = kissvg_Canvas2DYShift(canvas) -
-            kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(Pn);
+        x = canvas->TransformX(canvas, kissvg_TwoVectorXComponent(Pn));
+        y = canvas->TransformY(canvas, kissvg_TwoVectorYComponent(Pn));
 
         cairo_line_to(cr, x, y);
     }
