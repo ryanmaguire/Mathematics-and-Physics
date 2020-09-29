@@ -8,18 +8,19 @@
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
+#include <kissvg/include/kissvg_colors.h>
 #include <cairo-ps.h>
 
 /*  The limits of the coordinates in our computations. These correspond the   *
  *  the maximum (x, y) values we wish to plot.                                */
-#define X_MIN -3.0
-#define X_MAX  3.0
-#define Y_MIN -3.0
-#define Y_MAX  3.0
+#define X_MIN -2.2
+#define X_MAX  2.2
+#define Y_MIN -2.2
+#define Y_MAX  2.2
 
 /*  The size of the actual output image.                                      */
 #define X_INCHES 3 * 72.0
-#define Y_INCHES 2 * 72.0
+#define Y_INCHES 3 * 72.0
 
 /*  Compute the scales needed to convert from the mathematical coordinate     *
  *  system to the coordinates of the output image.                            */
@@ -42,70 +43,61 @@ static const double shifts[2] = {__x_shift, __y_shift};
 
 #define FILENAME "kissvg_ApolloniusProblem.ps"
 
-static void print_circle(kissvg_Circle *circle)
-{
-    printf(
-        "%f\t%f\t%f\n",
-        kissvg_TwoVectorXComponent(kissvg_CircleCenter(circle)),
-        kissvg_TwoVectorYComponent(kissvg_CircleCenter(circle)),
-        kissvg_CircleRadius(circle)
-    );
-    return;
-}
-
-void draw(cairo_t *cr)
+static void draw(cairo_t *cr)
 {
     kissvg_TwoVector center;
-    kissvg_Circle *C1, *C2, *C3;
-    kissvg_Circle **apo;
+    kissvg_Circle *C0, *C00;
+    kissvg_Circle *C1;
+    kissvg_Circle *Current_Circle;
     kissvg_Canvas2D *canvas;
     double radius;
-    long n, m, N;
-    N = 8;
+    long n, N;
+
+    N = 20;
 
     canvas = kissvg_CreateCanvas2D(scales, shifts);
 
-    radius = 0.5;
+    radius = 2.0;
+    center = kissvg_NewTwoVector(0.0, -2.0);
+    C0 = kissvg_CreateCircle(center, radius, canvas);
 
-    center = kissvg_NewTwoVector(0.0, 0.5);
-    C2 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_DrawCircle2D(cr, C2);
-
-    center = kissvg_NewTwoVector(0, -0.5);
-    C3 = kissvg_CreateCircle(center, radius, canvas);
-
-    kissvg_DrawCircle2D(cr, C3);
-
-    radius = 1.0;
-    center = kissvg_NewTwoVector(2.0, 0.0);
-    C1 = kissvg_CreateCircle(center, radius, canvas);
-
-    apo = kissvg_ApolloniusProblem(C1, C2, C3);
-    C3 = apo[0];
+    center = kissvg_NewTwoVector(0.0, 2.0);
+    C00 = kissvg_CreateCircle(center, radius, canvas);
 
     center = kissvg_NewTwoVector(0.0, 0.0);
-    radius = 1.0;
     C1 = kissvg_CreateCircle(center, radius, canvas);
+    kissvg_SetLineWidth(C1, kissvg_ThinPen);
     kissvg_DrawCircle2D(cr, C1);
-    kissvg_DrawCircle2D(cr, C3);
 
-    for (n=0; n<N; ++n)
+    radius = 1.0;
+
+    center = kissvg_NewTwoVector(0, -1.0);
+    kissvg_ResetCircle(C1, center, radius);
+    kissvg_DrawCircle2D(cr, C1);
+
+    radius = 0.5;
+
+    for (n=-N; n<N; ++n)
     {
-        for (m=0; m<N; ++m)
-            kissvg_DestroyCircle(apo[m]);
+        center = kissvg_NewTwoVector(-n, -0.5);
+        kissvg_ResetCircle(C1, center, radius);
 
-        apo = kissvg_ApolloniusProblem(C1, C2, C3);
-        C2 = C3;
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
 
-        for (m=0; m<N; ++m)
-        {
-            C3 = apo[m];
-            print_circle(C3);
-        }
-        kissvg_DrawCircle2D(cr, C3);
+        center = kissvg_NewTwoVector(-n, 0.5);
+        kissvg_ResetCircle(C1, center, radius);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+        kissvg_DestroyCircle(Current_Circle);
     }
 
-    free(apo);
+    kissvg_DestroyCircle(C0);
+    kissvg_DestroyCircle(C00);
+
     return;
 }
 

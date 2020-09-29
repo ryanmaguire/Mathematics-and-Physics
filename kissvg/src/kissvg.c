@@ -13,333 +13,8 @@
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
 #include <kissvg/include/kissvg_bool.h>
+#include <kissvg/include/kissvg_colors.h>
 #include <cairo.h>
-
-/*  NOTE:                                                                     *
- *      Detailed descriptions of the functions are provided in kissvg.h.      */
-
-/*  The primary tool for creating new kissvg_TwoVector's.                     */
-kissvg_TwoVector kissvg_NewTwoVector(double x, double y)
-{
-    kissvg_TwoVector NewVector;
-
-    /*  Simply set the zeroth value to x and the first value to y.            */
-    NewVector.dat[0] = x;
-    NewVector.dat[1] = y;
-
-    return NewVector;
-}
-
-/*  Function for computing vector sums of kissvg_TwoVector's.                 */
-kissvg_TwoVector kissvg_TwoVectorAdd(kissvg_TwoVector P, kissvg_TwoVector Q)
-{
-    kissvg_TwoVector sum;
-
-    /*  Declare two doubles for the new output vector.                        */
-    double x_new, y_new;
-
-    /*  Use the kissvg_TwoVectorXComponent and kissvg_TwoVectorYComponent     *
-     *  macros to access the needed values and compute the sums.              */
-    x_new = kissvg_TwoVectorXComponent(P) + kissvg_TwoVectorXComponent(Q);
-    y_new = kissvg_TwoVectorYComponent(P) + kissvg_TwoVectorYComponent(Q);
-
-    /*  Use kissvg_NewTwoVector to generate the output and return.            */
-    sum = kissvg_NewTwoVector(x_new, y_new);
-    return sum;
-}
-
-/*  Function for computing vector subtraction.                                */
-kissvg_TwoVector kissvg_TwoVectorSubtract(kissvg_TwoVector P,
-                                          kissvg_TwoVector Q)
-{
-    kissvg_TwoVector diff;
-
-    /*  Declare two doubles for the new output vector.                        */
-    double x_new, y_new;
-
-    /*  Do the same thing as kissvg_TwoVectorAdd, but subtract.               */
-    x_new = kissvg_TwoVectorXComponent(P)-kissvg_TwoVectorXComponent(Q);
-    y_new = kissvg_TwoVectorYComponent(P)-kissvg_TwoVectorYComponent(Q);
-
-    /*  Use kissvg_NewTwoVector to generate the output and return.            */
-    diff = kissvg_NewTwoVector(x_new, y_new);
-    return diff;
-}
-
-/*  Function for computing scalar multiplication of a scalar with a vector.   */
-kissvg_TwoVector kissvg_TwoVectorScale(double r, kissvg_TwoVector P)
-{
-    kissvg_TwoVector out;
-
-    /*  Declare two doubles for the new output vector.                        */
-    double x_new, y_new;
-
-    x_new = r*kissvg_TwoVectorXComponent(P);
-    y_new = r*kissvg_TwoVectorYComponent(P);
-
-    /*  Use kissvg_NewTwoVector to generate the output and return.            */
-    out = kissvg_NewTwoVector(x_new, y_new);
-    return out;
-}
-
-/*  Function for computing the length of a two dimensional vector.            */
-double kissvg_EuclideanNorm2D(kissvg_TwoVector P)
-{
-    /*  Declare the necessary variables for the computation.                  */
-    double x_comp, y_comp;
-    double norm;
-
-    /*  Extract the x and y values of the vector P.                           */
-    x_comp = kissvg_TwoVectorXComponent(P);
-    y_comp = kissvg_TwoVectorYComponent(P);
-
-    /*  Use kissvg_NewTwoVector to generate the output and return. sqrt is a  *
-     *  C standard library function found in math.h, and math.h is included   *
-     *  in the header kissvg_math.h. kissvg_SqrtDouble is an alias for this.  */
-    norm = kissvg_SqrtDouble(x_comp*x_comp + y_comp*y_comp);
-    return norm;
-}
-
-/*  Function for computing the standard Euclidean dot product of 2 two        *
- *  dimensional vectors P and Q.                                              */
-double kissvg_DotProduct2D(kissvg_TwoVector P, kissvg_TwoVector Q)
-{
-    /*  Declare all necessary variables.                                      */
-    double x0, y0;
-    double x1, y1;
-    double dot_product;
-
-    /*  Extract the x and y components of the vector P.                       */
-    x0 = kissvg_TwoVectorXComponent(P);
-    y0 = kissvg_TwoVectorYComponent(P);
-
-    /*  Extract the x and y components of the vector Q.                       */
-    x1 = kissvg_TwoVectorXComponent(Q);
-    y1 = kissvg_TwoVectorYComponent(Q);
-
-    /*  Compute the dot product and return.                                   */
-    dot_product = x0*x1 + y0*y1;
-    return dot_product;
-}
-
-/*  Function for computing the midpoint of 2 two dimensional vectors.         */
-kissvg_TwoVector kissvg_MidPoint2D(kissvg_TwoVector P, kissvg_TwoVector Q)
-{
-    /*  Declare all necessary variables.                                      */
-    double x0, y0;
-    double x1, y1;
-    double xmid, ymid;
-    kissvg_TwoVector midpoint;
-
-    /*  Extract the x and y components of the vector P.                       */
-    x0 = kissvg_TwoVectorXComponent(P);
-    y0 = kissvg_TwoVectorYComponent(P);
-
-    /*  Extract the x and y components of the vector Q.                       */
-    x1 = kissvg_TwoVectorXComponent(Q);
-    y1 = kissvg_TwoVectorYComponent(Q);
-
-    /*  Compute the midpoint of P and Q, which is simply 0.5*(P+Q).           */
-    xmid = 0.5*(x0 + x1);
-    ymid = 0.5*(y0 + y1);
-
-    /*  Use kissvg_NewTwoVector to create the new output and return.          */
-    midpoint = kissvg_NewTwoVector(xmid, ymid);
-    return midpoint;
-}
-
-/*  Function for computing the angle between the lines OP and OQ given three  *
- *  kissvg_TwoVector's O, P, and Q.                                           */
-double kissvg_RelAngle2D(kissvg_TwoVector O,
-                         kissvg_TwoVector P,
-                         kissvg_TwoVector Q)
-{
-    /*  Declare all necessary variables.                                      */
-    double dot_prod;
-    double abs_prod;
-    double rel_angle;
-
-    /*  We to compute the vector from O to P and O to Q, so declare these.    */
-    kissvg_TwoVector OP;
-    kissvg_TwoVector OQ;
-
-    /*  Compute the vector pointing from O to P, which is simply P-O. Do the  *
-     *  same thing for O and Q.                                               */
-    OP = kissvg_TwoVectorSubtract(P, O);
-    OQ = kissvg_TwoVectorSubtract(Q, O);
-
-    /*  The angle formula is arccos(a dot b / norm(a)norm(b)). First we'll    *
-     *  compute the dot product, then check that norm(a)norm(b) is non-zero.  */
-    dot_prod = kissvg_DotProduct2D(OP, OQ);
-    abs_prod = kissvg_EuclideanNorm2D(OP)*kissvg_EuclideanNorm2D(OQ);
-
-    /*  If norm(OP)norm(OQ) is zero, then one of these vectors is the zero    *
-     *  vector, meaning the angle is undefined. We then return Not-A-Number.  */
-    if (abs_prod == 0.0)
-        rel_angle = kissvg_NaN;
-
-    /*  If norm(OP)norm(OQ) is non-zero, we may use the angle formula. Note,  *
-     *  acos is a C standard library function found in math.h. This header    *
-     *  file is included with kissvg_math.h.                                  */
-    else
-        rel_angle = acos(dot_prod/abs_prod);
-
-    return rel_angle;
-}
-
-/*  Function for determining if three planar vectors are collinear.           */
-kissvg_Bool kissvg_IsCollinear(kissvg_TwoVector A,
-                               kissvg_TwoVector B,
-                               kissvg_TwoVector C)
-{
-    /*  The method simply checks the determinant of the matrix formed by      *
-     *  the column vector AB and AC. This is equivalent to seeing if the      *
-     *  cross product of AB and AC is zero.                                   */
-    kissvg_TwoVector AB;
-    kissvg_TwoVector AC;
-    double ABx, ABy;
-    double ACx, ACy;
-    double det;
-
-    /*  Compute the vectors pointing from A to B and A to C.                  */
-    AB = kissvg_TwoVectorSubtract(B, A);
-    AC = kissvg_TwoVectorSubtract(C, A);
-
-    /*  Extract the x and y components of AB.                                 */
-    ABx = kissvg_TwoVectorXComponent(AB);
-    ABy = kissvg_TwoVectorYComponent(AB);
-
-    /*  Extract the x and y components of AC.                                 */
-    ACx = kissvg_TwoVectorXComponent(AC);
-    ACy = kissvg_TwoVectorYComponent(AC);
-
-    /*  Compute the determinant of the matrix [AB | AC].                      */
-    det = ABx*ACy - ABy*ACx;
-
-    if (det == 0.0)
-        return kissvg_True;
-    else
-        return kissvg_False;
-}
-
-kissvg_TwoVector kissvg_OrthogonalVector2D(kissvg_TwoVector V)
-{
-    kissvg_TwoVector orth;
-    double x_comp, y_comp;
-
-    x_comp = kissvg_TwoVectorXComponent(V);
-    y_comp = kissvg_TwoVectorYComponent(V);
-
-    orth = kissvg_NewTwoVector(-y_comp, x_comp);
-
-    return orth;
-}
-
-/*  Function for determining the center of three points in the plane.         */
-kissvg_Circle *kissvg_FindCenter2D(kissvg_TwoVector A,
-                                   kissvg_TwoVector B,
-                                   kissvg_TwoVector C)
-{
-    /*  Declare the necessary variables.                                      */
-    kissvg_TwoVector U;
-    kissvg_TwoVector V;
-    kissvg_TwoVector MidPointAB, MidPointAC;
-    kissvg_TwoVector center;
-    kissvg_Line2D *L0, *L1;
-    kissvg_Circle *circle;
-    double radius;
-
-    /*  If A, B, and C are collinear, their center is "at infinity."          */
-    if (kissvg_IsCollinear(A, B, C))
-    {
-        center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
-        radius = kissvg_Infinity;
-
-        circle = kissvg_CreateCircle(center, radius, NULL);
-        kissvg_CircleSetIsLine(circle, kissvg_True);
-
-        V = kissvg_TwoVectorSubtract(A, B);
-        U = kissvg_TwoVectorSubtract(A, C);
-        kissvg_CircleSetPoint(circle, A);
-
-        if (!(kissvg_EuclideanNorm2D(V) == 0.0))
-            kissvg_CircleSetVelocity(circle, V);
-        else if (!(kissvg_EuclideanNorm2D(U) == 0.0))
-            kissvg_CircleSetVelocity(circle, U);
-        else
-        {
-            if (!(kissvg_EuclideanNorm2D(V) == 0.0))
-                kissvg_CircleSetVelocity(circle, V);
-            else
-            {
-                kissvg_SetError(circle, kissvg_True);
-                kissvg_SetErrorMessage(circle,
-                                       "Error Encountered: KissVG\n"
-                                       "\tFunction: kissvg_FindCenter2D\n\n"
-                                       "All three points are the same.\n");
-                kissvg_CircleSetVelocity(circle, A);
-                return circle;
-            }
-        }
-    }
-
-    /*  Otherwise, following Euclid, we compute the bisectors of the lines AB *
-     *  and AC, and then find where these intersect.                          */
-    else
-    {
-        U = kissvg_TwoVectorSubtract(A, B);
-        V = kissvg_TwoVectorSubtract(A, C);
-        MidPointAB = kissvg_MidPoint2D(A, B);
-        MidPointAC = kissvg_MidPoint2D(A, C);
-
-        U = kissvg_OrthogonalVector2D(U);
-        V = kissvg_OrthogonalVector2D(V);
-
-        L0 = kissvg_CreateLineFromPointAndTangent(MidPointAB, U, NULL);
-        L1 = kissvg_CreateLineFromPointAndTangent(MidPointAC, V, NULL);
-
-        center = kissvg_LineLineIntersection(L0, L1);
-        kissvg_DestroyLine2D(L0);
-        kissvg_DestroyLine2D(L1);
-        U = kissvg_TwoVectorSubtract(center, A);
-        radius = kissvg_EuclideanNorm2D(U);
-        circle = kissvg_CreateCircle(center, radius, NULL);
-    }
-
-    return circle;
-}
-
-kissvg_TwoVector kissvg_PlaneToDiskHomeo(kissvg_TwoVector P)
-{
-    kissvg_TwoVector out;
-    double px, py;
-    double outx, outy;
-    double norm;
-    double scale_factor;
-
-    px = kissvg_TwoVectorXComponent(P);
-    py = kissvg_TwoVectorYComponent(P);
-
-    if ((px == 0.0) && (py == 0.0))
-    {
-        outx = 0.0;
-        outy = 0.0;
-    }
-    else
-    {
-        norm = kissvg_EuclideanNorm2D(P);
-        outx = px/norm;
-        outy = py/norm;
-
-        scale_factor = (-1.0 + sqrt(4.0*norm*norm + 1.0))/(2.0*norm);
-
-        outx *= scale_factor;
-        outy *= scale_factor;
-    }
-    out = kissvg_NewTwoVector(outx, outy);
-
-    return out;
-}
 
 /******************************************************************************
  ******************************************************************************
@@ -1042,6 +717,23 @@ kissvg_Circle *kissvg_CreateCircle(kissvg_TwoVector P, double r,
     return circle;
 }
 
+void kissvg_ResetCircle(kissvg_Circle *C, kissvg_TwoVector P, double r)
+{
+    if (C == NULL)
+    {
+        puts(
+            "Error Encountered: KissVG\n"
+            "\tFunction: kissvg_CreateCircle\n\n"
+            "Malloc failed to create circle and return NULL. Aborting."
+        );
+        exit(0);
+    }
+
+    C->center = P;
+    C->radius = r;
+    return;
+}
+
 void kissvg_DestroyCircle(kissvg_Circle *circle)
 {
     free(circle);
@@ -1548,6 +1240,139 @@ static void kissvg_DrawTriangularArrow(cairo_t *cr,
     return;
 }
 
+static void kissvg_DrawLatexArrow(cairo_t *cr,
+                                  kissvg_TwoVector P1,
+                                  kissvg_TwoVector Q,
+                                  double arrow_size,
+                                  kissvg_Color *fill_color,
+                                  kissvg_Color *line_color,
+                                  double line_width,
+                                  kissvg_Canvas2D *canvas)
+{
+    kissvg_TwoVector A0, A1, A2, O, extra, B0, B1;
+    kissvg_TwoByTwoMatrix R;
+    double x, y, ox, oy, bx0, by0, bx1, by1;
+
+    A0 = kissvg_TwoVectorScale(arrow_size, Q);
+
+    extra = kissvg_TwoVectorScale(0.05, Q);
+
+    R  = kissvg_RotationMatrix2D(5.0*M_PI/6.0);
+    A1 = kissvg_TwoVectorMatrixTransform(R, A0);
+
+    R  = kissvg_RotationMatrix2D(7.0*M_PI/6.0);
+    A2 = kissvg_TwoVectorMatrixTransform(R, A0);
+
+    B0 = kissvg_EuclideanMidPoint2D(A0, A1);
+    B1 = kissvg_EuclideanMidPoint2D(A0, A2);
+
+    B0 = kissvg_TwoVectorScale(0.5, B0);
+    B1 = kissvg_TwoVectorScale(0.5, B1);
+
+    A0 = kissvg_TwoVectorScale(0.8, A0);
+
+    A0 = kissvg_TwoVectorAdd(A0, P1);
+    A1 = kissvg_TwoVectorAdd(A1, P1);
+    A2 = kissvg_TwoVectorAdd(A2, P1);
+    B0 = kissvg_TwoVectorAdd(B0, P1);
+    B1 = kissvg_TwoVectorAdd(B1, P1);
+
+    A0 = kissvg_TwoVectorAdd(A0, extra);
+    A1 = kissvg_TwoVectorAdd(A1, extra);
+    A2 = kissvg_TwoVectorAdd(A2, extra);
+    B0 = kissvg_TwoVectorAdd(B0, extra);
+    B1 = kissvg_TwoVectorAdd(B1, extra);
+
+    O = kissvg_EuclideanMidPoint2D(P1, A0);
+
+    ox = kissvg_Canvas2DXShift(canvas) +
+         kissvg_TwoVectorXComponent(O) * kissvg_Canvas2DXScale(canvas);
+    oy = kissvg_Canvas2DYShift(canvas) -
+         kissvg_TwoVectorYComponent(O) * kissvg_Canvas2DYScale(canvas);
+
+    bx0 = kissvg_Canvas2DXShift(canvas) +
+          kissvg_TwoVectorXComponent(B0) * kissvg_Canvas2DXScale(canvas);
+    by0 = kissvg_Canvas2DYShift(canvas) -
+          kissvg_TwoVectorYComponent(B0) * kissvg_Canvas2DYScale(canvas);
+
+    bx1 = kissvg_Canvas2DXShift(canvas) +
+          kissvg_TwoVectorXComponent(B1) * kissvg_Canvas2DXScale(canvas);
+    by1 = kissvg_Canvas2DYShift(canvas) -
+          kissvg_TwoVectorYComponent(B1) * kissvg_Canvas2DYScale(canvas);
+
+    x = kissvg_Canvas2DXShift(canvas) +
+        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
+
+    y = kissvg_Canvas2DYShift(canvas) -
+        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    cairo_move_to(cr, x, y);
+
+    x = kissvg_Canvas2DXShift(canvas) +
+        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A1);
+
+    y = kissvg_Canvas2DYShift(canvas) -
+        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A1);
+    cairo_curve_to(cr, ox, oy, bx0, by0, x, y);
+
+    x = kissvg_Canvas2DXShift(canvas) +
+        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A2);
+
+    y = kissvg_Canvas2DYShift(canvas) -
+        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A2);
+    cairo_line_to(cr, x, y);
+
+    x = kissvg_Canvas2DXShift(canvas) +
+        kissvg_Canvas2DXScale(canvas) * kissvg_TwoVectorXComponent(A0);
+
+    y = kissvg_Canvas2DYShift(canvas) -
+        kissvg_Canvas2DYScale(canvas) * kissvg_TwoVectorYComponent(A0);
+    cairo_curve_to(cr, bx1, by1, ox, oy, x, y);
+
+    cairo_close_path(cr);
+    cairo_save(cr);
+
+    if (kissvg_ColorIsTransparent(fill_color))
+    {
+        cairo_set_source_rgba(cr,
+                              kissvg_ColorRed(fill_color),
+                              kissvg_ColorGreen(fill_color),
+                              kissvg_ColorBlue(fill_color),
+                              kissvg_ColorAlpha(fill_color));
+    }
+    else
+    {
+        cairo_set_source_rgb(cr,
+                             kissvg_ColorRed(fill_color),
+                             kissvg_ColorGreen(fill_color),
+                             kissvg_ColorBlue(fill_color));
+    }
+
+    cairo_fill_preserve(cr);
+    cairo_restore(cr);
+
+    cairo_set_line_width(cr, line_width);
+
+    if (kissvg_ColorIsTransparent(line_color))
+    {
+        cairo_set_source_rgba(cr,
+                              kissvg_ColorRed(line_color),
+                              kissvg_ColorGreen(line_color),
+                              kissvg_ColorBlue(line_color),
+                              kissvg_ColorAlpha(line_color));
+    }
+    else
+    {
+        cairo_set_source_rgb(cr,
+                             kissvg_ColorRed(line_color),
+                             kissvg_ColorGreen(line_color),
+                             kissvg_ColorBlue(line_color));
+    }
+
+    cairo_stroke(cr);
+    return;
+}
+
+
 static void kissvg_DrawPolygonalArrows(cairo_t *cr, kissvg_Path2D *path)
 {
     kissvg_TwoVector Q;
@@ -1600,6 +1425,8 @@ static void kissvg_DrawPolygonalArrows(cairo_t *cr, kissvg_Path2D *path)
             DrawArrows = &kissvg_DrawStealthArrow;
         else if (arrow_type == kissvg_TriangularArrow)
             DrawArrows = &kissvg_DrawTriangularArrow;
+        else if (arrow_type == kissvg_LatexArrow)
+            DrawArrows = &kissvg_DrawLatexArrow;
         else
         {
             puts("Error Encountered: KissVG\n"
@@ -2046,7 +1873,7 @@ void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis)
         semi_height = tick_factor * kissvg_Axis2DTickSemiHeight(axis);
         semi_semi_height = tick_factor * kissvg_Axis2DTickSemiSemiHeight(axis);
 
-        tick = kissvg_OrthogonalVector2D(dxtick);
+        tick = kissvg_EuclideanOrthogonalVector2D(dxtick);
 
         dxtick = kissvg_TwoVectorScale(dist/norm, dxtick);
         tick_perp = kissvg_TwoVectorScale(height, tick);

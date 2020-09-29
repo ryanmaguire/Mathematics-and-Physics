@@ -21,11 +21,22 @@ fi
 rm -f *.so
 rm -f *.o
 
-$CC -std=c89 -pedantic -pedantic-errors -Wall -Wextra -Wpedantic \
--Wmisleading-indentation -Wmissing-prototypes -Wold-style-definition \
-$CAIROPATH -I../../ -DNDEBUG -g -fPIC -Wstrict-prototypes -O2 -c kissvg.c
+CompilerArgs="-std=c89 -pedantic -pedantic-errors -Wall -Wextra -Wpedantic"
+CompilerArgs="$CompilerArgs -Wmisleading-indentation -Wmissing-prototypes"
+CompilerArgs="$CompilerArgs -Wold-style-definition $CAIROPATH -I../../"
+CompilerArgs="$CompilerArgs -DNDEBUG -g -fPIC -Wstrict-prototypes -O2 -c"
 
-$CC $CAIROLIB kissvg.o -shared -o libkissvg.so -lcairo
+$CC $CompilerArgs kissvg.c
+$CC $CompilerArgs kissvg_vector.c
+$CC $CompilerArgs kissvg_euclidean.c
+$CC $CompilerArgs kissvg_inversive_geometry.c
+
+$CC $CAIROLIB \
+kissvg.o \
+kissvg_vector.o \
+kissvg_euclidean.o \
+kissvg_inversive_geometry.o	\
+-shared -o libkissvg.so -lcairo
 
 sudo mv libkissvg.so /usr/local/lib/libkissvg.so
 
