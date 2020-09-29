@@ -2,12 +2,13 @@
 #include <math.h>
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
+#include <kissvg/include/kissvg_colors.h>
 #include <cairo-ps.h>
 
 #define X_MIN -0.5
 #define X_MAX  6.8
 #define Y_MIN -1.35
-#define Y_MAX  1.3
+#define Y_MAX  1.35
 
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 1 * 72.0
@@ -23,7 +24,7 @@ static const double shifts[2] = {x_shift, y_shift};
 
 #define FILENAME "kissvg_Sine.ps"
 
-void draw(cairo_t *cr)
+static void draw(cairo_t *cr)
 {
     kissvg_Path2D *pathP, *pathQ;
     kissvg_Canvas2D *canvas;
@@ -87,9 +88,13 @@ void draw(cairo_t *cr)
     P = kissvg_NewTwoVector(0.0, -1.2);
     Q = kissvg_NewTwoVector(0.0,  1.2);
     axis = kissvg_CreateAxis2D(P, Q, canvas);
+
+    kissvg_Axis2DChangeEndArrow(axis, 1.0, kissvg_DefaultArrowSize,
+                                kissvg_Black, kissvg_Black, kissvg_False,
+                                kissvg_StealthArrow, 0.5*kissvg_ThinPen);
     kissvg_Axis2DAddArrow(axis, 0.0, kissvg_DefaultArrowSize, kissvg_Black,
                           kissvg_Black, kissvg_True, kissvg_StealthArrow,
-                          kissvg_DefaultArrowLineWidth);
+                          0.1*kissvg_ThinPen);
 
     P = kissvg_NewTwoVector(0.0, -1.0);
     Q = kissvg_NewTwoVector(0.0,  1.0);
@@ -99,39 +104,30 @@ void draw(cairo_t *cr)
     kissvg_Axis2DSetTickHeight(axis, 0.3);
     kissvg_Axis2DSetTickSemiHeight(axis, 0.2);
     kissvg_Axis2DSetTickSemiSemiHeight(axis, 0.1);
-
     kissvg_Axis2DUseDownTicks(axis);
-
     kissvg_DrawAxis2D(cr, axis);
 
     P = kissvg_NewTwoVector(-0.3, 0.0);
     Q = kissvg_NewTwoVector( 6.5, 0.0);
-
     kissvg_ResetAxis2D(axis, P, Q);
 
     P = kissvg_NewTwoVector(0.0, 0.0);
     Q = kissvg_NewTwoVector(6.0, 0.0);
-    kissvg_Axis2DCreateTicks(axis, P, Q);
-    kissvg_Axis2DSetTickDistance(axis, 0.5);
-    kissvg_Axis2DSetTickHeight(axis, 0.3);
-    kissvg_Axis2DSetTickSemiHeight(axis, 0.2);
-    kissvg_Axis2DSetTickSemiSemiHeight(axis, 0.1);
-
-    kissvg_Axis2DUseUpTicks(axis);
+    kissvg_Axis2DResetTicks(axis, P, Q);
     kissvg_DrawAxis2D(cr, axis);
 
     P = kissvg_NewTwoVector(0.5, 1.2);
     Q = kissvg_NewTwoVector(4.0, 1.2);
-
     kissvg_ResetAxis2D(axis, P, Q);
+
     kissvg_Axis2DUseTicks(axis, kissvg_False);
     kissvg_SetLineWidth(axis, 0.5*kissvg_DefaultPen);
     kissvg_Axis2DAddArrow(axis, 0.4, kissvg_DefaultArrowSize, kissvg_Green,
                           kissvg_Black, kissvg_True, kissvg_StealthArrow,
-                          kissvg_DefaultArrowLineWidth);
+                          kissvg_ThinPen);
     kissvg_Axis2DAddArrow(axis, 0.6, kissvg_DefaultArrowSize, kissvg_Green,
                           kissvg_Black, kissvg_False, kissvg_StealthArrow,
-                          kissvg_DefaultArrowLineWidth);
+                          kissvg_ThinPen);
     kissvg_DrawAxis2D(cr, axis);
     kissvg_DestroyAxis2D(axis);
 
@@ -139,29 +135,21 @@ void draw(cairo_t *cr)
     B = kissvg_NewTwoVector(2.0, 1.0);
     C = kissvg_NewTwoVector(1.5, 0.5);
 
-    circle = kissvg_FindCenter2D(A, B, C);
-
+    circle = kissvg_EuclideanFindCenter2D(A, B, C);
     kissvg_SetCanvas(circle, canvas);
-
-    kissvg_SetLineWidth(circle, kissvg_ThickPen);
     kissvg_DrawCircle2D(cr, circle);
-    kissvg_DestroyCircle(circle);
 
-    kissvg_CreateCircle(A, 0.02, canvas);
-    kissvg_SetLineWidth(circle, 0.01);
-    kissvg_SetFillColor(circle, kissvg_Blue);
+    kissvg_ResetCircle(circle, A, 0.02);
+    kissvg_SetLineWidth(circle, kissvg_ThinPen);
+    kissvg_SetFillColor(circle, kissvg_Aqua);
     kissvg_FillDrawCircle2D(cr, circle);
-    kissvg_DestroyCircle(circle);
 
-    kissvg_CreateCircle(B, 0.02, canvas);
-    kissvg_SetFillColor(circle, kissvg_Green);
-    kissvg_SetLineWidth(circle, 0.01);
+    kissvg_ResetCircle(circle, B, 0.02);
+    kissvg_SetFillColor(circle, kissvg_Teal);
     kissvg_FillDrawCircle2D(cr, circle);
-    kissvg_DestroyCircle(circle);
 
-    kissvg_CreateCircle(C, 0.02, canvas);
-    kissvg_SetLineWidth(circle, 0.01);
-    kissvg_SetFillColor(circle, kissvg_Red);
+    kissvg_ResetCircle(circle, C, 0.02);
+    kissvg_SetFillColor(circle, kissvg_Magenta);
     kissvg_FillDrawCircle2D(cr, circle);
     kissvg_DestroyCircle(circle);
 

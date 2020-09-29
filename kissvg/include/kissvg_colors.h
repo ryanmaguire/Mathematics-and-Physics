@@ -2,9 +2,14 @@
 #ifndef _KISSVG_COLORS_H_
 #define _KISSVG_COLORS_H
 
-#include "kissvg.h"
+#include "kissvg_defs.h"
 
 /*  The following are pre-defined colors for ease of use.                     */
+static kissvg_Color __kissvg_Blue      = {{0.00, 0.20, 1.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_Green     = {{0.00, 1.00, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Red       = {{1.00, 0.10, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Black     = {{0.00, 0.00, 0.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_White     = {{1.00, 1.00, 1.00}, 0, kissvg_False};
 static kissvg_Color __kissvg_DarkGray  = {{0.30, 0.30, 0.30}, kissvg_False, 0};
 static kissvg_Color __kissvg_Gray      = {{0.60, 0.60, 0.60}, kissvg_False, 0};
 static kissvg_Color __kissvg_LightGray = {{0.80, 0.80, 0.80}, kissvg_False, 0};
@@ -31,6 +36,11 @@ static kissvg_Color __kissvg_Silver    = {{0.75, 0.75, 0.75}, kissvg_False, 0};
 static kissvg_Color __kissvg_Sand      = {{0.93, 0.84, 0.25}, kissvg_False, 0};
 
 /*  Set the kissvg_ColorName pointers to point to __kissvg_ColorName.         */
+kissvg_Color *kissvg_Blue      = &__kissvg_Blue;
+kissvg_Color *kissvg_Green     = &__kissvg_Green;
+kissvg_Color *kissvg_Red       = &__kissvg_Red;
+kissvg_Color *kissvg_Black     = &__kissvg_Black;
+kissvg_Color *kissvg_White     = &__kissvg_White;
 kissvg_Color *kissvg_DarkGray  = &__kissvg_DarkGray;
 kissvg_Color *kissvg_Gray      = &__kissvg_Gray;
 kissvg_Color *kissvg_LightGray = &__kissvg_LightGray;
