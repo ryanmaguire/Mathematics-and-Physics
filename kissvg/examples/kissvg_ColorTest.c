@@ -21,35 +21,17 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 2 * 72.0
 
-/*  Compute the scales needed to convert from the mathematical coordinate     *
- *  system to the coordinates of the output image.                            */
-static const double __x_scale = X_INCHES/(X_MAX - X_MIN);
-static const double __y_scale = Y_INCHES/(Y_MAX - Y_MIN);
-
-/*  We'll use the smaller of the two scales and set both the x and y scales   *
- *  to this value to ensure we have a 1-to-1 aspect ratio.                    */
-static const double __scale = (__x_scale < __y_scale ? __x_scale : __y_scale);
-
-/*  Compute the shifts needed to ensure the image is centered.                */
-static const double __x_shift = 0.5*X_INCHES - 0.5*(X_MIN + X_MAX)*__x_scale;
-static const double __y_shift = 0.5*Y_INCHES - 0.5*(Y_MIN + Y_MAX)*__y_scale;
-
-/*  Set the scale to a 1-to-1 aspect ratio.                                   */
-static const double scales[2] = {__scale, __scale};
-
-/*  Set the shifts accordingly to center the image.                           */
-static const double shifts[2] = {__x_shift, __y_shift};
-
 #define FILENAME "kissvg_Colors.ps"
 
-void draw(cairo_t *cr)
+static void draw(cairo_t *cr)
 {
     kissvg_TwoVector center;
     kissvg_Circle *C1;
     kissvg_Canvas2D *canvas;
     double radius;
 
-    canvas = kissvg_CreateCanvas2D(scales, shifts);
+    canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
+                                   Y_MIN, Y_MAX, kissvg_True);
     radius = 0.5;
 
     center = kissvg_NewTwoVector(-2.0, 2.0);

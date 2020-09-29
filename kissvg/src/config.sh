@@ -41,5 +41,7 @@ kissvg_inversive_geometry.o	\
 sudo mv libkissvg.so /usr/local/lib/libkissvg.so
 
 rm -f kissvg.o
-
+rm -f kissvg_vector.o
+rm -f kissvg_euclidean.o
+rm -f kissvg_inversive_geometry.o
 

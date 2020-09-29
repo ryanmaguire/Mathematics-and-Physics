@@ -13,15 +13,6 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 1 * 72.0
 
-static const double x_scale   = X_INCHES/(X_MAX - X_MIN);
-static const double y_scale   = Y_INCHES/(Y_MAX - Y_MIN);
-static const double scale     = (x_scale < y_scale ? x_scale : y_scale);
-static const double scales[2] = {scale, scale};
-
-static const double x_shift   = 0.5*X_INCHES - 0.5*(X_MIN + X_MAX)*x_scale;
-static const double y_shift   = 0.5*Y_INCHES - 0.5*(Y_MIN + Y_MAX)*y_scale;
-static const double shifts[2] = {x_shift, y_shift};
-
 #define FILENAME "kissvg_Sine.ps"
 
 static void draw(cairo_t *cr)
@@ -38,7 +29,8 @@ static void draw(cairo_t *cr)
     double x1, y1;
     double dx;
 
-    canvas = kissvg_CreateCanvas2D(scales, shifts);
+    canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
+                                   Y_MIN, Y_MAX, kissvg_True);
 
     x0 = 0.0;
     x1 = M_PI;

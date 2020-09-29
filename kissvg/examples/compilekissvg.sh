@@ -21,9 +21,10 @@ CompilerArgs="-std=c89 -pedantic -pedantic-errors -Wall -Wextra -Wpedantic"
 CompilerArgs="$CompilerArgs -Wmisleading-indentation -Wmissing-prototypes"
 CompilerArgs="$CompilerArgs -Wold-style-definition $CAIROPATH -I../../"
 CompilerArgs="$CompilerArgs $CAIROPATH $CAIROLIB -L/usr/local/lib/"
-CompilerArgs="$CompilerArgs -DNDEBUG -g -Wstrict-prototypes -O2"
+CompilerArgs="$CompilerArgs -Werror -g -Wstrict-prototypes -O2"
 
 $CC $CompilerArgs $1 -o test -lcairo -lkissvg -lm
 ./test
 
 rm -f test
+rm -f *.o

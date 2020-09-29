@@ -22,26 +22,7 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 3 * 72.0
 
-/*  Compute the scales needed to convert from the mathematical coordinate     *
- *  system to the coordinates of the output image.                            */
-static const double __x_scale = X_INCHES/(X_MAX - X_MIN);
-static const double __y_scale = Y_INCHES/(Y_MAX - Y_MIN);
-
-/*  We'll use the smaller of the two scales and set both the x and y scales   *
- *  to this value to ensure we have a 1-to-1 aspect ratio.                    */
-static const double __scale = (__x_scale < __y_scale ? __x_scale : __y_scale);
-
-/*  Compute the shifts needed to ensure the image is centered.                */
-static const double __x_shift = 0.5*X_INCHES - 0.5*(X_MIN + X_MAX)*__x_scale;
-static const double __y_shift = 0.5*Y_INCHES - 0.5*(Y_MIN + Y_MAX)*__y_scale;
-
-/*  Set the scale to a 1-to-1 aspect ratio.                                   */
-static const double scales[2] = {__scale, __scale};
-
-/*  Set the shifts accordingly to center the image.                           */
-static const double shifts[2] = {__x_shift, __y_shift};
-
-#define FILENAME "kissvg_ApolloniusProblem.ps"
+#define FILENAME "kissvg_ApolloniusGasket.ps"
 
 static void draw(cairo_t *cr)
 {
@@ -51,11 +32,13 @@ static void draw(cairo_t *cr)
     kissvg_Circle *Current_Circle;
     kissvg_Canvas2D *canvas;
     double radius;
+    double small_radius;
     long n, N;
 
-    N = 20;
+    N = 25;
 
-    canvas = kissvg_CreateCanvas2D(scales, shifts);
+    canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
+                                   Y_MIN, Y_MAX, kissvg_True);
 
     radius = 2.0;
     center = kissvg_NewTwoVector(0.0, -2.0);
@@ -66,16 +49,11 @@ static void draw(cairo_t *cr)
 
     center = kissvg_NewTwoVector(0.0, 0.0);
     C1 = kissvg_CreateCircle(center, radius, canvas);
-    kissvg_SetLineWidth(C1, kissvg_ThinPen);
-    kissvg_DrawCircle2D(cr, C1);
-
-    radius = 1.0;
-
-    center = kissvg_NewTwoVector(0, -1.0);
-    kissvg_ResetCircle(C1, center, radius);
     kissvg_DrawCircle2D(cr, C1);
 
     radius = 0.5;
+    small_radius = 0.125;
+    kissvg_SetLineWidth(C1, kissvg_ThinPen);
 
     for (n=-N; n<N; ++n)
     {
@@ -86,6 +64,64 @@ static void draw(cairo_t *cr)
         kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
         kissvg_DrawCircle2D(cr, Current_Circle);
 
+        center = kissvg_NewTwoVector(0.5-n, -0.125);
+        kissvg_ResetCircle(C1, center, small_radius);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, -0.875);
+        kissvg_ResetCircle(C1, center, small_radius);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, -0.70834);
+        kissvg_ResetCircle(C1, center, 0.0416533311993);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, -0.29166);
+        kissvg_ResetCircle(C1, center, 0.0416533311993);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.3333333-n, -0.0556);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.6666666667-n, -0.0556);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.3333333-n, -0.9444);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.6666666667-n, -0.9444);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+
+
         center = kissvg_NewTwoVector(-n, 0.5);
         kissvg_ResetCircle(C1, center, radius);
 
@@ -93,6 +129,62 @@ static void draw(cairo_t *cr)
         kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
         kissvg_DrawCircle2D(cr, Current_Circle);
         kissvg_DestroyCircle(Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, 0.125);
+        kissvg_ResetCircle(C1, center, small_radius);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, 0.875);
+        kissvg_ResetCircle(C1, center, small_radius);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, 0.70834);
+        kissvg_ResetCircle(C1, center, 0.0416533311993);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.5-n, 0.29166);
+        kissvg_ResetCircle(C1, center, 0.0416533311993);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.3333333-n, 0.0556);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.6666666667-n, 0.0556);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.3333333-n, 0.9444);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
+
+        center = kissvg_NewTwoVector(0.6666666667-n, 0.9444);
+        kissvg_ResetCircle(C1, center, 0.0556776436283);
+
+        Current_Circle = kissvg_InversiveGeometryCircle(C00, C1);
+        kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+        kissvg_DrawCircle2D(cr, Current_Circle);
     }
 
     kissvg_DestroyCircle(C0);

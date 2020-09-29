@@ -21,7 +21,10 @@ typedef struct kissvg_TwoByTwoMatrix {
  *  of several data types like kissvg_Path2D and kissvg_Axis2D. It is used to *
  *  convert between the geometry of the actual output file                    *
  *  (.ps, .svg, .pdf, etc.) and the coordinates we use for computations.      */
-typedef struct kissvg_Canvas2D {
+
+typedef struct kissvg_Canvas2D kissvg_Canvas2D;
+
+struct kissvg_Canvas2D {
 
     /*  x_scale and y_scale are the scales applied to the user's coordinates  *
      *  so that the image is the correct size in the actual file.             */
@@ -33,7 +36,10 @@ typedef struct kissvg_Canvas2D {
      *  and X_MAX for the x-axis, and Y_MIN and Y_MAX for the y-axis.         */
     double x_shift;
     double y_shift;
-} kissvg_Canvas2D;
+
+    double (*TransformX) (kissvg_Canvas2D *, double);
+    double (*TransformY) (kissvg_Canvas2D *, double);
+};
 
 /*  This is the primary structure for using colors in drawings. It is a       *
  *  structure which contains an array of three double corresponding to Red,   *
