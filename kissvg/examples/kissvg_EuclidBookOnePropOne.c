@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_colors.h>
-#include <cairo-ps.h>
+#include <cairo-pdf.h>
 
 /*  The limits of the coordinates in our computations. These correspond the   *
  *  the maximum (x, y) values we wish to plot.                                */
@@ -21,7 +21,7 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 2 * 72.0
 
-#define FILENAME "kissvg_EuclidBookOnePropOne.ps"
+#define FILENAME "kissvg_EuclidBookOnePropOne"
 
 static void draw(cairo_t *cr)
 {
@@ -106,15 +106,22 @@ int main (void)
     cairo_surface_t *surface;
     cairo_t *cr;
     FILE *file;
+    char *filename;
 
-    file = fopen(FILENAME, "w");
+    filename = malloc(sizeof(*filename)*(strlen(FILENAME) + 5));
+
+
+    strcpy(filename, FILENAME);
+    strcat(filename, ".pdf");
+
+    file = fopen(filename, "w");
     if (file == NULL)
     {
-        fprintf(stderr, "Failed to open file %s for writing.\n", FILENAME);
+        fprintf(stderr, "Failed to open file %s for writing.\n", filename);
         return 1;
     }
 
-    surface = cairo_ps_surface_create(FILENAME, X_INCHES, Y_INCHES);
+    surface = cairo_pdf_surface_create(filename, X_INCHES, Y_INCHES);
 
     cr = cairo_create(surface);
     cairo_surface_destroy(surface);
@@ -124,6 +131,7 @@ int main (void)
     cairo_show_page(cr);
     cairo_destroy(cr);
     fclose(file);
+    free(filename);
 
     return 0;
 }

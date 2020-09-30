@@ -2,6 +2,8 @@
 #ifndef _KISSVG_DEFS_H
 #define _KISSVG_DEFS_H
 
+#include <kissvg/include/kissvg_bool.h>
+
 /*  First we'll define the basics of two dimensional Euclidean geometry, and  *
  *  then three dimensional after. But first-first, we typedef things.         */
 
@@ -25,6 +27,9 @@ typedef struct kissvg_TwoByTwoMatrix {
 typedef struct kissvg_Canvas2D kissvg_Canvas2D;
 
 struct kissvg_Canvas2D {
+
+    double x_inches;
+    double y_inches;
 
     /*  x_scale and y_scale are the scales applied to the user's coordinates  *
      *  so that the image is the correct size in the actual file.             */
@@ -52,6 +57,15 @@ typedef struct kissvg_Color {
     double alpha;
     kissvg_Bool has_transparency;
 } kissvg_Color;
+
+typedef struct kissvg_Label2D {
+    char *label;
+    int font_size;
+    int baseline_skip;
+    double margins[4];
+    kissvg_TwoVector label_pos;
+    kissvg_Canvas2D *canvas;
+} kissvg_Label2D;
 
 /*  Enumerated list of arrow types. Currently only three are provided, which  *
  *  are modeled after the tikz arrows. A no-arrow option is also provided.    */
@@ -117,6 +131,10 @@ typedef struct kissvg_Path2D {
      *  an open path. By default it is false.                                 */
     kissvg_Bool is_closed;
 
+    kissvg_Bool has_labels;
+    kissvg_Label2D **labels;
+    long N_Labels;
+
     /*  Boolean for determining if the region enclosed should be filled in.   *
      *  Default is set to false. If this Boolean is set to true, the various  *
      *  drawing routines will automatically set is_closed to true.            */
@@ -180,6 +198,10 @@ typedef struct kissvg_Axis2D {
 
     /*  The number of arrow.                                                  */
     long N_Arrows;
+
+    kissvg_Bool has_labels;
+    kissvg_Label2D **labels;
+    long N_Labels;
 
     /*  Boolean for use of tick marks. Default is False.                      */
     kissvg_Bool has_ticks;
@@ -275,6 +297,10 @@ typedef struct kissvg_Circle {
     /*  The number of arrow.                                                  */
     long N_Arrows;
 
+    kissvg_Bool has_labels;
+    kissvg_Label2D **labels;
+    long N_Labels;
+
     /*  Boolean for determining if the region enclosed should be filled in.   *
      *  Default is set to false.                                              */
     kissvg_Bool has_filldraw;
@@ -317,6 +343,10 @@ typedef struct kissvg_Line2D {
 
     /*  The number of arrow.                                                  */
     long N_Arrows;
+
+    kissvg_Bool has_labels;
+    kissvg_Label2D **labels;
+    long N_Labels;
 
     /*  The color of the axis. Default is black.                              */
     kissvg_Color *line_color;
