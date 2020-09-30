@@ -2,8 +2,6 @@
 #include <math.h>
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
-#include <kissvg/include/kissvg_colors.h>
-#include <cairo-ps.h>
 
 #define X_MIN -0.5
 #define X_MAX  6.8
@@ -13,7 +11,7 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 1 * 72.0
 
-#define FILENAME "kissvg_Sine.ps"
+#define FILENAME "kissvg_Sine"
 
 static void draw(cairo_t *cr)
 {
@@ -23,6 +21,7 @@ static void draw(cairo_t *cr)
     kissvg_Circle *circle;
     kissvg_TwoVector P, Q;
     kissvg_TwoVector A, B, C;
+    kissvg_Label2D *label;
 
     long n, N;
     double x0, y0;
@@ -30,7 +29,8 @@ static void draw(cairo_t *cr)
     double dx;
 
     canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
-                                   Y_MIN, Y_MAX, kissvg_True);
+                                   Y_MIN, Y_MAX, kissvg_True,
+                                   kissvg_PDF);
 
     x0 = 0.0;
     x1 = M_PI;
@@ -145,6 +145,15 @@ static void draw(cairo_t *cr)
     kissvg_FillDrawCircle2D(cr, circle);
     kissvg_DestroyCircle(circle);
 
+    label = kissvg_CreateLabel2D(
+        "$\\displaystyle{\\int_{a}^{b}f(x)\\textrm{d}x}$",
+        kissvg_NewTwoVector(2.0, 1.0), canvas
+    );
+
+    kissvg_DrawLabel2D(cr, label);
+
+    kissvg_DestroyLabel2D(label);
+
     kissvg_DestroyCanvas2D(canvas);
 
     return;
@@ -152,27 +161,6 @@ static void draw(cairo_t *cr)
 
 int main (void)
 {
-    cairo_surface_t *surface;
-    cairo_t *cr;
-    FILE *file;
-
-    file = fopen(FILENAME, "w");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Failed to open file %s for writing.\n", FILENAME);
-        return 1;
-    }
-
-    surface = cairo_ps_surface_create(FILENAME, X_INCHES, Y_INCHES);
-
-    cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    draw(cr);
-
-    cairo_show_page(cr);
-    cairo_destroy(cr);
-    fclose(file);
-
+    kissvg_GenerateFile(FILENAME, &draw, kissvg_PDF, X_INCHES, Y_INCHES);
     return 0;
 }

@@ -25,6 +25,8 @@
  *  Date:       September 28, 2020                                            *
  ******************************************************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
 #include <kissvg/include/kissvg_bool.h>
@@ -353,3 +355,247 @@ kissvg_TwoVector kissvg_FurthestPointOnCircle(kissvg_Circle *C,
     }
     return out;
 }
+
+kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
+                                                  kissvg_Circle *C1)
+{
+    kissvg_TwoVector P0, P1;
+    double r0, r1;
+    double dist;
+    double a, h;
+    double x0, y0;
+    double x1, y1;
+    double x2, y2;
+
+    double inter0_x, inter0_y;
+    double inter1_x, inter1_y;
+
+    kissvg_TwoVector *intersections;
+
+    P0 = kissvg_CircleCenter(C0);
+    P1 = kissvg_CircleCenter(C1);
+
+    r0 = kissvg_CircleRadius(C0);
+    r1 = kissvg_CircleRadius(C1);
+
+    if (r0 <= 0.0)
+    {
+        puts(
+            "Error Encountered: KissVG\n"
+            "\tFunction: kissvg_CircleCircleIntersection\n\n"
+            "r0 is not positive."
+        );
+        exit(0);
+    }
+    else if (r1 <= 0.0)
+    {
+        puts(
+            "Error Encountered: KissVG\n"
+            "\tFunction: kissvg_CircleCircleIntersection\n\n"
+            "r1 is not positive."
+        );
+        exit(0);
+    }
+
+    dist = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(P0, P1));
+
+    if ((dist > (r0+r1)) || (dist < kissvg_AbsDouble(r1-r0)) ||
+        ((dist == 0.0) && (r0 != r1)))
+    {
+        intersections = NULL;
+        return intersections;
+    }
+    else if ((dist == 0.0) && (r0 == r1))
+    {
+        intersections = malloc(sizeof(*intersections));
+        intersections[0] = kissvg_NewTwoVector(kissvg_Infinity,
+                                               kissvg_Infinity);
+        return intersections;
+    }
+
+    x0 = kissvg_TwoVectorXComponent(P0);
+    y0 = kissvg_TwoVectorYComponent(P0);
+
+    x1 = kissvg_TwoVectorXComponent(P1);
+    y1 = kissvg_TwoVectorYComponent(P1);
+
+    a = (r0*r0 - r1*r1 + dist*dist) / (2.0*dist);
+    h = sqrt(r0*r0 - a*a);
+
+    x2 = x0 + (a/dist) * (x1-x0);
+    y2 = y0 + (a/dist) * (y1-y0);
+
+    inter0_x = x2 + h*(y1 - y0)/dist;
+    inter0_y = y2 - h*(x1 - x0)/dist;
+
+    inter1_x = x2 - h*(y1 - y0)/dist;
+    inter1_y = y2 + h*(x1 - x0)/dist;
+
+    intersections = malloc(sizeof(*intersections)*2);
+
+    intersections[0] = kissvg_NewTwoVector(inter0_x, inter0_y);
+    intersections[1] = kissvg_NewTwoVector(inter1_x, inter1_y);
+
+    return intersections;
+}
+
+kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
+                                         kissvg_Circle *circle2,
+                                         kissvg_Circle *circle3)
+{
+    kissvg_Circle **solutions;
+    kissvg_Canvas2D *canvas;
+    kissvg_TwoVector center1, center2, center3;
+    kissvg_TwoVector center;
+    double r1, r2, r3;
+    double x1, x2, x3;
+    double y1, y2, y3;
+    double rcp;
+    long n;
+
+    /*  There are eight solutions, so set N to 8.                             */
+    long N = 8;
+
+    double a12, b12, c12, d12;
+    double a13, b13, c13, d13;
+
+    double A, B, C, D;
+    double x, y, radius;
+
+    double alpha, beta, gamma;
+
+    double s1[8] = {-1.0, -1.0, -1.0, -1.0,  1.0,  1.0,  1.0,  1.0};
+    double s2[8] = {-1.0, -1.0,  1.0,  1.0, -1.0, -1.0,  1.0,  1.0};
+    double s3[8] = {-1.0,  1.0, -1.0,  1.0, -1.0,  1.0, -1.0,  1.0};
+
+    canvas = circle1->canvas;
+
+    /*  There are, in general, eight solutions so allocate eight slots.       */
+    solutions = malloc(sizeof(*solutions) * N);
+
+    center1 = kissvg_CircleCenter(circle1);
+    center2 = kissvg_CircleCenter(circle2);
+    center3 = kissvg_CircleCenter(circle3);
+
+    r1 = kissvg_CircleRadius(circle1);
+    r2 = kissvg_CircleRadius(circle2);
+    r3 = kissvg_CircleRadius(circle3);
+
+    x1 = kissvg_TwoVectorXComponent(center1);
+    y1 = kissvg_TwoVectorYComponent(center1);
+
+    x2 = kissvg_TwoVectorXComponent(center2);
+    y2 = kissvg_TwoVectorYComponent(center2);
+
+    x3 = kissvg_TwoVectorXComponent(center3);
+    y3 = kissvg_TwoVectorYComponent(center3);
+
+    for (n=0; n<N; ++n)
+    {
+        a12 = 2.0*(x1 - x2);
+        b12 = 2.0*(y1 - y2);
+        c12 = 2.0*(s2[n]*r2 - s1[n]*r1);
+        d12 = (x2*x2 + y2*y2 - r2*r2) - (x1*x1 + y1*y1 - r1*r1);
+
+        a13 = 2.0*(x1 - x3);
+        b13 = 2.0*(y1 - y3);
+        c13 = 2.0*(s3[n]*r3 - s1[n]*r1);
+        d13 = (x3*x3 + y3*y3 - r3*r3) - (x1*x1 + y1*y1 - r1*r1);
+
+        rcp = a12*b13 - b12*a13;
+
+        if (rcp == 0.0)
+        {
+            if (((a12 == 0.0) && (b12 == 0.0)) ||
+                ((a13 == 0.0) && (b13 == 0.0)))
+            {
+                puts("Warning: KissVG\n"
+                     "\tFunction: kissvg_ApolloniusProblem\n\n"
+                     "\tTwo of the Circles are Identical.");
+                center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+                radius = kissvg_Infinity;
+            }
+            else
+            {
+
+            }
+            center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+            radius = kissvg_Infinity;
+
+            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
+        }
+        else
+        {
+            rcp = 1.0/rcp;
+            A = (-b13*d12 + b12*d13)*rcp;
+            B = (-b13*c12 + b12*c13)*rcp;
+            C = ( a13*d12 - a12*d13)*rcp;
+            D = ( a13*c12 - a12*c13)*rcp;
+
+            alpha = -1.0 + B*B + D*D;
+            beta = 2.0*(A*B + C*D + r1*s1[n] - B*x1 - D*y1);
+            gamma = A*A + C*C - r1*r1 + x1*x1 + y1*y1 - 2.0*(A*x1 + C*y1);
+
+            radius = (-beta - sqrt(beta*beta - 4.0*alpha*gamma))/(2.0*alpha);
+
+            if (radius < 0.0)
+                radius = (-beta+sqrt(beta*beta - 4.0*alpha*gamma))/(2.0*alpha);
+
+            x = A + B*radius;
+            y = C + D*radius;
+
+            center = kissvg_NewTwoVector(x, y);
+
+            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
+        }
+    }
+    return solutions;
+}
+
+kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
+                                             kissvg_Line2D *L1)
+{
+    kissvg_TwoVector P0, P1;
+    kissvg_TwoVector V0, V1;
+    kissvg_TwoVector inter;
+    kissvg_TwoVector P1P0;
+    kissvg_TwoVector times;
+    kissvg_TwoByTwoMatrix A, inverseA;
+    double v0x, v0y;
+    double v1x, v1y;
+    double t0;
+    double det;
+
+    P0 = kissvg_Line2DPoint(L0);
+    V0 = kissvg_Line2DTangent(L0);
+
+    P1 = kissvg_Line2DPoint(L1);
+    V1 = kissvg_Line2DTangent(L1);
+
+    v0x = kissvg_TwoVectorXComponent(V0);
+    v0y = kissvg_TwoVectorYComponent(V0);
+
+    v1x = kissvg_TwoVectorXComponent(V1);
+    v1y = kissvg_TwoVectorYComponent(V1);
+
+    det = v1x*v0y -v0x*v1y;
+
+    if (det == 0.0)
+    {
+        inter = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+
+        return inter;
+    }
+    else
+    {
+        P1P0 = kissvg_TwoVectorSubtract(P1, P0);
+        A = kissvg_NewTwoByTwoMatrix(v0x, -v1x, v0y, -v1y);
+        inverseA = kissvg_InverseTwoByTwoMatrix(A);
+        times = kissvg_TwoVectorMatrixTransform(inverseA, P1P0);
+        t0 = kissvg_TwoVectorXComponent(times);
+
+        inter = kissvg_TwoVectorAdd(P0, kissvg_TwoVectorScale(t0, V0));
+        return inter;
+    }
+}
+

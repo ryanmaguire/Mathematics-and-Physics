@@ -13,109 +13,10 @@
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
 #include <kissvg/include/kissvg_bool.h>
-#include <kissvg/include/kissvg_colors.h>
-#include <cairo.h>
-
-/******************************************************************************
- ******************************************************************************
- *                                                                            *
- *                 Begin kissvg_TwoByTwoMatrix Functions                      *
- *                                                                            *
- ******************************************************************************
- ******************************************************************************/
-
-kissvg_TwoByTwoMatrix kissvg_NewTwoByTwoMatrix(double a, double b,
-                                               double c, double d)
-{
-    kissvg_TwoByTwoMatrix A;
-
-    A.dat[0][0] = a;
-    A.dat[0][1] = b;
-    A.dat[1][0] = c;
-    A.dat[1][1] = d;
-
-    return A;
-}
-
-kissvg_TwoVector kissvg_TwoVectorMatrixTransform(kissvg_TwoByTwoMatrix A,
-                                                 kissvg_TwoVector P)
-{
-    kissvg_TwoVector out;
-    double x_new, y_new;
-    double x0, y0;
-    double a, b, c, d;
-
-    x0 = kissvg_TwoVectorXComponent(P);
-    y0 = kissvg_TwoVectorYComponent(P);
-
-    a = kissvg_TwoByTwoMatrixComponent(A, 0, 0);
-    b = kissvg_TwoByTwoMatrixComponent(A, 0, 1);
-    c = kissvg_TwoByTwoMatrixComponent(A, 1, 0);
-    d = kissvg_TwoByTwoMatrixComponent(A, 1, 1);
-
-    x_new = a*x0 + b*y0;
-    y_new = c*x0 + d*y0;
-
-    out = kissvg_NewTwoVector(x_new, y_new);
-    return out;
-}
-
-kissvg_TwoByTwoMatrix kissvg_RotationMatrix2D(double theta)
-{
-    double cos_theta, sin_theta;
-    kissvg_TwoByTwoMatrix R;
-
-    cos_theta = cos(theta);
-    sin_theta = sin(theta);
-
-    R = kissvg_NewTwoByTwoMatrix(cos_theta, -sin_theta, sin_theta, cos_theta);
-    return R;
-}
-
-kissvg_TwoByTwoMatrix kissvg_TwoByTwoMatrixScale(double r,
-                                                 kissvg_TwoByTwoMatrix A)
-{
-    kissvg_TwoByTwoMatrix out;
-    double a00, a01, a10, a11;
-
-    a00 = kissvg_TwoByTwoMatrixComponent(A, 0, 0);
-    a01 = kissvg_TwoByTwoMatrixComponent(A, 0, 1);
-    a10 = kissvg_TwoByTwoMatrixComponent(A, 1, 0);
-    a11 = kissvg_TwoByTwoMatrixComponent(A, 1, 1);
-
-    out = kissvg_NewTwoByTwoMatrix(r*a00, r*a01, r*a10, r*a11);
-    return out;
-}
-
-kissvg_TwoByTwoMatrix kissvg_InverseTwoByTwoMatrix(kissvg_TwoByTwoMatrix A)
-{
-    double a, b, c, d, det, det_rcp;
-    double ainv, binv, cinv, dinv;
-
-    a = kissvg_TwoByTwoMatrixComponent(A, 0, 0);
-    b = kissvg_TwoByTwoMatrixComponent(A, 0, 1);
-    c = kissvg_TwoByTwoMatrixComponent(A, 1, 0);
-    d = kissvg_TwoByTwoMatrixComponent(A, 1, 1);
-
-    det = a*d - b*c;
-
-    if (det == 0)
-    {
-        ainv = kissvg_NaN;
-        binv = kissvg_NaN;
-        cinv = kissvg_NaN;
-        dinv = kissvg_NaN;
-    }
-    else
-    {
-        det_rcp = 1.0/det;
-        ainv = d*det_rcp;
-        binv = -b*det_rcp;
-        cinv = -c*det_rcp;
-        dinv = a*det_rcp;
-    }
-    return kissvg_NewTwoByTwoMatrix(ainv, binv, cinv, dinv);
-}
+#include <cairo/src/cairo.h>
+#include <cairo/src/cairo-pdf.h>
+#include <cairo/src/cairo-svg.h>
+#include <cairo/src/cairo-ps.h>
 
 /******************************************************************************
  ******************************************************************************
@@ -138,7 +39,8 @@ static double __kissvg_CanvasTransformY(kissvg_Canvas2D *canvas, double y)
 kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
                                        double x_min, double x_max,
                                        double y_min, double y_max,
-                                       kissvg_Bool one_to_one_apect_ratio)
+                                       kissvg_Bool one_to_one_apect_ratio,
+                                       kissvg_FileType filetype)
 {
     kissvg_Canvas2D *canvas;
     double xshift, yshift, xscale, yscale;
@@ -164,6 +66,8 @@ kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
 
     canvas->TransformX = &__kissvg_CanvasTransformX;
     canvas->TransformY = &__kissvg_CanvasTransformY;
+
+    canvas->filetype = filetype;
 
     return canvas;
 }
@@ -202,6 +106,68 @@ void kissvg_DestroyColor(kissvg_Color *color)
     return;
 }
 
+/*  The following are pre-defined colors for ease of use.                     */
+static kissvg_Color __kissvg_Blue      = {{0.00, 0.20, 1.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_Green     = {{0.00, 1.00, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Red       = {{1.00, 0.10, 0.10}, 0, kissvg_False};
+static kissvg_Color __kissvg_Black     = {{0.00, 0.00, 0.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_White     = {{1.00, 1.00, 1.00}, 0, kissvg_False};
+static kissvg_Color __kissvg_DarkGray  = {{0.30, 0.30, 0.30}, kissvg_False, 0};
+static kissvg_Color __kissvg_Gray      = {{0.60, 0.60, 0.60}, kissvg_False, 0};
+static kissvg_Color __kissvg_LightGray = {{0.80, 0.80, 0.80}, kissvg_False, 0};
+static kissvg_Color __kissvg_Aqua      = {{0.10, 1.00, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Purple    = {{0.70, 0.00, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Violet    = {{0.50, 0.00, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Pink      = {{1.00, 0.40, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Yellow    = {{1.00, 1.00, 0.20}, kissvg_False, 0};
+static kissvg_Color __kissvg_Crimson   = {{0.80, 0.00, 0.13}, kissvg_False, 0};
+static kissvg_Color __kissvg_DarkGreen = {{0.25, 0.50, 0.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Orange    = {{1.00, 0.40, 0.10}, kissvg_False, 0};
+static kissvg_Color __kissvg_LightBlue = {{0.60, 0.80, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Teal      = {{0.00, 0.50, 0.50}, kissvg_False, 0};
+static kissvg_Color __kissvg_DarkBlue  = {{0.00, 0.00, 0.60}, kissvg_False, 0};
+static kissvg_Color __kissvg_Lavender  = {{0.80, 0.83, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Magenta   = {{1.00, 0.11, 0.81}, kissvg_False, 0};
+static kissvg_Color __kissvg_DeepPink  = {{1.00, 0.08, 0.58}, kissvg_False, 0};
+static kissvg_Color __kissvg_Marine    = {{0.30, 0.30, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Lime      = {{0.75, 0.90, 0.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Carrot    = {{1.00, 0.65, 0.30}, kissvg_False, 0};
+static kissvg_Color __kissvg_Brown     = {{0.30, 0.15, 0.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Azure     = {{0.00, 0.50, 1.00}, kissvg_False, 0};
+static kissvg_Color __kissvg_Silver    = {{0.75, 0.75, 0.75}, kissvg_False, 0};
+static kissvg_Color __kissvg_Sand      = {{0.93, 0.84, 0.25}, kissvg_False, 0};
+
+/*  Set the kissvg_ColorName pointers to point to __kissvg_ColorName.         */
+kissvg_Color *kissvg_Blue      = &__kissvg_Blue;
+kissvg_Color *kissvg_Green     = &__kissvg_Green;
+kissvg_Color *kissvg_Red       = &__kissvg_Red;
+kissvg_Color *kissvg_Black     = &__kissvg_Black;
+kissvg_Color *kissvg_White     = &__kissvg_White;
+kissvg_Color *kissvg_DarkGray  = &__kissvg_DarkGray;
+kissvg_Color *kissvg_Gray      = &__kissvg_Gray;
+kissvg_Color *kissvg_LightGray = &__kissvg_LightGray;
+kissvg_Color *kissvg_Aqua      = &__kissvg_Aqua;
+kissvg_Color *kissvg_Purple    = &__kissvg_Purple;
+kissvg_Color *kissvg_Violet    = &__kissvg_Violet;
+kissvg_Color *kissvg_Pink      = &__kissvg_Pink;
+kissvg_Color *kissvg_Yellow    = &__kissvg_Yellow;
+kissvg_Color *kissvg_Crimson   = &__kissvg_Crimson;
+kissvg_Color *kissvg_DarkGreen = &__kissvg_DarkGreen;
+kissvg_Color *kissvg_Orange    = &__kissvg_Orange;
+kissvg_Color *kissvg_LightBlue = &__kissvg_LightBlue;
+kissvg_Color *kissvg_Teal      = &__kissvg_Teal;
+kissvg_Color *kissvg_DarkBlue  = &__kissvg_DarkBlue;
+kissvg_Color *kissvg_Lavender  = &__kissvg_Lavender;
+kissvg_Color *kissvg_Magenta   = &__kissvg_Magenta;
+kissvg_Color *kissvg_DeepPink  = &__kissvg_DeepPink;
+kissvg_Color *kissvg_Marine    = &__kissvg_Marine;
+kissvg_Color *kissvg_Lime      = &__kissvg_Lime;
+kissvg_Color *kissvg_Carrot    = &__kissvg_Carrot;
+kissvg_Color *kissvg_Brown     = &__kissvg_Brown;
+kissvg_Color *kissvg_Azure     = &__kissvg_Azure;
+kissvg_Color *kissvg_Silver    = &__kissvg_Silver;
+kissvg_Color *kissvg_Sand      = &__kissvg_Sand;
+
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
@@ -237,6 +203,7 @@ void kissvg_ArrowSetType(kissvg_Arrow *arrow, kissvg_ArrowType type)
     arrow->arrow_type = type;
     return;
 }
+
 void kissvg_ArrowSetPos(kissvg_Arrow *arrow, double pos)
 {
     if (arrow == NULL)
@@ -310,6 +277,91 @@ void kissvg_DestroyArrow(kissvg_Arrow *arrow)
  *                                                                            *
  ******************************************************************************
  ******************************************************************************/
+
+static kissvg_TwoVector __GetPos(kissvg_Path2D *path, double pos)
+{
+    double norm;
+    double path_length;
+    double *path_norms;
+    double current_length, pos_length;
+    long n, N_Pts, current_pos;
+
+    kissvg_TwoVector P0, P1, Q, out;
+    kissvg_TwoVector *data;
+
+    data = kissvg_Path2DData(path);
+    N_Pts = kissvg_Path2DNumberOfPoints(path);
+    path_norms = malloc(sizeof(*path_norms) * (N_Pts-1));
+
+    P0 = kissvg_Path2DData(path)[0];
+    P1 = kissvg_Path2DData(path)[1];
+    Q = kissvg_TwoVectorSubtract(P1, P0);
+
+    norm = kissvg_EuclideanNorm2D(Q);
+    path_length = norm;
+    path_norms[0] = norm;
+
+    for (n=1; n<N_Pts-1; ++n)
+    {
+        P0 = kissvg_Path2DData(path)[n];
+        P1 = kissvg_Path2DData(path)[n+1];
+        Q = kissvg_TwoVectorSubtract(P1, P0);
+
+        norm = kissvg_EuclideanNorm2D(Q);
+
+        path_length += norm;
+        path_norms[n] = path_length;
+    }
+
+    if (pos < 0.0)
+        pos = 0.0;
+    else if (pos > 1.0)
+        pos = 1.0;
+
+    if ((data == NULL) || (N_Pts == 0))
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: __GetPos\n\n"
+             "Input path has NULL data. Aborting.");
+        exit(0);
+    }
+
+    if (pos == 0.0)
+        out = data[0];
+    else if (pos == 1.0)
+        out = data[N_Pts-1];
+    else
+    {
+        current_pos = 0;
+        current_length = path_norms[0];
+        pos_length = pos * path_length;
+
+        for (n=0; n<N_Pts-1; ++n)
+        {
+            if (pos_length < current_length)
+                break;
+            current_pos += 1;
+            current_length = path_norms[current_pos];
+        }
+
+        P0 = kissvg_Path2DData(path)[current_pos];
+        P1 = kissvg_Path2DData(path)[current_pos+1];
+        Q = kissvg_TwoVectorSubtract(P1, P0);
+        norm = kissvg_EuclideanNorm2D(Q);
+
+        if (norm == 0.0)
+            out = P0;
+        else
+        {
+            Q = kissvg_TwoVectorScale(1.0/norm, Q);
+            norm = pos_length-path_norms[current_pos-1];
+            Q = kissvg_TwoVectorScale(norm, Q);
+            out  = kissvg_TwoVectorAdd(P0, Q);
+        }
+    }
+    free(path_norms);
+    return out;
+}
 
 void kissvg_Path2DCreateArrow(kissvg_Path2D *path, double pos,
                               double arrow_size,
@@ -435,6 +487,97 @@ void kissvg_DestroyPath2D(kissvg_Path2D *path)
     }
 
     free(path);
+    return;
+}
+
+void kissvg_Path2DCreateLabel(kissvg_Path2D *path, char *label_content,
+                              double pos, int font_size,
+                              int baseline_skip, double margins[4],
+                              kissvg_TwoVector shift,
+                              kissvg_Color *line_color)
+{
+    kissvg_Canvas2D *canvas;
+    kissvg_Label2D *label;
+    kissvg_TwoVector anchor;
+
+    canvas = kissvg_GetCanvas(path);
+    kissvg_SetHasLabels(path, kissvg_True);
+    path->N_Labels = 1;
+    path->labels = malloc(sizeof(*path->labels));
+    label = path->labels[0];
+    anchor = __GetPos(path, pos);
+    label = kissvg_CreateLabel2D(label_content, anchor, canvas);
+
+    kissvg_Label2DSetShift(label, shift);
+    kissvg_Label2DSetMargins(label, margins);
+    kissvg_Label2DSetFontSize(label, font_size);
+    kissvg_Label2DSetBaselineSkip(label, baseline_skip);
+    kissvg_SetCanvas(label, canvas);
+    kissvg_SetLineColor(label, line_color);
+    return;
+}
+
+void kissvg_Path2DAddLabel(kissvg_Path2D *path, char *label_content,
+                           double pos, int font_size, int baseline_skip,
+                           double margins[4], kissvg_TwoVector shift,
+                           kissvg_Color *line_color)
+{
+
+    kissvg_Canvas2D *canvas;
+    kissvg_Label2D *label;
+    kissvg_TwoVector anchor;
+
+    canvas = kissvg_GetCanvas(path);
+
+    path->N_Labels += 1;
+    path->labels = realloc(path->labels, sizeof(*path->labels)*path->N_Labels);
+
+    label = path->labels[path->N_Labels-1];
+    anchor = __GetPos(path, pos);
+    label = kissvg_CreateLabel2D(label_content, anchor, canvas);
+
+    kissvg_Label2DSetShift(label, shift);
+    kissvg_Label2DSetMargins(label, margins);
+    kissvg_Label2DSetFontSize(label, font_size);
+    kissvg_Label2DSetBaselineSkip(label, baseline_skip);
+    kissvg_SetCanvas(label, canvas);
+    kissvg_SetLineColor(label, line_color);
+    return;
+}
+
+void kissvg_Path2DCreateEasyLabel(kissvg_Path2D *path,
+                                  char *label_content,
+                                  double pos, int font_size,
+                                  kissvg_TwoVector shift)
+{
+    double margins[4];
+
+    margins[0] = kissvg_DefaultLabelMargin;
+    margins[1] = kissvg_DefaultLabelMargin;
+    margins[2] = kissvg_DefaultLabelMargin;
+    margins[3] = kissvg_DefaultLabelMargin;
+
+    kissvg_Path2DCreateLabel(path, label_content, pos, font_size,
+                             kissvg_DefaultLabelBaselineSkip,
+                             margins, shift, kissvg_Black);
+    return;
+}
+
+extern void kissvg_Path2DAddEasyLabel(kissvg_Path2D *path,
+                                      char *label_content,
+                                      double pos, int font_size,
+                                      kissvg_TwoVector shift)
+{
+    double margins[4];
+
+    margins[0] = kissvg_DefaultLabelMargin;
+    margins[1] = kissvg_DefaultLabelMargin;
+    margins[2] = kissvg_DefaultLabelMargin;
+    margins[3] = kissvg_DefaultLabelMargin;
+
+    kissvg_Path2DAddLabel(path, label_content, pos, font_size,
+                          kissvg_DefaultLabelBaselineSkip,
+                          margins, shift, kissvg_Black);
     return;
 }
 
@@ -768,203 +911,6 @@ void kissvg_DestroyCircle(kissvg_Circle *circle)
     return;
 }
 
-kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
-                                                  kissvg_Circle *C1)
-{
-    kissvg_TwoVector P0, P1;
-    double r0, r1;
-    double dist;
-    double a, h;
-    double x0, y0;
-    double x1, y1;
-    double x2, y2;
-
-    double inter0_x, inter0_y;
-    double inter1_x, inter1_y;
-
-    kissvg_TwoVector *intersections;
-
-    P0 = kissvg_CircleCenter(C0);
-    P1 = kissvg_CircleCenter(C1);
-
-    r0 = kissvg_CircleRadius(C0);
-    r1 = kissvg_CircleRadius(C1);
-
-    if (r0 <= 0.0)
-    {
-        puts(
-            "Error Encountered: KissVG\n"
-            "\tFunction: kissvg_CircleCircleIntersection\n\n"
-            "r0 is not positive."
-        );
-        exit(0);
-    }
-    else if (r1 <= 0.0)
-    {
-        puts(
-            "Error Encountered: KissVG\n"
-            "\tFunction: kissvg_CircleCircleIntersection\n\n"
-            "r1 is not positive."
-        );
-        exit(0);
-    }
-
-    dist = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(P0, P1));
-
-    if ((dist > (r0+r1)) || (dist < kissvg_AbsDouble(r1-r0)) ||
-        ((dist == 0.0) && (r0 != r1)))
-    {
-        intersections = NULL;
-        return intersections;
-    }
-    else if ((dist == 0.0) && (r0 == r1))
-    {
-        intersections = malloc(sizeof(*intersections));
-        intersections[0] = kissvg_NewTwoVector(kissvg_Infinity,
-                                               kissvg_Infinity);
-        return intersections;
-    }
-
-    x0 = kissvg_TwoVectorXComponent(P0);
-    y0 = kissvg_TwoVectorYComponent(P0);
-
-    x1 = kissvg_TwoVectorXComponent(P1);
-    y1 = kissvg_TwoVectorYComponent(P1);
-
-    a = (r0*r0 - r1*r1 + dist*dist) / (2.0*dist);
-    h = sqrt(r0*r0 - a*a);
-
-    x2 = x0 + (a/dist) * (x1-x0);
-    y2 = y0 + (a/dist) * (y1-y0);
-
-    inter0_x = x2 + h*(y1 - y0)/dist;
-    inter0_y = y2 - h*(x1 - x0)/dist;
-
-    inter1_x = x2 - h*(y1 - y0)/dist;
-    inter1_y = y2 + h*(x1 - x0)/dist;
-
-    intersections = malloc(sizeof(*intersections)*2);
-
-    intersections[0] = kissvg_NewTwoVector(inter0_x, inter0_y);
-    intersections[1] = kissvg_NewTwoVector(inter1_x, inter1_y);
-
-    return intersections;
-}
-
-
-kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
-                                         kissvg_Circle *circle2,
-                                         kissvg_Circle *circle3)
-{
-    kissvg_Circle **solutions;
-    kissvg_Canvas2D *canvas;
-    kissvg_TwoVector center1, center2, center3;
-    kissvg_TwoVector center;
-    double r1, r2, r3;
-    double x1, x2, x3;
-    double y1, y2, y3;
-    double rcp;
-    long n;
-
-    /*  There are eight solutions, so set N to 8.                             */
-    long N = 8;
-
-    double a12, b12, c12, d12;
-    double a13, b13, c13, d13;
-
-    double A, B, C, D;
-    double x, y, radius;
-
-    double alpha, beta, gamma;
-
-    double s1[8] = {-1.0, -1.0, -1.0, -1.0,  1.0,  1.0,  1.0,  1.0};
-    double s2[8] = {-1.0, -1.0,  1.0,  1.0, -1.0, -1.0,  1.0,  1.0};
-    double s3[8] = {-1.0,  1.0, -1.0,  1.0, -1.0,  1.0, -1.0,  1.0};
-
-    canvas = circle1->canvas;
-
-    /*  There are, in general, eight solutions so allocate eight slots.       */
-    solutions = malloc(sizeof(*solutions) * N);
-
-    center1 = kissvg_CircleCenter(circle1);
-    center2 = kissvg_CircleCenter(circle2);
-    center3 = kissvg_CircleCenter(circle3);
-
-    r1 = kissvg_CircleRadius(circle1);
-    r2 = kissvg_CircleRadius(circle2);
-    r3 = kissvg_CircleRadius(circle3);
-
-    x1 = kissvg_TwoVectorXComponent(center1);
-    y1 = kissvg_TwoVectorYComponent(center1);
-
-    x2 = kissvg_TwoVectorXComponent(center2);
-    y2 = kissvg_TwoVectorYComponent(center2);
-
-    x3 = kissvg_TwoVectorXComponent(center3);
-    y3 = kissvg_TwoVectorYComponent(center3);
-
-    for (n=0; n<N; ++n)
-    {
-        a12 = 2.0*(x1 - x2);
-        b12 = 2.0*(y1 - y2);
-        c12 = 2.0*(s2[n]*r2 - s1[n]*r1);
-        d12 = (x2*x2 + y2*y2 - r2*r2) - (x1*x1 + y1*y1 - r1*r1);
-
-        a13 = 2.0*(x1 - x3);
-        b13 = 2.0*(y1 - y3);
-        c13 = 2.0*(s3[n]*r3 - s1[n]*r1);
-        d13 = (x3*x3 + y3*y3 - r3*r3) - (x1*x1 + y1*y1 - r1*r1);
-
-        rcp = a12*b13 - b12*a13;
-
-        if (rcp == 0.0)
-        {
-            if (((a12 == 0.0) && (b12 == 0.0)) ||
-                ((a13 == 0.0) && (b13 == 0.0)))
-            {
-                puts("Warning: KissVG\n"
-                     "\tFunction: kissvg_ApolloniusProblem\n\n"
-                     "\tTwo of the Circles are Identical.");
-                center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
-                radius = kissvg_Infinity;
-            }
-            else
-            {
-
-            }
-            center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
-            radius = kissvg_Infinity;
-
-            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
-        }
-        else
-        {
-            rcp = 1.0/rcp;
-            A = (-b13*d12 + b12*d13)*rcp;
-            B = (-b13*c12 + b12*c13)*rcp;
-            C = ( a13*d12 - a12*d13)*rcp;
-            D = ( a13*c12 - a12*c13)*rcp;
-
-            alpha = -1.0 + B*B + D*D;
-            beta = 2.0*(A*B + C*D + r1*s1[n] - B*x1 - D*y1);
-            gamma = A*A + C*C - r1*r1 + x1*x1 + y1*y1 - 2.0*(A*x1 + C*y1);
-
-            radius = (-beta - sqrt(beta*beta - 4.0*alpha*gamma))/(2.0*alpha);
-
-            if (radius < 0.0)
-                radius = (-beta+sqrt(beta*beta - 4.0*alpha*gamma))/(2.0*alpha);
-
-            x = A + B*radius;
-            y = C + D*radius;
-
-            center = kissvg_NewTwoVector(x, y);
-
-            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
-        }
-    }
-    return solutions;
-}
-
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
@@ -1014,53 +960,6 @@ void kissvg_DestroyLine2D(kissvg_Line2D *L)
 {
     free(L);
     return;
-}
-
-kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
-                                             kissvg_Line2D *L1)
-{
-    kissvg_TwoVector P0, P1;
-    kissvg_TwoVector V0, V1;
-    kissvg_TwoVector inter;
-    kissvg_TwoVector P1P0;
-    kissvg_TwoVector times;
-    kissvg_TwoByTwoMatrix A, inverseA;
-    double v0x, v0y;
-    double v1x, v1y;
-    double t0;
-    double det;
-
-    P0 = kissvg_Line2DPoint(L0);
-    V0 = kissvg_Line2DTangent(L0);
-
-    P1 = kissvg_Line2DPoint(L1);
-    V1 = kissvg_Line2DTangent(L1);
-
-    v0x = kissvg_TwoVectorXComponent(V0);
-    v0y = kissvg_TwoVectorYComponent(V0);
-
-    v1x = kissvg_TwoVectorXComponent(V1);
-    v1y = kissvg_TwoVectorYComponent(V1);
-
-    det = v1x*v0y -v0x*v1y;
-
-    if (det == 0.0)
-    {
-        inter = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
-
-        return inter;
-    }
-    else
-    {
-        P1P0 = kissvg_TwoVectorSubtract(P1, P0);
-        A = kissvg_NewTwoByTwoMatrix(v0x, -v1x, v0y, -v1y);
-        inverseA = kissvg_InverseTwoByTwoMatrix(A);
-        times = kissvg_TwoVectorMatrixTransform(inverseA, P1P0);
-        t0 = kissvg_TwoVectorXComponent(times);
-
-        inter = kissvg_TwoVectorAdd(P0, kissvg_TwoVectorScale(t0, V0));
-        return inter;
-    }
 }
 
 /******************************************************************************
@@ -1353,7 +1252,6 @@ static void kissvg_DrawLatexArrow(cairo_t *cr,
     cairo_stroke(cr);
     return;
 }
-
 
 static void kissvg_DrawPolygonalArrows(cairo_t *cr, kissvg_Path2D *path)
 {
@@ -1885,5 +1783,80 @@ void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis)
     kissvg_DrawPolygon2D(cr, path);
     kissvg_SetHasArrows(path, kissvg_False);
     kissvg_DestroyPath2D(path);
+    return;
+}
+
+void kissvg_GenerateFile(char *filename, void (*instruction)(cairo_t *),
+                         kissvg_FileType type, double x_inches, double y_inches)
+{
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    char *filename_ext, *ext_name;
+    FILE *file;
+    int ext_length;
+    cairo_surface_t *(*surface_func)(const char*, double, double);
+
+    if (type == kissvg_PS)
+    {
+        ext_length = 4;
+        surface_func = &cairo_ps_surface_create;
+        ext_name = ".ps";
+    }
+    else if (type == kissvg_SVG)
+    {
+        ext_length = 5;
+        surface_func = &cairo_svg_surface_create;
+        ext_name = ".svg";
+    }
+    else if (type == kissvg_PDF)
+    {
+        ext_length = 5;
+        surface_func = &cairo_pdf_surface_create;
+        ext_name = ".pdf";
+    }
+    else
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_GenerateFileFromInstructions\n\n"
+             "Illegal file type selected. Currently only PS, SVG, and.\n"
+             "PDF outputs are supported.\n\n");
+        exit(0);
+    }
+
+    /*  Allocate enough memory for the file name, plus the extension (.pdf,   *
+     *  .ps, or .svg) and +1 for the null terminator \0, so +4 or +5 total.   */
+    filename_ext = malloc(sizeof(*filename_ext)*(strlen(filename)+ext_length));
+
+    /*  Copy FILENAME (should be defined at the top) to filename and then     *
+     *  concatenate the ".pdf" file extension. Both functions are found in    *
+     *  the C standard library header string.h.                               */
+    strcpy(filename_ext, filename);
+    strcat(filename_ext, ext_name);
+
+    /*  Create filename.pdf, open it, and set write permissions "w".          */
+    file = fopen(filename_ext, "w");
+
+    /*  If fopen failed, file should be NULL. Check this.                     */
+    if (file == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_GenerateFileFromInstructions\n\n"
+             "fopen failed to open file for writing.\n\n");
+        exit(0);
+    }
+
+    /*  Create the PDF surface to be drawn on and set cr to this.             */
+    surface = surface_func(filename_ext, x_inches, y_inches);
+    cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+
+    /*  Invoke the drawing routine and generate the pdf.                      */
+    instruction(cr);
+    cairo_show_page(cr);
+    cairo_destroy(cr);
+
+    /*  Close the file, free the filename pointer, and return.                */
+    fclose(file);
+    free(filename_ext);
     return;
 }

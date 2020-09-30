@@ -7,8 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
-#include <kissvg/include/kissvg_colors.h>
-#include <cairo-pdf.h>
+#include <cairo/src/cairo-pdf.h>
 
 /*  The limits of the coordinates in our computations. These correspond the   *
  *  the maximum (x, y) values we wish to plot.                                */
@@ -103,35 +102,6 @@ static void draw(cairo_t *cr)
 
 int main (void)
 {
-    cairo_surface_t *surface;
-    cairo_t *cr;
-    FILE *file;
-    char *filename;
-
-    filename = malloc(sizeof(*filename)*(strlen(FILENAME) + 5));
-
-
-    strcpy(filename, FILENAME);
-    strcat(filename, ".pdf");
-
-    file = fopen(filename, "w");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Failed to open file %s for writing.\n", filename);
-        return 1;
-    }
-
-    surface = cairo_pdf_surface_create(filename, X_INCHES, Y_INCHES);
-
-    cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    draw(cr);
-
-    cairo_show_page(cr);
-    cairo_destroy(cr);
-    fclose(file);
-    free(filename);
-
+    kissvg_GenerateFile(FILENAME, &draw, kissvg_PDF, X_INCHES, Y_INCHES);
     return 0;
 }

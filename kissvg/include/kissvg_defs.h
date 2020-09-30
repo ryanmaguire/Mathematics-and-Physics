@@ -1,8 +1,14 @@
 /*  Include guard to prevent including this file twice.                       */
-#ifndef _KISSVG_DEFS_H
-#define _KISSVG_DEFS_H
+#ifndef _KISSVG_DEFS_H_
+#define _KISSVG_DEFS_H_
 
 #include <kissvg/include/kissvg_bool.h>
+
+typedef enum {
+    kissvg_PS,
+    kissvg_SVG,
+    kissvg_PDF
+} kissvg_FileType;
 
 /*  First we'll define the basics of two dimensional Euclidean geometry, and  *
  *  then three dimensional after. But first-first, we typedef things.         */
@@ -27,6 +33,7 @@ typedef struct kissvg_TwoByTwoMatrix {
 typedef struct kissvg_Canvas2D kissvg_Canvas2D;
 
 struct kissvg_Canvas2D {
+    kissvg_FileType filetype;
 
     double x_inches;
     double y_inches;
@@ -59,12 +66,14 @@ typedef struct kissvg_Color {
 } kissvg_Color;
 
 typedef struct kissvg_Label2D {
-    char *label;
+    char *label_content;
     int font_size;
     int baseline_skip;
     double margins[4];
-    kissvg_TwoVector label_pos;
+    kissvg_TwoVector anchor;
+    kissvg_TwoVector shift;
     kissvg_Canvas2D *canvas;
+    kissvg_Color *line_color;
 } kissvg_Label2D;
 
 /*  Enumerated list of arrow types. Currently only three are provided, which  *

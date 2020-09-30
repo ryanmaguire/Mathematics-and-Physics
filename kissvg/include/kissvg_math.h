@@ -90,8 +90,8 @@
  ******************************************************************************/
 
 /*  Include guard for this file to prevent including this twice.              */
-#ifndef _KISSVG_MATH_H
-#define _KISSVG_MATH_H
+#ifndef _KISSVG_MATH_H_
+#define _KISSVG_MATH_H_
 
 /*  It is assumed your compiler/implementation has support for the C99 math.h *
  *  header file which has more functions than the C89 math.h header. This     *

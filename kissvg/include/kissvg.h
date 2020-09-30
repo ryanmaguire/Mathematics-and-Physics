@@ -65,8 +65,8 @@
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef _KISSVG_H
-#define _KISSVG_H
+#ifndef _KISSVG_H_
+#define _KISSVG_H_
 
 /*  Needed for NULL pointer.                                                  */
 #include <stddef.h>
@@ -76,13 +76,13 @@
 
 /*  The kissvg_Bool data type, as well as kissvg_False and kissvg_True, are   *
  *  defined here.                                                             */
-#include "kissvg_bool.h"
+#include <kissvg/include/kissvg_bool.h>
 
 /*  Most typedefs are here.                                                   */
 #include <kissvg/include/kissvg_defs.h>
 
 /*  We use cairo for producing .ps, .svg, .pdf, etc., files.                  */
-#include <cairo.h>
+#include <cairo/src/cairo.h>
 
 /*  Various defaults for things like line width and arrow sizes.              */
 #define kissvg_DefaultPen 0.5
@@ -95,6 +95,10 @@
 #define kissvg_DefaultTickSize 0.2
 #define kissvg_DefaultTickHeight 0.1
 #define kissvg_DefaultTickDist 1.0
+
+#define kissvg_DefaultLabelFontSize 10
+#define kissvg_DefaultLabelBaselineSkip 12
+#define kissvg_DefaultLabelMargin 1
 
 /*  The following macros are universal all of the data types where the        *
  *  attribute applies. For example, Path2D, Axis2D, Circle, and Line2D all    *
@@ -109,6 +113,7 @@
 #define kissvg_FillColor(kissvg_struct) (kissvg_struct->fill_color)
 #define kissvg_HasError(kissvg_struct) (kissvg_struct->error_occured)
 #define kissvg_ErrorMessage(kissvg_struct) (kissvg_struct->error_message)
+#define kissvg_HasLabels(kissvg_struct) (kissvg_struct->has_labels)
 
 #define kissvg_SetErrorMessage(kissvg_struct, errmes)       \
     (strcpy(kissvg_struct->error_message, errmes))
@@ -121,6 +126,9 @@
 
 #define kissvg_SetHasArrows(kissvg_struct, arrow)           \
     (kissvg_struct->has_arrows = arrow)
+
+#define kissvg_SetHasLabels(kissvg_struct, label)           \
+    (kissvg_struct->has_labels = label)
 
 #define kissvg_SetLineWidth(kissvg_struct, width)           \
     (kissvg_struct->line_width = width)
@@ -589,7 +597,8 @@ extern kissvg_TwoByTwoMatrix kissvg_InverseTwoByTwoMatrix(
  ******************************************************************************/
 extern kissvg_Canvas2D *kissvg_CreateCanvas2D(
     double x_inches, double y_inches, double x_min, double x_max,
-    double y_min, double y_max, kissvg_Bool one_to_one_apect_ratio
+    double y_min, double y_max, kissvg_Bool one_to_one_apect_ratio,
+    kissvg_FileType filetype
 );
 
 /******************************************************************************
@@ -667,6 +676,36 @@ extern kissvg_Color *kissvg_CreateColor(double red, double green, double blue,
  ******************************************************************************/
 extern void kissvg_DestroyColor(kissvg_Color *color);
 
+extern kissvg_Color *kissvg_Blue;
+extern kissvg_Color *kissvg_Green;
+extern kissvg_Color *kissvg_Red;
+extern kissvg_Color *kissvg_Black;
+extern kissvg_Color *kissvg_White;
+extern kissvg_Color *kissvg_DarkGray;
+extern kissvg_Color *kissvg_Gray;
+extern kissvg_Color *kissvg_LightGray;
+extern kissvg_Color *kissvg_Aqua;
+extern kissvg_Color *kissvg_Purple;
+extern kissvg_Color *kissvg_Violet;
+extern kissvg_Color *kissvg_Pink;
+extern kissvg_Color *kissvg_Yellow;
+extern kissvg_Color *kissvg_Crimson;
+extern kissvg_Color *kissvg_DarkGreen;
+extern kissvg_Color *kissvg_Orange;
+extern kissvg_Color *kissvg_LightBlue;
+extern kissvg_Color *kissvg_Teal;
+extern kissvg_Color *kissvg_DarkBlue;
+extern kissvg_Color *kissvg_Lavender;
+extern kissvg_Color *kissvg_Magenta;
+extern kissvg_Color *kissvg_DeepPink;
+extern kissvg_Color *kissvg_Marine;
+extern kissvg_Color *kissvg_Lime;
+extern kissvg_Color *kissvg_Carrot;
+extern kissvg_Color *kissvg_Brown;
+extern kissvg_Color *kissvg_Azure;
+extern kissvg_Color *kissvg_Silver;
+extern kissvg_Color *kissvg_Sand;
+
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
@@ -698,6 +737,46 @@ extern void kissvg_DestroyArrow(kissvg_Arrow *arrow);
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
+ *                    Begin kissvg_Label2D Functions                          *
+ *                                                                            *
+ ******************************************************************************
+ ******************************************************************************/
+
+extern kissvg_Label2D *kissvg_CreateLabel2D(const char *label_content,
+                                            kissvg_TwoVector anchor,
+                                            kissvg_Canvas2D *canvas);
+
+extern void kissvg_DestroyLabel2D(kissvg_Label2D *label);
+
+extern void kissvg_ResetLabel2DContent(kissvg_Label2D *label,
+                                       const char *label_content);
+
+extern void kissvg_Label2DSetAnchor(kissvg_Label2D *label,
+                                    kissvg_TwoVector anchor);
+
+extern void kissvg_Label2DSetShift(kissvg_Label2D *label,
+                                   kissvg_TwoVector shift);
+
+extern void kissvg_Label2DSetMargins(kissvg_Label2D *label,
+                                     double margins[4]);
+
+extern void kissvg_Label2DSetFontSize(kissvg_Label2D *label, int font_size);
+
+extern void kissvg_Label2DSetBaselineSkip(kissvg_Label2D *label,
+                                          int baseline_skip);
+
+#define kissvg_Label2DMargins(label) (label->margins)
+#define kissvg_Label2DFontSize(label) (label->font_size)
+#define kissvg_Label2DBaselineSkip(label) (label->baseline_skip)
+#define kissvg_Label2DAnchor(label) (label->anchor)
+#define kissvg_Label2DShift(label) (label->shift)
+#define kissvg_Label2DContent(label) (label->label_content)
+
+extern void kissvg_DrawLabel2D(cairo_t *cr, kissvg_Label2D *label);
+
+/******************************************************************************
+ ******************************************************************************
+ *                                                                            *
  *                    Begin kissvg_Path2D Functions                           *
  *                                                                            *
  ******************************************************************************
@@ -725,6 +804,27 @@ extern void kissvg_Path2DAddArrow(kissvg_Path2D *path, double pos,
 
 extern kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start,
                                           kissvg_Canvas2D *canvas);
+
+extern void kissvg_Path2DCreateLabel(kissvg_Path2D *path, char *label_content,
+                                     double pos, int font_size,
+                                     int baseline_skip, double margins[4],
+                                     kissvg_TwoVector shift,
+                                     kissvg_Color *line_color);
+
+extern void kissvg_Path2DAddLabel(kissvg_Path2D *path, char *label_content,
+                                  double pos, int font_size, int baseline_skip,
+                                  double margins[4], kissvg_TwoVector shift,
+                                  kissvg_Color *line_color);
+
+extern void kissvg_Path2DCreateEasyLabel(kissvg_Path2D *path,
+                                         char *label_content,
+                                         double pos, int font_size,
+                                         kissvg_TwoVector shift);
+
+extern void kissvg_Path2DAddEasyLabel(kissvg_Path2D *path,
+                                      char *label_content,
+                                      double pos, int font_size,
+                                      kissvg_TwoVector shift);
 
 extern void kissvg_AppendPath2D(kissvg_Path2D *path, kissvg_TwoVector P);
 extern void kissvg_DestroyPath2D(kissvg_Path2D *path);
@@ -935,6 +1035,10 @@ extern void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis);
 
 extern void kissvg_DrawCircle2D(cairo_t *cr, kissvg_Circle *circle);
 extern void kissvg_FillDrawCircle2D(cairo_t *cr, kissvg_Circle *circle);
+
+extern void kissvg_GenerateFile(char *filename, void (*instruction)(cairo_t *),
+                                kissvg_FileType type, double x_inches,
+                                double y_inches);
 
 #endif
 /*  End of include guard.                                                     */

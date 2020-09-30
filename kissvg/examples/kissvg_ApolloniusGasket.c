@@ -6,11 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <kissvg/include/kissvg.h>
-#include <kissvg/include/kissvg_math.h>
-#include <kissvg/include/kissvg_colors.h>
-#include <cairo-ps.h>
 
 /*  The limits of the coordinates in our computations. These correspond the   *
  *  the maximum (x, y) values we wish to plot.                                */
@@ -23,10 +19,9 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 3 * 72.0
 
-#define FILENAME "kissvg_ApolloniusGasket.ps"
+#define FILENAME "kissvg_ApolloniusGasket"
 
 #define USE_COLORS 1
-
 #ifdef USE_COLORS
 #define N_COLORS 26
 typedef struct my_colors my_colors;
@@ -34,7 +29,7 @@ typedef struct my_colors my_colors;
 static kissvg_Color **get_my_colors(void)
 {
     kissvg_Color **my_colors = malloc(sizeof(*my_colors) * N_COLORS);
-    my_colors[0] = kissvg_Teal;
+    my_colors[0] = kissvg_Brown;
     my_colors[1] = kissvg_Crimson;
     my_colors[2] = kissvg_Azure;
     my_colors[3] = kissvg_Carrot;
@@ -147,27 +142,6 @@ static void draw(cairo_t *cr)
 
 int main (void)
 {
-    cairo_surface_t *surface;
-    cairo_t *cr;
-    FILE *file;
-
-    file = fopen(FILENAME, "w");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Failed to open file %s for writing.\n", FILENAME);
-        return 1;
-    }
-
-    surface = cairo_ps_surface_create(FILENAME, X_INCHES, Y_INCHES);
-
-    cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    draw(cr);
-
-    cairo_show_page(cr);
-    cairo_destroy(cr);
-    fclose(file);
-
+    kissvg_GenerateFile(FILENAME, &draw, kissvg_PDF, X_INCHES, Y_INCHES);
     return 0;
 }
