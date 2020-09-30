@@ -559,6 +559,8 @@ extern kissvg_TwoByTwoMatrix kissvg_InverseTwoByTwoMatrix(
  ******************************************************************************/
 
 /*  Use these macros to access the data in a pointer to kissvg_Canvas2D.      */
+#define kissvg_Canvas2DXInches(canvas) (canvas->x_inches)
+#define kissvg_Canvas2DYInches(canvas) (canvas->y_inches)
 #define kissvg_Canvas2DXScale(canvas) (canvas->x_scale)
 #define kissvg_Canvas2DYScale(canvas) (canvas->y_scale)
 #define kissvg_Canvas2DXShift(canvas) (canvas->x_shift)
