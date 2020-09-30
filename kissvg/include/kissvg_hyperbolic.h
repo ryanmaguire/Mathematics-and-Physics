@@ -33,8 +33,8 @@
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef _KISSVG_COMPLEX_H
-#define _KISSVG_COMPLEX_H
+#ifndef _KISSVG_COMPLEX_H_
+#define _KISSVG_COMPLEX_H_
 
 #include "kissvg_complex.h"
 

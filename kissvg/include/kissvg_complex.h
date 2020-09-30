@@ -33,8 +33,8 @@
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef _KISSVG_COMPLEX_H
-#define _KISSVG_COMPLEX_H
+#ifndef _KISSVG_COMPLEX_H_
+#define _KISSVG_COMPLEX_H_
 
 /*  C99 requires complex.h, but C11 makes it optional. If you are using a     *
  *  compiler that supports the C99 standard, we can just #include complex.h.  *
