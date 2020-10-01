@@ -21,7 +21,6 @@ static void draw(cairo_t *cr)
     kissvg_Circle *circle;
     kissvg_TwoVector P, Q;
     kissvg_TwoVector A, B, C;
-    kissvg_Label2D *label;
 
     long n, N;
     double x0, y0;
@@ -144,15 +143,6 @@ static void draw(cairo_t *cr)
     kissvg_SetFillColor(circle, kissvg_Magenta);
     kissvg_FillDrawCircle2D(cr, circle);
     kissvg_DestroyCircle(circle);
-
-    label = kissvg_CreateLabel2D(
-        "$\\displaystyle{\\int_{a}^{b}f(x)\\textrm{d}x}$",
-        kissvg_NewTwoVector(2.0, 1.0), canvas
-    );
-
-    kissvg_DrawLabel2D(cr, label);
-
-    kissvg_DestroyLabel2D(label);
 
     kissvg_DestroyCanvas2D(canvas);
 

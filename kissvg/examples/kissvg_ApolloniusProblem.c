@@ -32,7 +32,7 @@ static void draw(cairo_t *cr)
     N = 8;
 
     canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
-                                   Y_MIN, Y_MAX, kissvg_True);
+                                   Y_MIN, Y_MAX, kissvg_True, kissvg_PDF);
 
     radius = 0.5;
     center = kissvg_NewTwoVector(1.0, 1.0);

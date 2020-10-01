@@ -1021,6 +1021,9 @@ extern kissvg_TwoVector kissvg_InversiveGeometryPoint(kissvg_Circle *C,
 extern kissvg_Circle *kissvg_InversiveGeometryCircle(kissvg_Circle *C0,
                                                      kissvg_Circle *C1);
 
+extern kissvg_Circle *kissvg_InversiveGeometryLine(kissvg_Circle *C,
+                                                   kissvg_Line2D *L);
+
 /******************************************************************************
  ******************************************************************************
  *                                                                            *
@@ -1035,6 +1038,9 @@ extern void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis);
 
 extern void kissvg_DrawCircle2D(cairo_t *cr, kissvg_Circle *circle);
 extern void kissvg_FillDrawCircle2D(cairo_t *cr, kissvg_Circle *circle);
+
+extern void kissvg_DrawLine2D(cairo_t *cr, kissvg_Line2D *line,
+                              double t0, double t1);
 
 extern void kissvg_GenerateFile(char *filename, void (*instruction)(cairo_t *),
                                 kissvg_FileType type, double x_inches,

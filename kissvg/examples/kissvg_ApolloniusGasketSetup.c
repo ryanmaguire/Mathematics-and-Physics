@@ -1,9 +1,3 @@
-/*
- *  To Compile:
- *      gcc -I../../ -L./ $(pkg-config --cflags --libs cairo) \
- *      kissvg_EuclidBookOnePropOne.c -o test -lcairo -lkissvg
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
@@ -19,7 +13,7 @@
 #define X_INCHES 3 * 72.0
 #define Y_INCHES 3 * 72.0
 
-#define FILENAME "kissvg_ApolloniusGasket"
+#define FILENAME "kissvg_ApolloniusGasketSetup"
 
 #define USE_COLORS 1
 #ifdef USE_COLORS
@@ -42,31 +36,30 @@ static kissvg_Color **get_my_colors(void)
 }
 #endif
 
-static void DO_DRAW(cairo_t *cr, kissvg_Circle *C0,
-                    kissvg_Circle *C1, kissvg_Color **cols, int num)
+static void DO_DRAW(cairo_t *cr, kissvg_Circle *C1,
+                    kissvg_Color **cols, int num)
 {
-    kissvg_Circle *Current_Circle;
-    Current_Circle = kissvg_InversiveGeometryCircle(C0, C1);
-    kissvg_SetLineWidth(Current_Circle, kissvg_ThinPen);
+
+    kissvg_SetLineWidth(C1, kissvg_ThinPen);
 #ifdef USE_COLORS
-    kissvg_SetFillColor(Current_Circle, cols[num]);
-    kissvg_FillDrawCircle2D(cr, Current_Circle);
+    kissvg_SetFillColor(C1, cols[num]);
+    kissvg_FillDrawCircle2D(cr, C1);
 #else
     if (!(cols == NULL))
         cols = NULL;
     if (!num == 0)
         num = 0;
-    kissvg_DrawCircle2D(cr, Current_Circle);
+    kissvg_DrawCircle2D(cr, C1);
 #endif
-    kissvg_DestroyCircle(Current_Circle);
 }
 
 
 static void draw(cairo_t *cr)
 {
-    kissvg_TwoVector center;
+    kissvg_TwoVector center, A, B;
     kissvg_Circle *C0;
     kissvg_Circle *C1;
+    kissvg_Line2D *L0;
     kissvg_Canvas2D *canvas;
     long n, N;
     kissvg_Color **cols;
@@ -84,58 +77,74 @@ static void draw(cairo_t *cr)
 
     center = kissvg_NewTwoVector(0.0, -2.0);
     C0 = kissvg_CreateCircle(center, 2.0, canvas);
-
-    center = kissvg_NewTwoVector(0.0, 0.0);
-    C1 = kissvg_CreateCircle(center, 2.0, canvas);
-    kissvg_DrawCircle2D(cr, C1);
-
-    kissvg_SetLineWidth(C1, kissvg_ThinPen);
+    C1 = kissvg_CreateCircle(center, 1.0, canvas);
 
     for (n=-N; n<N; ++n)
     {
         center = kissvg_NewTwoVector(-n, -0.5);
         kissvg_ResetCircle(C1, center, 0.5);
-        DO_DRAW(cr, C0, C1, cols, 0);
+        DO_DRAW(cr, C1, cols, 0);
 
         center = kissvg_NewTwoVector(0.5-n, -0.125);
         kissvg_ResetCircle(C1, center, 0.125);
-        DO_DRAW(cr, C0, C1, cols, 1);
+        DO_DRAW(cr, C1, cols, 1);
 
         center = kissvg_NewTwoVector(0.5-n, -0.875);
         kissvg_ResetCircle(C1, center, 0.125);
-        DO_DRAW(cr, C0, C1, cols, 2);
+        DO_DRAW(cr, C1, cols, 2);
 
         center = kissvg_NewTwoVector(0.5-n, -0.70834);
         kissvg_ResetCircle(C1, center, 0.0416533311993);
-        DO_DRAW(cr, C0, C1, cols, 3);
+        DO_DRAW(cr, C1, cols, 3);
 
         center = kissvg_NewTwoVector(0.5-n, -0.29166);
         kissvg_ResetCircle(C1, center, 0.0416533311993);
-        DO_DRAW(cr, C0, C1, cols, 4);
+        DO_DRAW(cr, C1, cols, 4);
 
         center = kissvg_NewTwoVector(0.3333333-n, -0.0556);
         kissvg_ResetCircle(C1, center, 0.0556776436283);
-        DO_DRAW(cr, C0, C1, cols, 5);
+        DO_DRAW(cr, C1, cols, 5);
 
         center = kissvg_NewTwoVector(0.6666666667-n, -0.0556);
         kissvg_ResetCircle(C1, center, 0.0556776436283);
-        DO_DRAW(cr, C0, C1, cols, 6);
+        DO_DRAW(cr, C1, cols, 6);
 
         center = kissvg_NewTwoVector(0.3333333-n, -0.9444);
         kissvg_ResetCircle(C1, center, 0.0556776436283);
-        DO_DRAW(cr, C0, C1, cols, 7);
+        DO_DRAW(cr, C1, cols, 7);
 
         center = kissvg_NewTwoVector(0.6666666667-n, -0.9444);
         kissvg_ResetCircle(C1, center, 0.0556776436283);
-        DO_DRAW(cr, C0, C1, cols, 8);
+        DO_DRAW(cr, C1, cols, 8);
     }
 
     center = kissvg_NewTwoVector(0.0, -1.0);
     kissvg_ResetCircle(C1, center, 1.0);
     kissvg_DrawCircle2D(cr, C1);
 
+    center = kissvg_NewTwoVector(0.0, 0.0);
+    kissvg_ResetCircle(C1, center, 2.0);
+    kissvg_DrawCircle2D(cr, C1);
+
+    center = kissvg_NewTwoVector(0.0, -2.0);
+    kissvg_ResetCircle(C1, center, 2.0);
+    kissvg_DrawCircle2D(cr, C1);
+
     kissvg_DestroyCircle(C0);
     kissvg_DestroyCircle(C1);
+
+    A = kissvg_NewTwoVector(-1.0, -1.0);
+    B = kissvg_NewTwoVector(1.0, -1.0);
+
+    L0 = kissvg_CreateLineFromTwoPoints(A, B, canvas);
+    kissvg_DrawLine2D(cr, L0, -3.0, 3.0);
+    kissvg_DestroyLine2D(L0);
+
+    A = kissvg_NewTwoVector(-1.0, 0.0);
+    B = kissvg_NewTwoVector(1.0, 0.0);
+    L0 = kissvg_CreateLineFromTwoPoints(A, B, canvas);
+    kissvg_DrawLine2D(cr, L0, -3.0, 3.0);
+    kissvg_DestroyLine2D(L0);
 
     return;
 }
