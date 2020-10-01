@@ -136,7 +136,6 @@ void kissvg_Label2DSetShift(kissvg_Label2D *label, kissvg_TwoVector shift)
     return;
 }
 
-
 void kissvg_Label2DSetMargins(kissvg_Label2D *label, double margins[4])
 {
     if (label == NULL)

@@ -218,7 +218,6 @@ void kissvg_ArrowSetPos(kissvg_Arrow *arrow, double pos)
     return;
 }
 
-
 void kissvg_ArrowSetSize(kissvg_Arrow *arrow, double size)
 {
     if (arrow == NULL)
@@ -927,7 +926,7 @@ kissvg_Line2D *kissvg_CreateLineFromTwoPoints(kissvg_TwoVector P,
     kissvg_TwoVector V;
     line = malloc(sizeof(*line));
 
-    V = kissvg_TwoVectorSubtract(P, Q);
+    V = kissvg_TwoVectorSubtract(Q, P);
 
     line->P = P;
     line->V = V;
@@ -1785,6 +1784,30 @@ void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis)
     kissvg_DestroyPath2D(path);
     return;
 }
+
+void kissvg_DrawLine2D(cairo_t *cr, kissvg_Line2D *line, double t0, double t1)
+{
+    kissvg_Path2D *path;
+    kissvg_TwoVector A, B, P, V;
+
+    P = kissvg_Line2DPoint(line);
+    V = kissvg_Line2DTangent(line);
+
+    A = kissvg_TwoVectorAdd(P,kissvg_TwoVectorScale(t0, V));
+    B = kissvg_TwoVectorAdd(P,kissvg_TwoVectorScale(t1, V));
+
+    path = kissvg_CreatePath2D(A, line->canvas);
+
+    kissvg_SetLineColor(path, kissvg_LineColor(line));
+    kissvg_SetLineWidth(path, kissvg_LineWidth(line));
+    kissvg_SetClosedPath(path, kissvg_False);
+    kissvg_AppendPath2D(path, B);
+
+    kissvg_DrawPolygon2D(cr, path);
+    kissvg_DestroyPath2D(path);
+    return;
+}
+
 
 void kissvg_GenerateFile(char *filename, void (*instruction)(cairo_t *),
                          kissvg_FileType type, double x_inches, double y_inches)

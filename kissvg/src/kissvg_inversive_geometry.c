@@ -82,3 +82,24 @@ kissvg_Circle *kissvg_InversiveGeometryCircle(kissvg_Circle *C0,
     }
     return out;
 }
+
+kissvg_Circle *kissvg_InversiveGeometryLine(kissvg_Circle *C,
+                                            kissvg_Line2D *L)
+{
+    kissvg_TwoVector center;
+    kissvg_TwoVector P;
+    kissvg_Circle *out_circle;
+    kissvg_Canvas2D *canvas;
+    double radius;
+
+    canvas = kissvg_GetCanvas(L);
+
+    center = kissvg_CircleCenter(C);
+    P = kissvg_ClosestPointOnLine(L, center);
+    P = kissvg_InversiveGeometryPoint(C, P);
+
+    center = kissvg_EuclideanMidPoint2D(center, P);
+    radius = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(P, center));
+    out_circle = kissvg_CreateCircle(center, radius, canvas);
+    return out_circle;
+}

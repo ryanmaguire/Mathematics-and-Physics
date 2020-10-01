@@ -1,9 +1,3 @@
-/*
- *  To Compile:
- *      gcc -I../../ -L./ $(pkg-config --cflags --libs cairo) \
- *      kissvg_EuclidBookOnePropOne.c -o test -lcairo -lkissvg
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <kissvg/include/kissvg.h>
@@ -29,7 +23,7 @@ static void draw(cairo_t *cr)
     double radius;
 
     canvas = kissvg_CreateCanvas2D(X_INCHES, Y_INCHES, X_MIN, X_MAX,
-                                   Y_MIN, Y_MAX, kissvg_True);
+                                   Y_MIN, Y_MAX, kissvg_True, kissvg_PDF);
     radius = 0.5;
 
     center = kissvg_NewTwoVector(-2.0, 2.0);

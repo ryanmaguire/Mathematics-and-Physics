@@ -243,6 +243,17 @@
 #define kissvg_AbsLongDouble(x) fabs((double)x)
 #endif
 
+/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
+#if (__HAS_C99_MATH_H__ == 1)
+#define kissvg_AcosFloat(x) acosf(x)
+#define kissvg_AcosDouble(x) acos(x)
+#define kissvg_AcosLongDouble(x) acosl(x)
+#else
+#define kissvg_AcosFloat(x) acos((double)x)
+#define kissvg_AcosDouble(x) acos(x)
+#define kissvg_AcosLongDouble(x) acos((double)x)
+#endif
+
 #ifdef kissvg_Infinity
 #undef kissvg_Infinity
 #endif
