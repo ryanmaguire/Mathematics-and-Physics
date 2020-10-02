@@ -53,7 +53,6 @@ static void DO_DRAW(cairo_t *cr, kissvg_Circle *C1,
 #endif
 }
 
-
 static void draw(cairo_t *cr)
 {
     kissvg_TwoVector center, A, B;
