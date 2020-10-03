@@ -35,14 +35,14 @@ static long GCD(long n0, long n1)
 static kissvg_Color **get_my_colors(void)
 {
     kissvg_Color **my_colors = malloc(sizeof(*my_colors) * N_COLORS);
-    my_colors[0] = kissvg_Brown;
+    my_colors[0] = kissvg_DarkGreen;
     my_colors[1] = kissvg_Crimson;
-    my_colors[2] = kissvg_Azure;
-    my_colors[3] = kissvg_Carrot;
+    my_colors[2] = kissvg_Sand;
+    my_colors[3] = kissvg_Green;
     my_colors[4] = kissvg_Lavender;
     my_colors[5] = kissvg_Magenta;
     my_colors[6] = kissvg_Aqua;
-    my_colors[7] = kissvg_DarkGreen;
+    my_colors[7] = kissvg_DarkBlue;
     my_colors[8] = kissvg_DeepPink;
     return my_colors;
 }

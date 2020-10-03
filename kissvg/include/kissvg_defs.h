@@ -29,7 +29,6 @@ typedef struct kissvg_TwoByTwoMatrix {
  *  of several data types like kissvg_Path2D and kissvg_Axis2D. It is used to *
  *  convert between the geometry of the actual output file                    *
  *  (.ps, .svg, .pdf, etc.) and the coordinates we use for computations.      */
-
 typedef struct kissvg_Canvas2D kissvg_Canvas2D;
 
 struct kissvg_Canvas2D {

@@ -68,12 +68,6 @@
 #ifndef _KISSVG_H_
 #define _KISSVG_H_
 
-/*  Needed for NULL pointer.                                                  */
-#include <stddef.h>
-
-/*  Needed for strcpy.                                                        */
-#include <string.h>
-
 /*  The kissvg_Bool data type, as well as kissvg_False and kissvg_True, are   *
  *  defined here.                                                             */
 #include <kissvg/include/kissvg_bool.h>
@@ -95,7 +89,6 @@
 #define kissvg_DefaultTickSize 0.2
 #define kissvg_DefaultTickHeight 0.1
 #define kissvg_DefaultTickDist 1.0
-
 #define kissvg_DefaultLabelFontSize 10
 #define kissvg_DefaultLabelBaselineSkip 12
 #define kissvg_DefaultLabelMargin 1
@@ -114,9 +107,6 @@
 #define kissvg_HasError(kissvg_struct) (kissvg_struct->error_occured)
 #define kissvg_ErrorMessage(kissvg_struct) (kissvg_struct->error_message)
 #define kissvg_HasLabels(kissvg_struct) (kissvg_struct->has_labels)
-
-#define kissvg_SetErrorMessage(kissvg_struct, errmes)       \
-    (strcpy(kissvg_struct->error_message, errmes))
 
 #define kissvg_SetError(kissvg_struct, error)               \
     (kissvg_struct->error_occured = error)
@@ -618,7 +608,7 @@ extern kissvg_Canvas2D *kissvg_CreateCanvas2D(
  *      kissvg_CreateCanvas2D should be used for every image, this function   *
  *      should always be called at the end.                                   *
  ******************************************************************************/
-extern void kissvg_DestroyCanvas2D(kissvg_Canvas2D *canvas);
+extern void kissvg_DestroyCanvas2D(kissvg_Canvas2D **canvas_pointer);
 
 /******************************************************************************
  ******************************************************************************
@@ -674,7 +664,7 @@ extern kissvg_Color *kissvg_CreateColor(double red, double green, double blue,
  *  NOTE:                                                                     *
  *      This function must be called if kissvg_CreateColor was used.          *
  ******************************************************************************/
-extern void kissvg_DestroyColor(kissvg_Color *color);
+extern void kissvg_DestroyColor(kissvg_Color **color_pointer);
 
 extern kissvg_Color *kissvg_Blue;
 extern kissvg_Color *kissvg_Green;
@@ -944,6 +934,8 @@ extern void kissvg_CircleAddArrow(kissvg_Circle *path, double pos,
 
 extern kissvg_Circle *kissvg_CreateCircle(kissvg_TwoVector P, double r,
                                           kissvg_Canvas2D *canvas);
+
+extern void kissvg_CircleSetErrorMessage(kissvg_Circle *C, char *mes);
 
 extern void kissvg_ResetCircle(kissvg_Circle *C, kissvg_TwoVector P, double r);
 

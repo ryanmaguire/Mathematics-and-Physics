@@ -34,6 +34,82 @@
 /*  NOTE:                                                                     *
  *      Detailed descriptions of the functions are provided in kissvg.h.      */
 
+/*  Error checking routine for kissvg_Circle's.                               */
+static void __check_circle_error(kissvg_Circle *C, const char *FuncName)
+{
+    /*  If the input circle is NULL, it was not set via kissvg_CreateCircle   *
+     *  or kissvg_DestroyCircle was called prematurely. In either case, print *
+     *  an error message and abort the computation.                           */
+    if (C == NULL)
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input circle is NULL. Aborting.", FuncName);
+        exit(0);
+    }
+
+    /*  If the input circle has an error set, abort the computation.          */
+    if (kissvg_HasError(C))
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input circle has error_encoutered variable set to true.\n"
+               "Printing Error Message:\n\n", FuncName);
+
+        /*  If the error message is NULL, then it wasn't set. Print this.     */
+        if (kissvg_ErrorMessage(C) == NULL)
+            puts("Input circle did not have an error message set.\n\n");
+
+        /*  Otherwise, simply print the message.                              */
+        else
+            puts(kissvg_ErrorMessage(C));
+
+        /*  Abort the computation.                                            */
+        exit(0);
+    }
+
+    /*  If no error occured, return to caller.                                */
+    return;
+}
+
+/*  Error checking routine for kissvg_Line2D's.                               */
+static void __check_line_error(kissvg_Line2D *L, const char *FuncName)
+{
+    /*  If the input line is NULL, it was not set via kissvg_CreateLine...    *
+     *  or kissvg_DestroyLine2D was called prematurely. In either case, print *
+     *  an error message and abort the computation.                           */
+    if (L == NULL)
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input line is NULL. Aborting.", FuncName);
+        exit(0);
+    }
+
+    /*  If the input line has an error set, abort the computation.            */
+    if (kissvg_HasError(L))
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input line has error_encoutered variable set to true.\n"
+               "Printing Error Message:\n\n", FuncName);
+
+        /*  If the error message is NULL, then it wasn't set. Print this.     */
+        if (kissvg_ErrorMessage(L) == NULL)
+            puts("Input line did not have an error message set.\n\n");
+
+        /*  Otherwise, simply print the message.                              */
+        else
+            puts(kissvg_ErrorMessage(L));
+
+        /*  Abort the computation.                                            */
+        exit(0);
+    }
+
+    /*  If no error occured, return to caller.                                */
+    return;
+}
+
 /*  Function for computing the length of a two dimensional vector.            */
 double kissvg_EuclideanNorm2D(kissvg_TwoVector P)
 {
@@ -214,6 +290,7 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
     kissvg_Line2D *L0, *L1;
     kissvg_Circle *circle;
     double radius;
+    char *err_mes;
 
     /*  If A, B, and C are collinear, their center is "at infinity."          */
     if (kissvg_EuclideanIsCollinear(A, B, C))
@@ -249,11 +326,11 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
          *  message will print and, pending situation, exit(0) will be called.*/
         else
         {
-            kissvg_SetError(circle, kissvg_True);
-            kissvg_SetErrorMessage(circle,
-                                   "Error Encountered: KissVG\n"
-                                   "\tFunction: kissvg_FindCenter2D\n\n"
-                                   "All three points are the same.\n");
+            err_mes = "Error Encountered: KissVG\n"
+                      "\tFunction: kissvg_FindCenter2D\n\n"
+                      "All three points are the same.\n";
+
+            kissvg_CircleSetErrorMessage(circle, err_mes);
             kissvg_CircleSetVelocity(circle, A);
         }
     }
@@ -308,12 +385,18 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
 /*  Function for finding the closest point on a line L to a given point P.    */
 kissvg_TwoVector kissvg_ClosestPointOnLine(kissvg_Line2D *L, kissvg_TwoVector P)
 {
+    /*  Declare all necessary variables.                                      */
     kissvg_TwoVector orth;
-    kissvg_TwoVector V;
-    kissvg_TwoVector A, B;
-    kissvg_TwoVector out;
+    kissvg_TwoVector A, B, V, out;
     kissvg_Line2D *orthline;
 
+    /*  Create a variable for the name of the function for error checking.    */
+    const char *FuncName = "kissvg_ClosestPointOnLine";
+
+    /*  Check the input line for errors. This will abort if there are.        */
+    __check_line_error(L, FuncName);
+
+    /*  Extract a point on the line and it's tangent vector.                  */
     A = kissvg_Line2DPoint(L);
     V = kissvg_Line2DTangent(L);
     B = kissvg_TwoVectorAdd(A, V);
@@ -322,105 +405,163 @@ kissvg_TwoVector kissvg_ClosestPointOnLine(kissvg_Line2D *L, kissvg_TwoVector P)
     if (kissvg_EuclideanIsCollinear(A, B, P))
         return P;
 
+    /*  Otherwise, get a vector orth which is orthogonal to the line and      *
+     *  create a new line containing the input point P and with tangent set   *
+     *  to orth.                                                              */
     orth = kissvg_EuclideanOrthogonalVector2D(V);
     orthline = kissvg_CreateLineFromPointAndTangent(P, orth, NULL);
+
+    /*  The output is the intersection of the input line with the new one.    */
     out = kissvg_LineLineIntersection(L, orthline);
 
+    /*  Destroy the created line and return the answer.                       */
     kissvg_DestroyLine2D(orthline);
     return out;
 }
 
+/*  Given a circle C and a point P in the plane, compute the closest point on *
+ *  the circle to P.                                                          */
 kissvg_TwoVector kissvg_ClosestPointOnCircle(kissvg_Circle *C,
                                              kissvg_TwoVector P)
 {
-    kissvg_TwoVector out;
-    kissvg_TwoVector center;
+    /*  Declare all necessary variables.                                      */
+    kissvg_TwoVector out, center;
     kissvg_TwoVector Pcirc, Vcirc;
     kissvg_Line2D *L;
-    kissvg_Bool is_line;
     double radius, norm;
 
-    is_line = kissvg_CircleIsLine(C);
+    /*  Create a variable for the name of the function for error checking.    */
+    const char *FuncName = "kissvg_ClosestPointOnCircle";
 
-    if (is_line)
+    /*  Check the input circle for errors. This will abort if there are.      */
+    __check_circle_error(C, FuncName);
+
+    /*  If the input circle is a line (circle with infinite radius), use      *
+     *  kissvg_ClosestPointOnLine to perform the computation.                 */
+    if (kissvg_CircleIsLine(C))
     {
+
+        /*  Extract the point and tangent defining the line.                  */
         Pcirc = kissvg_CirclePoint(C);
         Vcirc = kissvg_CircleTangent(C);
+
+        /*  Create an actual kissvg_Line2D from these values.                 */
         L = kissvg_CreateLineFromPointAndTangent(Pcirc, Vcirc, NULL);
+
+        /*  Compute the closest point using this line, and then destroy L.    */
         out = kissvg_ClosestPointOnLine(L, P);
         kissvg_DestroyLine2D(L);
     }
+
+    /*  Otherwise the input is an actual circle so we compute as such.        */
     else
     {
+        /*  Extract the center and radius from the circle.                    */
         center = kissvg_CircleCenter(C);
         radius = kissvg_CircleRadius(C);
+
+        /*  Get a vector pointing from P to the center of the circle and      *
+         *  compute its norm.                                                 */
         out = kissvg_TwoVectorSubtract(P, center);
         norm = kissvg_EuclideanNorm2D(out);
+
+        /* If the norm is zero, the input point is the center, so simple set  *
+         *  (r, 0) as the closest point (we'll shift by center after).        */
         if (norm == 0.0)
             out = kissvg_NewTwoVector(radius, 0.0);
+
+        /*  Otherwise the closest point is the one on the circle between the  *
+         *  center and the given point. Compute this.                         */
         else
             out = kissvg_TwoVectorScale(radius/norm, out);
 
+        /*  The above computation translated to the origin. Shift by center.  */
         out = kissvg_TwoVectorAdd(out, center);
     }
+
     return out;
 }
 
+/*  Given a circle C and a point P in the plane, compute the closest point on *
+ *  the circle to P.                                                          */
 kissvg_TwoVector kissvg_FurthestPointOnCircle(kissvg_Circle *C,
                                               kissvg_TwoVector P)
 {
-    kissvg_TwoVector out;
-    kissvg_TwoVector center;
-    kissvg_TwoVector Pcirc, Vcirc;
-    kissvg_Line2D *L;
-    kissvg_Bool is_line;
+    /*  Declare all necessary variables.                                      */
+    kissvg_TwoVector out, center;
     double radius, norm;
 
-    is_line = kissvg_CircleIsLine(C);
+    /*  Create a variable for the name of the function for error checking.    */
+    const char *FuncName = "kissvg_FurthestPointOnCircle";
 
-    if (is_line)
-    {
-        Pcirc = kissvg_CirclePoint(C);
-        Vcirc = kissvg_CircleTangent(C);
-        L = kissvg_CreateLineFromPointAndTangent(Pcirc, Vcirc, NULL);
-        out = kissvg_ClosestPointOnLine(L, P);
-        kissvg_DestroyLine2D(L);
-    }
+    /*  Check the input circle for errors. This will abort if there are.      */
+    __check_circle_error(C, FuncName);
+
+    /*  If the input circle is a line (circle with infinite radius), return   *
+     *  the point at infinity (inf, inf).                                     */
+    if (kissvg_CircleIsLine(C))
+        out = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+
+    /*  Otherwise the input is an actual circle so we compute as such.        */
     else
     {
+        /*  Extract the center and radius from the circle.                    */
         center = kissvg_CircleCenter(C);
         radius = kissvg_CircleRadius(C);
+
+        /*  Get a vector pointing from P to the center of the circle and      *
+         *  compute its norm.                                                 */
         out = kissvg_TwoVectorSubtract(P, center);
         norm = kissvg_EuclideanNorm2D(out);
+
+        /*  If the norm is zero, the input point is the center, so simple set *
+         *  (-r, 0) as the furthest point (we'll shift by center after). We   *
+         *  do this since the closest point is set to (r, 0) in this case and *
+         *  we want closest and furthest to be antepodal points on the circle.*/
         if (norm == 0.0)
-            out = kissvg_NewTwoVector(-radius, 0.0);
+            out = kissvg_NewTwoVector(radius, 0.0);
+
+        /*  Otherwise the furthest point is the one on the circle antepodal   *
+         *  to the one between the center and the given point. Compute this.  */
         else
             out = kissvg_TwoVectorScale(-radius/norm, out);
 
+        /*  The above computation translated to the origin. Shift by center.  */
         out = kissvg_TwoVectorAdd(out, center);
     }
+
     return out;
 }
 
 kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
                                                   kissvg_Circle *C1)
 {
-    kissvg_TwoVector P0, P1;
+    kissvg_TwoVector center0, center1;
     double r0, r1;
     double dist;
     double a, h;
     double x0, y0;
     double x1, y1;
     double x2, y2;
+    double x_factor, y_factor;
 
     double inter0_x, inter0_y;
     double inter1_x, inter1_y;
 
     kissvg_TwoVector *intersections;
 
-    P0 = kissvg_CircleCenter(C0);
-    P1 = kissvg_CircleCenter(C1);
+    /*  Create a variable for the name of the function for error checking.    */
+    const char *FuncName = "kissvg_FurthestPointOnCircle";
 
+    /*  Check the input circles for errors. This will abort if there are.     */
+    __check_circle_error(C0, FuncName);
+    __check_circle_error(C1, FuncName);
+
+    /*  Extract the centers from the circles.                                 */
+    center0 = kissvg_CircleCenter(C0);
+    center1 = kissvg_CircleCenter(C1);
+
+    /*  Extract the radii.                                                    */
     r0 = kissvg_CircleRadius(C0);
     r1 = kissvg_CircleRadius(C1);
 
@@ -443,51 +584,65 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
         exit(0);
     }
 
-    dist = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(P0, P1));
+    dist = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(center0, center1));
 
-    if ((dist > (r0+r1)) || (dist < kissvg_AbsDouble(r1-r0)) ||
+    /*  If any of these scenarios are true, the intersection set is empty.    */
+    if ((dist > (r0+r1))                 ||
+        (dist < kissvg_AbsDouble(r1-r0)) ||
         ((dist == 0.0) && (r0 != r1)))
-    {
         intersections = NULL;
-        return intersections;
-    }
+
+    /*  If this is true, the two circels are the same and there are           *
+     *  infinitely many solutions.                                            */
     else if ((dist == 0.0) && (r0 == r1))
     {
         intersections = malloc(sizeof(*intersections));
         intersections[0] = kissvg_NewTwoVector(kissvg_Infinity,
                                                kissvg_Infinity);
-        return intersections;
     }
 
-    x0 = kissvg_TwoVectorXComponent(P0);
-    y0 = kissvg_TwoVectorYComponent(P0);
+    /*  Otherwise, there is a legitimate solution.                            */
+    else
+    {
+        /*  Allocate memory for two solutions, even if they're the same.      */
+        intersections = malloc(sizeof(*intersections)*2);
 
-    x1 = kissvg_TwoVectorXComponent(P1);
-    y1 = kissvg_TwoVectorYComponent(P1);
+        /*  Extract the x and y coordinates of the centers.                   */
+        x0 = kissvg_TwoVectorXComponent(center0);
+        y0 = kissvg_TwoVectorYComponent(center0);
 
-    a = (r0*r0 - r1*r1 + dist*dist) / (2.0*dist);
-    h = sqrt(r0*r0 - a*a);
+        x1 = kissvg_TwoVectorXComponent(center1);
+        y1 = kissvg_TwoVectorYComponent(center1);
 
-    x2 = x0 + (a/dist) * (x1-x0);
-    y2 = y0 + (a/dist) * (y1-y0);
+        /*  Compute some necessary variables.                                 */
+        a = (r0*r0 - r1*r1 + dist*dist) / (2.0*dist);
+        h = sqrt(r0*r0 - a*a);
 
-    inter0_x = x2 + h*(y1 - y0)/dist;
-    inter0_y = y2 - h*(x1 - x0)/dist;
+        x2 = x0 + (a/dist) * (x1-x0);
+        y2 = y0 + (a/dist) * (y1-y0);
 
-    inter1_x = x2 - h*(y1 - y0)/dist;
-    inter1_y = y2 + h*(x1 - x0)/dist;
+        /*  If these variables are zero, both solutions are identical. This   *
+         *  is fine, the output will still have two solutions allocated.      */
+        x_factor = h*(y1 - y0)/dist;
+        y_factor = h*(x1 - x0)/dist;
 
-    intersections = malloc(sizeof(*intersections)*2);
+        /*  Compute the solutions.                                            */
+        inter0_x = x2 + x_factor;
+        inter0_y = y2 - y_factor;
+        inter1_x = x2 - x_factor;
+        inter1_y = y2 + y_factor;
 
-    intersections[0] = kissvg_NewTwoVector(inter0_x, inter0_y);
-    intersections[1] = kissvg_NewTwoVector(inter1_x, inter1_y);
+        /*  Store the solutions in the intersections variable.                */
+        intersections[0] = kissvg_NewTwoVector(inter0_x, inter0_y);
+        intersections[1] = kissvg_NewTwoVector(inter1_x, inter1_y);
+    }
 
     return intersections;
 }
 
-kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
-                                         kissvg_Circle *circle2,
-                                         kissvg_Circle *circle3)
+kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *C0,
+                                         kissvg_Circle *C1,
+                                         kissvg_Circle *C2)
 {
     kissvg_Circle **solutions;
     kissvg_Canvas2D *canvas;
@@ -514,18 +669,26 @@ kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *circle1,
     double s2[8] = {-1.0, -1.0,  1.0,  1.0, -1.0, -1.0,  1.0,  1.0};
     double s3[8] = {-1.0,  1.0, -1.0,  1.0, -1.0,  1.0, -1.0,  1.0};
 
-    canvas = circle1->canvas;
+    /*  Create a variable for the name of the function for error checking.    */
+    const char *FuncName = "kissvg_ApolloniusProblem";
+
+    /*  Check the input circles for errors. This will abort if there are.     */
+    __check_circle_error(C0, FuncName);
+    __check_circle_error(C1, FuncName);
+    __check_circle_error(C2, FuncName);
+
+    canvas = kissvg_GetCanvas(C0);
 
     /*  There are, in general, eight solutions so allocate eight slots.       */
     solutions = malloc(sizeof(*solutions) * N);
 
-    center1 = kissvg_CircleCenter(circle1);
-    center2 = kissvg_CircleCenter(circle2);
-    center3 = kissvg_CircleCenter(circle3);
+    center1 = kissvg_CircleCenter(C0);
+    center2 = kissvg_CircleCenter(C1);
+    center3 = kissvg_CircleCenter(C2);
 
-    r1 = kissvg_CircleRadius(circle1);
-    r2 = kissvg_CircleRadius(circle2);
-    r3 = kissvg_CircleRadius(circle3);
+    r1 = kissvg_CircleRadius(C0);
+    r2 = kissvg_CircleRadius(C1);
+    r3 = kissvg_CircleRadius(C2);
 
     x1 = kissvg_TwoVectorXComponent(center1);
     y1 = kissvg_TwoVectorYComponent(center1);
@@ -644,4 +807,3 @@ kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
         return inter;
     }
 }
-

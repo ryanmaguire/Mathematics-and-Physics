@@ -94,7 +94,7 @@ static void draw(cairo_t *cr)
 
     kissvg_DestroyCircle(C1);
     kissvg_DestroyCircle(C2);
-    kissvg_DestroyCanvas2D(canvas);
+    kissvg_DestroyCanvas2D(&canvas);
     kissvg_DestroyPath2D(path);
 
     return;
