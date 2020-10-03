@@ -1,11 +1,30 @@
-/*
- *  Compile with:
- *      gcc-10 -std=c89 -pedantic -pedantic-errors -Wall -Wextra -I../../ \
- *      -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
- *      $(pkg-config --cflags --libs cairo) -c kissvg.c
- *
- *      gcc kissvg.o -shared -o libkissvg.so -lcairo
- */
+/******************************************************************************
+ *                                 LICENSE                                    *
+ ******************************************************************************
+ *  This file is part of KissVG.                                              *
+ *                                                                            *
+ *  KissVG is free software: you can redistribute it and/or modify it         *
+ *  it under the terms of the GNU General Public License as published by      *
+ *  the Free Software Foundation, either version 3 of the License, or         *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  KissVG is distributed in the hope that it will be useful,                 *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with KissVG.  If not, see <https://www.gnu.org/licenses/>.          *
+ ******************************************************************************
+ *                                  kissvg                                    *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      This file provides many of the functions described in kissvg.h. See   *
+ *      that header file for more details.                                    *
+ ******************************************************************************
+ *  Author:     Ryan Maguire, Dartmouth College                               *
+ *  Date:       October 2, 2020                                               *
+ ******************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -26,55 +45,116 @@
  ******************************************************************************
  ******************************************************************************/
 
+/*  Function for transforming user coordinates to the coordinate of the file. *
+ *  That is, the user coordinates are of the form (x, y), a point in the      *
+ *  Cartesian plane, whereas the file coordinates depend on the .svg/.ps/.pdf *
+ *  file. This function transforms the x coordinate.                          */
 static double __kissvg_CanvasTransformX(kissvg_Canvas2D *canvas, double x)
 {
     return kissvg_Canvas2DXShift(canvas) + kissvg_Canvas2DXScale(canvas) * x;
 }
 
+/*  Same as __kissvg_CanvasTransformX but for the y coordinate.               */
 static double __kissvg_CanvasTransformY(kissvg_Canvas2D *canvas, double y)
 {
     return kissvg_Canvas2DYShift(canvas) - kissvg_Canvas2DYScale(canvas) * y;
 }
 
+/*  Create a canvas for a two dimensional drawing. This should be done once,  *
+ *  and only once, for every two dimensional drawing you make. It contains    *
+ *  the geometry of the file, the geometry of the user, and transformations   *
+ *  to swap between the two.                                                  */
 kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
                                        double x_min, double x_max,
                                        double y_min, double y_max,
                                        kissvg_Bool one_to_one_apect_ratio,
                                        kissvg_FileType filetype)
 {
+    /*  Declare necessary variables.                                          */
     kissvg_Canvas2D *canvas;
     double xshift, yshift, xscale, yscale;
 
+    /*  Allocate memory for the canvas.                                       */
     canvas = malloc(sizeof(*canvas));
 
+    /*  Check to make sure malloc didn't fail. Abort if it did.               */
+    if (canvas == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CreateCanvas2D\n\n"
+             "Malloc failed to create canvas and returned NULL. Aborting.\n\n");
+        exit(0);
+    }
+
+    /*  Compute the scales to go from Cartesian geometry to file coordinates. */
     xscale = x_inches/(x_max - x_min);
     yscale = y_inches/(y_max - y_min);
 
+    /*  If 1-1 aspect ratio has been requested, choose the smaller of x_scale *
+     *  and y_scale and set both variables to this value. This ensures the    *
+     *  drawing does not fall outside of the bounds.                          */
     if (one_to_one_apect_ratio)
     {
         xscale = (xscale < yscale ? xscale : yscale);
         yscale = xscale;
     }
 
+    /*  Set the shifts to center the figure in the file.                      */
     xshift = 0.5*x_inches - 0.5*(x_min + x_max)*xscale;
     yshift = 0.5*y_inches - 0.5*(y_min + y_max)*yscale;
 
+    /*  Set the canvas attributes to the computed values.                     */
     canvas->x_scale = xscale;
     canvas->y_scale = yscale;
     canvas->x_shift = xshift;
     canvas->y_shift = yshift;
 
+    /*  Set the TransformX and TransformY functions to point to the addresses *
+     *  associated to the __kissvg_CanvasTransformX and                       *
+     *  __kissvg_CanvasTransformY functions, respectively.                    */
     canvas->TransformX = &__kissvg_CanvasTransformX;
     canvas->TransformY = &__kissvg_CanvasTransformY;
 
+    /*  Set the filetype attribute to the requested type and return.          */
     canvas->filetype = filetype;
-
     return canvas;
 }
 
-void kissvg_DestroyCanvas2D(kissvg_Canvas2D *canvas)
+/*  Main function for destroying a two dimensional canvas. This should always *
+ *  be called at the end of a two dimensional drawing to avoid memory leaks.  */
+void kissvg_DestroyCanvas2D(kissvg_Canvas2D **canvas_pointer)
 {
-    free(canvas);
+    /*  Check that the input pointer was not NULL.                            */
+    if (canvas_pointer == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_DestroyCanvas2D\n\n"
+             "Input canvas_pointer is NULL. Aborting.");
+        exit(0);
+    }
+
+    /*  The only thing malloc'd by kissvg_CreateCanvas2D is the canvas itself *
+     *  so we only need to free this. If you already destroyed this, the      *
+     *  canvas variable is set to NULL after being free'd to prevent you from *
+     *  free'ing it twice. However, it's best to just keep track of what      *
+     *  you've created and destroyed.                                         */
+    if (*canvas_pointer == NULL)
+    {
+        puts("Warning: KissVG\n"
+             "\tFunction: kissvg_DestroyCanvas2D\n\n"
+             "You are calling kissvg_DestroyCanvas2D on a canvas that is\n"
+             "NULL. You likely already destroyed this canvas. Returning.\n");
+    }
+    else
+    {
+        /*  If canvas is not NULL, we can safely free it.                     */
+        free(*canvas_pointer);
+
+        /*  After freeing, set canvas to NULL to prevent user's from trying   *
+         *  to free this twice.                                               */
+        *canvas_pointer = NULL;
+    }
+
     return;
 }
 
@@ -86,23 +166,73 @@ void kissvg_DestroyCanvas2D(kissvg_Canvas2D *canvas)
  ******************************************************************************
  ******************************************************************************/
 
+/*  Function for creating a color in RGB (red-green-blue) format with real    *
+ *  values between 0 and 1. If the transparent Boolean is set to true, one    *
+ *  may use the alpha value to set the opacity of the color.                  */
 kissvg_Color *kissvg_CreateColor(double red, double green, double blue,
                                  kissvg_Bool transparent, double alpha)
 {
+    /*  Declare the necessary variable.                                       */
     kissvg_Color *color;
 
+    /*  Allocate memory for the color.                                        */
     color = malloc(sizeof(*color));
+
+    /*  Check to make sure malloc didn't fail. Abort if it did.               */
+    if (color == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CreateColor\n\n"
+             "Malloc failed to create color and returned NULL. Aborting.\n\n");
+        exit(0);
+    }
+
+    /*  Set the attributes for the color and return.                          */
     color->dat[0] = red;
     color->dat[1] = green;
     color->dat[2] = blue;
     color->has_transparency = transparent;
     color->alpha = alpha;
+
     return color;
 }
 
-void kissvg_DestroyColor(kissvg_Color *color)
+/*  Function for destroying new colors. Note you should NOT call this         *
+ *  function on predefined colors like kissvg_Black since these are not       *
+ *  created using malloc, so free'ing them causes errors.                     */
+void kissvg_DestroyColor(kissvg_Color **color_pointer)
 {
-    free(color);
+    /*  Check that the input pointer was not NULL.                            */
+    if (color_pointer == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_DestroyColor\n\n"
+             "Input color_pointer is NULL. Aborting.");
+        exit(0);
+    }
+
+    /*  The only thing malloc'd by kissvg_CreateColor is the color itself     *
+     *  so we only need to free this. If you already destroyed this, the      *
+     *  color variable is set to NULL after being free'd to prevent you from  *
+     *  free'ing it twice. However, it's best to just keep track of what      *
+     *  you've created and destroyed.                                         */
+    if (*color_pointer == NULL)
+    {
+        puts("Warning: KissVG\n"
+             "\tFunction: kissvg_DestroyColor\n\n"
+             "You are calling kissvg_DestroyColor on a color that is\n"
+             "NULL. You likely already destroyed this color. Returning.\n");
+    }
+    else
+    {
+        /*  If color is not NULL, we can safely free it.                      */
+        free(*color_pointer);
+
+        /*  After freeing, set color to NULL to prevent user's from trying    *
+         *  to free this twice.                                               */
+        *color_pointer = NULL;
+    }
+
     return;
 }
 
@@ -176,62 +306,94 @@ kissvg_Color *kissvg_Sand      = &__kissvg_Sand;
  ******************************************************************************
  ******************************************************************************/
 
-void kissvg_ArrowSetReverse(kissvg_Arrow *arrow, kissvg_Bool reverse)
+static void __check_arrow_error(kissvg_Arrow *arrow, char *FuncName)
 {
+    /*  If the input arrow is NULL, it was not set via kissvg_CreateArrow     *
+     *  or kissvg_DestroyArrow was called prematurely. In either case, print  *
+     *  an error message and abort the computation.                           */
     if (arrow == NULL)
     {
-        puts("Error Encountered: KissVG\n"
-             "\tFunction: kissvg_ArrowSetReverse\n\n"
-             "Input arrow is NULL. Aborting.\n\n");
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input arrow is NULL. Aborting.", FuncName);
         exit(0);
     }
 
+    /*  If the input arrow has an error set, abort the computation.           */
+    if (kissvg_HasError(arrow))
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input arrow has error_encoutered variable set to true.\n"
+               "Printing Error Message:\n\n", FuncName);
+
+        /*  If the error message is NULL, then it wasn't set. Print this.     */
+        if (kissvg_ErrorMessage(arrow) == NULL)
+            puts("Input circle did not have an error message set.\n\n");
+
+        /*  Otherwise, simply print the message.                              */
+        else
+            puts(kissvg_ErrorMessage(arrow));
+
+        /*  Abort the computation.                                            */
+        exit(0);
+    }
+
+    /*  If no error occured, return to caller.                                */
+    return;
+}
+
+/*  Function for reversing the direction of an arrow head.                    */
+void kissvg_ArrowSetReverse(kissvg_Arrow *arrow, kissvg_Bool reverse)
+{
+    /*  Check that the input arrow doesn't have errors.                       */
+    __check_arrow_error(arrow, "kissvg_ArrowSetReverse");
+
+    /*  Set reverse arrow to the requested Boolean and return.                */
     arrow->reverse_arrow = reverse;
     return;
 }
 
+/*  Function for setting the arrow type of a given arrow.                     */
 void kissvg_ArrowSetType(kissvg_Arrow *arrow, kissvg_ArrowType type)
 {
-    if (arrow == NULL)
-    {
-        puts("Error Encountered: KissVG\n"
-             "\tFunction: kissvg_ArrowSetType\n\n"
-             "Input arrow is NULL. Aborting.\n\n");
-        exit(0);
-    }
+    /*  Check that the input arrow doesn't have any errors.                   */
+    __check_arrow_error(arrow, "kissvg_ArrowSetType");
 
+    /*  Set the arrow_type to the requested value and return.                 */
     arrow->arrow_type = type;
     return;
 }
 
+/*  Function for setting the position of a given arrow.                       */
 void kissvg_ArrowSetPos(kissvg_Arrow *arrow, double pos)
 {
-    if (arrow == NULL)
-    {
-        puts("Error Encountered: KissVG\n"
-             "\tFunction: kissvg_ArrowSetPos\n\n"
-             "Input arrow is NULL. Aborting.\n\n");
-        exit(0);
-    }
+    /*  Check that the input arrow doesn't have errors.                       */
+    __check_arrow_error(arrow, "kissvg_ArrowSetPos");
 
+    /*  Set arrow_pos to the request position. Note that no error checks are  *
+     *  performed on this value, though it should lie between 0 and 1,        *
+     *  inclusively. In the drawing routines, values below zero are set to    *
+     *  zero and values above one are set to one.                             */
     arrow->arrow_pos = pos;
     return;
 }
 
+/*  Function for setting the size of the arrow head of a given arrow. Arrow   *
+ *  heads are defined by three points on a circle and this value is the       *
+ *  circle's radius.                                                          */
 void kissvg_ArrowSetSize(kissvg_Arrow *arrow, double size)
 {
-    if (arrow == NULL)
-    {
-        puts("Error Encountered: KissVG\n"
-             "\tFunction: kissvg_ArrowSetSize\n\n"
-             "Input arrow is NULL. Aborting.\n\n");
-        exit(0);
-    }
+    /*  Check that the input arrow doesn't have errors.                       */
+    __check_arrow_error(arrow, "kissvg_ArrowSetSize");
 
+    /*  Set the arrow size to the requested value and return.                 */
     arrow->arrow_size = size;
     return;
 }
 
+/*  Function for creating arrows. This is used by various path, axis, and     *
+ *  circle functions for storing arrows in those data types.                  */
 kissvg_Arrow *kissvg_CreateArrow(double pos,
                                  double arrow_size,
                                  kissvg_Color *arrow_fill_color,
@@ -240,9 +402,15 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
                                  kissvg_ArrowType type,
                                  double arrow_line_width)
 {
+    /*  Declare necessary variables.                                          */
     kissvg_Arrow *arrow;
+    char *mes;
+    long mes_len;
+
+    /*  Allocate memory for the arrow.                                        */
     arrow = malloc(sizeof(*arrow));
 
+    /*  Check to see if malloc failed.                                        */
     if (arrow == NULL)
     {
         puts("Error Encountered: KissVG\n"
@@ -251,11 +419,31 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
         exit(0);
     }
 
+    /*  If the size value is negative, set this as an error message.          */
+    if (arrow_size < 0.0)
+    {
+        kissvg_SetError(arrow, kissvg_True);
+        mes = "Error Encountered: KissVG\n"
+              "\tFunction: kissvg_CreateArrow\n\n"
+              "Input size is negative. Values must be non-negative.\n\n";
+
+        /*  Get the length of the above string. Add one to it since we need   *
+         *  to leave room for the null terminator "\0".                       */
+        mes_len = strlen(mes) + 1;
+
+        /*  Allocate memory for the error message and copy mes to this.       */
+        arrow->error_message = malloc(sizeof(*arrow->error_message) * mes_len);
+        strcpy(mes, arrow->error_message);
+    }
+
+    /*  If arrow_size is non-negative, set error_occured to false.            */
+    else
+        kissvg_SetError(arrow, kissvg_False);
+
     kissvg_ArrowSetPos(arrow, pos);
     kissvg_ArrowSetSize(arrow, arrow_size);
     kissvg_ArrowSetReverse(arrow, reverse_arrow);
     kissvg_ArrowSetType(arrow, type);
-
     kissvg_SetFillColor(arrow, arrow_fill_color);
     kissvg_SetLineColor(arrow, arrow_color);
     kissvg_SetLineWidth(arrow, arrow_line_width);
@@ -265,7 +453,41 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
 
 void kissvg_DestroyArrow(kissvg_Arrow *arrow)
 {
-    free(arrow);
+    char *err_mes;
+
+    /*  If the arrow has an error message attached to it, free this.          */
+    if (kissvg_HasError(arrow))
+    {
+        /*  Extract the error message from the arrow and set this as err_mes. */
+        err_mes = kissvg_ErrorMessage(arrow);
+
+        /*  Check that the pointer isn't NULL before free'ing.                */
+        if (err_mes != NULL)
+            free(err_mes);
+    }
+
+    /*  If you already destroyed this, the arrow variable is set to NULL      *
+     *  after being free'd to prevent you from free'ing it twice. However,    *
+     *  it's best to just keep track of what you've created and destroyed.    */
+    if (arrow == NULL)
+    {
+        puts("Warning: KissVG\n"
+             "\tFunction: kissvg_DestroyCanvas2D\n\n"
+             "You are calling kissvg_DestroyCanvas2D on a canvas that is\n"
+             "NULL. You likely already destroyed this canvas. Returning.");
+    }
+
+    /*  Otherwise, the only thing left to free is the arrow itself.           */
+    else
+    {
+        /*  If canvas is not NULL, we can safely free it.                     */
+        free(arrow);
+
+        /*  After freeing, set canvas to NULL to prevent user's from trying   *
+         *  to free this twice.                                               */
+        arrow = NULL;
+    }
+
     return;
 }
 
@@ -864,11 +1086,9 @@ kissvg_Circle *kissvg_CreateCircle(kissvg_TwoVector P, double r,
 
     if (circle == NULL)
     {
-        puts(
-            "Error Encountered: KissVG\n"
-            "\tFunction: kissvg_CreateCircle\n\n"
-            "Malloc failed to create circle and return NULL. Aborting."
-        );
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CreateCircle\n\n"
+             "Malloc failed to create circle and return NULL. Aborting.");
         exit(0);
     }
 
@@ -877,14 +1097,42 @@ kissvg_Circle *kissvg_CreateCircle(kissvg_TwoVector P, double r,
     kissvg_SetLineWidth(circle, kissvg_DefaultPen);
     kissvg_SetCanvas(circle, canvas);
     kissvg_CircleSetIsLine(circle, kissvg_False);
-
-    circle->center = P;
-    circle->radius = r;
-
+    kissvg_SetError(circle, kissvg_False);
     kissvg_SetHasArrows(circle, kissvg_False);
     kissvg_SetFillDraw(circle, kissvg_False);
 
+    circle->arrows = NULL;
+    circle->error_message = NULL;
+    circle->center = P;
+    circle->radius = r;
+
     return circle;
+}
+
+void kissvg_CircleSetErrorMessage(kissvg_Circle *C, char *mes)
+{
+    long mes_len;
+    if (C == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CircleSetErrorMessage\n\n"
+             "Input circle is NULL. Aborting.");
+        exit(0);
+    }
+
+    if (mes == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CircleSetErrorMessage\n\n"
+             "Input error message is NULL. Aborting.");
+        exit(0);
+    }
+
+    kissvg_SetError(C, kissvg_True);
+    mes_len = strlen(mes)+1;
+    C->error_message = malloc(sizeof(*C->error_message)*mes_len);
+    strcpy(C->error_message, mes);
+    return;
 }
 
 void kissvg_ResetCircle(kissvg_Circle *C, kissvg_TwoVector P, double r)
@@ -906,6 +1154,27 @@ void kissvg_ResetCircle(kissvg_Circle *C, kissvg_TwoVector P, double r)
 
 void kissvg_DestroyCircle(kissvg_Circle *circle)
 {
+    char *err_mes;
+    long n, N_Arrows;
+    kissvg_Arrow *current_arrow;
+    if (kissvg_HasError(circle))
+    {
+        err_mes = kissvg_ErrorMessage(circle);
+        if (err_mes != NULL)
+            free(err_mes);
+    }
+
+    if (kissvg_HasArrows(circle))
+    {
+        N_Arrows = kissvg_NumberOfArrows(circle);
+        for (n=0; n<N_Arrows; ++n)
+        {
+            current_arrow = kissvg_nthArrow(circle, n);
+            kissvg_DestroyArrow(current_arrow);
+        }
+        free(circle->arrows);
+    }
+
     free(circle);
     return;
 }
@@ -925,6 +1194,13 @@ kissvg_Line2D *kissvg_CreateLineFromTwoPoints(kissvg_TwoVector P,
     kissvg_Line2D *line;
     kissvg_TwoVector V;
     line = malloc(sizeof(*line));
+    if (line == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CreateLineFromTwoPoints\n\n"
+             "Malloc failed to create line and return NULL. Aborting.");
+        exit(0);
+    }
 
     V = kissvg_TwoVectorSubtract(Q, P);
 
@@ -934,6 +1210,10 @@ kissvg_Line2D *kissvg_CreateLineFromTwoPoints(kissvg_TwoVector P,
     kissvg_SetLineWidth(line, kissvg_DefaultPen);
     kissvg_SetLineColor(line, kissvg_Black);
     kissvg_SetCanvas(line, canvas);
+    kissvg_SetError(line, kissvg_False);
+    kissvg_SetHasArrows(line, kissvg_False);
+    line->arrows = NULL;
+    line->error_message = NULL;
 
     return line;
 }
@@ -944,6 +1224,13 @@ kissvg_Line2D *kissvg_CreateLineFromPointAndTangent(kissvg_TwoVector P,
 {
     kissvg_Line2D *line;
     line = malloc(sizeof(*line));
+    if (line == NULL)
+    {
+        puts("Error Encountered: KissVG\n"
+             "\tFunction: kissvg_CreateLineFromPointAndTangent\n\n"
+             "Malloc failed to create line and return NULL. Aborting.");
+        exit(0);
+    }
 
     line->P = P;
     line->V = V;
@@ -951,6 +1238,10 @@ kissvg_Line2D *kissvg_CreateLineFromPointAndTangent(kissvg_TwoVector P,
     kissvg_SetLineWidth(line, kissvg_DefaultPen);
     kissvg_SetLineColor(line, kissvg_Black);
     kissvg_SetCanvas(line, canvas);
+    kissvg_SetError(line, kissvg_False);
+    kissvg_SetHasArrows(line, kissvg_False);
+    line->arrows = NULL;
+    line->error_message = NULL;
 
     return line;
 }
@@ -1625,6 +1916,7 @@ void kissvg_DrawCircle2D(cairo_t *cr, kissvg_Circle *circle)
     }
 
     kissvg_DrawPolygon2D(cr, path);
+    kissvg_SetHasArrows(path, kissvg_False);
     kissvg_DestroyPath2D(path);
 
     return;
@@ -1676,6 +1968,7 @@ void kissvg_FillDrawCircle2D(cairo_t *cr, kissvg_Circle *circle)
     }
 
     kissvg_FillDrawPolygon2D(cr, path);
+    kissvg_SetHasArrows(path, kissvg_False);
     kissvg_DestroyPath2D(path);
 
     return;
