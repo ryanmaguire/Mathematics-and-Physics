@@ -3,13 +3,13 @@
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
 
-#define X_MIN -0.5
-#define X_MAX  6.8
+#define X_MIN -0.2
+#define X_MAX  6.3
 #define Y_MIN -1.35
 #define Y_MAX  1.35
 
-#define X_INCHES 3 * 72.0
-#define Y_INCHES 1 * 72.0
+#define X_INCHES 6 * 72.0
+#define Y_INCHES 2 * 72.0
 
 #define FILENAME "kissvg_Sine"
 
@@ -19,10 +19,11 @@ static void draw(cairo_t *cr)
     kissvg_Canvas2D *canvas;
     kissvg_Axis2D *axis;
     kissvg_Circle *circle;
+    kissvg_Arrow *arrow;
     kissvg_TwoVector P, Q;
     kissvg_TwoVector A, B, C;
 
-    long n, N;
+    long n, N, current_arrow;
     double x0, y0;
     double x1, y1;
     double dx;
@@ -42,6 +43,7 @@ static void draw(cairo_t *cr)
 
     pathP = kissvg_CreatePath2D(P, canvas);
     pathQ = kissvg_CreatePath2D(Q, canvas);
+    current_arrow = 0;
 
     for (n=0; n<N; ++n)
     {
@@ -55,6 +57,24 @@ static void draw(cairo_t *cr)
 
         kissvg_AppendPath2D(pathP, P);
         kissvg_AppendPath2D(pathQ, Q);
+
+        if (((n % 50) == 0) && (n != 0))
+        {
+            kissvg_Path2DAddArrow(pathP, ((double)n) / ((double)N),
+                                  0.8*kissvg_DefaultArrowSize,
+                                  kissvg_StealthArrow);
+
+            arrow = kissvg_nthArrow(pathP, current_arrow);
+            kissvg_SetFillColor(arrow, kissvg_Aqua);
+
+            kissvg_Path2DAddArrow(pathQ, ((double)n) / ((double)N),
+                                  0.8*kissvg_DefaultArrowSize,
+                                  kissvg_StealthArrow);
+            arrow = kissvg_nthArrow(pathQ, current_arrow);
+            kissvg_SetFillColor(arrow, kissvg_Aqua);
+
+            current_arrow += 1;
+        }
     }
 
     /*  Set the first region to fill with the default blue color.             */
@@ -72,19 +92,20 @@ static void draw(cairo_t *cr)
     kissvg_FillDrawPolygon2D(cr, pathP);
     kissvg_FillDrawPolygon2D(cr, pathQ);
 
-    kissvg_DestroyPath2D(pathP);
-    kissvg_DestroyPath2D(pathQ);
+    kissvg_DestroyPath2D(&pathP);
+    kissvg_DestroyPath2D(&pathQ);
 
     /*  Create and draw the y-axis.                                           */
     P = kissvg_NewTwoVector(0.0, -1.2);
     Q = kissvg_NewTwoVector(0.0,  1.2);
+
     axis = kissvg_CreateAxis2D(P, Q, canvas);
 
     kissvg_Axis2DChangeEndArrow(axis, 1.0, kissvg_DefaultArrowSize,
-                                kissvg_Black, kissvg_Black, kissvg_False,
+                                kissvg_Black, kissvg_Black,
                                 kissvg_StealthArrow, 0.5*kissvg_ThinPen);
     kissvg_Axis2DAddArrow(axis, 0.0, kissvg_DefaultArrowSize, kissvg_Black,
-                          kissvg_Black, kissvg_True, kissvg_StealthArrow,
+                          kissvg_Black, kissvg_ReverseStealthArrow,
                           0.1*kissvg_ThinPen);
 
     P = kissvg_NewTwoVector(0.0, -1.0);
@@ -114,11 +135,10 @@ static void draw(cairo_t *cr)
     kissvg_Axis2DUseTicks(axis, kissvg_False);
     kissvg_SetLineWidth(axis, 0.5*kissvg_DefaultPen);
     kissvg_Axis2DAddArrow(axis, 0.4, kissvg_DefaultArrowSize, kissvg_Green,
-                          kissvg_Black, kissvg_True, kissvg_StealthArrow,
+                          kissvg_Black, kissvg_ReverseStealthArrow,
                           kissvg_ThinPen);
     kissvg_Axis2DAddArrow(axis, 0.6, kissvg_DefaultArrowSize, kissvg_Green,
-                          kissvg_Black, kissvg_False, kissvg_StealthArrow,
-                          kissvg_ThinPen);
+                          kissvg_Black, kissvg_StealthArrow, kissvg_ThinPen);
     kissvg_DrawAxis2D(cr, axis);
     kissvg_DestroyAxis2D(axis);
 
@@ -144,7 +164,7 @@ static void draw(cairo_t *cr)
     kissvg_FillDrawCircle2D(cr, circle);
     kissvg_DestroyCircle(circle);
 
-    kissvg_DestroyCanvas2D(canvas);
+    kissvg_DestroyCanvas2D(&canvas);
 
     return;
 }

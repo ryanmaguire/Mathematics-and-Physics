@@ -1,20 +1,81 @@
+/******************************************************************************
+ *                                 LICENSE                                    *
+ ******************************************************************************
+ *  This file is part of KissVG.                                              *
+ *                                                                            *
+ *  KissVG is free software: you can redistribute it and/or modify it         *
+ *  it under the terms of the GNU General Public License as published by      *
+ *  the Free Software Foundation, either version 3 of the License, or         *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  KissVG is distributed in the hope that it will be useful,                 *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with KissVG.  If not, see <https://www.gnu.org/licenses/>.          *
+ ******************************************************************************
+ *                              kissvg_defs                                   *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Typedef the various structs that are used frequently in KissVG.       *
+ *  Data Types:                                                               *
+ *      kissvg_TwoVector:                                                     *
+ *          Primary tool for two-dimensional/planar geometry and drawing. It  *
+ *          is a data type used to represent the ordered pair (x, y).         *
+ *      kissvg_TwoByTwoMatrix:                                                *
+ *          A data type representing a 2x2 matrix. Used for applying linear   *
+ *          transformations to a kissvg_TwoVector.                            *
+ *      kissvg_Canvas2D:                                                      *
+ *          A struct which contains all of the necessary data to transform    *
+ *          the intrinsic geometry of the output file (.ps, .svg, or whatever *
+ *          is being produced) to the coordinate geometry of the user.        *
+ *      kissvg_Path2D:                                                        *
+ *          A struct containing a pointer to a kissvg_TwoVector, as well as   *
+ *          data for the drawing like color, line width, etc.                 *
+ *      kissvg_Axis2D:                                                        *
+ *          A specialized kissvg_Path2D with additional data for tick marks.  *
+ *      kissvg_Color:                                                         *
+ *          A struct containing red, green, and blue values (r g, b). The     *
+ *          values use real numbers between 0 and 1, and not chars between 0  *
+ *          and 255.                                                          *
+ *      kissvg_ArrowType:                                                     *
+ *          An integer corresponding to various arrow styles.                 *
+ *      kissvg_Arrow:                                                         *
+ *          A struct containing data pertaining to arrows stored in paths.    *
+ *          This includes size, color, fill color, and more.                  *
+ *      kissvg_Circle:                                                        *
+ *          Data structure for circles, including a kissvg_TwoVector for the  *
+ *          center and a double for the radius. In addition it contains data  *
+ *          for drawing the circle.                                           *
+ ******************************************************************************
+ *                               DEPENDENCIES                                 *
+ ******************************************************************************
+ *  1.) kissvg_bool.h:                                                        *
+ *      Header file where kissvg_bool is typedef'd, as well as kissvg_true    *
+ *      and kissvg_false.                                                     *
+ ******************************************************************************
+ *  Author:     Ryan Maguire, Dartmouth College                               *
+ *  Date:       October 3, 2020                                               *
+ ******************************************************************************/
+
 /*  Include guard to prevent including this file twice.                       */
 #ifndef _KISSVG_DEFS_H_
 #define _KISSVG_DEFS_H_
 
+/*  Several of the structs have Booleans in them which are defined here.      */
 #include <kissvg/include/kissvg_bool.h>
 
+/*  Enumeration for legal file outputs. Currently PostScript (.ps), Scalable  *
+ *  Vector Graphics (.svg), and Portable Document Format (.pdf) are allowed.  */
 typedef enum {
     kissvg_PS,
     kissvg_SVG,
     kissvg_PDF
 } kissvg_FileType;
 
-/*  First we'll define the basics of two dimensional Euclidean geometry, and  *
- *  then three dimensional after. But first-first, we typedef things.         */
-
-/*  We'll define a plane point the same way we do a complex value. See        *
- *  kissvg_complex.h for this typedef.                                        */
+/*  We'll define a plane point the same way we do a complex value.            */
 typedef struct kissvg_TwoVector {
     double dat[2];
 } kissvg_TwoVector;
@@ -30,6 +91,7 @@ typedef struct kissvg_TwoByTwoMatrix {
  *  convert between the geometry of the actual output file                    *
  *  (.ps, .svg, .pdf, etc.) and the coordinates we use for computations.      */
 typedef struct kissvg_Canvas2D kissvg_Canvas2D;
+typedef double (*kissvg_CanvasTransform) (kissvg_Canvas2D *, double);
 
 struct kissvg_Canvas2D {
     kissvg_FileType filetype;
@@ -48,8 +110,8 @@ struct kissvg_Canvas2D {
     double x_shift;
     double y_shift;
 
-    double (*TransformX) (kissvg_Canvas2D *, double);
-    double (*TransformY) (kissvg_Canvas2D *, double);
+    kissvg_CanvasTransform TransformX;
+    kissvg_CanvasTransform TransformY;
 };
 
 /*  This is the primary structure for using colors in drawings. It is a       *
@@ -64,6 +126,7 @@ typedef struct kissvg_Color {
     kissvg_Bool has_transparency;
 } kissvg_Color;
 
+/*  Struct for adding labels to figures.                                      */
 typedef struct kissvg_Label2D {
     char *label_content;
     int font_size;
@@ -76,12 +139,17 @@ typedef struct kissvg_Label2D {
 } kissvg_Label2D;
 
 /*  Enumerated list of arrow types. Currently only three are provided, which  *
- *  are modeled after the tikz arrows. A no-arrow option is also provided.    */
+ *  are modeled after the tikz arrows. A no-arrow option is also provided. If *
+ *  you want to flip the direction, use the Reverse option, i.e. something    *
+ *  like kissvg_StealthArrowReverse.                                          */
 typedef enum {
     kissvg_NoArrow,
     kissvg_StealthArrow,
+    kissvg_ReverseStealthArrow,
     kissvg_TriangularArrow,
-    kissvg_LatexArrow
+    kissvg_ReverseTriangularArrow,
+    kissvg_LatexArrow,
+    kissvg_ReverseLatexArrow
 } kissvg_ArrowType;
 
 /*  Struct containing all of the information for arrows. This struct is       *
@@ -139,9 +207,14 @@ typedef struct kissvg_Path2D {
      *  an open path. By default it is false.                                 */
     kissvg_Bool is_closed;
 
+    /*  Boolean for determining if there are lables along the path.           */
     kissvg_Bool has_labels;
+
+    /*  Pointer to the labels of the path.                                    */
     kissvg_Label2D **labels;
-    long N_Labels;
+
+    /*  The number of labels on the path.                                     */
+    unsigned long N_Labels;
 
     /*  Boolean for determining if the region enclosed should be filled in.   *
      *  Default is set to false. If this Boolean is set to true, the various  *

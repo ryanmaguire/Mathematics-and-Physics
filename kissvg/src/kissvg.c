@@ -26,12 +26,21 @@
  *  Date:       October 2, 2020                                               *
  ******************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+/*  Needed for puts, printf, and more.                                        */
 #include <stdio.h>
+
+/*  Contains malloc, exit, realloc, etc.                                      */
+#include <stdlib.h>
+
+/*  Useful string manipulating functions like strcpy and strlen found here.   */
+#include <string.h>
+
+/*  The main headers for kissvg are located here.                             */
 #include <kissvg/include/kissvg.h>
 #include <kissvg/include/kissvg_math.h>
 #include <kissvg/include/kissvg_bool.h>
+
+/*  Currently we use the cairo backends for producing the output files.       */
 #include <cairo/src/cairo.h>
 #include <cairo/src/cairo-pdf.h>
 #include <cairo/src/cairo-svg.h>
@@ -72,7 +81,11 @@ kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
 {
     /*  Declare necessary variables.                                          */
     kissvg_Canvas2D *canvas;
+    kissvg_FileType *filetype_pointer;
+    double *xshift_pointer, *yshift_pointer;
+    double *xscale_pointer, *yscale_pointer;
     double xshift, yshift, xscale, yscale;
+    kissvg_CanvasTransform *TransformX_pointer, *TransformY_pointer;
 
     /*  Allocate memory for the canvas.                                       */
     canvas = malloc(sizeof(*canvas));
@@ -85,6 +98,17 @@ kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
              "Malloc failed to create canvas and returned NULL. Aborting.\n\n");
         exit(0);
     }
+
+    /*  Have the pointers we declared point to the attributes in the canvas.  */
+    xscale_pointer = &kissvg_Canvas2DXScale(canvas);
+    yscale_pointer = &kissvg_Canvas2DYScale(canvas);
+    xshift_pointer = &kissvg_Canvas2DXShift(canvas);
+    yshift_pointer = &kissvg_Canvas2DYShift(canvas);
+
+    TransformX_pointer = &kissvg_Canvas2DTransformX(canvas);
+    TransformY_pointer = &kissvg_Canvas2DTransformY(canvas);
+
+    filetype_pointer = &kissvg_Canvas2DFiletype(canvas);
 
     /*  Compute the scales to go from Cartesian geometry to file coordinates. */
     xscale = x_inches/(x_max - x_min);
@@ -100,28 +124,30 @@ kissvg_Canvas2D *kissvg_CreateCanvas2D(double x_inches, double y_inches,
     }
 
     /*  Set the shifts to center the figure in the file.                      */
-    xshift = 0.5*x_inches - 0.5*(x_min + x_max)*xscale;
-    yshift = 0.5*y_inches - 0.5*(y_min + y_max)*yscale;
+    xshift = 0.5*x_inches - 0.5*(x_min + x_max) * xscale;
+    yshift = 0.5*y_inches - 0.5*(y_min + y_max) * yscale;
 
-    /*  Set the canvas attributes to the computed values.                     */
-    canvas->x_scale = xscale;
-    canvas->y_scale = yscale;
-    canvas->x_shift = xshift;
-    canvas->y_shift = yshift;
+    *xshift_pointer = xshift;
+    *yshift_pointer = yshift;
+    *xscale_pointer = xscale;
+    *yscale_pointer = yscale;
 
     /*  Set the TransformX and TransformY functions to point to the addresses *
      *  associated to the __kissvg_CanvasTransformX and                       *
      *  __kissvg_CanvasTransformY functions, respectively.                    */
-    canvas->TransformX = &__kissvg_CanvasTransformX;
-    canvas->TransformY = &__kissvg_CanvasTransformY;
+    *TransformX_pointer = &__kissvg_CanvasTransformX;
+    *TransformY_pointer = &__kissvg_CanvasTransformY;
 
     /*  Set the filetype attribute to the requested type and return.          */
-    canvas->filetype = filetype;
+    *filetype_pointer = filetype;
     return canvas;
 }
 
 /*  Main function for destroying a two dimensional canvas. This should always *
- *  be called at the end of a two dimensional drawing to avoid memory leaks.  */
+ *  be called at the end of a two dimensional drawing to avoid memory leaks.  *
+ *  Note, kissvg_CreateCanvas2D returns a pointer to a kissvg_Canvas2D struct *
+ *  where as this function wants a pointer to a pointer to a kissvg_Canvas2D  *
+ *  kissvg_Canvas2D. Destroy the canvas with kissvg_DestroyCanvas2D(&canvas). */
 void kissvg_DestroyCanvas2D(kissvg_Canvas2D **canvas_pointer)
 {
     /*  Check that the input pointer was not NULL.                            */
@@ -306,6 +332,7 @@ kissvg_Color *kissvg_Sand      = &__kissvg_Sand;
  ******************************************************************************
  ******************************************************************************/
 
+/*  Private error checking function for a kissvg_Arrow pointer.               */
 static void __check_arrow_error(kissvg_Arrow *arrow, char *FuncName)
 {
     /*  If the input arrow is NULL, it was not set via kissvg_CreateArrow     *
@@ -371,8 +398,8 @@ void kissvg_ArrowSetPos(kissvg_Arrow *arrow, double pos)
     /*  Check that the input arrow doesn't have errors.                       */
     __check_arrow_error(arrow, "kissvg_ArrowSetPos");
 
-    /*  Set arrow_pos to the request position. Note that no error checks are  *
-     *  performed on this value, though it should lie between 0 and 1,        *
+    /*  Set arrow_pos to the requested position. Note that no error checks    *
+     *  are performed on this value, though it should lie between 0 and 1,    *
      *  inclusively. In the drawing routines, values below zero are set to    *
      *  zero and values above one are set to one.                             */
     arrow->arrow_pos = pos;
@@ -398,13 +425,13 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
                                  double arrow_size,
                                  kissvg_Color *arrow_fill_color,
                                  kissvg_Color *arrow_color,
-                                 kissvg_Bool reverse_arrow,
                                  kissvg_ArrowType type,
                                  double arrow_line_width)
 {
     /*  Declare necessary variables.                                          */
     kissvg_Arrow *arrow;
-    char *mes;
+    kissvg_Bool reverse_arrow;
+    char *mes, **arrow_mes_pointer;
     long mes_len;
 
     /*  Allocate memory for the arrow.                                        */
@@ -419,6 +446,9 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
         exit(0);
     }
 
+    /*  Get a pointer to the error message inside the arrow.                  */
+    arrow_mes_pointer = &kissvg_ErrorMessage(arrow);
+
     /*  If the size value is negative, set this as an error message.          */
     if (arrow_size < 0.0)
     {
@@ -432,28 +462,52 @@ kissvg_Arrow *kissvg_CreateArrow(double pos,
         mes_len = strlen(mes) + 1;
 
         /*  Allocate memory for the error message and copy mes to this.       */
-        arrow->error_message = malloc(sizeof(*arrow->error_message) * mes_len);
-        strcpy(mes, arrow->error_message);
+        *arrow_mes_pointer = malloc(sizeof(*arrow->error_message) * mes_len);
+        strcpy(*arrow_mes_pointer, mes);
     }
 
-    /*  If arrow_size is non-negative, set error_occured to false.            */
+    /*  If arrow_size is non-negative, set error occured to false.            */
     else
+    {
+        /*  Set the error occured variable to false.                          */
         kissvg_SetError(arrow, kissvg_False);
 
+        /*  Set the actual error message (not it's pointer) to NULL.          */
+        *arrow_mes_pointer = NULL;
+    }
+
+    /*  If any of the reverse-type arrows have been selected, set the         *
+     *  reverse_arrow Boolean to true. Otherwise, set it to false.            */
+    if ((type == kissvg_ReverseLatexArrow)      ||
+        (type == kissvg_ReverseStealthArrow)    ||
+        (type == kissvg_ReverseTriangularArrow))
+        reverse_arrow = kissvg_True;
+    else
+        reverse_arrow = kissvg_False;
+
+    /*  Store the requested values in the arrow and return.                   */
     kissvg_ArrowSetPos(arrow, pos);
-    kissvg_ArrowSetSize(arrow, arrow_size);
-    kissvg_ArrowSetReverse(arrow, reverse_arrow);
     kissvg_ArrowSetType(arrow, type);
-    kissvg_SetFillColor(arrow, arrow_fill_color);
+    kissvg_ArrowSetSize(arrow, arrow_size);
     kissvg_SetLineColor(arrow, arrow_color);
+    kissvg_SetFillColor(arrow, arrow_fill_color);
     kissvg_SetLineWidth(arrow, arrow_line_width);
+    kissvg_ArrowSetReverse(arrow, reverse_arrow);
 
     return arrow;
 }
 
-void kissvg_DestroyArrow(kissvg_Arrow *arrow)
+/*  Main function for destroying arrows. This should always. Note,            *
+ *  kissvg_CreateArrow returns a pointer to a kissvg_Arrow struct whereas     *
+ *  this function wants a pointer to a pointer to a kissvg_Arrow struct.      *
+ *  Destroy the arrow with kissvg_DestroyArrow(&arrow).                       */
+void kissvg_DestroyArrow(kissvg_Arrow **arrow_pointer)
 {
     char *err_mes;
+    kissvg_Arrow *arrow;
+
+    /*  Extract the arrow pointer from the input pointer-to-a-pointer.        */
+    arrow = *arrow_pointer;
 
     /*  If the arrow has an error message attached to it, free this.          */
     if (kissvg_HasError(arrow))
@@ -472,20 +526,20 @@ void kissvg_DestroyArrow(kissvg_Arrow *arrow)
     if (arrow == NULL)
     {
         puts("Warning: KissVG\n"
-             "\tFunction: kissvg_DestroyCanvas2D\n\n"
-             "You are calling kissvg_DestroyCanvas2D on a canvas that is\n"
-             "NULL. You likely already destroyed this canvas. Returning.");
+             "\tFunction: kissvg_DestroyArrow\n\n"
+             "You are calling kissvg_DestroyArrow on an arrow that is\n"
+             "NULL. You likely already destroyed this arrow. Returning.");
     }
 
     /*  Otherwise, the only thing left to free is the arrow itself.           */
     else
     {
-        /*  If canvas is not NULL, we can safely free it.                     */
+        /*  If arrow is not NULL, we can safely free it.                     */
         free(arrow);
 
-        /*  After freeing, set canvas to NULL to prevent user's from trying   *
+        /*  After freeing, set arrow to NULL to prevent user's from trying    *
          *  to free this twice.                                               */
-        arrow = NULL;
+        *arrow_pointer = NULL;
     }
 
     return;
@@ -499,6 +553,50 @@ void kissvg_DestroyArrow(kissvg_Arrow *arrow)
  ******************************************************************************
  ******************************************************************************/
 
+/*  Private error checking function for a kissvg_Path2D pointer.               */
+static void __check_path_error(kissvg_Path2D *path, char *FuncName)
+{
+    /*  If the input path is NULL, it was not set via kissvg_CreatePath2D     *
+     *  or kissvg_DestroyPath2D was called prematurely. In either case, print *
+     *  an error message and abort the computation.                           */
+    if (path == NULL)
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input path is NULL. Aborting.", FuncName);
+        exit(0);
+    }
+
+    /*  If the input arrow has an error set, abort the computation.           */
+    if (kissvg_HasError(path))
+    {
+        printf("Error Encountered: KissVG\n"
+               "\tFunction: %s\n\n"
+               "Input path has error_encoutered variable set to true.\n"
+               "Printing Error Message:\n\n", FuncName);
+
+        /*  If the error message is NULL, then it wasn't set. Print this.     */
+        if (kissvg_ErrorMessage(path) == NULL)
+            puts("Input circle did not have an error message set.\n\n");
+
+        /*  Otherwise, simply print the message.                              */
+        else
+            puts(kissvg_ErrorMessage(path));
+
+        /*  Abort the computation.                                            */
+        exit(0);
+    }
+
+    /*  If no error occured, return to caller.                                */
+    return;
+}
+
+/*  Private function for converting the position of a point on a path in      *
+ *  in terms of its relative arc-length to a point in the plane. That is,     *
+ *  many functions store labels and arrows via a single real number t between *
+ *  0 and 1. This represents a point by how far along the path it is. If it's *
+ *  at the start, then t=0, the end has t=1, and the midpoint has t=0.5. This *
+ *  function returns the actual Cartesian coordinates.                        */
 static kissvg_TwoVector __GetPos(kissvg_Path2D *path, double pos)
 {
     double norm;
@@ -584,39 +682,64 @@ static kissvg_TwoVector __GetPos(kissvg_Path2D *path, double pos)
     return out;
 }
 
-void kissvg_Path2DCreateArrow(kissvg_Path2D *path, double pos,
-                              double arrow_size,
-                              kissvg_Color *arrow_fill_color,
-                              kissvg_Color *arrow_color,
-                              kissvg_Bool reverse_arrow,
-                              kissvg_ArrowType type,
-                              double arrow_line_width)
-{
-    kissvg_SetHasArrows(path, kissvg_True);
-    path->N_Arrows = 1;
-    path->arrows = malloc(sizeof(*path->arrows));
-
-    path->arrows[0] = kissvg_CreateArrow(pos, arrow_size, arrow_fill_color,
-                                         arrow_color, reverse_arrow, type,
-                                         arrow_line_width);
-    return;
-}
-
+/*  Function for adding an arrow along a path.                                */
 void kissvg_Path2DAddArrow(kissvg_Path2D *path, double pos, double arrow_size,
-                           kissvg_Color *arrow_fill_color,
-                           kissvg_Color *arrow_color,
-                           kissvg_Bool reverse_arrow,
-                           kissvg_ArrowType type,
-                           double arrow_line_width)
+                           kissvg_ArrowType type)
 {
-    path->N_Arrows += 1;
-    path->arrows = realloc(path->arrows, sizeof(*path->arrows)*path->N_Arrows);
+    /*  Declare necessary variables and set them to their defaults.           */
+    kissvg_Color *fill_color;
+    kissvg_Color *line_color;
+    kissvg_Arrow ***arrow_pointer;
+    double line_width;
+    unsigned long *N_Arrows_pointer;
 
-    path->arrows[path->N_Arrows-1] = kissvg_CreateArrow(pos, arrow_size,
-                                                        arrow_fill_color,
-                                                        arrow_color,
-                                                        reverse_arrow, type,
-                                                        arrow_line_width);
+    /*  You can change the defaults by accesing the nth arrow with            *
+     *  arrow = kissvg_nthArrow(path, n) and using the kissvg_Arrow functions.*/
+    fill_color = kissvg_Black;
+    line_color = kissvg_Black;
+    line_width = kissvg_ThinPen;
+
+    /*  Check for errors in the input path.                                   */
+    __check_path_error(path, "kissvg_Path2DAddArrow");
+
+    /*  Get pointers to the relevant attributes of the path.                  */
+    N_Arrows_pointer = &kissvg_NumberOfArrows(path);
+    arrow_pointer = &kissvg_ArrowData(path);
+
+    /*  If this is the first arrow on the path, we need to allocate memory    *
+     *  for it, set the has_arrows Boolean to true, and set N_Arrows to 1.    */
+    if (!kissvg_HasArrows(path))
+    {
+        kissvg_SetHasArrows(path, kissvg_True);
+
+        *N_Arrows_pointer = 1;
+        *arrow_pointer = malloc(sizeof(*arrow_pointer));
+
+        /*  Check if malloc failed.                                           */
+        if (*arrow_pointer == NULL)
+        {
+            puts("Error Encountered: KissVG\n"
+                 "\tFunction: kissvg_Path2DAddArrow\n\n"
+                 "Malloc failed and returned NULL. Aborting.\n\n");
+            exit(0);
+        }
+
+        /*  Otherwise, set the first point to the requested arrow.            */
+        (*arrow_pointer)[0] = kissvg_CreateArrow(pos, arrow_size, fill_color,
+                                                 line_color, type, line_width);
+    }
+
+    /*  Otherwise increment N_Arrows, realloc arrows, and create the new one. */
+    else
+    {
+        *N_Arrows_pointer  += 1;
+        *arrow_pointer = realloc(*arrow_pointer,
+                                 sizeof(*arrow_pointer)* (*N_Arrows_pointer));
+
+        (*arrow_pointer)[(*N_Arrows_pointer)-1] = kissvg_CreateArrow(
+            pos, arrow_size, fill_color, line_color, type, line_width
+        );
+    }
 
     return;
 }
@@ -625,6 +748,8 @@ kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start,
                                    kissvg_Canvas2D *canvas)
 {
     kissvg_Path2D *path;
+    kissvg_TwoVector *data;
+    unsigned long *N_Pts_pointer;
 
     path = malloc(sizeof(*path));
 
@@ -646,8 +771,16 @@ kissvg_Path2D *kissvg_CreatePath2D(kissvg_TwoVector start,
         exit(0);
     }
 
-    path->data[0] = start;
-    path->N_Pts = 1;
+    /*  Get pointers to the data pointer, and a pointer to the variable       *
+     *  representing the number of elements in the path.                      */
+    data = kissvg_Path2DData(path);
+
+    /*  We need the address of the N_Pts attribute, so use & for this.        */
+    N_Pts_pointer = &kissvg_Path2DNumberOfPoints(path);
+
+    /*  Set the data pointer to the starting value and N_Pts to 1.            */
+    data[0] = start;
+    *N_Pts_pointer = 1;
 
     kissvg_SetLineColor(path, kissvg_Black);
     kissvg_SetFillColor(path, kissvg_Black);
@@ -690,11 +823,29 @@ void kissvg_AppendPath2D(kissvg_Path2D *path, kissvg_TwoVector P)
     return;
 }
 
-void kissvg_DestroyPath2D(kissvg_Path2D *path)
+void kissvg_DestroyPath2D(kissvg_Path2D **path_pointer)
 {
     long n, N_Arrows;
-    kissvg_Arrow *current_arrow;
-    free(path->data);
+    kissvg_Arrow **current_arrow;
+    kissvg_TwoVector *data;
+    kissvg_Path2D *path;
+
+    path = *path_pointer;
+    data = kissvg_Path2DData(path);
+
+    if (data == NULL)
+    {
+        puts("Warning: KissVG\n"
+             "\tFunction: kissvg_DestroyPath2D\n\n"
+             "The data in the path you are trying to destroy is NULL.\n"
+             "You likely already destroyed this path. Skipping.\n\n");
+    }
+    else
+    {
+        /*  If data is not NULL, we can safely free it.                       */
+        free(data);
+        data = NULL;
+    }
 
     N_Arrows = kissvg_NumberOfArrows(path);
 
@@ -702,14 +853,24 @@ void kissvg_DestroyPath2D(kissvg_Path2D *path)
     {
         for (n=0; n<N_Arrows; ++n)
         {
-            current_arrow = kissvg_nthArrow(path, n);
+            current_arrow = &kissvg_nthArrow(*path_pointer, n);
             kissvg_DestroyArrow(current_arrow);
+            *current_arrow = NULL;
         }
     }
 
     free(path);
+    *path_pointer = NULL;
     return;
 }
+
+/******************************************************************************
+ ******************************************************************************
+ *                                                                            *
+ *                     Begin kissvg_Label Functions                           *
+ *                                                                            *
+ ******************************************************************************
+ ******************************************************************************/
 
 void kissvg_Path2DCreateLabel(kissvg_Path2D *path, char *label_content,
                               double pos, int font_size,
@@ -891,39 +1052,27 @@ void kissvg_Axis2DUseDownTicks(kissvg_Axis2D *axis)
     return;
 }
 
-void kissvg_Axis2DCreateArrow(kissvg_Axis2D *axis, double pos,
-                              double arrow_size,
-                              kissvg_Color *arrow_fill_color,
-                              kissvg_Color *arrow_color,
-                              kissvg_Bool reverse_arrow,
-                              kissvg_ArrowType type,
-                              double arrow_line_width)
-{
-    kissvg_SetHasArrows(axis, kissvg_True);
-    axis->N_Arrows = 1;
-    axis->arrows = malloc(sizeof(*axis->arrows));
-
-    axis->arrows[0] = kissvg_CreateArrow(pos, arrow_size, arrow_fill_color,
-                                         arrow_color, reverse_arrow, type,
-                                         arrow_line_width);
-    return;
-}
-
 void kissvg_Axis2DAddArrow(kissvg_Axis2D *axis, double pos, double arrow_size,
-                           kissvg_Color *arrow_fill_color,
-                           kissvg_Color *arrow_color,
-                           kissvg_Bool reverse_arrow,
-                           kissvg_ArrowType type,
-                           double arrow_line_width)
+                           kissvg_Color *fill_color, kissvg_Color *line_color,
+                           kissvg_ArrowType type, double line_width)
 {
-    axis->N_Arrows += 1;
-    axis->arrows = realloc(axis->arrows, sizeof(*axis->arrows)*axis->N_Arrows);
+    if (!kissvg_HasArrows(axis))
+    {
+        kissvg_SetHasArrows(axis, kissvg_True);
+        axis->N_Arrows = 1;
+        axis->arrows = malloc(sizeof(*axis->arrows));
+        axis->arrows[0] = kissvg_CreateArrow(pos, arrow_size, fill_color,
+                                             line_color, type, line_width);
+    }
+    else
+    {
+        axis->N_Arrows += 1;
+        axis->arrows = realloc(axis->arrows,
+                               sizeof(*axis->arrows)*axis->N_Arrows);
 
-    axis->arrows[axis->N_Arrows-1] = kissvg_CreateArrow(pos, arrow_size,
-                                                        arrow_fill_color,
-                                                        arrow_color,
-                                                        reverse_arrow, type,
-                                                        arrow_line_width);
+        axis->arrows[axis->N_Arrows-1] = kissvg_CreateArrow(
+            pos, arrow_size, fill_color, line_color, type, line_width);
+    }
     return;
 }
 
@@ -959,10 +1108,13 @@ kissvg_Axis2D *kissvg_CreateAxis2D(kissvg_TwoVector start,
     kissvg_Axis2DSetAxisFinish(axis, finish);
     kissvg_Axis2DUseTicks(axis, kissvg_False);
 
-    kissvg_Axis2DCreateArrow(axis, 1.0, kissvg_DefaultArrowSize,
-                             kissvg_Black, kissvg_Black, kissvg_False,
-                             kissvg_StealthArrow,
-                             kissvg_DefaultArrowLineWidth);
+    /*  Currently the axis does not have arrows, so set to false. This will   *
+     *  be immediately changed when kissvg_Axis2DAddArrow is called. For now  *
+     *  we just need this Boolean initialized.                                */
+    kissvg_SetHasArrows(axis, kissvg_False);
+    kissvg_Axis2DAddArrow(axis, 1.0, kissvg_DefaultArrowSize,
+                          kissvg_Black, kissvg_Black, kissvg_StealthArrow,
+                          kissvg_DefaultArrowLineWidth);
 
     axis->up_ticks = kissvg_False;
     axis->down_ticks = kissvg_False;
@@ -974,7 +1126,6 @@ void kissvg_Axis2DChangeEndArrow(kissvg_Axis2D *axis, double pos,
                                  double arrow_size,
                                  kissvg_Color *arrow_fill_color,
                                  kissvg_Color *arrow_color,
-                                 kissvg_Bool reverse_arrow,
                                  kissvg_ArrowType type,
                                  double arrow_line_width)
 {
@@ -991,11 +1142,10 @@ void kissvg_Axis2DChangeEndArrow(kissvg_Axis2D *axis, double pos,
     }
 
     arrow = kissvg_nthArrow(axis, 0);
-    kissvg_DestroyArrow(arrow);
+    kissvg_DestroyArrow(&arrow);
 
-    arrow = kissvg_CreateArrow(pos, arrow_size,
-                               arrow_fill_color, arrow_color, reverse_arrow,
-                               type, arrow_line_width);
+    arrow = kissvg_CreateArrow(pos, arrow_size, arrow_fill_color,
+                               arrow_color, type, arrow_line_width);
 
     axis->arrows[0] = arrow;
     return;
@@ -1022,7 +1172,7 @@ void kissvg_DestroyAxis2D(kissvg_Axis2D *axis)
         for (n=0; n<N_Arrows; ++n)
         {
             current_arrow = kissvg_nthArrow(axis, n);
-            kissvg_DestroyArrow(current_arrow);
+            kissvg_DestroyArrow(&current_arrow);
         }
     }
 
@@ -1038,42 +1188,30 @@ void kissvg_DestroyAxis2D(kissvg_Axis2D *axis)
  ******************************************************************************
  ******************************************************************************/
 
-void kissvg_CircleCreateArrow(kissvg_Circle *circle, double pos,
-                              double arrow_size,
-                              kissvg_Color *arrow_fill_color,
-                              kissvg_Color *arrow_color,
-                              kissvg_Bool reverse_arrow,
-                              kissvg_ArrowType type,
-                              double arrow_line_width)
-{
-    kissvg_SetHasArrows(circle, kissvg_True);
-    circle->N_Arrows = 1;
-    circle->arrows = malloc(sizeof(*circle->arrows));
-
-    circle->arrows[0] = kissvg_CreateArrow(pos, arrow_size, arrow_fill_color,
-                                           arrow_color, reverse_arrow, type,
-                                           arrow_line_width);
-    return;
-}
-
 void kissvg_CircleAddArrow(kissvg_Circle *circle, double pos, double arrow_size,
-                           kissvg_Color *arrow_fill_color,
-                           kissvg_Color *arrow_color,
-                           kissvg_Bool reverse_arrow,
-                           kissvg_ArrowType type,
-                           double arrow_line_width)
+                           kissvg_Color *fill_color, kissvg_Color *line_color,
+                           kissvg_ArrowType type, double line_width)
 {
-    circle->N_Arrows += 1;
-    circle->arrows = realloc(
-        circle->arrows, sizeof(*circle->arrows)*circle->N_Arrows
-    );
+    if (!kissvg_HasArrows(circle))
+    {
+        kissvg_SetHasArrows(circle, kissvg_True);
+        circle->N_Arrows = 1;
+        circle->arrows = malloc(sizeof(*circle->arrows));
 
-    circle->arrows[circle->N_Arrows-1] = kissvg_CreateArrow(pos, arrow_size,
-                                                            arrow_fill_color,
-                                                            arrow_color,
-                                                            reverse_arrow,
-                                                            type,
-                                                            arrow_line_width);
+        circle->arrows[0] = kissvg_CreateArrow(pos, arrow_size, fill_color,
+                                               line_color, type, line_width);
+    }
+    else
+    {
+        circle->N_Arrows += 1;
+        circle->arrows = realloc(
+            circle->arrows, sizeof(*circle->arrows)*circle->N_Arrows
+        );
+
+        circle->arrows[circle->N_Arrows-1] = kissvg_CreateArrow(
+            pos, arrow_size, fill_color, line_color, type, line_width
+        );
+    }
     return;
 }
 
@@ -1170,7 +1308,7 @@ void kissvg_DestroyCircle(kissvg_Circle *circle)
         for (n=0; n<N_Arrows; ++n)
         {
             current_arrow = kissvg_nthArrow(circle, n);
-            kissvg_DestroyArrow(current_arrow);
+            kissvg_DestroyArrow(&current_arrow);
         }
         free(circle->arrows);
     }
@@ -1591,11 +1729,14 @@ static void kissvg_DrawPolygonalArrows(cairo_t *cr, kissvg_Path2D *path)
         arrow = kissvg_nthArrow(path, n);
         arrow_type = kissvg_ArrowType(arrow);
 
-        if (arrow_type == kissvg_StealthArrow)
+        if ((arrow_type == kissvg_StealthArrow) ||
+            (arrow_type == kissvg_ReverseStealthArrow))
             DrawArrows = &kissvg_DrawStealthArrow;
-        else if (arrow_type == kissvg_TriangularArrow)
+        else if ((arrow_type == kissvg_TriangularArrow) ||
+                 (arrow_type == kissvg_ReverseTriangularArrow))
             DrawArrows = &kissvg_DrawTriangularArrow;
-        else if (arrow_type == kissvg_LatexArrow)
+        else if ((arrow_type == kissvg_LatexArrow)  ||
+                 (arrow_type == kissvg_ReverseLatexArrow))
             DrawArrows = &kissvg_DrawLatexArrow;
         else
         {
@@ -1868,6 +2009,9 @@ void kissvg_FillDrawPolygon2D(cairo_t *cr, kissvg_Path2D *path)
     }
 
     cairo_stroke(cr);
+
+    if (kissvg_HasArrows(path))
+        kissvg_DrawPolygonalArrows(cr, path);
 }
 
 void kissvg_DrawCircle2D(cairo_t *cr, kissvg_Circle *circle)
@@ -1917,7 +2061,7 @@ void kissvg_DrawCircle2D(cairo_t *cr, kissvg_Circle *circle)
 
     kissvg_DrawPolygon2D(cr, path);
     kissvg_SetHasArrows(path, kissvg_False);
-    kissvg_DestroyPath2D(path);
+    kissvg_DestroyPath2D(&path);
 
     return;
 }
@@ -1969,7 +2113,7 @@ void kissvg_FillDrawCircle2D(cairo_t *cr, kissvg_Circle *circle)
 
     kissvg_FillDrawPolygon2D(cr, path);
     kissvg_SetHasArrows(path, kissvg_False);
-    kissvg_DestroyPath2D(path);
+    kissvg_DestroyPath2D(&path);
 
     return;
 }
@@ -2067,14 +2211,14 @@ void kissvg_DrawAxis2D(cairo_t *cr, kissvg_Axis2D *axis)
             kissvg_SetLineWidth(tick_path, kissvg_Axis2DTickWidth(axis));
             kissvg_SetLineColor(tick_path, kissvg_Axis2DTickColor(axis));
             kissvg_DrawPolygon2D(cr, tick_path);
-            kissvg_DestroyPath2D(tick_path);
+            kissvg_DestroyPath2D(&tick_path);
             tick = kissvg_TwoVectorAdd(tick, dxtick);
         }
     }
 
     kissvg_DrawPolygon2D(cr, path);
     kissvg_SetHasArrows(path, kissvg_False);
-    kissvg_DestroyPath2D(path);
+    kissvg_DestroyPath2D(&path);
     return;
 }
 
@@ -2097,7 +2241,7 @@ void kissvg_DrawLine2D(cairo_t *cr, kissvg_Line2D *line, double t0, double t1)
     kissvg_AppendPath2D(path, B);
 
     kissvg_DrawPolygon2D(cr, path);
-    kissvg_DestroyPath2D(path);
+    kissvg_DestroyPath2D(&path);
     return;
 }
 
