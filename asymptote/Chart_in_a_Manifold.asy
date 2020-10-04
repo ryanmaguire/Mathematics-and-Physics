@@ -2,7 +2,7 @@
 // ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
 import _asy_preamble_2d;
 import _custom_arrows;
-import _euc_geo_2d;
+import _euclidean_geometry;
 
 // Size of the output figure.
 size(256);
