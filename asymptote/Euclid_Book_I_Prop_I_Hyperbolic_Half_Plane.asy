@@ -1,7 +1,7 @@
 // Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in your
 // ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
 import _asy_preamble_2d;
-import _euc_geo_2d;
+import _euclidean_geometry;
 import _complex_math;
 import _custom_arrows;
 import graph;

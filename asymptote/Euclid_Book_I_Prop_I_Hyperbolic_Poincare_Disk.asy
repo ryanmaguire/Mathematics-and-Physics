@@ -1,7 +1,7 @@
 // Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in your
 // ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
 import _asy_preamble_2d;
-import _euc_geo_2d;
+import _euclidean_geometry;
 import _complex_math;
 import graph;
 
@@ -31,20 +31,20 @@ Q = PlaneToDisk(B);
 
 P_TranQ = MobiusTransform(P, Q);
 
-radius = EucNormTwo(P_TranQ);
+radius = EuclideanNorm2D(P_TranQ);
 
 C1 = HyperbolicCircle(P, radius, 0.0);
 C2 = HyperbolicCircle(P, radius, 1.0);
 C3 = HyperbolicCircle(P, radius, 2.0);
-CenterP = FindCenterTwo(C1, C2, C3);
+CenterP = FindCenter2D(C1, C2, C3);
 
 D1 = HyperbolicCircle(Q, radius, 0.0);
 D2 = HyperbolicCircle(Q, radius, 1.0);
 D3 = HyperbolicCircle(Q, radius, 2.0);
-CenterQ = FindCenterTwo(D1, D2, D3);
+CenterQ = FindCenter2D(D1, D2, D3);
 
-r1 = EucNormTwo(CenterP-Q);
-r2 = EucNormTwo(CenterQ-P);
+r1 = EuclideanNorm2D(CenterP-Q);
+r2 = EuclideanNorm2D(CenterQ-P);
 
 Intersections = CircleCircleIntersection(CenterP, r1, CenterQ, r2);
 
