@@ -2,8 +2,7 @@
 import settings;
 import smoothcontour3;
 import graph3;
-import _euc_geo_2d;
-import _euc_geo_3d;
+import _euclidean;
 import three;
 
 if(!settings.multipleView)
@@ -27,11 +26,11 @@ pen rpen = red+linewidth(0.5pt);
 // Size of the output figure.
 size(128);
 
-triple A = SphericalToRect(0.0, pi/2);
-triple B = SphericalToRect(3pi/4, pi/2);
+triple A = SphericalToRect(1.0, 0.0, pi/2);
+triple B = SphericalToRect(1.0, 3pi/4, pi/2);
 
-triple c1(real t){return spherical_circle(t, A, B);}
-triple c2(real t){return spherical_circle(t, B, A);}
+triple c1(real t){return SphericalCircle(t, 1.0, A, B);}
+triple c2(real t){return SphericalCircle(t, 1.0, B, A);}
 
 // Radius of the dot and pipes.
 real dotR = 0.08;

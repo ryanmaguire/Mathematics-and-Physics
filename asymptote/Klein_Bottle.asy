@@ -1,17 +1,7 @@
 // Boilerplate stuff.
-import settings;
+import _asy_preamble_3d;
 import graph3;
 import palette;
-
-if(!settings.multipleView)  settings.batchView=false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-
-viewportmargin = (2, 2);
 
 currentprojection=perspective(camera = (20, 80, 30), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);

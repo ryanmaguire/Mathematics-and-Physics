@@ -1,3 +1,5 @@
+import _euclidean;
+
 pair _Complex_One  = (1.0, 0.0);
 pair _Complex_I    = (0.0, 1.0);
 pair _Complex_Zero = (0.0, 0.0);
@@ -102,4 +104,77 @@ pair HyperbolicCircle(pair P, real radius, real theta)
 
     InvP = ComplexFromPolar(radius, theta);
     return InverseMobiusTransform(InvP, P);
+}
+
+pair HyperbolicPathPoincarePlane(real t, pair A, pair B)
+{
+    real c1, c2;
+    real x, y;
+
+    x = A.x*(1.0-t) + B.x*t;
+    if (A.x != B.x)
+    {
+        c2 = (B.y*B.y - A.y*A.y + B.x*B.x - A.x*A.x)/(2.0*(A.x - B.x));
+        c1 = A.y*A.y + (A.x+ c2)*(A.x + c2);
+
+        y = sqrt(c1 - (x+c2)*(x+c2));
+    }
+    else
+        y = A.y*(1.0-t) + B.y*t;
+
+    return (x, y);
+}
+
+pair HyperbolicLinePoincarePlane(real t, pair A, pair B)
+{
+    pair C;
+    pair P, Q, O;
+
+    O = (0.0, 0.0);
+
+    real x, dist;
+
+    P = MidPoint2D(A, B);
+
+    if (A.x != B.x)
+    {
+        C = (A.y-B.y, B.x-A.x);
+
+        x = P.x - C.x*P.y/C.y;
+        Q = (x, 0.0);
+        dist = EuclideanNorm2D(Q - A);
+
+        return Q + scale(dist)*(cos(t), sin(t));
+    }
+    else
+        return scale(1-t)*A + scale(t)*B;
+}
+
+pair HyperbolicCirclePoincarePlane(real t, pair A, pair B)
+{
+    real c1, c2;
+    real x1, y1, x0, y, m, dist;
+
+    pair center;
+
+    x1 = B.x;
+    y1 = B.y;
+
+    x0 = A.x;
+    if (A.x != B.x)
+    {
+        c2 = (B.y*B.y - A.y*A.y + B.x*B.x - A.x*A.x)/(2.0*(A.x - B.x));
+        c1 = A.y*A.y + (A.x + c2)*(A.x + c2);
+
+        m = -(x1 + c2)/sqrt(c1 - (x1+c2)*(x1+c2));
+
+        y = y1 + m*(x0-x1);
+        center = (x0, y);
+
+        dist = EuclideanNorm2D(center - B);
+
+        return center + scale(dist)*(cos(t), sin(t));
+    }
+    else
+        return A;
 }

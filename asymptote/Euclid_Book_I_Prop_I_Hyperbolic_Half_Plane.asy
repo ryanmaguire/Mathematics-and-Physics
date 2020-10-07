@@ -1,8 +1,7 @@
 // Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in your
 // ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
 import _asy_preamble_2d;
-import _euclidean_geometry;
-import _complex_math;
+import _complex;
 import _custom_arrows;
 import graph;
 
@@ -32,79 +31,6 @@ ymax = 6.0;
 A = scale(2.0)*expi(3pi/4);
 B = scale(1.5)*expi(pi/3);
 
-pair HyperbolicPathPoincarePlane(real t, pair A, pair B)
-{
-    real c1, c2;
-    real x, y;
-
-    x = A.x*(1.0-t) + B.x*t;
-    if (A.x != B.x)
-    {
-        c2 = (B.y*B.y - A.y*A.y + B.x*B.x - A.x*A.x)/(2.0*(A.x - B.x));
-        c1 = A.y*A.y + (A.x+ c2)*(A.x + c2);
-
-        y = sqrt(c1 - (x+c2)*(x+c2));
-    }
-    else
-        y = A.y*(1.0-t) + B.y*t;
-
-    return (x, y);
-}
-
-pair HyperbolicLinePoincarePlane(real t, pair A, pair B)
-{
-    pair C;
-    pair P, Q, O;
-
-    O = (0.0, 0.0);
-
-    real x, dist;
-
-    P = MidPointTwo(A, B);
-
-    if (A.x != B.x)
-    {
-        C = (A.y-B.y, B.x-A.x);
-
-        x = P.x - C.x*P.y/C.y;
-        Q = (x, 0.0);
-        dist = EucNormTwo(Q - A);
-
-        return Q + scale(dist)*(cos(t), sin(t));
-    }
-    else
-        return scale(1-t)*A + scale(t)*B;
-}
-
-pair HyperbolicCirclePoincarePlane(real t, pair A, pair B)
-{
-    real c1, c2;
-    real x1, y1, x0, y, m, dist;
-
-    pair center;
-
-    x1 = B.x;
-    y1 = B.y;
-
-    x0 = A.x;
-    if (A.x != B.x)
-    {
-        c2 = (B.y*B.y - A.y*A.y + B.x*B.x - A.x*A.x)/(2.0*(A.x - B.x));
-        c1 = A.y*A.y + (A.x + c2)*(A.x + c2);
-
-        m = -(x1 + c2)/sqrt(c1 - (x1+c2)*(x1+c2));
-
-        y = y1 + m*(x0-x1);
-        center = (x0, y);
-
-        dist = EucNormTwo(center - B);
-
-        return center + scale(dist)*(cos(t), sin(t));
-    }
-    else
-        return A;
-}
-
 pair A = (1.5, 1.0);
 pair B = (2.5, 2.0);
 
@@ -119,11 +45,11 @@ D1 = c2(0.0);
 D2 = c2(1.0);
 D3 = c2(2.0);
 
-CenterA = FindCenterTwo(C1, C2, C3);
-CenterB = FindCenterTwo(D1, D2, D3);
+CenterA = FindCenter2D(C1, C2, C3);
+CenterB = FindCenter2D(D1, D2, D3);
 
-r1 = EucNormTwo(C1 - CenterA);
-r2 = EucNormTwo(D1 - CenterB);
+r1 = EuclideanNorm2D(C1 - CenterA);
+r2 = EuclideanNorm2D(D1 - CenterB);
 
 Intersections = CircleCircleIntersection(CenterA, r1, CenterB, r2);
 
