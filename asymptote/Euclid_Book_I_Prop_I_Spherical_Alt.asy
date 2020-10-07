@@ -2,8 +2,7 @@
 import settings;
 import smoothcontour3;
 import graph3;
-import _euc_geo_2d;
-import _euc_geo_3d;
+import _euclidean;
 import three;
 
 if(!settings.multipleView)
@@ -27,11 +26,11 @@ pen rpen = red+linewidth(0.5pt);
 // Size of the output figure.
 size(128);
 
-triple A = SphericalToRect(0.0, pi/2);
-triple B = SphericalToRect(pi/4, pi/2);
+triple A = SphericalToRect(1.0, 0.0, pi/2);
+triple B = SphericalToRect(1.0, pi/4, pi/2);
 
-triple c1(real t){return spherical_circle(t, A, B);}
-triple c2(real t){return spherical_circle(t, B, A);}
+triple c1(real t){return SphericalCircle(t, 1.0, A, B);}
+triple c2(real t){return SphericalCircle(t, 1.0, B, A);}
 
 radialshade(
     project(
@@ -57,11 +56,11 @@ D3 = StereographicProjection(c2(2.0));
 
 pair CenterA, CenterB;
 
-CenterA = FindCenterTwo(C1, C2, C3);
-CenterB = FindCenterTwo(D1, D2, D3);
+CenterA = FindCenter2D(C1, C2, C3);
+CenterB = FindCenter2D(D1, D2, D3);
 
-real r1 = EucNormTwo(CenterA - C1);
-real r2 = EucNormTwo(CenterB - D1);
+real r1 = EuclideanNorm2D(CenterA - C1);
+real r2 = EuclideanNorm2D(CenterB - D1);
 
 pair[] Intersections = CircleCircleIntersection(CenterA, r1, CenterB, r2);
 
@@ -70,9 +69,9 @@ if (!isnan(Intersections[0].x))
     triple SphereIntersection;
     SphereIntersection = InverseStereographicProjection(Intersections[0]);
 
-    triple c3(real t){return great_circle(t, A, B);}
-    triple c4(real t){return great_circle(t, B, SphereIntersection);}
-    triple c5(real t){return great_circle(t, SphereIntersection, A);}
+    triple c3(real t){return GreatCircle(t, 1.0, A, B);}
+    triple c4(real t){return GreatCircle(t, 1.0, B, SphereIntersection);}
+    triple c5(real t){return GreatCircle(t, 1.0, SphereIntersection, A);}
 
     guide3 q1=graph(c3, 0, -1, 100, operator ..);
     guide3 q2=graph(c4, 0, -1, 100, operator ..);

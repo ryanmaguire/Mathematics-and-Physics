@@ -55,8 +55,14 @@
  *          Compute the relative angle of the points X and Y with respect to  *
  *          the point O.                                                      *
  ******************************************************************************
- *  Author:     Ryan Maguire                                                  *
+ *  Author:     Ryan Maguire, Dartmouth College                               *
  *  Date:       September 17, 2020                                            *
+ ******************************************************************************/
+
+/******************************************************************************
+ ******************************************************************************
+ *                      Begin Two Dimensional Functions                       *
+ ******************************************************************************
  ******************************************************************************/
 
 /* Find midpoint given two points in the plane.                               */
@@ -357,7 +363,7 @@ pair PlaneToDisk(pair P)
     /*  Declare necessary variables.                                          */
     real norm, x_hat, y_hat, scale_factor, x, y;
 
-    /*  The origin maps to the origin, so if P = (0, 0), simply return it.    */
+    /*  The origin maps to the origin, so if P = (0, 0) simply return it.     */
     if (P==(0, 0))
         return P;
 
@@ -370,6 +376,8 @@ pair PlaneToDisk(pair P)
 
     /*  Compute the inverse of 2x/(1-||x||)(1+||x||).                         */
     scale_factor = (-1.0 + sqrt(4.0*norm^2 + 1.0))/(2.0*norm);
+
+    /*  Since P is not the origin, norm is non-zero so we can divide by it.   */
     x_hat = scale_factor * x / norm;
     y_hat = scale_factor * y / norm;
 
@@ -418,45 +426,87 @@ pair[] CircleCircleIntersection(pair P0, real r0, pair P1, real r1)
     y0 = P2y - factory;
     x1 = P2x - factorx;
     y1 = P2y + factory;
-
-    pair[] intersections = {(x0, y0), (x1, y1)};
+    intersections[0] = (x0, y0);
+    intersections[1] = (x1, y1);
     return intersections;
+}
+
+/******************************************************************************
+ ******************************************************************************
+ *                     Begin Three Dimensional Functions                      *
+ ******************************************************************************
+ ******************************************************************************/
+
+/*  Scale a three dimensional vector by a real number.                        */
+triple ScaleThreeVector(real r, triple V)
+{
+    /*  Declare necessary variables.                                          */
+    real x, y, z;
+
+    /*  Scale the components by r and return.                                 */
+    x = r*V.x;
+    y = r*V.y;
+    z = r*V.z;
+    return (x, y, z);
+}
+
+/*  Get a point on the line PQ with respect to the parameter t. This is the   *
+ *  equation L(t) = (1-t)*P + t*Q;                                            */
+triple LinePQ3D(real t, triple P, triple Q)
+{
+    /*  Declare necessary variables.                                          */
+    triple X0, X1, out;
+
+    /*  Compute the vector (1-t)P + tQ.                                       */
+    X0 = ScaleThreeVector(1.0-t, P);
+    X1 = ScaleThreeVector(t, Q);
+
+    /*  Compute the output and return it.                                     */
+    out = X0 + X1;
+    return out;
 }
 
 /* Find midpoint given two points in space.                                   */
 triple MidPoint3D(triple A, triple B)
 {
     /*  Declare necessary variables.                                          */
-    real Ax, Ay, Az, Bx, By, Bz, x, y, z;
-
-    /*  Extract values from the triples A and B.                              */
-    Ax = A.x;
-    Ay = A.y;
-    Az = A.z;
-    Bx = B.x;
-    By = B.y;
-    Bz = B.z;
+    triple out;
 
     /*  Compute the midpoint using the midpoint formula.                      */
-    x = 0.5*(Ax + Bx);
-    y = 0.5*(Ay + By);
-    z = 0.5*(Az + Bz);
-
-    return (x, y, z);
+    out = ScaleThreeVector(0.5, A+B);
+    return out;
 }
 
 /* Returns the Euclidean norm of a 3-dimensional point.                       */
-real EuclideanNorm2D(triple A)
+real EuclideanNorm3D(triple A)
 {
     /*  Declare necessary variables.                                          */
-    real x, y, z;
+    real x, y, z, norm;
 
     /*  Extract the values from the triple A.                                 */
     x = A.x;
     y = A.y;
     z = A.z;
 
-    return sqrt(x*x + y*y + z*z);
+    /*  Use Pythagoras to compute the length of A.                            */
+    norm = sqrt(x*x + y*y + z*z);
+    return norm;
+}
+
+/*  Given a non-zero vector, convert it to a unit vector.                     */
+triple NormalizeVector3D(triple V)
+{
+    /*  Declare necessary variables.                                          */
+    real norm;
+    triple out;
+
+    /*  Compute the norm of the vector V and check that it is non-zero.       */
+    norm = EuclideanNorm3D(V);
+    assert(norm>0.0);
+
+    /*  Compute the normalized vector and return.                             */
+    out = ScaleThreeVector(1.0/norm, V);
+    return out;
 }
 
 /*  Compute the dot product of two 3-dimensional vectors.                     */
@@ -475,7 +525,6 @@ real DotProduct3D(triple A, triple B)
 
     /*  Compute the dot product and return.                                   */
     dot_prod = Ax*Bx + Ay*By + Az*Bz;
-
     return dot_prod;
 }
 
@@ -492,7 +541,7 @@ real RelAngle3D(triple O, triple X, triple Y)
 
     /*  Compute the dot product and the product of their norms.               */
     dot_prod = DotProduct3D(P, Q);
-    abs_prod = EuclideanNorm2D(P)*EuclideanNorm2D(Q);
+    abs_prod = EuclideanNorm3D(P)*EuclideanNorm3D(Q);
 
     /*  If abs_prod = 0, either O = X or O = Y. In either case, the angle is  *
      *  undefined, so return not-a-number.                                    */
@@ -504,11 +553,26 @@ real RelAngle3D(triple O, triple X, triple Y)
         return acos(dot_prod/abs_prod);
 }
 
+/*  Return the angle between P and Q relative to the origin.                  */
+real Angle3D(triple P, triple Q)
+{
+    /*  Declare necessary variables.                                          */
+    triple O;
+    real theta;
+
+    /*  Set a variable for the origin.                                        */
+    O = (0.0, 0.0, 0.0);
+
+    theta = RelAngle3D(O, P, Q);
+    return theta;
+}
+
 /*  Diffeomorphism from R^3 to the unit ball.                                 */
 triple SpaceToBall(triple P)
 {
     /*  Declare necessary variables.                                          */
-    real norm, x, y, z, x_hat, y_hat, z_hat, scale_factor;
+    real norm, scale_factor;
+    triple out;
 
     /*  If P is the origin, simply return it since the diffeormorphism fixes  *
      *  this point.                                                           */
@@ -516,103 +580,240 @@ triple SpaceToBall(triple P)
         return P;
 
     /*  Otherwise, compute the length of P.                                   */
-    norm = EuclideanNorm2D(P);
-
-    /*  Extract the values from P.                                            */
-    x = P.x;
-    y = P.y;
-    z = P.z;
+    norm = EuclideanNorm3D(P);
 
     /*  Compute the inverse of 2r / (1+||r||)(1-||r||).                       */
-    scale_factor = (-1.0 + sqrt(4.0*norm^2 + 1.0))/(2.0*norm);
-    x_hat = scale_factor * x / norm;
-    y_hat = scale_factor * y / norm;
-    z_hat = scale_factor * z / norm;
-
-    return (x_hat, y_hat, z_hat);
+    scale_factor = (-1.0 + sqrt(4.0*norm*norm + 1.0))/(2.0*norm*norm);
+    out = ScaleThreeVector(scale_factor, P);
+    return out;
 }
 
-triple SphericalToRect(real phi, real theta)
+/*  Convert spherical coordinates to rectangular. Note, this uses the         *
+ *  physicists convention and NOT the mathematicians (old habbits die hard).  *
+ *  r is the distance to the origin, phi is the azimuth angle (the angle in   *
+ *  the xy plane), and theta is the zenith angle (the angle made with z).     */
+triple SphericalToRect(real r, real phi, real theta)
 {
-    return (cos(phi)*sin(theta), sin(phi)*sin(theta), cos(theta));
+    /*  Declare necessary variables.                                          */
+    real x, y, z, cos_theta, sin_theta, cos_phi, sin_phi;
+
+    /*  Pre-compute the trigonometric factors to save excess computations.    */
+    cos_theta = cos(theta);
+    sin_theta = sin(theta);
+    cos_phi   = cos(phi);
+    sin_phi   = sin(phi);
+
+    /*  Compute the x, y, and z coordinates and return.                       */
+    x = r*cos_phi*sin_theta;
+    y = r*sin_phi*sin_theta;
+    z = r*cos_theta;
+    return (x, y, z);
 }
 
-pair RectToSpherical(real x, real y, real z)
+/*  Convert Cartesian to spherical coordinates.                               */
+triple RectToSpherical(real x, real y, real z)
 {
-    real rho_norm  = sqrt(x*x + y*y);
-    real phi = atan2(y, x);
-    real theta = pi - atan2(z, rho_norm);
-    return (phi, theta);
+    /*  Declare necessary variables.                                          */
+    real r, rho, phi, theta;
+
+    /*  Compute the projection in the xy plane (rho), and r.                  */
+    rho = sqrt(x*x + y*y);
+    r   = sqrt(rho*rho + z*z);
+
+    /*  Compute the azimuth and zenith angles, and return (r, phi, theta).    */
+    phi = atan2(y, x);
+    theta = pi-atan2(z, rho);
+    return (r, phi, theta);
 }
 
-real DotProductThree(triple p, triple q)
+/*  Compute the dot product of two 3-dimensional vectors.                     */
+real DotProduct3D(triple P, triple Q)
 {
-    return p.x*q.x + p.y*q.y + p.z*q.z;
+    /*  Declare necessary variables.                                          */
+    real Px, Py, Pz, Qx, Qy, Qz, dot_prod;
+
+    /*  Extract values from the triples P and Q.                              */
+    Px = P.x;
+    Py = P.y;
+    Pz = P.z;
+    Qx = Q.x;
+    Qy = Q.y;
+    Qz = Q.z;
+
+    /*  Compute the Euclidean dot product and return.                         */
+    dot_prod = Px*Qx + Py*Qy + Pz*Qz;
+    return dot_prod;
 }
 
-triple CrossProduct(triple p, triple q)
+/*  Compute the cross product of two triples P and Q.                         */
+triple CrossProduct(triple P, triple Q)
 {
-    return (p.y*q.z - p.z*q.y, p.z*q.x - p.x*q.z, p.x*q.y - p.y*q.x);
+    /*  Declare necessary variables.                                          */
+    real Px, Py, Pz, Qx, Qy, Qz, x, y, z;
+
+    /*  Extract the values from P and Q.                                      */
+    Px = P.x;
+    Py = P.y;
+    Pz = P.z;
+    Qx = Q.x;
+    Qy = Q.y;
+    Qz = Q.z;
+
+    /*  Compute the components of the cross product.                          */
+    x = Py*Qz - Pz*Qy;
+    y = Pz*Qx - Px*Qz;
+    z = Px*Qy - Py*Qx;
+    return (x, y, z);
 }
 
-triple proj_point_to_line(triple q, triple p, triple v)
+/*  Given a point Q, and a line in the form P + tV, computes the projection   *
+ *  of Q onto this line. That is, the closest point on the line to Q.         */
+triple ProjPointToLine(triple Q, triple P, triple V)
 {
-    real norm_v = EuclideanNorm2D(v);
-    assert(norm_v>0);
+    /*  Declare necessary variables.                                          */
+    real normV, scale;
+    triple PQ, out;
 
-    triple pq = q-p;
-    real scale = DotProductThree(pq, v)/(norm_v * norm_v);
+    /*  Compute the norm of V. V needs to be non-zero to unambiguously define *
+     *  a straight line, so we'll check for this.                             */
+    normV = EuclideanNorm3D(V);
+    assert(normV>0.0);
 
-    return scale(scale, scale, scale)*v + p;
+    /*  Get the vector pointing from P to Q.                                  */
+    PQ = Q-P;
+
+    /*  Compute the scale which is used for the projection of Q onto the line.*/
+    scale = DotProduct3D(PQ, V)/(normV * normV);
+
+    /*  Compute the x, y, and z values and return.                            */
+    out = ScaleThreeVector(scale, V) + P;
+    return out;
 }
 
-triple great_circle(real t, triple P, triple Q)
+/*  Compute the equation of a great circle on a sphere of radius r given the  *
+ *  vectors pointing in the P and Q directions.                               */
+triple GreatCircle(real t, real r, triple P, triple Q)
 {
-    triple e1 = P;
-    triple e2 = CrossProduct(e1, Q);
-    triple e3 = CrossProduct(e1, e2);
-    e1 = e1/EuclideanNorm2D(e1);
-    e3 = e3/EuclideanNorm2D(e3);
+    /*  Declare necessary variables.                                          */
+    real u, v, tau, theta;
+    triple e0, e1, e2, out;
 
-    real tau, theta;
+    /*  Get three orthogonal vectors from the inputs P and Q.                 */
+    e0 = P;
+    e1 = CrossProduct(e0, Q);
+    e2 = CrossProduct(e0, e1);
 
-    theta = asin(DotProductThree(P, Q)/(EuclideanNorm2D(P)*EuclideanNorm2D(Q)));
+    /*  Normalize e0, e1, and e2. If P and Q lie on the same line through the *
+     *  origin this step will fail and the computation will abort.            */
+    e0 = NormalizeVector3D(e0);
+    e1 = NormalizeVector3D(e1);
+    e2 = NormalizeVector3D(e2);
+
+    /*  Get the angle between P and Q and scale this by t.                    */
+    theta = Angle3D(P, Q);
     tau = t*theta;
 
-    real u = cos(tau);
-    real v = sin(tau);
+    /*  Values for parameterizing the great circle.                           */
+    u = cos(tau);
+    v = sin(tau);
 
-    return scale(u, u, u)*e1 + scale(v, v, v)*e3;
+    /*  Scale e0 and e2 by u and v, respectively.                             */
+    e0 = ScaleThreeVector(u, e0);
+    e2 = ScaleThreeVector(v, e2);
+
+    /*  Compute the output point and return.                                  */
+    out = ScaleThreeVector(r, e0+e2);
+    return out;
 }
 
-triple spherical_circle(real t, triple P, triple Q)
+triple SphericalCircle(real t, real r, triple P, triple Q)
 {
-    triple proj = proj_point_to_line(Q, (0,0,0), P);
-    triple proj_to_Q = Q - proj;
-    real radius = EuclideanNorm2D(proj_to_Q);
+    triple proj, projQ, cross, out;
+    real cross_norm, radius, cos_t, sin_t, factor;
 
-    triple cross = CrossProduct(P, proj_to_Q);
-    assert(EuclideanNorm2D(cross) > 0.0);
-    real factor = radius/EuclideanNorm2D(cross);
-    cross = scale(factor, factor, factor)*cross;
+    /*  Normalize P and Q so that they are unit vectors.                      */
+    P = NormalizeVector3D(P);
+    Q = NormalizeVector3D(Q);
 
-    real cos_t = cos(t);
-    real sin_t = sin(t);
+    /*  Now rescale them so that the lie on the sphere of radius r.           */
+    P = ScaleThreeVector(r, P);
+    Q = ScaleThreeVector(r, Q);
 
-    return proj+scale(cos_t, cos_t, cos_t)*proj_to_Q +
-                scale(sin_t, sin_t, sin_t)*cross;
+    /*  Project Q onto the line through the origin and P.                     */
+    proj = ProjPointToLine(Q, (0,0,0), P);
+
+    /*  Get the vector from the projection point to Q.                        */
+    projQ = Q - proj;
+
+    /*  The length of projQ is the radius of the circle we wish to compute,   *
+     *  with projQ as the center. So compute this value.                      */
+    radius = EuclideanNorm3D(projQ);
+
+    /*  Compute the cross product of P and projQ.                             */
+    cross = CrossProduct(P, projQ);
+    cross_norm = EuclideanNorm3D(cross);
+
+    /*  The norm of the cross product should not be zero, so check this.      */
+    assert(cross_norm > 0.0);
+
+    /*  Scale factor for the final circle.                                    */
+    factor = radius/EuclideanNorm3D(cross);
+    cross = ScaleThreeVector(factor, cross);
+
+    /*  Precompute the sine and cosine of t.                                  */
+    cos_t = cos(t);
+    sin_t = sin(t);
+
+    /*  And lastly, compute the point on the circle corresponding to t.       */
+    out = proj+ScaleThreeVector(cos_t, projQ)+ScaleThreeVector(sin_t, cross);
+    return out;
 }
 
+/*  Compute the stereographic projection of a 3-dimensional vector P. P does  *
+ *  not need to lie on the unit sphere, and the stereographic projection will *
+ *  occur with respect to the sphere of radius equal to the norm of P.        */
 pair StereographicProjection(triple P)
 {
-    assert(P.z != 1.0);
-    real denom = 1.0 / (1.0 - P.z);
+    /*  Declare necessary values.                                             */
+    real norm, denom;
+    pair out;
 
-    return (P.x * denom, P.y * denom);
+    /*  Compute the norm of P to find the radius of the sphere it lies on.    */
+    norm = EuclideanNorm3D(P);
+
+    /*  The z component of P cannot be equal to the radius, so check this.    */
+    assert(P.z != norm);
+
+    /*  Compute the denominator of the stereographic projection.              */
+    denom = norm / (norm - P.z);
+
+    /*  Perform the computation and return.                                   */
+    out = (P.x * denom, P.y * denom);
+    return out;
 }
 
+/*  Compute the inverse stereographic projection of a point in the plane.     *
+ *  computes the inverse projection with respect to the unit sphere. If you   *
+ *  used StereographicProjection on a vector that did not have length 1, this *
+ *  will not return it's inverse.                                             */
 triple InverseStereographicProjection(pair P)
 {
-    real denom = 1.0/(1.0 + P.x^2 + P.y^2);
-    return (2.0*P.x*denom, 2.0*P.y*denom, (-1.0+P.x^2+P.y^2)*denom);
+    /*  Declare necessary variables.                                          */
+    real norm, denom, x, y;
+    triple out;
+
+    /*  Extract the values from the pair P.                                   */
+    x = P.x;
+    y = P.y;
+
+    /*  Get the length of the vector P.                                       */
+    norm = EuclideanNorm2D(P);
+
+    /*  Compute the denominator for the inverse stereographic projection.     */
+    denom = 1.0/(1.0 + norm*norm);
+
+    /*  Compute the corresponding point on the unit sphere and return.        */
+    out = (2.0*x, 2.0*y, -1.0 + x*x + y*y);
+    out = ScaleThreeVector(denom, out);
+    return out;
 }
