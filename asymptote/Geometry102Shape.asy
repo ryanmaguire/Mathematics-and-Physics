@@ -9,7 +9,7 @@ int samples;
 pen mpen;
 surface s;
 
-camera_location = (200.0, 50.0, 50.0);
+camera_location = (50.0, 200.0, 50.0);
 origin = (0.0, 0.0, 0.0);
 up_dir = (0.0, 0.0, 1.0);
 zoom = 1.0;
@@ -28,9 +28,8 @@ currentlight=light(
 
 r = 0.1;
 R = 10;
-samples = 32;
+samples = 16;
 mpen = black+linewidth(0.3pt);
-
 
 triple f(pair t)
 {
@@ -38,11 +37,13 @@ triple f(pair t)
     real x, y, z;
     phi = t.x;
     r = sin(phi);
+    r *= r;
     theta = t.y;
+    r = 1.0 / (1+r);
 
-    x = (1+r)*cos(theta);
+    x = r*cos(theta);
     y = 0.0;
-    z = (1+r)*sin(theta);
+    z = r*sin(theta);
 
     return shift(0, 0, -r)*(rotate(180*phi/pi, (0, 0, 1))*(x, y, z));
 }
