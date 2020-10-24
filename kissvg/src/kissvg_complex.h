@@ -107,30 +107,30 @@ extern kissvg_ComplexDouble rssringoccs_ComplexPolar(double r, double theta);
 /*  In C99, since _Complex is a built-in data type, given double _Complex z1  *
  *  and double _Complex z2, you can just do z1 + z2. Structs can't be added,  *
  *  so we need a function for computing the sum of two complex values.        */
-extern kissvg_ComplexDouble kissvg_ComplexAdd(kissvg_ComplexDouble z1,
-                                              kissvg_ComplexDouble z2);
+extern kissvg_ComplexDouble
+kissvg_ComplexAdd(kissvg_ComplexDouble z1, kissvg_ComplexDouble z2);
 
-extern kissvg_ComplexDouble kissvg_ComplexSubtract(kissvg_ComplexDouble z1,
-                                                   kissvg_ComplexDouble z2);
+extern kissvg_ComplexDouble
+kissvg_ComplexSubtract(kissvg_ComplexDouble z1, kissvg_ComplexDouble z2);
 
-extern kissvg_ComplexDouble kissvg_ComplexMultiply(kissvg_ComplexDouble z1,
-                                                   kissvg_ComplexDouble z2);
+extern kissvg_ComplexDouble
+kissvg_ComplexMultiply(kissvg_ComplexDouble z1, kissvg_ComplexDouble z2);
 
 extern kissvg_ComplexDouble kissvg_ComplexReciprocal(kissvg_ComplexDouble z);
 
-extern kissvg_ComplexDouble kissvg_ComplexDivide(kissvg_ComplexDouble z1,
-                                                 kissvg_ComplexDouble z2);
+extern kissvg_ComplexDouble
+kissvg_ComplexDivide(kissvg_ComplexDouble z1, kissvg_ComplexDouble z2);
 
-extern kissvg_ComplexDouble kissvg_ComplexScale(double x,
-                                                kissvg_ComplexDouble z);
+extern kissvg_ComplexDouble
+kissvg_ComplexScale(double x, kissvg_ComplexDouble z);
 
-extern kissvg_ComplexDouble kissvg_PoincareDiskMobiusTransform(
-    kissvg_ComplexDouble z, kissvg_ComplexDouble w
-);
+extern kissvg_ComplexDouble
+kissvg_PoincareDiskMobiusTransform(kissvg_ComplexDouble z,
+                                   kissvg_ComplexDouble w);
 
-extern kissvg_ComplexDouble kissvg_PoincareDiskInverseMobiusTransform(
-    kissvg_ComplexDouble z, kissvg_ComplexDouble w
-);
+extern kissvg_ComplexDouble
+kissvg_PoincareDiskInverseMobiusTransform(kissvg_ComplexDouble z,
+                                          kissvg_ComplexDouble w);
 
 #endif
 /*  End of include guard.                                                     */
