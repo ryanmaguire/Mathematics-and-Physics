@@ -533,6 +533,39 @@ kissvg_TwoVector kissvg_FurthestPointOnCircle(kissvg_Circle *C,
     return out;
 }
 
+kissvg_TwoVector kissvg_Plane_To_Disk_Homeo(kissvg_TwoVector P)
+{
+    kissvg_TwoVector out;
+    double px, py;
+    double outx, outy;
+    double norm;
+    double scale_factor;
+
+    px = kissvg_TwoVector_X_Component(P);
+    py = kissvg_TwoVector_Y_Component(P);
+
+    if ((px == 0.0) && (py == 0.0))
+    {
+        outx = 0.0;
+        outy = 0.0;
+    }
+    else
+    {
+        norm = kissvg_Euclidean_Norm_2D(P);
+        outx = px/norm;
+        outy = py/norm;
+
+        scale_factor = (-1.0 + sqrt(4.0*norm*norm + 1.0))/(2.0*norm);
+
+        outx *= scale_factor;
+        outy *= scale_factor;
+    }
+    out = kissvg_New_TwoVector(outx, outy);
+
+    return out;
+}
+
+
 kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
                                                   kissvg_Circle *C1)
 {

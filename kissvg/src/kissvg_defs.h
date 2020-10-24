@@ -27,19 +27,21 @@
  *      kissvg_TwoByTwoMatrix:                                                *
  *          A data type representing a 2x2 matrix. Used for applying linear   *
  *          transformations to a kissvg_TwoVector.                            *
- *      kissvg_Canvas2D:                                                      *
+ *      kissvg_Canvas:                                                        *
  *          A struct which contains all of the necessary data to transform    *
  *          the intrinsic geometry of the output file (.ps, .svg, or whatever *
  *          is being produced) to the coordinate geometry of the user.        *
  *      kissvg_Path2D:                                                        *
  *          A struct containing a pointer to a kissvg_TwoVector, as well as   *
  *          data for the drawing like color, line width, etc.                 *
- *      kissvg_Axis2D:                                                        *
- *          A specialized kissvg_Path2D with additional data for tick marks.  *
- *      kissvg_Color:                                                         *
+ *      kissvg_Pen:                                                           *
  *          A struct containing red, green, and blue values (r g, b). The     *
  *          values use real numbers between 0 and 1, and not chars between 0  *
- *          and 255.                                                          *
+ *          and 255. It contains information about the transparency of the    *
+ *          object and it's linewidth.                                        *
+ *      kissvg_Palette:                                                       *
+ *          A struct with lots of data about how to draw an object. This      *
+ *          includes line pens, fill pens, tick marks, labels, arrows, etc.   *
  *      kissvg_ArrowType:                                                     *
  *          An integer corresponding to various arrow styles.                 *
  *      kissvg_Arrow:                                                         *
@@ -50,12 +52,6 @@
  *          center and a double for the radius. In addition it contains data  *
  *          for drawing the circle.                                           *
  ******************************************************************************
- *                               DEPENDENCIES                                 *
- ******************************************************************************
- *  1.) kissvg_bool.h:                                                        *
- *      Header file where kissvg_bool is typedef'd, as well as kissvg_true    *
- *      and kissvg_false.                                                     *
- ******************************************************************************
  *  Author:     Ryan Maguire, Dartmouth College                               *
  *  Date:       October 3, 2020                                               *
  ******************************************************************************/
@@ -64,8 +60,8 @@
 #ifndef _KISSVG_DEFS_H_
 #define _KISSVG_DEFS_H_
 
-/*  Several of the structs have Booleans in them which are defined here.      */
-#include <kissvg/include/kissvg_bool.h>
+/*  Several of the structs have Booleans, which we typedef here.              */
+typedef enum {kissvg_False, kissvg_True} kissvg_Bool;
 
 /*  Enumeration for legal file outputs. Currently PostScript (.ps), Scalable  *
  *  Vector Graphics (.svg), and Portable Document Format (.pdf) are allowed.  */
@@ -87,15 +83,21 @@ typedef struct kissvg_TwoByTwoMatrix {
 } kissvg_TwoByTwoMatrix;
 
 /*  This struct is required for most routines and is included as an attribute *
- *  of several data types like kissvg_Path2D and kissvg_Axis2D. It is used to *
- *  convert between the geometry of the actual output file                    *
- *  (.ps, .svg, .pdf, etc.) and the coordinates we use for computations.      */
-typedef struct kissvg_Canvas2D kissvg_Canvas2D;
-typedef double (*kissvg_CanvasTransform) (kissvg_Canvas2D *, double);
+ *  of several data types. It is used to convert between the geometry of the  *
+ *  actual output file (.ps, .svg, .pdf, etc.) and the coordinates we use for *
+ *  computations.                                                             */
+typedef struct kissvg_Canvas kissvg_Canvas;
 
-struct kissvg_Canvas2D {
+/*  This function pointer is stored inside a kissvg_Canvas struct. The        *
+ *  function takes in the canvas and a double and transforms the user's       *
+ *  coordinates to the coordinates of the actual file.                        */
+typedef double (*kissvg_CanvasTransform) (kissvg_Canvas *, double);
+
+/*  Actual definition of kissvg_Canvas struct.                                */
+struct kissvg_Canvas {
     kissvg_FileType filetype;
 
+    /*  The size of the figure, in inches.                                    */
     double x_inches;
     double y_inches;
 
@@ -105,13 +107,14 @@ struct kissvg_Canvas2D {
     double y_scale;
 
     /*  x_shift and y_shift are used to center the figure. The center is not  *
-     *  taken to be (0, 0), but rather the mean of the user provided X_MIN    *
-     *  and X_MAX for the x-axis, and Y_MIN and Y_MAX for the y-axis.         */
+     *  taken to be (0, 0), but rather the value corresponding to             *
+     *  (x_inches, y_inches)/2.                                               */
     double x_shift;
     double y_shift;
 
-    kissvg_CanvasTransform TransformX;
-    kissvg_CanvasTransform TransformY;
+    /*  Transform functions are stored inside the canvas for ease of access.  */
+    kissvg_CanvasTransform X_Transform;
+    kissvg_CanvasTransform Y_Transform;
 };
 
 /*  This is the primary structure for using colors in drawings. It is a       *
@@ -120,11 +123,12 @@ struct kissvg_Canvas2D {
  *  setting these values so one should never have to do so directly. The      *
  *  Boolean has_transparency is used for determining if alpha composting      *
  *  should be used with the value alpha.                                      */
-typedef struct kissvg_Color {
+typedef struct kissvg_Pen {
     double dat[3];
     double alpha;
+    double linewidth;
     kissvg_Bool has_transparency;
-} kissvg_Color;
+} kissvg_Pen;
 
 /*  Struct for adding labels to figures.                                      */
 typedef struct kissvg_Label2D {
@@ -134,30 +138,25 @@ typedef struct kissvg_Label2D {
     double margins[4];
     kissvg_TwoVector anchor;
     kissvg_TwoVector shift;
-    kissvg_Canvas2D *canvas;
-    kissvg_Color *line_color;
+    kissvg_Pen *pen;
 } kissvg_Label2D;
 
 /*  Enumerated list of arrow types. Currently only three are provided, which  *
  *  are modeled after the tikz arrows. A no-arrow option is also provided. If *
  *  you want to flip the direction, use the Reverse option, i.e. something    *
- *  like kissvg_StealthArrowReverse.                                          */
+ *  like kissvg_Stealth_Arrow_Reverse.                                        */
 typedef enum {
-    kissvg_NoArrow,
-    kissvg_StealthArrow,
-    kissvg_ReverseStealthArrow,
-    kissvg_TriangularArrow,
-    kissvg_ReverseTriangularArrow,
-    kissvg_LatexArrow,
-    kissvg_ReverseLatexArrow
+    kissvg_No_Arrow,
+    kissvg_Stealth_Arrow,
+    kissvg_Reverse_Stealth_Arrow,
+    kissvg_Triangular_Arrow,
+    kissvg_Reverse_Triangular_Arrow,
+    kissvg_Latex_Arrow,
+    kissvg_Reverse_Latex_Arrow
 } kissvg_ArrowType;
 
-/*  Struct containing all of the information for arrows. This struct is       *
- *  contained in the Path2D, Circle, and Axis2D structs.                      */
+/*  Struct containing all of the information for arrows.                      */
 typedef struct kissvg_Arrow {
-
-    /*  Booleans for the direction of the arrow.                              */
-    kissvg_Bool reverse_arrow;
 
     /*  The type of arrow to draw. (Stealth, triangle, LaTeX, or none).       */
     kissvg_ArrowType arrow_type;
@@ -172,40 +171,19 @@ typedef struct kissvg_Arrow {
     char *error_message;
 
     /*  The color of the interior of the arrow drawn.                         */
-    kissvg_Color *fill_color;
+    kissvg_Pen *fill_pen;
 
     /*  The color of the outline of the arrow.                                */
-    kissvg_Color *line_color;
+    kissvg_Pen *line_pen;
 
     /*  The radius of the arrow head. The arrow head is defined by three      *
      *  points on a circle about the point corresponding to the arrow_pos.    */
     double arrow_size;
-
-    /*  The width of the boundary of the arrow. This only matters if the fill *
-     *  colors is different than the line color.                              */
-    double line_width;
 } kissvg_Arrow;
 
-/*  This is the primary data type used for drawing 2 dimensional figures. It  *
- *  contains a lot of information, and various functions and macros are       *
- *  provided below for accessing the data and altering it.                    */
-typedef struct kissvg_Path2D {
-
-    /*  This pointer contains all of the points of the path.                  */
-    kissvg_TwoVector *data;
-
-    /*  The number of points in the data pointer.                             */
-    unsigned long N_Pts;
-
-    /*  Boolean for determining if an error occured.                          */
-    kissvg_Bool error_occured;
-
-    /*  An error message which is set by various functions if an error occurs.*/
-    char *error_message;
-
-    /*  Boolean for determining if the path is meant to be a closed path or   *
-     *  an open path. By default it is false.                                 */
-    kissvg_Bool is_closed;
+/*  Struct stored in paths and circles containing all of the info on how to   *
+ *  draw the object.                                                          */
+typedef struct kissvg_Palette {
 
     /*  Boolean for determining if there are lables along the path.           */
     kissvg_Bool has_labels;
@@ -219,7 +197,7 @@ typedef struct kissvg_Path2D {
     /*  Boolean for determining if the region enclosed should be filled in.   *
      *  Default is set to false. If this Boolean is set to true, the various  *
      *  drawing routines will automatically set is_closed to true.            */
-    kissvg_Bool has_filldraw;
+    kissvg_Bool has_fill_draw;
 
     /*  Boolean for determining if the path has arrows on it.                 */
     kissvg_Bool has_arrows;
@@ -231,63 +209,24 @@ typedef struct kissvg_Path2D {
     unsigned long N_Arrows;
 
     /*  The color of the interior of the region enclosed by the path. This is *
-     *  only used if the fill_draw Boolean is set.                            */
-    kissvg_Color *fill_color;
+     *  only used if the has_fill_draw Boolean is set.                        */
+    kissvg_Pen *fill_pen;
 
     /*  The color of the path.                                                */
-    kissvg_Color *line_color;
+    kissvg_Pen *line_pen;
 
-    /*  The width of the path.                                                */
-    double line_width;
-
-    /*  The canvas for the entire drawing. Note this should be a constant for *
-     *  the entire drawing and should not vary between paths.                 */
-    kissvg_Canvas2D *canvas;
-} kissvg_Path2D;
-
-/*  Data structure for drawing and customizing axes with KissVG. There are a  *
- *  plethora of options including tick marks and colors.                      */
-typedef struct kissvg_Axis2D {
-
-    /*  The start of the axis (x_0, y_0).                                     */
-    kissvg_TwoVector start;
-
-    /*  The end of the axis (x_1, y_1). Note that is has_arrow is set, which  *
-     *  by default it will be, then the axis will be +arrow_size longer to    *
-     *  account for the arrow head. This may make your figure fall out of the *
-     *  page if you left no room when setting X_MIN, X_MAX, Y_MIN, orY_MAX.   */
-    kissvg_TwoVector finish;
-
-    /*  Boolean for determining if an error occured.                          */
-    kissvg_Bool error_occured;
-
-    /*  An error message which is set by various functions if an error occurs.*/
-    char *error_message;
-
-    /*  Where the ticks should start. Usually you will be plotting the x and  *
-     *  y axes so it is reasonable to set this as an integer pair like (0, 0).*/
-    kissvg_TwoVector tick_start;
+    /*  Where the ticks should start. This is parameterized by the arc length *
+     *  of the object. That is, if you set tick_start = 0 there will be a     *
+     *  tick at the very start of the path.                                   */
+    double tick_start;
 
     /*  Where the tick marks stop.                                            */
-    kissvg_TwoVector tick_finish;
-
-    /*  Boolean for determining if the path has arrows on it.                 */
-    kissvg_Bool has_arrows;
-
-    /*  Pointer to the arrows stored on the path.                             */
-    kissvg_Arrow **arrows;
-
-    /*  The number of arrow.                                                  */
-    long N_Arrows;
-
-    kissvg_Bool has_labels;
-    kissvg_Label2D **labels;
-    long N_Labels;
+    double tick_finish;
 
     /*  Boolean for use of tick marks. Default is False.                      */
     kissvg_Bool has_ticks;
 
-    /*  Boolean for only have ticks "above" the axis. For the x-axis, where   *
+    /*  Boolean for only having ticks "above" the axis. For the x-axis, where *
      *  tick_start is to the left of tick_finish, the ticks will indeed be    *
      *  pointing "up". For the y-axis, with tick_start below tick_finish, the *
      *  ticks will point to the "left" since this is just a rotation of the   *
@@ -327,22 +266,35 @@ typedef struct kissvg_Axis2D {
      *  |_______|_______|_______|_______|_______|_______|_______|_______|     *
      **************************************************************************/
 
-    /*  The color of the axis. Default is black.                              */
-    kissvg_Color *line_color;
-
     /*  The color of the ticks. Default is black.                             */
-    kissvg_Color *tick_color;
-
-    /*  The thickness of the axis. Default is the macro kissvg_DefaultAxes.   */
-    double line_width;
-
-    /*  The size of the ticks. Default is zero since ticks are not drawn by   *
-     *  default and need to be set by the user.                               */
-    double tick_width;
+    kissvg_Pen *tick_pen;
 
     /*  The canvas of the entire drawing.                                     */
-    kissvg_Canvas2D *canvas;
-} kissvg_Axis2D;
+    kissvg_Canvas *canvas;
+} kissvg_Palette;
+
+/*  This is the primary data type used for drawing 2 dimensional figures.     */
+typedef struct kissvg_Path2D {
+
+    /*  This pointer contains all of the points of the path.                  */
+    kissvg_TwoVector *data;
+
+    /*  The number of points in the data pointer.                             */
+    unsigned long N_Pts;
+
+    /*  Boolean for determining if an error occured.                          */
+    kissvg_Bool error_occured;
+
+    /*  An error message which is set by various functions if an error occurs.*/
+    char *error_message;
+
+    /*  Boolean for determining if the object is meant to be closed or not.   *
+     *  If you wish to use fill draw with the object, this must be true.      */
+    kissvg_Bool is_closed;
+
+    /*  Data for how to draw the path and the geometry of the page.           */
+    kissvg_Palette *palette;
+} kissvg_Path2D;
 
 /*  This is the primary structure for working with and drawing circles. It    *
  *  contains geometric data as well as visual data for how to draw it.        */
@@ -352,14 +304,14 @@ typedef struct kissvg_Circle {
     kissvg_TwoVector center;
     double radius;
 
+    /*  Several routines allow for the possibility of a circle degenerating   *
+     *  to a line, which is a circle with center "at infinity." In these      *
+     *  scenarios the functions set the circle to be a line defined by a      *
+     *  point P which lies on it, and its tangent vector V. The is_line       *
+     *  is for determining if a circle is actually a line.                    */
     kissvg_Bool is_line;
     kissvg_TwoVector P;
     kissvg_TwoVector V;
-
-    /*  The rest are for drawing the circle. If you only need the circle for  *
-     *  computations then you need not set any of these. When a circle is     *
-     *  created via kissvg_CreateCircle, many reasonable defaults are set so  *
-     *  you can still draw without having to explicitly set values.           */
 
     /*  Boolean for determining if an error occured.                          */
     kissvg_Bool error_occured;
@@ -367,37 +319,8 @@ typedef struct kissvg_Circle {
     /*  An error message which is set by various functions if an error occurs.*/
     char *error_message;
 
-    /*  Boolean for determining if the circle has arrows. By default circles  *
-     *  do not have arrows so the arrow_fill_color and arrow_color variables  *
-     *  below are not set.                                                    */
-    kissvg_Bool has_arrows;
-
-    /*  Pointer to the arrows stored on the path.                             */
-    kissvg_Arrow **arrows;
-
-    /*  The number of arrow.                                                  */
-    long N_Arrows;
-
-    kissvg_Bool has_labels;
-    kissvg_Label2D **labels;
-    long N_Labels;
-
-    /*  Boolean for determining if the region enclosed should be filled in.   *
-     *  Default is set to false.                                              */
-    kissvg_Bool has_filldraw;
-
-    /*  The color of the interior of the region enclosed by the path. This is *
-     *  only used if the fill_draw Boolean is set.                            */
-    kissvg_Color *fill_color;
-
-    /*  The color of the axis. Default is black.                              */
-    kissvg_Color *line_color;
-
-    /*  The thickness of the axis. Default is the macro kissvg_DefaultAxes.   */
-    double line_width;
-
-    /*  The canvas of the entire drawing.                                     */
-    kissvg_Canvas2D *canvas;
+    /*  Data for how to draw the path and the geometry of the page.           */
+    kissvg_Palette *palette;
 } kissvg_Circle;
 
 /*  A data type for conviently dealing with lines.                            */
@@ -416,34 +339,16 @@ typedef struct kissvg_Line2D {
     /*  An error message which is set by various functions if an error occurs.*/
     char *error_message;
 
-    /*  Boolean for determining if the line has arrows.                       */
-    kissvg_Bool has_arrows;
-
-    /*  Pointer to the arrows stored on the path.                             */
-    kissvg_Arrow **arrows;
-
-    /*  The number of arrow.                                                  */
-    long N_Arrows;
-
-    kissvg_Bool has_labels;
-    kissvg_Label2D **labels;
-    long N_Labels;
-
-    /*  The color of the axis. Default is black.                              */
-    kissvg_Color *line_color;
-
-    /*  The thickness of the axis. Default is the macro kissvg_DefaultAxes.   */
-    double line_width;
-
-    /*  The canvas of the entire drawing.                                     */
-    kissvg_Canvas2D *canvas;
+    /*  Data for how to draw the path and the geometry of the page.           */
+    kissvg_Palette *palette;
 } kissvg_Line2D;
 
 /*  Note, one should not access the data in these structures directly, but    *
- *  rather use the functions defined below, like kissvg_TwoVectorXComponent   *
- *  and so on to access the elements, and kissvg_NewTwoVector to create       *
- *  vectors. It makes the code readable and the attributes of these           *
- *  structures are supposed to be "hidden" from the end-user.                 */
+ *  rather use the functions and macros defined in kissvg.h, like             *
+ *  kissvg_TwoVector_X_Component and so on to access the elements, and        *
+ *  kissvg_New_TwoVector to create vectors. It makes the code readable and    *
+ *  the attributes of these structures are supposed to be "hidden" from the   *
+ *  end-user.                                                                 */
 
 #endif
 /*  End of kissvg_defs.h include guard.                                       */
