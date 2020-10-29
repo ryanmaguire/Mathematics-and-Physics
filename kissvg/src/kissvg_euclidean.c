@@ -27,9 +27,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <kissvg/include/kissvg.h>
-#include <kissvg/include/kissvg_math.h>
-#include <kissvg/include/kissvg_bool.h>
+#include <kissvg/src/kissvg_math.h>
+#include <kissvg/src/kissvg_vector.h>
+#include <kissvg/src/kissvg_matrix.h>
+#include <kissvg/src/kissvg_circle.h>
+#include <kissvg/src/kissvg_line.h>
+#include <kissvg/src/kissvg_euclidean.h>
 
 /*  NOTE:                                                                     *
  *      Detailed descriptions of the functions are provided in kissvg.h.      */
@@ -49,7 +52,7 @@ static void __check_circle_error(kissvg_Circle *C, const char *FuncName)
     }
 
     /*  If the input circle has an error set, abort the computation.          */
-    if (kissvg_HasError(C))
+    if (kissvg_Has_Error(C))
     {
         printf("Error Encountered: KissVG\n"
                "\tFunction: %s\n\n"
@@ -57,12 +60,12 @@ static void __check_circle_error(kissvg_Circle *C, const char *FuncName)
                "Printing Error Message:\n\n", FuncName);
 
         /*  If the error message is NULL, then it wasn't set. Print this.     */
-        if (kissvg_ErrorMessage(C) == NULL)
+        if (kissvg_Error_Message(C) == NULL)
             puts("Input circle did not have an error message set.\n\n");
 
         /*  Otherwise, simply print the message.                              */
         else
-            puts(kissvg_ErrorMessage(C));
+            puts(kissvg_Error_Message(C));
 
         /*  Abort the computation.                                            */
         exit(0);
@@ -87,7 +90,7 @@ static void __check_line_error(kissvg_Line2D *L, const char *FuncName)
     }
 
     /*  If the input line has an error set, abort the computation.            */
-    if (kissvg_HasError(L))
+    if (kissvg_Has_Error(L))
     {
         printf("Error Encountered: KissVG\n"
                "\tFunction: %s\n\n"
@@ -95,12 +98,12 @@ static void __check_line_error(kissvg_Line2D *L, const char *FuncName)
                "Printing Error Message:\n\n", FuncName);
 
         /*  If the error message is NULL, then it wasn't set. Print this.     */
-        if (kissvg_ErrorMessage(L) == NULL)
+        if (kissvg_Error_Message(L) == NULL)
             puts("Input line did not have an error message set.\n\n");
 
         /*  Otherwise, simply print the message.                              */
         else
-            puts(kissvg_ErrorMessage(L));
+            puts(kissvg_Error_Message(L));
 
         /*  Abort the computation.                                            */
         exit(0);
@@ -111,30 +114,30 @@ static void __check_line_error(kissvg_Line2D *L, const char *FuncName)
 }
 
 /*  Function for computing the length of a two dimensional vector.            */
-double kissvg_EuclideanNorm2D(kissvg_TwoVector P)
+double kissvg_Euclidean_Norm_2D(kissvg_TwoVector P)
 {
     /*  Declare the necessary variables for the computation.                  */
     double x_comp, y_comp;
     double norm;
 
     /*  Extract the x and y values of the vector P.                           */
-    x_comp = kissvg_TwoVectorXComponent(P);
-    y_comp = kissvg_TwoVectorYComponent(P);
+    x_comp = kissvg_TwoVector_X_Component(P);
+    y_comp = kissvg_TwoVector_Y_Component(P);
 
     /*  If either x or y is infinity, set the length to infinity.             */
-    if (kissvg_IsInf(x_comp) || kissvg_IsInf(y_comp))
+    if (kissvg_Is_Inf(x_comp) || kissvg_Is_Inf(y_comp))
         return kissvg_Infinity;
 
     /*  Use kissvg_NewTwoVector to generate the output and return. sqrt is a  *
      *  C standard library function found in math.h, and math.h is included   *
      *  in the header kissvg_math.h. kissvg_SqrtDouble is an alias for this.  */
-    norm = kissvg_SqrtDouble(x_comp*x_comp + y_comp*y_comp);
+    norm = kissvg_Sqrt_Double(x_comp*x_comp + y_comp*y_comp);
     return norm;
 }
 
 /*  Function for computing the standard Euclidean dot product of 2 two        *
  *  dimensional vectors P and Q.                                              */
-double kissvg_EuclideanDotProduct2D(kissvg_TwoVector P, kissvg_TwoVector Q)
+double kissvg_Euclidean_Dot_Product_2D(kissvg_TwoVector P, kissvg_TwoVector Q)
 {
     /*  Declare all necessary variables.                                      */
     double x0, y0;
@@ -142,12 +145,12 @@ double kissvg_EuclideanDotProduct2D(kissvg_TwoVector P, kissvg_TwoVector Q)
     double dot_product;
 
     /*  Extract the x and y components of the vector P.                       */
-    x0 = kissvg_TwoVectorXComponent(P);
-    y0 = kissvg_TwoVectorYComponent(P);
+    x0 = kissvg_TwoVector_X_Component(P);
+    y0 = kissvg_TwoVector_Y_Component(P);
 
     /*  Extract the x and y components of the vector Q.                       */
-    x1 = kissvg_TwoVectorXComponent(Q);
-    y1 = kissvg_TwoVectorYComponent(Q);
+    x1 = kissvg_TwoVector_X_Component(Q);
+    y1 = kissvg_TwoVector_Y_Component(Q);
 
     /*  Compute the dot product and return.                                   */
     dot_product = x0*x1 + y0*y1;
@@ -157,27 +160,27 @@ double kissvg_EuclideanDotProduct2D(kissvg_TwoVector P, kissvg_TwoVector Q)
 /*  Given a vector V, returns an orthogonal vector U with respect to the      *
  *  standard Euclidean dot product. That is, a vector U with <V|U> = 0        *
  *  (using bra-ket notation).                                                 */
-kissvg_TwoVector kissvg_EuclideanOrthogonalVector2D(kissvg_TwoVector V)
+kissvg_TwoVector kissvg_Euclidean_Orthogonal_Vector_2D(kissvg_TwoVector V)
 {
     /*  Declare necessary variables.                                          */
     kissvg_TwoVector orth;
     double x_comp, y_comp;
 
     /*  Extract the x and y values from the input vector.                     */
-    x_comp = kissvg_TwoVectorXComponent(V);
-    y_comp = kissvg_TwoVectorYComponent(V);
+    x_comp = kissvg_TwoVector_X_Component(V);
+    y_comp = kissvg_TwoVector_Y_Component(V);
 
     /*  Simply return (-y, x) since this will be orthogonal. That is, the dot *
      *  product is <V|U> = <(x,y)|(-y,x)> = -xy + yx = 0.                     */
-    orth = kissvg_NewTwoVector(-y_comp, x_comp);
+    orth = kissvg_New_TwoVector(-y_comp, x_comp);
     return orth;
 }
 
 /*  Function for computing the angle between the lines OP and OQ given three  *
  *  kissvg_TwoVector's O, P, and Q.                                           */
-double kissvg_EuclideanRelAngle2D(kissvg_TwoVector O,
-                                  kissvg_TwoVector P,
-                                  kissvg_TwoVector Q)
+double kissvg_Euclidean_Rel_Angle_2D(kissvg_TwoVector O,
+                                     kissvg_TwoVector P,
+                                     kissvg_TwoVector Q)
 {
     /*  Declare all necessary variables.                                      */
     double dot_prod;
@@ -190,15 +193,15 @@ double kissvg_EuclideanRelAngle2D(kissvg_TwoVector O,
 
     /*  Compute the vector pointing from O to P, which is simply P-O. Do the  *
      *  same thing for O and Q.                                               */
-    OP = kissvg_TwoVectorSubtract(P, O);
-    OQ = kissvg_TwoVectorSubtract(Q, O);
+    OP = kissvg_TwoVector_Subtract(P, O);
+    OQ = kissvg_TwoVector_Subtract(Q, O);
 
     /*  The angle formula is arccos(a dot b / norm(a)norm(b)). First we'll    *
      *  compute the dot product, then check that norm(a)norm(b) is non-zero.  */
-    dot_prod = kissvg_EuclideanDotProduct2D(OP, OQ);
+    dot_prod = kissvg_Euclidean_Dot_Product_2D(OP, OQ);
 
     /*  abs_prod represents the quantity ||OP|| * ||OQ||.                     */
-    abs_prod = kissvg_EuclideanNorm2D(OP)*kissvg_EuclideanNorm2D(OQ);
+    abs_prod = kissvg_Euclidean_Norm_2D(OP)*kissvg_Euclidean_Norm_2D(OQ);
 
     /*  If norm(OP)norm(OQ) is zero, then one of these vectors is the zero    *
      *  vector, meaning the angle is undefined. We then return Not-A-Number.  */
@@ -209,15 +212,15 @@ double kissvg_EuclideanRelAngle2D(kissvg_TwoVector O,
      *  acos is a C standard library function found in math.h. This header    *
      *  file is included with kissvg_math.h. kissvg_AcosDouble is an alias.   */
     else
-        rel_angle = kissvg_AcosDouble(dot_prod/abs_prod);
+        rel_angle = kissvg_Acos_Double(dot_prod/abs_prod);
 
     return rel_angle;
 }
 
 /*  Function for determining if three planar vectors are collinear.           */
-kissvg_Bool kissvg_EuclideanIsCollinear(kissvg_TwoVector A,
-                                        kissvg_TwoVector B,
-                                        kissvg_TwoVector C)
+kissvg_Bool kissvg_Euclidean_Is_Collinear(kissvg_TwoVector A,
+                                          kissvg_TwoVector B,
+                                          kissvg_TwoVector C)
 {
     /*  The method simply checks the determinant of the matrix formed by      *
      *  the column vectors AB and AC. This is equivalent to seeing if the     *
@@ -230,16 +233,16 @@ kissvg_Bool kissvg_EuclideanIsCollinear(kissvg_TwoVector A,
     double det;
 
     /*  Compute the vectors pointing from A to B and A to C.                  */
-    AB = kissvg_TwoVectorSubtract(B, A);
-    AC = kissvg_TwoVectorSubtract(C, A);
+    AB = kissvg_TwoVector_Subtract(B, A);
+    AC = kissvg_TwoVector_Subtract(C, A);
 
     /*  Extract the x and y components of AB.                                 */
-    ABx = kissvg_TwoVectorXComponent(AB);
-    ABy = kissvg_TwoVectorYComponent(AB);
+    ABx = kissvg_TwoVector_X_Component(AB);
+    ABy = kissvg_TwoVector_Y_Component(AB);
 
     /*  Extract the x and y components of AC.                                 */
-    ACx = kissvg_TwoVectorXComponent(AC);
-    ACy = kissvg_TwoVectorYComponent(AC);
+    ACx = kissvg_TwoVector_X_Component(AC);
+    ACy = kissvg_TwoVector_Y_Component(AC);
 
     /*  Compute the determinant of the matrix [AB | AC].                      */
     det = ABx*ACy - ABy*ACx;
@@ -251,8 +254,8 @@ kissvg_Bool kissvg_EuclideanIsCollinear(kissvg_TwoVector A,
 }
 
 /*  Function for computing the midpoint of 2 two dimensional vectors.         */
-kissvg_TwoVector kissvg_EuclideanMidPoint2D(kissvg_TwoVector P,
-                                            kissvg_TwoVector Q)
+kissvg_TwoVector kissvg_Euclidean_Midpoint_2D(kissvg_TwoVector P,
+                                              kissvg_TwoVector Q)
 {
     /*  Declare all necessary variables.                                      */
     double x0, y0;
@@ -261,26 +264,26 @@ kissvg_TwoVector kissvg_EuclideanMidPoint2D(kissvg_TwoVector P,
     kissvg_TwoVector midpoint;
 
     /*  Extract the x and y components of the vector P.                       */
-    x0 = kissvg_TwoVectorXComponent(P);
-    y0 = kissvg_TwoVectorYComponent(P);
+    x0 = kissvg_TwoVector_X_Component(P);
+    y0 = kissvg_TwoVector_Y_Component(P);
 
     /*  Extract the x and y components of the vector Q.                       */
-    x1 = kissvg_TwoVectorXComponent(Q);
-    y1 = kissvg_TwoVectorYComponent(Q);
+    x1 = kissvg_TwoVector_X_Component(Q);
+    y1 = kissvg_TwoVector_Y_Component(Q);
 
     /*  Compute the midpoint of P and Q, which is simply 0.5*(P+Q).           */
     xmid = 0.5*(x0 + x1);
     ymid = 0.5*(y0 + y1);
 
     /*  Use kissvg_NewTwoVector to create the new output and return.          */
-    midpoint = kissvg_NewTwoVector(xmid, ymid);
+    midpoint = kissvg_New_TwoVector(xmid, ymid);
     return midpoint;
 }
 
 /*  Function for determining the center of three points in the plane.         */
-kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
-                                            kissvg_TwoVector B,
-                                            kissvg_TwoVector C)
+kissvg_Circle *kissvg_Euclidean_Find_Center_2D(kissvg_TwoVector A,
+                                               kissvg_TwoVector B,
+                                               kissvg_TwoVector C)
 {
     /*  Declare the necessary variables.                                      */
     kissvg_TwoVector U;
@@ -293,31 +296,27 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
     char *err_mes;
 
     /*  If A, B, and C are collinear, their center is "at infinity."          */
-    if (kissvg_EuclideanIsCollinear(A, B, C))
+    if (kissvg_Euclidean_Is_Collinear(A, B, C))
     {
-        center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+        center = kissvg_New_TwoVector(kissvg_Infinity, kissvg_Infinity);
         radius = kissvg_Infinity;
 
-        circle = kissvg_CreateCircle(center, radius, NULL);
-        kissvg_CircleSetIsLine(circle, kissvg_True);
+        circle = kissvg_Create_Circle(center, radius, NULL);
 
-        V = kissvg_TwoVectorSubtract(A, B);
-        U = kissvg_TwoVectorSubtract(A, C);
+        V = kissvg_TwoVector_Subtract(A, B);
+        U = kissvg_TwoVector_Subtract(A, C);
 
         /*  In this case, the circle degenerates to a line. We need to        *
          *  specify a point on the line and a vector tangent to it. We can    *
          *  take any point A, B, C as our point, and either AB, AC, or BC as  *
-         *  our tangent.                                                      */
-        kissvg_CircleSetPoint(circle, A);
-
-        /*  If A and B are different points, take AB to be the tangent vector *
-         *  of the line.                                                      */
-        if (!(kissvg_EuclideanNorm2D(V) == 0.0))
-            kissvg_CircleSetVelocity(circle, V);
+         *  our tangent. If A and B are different points, take AB to be the   *
+         *  tangent vector of the line.                                       */
+        if (!(kissvg_Euclidean_Norm_2D(V) == 0.0))
+            kissvg_Circle_Set_Line(circle, A, V);
 
         /*  If A and B are the same point, try to set the tangent as AC.      */
-        else if (!(kissvg_EuclideanNorm2D(U) == 0.0))
-            kissvg_CircleSetVelocity(circle, U);
+        else if (!(kissvg_Euclidean_Norm_2D(U) == 0.0))
+            kissvg_Circle_Set_Line(circle, A, U);
 
         /*  If both AB and AC are the zero vector, then all three points are  *
          *  the same and it is impossible to specify a unique line. Set the   *
@@ -330,8 +329,8 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
                       "\tFunction: kissvg_FindCenter2D\n\n"
                       "All three points are the same.\n";
 
-            kissvg_CircleSetErrorMessage(circle, err_mes);
-            kissvg_CircleSetVelocity(circle, A);
+            kissvg_Circle_Set_Error_Message(circle, err_mes);
+            kissvg_Circle_Set_Line(circle, A, A);
         }
     }
 
@@ -340,41 +339,41 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
     else
     {
         /*  Get the vectors AB and AC.                                        */
-        U = kissvg_TwoVectorSubtract(A, B);
-        V = kissvg_TwoVectorSubtract(A, C);
+        U = kissvg_TwoVector_Subtract(A, B);
+        V = kissvg_TwoVector_Subtract(A, C);
 
         /*  Find the midpoints of AB and AC.                                  */
-        MidPointAB = kissvg_EuclideanMidPoint2D(A, B);
-        MidPointAC = kissvg_EuclideanMidPoint2D(A, C);
+        MidPointAB = kissvg_Euclidean_Midpoint_2D(A, B);
+        MidPointAC = kissvg_Euclidean_Midpoint_2D(A, C);
 
         /*  We need the bisecting lines of AB and AC, which we'll compute via *
          *  the midpoints and vectors orthogonal to AB and AC.                */
-        U = kissvg_EuclideanOrthogonalVector2D(U);
-        V = kissvg_EuclideanOrthogonalVector2D(V);
+        U = kissvg_Euclidean_Orthogonal_Vector_2D(U);
+        V = kissvg_Euclidean_Orthogonal_Vector_2D(V);
 
         /*  Create bisecting lines from midpoints and orthgonal vectors.      *
          *  Since we don't need these lines to have the canvas variable set   *
          *  (we're using the lines for computations, not for drawing), simply *
          *  set the canvas variable to NULL.                                  */
-        L0 = kissvg_CreateLineFromPointAndTangent(MidPointAB, U, NULL);
-        L1 = kissvg_CreateLineFromPointAndTangent(MidPointAC, V, NULL);
+        L0 = kissvg_Create_Line2D_From_Point_And_Tangent(MidPointAB, U, NULL);
+        L1 = kissvg_Create_Line2D_From_Point_And_Tangent(MidPointAC, V, NULL);
 
         /*  The center of the circle is the intersection of the two lines, so *
          *  we simply compute this point and save it.                         */
-        center = kissvg_LineLineIntersection(L0, L1);
+        center = kissvg_Line2D_Intersection(L0, L1);
 
         /*  Lines are created via malloc and need to be free'd when done      *
          *  using the kissvg_DestroyLine2D function.                          */
-        kissvg_DestroyLine2D(L0);
-        kissvg_DestroyLine2D(L1);
+        kissvg_Destroy_Line_2D(L0);
+        kissvg_Destroy_Line_2D(L1);
 
         /*  We need to compute the radius of the circle, so get the vector    *
          *  starting at center and ending at A.                               */
-        U = kissvg_TwoVectorSubtract(center, A);
+        U = kissvg_TwoVector_Subtract(center, A);
 
         /*  The radius is the Euclidean norm of this vector, so compute this. */
-        radius = kissvg_EuclideanNorm2D(U);
-        circle = kissvg_CreateCircle(center, radius, NULL);
+        radius = kissvg_Euclidean_Norm_2D(U);
+        circle = kissvg_Create_Circle(center, radius, NULL);
     }
 
     /* Return the output. The user can check if the circle degenerated to a   *
@@ -383,7 +382,8 @@ kissvg_Circle *kissvg_EuclideanFindCenter2D(kissvg_TwoVector A,
 }
 
 /*  Function for finding the closest point on a line L to a given point P.    */
-kissvg_TwoVector kissvg_ClosestPointOnLine(kissvg_Line2D *L, kissvg_TwoVector P)
+kissvg_TwoVector
+kissvg_Closest_Point_On_Line2D(kissvg_Line2D *L, kissvg_TwoVector P)
 {
     /*  Declare all necessary variables.                                      */
     kissvg_TwoVector orth;
@@ -397,32 +397,32 @@ kissvg_TwoVector kissvg_ClosestPointOnLine(kissvg_Line2D *L, kissvg_TwoVector P)
     __check_line_error(L, FuncName);
 
     /*  Extract a point on the line and it's tangent vector.                  */
-    A = kissvg_Line2DPoint(L);
-    V = kissvg_Line2DTangent(L);
-    B = kissvg_TwoVectorAdd(A, V);
+    A = kissvg_Line2D_Point(L);
+    V = kissvg_Line2D_Tangent(L);
+    B = kissvg_TwoVector_Add(A, V);
 
     /*  If A, B, and P are collinear, then P lies on the line so return P.    */
-    if (kissvg_EuclideanIsCollinear(A, B, P))
+    if (kissvg_Euclidean_Is_Collinear(A, B, P))
         return P;
 
     /*  Otherwise, get a vector orth which is orthogonal to the line and      *
      *  create a new line containing the input point P and with tangent set   *
      *  to orth.                                                              */
-    orth = kissvg_EuclideanOrthogonalVector2D(V);
-    orthline = kissvg_CreateLineFromPointAndTangent(P, orth, NULL);
+    orth = kissvg_Euclidean_Orthogonal_Vector_2D(V);
+    orthline = kissvg_Create_Line2D_From_Point_And_Tangent(P, orth, NULL);
 
     /*  The output is the intersection of the input line with the new one.    */
-    out = kissvg_LineLineIntersection(L, orthline);
+    out = kissvg_Line2D_Intersection(L, orthline);
 
     /*  Destroy the created line and return the answer.                       */
-    kissvg_DestroyLine2D(orthline);
+    kissvg_Destroy_Line2D(&orthline);
     return out;
 }
 
 /*  Given a circle C and a point P in the plane, compute the closest point on *
  *  the circle to P.                                                          */
-kissvg_TwoVector kissvg_ClosestPointOnCircle(kissvg_Circle *C,
-                                             kissvg_TwoVector P)
+kissvg_TwoVector kissvg_Closest_Point_On_Circle(kissvg_Circle *C,
+                                                kissvg_TwoVector P)
 {
     /*  Declare all necessary variables.                                      */
     kissvg_TwoVector out, center;
@@ -438,45 +438,45 @@ kissvg_TwoVector kissvg_ClosestPointOnCircle(kissvg_Circle *C,
 
     /*  If the input circle is a line (circle with infinite radius), use      *
      *  kissvg_ClosestPointOnLine to perform the computation.                 */
-    if (kissvg_CircleIsLine(C))
+    if (kissvg_Circle_Is_Line(C))
     {
 
         /*  Extract the point and tangent defining the line.                  */
-        Pcirc = kissvg_CirclePoint(C);
-        Vcirc = kissvg_CircleTangent(C);
+        Pcirc = kissvg_Circle_Point(C);
+        Vcirc = kissvg_Circle_Tangent(C);
 
         /*  Create an actual kissvg_Line2D from these values.                 */
-        L = kissvg_CreateLineFromPointAndTangent(Pcirc, Vcirc, NULL);
+        L = kissvg_Create_Line2D_From_Point_And_Tangent(Pcirc, Vcirc, NULL);
 
         /*  Compute the closest point using this line, and then destroy L.    */
-        out = kissvg_ClosestPointOnLine(L, P);
-        kissvg_DestroyLine2D(L);
+        out = kissvg_Closest_Point_On_Line2D(L, P);
+        kissvg_Destroy_Line2D(&L);
     }
 
     /*  Otherwise the input is an actual circle so we compute as such.        */
     else
     {
         /*  Extract the center and radius from the circle.                    */
-        center = kissvg_CircleCenter(C);
-        radius = kissvg_CircleRadius(C);
+        center = kissvg_Circle_Center(C);
+        radius = kissvg_Circle_Radius(C);
 
         /*  Get a vector pointing from P to the center of the circle and      *
          *  compute its norm.                                                 */
-        out = kissvg_TwoVectorSubtract(P, center);
-        norm = kissvg_EuclideanNorm2D(out);
+        out = kissvg_TwoVector_Subtract(P, center);
+        norm = kissvg_Euclidean_Norm_2D(out);
 
         /* If the norm is zero, the input point is the center, so simple set  *
          *  (r, 0) as the closest point (we'll shift by center after).        */
         if (norm == 0.0)
-            out = kissvg_NewTwoVector(radius, 0.0);
+            out = kissvg_New_TwoVector(radius, 0.0);
 
         /*  Otherwise the closest point is the one on the circle between the  *
          *  center and the given point. Compute this.                         */
         else
-            out = kissvg_TwoVectorScale(radius/norm, out);
+            out = kissvg_TwoVector_Scale(radius/norm, out);
 
         /*  The above computation translated to the origin. Shift by center.  */
-        out = kissvg_TwoVectorAdd(out, center);
+        out = kissvg_TwoVector_Add(out, center);
     }
 
     return out;
@@ -484,8 +484,8 @@ kissvg_TwoVector kissvg_ClosestPointOnCircle(kissvg_Circle *C,
 
 /*  Given a circle C and a point P in the plane, compute the closest point on *
  *  the circle to P.                                                          */
-kissvg_TwoVector kissvg_FurthestPointOnCircle(kissvg_Circle *C,
-                                              kissvg_TwoVector P)
+kissvg_TwoVector kissvg_Furthest_Point_On_Circle(kissvg_Circle *C,
+                                                 kissvg_TwoVector P)
 {
     /*  Declare all necessary variables.                                      */
     kissvg_TwoVector out, center;
@@ -499,35 +499,35 @@ kissvg_TwoVector kissvg_FurthestPointOnCircle(kissvg_Circle *C,
 
     /*  If the input circle is a line (circle with infinite radius), return   *
      *  the point at infinity (inf, inf).                                     */
-    if (kissvg_CircleIsLine(C))
-        out = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+    if (kissvg_Circle_Is_Line(C))
+        out = kissvg_New_TwoVector(kissvg_Infinity, kissvg_Infinity);
 
     /*  Otherwise the input is an actual circle so we compute as such.        */
     else
     {
         /*  Extract the center and radius from the circle.                    */
-        center = kissvg_CircleCenter(C);
-        radius = kissvg_CircleRadius(C);
+        center = kissvg_Circle_Center(C);
+        radius = kissvg_Circle_Radius(C);
 
         /*  Get a vector pointing from P to the center of the circle and      *
          *  compute its norm.                                                 */
-        out = kissvg_TwoVectorSubtract(P, center);
-        norm = kissvg_EuclideanNorm2D(out);
+        out = kissvg_TwoVector_Subtract(P, center);
+        norm = kissvg_Euclidean_Norm_2D(out);
 
         /*  If the norm is zero, the input point is the center, so simple set *
          *  (-r, 0) as the furthest point (we'll shift by center after). We   *
          *  do this since the closest point is set to (r, 0) in this case and *
          *  we want closest and furthest to be antepodal points on the circle.*/
         if (norm == 0.0)
-            out = kissvg_NewTwoVector(radius, 0.0);
+            out = kissvg_New_TwoVector(radius, 0.0);
 
         /*  Otherwise the furthest point is the one on the circle antepodal   *
          *  to the one between the center and the given point. Compute this.  */
         else
-            out = kissvg_TwoVectorScale(-radius/norm, out);
+            out = kissvg_TwoVector_Scale(-radius/norm, out);
 
         /*  The above computation translated to the origin. Shift by center.  */
-        out = kissvg_TwoVectorAdd(out, center);
+        out = kissvg_TwoVector_Add(out, center);
     }
 
     return out;
@@ -555,7 +555,8 @@ kissvg_TwoVector kissvg_Plane_To_Disk_Homeo(kissvg_TwoVector P)
         outx = px/norm;
         outy = py/norm;
 
-        scale_factor = (-1.0 + sqrt(4.0*norm*norm + 1.0))/(2.0*norm);
+        scale_factor = (-1.0 + kissvg_Sqrt_Double(4.0*norm*norm + 1.0)) /
+                       (2.0*norm);
 
         outx *= scale_factor;
         outy *= scale_factor;
@@ -566,8 +567,8 @@ kissvg_TwoVector kissvg_Plane_To_Disk_Homeo(kissvg_TwoVector P)
 }
 
 
-kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
-                                                  kissvg_Circle *C1)
+kissvg_TwoVector *kissvg_Circle_Intersection(kissvg_Circle *C0,
+                                             kissvg_Circle *C1)
 {
     kissvg_TwoVector center0, center1;
     double r0, r1;
@@ -591,12 +592,12 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
     __check_circle_error(C1, FuncName);
 
     /*  Extract the centers from the circles.                                 */
-    center0 = kissvg_CircleCenter(C0);
-    center1 = kissvg_CircleCenter(C1);
+    center0 = kissvg_Circle_Center(C0);
+    center1 = kissvg_Circle_Center(C1);
 
     /*  Extract the radii.                                                    */
-    r0 = kissvg_CircleRadius(C0);
-    r1 = kissvg_CircleRadius(C1);
+    r0 = kissvg_Circle_Radius(C0);
+    r1 = kissvg_Circle_Radius(C1);
 
     if (r0 <= 0.0)
     {
@@ -617,11 +618,13 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
         exit(0);
     }
 
-    dist = kissvg_EuclideanNorm2D(kissvg_TwoVectorSubtract(center0, center1));
+    dist = kissvg_Euclidean_Norm_2D(
+        kissvg_TwoVector_Subtract(center0, center1)
+    );
 
     /*  If any of these scenarios are true, the intersection set is empty.    */
-    if ((dist > (r0+r1))                 ||
-        (dist < kissvg_AbsDouble(r1-r0)) ||
+    if ((dist > (r0+r1))                  ||
+        (dist < kissvg_Abs_Double(r1-r0)) ||
         ((dist == 0.0) && (r0 != r1)))
         intersections = NULL;
 
@@ -630,8 +633,8 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
     else if ((dist == 0.0) && (r0 == r1))
     {
         intersections = malloc(sizeof(*intersections));
-        intersections[0] = kissvg_NewTwoVector(kissvg_Infinity,
-                                               kissvg_Infinity);
+        intersections[0] = kissvg_New_TwoVector(kissvg_Infinity,
+                                                kissvg_Infinity);
     }
 
     /*  Otherwise, there is a legitimate solution.                            */
@@ -641,11 +644,11 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
         intersections = malloc(sizeof(*intersections)*2);
 
         /*  Extract the x and y coordinates of the centers.                   */
-        x0 = kissvg_TwoVectorXComponent(center0);
-        y0 = kissvg_TwoVectorYComponent(center0);
+        x0 = kissvg_TwoVector_X_Component(center0);
+        y0 = kissvg_TwoVector_Y_Component(center0);
 
-        x1 = kissvg_TwoVectorXComponent(center1);
-        y1 = kissvg_TwoVectorYComponent(center1);
+        x1 = kissvg_TwoVector_X_Component(center1);
+        y1 = kissvg_TwoVector_Y_Component(center1);
 
         /*  Compute some necessary variables.                                 */
         a = (r0*r0 - r1*r1 + dist*dist) / (2.0*dist);
@@ -666,19 +669,19 @@ kissvg_TwoVector *kissvg_CircleCircleIntersection(kissvg_Circle *C0,
         inter1_y = y2 + y_factor;
 
         /*  Store the solutions in the intersections variable.                */
-        intersections[0] = kissvg_NewTwoVector(inter0_x, inter0_y);
-        intersections[1] = kissvg_NewTwoVector(inter1_x, inter1_y);
+        intersections[0] = kissvg_New_TwoVector(inter0_x, inter0_y);
+        intersections[1] = kissvg_New_TwoVector(inter1_x, inter1_y);
     }
 
     return intersections;
 }
 
-kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *C0,
-                                         kissvg_Circle *C1,
-                                         kissvg_Circle *C2)
+kissvg_Circle **kissvg_Apollonius_Problem(kissvg_Circle *C0,
+                                          kissvg_Circle *C1,
+                                          kissvg_Circle *C2)
 {
     kissvg_Circle **solutions;
-    kissvg_Canvas2D *canvas;
+    kissvg_Palette *palette;
     kissvg_TwoVector center1, center2, center3;
     kissvg_TwoVector center;
     double r1, r2, r3;
@@ -710,27 +713,27 @@ kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *C0,
     __check_circle_error(C1, FuncName);
     __check_circle_error(C2, FuncName);
 
-    canvas = kissvg_GetCanvas(C0);
+    palette = kissvg_Get_Palette(C0);
 
     /*  There are, in general, eight solutions so allocate eight slots.       */
     solutions = malloc(sizeof(*solutions) * N);
 
-    center1 = kissvg_CircleCenter(C0);
-    center2 = kissvg_CircleCenter(C1);
-    center3 = kissvg_CircleCenter(C2);
+    center1 = kissvg_Circle_Center(C0);
+    center2 = kissvg_Circle_Center(C1);
+    center3 = kissvg_Circle_Center(C2);
 
-    r1 = kissvg_CircleRadius(C0);
-    r2 = kissvg_CircleRadius(C1);
-    r3 = kissvg_CircleRadius(C2);
+    r1 = kissvg_Circle_Radius(C0);
+    r2 = kissvg_Circle_Radius(C1);
+    r3 = kissvg_Circle_Radius(C2);
 
-    x1 = kissvg_TwoVectorXComponent(center1);
-    y1 = kissvg_TwoVectorYComponent(center1);
+    x1 = kissvg_TwoVector_X_Component(center1);
+    y1 = kissvg_TwoVector_Y_Component(center1);
 
-    x2 = kissvg_TwoVectorXComponent(center2);
-    y2 = kissvg_TwoVectorYComponent(center2);
+    x2 = kissvg_TwoVector_X_Component(center2);
+    y2 = kissvg_TwoVector_Y_Component(center2);
 
-    x3 = kissvg_TwoVectorXComponent(center3);
-    y3 = kissvg_TwoVectorYComponent(center3);
+    x3 = kissvg_TwoVector_X_Component(center3);
+    y3 = kissvg_TwoVector_Y_Component(center3);
 
     for (n=0; n<N; ++n)
     {
@@ -754,17 +757,17 @@ kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *C0,
                 puts("Warning: KissVG\n"
                      "\tFunction: kissvg_ApolloniusProblem\n\n"
                      "\tTwo of the Circles are Identical.");
-                center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+                center = kissvg_New_TwoVector(kissvg_Infinity, kissvg_Infinity);
                 radius = kissvg_Infinity;
             }
             else
             {
 
             }
-            center = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+            center = kissvg_New_TwoVector(kissvg_Infinity, kissvg_Infinity);
             radius = kissvg_Infinity;
 
-            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
+            solutions[n] = kissvg_Create_Circle(center, radius, palette);
         }
         else
         {
@@ -786,16 +789,16 @@ kissvg_Circle **kissvg_ApolloniusProblem(kissvg_Circle *C0,
             x = A + B*radius;
             y = C + D*radius;
 
-            center = kissvg_NewTwoVector(x, y);
+            center = kissvg_New_TwoVector(x, y);
 
-            solutions[n] = kissvg_CreateCircle(center, radius, canvas);
+            solutions[n] = kissvg_Create_Circle(center, radius, palette);
         }
     }
     return solutions;
 }
 
-kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
-                                             kissvg_Line2D *L1)
+kissvg_TwoVector kissvg_Line2D_Intersection(kissvg_Line2D *L0,
+                                            kissvg_Line2D *L1)
 {
     kissvg_TwoVector P0, P1;
     kissvg_TwoVector V0, V1;
@@ -808,35 +811,35 @@ kissvg_TwoVector kissvg_LineLineIntersection(kissvg_Line2D *L0,
     double t0;
     double det;
 
-    P0 = kissvg_Line2DPoint(L0);
-    V0 = kissvg_Line2DTangent(L0);
+    P0 = kissvg_Line2D_Point(L0);
+    V0 = kissvg_Line2D_Tangent(L0);
 
-    P1 = kissvg_Line2DPoint(L1);
-    V1 = kissvg_Line2DTangent(L1);
+    P1 = kissvg_Line2D_Point(L1);
+    V1 = kissvg_Line2D_Tangent(L1);
 
-    v0x = kissvg_TwoVectorXComponent(V0);
-    v0y = kissvg_TwoVectorYComponent(V0);
+    v0x = kissvg_TwoVector_X_Component(V0);
+    v0y = kissvg_TwoVector_Y_Component(V0);
 
-    v1x = kissvg_TwoVectorXComponent(V1);
-    v1y = kissvg_TwoVectorYComponent(V1);
+    v1x = kissvg_TwoVector_X_Component(V1);
+    v1y = kissvg_TwoVector_Y_Component(V1);
 
     det = v1x*v0y -v0x*v1y;
 
     if (det == 0.0)
     {
-        inter = kissvg_NewTwoVector(kissvg_Infinity, kissvg_Infinity);
+        inter = kissvg_New_TwoVector(kissvg_Infinity, kissvg_Infinity);
 
         return inter;
     }
     else
     {
-        P1P0 = kissvg_TwoVectorSubtract(P1, P0);
-        A = kissvg_NewTwoByTwoMatrix(v0x, -v1x, v0y, -v1y);
-        inverseA = kissvg_InverseTwoByTwoMatrix(A);
-        times = kissvg_TwoVectorMatrixTransform(inverseA, P1P0);
-        t0 = kissvg_TwoVectorXComponent(times);
+        P1P0 = kissvg_TwoVector_Subtract(P1, P0);
+        A = kissvg_New_TwoByTwoMatrix(v0x, -v1x, v0y, -v1y);
+        inverseA = kissvg_Inverse_TwoByTwoMatrix(A);
+        times = kissvg_TwoVector_Matrix_Transform(inverseA, P1P0);
+        t0 = kissvg_TwoVector_X_Component(times);
 
-        inter = kissvg_TwoVectorAdd(P0, kissvg_TwoVectorScale(t0, V0));
+        inter = kissvg_TwoVector_Add(P0, kissvg_TwoVector_Scale(t0, V0));
         return inter;
     }
 }

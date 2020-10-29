@@ -93,12 +93,12 @@
 #ifndef _KISSVG_MATH_H_
 #define _KISSVG_MATH_H_
 
-/*  It is assumed your compiler/implementation has support for the C99 math.h *
+/*  It is not assumed your compiler/implementation supports the C99 math.h    *
  *  header file which has more functions than the C89 math.h header. This     *
  *  includes float/long double support for many functions like sin, cos, fabs *
  *  more, defining them as sinf, sinl, cosf, cosl, fabsf, fabsl, etc. If you  *
- *  do NOT have the C99 math.h available but do have C89 math.h, then you     *
- *  must #undef the macro __HAS_C99_MATH_H__ or comment it out.               */
+ *  do have C99 math.h support and would like to use it, set the macro        *
+ *  __HAS_C99_MATH_H__ defined below to 1.                                    */
 
 /*  Assuming you have C89 math.h, so defining the macro __HAS_C99_MATH_H__ to *
  *  be zero.                                                                  */
@@ -106,183 +106,181 @@
 #define __HAS_C99_MATH_H__ 0
 #endif
 
-/*  This number is needed for computing the smallest value which will yield   *
- *  INFINITY or HUGE_VAL with the exponential function.                       */
-#define NATURAL_LOG_OF_10 2.302585092994045684017991
-
 /*  Include the standard library header math.h. We're only going to alias     *
  *  functions we ever use in rss_ringoccs, sin, cos, fabs, exp, atan2.        */
 #include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 /*  And this header file contains macros for the smallest and largest allowed *
  *  values for your system.                                                   */
 #include <float.h>
 
+/*  This number is needed for computing the smallest value which will yield   *
+ *  INFINITY or HUGE_VAL with the exponential function.                       */
+#define NATURAL_LOG_OF_10 2.302585092994045684017991
+
+/* Define Miscellaneous Constants.                                            */
+#define SQRT_ONE_BY_2_PI    0.3989422804014326779399461
+#define SQRT_PI_BY_8        0.6266570686577501256039413
+#define SQRT_PI_BY_2        1.2533141373155002512078830
+#define SQRT_2_BY_PI        0.7978845608028653558798921
+#define PI_BY_TWO           1.570796326794896619231321691639751440
+#define PI_BY_FOUR          0.785398163397448309615660845819875721
+#define ONE_PI              3.141592653589793238462643383279502880
+#define TWO_PI              6.283185307179586476925286766559005768
+#define SQRT_2              1.414213562373095048801688724209698080
+#define RCPR_EULER_E        0.367879441171442321595523770161460867
+#define ONE_BY_SQRT_PI      0.564189583547756286948079451560772585
+#define TWO_BY_SQRT_PI      1.128379167095512573896158903121545171
+
+/*  Define the speed of light in kilometers per second.                       */
+#define SPEED_OF_LIGHT_KMS  299792.4580
+
 /*  Macros for the largest values of float, double, and long double,          *
  *  respectively, that will not return INFINITY when exp(x) is computed.      */
-#define MAX_FLOAT_BASE_E FLT_MAX_10_EXP*NATURAL_LOG_OF_10
-#define MAX_DOUBLE_BASE_E DBL_MAX_10_EXP*NATURAL_LOG_OF_10
-#define MAX_LDOUBLE_BASE_E LDBL_MAX_10_EXP*NATURAL_LOG_OF_10
+#define MAX_FLOAT_BASE_E    FLT_MAX_10_EXP * NATURAL_LOG_OF_10
+#define MAX_DOUBLE_BASE_E   DBL_MAX_10_EXP * NATURAL_LOG_OF_10
+#define MAX_LDOUBLE_BASE_E  LDBL_MAX_10_EXP * NATURAL_LOG_OF_10
 
-/*  Aliases for the sine trig function found in math.h. First, undef these    *
- *  names if they're already in use to preventing #define'ing twice.          */
-#ifdef kissvg_SinFloat
-#undef kissvg_SinFloat
-#endif
-#ifdef kissvg_SinDouble
-#undef kissvg_SinDouble
-#endif
-#ifdef kissvg_SinLongDouble
-#undef kissvg_SinLongDouble
-#endif
+/*  NOTE:                                                                     *
+ *      All of the functions have extra parentheses around the x. For example,*
+ *      we define sine for floats by using:                                   *
+ *          #define kissvg_Sin_Float(x) sin((double)(x))                      *
+ *      The C preprocessor takes whatever x is and literaly replaces it into  *
+ *      the function. So if you input kissvg_Sin_Float(x+y), then this        *
+ *      would become sin((double)x+y) if not for the extra parentheses. What  *
+ *      we want is sin((double)(x+y)).                                        */
 
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_SinFloat(x) sinf(x)
-#define kissvg_SinDouble(x) sin(x)
-#define kissvg_SinLongDouble(x) sinl(x)
+/*  Aliases for the sine trig function found in math.h.                       */
+#define kissvg_Sin_Double(x)       sin((x))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Sin_Float(x)        sinf((x))
+#define kissvg_Sin_LongDouble(x)   sinl((x))
 #else
-#define kissvg_SinFloat(x) sin((double)x)
-#define kissvg_SinDouble(x) sin(x)
-#define kissvg_SinLongDouble(x) sin((double)x)
+#define kissvg_Sin_Float(x)        sin((double)(x))
+#define kissvg_Sin_LongDouble(x)   sin((double)(x))
 #endif
 
-/*  Aliases for the cosine trig function found in math.h. First, undef these  *
- *  names if they're already in use to preventing #define'ing twice.          */
-#ifdef kissvg_CosFloat
-#undef kissvg_CosFloat
-#endif
-#ifdef kissvg_CosDouble
-#undef kissvg_CosDouble
-#endif
-#ifdef kissvg_CosLongDouble
-#undef kissvg_CosLongDouble
-#endif
-
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_CosFloat(x) cosf(x)
-#define kissvg_CosDouble(x) cos(x)
-#define kissvg_CosLongDouble(x) cosl(x)
+/*  Aliases for the cosine trig function found in math.h.                     */
+#define kissvg_Cos_Double(x)       cos(x)
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Cos_Float(x)        cosf(x)
+#define kissvg_Cos_LongDouble(x)   cosl(x)
 #else
-#define kissvg_CosFloat(x) cos((double)x)
-#define kissvg_CosDouble(x) cos(x)
-#define kissvg_CosLongDouble(x) cos((double)x)
+#define kissvg_Cos_Float(x)        cos((double)(x))
+#define kissvg_Cos_LongDouble(x)   cos((double)(x))
 #endif
 
-/*  Aliases for the square root function found in math.h. First, undef these  *
- *  names if they're already in use to preventing #define'ing twice.          */
-#ifdef kissvg_SqrtFloat
-#undef kissvg_SqrtFloat
-#endif
-#ifdef kissvg_SqrtDouble
-#undef kissvg_SqrtDouble
-#endif
-#ifdef kissvg_SqrtLongDouble
-#undef kissvg_SqrtLongDouble
-#endif
-
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_SqrtFloat(x) sqrtf(x)
-#define kissvg_SqrtDouble(x) sqrt(x)
-#define kissvg_SqrtLongDouble(x) sqrtl(x)
+/*  Aliases for the square root function found in math.h.                     */
+#define kissvg_Sqrt_Double(x)      sqrt((x))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Sqrt_Float(x)       sqrtf((x))
+#define kissvg_Sqrt_LongDouble(x)  sqrtl((x))
 #else
-#define kissvg_SqrtFloat(x) sqrt((double)x)
-#define kissvg_SqrtDouble(x) sqrt(x)
-#define kissvg_SqrtLongDouble(x) sqrt((double)x)
+#define kissvg_Sqrt_Float(x)       sqrt((double)(x))
+#define kissvg_Sqrt_LongDouble(x)  sqrt((double)(x))
 #endif
 
-/*  Aliases for the exponential function found in math.h. First, undef these  *
- *  names if they're already in use to preventing #define'ing twice.          */
-#ifdef kissvg_ExpFloat
-#undef kissvg_ExpFloat
-#endif
-#ifdef kissvg_ExpDouble
-#undef kissvg_ExpDouble
-#endif
-#ifdef kissvg_ExpLongDouble
-#undef kissvg_ExpLongDouble
-#endif
-
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_ExpFloat(x) expf(x)
-#define kissvg_ExpDouble(x) exp(x)
-#define kissvg_ExpLongDouble(x) expl(x)
+/*  Aliases for the exponential function found in math.h.                     */
+#define kissvg_Exp_Double(x)       exp((x))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Exp_Float(x)        expf((x))
+#define kissvg_Exp_LongDouble(x)   expl((x))
 #else
-#define kissvg_ExpFloat(x) exp((double)x)
-#define kissvg_ExpDouble(x) exp(x)
-#define kissvg_ExpLongDouble(x) exp((double)x)
+#define kissvg_Exp_Float(x)        exp((double)(x))
+#define kissvg_Exp_LongDouble(x)   exp((double)(x))
 #endif
 
-/*  Aliases for the absolute value function found in math.h. First, undef     *
- *  these names if they're already in use to preventing #define'ing twice.    */
-#ifdef kissvg_AbsFloat
-#undef kissvg_AbsFloat
-#endif
-#ifdef kissvg_AbsDouble
-#undef kissvg_AbsDouble
-#endif
-#ifdef kissvg_AbsLongDouble
-#undef kissvg_AbsLongDouble
-#endif
-
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_AbsFloat(x) fabsf(x)
-#define kissvg_AbsDouble(x) fabs(x)
-#define kissvg_AbsLongDouble(x) fabsl(x)
+/*  Aliases for the exponential function found in math.h.                     */
+#define kissvg_Log_Double(x)       log((x))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Log_Float(x)        logf((x))
+#define kissvg_Log_LongDouble(x)   logl((x))
 #else
-#define kissvg_AbsFloat(x) fabs((double)x)
-#define kissvg_AbsDouble(x) fabs(x)
-#define kissvg_AbsLongDouble(x) fabs((double)x)
+#define kissvg_Log_Float(x)        log((double)(x))
+#define kissvg_Log_LongDouble(x)   log((double)(x))
 #endif
 
-/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
-#if (__HAS_C99_MATH_H__ == 1)
-#define kissvg_AcosFloat(x) acosf(x)
-#define kissvg_AcosDouble(x) acos(x)
-#define kissvg_AcosLongDouble(x) acosl(x)
+/*  Aliases for the absolute value function found in math.h.                  */
+#define kissvg_Abs_Double(x)       fabs((x))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Abs_Float(x)        fabsf((x))
+#define kissvg_Abs_LongDouble(x)   fabsl((x))
 #else
-#define kissvg_AcosFloat(x) acos((double)x)
-#define kissvg_AcosDouble(x) acos(x)
-#define kissvg_AcosLongDouble(x) acos((double)x)
+#define kissvg_Abs_Float(x)        fabs((double)(x))
+#define kissvg_Abs_LongDouble(x)   fabs((double)(x))
 #endif
 
-#ifdef kissvg_Infinity
-#undef kissvg_Infinity
+/*  Aliases for the arc tangent function found in math.h.                     */
+#define kissvg_Arctan_Double(x, y)     atan2((x), (y))
+#if __HAS_C99_MATH_H__ != 0
+#define kissvg_Arctan_Float(x, y)      atan2f((x), (y))
+#define kissvg_Arctan_LongDouble(x, y) atan2l((x), (y))
+#else
+#define kissvg_Arctan_Float(x, y)      atan2((double)(x), (double)(y))
+#define kissvg_Arctan_LongDouble(x, y) atan2((double)(x), (double)(y))
 #endif
 
+/*  If INFINITY is not defined, set it to the HUGE_VAL macro that is          *
+ *  specified in math.h. Most compilers already have an INFINITY macro, but   *
+ *  it is not required in the C89 standard.                                   */
 #ifndef INFINITY
 #define kissvg_Infinity HUGE_VAL
 #else
 #define kissvg_Infinity INFINITY
 #endif
 
-#ifdef kissvg_IsInf
-#undef kissvg_IsInf
-#endif
-#define kissvg_IsInf(x) (x == (x+1))
-
-#ifdef kissvg_NaN
-#undef kissvg_NaN
-#endif
-
+/*  If NAN is not defined, we'll use the CPYTHON method of defining NAN, the  *
+ *  source code of which is contained in python/cpython/Include/pymath.h.     */
 #ifndef NAN
-#define kissvg_NaN (HUGE_VAL * 0.0)
+#define kissvg_NaN (INFINITY * 0.0)
 #else
 #define kissvg_NaN NAN
 #endif
 
-#ifdef kissvg_IsNaN
-#undef kissvg_IsNaN
+/*  The following functions are not required in C89/C90 implementations of    *
+ *  math.h. The algorithms for their computations are very straight-forward,  *
+ *  reducing the definitions to computations using sin, cos, exp, etc. We     *
+ *  provide them here for portability.                                        */
+
+extern float kissvg_Sinh_Float(float x);
+extern double kissvg_Sinh_Double(double x);
+extern long double kissvg_Sinh_LongDouble(long double x);
+
+extern float kissvg_Cosh_Float(float x);
+extern double kissvg_Cosh_Double(double x);
+extern long double kissvg_Cosh_LongDouble(long double x);
+
+extern float kissvg_Tanh_Float(float x);
+extern double kissvg_Tanh_Double(double x);
+extern long double kissvg_Tanh_LongDouble(long double x);
+
+extern float kissvg_Erf_Float(float x);
+extern double kissvg_Erf_Double(double x);
+extern long double kissvg_Erf_LongDouble(long double x);
+
+extern float
+kissvg_Float_Poly_Float_Coeffs(float *coeffs, unsigned int degree, float x);
+
+extern double
+kissvg_Double_Poly_Double_Coeffs(double *coeffs, unsigned int degree, double x);
+
+extern long double
+kissvg_LongDouble_Poly_LongDouble_Coeffs(long double *coeffs,
+                                         unsigned int degree,
+                                         long double x);
+
+/*  Set aliases depending on if __HAS_C99_MATH_H__ is defined.                */
+#define kissvg_Acos_Double(x)       acos(x)
+#if (__HAS_C99_MATH_H__ == 1)
+#define kissvg_Acos_Float(x)        acosf(x)
+#define kissvg_Acos_LongDouble(x)   acosl(x)
+#else
+#define kissvg_Acos_Float(x)        acos((double)x)
+#define kissvg_Acos_LongDouble(x)   acos((double)x)
 #endif
-#define kissvg_IsNaN(x) (x != x)
+
+#define kissvg_Is_Inf(x) ((x) == ((x)+1))
+#define kissvg_Is_NaN(x) ((x) != (x))
 
 #endif
 /*  End of include guard.                                                     */

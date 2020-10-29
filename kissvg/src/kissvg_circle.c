@@ -19,17 +19,14 @@ kissvg_Circle *kissvg_Create_Circle(kissvg_TwoVector P, double r,
         exit(0);
     }
 
-    circle->palette = palette;
     circle->error_occured = kissvg_False;
     circle->is_line = kissvg_False;
     circle->error_message = NULL;
     circle->center = P;
     circle->radius = r;
+    circle->palette = palette;
     return circle;
 }
-
-extern kissvg_Circle *
-kissvg_Create_Circle(kissvg_TwoVector P, double r, kissvg_Palette *palette);
 
 void kissvg_Circle_Set_Line(kissvg_Circle *circle, kissvg_TwoVector P,
                             kissvg_TwoVector V)

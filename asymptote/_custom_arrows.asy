@@ -8,11 +8,16 @@ arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
     a.head=new path(path g, position position=EndPoint, pen p=currentpen,
                     real size=0, real angle=arrowangle)
     {
-        if(size == 0) size=a.size(p);
-        angle=min(angle*arrowhookfactor, 45);
+        if(size == 0)
+            size=a.size(p);
+
+        angle = min(angle*arrowhookfactor, 45);
         bool relative=position.relative;
         real position=position.position.x;
-        if(relative) position=reltime(g, position);
+
+        if(relative)
+            position=reltime(g, position);
+
         path r=subpath(g, position, 0);
         pair x=point(r, 0);
         real t=arctime(r, size);

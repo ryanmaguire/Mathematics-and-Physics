@@ -202,11 +202,11 @@ extern kissvg_TwoVector
 kissvg_Furthest_Point_On_Circle(kissvg_Circle *C, kissvg_TwoVector P);
 
 extern kissvg_TwoVector
-kissvg_Closest_Point_On_Line(kissvg_Line2D *L, kissvg_TwoVector P);
+kissvg_Closest_Point_On_Line2D(kissvg_Line2D *L, kissvg_TwoVector P);
 
 /******************************************************************************
  *  Function:                                                                 *
- *      kissvg_LineLineIntersection                                           *
+ *      kissvg_Line2D_Intersection                                            *
  *  Purpose:                                                                  *
  *      Returns the point of intersection of two lines L0 and L1.             *
  *  Arguments:                                                                *
@@ -223,7 +223,7 @@ kissvg_Closest_Point_On_Line(kissvg_Line2D *L, kissvg_TwoVector P);
  *      The source code is contained in src/kissvg.c                          *
  ******************************************************************************/
 extern kissvg_TwoVector
-kissvg_LineIntersection(kissvg_Line2D *L0, kissvg_Line2D *L1);
+kissvg_Line2D_Intersection(kissvg_Line2D *L0, kissvg_Line2D *L1);
 
 /******************************************************************************
  ******************************************************************************
