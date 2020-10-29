@@ -29,9 +29,10 @@ $CC $CompilerArgs kissvg_matrix.c
 $CC $CompilerArgs kissvg_vector.c
 $CC $CompilerArgs kissvg_pen.c
 $CC $CompilerArgs kissvg_circle.c
+$CC $CompilerArgs kissvg_line.c
+$CC $CompilerArgs kissvg_euclidean.c
 
-# $CC $CompilerArgs kissvg_euclidean.c
-# $CC $CompilerArgs kissvg_inversive_geometry.c
+# $CC $CompilerArgs kissvg_inversive.c
 # 
 # echo "Building KissVG Shared Object (.so)"
 # $CC -L/usr/local/lib \

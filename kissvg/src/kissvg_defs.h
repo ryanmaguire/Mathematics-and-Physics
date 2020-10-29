@@ -350,5 +350,14 @@ typedef struct kissvg_Line2D {
  *  the attributes of these structures are supposed to be "hidden" from the   *
  *  end-user.                                                                 */
 
+/*  The following macros are universal all of the data types where the        *
+ *  attribute applies. For example, Path2D, Circle, and Line2D all have a     *
+ *  kissvg_Palette Boolean which may be set via kissvg_Set_Palette.           */
+#define kissvg_Has_Error(obj)            ((obj)->error_occured)
+#define kissvg_Get_Palette(obj)          ((obj)->palette)
+#define kissvg_Set_Palette(obj, palette) ((obj)->palette = palette)
+#define kissvg_Set_Error(obj, error)     ((obj)->error_occured = error)
+#define kissvg_Error_Message(obj)        ((obj)->error_message)
+
 #endif
 /*  End of kissvg_defs.h include guard.                                       */
