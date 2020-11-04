@@ -39,3 +39,10 @@ could not find the information, not that is unknown to others.
    Date: Unknown  
    Resolution: 450x600  
    Description: Painting of Luigi Guido Grandi (1671-1742 C.E.).  
+
+   Filename: BernardBolzano.jpg
+   License: Public Domain
+   Artist: Unknown
+   Date: Unknown
+   Resolution: 209x240
+   Description: Drawing of Bernard Bolzano (1781-1848 C.E.).
