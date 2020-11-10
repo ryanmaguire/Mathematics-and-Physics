@@ -23,7 +23,7 @@
  *      Provide routines for two and three dimensional Euclidean geometry.    *
  ******************************************************************************
  *  Functions:                                                                *
- *      CircleCircleIntersection (pair P0, real r0, pair P1, real r1):        *
+ *      CircleIntersection (pair P0, real r0, pair P1, real r1):              *
  *          Given two points and two radii, finds the intersections of the    *
  *          circles centered about each with the respective radii. If the     *
  *          two circles are identical, or if the are no intersection points,  *
@@ -385,7 +385,7 @@ pair PlaneToDisk(pair P)
 }
 
 /*  Compute the intersection of two circles given the centers and radii.      */
-pair[] CircleCircleIntersection(pair P0, real r0, pair P1, real r1)
+pair[] CircleIntersection(pair P0, real r0, pair P1, real r1)
 {
     /*  Declare necessary variables.                                          */
     real dist, a, h, x0, y0, x1, y1;
