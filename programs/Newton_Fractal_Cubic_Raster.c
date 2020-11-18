@@ -11,15 +11,19 @@
 /*  Create a variable for the number of roots. z^3-1 has three.               */
 #define NRoots 3
 
-void color(char red, char green, char blue)
+void color(char red, char green, char blue, FILE *fp)
 {
-    fputc(red,   stdout);
-    fputc(green, stdout);
-    fputc(blue,  stdout);
+    fputc(red,   fp);
+    fputc(green, fp);
+    fputc(blue,  fp);
 }
 
 int main(int argc, char *argv[])
 {
+    /*  Declare a variable for the output file and give it write permission.  */
+    FILE *fp;
+    fp = fopen("newton_cubic_fractal.ppm", "w");
+
     /* Values for the min and max of the x and y axes.                        */
     double x_min = -1.0;
     double x_max =  1.0;
@@ -46,8 +50,7 @@ int main(int argc, char *argv[])
     complex double z, root;
 
 
-    printf("P6\n# CREATOR: Ryan / Newton Fractal\n");
-    printf("%d %d\n255\n",size,size);
+    fprintf(fp, "P6\n%d %d\n255\n", size, size);
 
     // Colors for the roots (Red, Green, Blue).
     char colors[NRoots][3] = {{255, 0, 30}, {0, 255, 30}, {0, 30, 255}};
@@ -90,7 +93,7 @@ int main(int argc, char *argv[])
             brightness[ind] -= factor*iters;
 
             // Color the current pixel.
-            color(brightness[0], brightness[1], brightness[2]);
+            color(brightness[0], brightness[1], brightness[2], fp);
         }
     }
     return 0;
