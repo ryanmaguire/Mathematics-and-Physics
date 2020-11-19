@@ -4,14 +4,6 @@
 #include <complex.h>
 
 /*  We'll need the following data types for planar and spherical points.      */
-typedef struct two_vec {
-    double dat[2];
-} two_vec;
-
-typedef struct three_vec {
-    double dat[3];
-} three_vec;
-
 typedef struct root_struct {
     complex double *roots;
     unsigned int n_roots;
@@ -28,24 +20,18 @@ const int size = 4*1024;
 
 /*  Maximum number of iterations for the Newton-Raphson method. This must be  *
  *  less than 255, otherwise we'll run out of colors.                         */
-const unsigned int MaxIters = 32;
+const unsigned int MaxIters = 64;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */
 const unsigned int root_finder_max_iter = 200;
 
-/*  Define the camera angle for the image of the sphere. This is where the    *
- *  observer looking at the sphere will be placed. The output image is        *
- *  normalized to take up the entire screen, so u and lambda*u will have the  *
- *  same result for any positive lambda. u and -u will have different results.*/
-three_vec camera_pos = {{1.0, 1.0, 1.0}};
-
 /*  The degree of the polynomial.                                             */
-#define deg 3
+#define deg 10
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {1, 0, 0, -1};
+complex double coeffs[deg+1] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1};
 
 /******************************************************************************
  ******************************************************************************
@@ -265,114 +251,6 @@ static void destroy_roots(root_struct *the_roots)
     free(the_roots);
 }
 
-static three_vec normalize_three_vec(three_vec p)
-{
-    three_vec out;
-    double norm, rcpr_norm;
-
-    norm = sqrt(p.dat[0]*p.dat[0] + p.dat[1]*p.dat[1] + p.dat[2]*p.dat[2]);
-    rcpr_norm = 1.0/norm;
-
-    out.dat[0] = p.dat[0]*rcpr_norm;
-    out.dat[1] = p.dat[1]*rcpr_norm;
-    out.dat[2] = p.dat[2]*rcpr_norm;
-
-    return out;
-}
-
-static three_vec cross_product(three_vec p, three_vec q)
-{
-    three_vec out;
-
-    out.dat[0] = p.dat[1]*q.dat[2] - p.dat[2]*q.dat[1];
-    out.dat[1] = p.dat[2]*q.dat[0] - p.dat[0]*q.dat[2];
-    out.dat[2] = p.dat[0]*q.dat[1] - p.dat[1]*q.dat[0];
-
-    return out;
-}
-
-static three_vec scale_three_vec(double x, three_vec p)
-{
-    three_vec out;
-
-    out.dat[0] = x*p.dat[0];
-    out.dat[1] = x*p.dat[1];
-    out.dat[2] = x*p.dat[2];
-
-    return out;
-}
-
-static three_vec sum_three_vec(three_vec p, three_vec q)
-{
-    three_vec out;
-
-    out.dat[0] = p.dat[0] + q.dat[0];
-    out.dat[1] = p.dat[1] + q.dat[1];
-    out.dat[2] = p.dat[2] + q.dat[2];
-
-    return out;
-}
-
-static two_vec stereographic_projection(three_vec p)
-{
-    double X, Y, denom;
-    two_vec out;
-
-    denom = 1.0/(1.0-p.dat[2]);
-    X = p.dat[0]*denom;
-    Y = p.dat[1]*denom;
-
-    out.dat[0] = X;
-    out.dat[1] = Y;
-
-    return out;
-}
-
-static three_vec inverse_orthographic_projection(two_vec p, three_vec u)
-{
-    double ux, uy, x, y, z;
-    three_vec out, X, Y;
-
-    ux = u.dat[0];
-    uy = u.dat[1];
-
-    if (ux == 0.0)
-    {
-        X.dat[0] = 1.0;
-        X.dat[1] = 0.0;
-        X.dat[2] = 0.0;
-    }
-    else
-    {
-        if (uy == 0.0)
-        {
-            X.dat[0] = 0.0;
-            X.dat[1] = 1.0;
-            X.dat[2] = 0.0;
-        }
-        else
-        {
-            X.dat[0] = 1.0;
-            X.dat[1] = -uy/ux;
-            X.dat[2] = 0.0;
-        }
-
-        X = normalize_three_vec(X);
-    }
-
-    Y = cross_product(X, u);
-    x = p.dat[0];
-    y = p.dat[1];
-    z = sqrt(1.0 - x*x - y*y);
-
-    out = sum_three_vec(
-        sum_three_vec(scale_three_vec(x, X), scale_three_vec(y, Y)),
-        scale_three_vec(z, u)
-    );
-
-    return out;
-}
-
 void color(char red, char green, char blue, FILE *fp)
 {
     fputc(red,   fp);
@@ -384,7 +262,7 @@ int main(void)
 {
     /*  Declare a variable for the output file and give it write permission.  */
     FILE *fp;
-    fp = fopen("newton_fractal_on_sphere.ppm", "w");
+    fp = fopen("newton_fractal.ppm", "w");
 
     /*  Struct for the roots.                                                 */
     root_struct *roots_of_f = get_roots();
@@ -400,10 +278,6 @@ int main(void)
     const double x_max =  1.0;
     const double y_min = -1.0;
     const double y_max =  1.0;
-
-    three_vec u = normalize_three_vec(camera_pos);
-    three_vec p;
-    two_vec Z, proj_p;
 
     /*  Factor for giving the image a gradient.                               */
     unsigned char factor = 255/MaxIters;
@@ -429,65 +303,47 @@ int main(void)
         for (x=0; x<size; ++x)
         {
             z_x = x * (x_max - x_min)/(size - 1) + x_min;
+            z = z_x + _Complex_I*z_y;
 
-            if ((z_x*z_x + z_y*z_y) <= 1.0)
+            /*  Allow MaxIters number of iterations of Newton-Raphson.        */
+            for (iters=0; iters<MaxIters; ++iters)
             {
-                Z.dat[0] = z_x;
-                Z.dat[1] = z_y;
+                /*  Perfrom Newton-Raphson on the polynomial f.               */
+                root = z - f(z)/f_prime(z);
 
-                p = inverse_orthographic_projection(Z, u);
+                /*  Checks for convergence.                                   */
+                if (cabs(root - z) < 10e-10)
+                    break;
 
-                if (p.dat[2] >= 0.999999)
-                    color(0, 0, 0, fp);
-                else
+                z = root;
+            }
+
+            /*  Find which roots the final iteration is closest too.          */
+            min = cabs(z-roots[0]);
+            ind = 0;
+
+            for (n=1; n<n_roots; ++n)
+            {
+                temp = cabs(z - roots[n]);
+                if (temp < min)
                 {
-
-                    proj_p = stereographic_projection(p);
-                    z = proj_p.dat[0] + _Complex_I*proj_p.dat[1];
-
-                    /*  Allow MaxIters number of iterations of Newton-Raphson.*/
-                    for (iters=0; iters<MaxIters; ++iters)
-                    {
-                        /*  Perfrom Newton-Raphson on the polynomial f.       */
-                        root = z - f(z)/f_prime(z);
-
-                        /*  Checks for convergence.                           */
-                        if (cabs(root - z) < 10e-10)
-                            break;
-
-                        z = root;
-                    }
-
-                    /*  Find which roots the final iteration is closest too.  */
-                    min = cabs(z-roots[0]);
-                    ind = 0;
-
-                    for (n=1; n<n_roots; ++n)
-                    {
-                        temp = cabs(z - roots[n]);
-                        if (temp < min)
-                        {
-                            min = temp;
-                            ind = n;
-                        }
-                    }
-
-                    if (min > 0.1)
-                        color((char)0, (char)0, (char)0, fp);
-                    else
-                    {
-                        scale = (255.0-factor*iters)/255.0;
-                        for (n=0; n<3; ++n)
-                            brightness[n] =
-                                (unsigned char)(scale * colors[ind][n]);
-
-                        /*  Color the current pixel.                          */
-                        color(brightness[0], brightness[1], brightness[2], fp);
-                    }
+                    min = temp;
+                    ind = n;
                 }
             }
-            else
+
+            if (min > 0.1)
                 color((char)0, (char)0, (char)0, fp);
+            else
+            {
+                scale = (255.0-factor*iters)/255.0;
+                for (n=0; n<3; ++n)
+                    brightness[n] =
+                        (unsigned char)(scale * colors[ind][n]);
+
+                /*  Color the current pixel.                                  */
+                color(brightness[0], brightness[1], brightness[2], fp);
+            }
         }
     }
 
