@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <kissvg/include/kissvg.h>
+#include <kissvg/src/kissvg.h>
 #include <cairo/src/cairo.h>
 #include <cairo/src/cairo-pdf.h>
 

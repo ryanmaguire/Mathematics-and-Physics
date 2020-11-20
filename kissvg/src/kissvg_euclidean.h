@@ -225,21 +225,4 @@ kissvg_Closest_Point_On_Line2D(kissvg_Line2D *L, kissvg_TwoVector P);
 extern kissvg_TwoVector
 kissvg_Line2D_Intersection(kissvg_Line2D *L0, kissvg_Line2D *L1);
 
-/******************************************************************************
- ******************************************************************************
- *                                                                            *
- *                   Begin Inversive Geometry Functions                       *
- *                                                                            *
- ******************************************************************************
- ******************************************************************************/
-
-extern kissvg_TwoVector
-kissvg_InversiveGeometryPoint(kissvg_Circle *C, kissvg_TwoVector P);
-
-extern kissvg_Circle *
-kissvg_InversiveGeometryCircle(kissvg_Circle *C0, kissvg_Circle *C1);
-
-extern kissvg_Circle *
-kissvg_InversiveGeometryLine(kissvg_Circle *C, kissvg_Line2D *L);
-
 #endif
