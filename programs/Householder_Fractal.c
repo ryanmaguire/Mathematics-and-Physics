@@ -3,12 +3,6 @@
 #include <math.h>
 #include <complex.h>
 
-/*  We'll need the following data types for planar and spherical points.      */
-typedef struct root_struct {
-    complex double *roots;
-    unsigned int n_roots;
-} root_struct;
-
 /******************************************************************************
  ******************************************************************************
  *                          Begin User Input                                  *
@@ -38,6 +32,12 @@ complex double coeffs[deg+1] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1};
  *                            End User Input                                  *
  ******************************************************************************
  ******************************************************************************/
+
+/*  We'll need the following data types for planar and spherical points.      */
+typedef struct root_struct {
+    complex double *roots;
+    unsigned int n_roots;
+} root_struct;
 
 #define N_COLORS 14
 const double PI = 3.14159265358979323846264338327950288419716;
