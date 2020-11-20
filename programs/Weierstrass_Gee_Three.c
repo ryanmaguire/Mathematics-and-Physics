@@ -37,7 +37,7 @@ const double PI = 3.14159265358979323846264338327950288419716;
 const double g_fac = 284.856057355645759120065020341457747812508897;
 
 /*  Maximum number of terms in the Taylor series.                             */
-const unsigned int max_taylor = 100;
+const unsigned int max_taylor = 500;
 
 /*  To avoid computing sigma_5 over and over again, which is computationally  *
  *  expensive, we'll create a table of the first "max_taylor" values of       *
@@ -72,21 +72,41 @@ static long divisor_quintic(int N)
  *                  27   |          /___                    |                 *
  *                       |__         n=1                  __|                 *
  ******************************************************************************/
-static complex double gee_three(complex double z)
+static complex double gee_three(complex double q)
 {
-    complex double sum, q, q_power;
+    complex double sum, q_squared, q_power;
     unsigned int n;
 
-    if (cabs(z) >= 1.0)
+    if (cabs(q) >= 1.0)
         return 0.0;
 
-    q = z*z;
+    q_squared = q*q;
     q_power = 1.0;
     sum = 0.0;
 
     for (n=0; n<max_taylor; ++n)
     {
-        q_power *= q;
+        q_power *= q_squared;
+        sum += divisor_quintic_table[n]*q_power;
+    }
+    return g_fac*(1.0 - 504.0*sum);
+}
+
+/*  Now we plot g_3 as a function of q^2 instead of q.                        */
+static complex double gee_three_square(complex double q_squared)
+{
+    complex double sum, q_power;
+    unsigned int n;
+
+    if (cabs(q_squared) >= 1.0)
+        return 0.0;
+
+    q_power = 1.0;
+    sum = 0.0;
+
+    for (n=0; n<max_taylor; ++n)
+    {
+        q_power *= q_squared;
         sum += divisor_quintic_table[n]*q_power;
     }
     return g_fac*(1.0 - 504.0*sum);
@@ -162,6 +182,18 @@ static void set_color(unsigned char *color, double x)
 
 }
 
+static void set_square_color(unsigned char *color, double x)
+{
+    if (x < 0.0)
+    {
+        color[0] = 0;
+        color[1] = 0;
+        color[2] = 0;
+    }
+    else
+        set_color(color, x);
+}
+
 /*  Function for coloring the current pixel of the .ppm file.                 */
 void color(char red, char green, char blue, FILE *fp)
 {
@@ -173,7 +205,7 @@ void color(char red, char green, char blue, FILE *fp)
 int main(void)
 {
     /*  Declare a variable for the output file and give it write permission.  */
-    FILE *g3_re, *g3_im;
+    FILE *g3_re, *g3_im, *g3_sq_re, *g3_sq_im;
 
     /*  Values for the min and max of the x and y axes.                       */
     const double x_min = -1.0;
@@ -192,10 +224,14 @@ int main(void)
     /*  Open the two images and give them write permissions.                  */
     g3_re = fopen("gee_three_real.ppm", "w");
     g3_im = fopen("gee_three_imag.ppm", "w");
+    g3_sq_re = fopen("gee_three_square_real.ppm", "w");
+    g3_sq_im = fopen("gee_three_square_imag.ppm", "w");
 
     /*  Write the preamble for the ppm files.                                 */
     fprintf(g3_re, "P6\n%d %d\n255\n", size, size);
     fprintf(g3_im, "P6\n%d %d\n255\n", size, size);
+    fprintf(g3_sq_re, "P6\n%d %d\n255\n", size, size);
+    fprintf(g3_sq_im, "P6\n%d %d\n255\n", size, size);
 
     /*  Colors for the roots (Red, Green, Blue).                              */
     unsigned char *brightness = malloc(sizeof(*brightness) * 3);
@@ -223,6 +259,8 @@ int main(void)
             {
                 color((char)255, (char)255, (char)255, g3_re);
                 color((char)255, (char)255, (char)255, g3_im);
+                color((char)255, (char)255, (char)255, g3_sq_re);
+                color((char)255, (char)255, (char)255, g3_sq_im);
             }
             else
             {
@@ -237,6 +275,18 @@ int main(void)
 
                 set_color(brightness, im);
                 color(brightness[0], brightness[1], brightness[2], g3_im);
+
+                /*  Now make the "square" pictures.                           */
+                g = gee_three_square(z);
+                re = creal(g);
+                im = cimag(g);
+
+                /*  Now make the "square" pictures.                           */
+                set_square_color(brightness, re);
+                color(brightness[0], brightness[1], brightness[2], g3_sq_re);
+
+                set_square_color(brightness, im);
+                color(brightness[0], brightness[1], brightness[2], g3_sq_im);
             }
         }
     }
