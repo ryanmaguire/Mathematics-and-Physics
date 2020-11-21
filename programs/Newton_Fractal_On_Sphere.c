@@ -26,6 +26,12 @@ typedef struct root_struct {
 /*  The number of pixels in the x and y axes.                                 */
 const int size = 4*1024;
 
+/*  Values for the min and max of the x and y axes.                           */
+const double x_min = -1.0;
+const double x_max =  1.0;
+const double y_min = -1.0;
+const double y_max =  1.0;
+
 /*  Maximum number of iterations for the Newton-Raphson method. This must be  *
  *  less than 255, otherwise we'll run out of colors.                         */
 const unsigned int MaxIters = 32;
@@ -45,7 +51,7 @@ three_vec camera_pos = {{1.0, 1.0, 1.0}};
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {1, 0, 0, -1};
+complex double coeffs[deg+1] = {1, 0, -2, 2};
 
 /******************************************************************************
  ******************************************************************************
@@ -168,7 +174,7 @@ static complex double f_prime(complex double z)
 
     out = deg*coeffs[0];
     for (n=1; n<deg; ++n)
-        out = z*out + deg*coeffs[n];
+        out = z*out + (deg-n)*coeffs[n];
 
     return out;
 }
@@ -394,12 +400,6 @@ int main(void)
 
     /*  The colors for the drawing.                                           */
     unsigned char **colors = get_colors();
-
-    /*  Values for the min and max of the x and y axes.                       */
-    const double x_min = -1.0;
-    const double x_max =  1.0;
-    const double y_min = -1.0;
-    const double y_max =  1.0;
 
     three_vec u = normalize_three_vec(camera_pos);
     three_vec p;
