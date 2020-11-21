@@ -18,6 +18,12 @@ typedef struct root_struct {
 /*  The number of pixels in the x and y axes.                                 */
 const int size = 4*1024;
 
+/*  Values for the min and max of the x and y axes.                           */
+const double x_min = -3.0;
+const double x_max =  3.0;
+const double y_min = -3.0;
+const double y_max =  3.0;
+
 /*  Maximum number of iterations for the Newton-Raphson method. This must be  *
  *  less than 255, otherwise we'll run out of colors.                         */
 const unsigned int MaxIters = 32;
@@ -27,11 +33,11 @@ const unsigned int MaxIters = 32;
 const unsigned int root_finder_max_iter = 200;
 
 /*  The degree of the polynomial.                                             */
-#define deg 4
+#define deg 3
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {3, 7, 2, 0, -1};
+complex double coeffs[deg+1] = {1, 0, -2, 2};
 
 /******************************************************************************
  ******************************************************************************
@@ -272,12 +278,6 @@ int main(void)
 
     /*  The colors for the drawing.                                           */
     unsigned char **colors = get_colors();
-
-    /*  Values for the min and max of the x and y axes.                       */
-    const double x_min = -1.0;
-    const double x_max =  1.0;
-    const double y_min = -1.0;
-    const double y_max =  1.0;
 
     /*  Factor for giving the image a gradient.                               */
     unsigned char factor = 255/MaxIters;
