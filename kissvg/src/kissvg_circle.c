@@ -47,7 +47,6 @@ void kissvg_Circle_Set_Line(kissvg_Circle *circle, kissvg_TwoVector P,
     return;
 }
 
-
 void kissvg_Circle_Set_Error_Message(kissvg_Circle *circle, char *mes)
 {
     long mes_len;
