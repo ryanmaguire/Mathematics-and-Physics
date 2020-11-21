@@ -20,18 +20,18 @@ const int size = 4*1024;
 
 /*  Maximum number of iterations for the Newton-Raphson method. This must be  *
  *  less than 255, otherwise we'll run out of colors.                         */
-const unsigned int MaxIters = 64;
+const unsigned int MaxIters = 32;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */
 const unsigned int root_finder_max_iter = 200;
 
 /*  The degree of the polynomial.                                             */
-#define deg 10
+#define deg 4
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1};
+complex double coeffs[deg+1] = {3, 7, 2, 0, -1};
 
 /******************************************************************************
  ******************************************************************************
@@ -154,7 +154,7 @@ static complex double f_prime(complex double z)
 
     out = deg*coeffs[0];
     for (n=1; n<deg; ++n)
-        out = z*out + deg*coeffs[n];
+        out = z*out + (deg-n)*coeffs[n];
 
     return out;
 }
