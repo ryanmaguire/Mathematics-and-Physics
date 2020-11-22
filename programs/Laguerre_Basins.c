@@ -3,12 +3,6 @@
 #include <math.h>
 #include <complex.h>
 
-/*  We'll need the following data types for planar and spherical points.      */
-typedef struct root_struct {
-    complex double *roots;
-    unsigned int n_roots;
-} root_struct;
-
 /******************************************************************************
  ******************************************************************************
  *                          Begin User Input                                  *
@@ -19,20 +13,23 @@ typedef struct root_struct {
 const int size = 4*1024;
 
 /*  Values for the min and max of the x and y axes.                           */
-const double x_min = -3.0;
-const double x_max =  3.0;
-const double y_min = -3.0;
-const double y_max =  3.0;
+const double x_min = -5.0;
+const double x_max =  5.0;
+const double y_min = -5.0;
+const double y_max =  5.0;
 
-/*  Maximum number of iterations for the Newton-Raphson method. This must be  *
- *  less than 255, otherwise we'll run out of colors.                         */
-const unsigned int MaxIters = 48;
+/*  Maximum number of iterations for Laguerre's method. This must be less     *
+ *  than 255, otherwise we'll run out of colors.                             */
+const unsigned int MaxIters = 32;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */
 const unsigned int root_finder_max_iter = 200;
 
-/*  The degree of the polynomial.                                             */
+/*  The degree of the polynomial. We only define 14 colors, so ideally this   *
+ *  shoule be less than or equal to 14 (or have multiplicity in the roots).   *
+ *  Polynomials with more than 14 roots will have at least two distinct roots *
+ *  with the same color.                                                      */
 #define deg 4
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
@@ -45,6 +42,13 @@ complex double coeffs[deg+1] = {1, -1, 0, -1, 1};
  ******************************************************************************
  ******************************************************************************/
 
+/*  We'll need the following data type for finding all of the roots.          */
+typedef struct root_struct {
+    complex double *roots;
+    unsigned int n_roots;
+} root_struct;
+
+/*  We'll define 14 colors for up to 14 distinct roots.                       */
 #define N_COLORS 14
 const double PI = 3.14159265358979323846264338327950288419716;
 
@@ -130,6 +134,7 @@ static unsigned char **get_colors(void)
     return colors;
 }
 
+/*  Function for freeing all of the pointers created via get_colors.          */
 static void destroy_colors(unsigned char **colors)
 {
     unsigned int n;
@@ -153,6 +158,8 @@ static complex double f(complex double z)
     return out;
 }
 
+/*  Function for computing the derivative of the polynomial, again using      *
+ *  Horner's method.                                                          */
 static complex double f_prime(complex double z)
 {
     complex double out;
@@ -165,6 +172,24 @@ static complex double f_prime(complex double z)
     return out;
 }
 
+/*  Lastly, Laguerre require the second derivative of the polynomial, so      *
+ *  let's provide a function for computing this.                              */
+static complex double f_2prime(complex double z)
+{
+    complex double out;
+    int n;
+
+    out = deg*(deg-1)*coeffs[0];
+    for (n=1; n<deg-1; ++n)
+        out = z*out + (deg-n)*(deg-n-1)*coeffs[n];
+
+    return out;
+}
+
+/*  This algorithm uses the methods outlined in a paper by                    *
+ *  John Hubbard, Dierk Schleicher, and Scott Sutherland. It works on         *
+ *  polynomials whose roots are known to lie in the unit disk. Scale the      *
+ *  coefficients accordingly to ensure this.                                  */
 static root_struct *get_roots(void)
 {
     root_struct *out = malloc(sizeof(*out));
@@ -173,46 +198,63 @@ static root_struct *get_roots(void)
     double r, theta, factor_1, factor_2, min, temp;
 
     out->roots = malloc(sizeof(*out->roots) * deg);
-
     s = (int)ceil(0.26632*log(deg));
     N = (int)ceil(8.32547*deg*log(deg));
     n_roots = 0;
-
     factor_1 = 1.0+sqrt(2);
     factor_2 = (deg-1.0)/deg;
 
-
     for (m=0; m<s; ++m)
     {
+        /*  Fundamental theorem of algebra tells us we need only look for,    *
+         *  at most, deg roots. If we found this many, break.                 */
         if (n_roots >= deg)
             break;
 
+        /*  This formula is provided in section 9 of Hubbard, Schleicher, and *
+         *  Sutherland.                                                       */
         r = factor_1 + pow(factor_2, (2*m+1)/(4*s));
 
         for (n=0; n<N; ++n)
         {
+            /*  Perform the same check inside the inner for-loop.             */
             if (n_roots >= deg)
                 break;
 
             theta = 2*PI*n/N;
+
+            /*  Use Euler's formula to compute r * exp(i theta).              */
             p = r * (cos(theta) + _Complex_I*sin(theta));
 
+            /*  We now use Newton's method on all of the sampled points. We   *
+             *  are guaranteed that each root will have at least one of these *
+             *  points in its basin of attraction, and so we should get all   *
+             *  of the roots.                                                 */
             for (iter=0; iter<root_finder_max_iter; ++iter)
             {
                 root = p - f(p)/f_prime(p);
+
+                /*  If the magnitude of "root" is below a certain threshold,  *
+                 *  break out of the loop.                                    */
                 if (cabs(f(root)) < 1.0e-10)
                     break;
 
                 p = root;
             }
 
+            /*  Check if Newton-Raphson actually found a root.                */
             if (cabs(f(root)) < 1.0e-8)
             {
+                /*  If this is the first root we found, add 1 to n_roots and  *
+                 *  store this value in the out struct.                       */
                 if (n_roots == 0)
                 {
                     n_roots += 1;
                     out->roots[0] = root;
                 }
+
+                /*  If we have already found a root, check that this is not   *
+                 *  a root that is already in our list.                       */
                 else
                 {
                     min = cabs(root - out->roots[0]);
@@ -222,6 +264,10 @@ static root_struct *get_roots(void)
                         if (temp < min)
                             min = temp;
                     }
+
+                    /*  If the current root is closer than a certain          *
+                     *  threshold to a root we already found, skip it.        *
+                     *  Otherwise add it to the list.                         */
                     if (min >= 0.001)
                     {
                         out->roots[n_roots] = root;
@@ -232,6 +278,9 @@ static root_struct *get_roots(void)
         }
     }
 
+    /*  If no roots were found, abort the calculation. This should only       *
+     *  occur if our polynomials roots lie outside of the unit disk, in       *
+     *  which case the algorithm may fail.                                    */
     if (n_roots == 0)
     {
         puts("\nError:");
@@ -241,6 +290,8 @@ static root_struct *get_roots(void)
     else
         out->n_roots = n_roots;
 
+    /*  Print out all of the roots so the user can inspect them before the    *
+     *  long computation begins.                                              */
     printf("Number of roots: %d\n", n_roots);
     for (n=0; n<n_roots; ++n)
         printf(
@@ -251,12 +302,14 @@ static root_struct *get_roots(void)
     return out;
 }
 
+/*  Function for freeing all of the memory allocated by get_roots.            */
 static void destroy_roots(root_struct *the_roots)
 {
     free(the_roots->roots);
     free(the_roots);
 }
 
+/*  Function for coloring the current pixel of the file.                      */
 void color(char red, char green, char blue, FILE *fp)
 {
     fputc(red,   fp);
@@ -268,7 +321,7 @@ int main(void)
 {
     /*  Declare a variable for the output file and give it write permission.  */
     FILE *fp;
-    fp = fopen("newton_fractal.ppm", "w");
+    fp = fopen("laguerre_basins.ppm", "w");
 
     /*  Struct for the roots.                                                 */
     root_struct *roots_of_f = get_roots();
@@ -288,7 +341,7 @@ int main(void)
     /*  More dummy variables to loop over.                                    */
     int x, y;
     double z_x, z_y, min, temp, scale;
-    complex double z, root;
+    complex double z, root, G, H, a, p, fz, denom, denom_plus, denom_minus;
 
     fprintf(fp, "P6\n%d %d\n255\n", size, size);
 
@@ -305,11 +358,25 @@ int main(void)
             z_x = x * (x_max - x_min)/(size - 1) + x_min;
             z = z_x + _Complex_I*z_y;
 
-            /*  Allow MaxIters number of iterations of Newton-Raphson.        */
+            /*  Allow MaxIters number of iterations of Laguerre's method.     */
             for (iters=0; iters<MaxIters; ++iters)
             {
-                /*  Perfrom Newton-Raphson on the polynomial f.               */
-                root = z - f(z)/f_prime(z);
+                /*  Perfrom Laguerre's method on the polynomial f.            */
+                fz = f(z);
+                G = f_prime(z) / fz;
+                H = G*G - f_2prime(z)/fz;
+
+                p = csqrt((deg - 1) * (deg*H - G*G));
+                denom_plus = G + p;
+                denom_minus = G - p;
+
+                if (cabs(denom_minus) < cabs(denom_plus))
+                    denom = denom_plus;
+                else
+                    denom = denom_minus;
+
+                a = deg/denom;
+                root = z-a;
 
                 /*  Checks for convergence.                                   */
                 if (cabs(root - z) < 10e-10)
