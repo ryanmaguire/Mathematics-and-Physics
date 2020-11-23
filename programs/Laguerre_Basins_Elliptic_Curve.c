@@ -12,10 +12,9 @@
 /*  The number of pixels in the x and y axes.                                 */
 const int size = 1024;
 
-const double e_a = 0.5;
+const double e_a = 2.0;
 const double e_b = 1.0;
-const double e_c = -0.2;
-const double e_shift = 0.0;
+const double e_shift = 1.0;
 
 /*  Values for the min and max of the x and y axes.                           */
 const double x_min = -1.0;
@@ -334,6 +333,8 @@ int main(void)
     unsigned int n_roots = roots_of_f->n_roots;
     complex double *roots = roots_of_f->roots;
 
+    double e_c = -pow(-sqrt(0.148) + e_shift, 3.0);
+
     /*  The colors for the drawing.                                           */
     unsigned char **colors = get_colors();
 
@@ -406,7 +407,7 @@ int main(void)
 
             /*  Color in the elliptic curve if (z_x, z_y) lies on it).        */
             z_x = z_x + e_shift;
-            if (fabs(e_a*z_y*z_y - e_b*z_x*z_x*z_x + e_c) < 0.05)
+            if (fabs(e_a*z_y*z_y - e_b*z_x*z_x*z_x - e_c) < 0.03)
                 color((char)0, (char)0, (char)0, fp);
             else if (min > 0.1)
                 color((char)0, (char)0, (char)0, fp);

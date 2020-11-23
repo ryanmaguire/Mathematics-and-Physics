@@ -3,16 +3,14 @@
 #include <math.h>
 #include <complex.h>
 
+/******************************************************************************
+ ******************************************************************************
+ *                          Begin User Input                                  *
+ ******************************************************************************
+ ******************************************************************************/
+
 /*  The number of pixels in the x and y axes.                                 */
 const int size = 1024;
-
-/*  Maximum number of iterations for Laguerre's method. This must be less     *
- *  than 255, otherwise we'll run out of colors.                              */
-const unsigned int MaxIters = 32;
-
-/*  Maximum number of iterations allowed before giving up on the root finding *
- *  algorithm. If no roots are found, the computation aborts.                 */
-const unsigned int root_finder_max_iter = 200;
 
 /*  Values for the min and max of the x and y axes.                           */
 const double x_min = -3.0;
@@ -20,14 +18,38 @@ const double x_max =  3.0;
 const double y_min = -3.0;
 const double y_max =  3.0;
 
+/*  Maximum number of iterations for Laguerre's method. This must be less     *
+ *  than 255, otherwise we'll run out of colors.                             */
+const unsigned int MaxIters = 32;
+
+/*  Maximum number of iterations allowed before giving up on the root finding *
+ *  algorithm. If no roots are found, the computation aborts.                 */
+const unsigned int root_finder_max_iter = 200;
+
+/*  The degree of the polynomial. We only define 14 colors, so ideally this   *
+ *  shoule be less than or equal to 14 (or have multiplicity in the roots).   *
+ *  Polynomials with more than 14 roots will have at least two distinct roots *
+ *  with the same color.                                                      */
+#define deg 3
+
+/*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
+ *  and the last coefficient is the constant term.                            */
+complex double coeffs[deg+1] = {1, 0, 0, -1};
+
+/******************************************************************************
+ ******************************************************************************
+ *                            End User Input                                  *
+ ******************************************************************************
+ ******************************************************************************/
+
 /*  We'll need the following data type for finding all of the roots.          */
 typedef struct root_struct {
     complex double *roots;
     unsigned int n_roots;
 } root_struct;
 
-/*  We'll define 4 colors for up to 4 distinct roots.                         */
-#define N_COLORS 4
+/*  We'll define 14 colors for up to 14 distinct roots.                       */
+#define N_COLORS 14
 const double PI = 3.14159265358979323846264338327950288419716;
 
 /*  Function for setting colors that can be used in a drawing.                */
@@ -59,6 +81,56 @@ static unsigned char **get_colors(void)
     colors[3][1] = (unsigned char)255;
     colors[3][2] = (unsigned char)51;
 
+    /*  Light Blue. */
+    colors[4][0] = (unsigned char)128;
+    colors[4][1] = (unsigned char)212;
+    colors[4][2] = (unsigned char)255;
+
+    /*  Magenta.    */
+    colors[5][0] = (unsigned char)255;
+    colors[5][1] = (unsigned char)29;
+    colors[5][2] = (unsigned char)206;
+
+    /*  Teal.   */
+    colors[6][0] = (unsigned char)0;
+    colors[6][1] = (unsigned char)128;
+    colors[6][2] = (unsigned char)128;
+
+    /*  Purple. */
+    colors[7][0] = (unsigned char)255;
+    colors[7][1] = (unsigned char)0;
+    colors[7][2] = (unsigned char)255;
+
+    /*  Orange. */
+    colors[8][0] = (unsigned char)255;
+    colors[8][1] = (unsigned char)85;
+    colors[8][2] = (unsigned char)0;
+
+    /*  Turquoise.  */
+    colors[9][0] = (unsigned char)77;
+    colors[9][1] = (unsigned char)255;
+    colors[9][2] = (unsigned char)195;
+
+    /*  Pine.   */
+    colors[10][0] = (unsigned char)0;
+    colors[10][1] = (unsigned char)128;
+    colors[10][2] = (unsigned char)106;
+
+    /*  Melon.  */
+    colors[11][0] = (unsigned char)255;
+    colors[11][1] = (unsigned char)191;
+    colors[11][2] = (unsigned char)179;
+
+    /*  Mauve.  */
+    colors[12][0] = (unsigned char)255;
+    colors[12][1] = (unsigned char)179;
+    colors[12][2] = (unsigned char)230;
+
+    /*  Midnight Blue.  */
+    colors[13][0] = (unsigned char)102;
+    colors[13][1] = (unsigned char)51;
+    colors[13][2] = (unsigned char)102;
+
     return colors;
 }
 
@@ -74,7 +146,7 @@ static void destroy_colors(unsigned char **colors)
 
 /*  Define the polynomial based on the user provided coefficients. Compute    *
  *  this via Horner's method for speed.                                       */
-static complex double f(complex double z, double *coeffs, int deg)
+static complex double f(complex double z)
 {
     complex double out;
     int n;
@@ -88,7 +160,7 @@ static complex double f(complex double z, double *coeffs, int deg)
 
 /*  Function for computing the derivative of the polynomial, again using      *
  *  Horner's method.                                                          */
-static complex double f_prime(complex double z, double *coeffs, int deg)
+static complex double f_prime(complex double z)
 {
     complex double out;
     int n;
@@ -102,14 +174,13 @@ static complex double f_prime(complex double z, double *coeffs, int deg)
 
 /*  Lastly, Laguerre require the second derivative of the polynomial, so      *
  *  let's provide a function for computing this.                              */
-static complex double f_2prime(complex double z, double *coeffs, int deg)
+static complex double f_2prime(complex double z)
 {
     complex double out;
     int n;
 
     out = deg*(deg-1)*coeffs[0];
-    for (n=1; n<deg-1; ++n
-    )
+    for (n=1; n<deg-1; ++n)
         out = z*out + (deg-n)*(deg-n-1)*coeffs[n];
 
     return out;
@@ -119,7 +190,7 @@ static complex double f_2prime(complex double z, double *coeffs, int deg)
  *  John Hubbard, Dierk Schleicher, and Scott Sutherland. It works on         *
  *  polynomials whose roots are known to lie in the unit disk. Scale the      *
  *  coefficients accordingly to ensure this.                                  */
-static root_struct *get_roots(double *coeffs, int deg)
+static root_struct *get_roots(void)
 {
     root_struct *out = malloc(sizeof(*out));
     complex double p, root;
@@ -161,18 +232,18 @@ static root_struct *get_roots(double *coeffs, int deg)
              *  of the roots.                                                 */
             for (iter=0; iter<root_finder_max_iter; ++iter)
             {
-                root = p - f(p, coeffs, deg)/f_prime(p, coeffs, deg);
+                root = p - f(p)/f_prime(p);
 
                 /*  If the magnitude of "root" is below a certain threshold,  *
                  *  break out of the loop.                                    */
-                if (cabs(f(root, coeffs, deg)) < 1.0e-10)
+                if (cabs(f(root)) < 1.0e-10)
                     break;
 
                 p = root;
             }
 
             /*  Check if Newton-Raphson actually found a root.                */
-            if (cabs(f(root, coeffs, deg)) < 1.0e-8)
+            if (cabs(f(root)) < 1.0e-8)
             {
                 /*  If this is the first root we found, add 1 to n_roots and  *
                  *  store this value in the out struct.                       */
@@ -249,36 +320,14 @@ void color(char red, char green, char blue, FILE *fp)
 int main(void)
 {
     /*  Declare a variable for the output file and give it write permission.  */
-    FILE **fp;
-
-    fp = malloc(sizeof(*fp) * 2);
-    fp[0] = fopen("laguerre_basins_1_0_0_m1.ppm", "w");
-    fp[1] = fopen("laguerre_basins_1_m1_0_m1_1.ppm", "w");
-
-    const int degs[2] = {3, 4};
-    double **coeffs;
-
-    coeffs = malloc(sizeof(*coeffs) * 2);
-
-    coeffs[0] = malloc(sizeof(*coeffs[0]) * 4);
-    coeffs[0][0] = 1.0;
-    coeffs[0][1] = 0.0;
-    coeffs[0][2] = 0.0;
-    coeffs[0][3] = -1.0;
-
-    coeffs[1] = malloc(sizeof(*coeffs[1]) * 5);
-    coeffs[1][0] = 1.0;
-    coeffs[1][1] = -1.0;
-    coeffs[1][2] = 0.0;
-    coeffs[1][3] = -1.0;
-    coeffs[1][4] = 1.0;
+    FILE *fp;
+    fp = fopen("laguerre_basins.ppm", "w");
 
     /*  Struct for the roots.                                                 */
-    root_struct **roots_of_f;
+    root_struct *roots_of_f = get_roots();
 
-    roots_of_f = malloc(sizeof(*roots_of_f) * 2);
-    roots_of_f[0] = get_roots(coeffs[0], degs[0]);
-    roots_of_f[1] = get_roots(coeffs[1], degs[1]);
+    unsigned int n_roots = roots_of_f->n_roots;
+    complex double *roots = roots_of_f->roots;
 
     /*  The colors for the drawing.                                           */
     unsigned char **colors = get_colors();
@@ -287,15 +336,14 @@ int main(void)
     unsigned char factor = 255/MaxIters;
 
     /* Dummy variables to loop over.                                          */
-    unsigned int iters, ind, n, m;
+    unsigned int iters, ind, n;
 
     /*  More dummy variables to loop over.                                    */
     int x, y;
     double z_x, z_y, min, temp, scale;
     complex double z, root, G, H, a, p, fz, denom, denom_plus, denom_minus;
 
-    for (m=0; m<2; ++m)
-        fprintf(fp[m], "P6\n%d %d\n255\n", size, size);
+    fprintf(fp, "P6\n%d %d\n255\n", size, size);
 
     /*  Colors for the roots (Red, Green, Blue).                              */
     unsigned char brightness[3];
@@ -308,74 +356,66 @@ int main(void)
         for (x=0; x<size; ++x)
         {
             z_x = x * (x_max - x_min)/(size - 1) + x_min;
-            for (m=0; m<2; ++m)
+            z = z_x + _Complex_I*z_y;
+
+            /*  Allow MaxIters number of iterations of Laguerre's method.     */
+            for (iters=0; iters<MaxIters; ++iters)
             {
-                z = z_x + _Complex_I*z_y;
+                /*  Perfrom Laguerre's method on the polynomial f.            */
+                fz = f(z);
+                G = f_prime(z) / fz;
+                H = G*G - f_2prime(z)/fz;
 
-                /*  Allow MaxIters number of iterations of Laguerre's method. */
-                for (iters=0; iters<MaxIters; ++iters)
-                {
-                    /*  Performm Laguerre's method on the polynomial f.       */
-                    fz = f(z, coeffs[m], degs[m]);
-                    G = f_prime(z, coeffs[m], degs[m]) / fz;
-                    H = G*G - f_2prime(z, coeffs[m], degs[m]) / fz;
+                p = csqrt((deg - 1) * (deg*H - G*G));
+                denom_plus = G + p;
+                denom_minus = G - p;
 
-                    p = csqrt((degs[m] - 1) * (degs[m]*H - G*G));
-                    denom_plus = G + p;
-                    denom_minus = G - p;
-
-                    if (cabs(denom_minus) < cabs(denom_plus))
-                        denom = denom_plus;
-                    else
-                        denom = denom_minus;
-
-                    a = degs[m]/denom;
-                    root = z-a;
-
-                    /*  Checks for convergence.                               */
-                    if (cabs(root - z) < 10e-8)
-                        break;
-
-                    z = root;
-                }
-
-                /*  Find which roots the final iteration is closest too.      */
-                min = cabs(z-(roots_of_f[m])->roots[0]);
-                ind = 0;
-
-                for (n=1; n<(roots_of_f[m])->n_roots; ++n)
-                {
-                    temp = cabs(z - (roots_of_f[m])->roots[n]);
-                    if (temp < min)
-                    {
-                        min = temp;
-                        ind = n;
-                    }
-                }
-
-                if (min > 0.1)
-                    color((char)0, (char)0, (char)0, fp[m]);
+                if (cabs(denom_minus) < cabs(denom_plus))
+                    denom = denom_plus;
                 else
-                {
-                    scale = (255.0-factor*iters)/255.0;
-                    for (n=0; n<3; ++n)
-                        brightness[n] =
-                            (unsigned char)(scale * colors[ind][n]);
+                    denom = denom_minus;
 
-                    /*  Color the current pixel.                             */
-                    color(brightness[0], brightness[1], brightness[2], fp[m]);
+                a = deg/denom;
+                root = z-a;
+
+                /*  Checks for convergence.                                   */
+                if (cabs(root - z) < 10e-8)
+                    break;
+
+                z = root;
+            }
+
+            /*  Find which roots the final iteration is closest too.          */
+            min = cabs(z-roots[0]);
+            ind = 0;
+
+            for (n=1; n<n_roots; ++n)
+            {
+                temp = cabs(z - roots[n]);
+                if (temp < min)
+                {
+                    min = temp;
+                    ind = n;
                 }
+            }
+
+            if (min > 0.1)
+                color((char)0, (char)0, (char)0, fp);
+            else
+            {
+                scale = (255.0-factor*iters)/255.0;
+                for (n=0; n<3; ++n)
+                    brightness[n] =
+                        (unsigned char)(scale * colors[ind][n]);
+
+                /*  Color the current pixel.                                  */
+                color(brightness[0], brightness[1], brightness[2], fp);
             }
         }
     }
 
     /*  Free the memory allocated to colors before returning.                 */
     destroy_colors(colors);
-    destroy_roots(roots_of_f[0]);
-    destroy_roots(roots_of_f[1]);
-    free(roots_of_f);
-    free(coeffs[0]);
-    free(coeffs[1]);
-    free(coeffs);
+    destroy_roots(roots_of_f);
     return 0;
 }
