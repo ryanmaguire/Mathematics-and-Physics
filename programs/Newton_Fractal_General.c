@@ -33,11 +33,11 @@ const unsigned int MaxIters = 48;
 const unsigned int root_finder_max_iter = 200;
 
 /*  The degree of the polynomial.                                             */
-#define deg 4
+#define deg 3
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {1, -1, 0, -1, 1};
+complex double coeffs[deg+1] = {1, 0, -2, 2};
 
 /******************************************************************************
  ******************************************************************************
