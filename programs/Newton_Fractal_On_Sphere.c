@@ -51,7 +51,7 @@ three_vec camera_pos = {{1.0, 1.0, 1.0}};
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-complex double coeffs[deg+1] = {1, 0, -2, 2};
+complex double coeffs[deg+1] = {1, 0, 0, -1};
 
 /******************************************************************************
  ******************************************************************************
