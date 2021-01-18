@@ -46,3 +46,10 @@ could not find the information, not that is unknown to others.
    Date: Unknown
    Resolution: 209x240
    Description: Drawing of Bernard Bolzano (1781-1848 C.E.).
+
+   Filename: SrinivasaRamanujanPre1920.jpg
+   License: Public Domain
+   Artist: Unknown
+   Date: Before 1920 C.E.
+   Resolution: 350x480
+   Description: Photograph of Srinivasa Ramanujan (1887-1920 C.E.).
