@@ -7,6 +7,8 @@
 #define BOB
 
 #ifdef BOB
+
+//	Legal equivalent of the Quake code using a Union.
 float Q_rsqrt( float number )
 {
 	const float x2 = number * 0.5F;
