@@ -46,7 +46,7 @@ CenterQ = FindCenter2D(D1, D2, D3);
 r1 = EuclideanNorm2D(CenterP-Q);
 r2 = EuclideanNorm2D(CenterQ-P);
 
-Intersections = CircleCircleIntersection(CenterP, r1, CenterQ, r2);
+Intersections = CircleIntersection(CenterP, r1, CenterQ, r2);
 
 assert(!isnan(Intersections[0].x));
 
@@ -75,3 +75,4 @@ label("$A$", P, scale(2.0)*NW);
 label("$B$", Q, scale(2.0)*NE);
 label("$C$", Intersections[1], scale(2.8)*N);
 label("$O$", (0, 0), SW);
+

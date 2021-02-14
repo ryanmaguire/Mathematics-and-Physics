@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 import _custom_arrows;
 texpreamble("\usepackage{amssymb}");
 
@@ -42,8 +42,8 @@ pair B = (x, 0);
 pair C = (x, y);
 pair D = (-x, y);
 
-pair S1 = MidPointTwo(A, B);
-pair S2 = MidPointTwo(C, D);
+pair S1 = MidPoint2D(A, B);
+pair S2 = MidPoint2D(C, D);
 
 pair O = (0, 2*y);
 pair P1 = (0.7*x, 0.95*y);
@@ -57,11 +57,11 @@ draw(P1--P2, SharpArrow(arsize), margins);
 draw(Q1--Q2, SharpArrow(arsize), margins);
 
 g = scale(1, e)*arc(S1, x, 180, 360)--C--
-    reverse(shift(MidPointTwo(C, D))*(scale(1, e)*arc(S1, x, 180, 360)))--cycle;
+    reverse(shift(MidPoint2D(C, D))*(scale(1, e)*arc(S1, x, 180, 360)))--cycle;
 
 axialshade(g, gray(0.2)+opacity(0.7), (S2.x, S2.y+y), gray(0.9), (S1.x, S1.y-y));
 draw(g, spen);
-g = scale(1, e)*arc(MidPointTwo(A, B), x, 0, 180);
+g = scale(1, e)*arc(MidPoint2D(A, B), x, 0, 180);
 draw(g, dpen);
 
 g = ellipse(S2, 1, e);
@@ -83,3 +83,5 @@ label("$f(P)$", P2, E, fontsize(9pt));
 label("$Q$", Q1, NW, fontsize(9pt));
 label("$f(Q)$", Q2, SE, fontsize(9pt));
 label("$(\mathbf{0},2)$", O, NE, fontsize(9pt));
+
+

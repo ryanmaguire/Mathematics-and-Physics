@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 import _custom_arrows;
 texpreamble("\usepackage{amssymb}");
 
@@ -34,3 +34,4 @@ filldraw(circle(O, r), gray(0.5)+opacity(0.5), spen);
 draw(scale(1, e)*arc(O, r, 180, 360), spen);
 draw(circle(shift(-2*r)*O, r), spen);
 filldraw(circle(shift(-r, 0)*O, rdot), black);
+

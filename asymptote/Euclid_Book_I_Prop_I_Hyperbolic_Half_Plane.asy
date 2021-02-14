@@ -3,6 +3,7 @@
 import _asy_preamble_2d;
 import _complex;
 import _custom_arrows;
+import _euclidean;
 import graph;
 
 // Size of the output figure.
@@ -51,7 +52,7 @@ CenterB = FindCenter2D(D1, D2, D3);
 r1 = EuclideanNorm2D(C1 - CenterA);
 r2 = EuclideanNorm2D(D1 - CenterB);
 
-Intersections = CircleCircleIntersection(CenterA, r1, CenterB, r2);
+Intersections = CircleIntersection(CenterA, r1, CenterB, r2);
 
 inter = Intersections[1];
 
@@ -78,3 +79,4 @@ filldraw(circle(inter, 0.04), black);
 label("$A$", A, S);
 label("$B$", B, E);
 label("$C$", inter, W);
+

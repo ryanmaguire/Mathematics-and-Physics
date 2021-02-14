@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 import _custom_arrows;
 texpreamble("\usepackage{amssymb}");
 
