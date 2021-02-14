@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 texpreamble("\usepackage{amssymb}");
 
 if(settings.render < 0)    settings.render    = 4;
@@ -32,7 +32,7 @@ pair B = (0.0, -1.0);
 pair C = (-r, 0);
 pair D = (r, 0);
 
-pair X = MidPointTwo(C, A);
+pair X = MidPoint2D(C, A);
 
 draw(scale(1, e)*arc(C, r, 0, 180), dpen);
 draw(scale(1, e)*arc(D, r, 0, 180), dpen);
@@ -61,4 +61,6 @@ draw(shift((X.x, -X.y))*(scale(1, e)*arc(O, 0.5*r, 180, 360)), spen);
 draw(shift((-X.x, X.y))*(scale(1, e)*arc(O, 0.5*r, 180, 360)), spen);
 draw(A--B, spen);
 draw(A--shift(-r, 0)*C--B--shift(r, 0)*D--cycle);
+
+
 

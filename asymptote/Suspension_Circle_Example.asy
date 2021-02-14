@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 texpreamble("\usepackage{amssymb}");
 
 if(settings.render < 0)    settings.render    = 4;
@@ -38,13 +38,15 @@ pair D = (0, -r);
 draw(A--B--C--D--cycle);
 draw(scale(1, e)*arc(O, r, 180, 360), spen+blue);
 draw(scale(1, e)*arc(O, r, 0, 180), dpen+blue);
-draw(shift(MidPointTwo(O, B))*(scale(0.5, e)*arc(O, r, 180, 360)), spen);
-draw(shift(MidPointTwo(O, B))*(scale(0.5, e)*arc(O, r, 0, 180)), dpen);
-draw(shift(MidPointTwo(O, D))*(scale(0.5, e)*arc(O, r, 180, 360)), spen);
-draw(shift(MidPointTwo(O, D))*(scale(0.5, e)*arc(O, r, 0, 180)), dpen);
+draw(shift(MidPoint2D(O, B))*(scale(0.5, e)*arc(O, r, 180, 360)), spen);
+draw(shift(MidPoint2D(O, B))*(scale(0.5, e)*arc(O, r, 0, 180)), dpen);
+draw(shift(MidPoint2D(O, D))*(scale(0.5, e)*arc(O, r, 180, 360)), spen);
+draw(shift(MidPoint2D(O, D))*(scale(0.5, e)*arc(O, r, 0, 180)), dpen);
 
 label("$\mathbb{S}^{1}$", C, NE, fontsize(fsize));
-label("$S\mathbb{S}^{1}$", MidPointTwo(A, B), NW, fontsize(fsize));
+label("$S\mathbb{S}^{1}$", MidPoint2D(A, B), NW, fontsize(fsize));
 
 filldraw(circle(B, rdot), dotf, dotc);
 filldraw(circle(D, rdot), dotf, dotc);
+
+

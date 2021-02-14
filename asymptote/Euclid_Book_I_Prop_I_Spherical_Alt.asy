@@ -62,7 +62,7 @@ CenterB = FindCenter2D(D1, D2, D3);
 real r1 = EuclideanNorm2D(CenterA - C1);
 real r2 = EuclideanNorm2D(CenterB - D1);
 
-pair[] Intersections = CircleCircleIntersection(CenterA, r1, CenterB, r2);
+pair[] Intersections = CircleIntersection(CenterA, r1, CenterB, r2);
 
 if (!isnan(Intersections[0].x))
 {
@@ -88,3 +88,4 @@ if (!isnan(Intersections[0].x))
     label("$C$", project(SphereIntersection), N);
 
 }
+

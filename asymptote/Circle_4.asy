@@ -1,7 +1,7 @@
 // Make sure _asy_preamble_2d.asy and _euc_geo_2d.asy are in your ASYMPTOTE_DIR
 // environment variable. These are found in the asymptote/ folder.
 import _asy_preamble_2d;
-import _euc_geo_2d;
+import _euclidean;
 
 // Size of the output figure.
 size(128);
@@ -18,8 +18,8 @@ pair[] TriPts = {(-1.0, 0.0), (0.0, 1.0), (0.1, 0.0)};
 int TriN = 3;
 
 // Obtain the center of the circle these points define and compute radius.
-pair P = FindCenterTwo(TriPts[0], TriPts[1], TriPts[2]);
-real R = EucNormTwo(P-TriPts[0]);
+pair P = FindCenter2D(TriPts[0], TriPts[1], TriPts[2]);
+real R = EuclideanNorm2D(P-TriPts[0]);
 
 // Draw and fill in the triangle.
 filldraw(PolyFromPoints(TriPts, TriN, true), fillp, defaultpen);
@@ -37,3 +37,4 @@ draw((0.0, -min)--(0.0, max), axesp);
 // Label points on the x and y axes.
 label("$-1$", (-1.02, -0.1));
 label("$1$",  ( 0.10,  1.0));
+

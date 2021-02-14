@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _euc_geo;
+import _euclidean;
 texpreamble("\usepackage{amssymb}");
 
 if(settings.render < 0)    settings.render    = 4;
@@ -44,7 +44,7 @@ filldraw(circle(A1, rdot), red);
 filldraw(circle(A2, rdot), blue);
 filldraw(circle(A3, rdot), blue);
 label("$\mathbb{Z}_{2}*\mathbb{Z}_{1}$",
-      MidPointTwo(A2, A3), N, fontsize(fsize));
+      MidPoint2D(A2, A3), N, fontsize(fsize));
 
 A1 = (3.0, 0.5);
 A2 = (3.5, 0.0);
@@ -78,4 +78,5 @@ filldraw(circle(A4, rdot), red);
 filldraw(circle(A5, rdot), red);
 filldraw(circle(A6, rdot), red);
 label("$\mathbb{Z}_{3}*\mathbb{Z}_{3}$", A2, N, fontsize(fsize));
+
 
