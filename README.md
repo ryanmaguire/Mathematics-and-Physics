@@ -1,3 +1,30 @@
+## Friendly Warnings
+  1. There are many typos and incorrect information. This is obviously not
+     intentional, many of the notes were taken mid-lecture via LaTeX and I have
+     not had the time to correct them yet. I am working though in order,
+     correcting information, and have made good progress in book 1 on Logic and
+     Set Theory.
+  2. The figures were originally written in tikz, then asymptote, and now I am
+     moving on to my own vector graphics library called KissVG (Keep It Simple,
+     Stupid - Vector Graphics) that uses the cairo library as a back-end, though
+     I may eventually write my own back-end tools. It is written in C89/C90
+     compliant code and is also hosted on GitHub. KissVG is currently having a
+     substantial part of its code moved to my other project, libtmpl, which is
+     a simple library of mathematical functions and routines, also written in
+     C. The goal is that libtmpl will provide a wide variety of math functions
+     (complex analysis, numerical analysis, special functions, graph theory,
+     linear algebra, knot theory, geometry, etc.), KissVG will provide the
+     vector graphics library (and eventually some ray-tracing ideas for 3D
+     drawings, which are useful for depicting manifolds such as a torus), and
+     Mathematics-and-Physics will be the tex files. The tikz and asymptote code
+     will not be removed, but simply moved to the "old" directory. The reason
+     for changing to C for the graphics is portability. C compilers are easily
+     accessible, so in the end one would hopefully only need a good LaTeX
+     compiler with a few packages, and a C compiler, to build this project.
+  3. As noted below, I changed to A5 geometry paper to improve readability. This
+     means some of the older notes that I have not yet gotten too will have
+     equations falling outside of the lines. This will be corrected in time.
+
 # Mathematics_and_Physics
 Various notes on mathematics and physics organized in several volumes. **This
 project is currently incomplete and will remain so for quite some time**. I am
