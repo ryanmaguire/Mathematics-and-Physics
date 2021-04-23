@@ -1,5 +1,5 @@
 // Function for mimicing 3D drawing using 2D coordinates.
-struct xyzpoint{
+struct xyzpoint {
     pair P, R, ProjX, ProjY, ProjZ;
 
     // Mimic 3D drawing with these.
