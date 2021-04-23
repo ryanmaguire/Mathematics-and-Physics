@@ -20,10 +20,10 @@
 
 /*  Default settings for all 2D drawings.                                     */
 import settings;
-if(settings.render < 0)
+if (settings.render < 0)
     settings.render = 8;
 
-if(!settings.multipleView)
+if (!settings.multipleView)
     settings.batchView = false;
 
 settings.outformat   = "pdf";
