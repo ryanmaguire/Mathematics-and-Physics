@@ -18,15 +18,69 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*   Make sure _custom_arrows.asy, _asy_preamble_2d, and _euclidean are in    *
- *   your ASYMPTOTE_DIR environment variable. These are found in the          *
- *   asymptote/ folder of this project.                                       */
-import _asy_preamble_2d;
-import _custom_arrows;
-import _euclidean;
+/*  Set default settings for the drawing.                                     */
+import settings;
+if (settings.render < 0)
+    settings.render = 8;
+
+if (!settings.multipleView)
+    settings.batchView = false;
+
+settings.outformat   = "pdf";
+settings.inlineimage = true;
+settings.embed       = true;
+settings.toolbar     = false;
+settings.prc         = false;
+settings.bw          = false;
+settings.cmyk        = false;
+viewportmargin       = (2, 2);
 
 /* Size of the output figure.                                                 */
 size(256);
+
+/*  Default pen for drawing figures.                                          */
+defaultpen(black+linewidth(0.5pt)+fontsize(7pt));
+
+/*  Default size of arrowheads.                                               */
+real arsize = 5bp;
+
+/*  Needed for the use of mathbb and mathcal commands.                        */
+texpreamble("\usepackage{amssymb}");
+
+/*  Commonly used pens.                                                       */
+pen axesp  = black + linewidth(0.7pt) + fontsize(9pt);
+pen dashp  = defaultpen + linetype("8 4");
+pen labelp = defaultpen + fontsize(10pt);
+
+/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
+ *  your path when creating this figure.                                      */
+import _custom_arrows;
+
+/* Given an array of pairs and an array of reals, draw a path between the     *
+ * pairs with angle specified by the array of reals.                          */
+path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, int ArSize, bool closed)
+{
+    /*  Declare necessary variables.                                          */
+    path g;
+    int i;
+
+    /*  Assert that the collection of points has at least 2 points.           */
+    assert(ArSize>1);
+
+    /*  Set the start of the path.                                            */
+    g = Pts[0]{dir(Dirs[0])}..Pts[1]{dir(Dirs[1])};
+
+    /* Loop through the arrays and construct the path.                        */
+    for (i=2; i<ArSize; ++i)
+        g = g..Pts[i]{dir(Dirs[i])};
+
+    /* If the closed Boolean is true, close the path into a cycle.            */
+    if (closed)
+        g = g..cycle;
+
+    return g;
+}
+/*  End of PathFromPointsAndAngles.                                           */
 
 /* Variables for shifting and drawing.                                        */
 path g, g0, g1, gX, gU, gImU;
