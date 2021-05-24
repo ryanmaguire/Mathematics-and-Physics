@@ -18,12 +18,19 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*   Make sure _custom_arrows.asy, _asy_preamble_2d, and _euclidean are in    *
- *   your ASYMPTOTE_DIR environment variable. These are found in the          *
- *   asymptote/ folder of this project.                                       */
-import _asy_preamble_2d;
+/*  Draw the image on a PDF file.                                             */
+import settings;
+settings.outformat = "pdf";
+
+/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
+ *  your path when creating this figure.                                      */
 import _custom_arrows;
-import _euclidean;
+
+/*  Default pen used for drawing.                                             */
+defaultpen(black+linewidth(0.5pt)+fontsize(7pt));
+
+/*  Default size of arrowheads.                                               */
+real arsize = 5bp;
 
 /* Size of the output figure.                                                 */
 size(256);
@@ -34,9 +41,6 @@ pair X = (1, 0);
 
 /*  Path for the arrow.                                                       */
 path g = O--X;
-
-/*  Size of arrowhead.                                                        */
-real arsize = 5bp;
 
 /*  Displacements used to shift the path.                                     */
 real dy = -0.5;
@@ -69,3 +73,4 @@ draw(shift(3*dx, 1*dy)*g, black+dashed, EndSharpArrow(StealthHead, arsize));
 draw(shift(3*dx, 2*dy)*g, black+dashed, MidSharpArrow(StealthHead, arsize));
 draw(shift(3*dx, 3*dy)*g, black+dashed, SharpArrows(StealthHead, arsize));
 draw(shift(3*dx, 4*dy)*g, black+dashed, BeginSharpArrow(StealthHead, arsize));
+
