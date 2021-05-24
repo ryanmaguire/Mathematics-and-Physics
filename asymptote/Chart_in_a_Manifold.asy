@@ -18,22 +18,13 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Set default settings for the drawing.                                     */
+/*  Draw the image on a PDF file.                                             */
 import settings;
-if (settings.render < 0)
-    settings.render = 8;
+settings.outformat = "pdf";
 
-if (!settings.multipleView)
-    settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-settings.bw          = false;
-settings.cmyk        = false;
-viewportmargin       = (2, 2);
+/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
+ *  your path when creating this figure.                                      */
+import _custom_arrows;
 
 /* Size of the output figure.                                                 */
 size(256);
@@ -52,10 +43,6 @@ pen axesp  = black + linewidth(0.7pt) + fontsize(9pt);
 pen dashp  = defaultpen + linetype("8 4");
 pen labelp = defaultpen + fontsize(10pt);
 
-/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
- *  your path when creating this figure.                                      */
-import _custom_arrows;
-
 /* Given an array of pairs and an array of reals, draw a path between the     *
  * pairs with angle specified by the array of reals.                          */
 path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, int ArSize, bool closed)
@@ -65,7 +52,7 @@ path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, int ArSize, bool closed)
     int i;
 
     /*  Assert that the collection of points has at least 2 points.           */
-    assert(ArSize>1);
+    assert(ArSize > 1);
 
     /*  Set the start of the path.                                            */
     g = Pts[0]{dir(Dirs[0])}..Pts[1]{dir(Dirs[1])};
@@ -135,7 +122,7 @@ Label L = Label("$\mathbb{R}^{n}$", position=1);
 /*   Draw the y axis, adding the label R^n at the top of it.                  */
 draw(L, YAxes[0]--YAxes[1], E, axesp, SharpArrow(arsize));
 
-/*   Create the paths for X, U, and ImU using tools in _euclidean.asy.        */
+/*   Create the paths for X, U, and ImU using PathFromPointsAndAngles.        */
 gX   = PathFromPointsAndAngles(XPts, XAng, XN, true);
 gU   = PathFromPointsAndAngles(UPts, UAng, UN, true);
 gImU = PathFromPointsAndAngles(ImUPts, ImUAng, ImUN, true);
