@@ -26,25 +26,25 @@ settings.outformat = "pdf";
  *  your path when creating this figure.                                      */
 import _custom_arrows;
 
-/* Size of the output figure.                                                 */
+/*  Size of the output figure.                                                */
 size(256);
 
 /*  Default pen for drawing figures.                                          */
 defaultpen(black + linewidth(0.5pt) + fontsize(7pt));
 
 /*  A thinner pen for drawing.                                                */
-pen thinp  = black + linewidth(0.3pt);
+pen thinp = black + linewidth(0.3pt);
 
 /*  Default size of arrowheads.                                               */
 real arsize = 5bp;
 
 /*  Pen for drawing axes.                                                     */
-pen axesp  = black + linewidth(0.7pt) + fontsize(9pt);
+pen axesp = black + linewidth(0.7pt) + fontsize(9pt);
 
 /*  Filler for the triangles.                                                 */
-pen fillp = red+opacity(0.5);
+pen fillp = red + opacity(0.5);
 
-/* Given an array of pairs, draw a polygonal curve through the point.         */
+/*  Given an array of pairs, draw a polygonal curve through the points.       */
 path PolyFromPoints(pair[] Pts, int ArSize, bool closed)
 {
     /*  Declare necessary variables.                                          */
@@ -52,16 +52,16 @@ path PolyFromPoints(pair[] Pts, int ArSize, bool closed)
     int i;
 
     /*  Assert that the collection of points has at least 2 points.           */
-    assert(ArSize>1);
+    assert(ArSize > 1);
 
     /*  Start the path going from the zeroth point to the first.              */
-    g = Pts[0]--Pts[1];
+    g = Pts[0] -- Pts[1];
 
-    /* Loop through the array and construct the path.                         */
-    for (i=2; i<ArSize; ++i)
-        g = g--Pts[i];
+    /*  Loop through the array and construct the path.                        */
+    for (i = 2; i < ArSize; ++i)
+        g = g -- Pts[i];
 
-    /* If the closed Boolean is true, close the path into a cycle.            */
+    /*  If the closed Boolean is true, close the path into a cycle.           */
     if (closed)
         g = g--cycle;
 
@@ -77,20 +77,34 @@ real len = 1.2;
 transform T = scale(R, R);
 
 /*  The origin and points for the x and y axes.                               */
-pair O   = (0.0, 0.0);
+pair O = (0.0, 0.0);
 pair[] X = {(-len, 0.0), (len, 0.0)};
 pair[] Y = {(0.0, -len), (0.0, len)};
 
-/*  Points for the object inside circle.                                      */
-pair[] ObjPts = {T*expi(pi/4), T*expi(5pi/4), T*expi(3pi/4), T*expi(7pi/4)};
+/*  Points for the object inside the circle.                                  */
+pair[] ObjPts = {
+    T*expi(0.25*pi),
+    T*expi(1.25*pi),
+    T*expi(0.75*pi),
+    T*expi(1.75*pi)
+};
+
+/*  Number of points specified in the above array.                            */
 int ObjN = 4;
+
+/*  Construct a closed path through these points.                             */
+path g = PolyFromPoints(ObjPts, ObjN, true);
+
+/*  Labels for the axes.                                                      */
+Label X_Label = Label("$x$", position=1.0);
+Label Y_Label = Label("$y$", position=1.0);
 
 /*  Draw the circle.                                                          */
 draw(circle(O, R));
 
 /*  Draw and label the axes.                                                  */
-draw(Label("$x$", position=1), X[0]--X[1], S, axesp, SharpArrows(arsize));
-draw(Label("$y$", position=1), Y[0]--Y[1], W, axesp, SharpArrows(arsize));
+draw(X_Label, X[0] -- X[1], S, axesp, SharpArrows(arsize));
+draw(Y_Label, Y[0] -- Y[1], W, axesp, SharpArrows(arsize));
 
 /*  And draw the object inside of the circle.                                 */
-filldraw(PolyFromPoints(ObjPts, ObjN, true), fillp, thinp);
+filldraw(g, fillp, thinp);
