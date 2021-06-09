@@ -34,8 +34,8 @@ pen fpen = fontsize(7pt);
 
 /*  Size of the arrows, and coordinates for the labels.                       */
 real arsize = 5bp;
-pair A = (0.0,  0.0);
-pair B = (2.0,  0.0);
+pair A = (0.0, 0.0);
+pair B = (2.0, 0.0);
 pair C = (0.0, -2.0);
 pair D = (2.0, -2.0);
 

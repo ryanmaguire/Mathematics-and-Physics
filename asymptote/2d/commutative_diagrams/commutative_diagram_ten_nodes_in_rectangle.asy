@@ -36,28 +36,40 @@ pen fpen = fontsize(7pt);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Variable used for indexing.                                               */
-int i;
+int n;
+
+/*  The number of nodes to draw.                                              */
+int N_Nodes = 5;
+
+/*  Pairs for drawing the nodes later in the for-loop.                        */
+pair A, B, C, D;
 
 /*  size of the arrow heads.                                                  */
 real arsize = 5bp;
 
 /*  Loop over all of the points and label various functions and nodes.        */
-for(i=1; i<5; ++i)
+for (n = 1; n < N_Nodes; ++n)
 {
-    draw("$f_{"+string(i)+"}$", (2*i, 2)--(2*i,   0), 2*E, fpen,
-         SharpArrow(arsize), margins);
-    draw("$g_{"+string(i)+"}$", (2*i, 2)--(2*i+2, 2), 2*S, fpen,
-         SharpArrow(arsize), margins);
-    draw("$h_{"+string(i)+"}$", (2*i, 0)--(2*i+2, 0), 2*N, fpen,
-         SharpArrow(arsize), margins);
+    /*  Compute the new points for this part of the for-loop.                 */
+    A = (2.0*n, 2.0);
+    B = (2.0*n, 0.0);
+    C = (2.0*(n + 1.0), 2.0);
+    D = (2.0*(n + 1.0), 0.0);
 
-    label("$A_{"+string(i)+"}$", (2*i, 2));
-    label("$B_{"+string(i)+"}$", (2*i, 0));
+    /*  Draw arrows and label the functions between these nodes.              */
+    draw("$f_{"+string(n)+"}$", A -- B, 2*E, fpen, SharpArrow(arsize), margins);
+    draw("$g_{"+string(n)+"}$", A -- C, 2*S, fpen, SharpArrow(arsize), margins);
+    draw("$h_{"+string(n)+"}$", B -- D, 2*N, fpen, SharpArrow(arsize), margins);
+
+    /*  Label the actual nodes.                                               */
+    label("$A_{"+string(n)+"}$", A);
+    label("$B_{"+string(n)+"}$", B);
 }
+/*  End of for-loop drawing all but the last two nodes.                       */
 
-/*  Draw the rightmost arrows and labels.                                     */
-draw("$f_{"+string(i)+"}$", (2*i, 2)--(2*i, 0), 2*E, fpen,
-     SharpArrow(arsize), margins);
-
-label("$A_{"+string(i)+"}$", (2*i, 2));
-label("$B_{"+string(i)+"}$", (2*i, 0));
+/*  Label and draw the final nodes.                                           */
+A = (2.0*n, 2.0);
+B = (2.0*n, 0.0);
+draw("$f_{"+string(n)+"}$", A -- B, 2*E, fpen, SharpArrow(arsize), margins);
+label("$A_{"+string(n)+"}$", A);
+label("$B_{"+string(n)+"}$", B);

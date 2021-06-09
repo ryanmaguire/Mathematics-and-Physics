@@ -34,7 +34,7 @@ pen fpen = fontsize(7pt);
 
 /*  Mark coordinates for the points, and specify the arrow size.              */
 real arsize = 5bp;
-pair A = (0.0,  0.0);
+pair A = (0.0, 0.0);
 pair B = (0.0, -1.0);
 pair C = (0.0, -2.0);
 pair D = (1.0, -1.0);
