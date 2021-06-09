@@ -29,24 +29,25 @@ size(64);
 /*  Default pen used for labels.                                              */
 defaultpen(fontsize(9pt));
 
-/*  Pen used to label functions.                                              */
+/*  Pens used to label functions.                                             */
 pen fpen = fontsize(8pt);
+pen dpen = fpen+linetype("4 4");
 
 /*  Set arrow size, and mark three points for A, B, and C.                    */
 real arsize = 5bp;
 pair A = (0.0,  0.0);
-pair B = (0.0, -1.0);
-pair C = (1.0,  0.0);
+pair B = (1.0,  0.5);
+pair C = (1.0, -0.5);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$g$", B -- C, 2*SE, fpen, SharpArrow(arsize), margins);
-draw("$h$", A -- C, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$\alpha$", A -- B, NW,  fpen, SharpArrow(arsize), margins);
+draw("$\tilde{f}$", C -- B, E, dpen, SharpArrow(arsize), margins);
+draw("$f$", C -- A, SW,  fpen, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
+label("$X$", A);
+label("$C(X)$", B);
+label("$Y$", C);

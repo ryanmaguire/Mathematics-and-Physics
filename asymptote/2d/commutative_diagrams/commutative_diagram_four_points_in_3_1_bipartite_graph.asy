@@ -24,29 +24,33 @@
 import _custom_arrows;
 
 /*  Size of the output figure.                                                */
-size(64);
+size(128);
 
 /*  Default pen used for labels.                                              */
 defaultpen(fontsize(9pt));
 
 /*  Pen used to label functions.                                              */
-pen fpen = fontsize(8pt);
+pen fpen = fontsize(7pt);
 
-/*  Set arrow size, and mark three points for A, B, and C.                    */
+/*  Mark coordinates for the points, and specify the arrow size.              */
 real arsize = 5bp;
 pair A = (0.0,  0.0);
 pair B = (0.0, -1.0);
-pair C = (1.0,  0.0);
+pair C = (0.0, -2.0);
+pair D = (1.0, -1.0);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
+margin margins = TrueMargin(0.4cm, 0.4cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$g$", B -- C, 2*SE, fpen, SharpArrow(arsize), margins);
-draw("$h$", A -- C, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$f_{1}$", A -- D, 2*NE, fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", B -- D, 2*S, fpen, SharpArrow(arsize), margins);
+draw("$f_{3}$", C -- D, 2*SE, fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", B -- C, 2*W, fpen, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);
 label("$B$", B);
 label("$C$", C);
+label("$D$", D);

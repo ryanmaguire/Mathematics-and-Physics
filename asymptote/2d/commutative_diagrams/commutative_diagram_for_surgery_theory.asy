@@ -23,30 +23,71 @@
  *  ASYMPTOTE_DIR environment variable to include this.                       */
 import _custom_arrows;
 
-/*  Size of the output figure.                                                */
-size(64);
+/*  Size of output.                                                           */
+size(128);
 
-/*  Default pen used for labels.                                              */
+/*  Default font size for labels.                                             */
 defaultpen(fontsize(9pt));
 
-/*  Pen used to label functions.                                              */
-pen fpen = fontsize(8pt);
+/*  Transform for shifting later.                                             */
+transform T;
 
-/*  Set arrow size, and mark three points for A, B, and C.                    */
+/*  Pen used to label functions.                                              */
+pen fpen = fontsize(7pt);
+
+/*  Arrow size and coordinates for points.                                    */
 real arsize = 5bp;
-pair A = (0.0,  0.0);
-pair B = (0.0, -1.0);
-pair C = (1.0,  0.0);
+pair M  = (0.0,  0.0);
+pair BO = (1.0, -1.0);
+pair BG = (1.0,  0.0);
+pair GO = (1.0,  1.0);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$g$", B -- C, 2*SE, fpen, SharpArrow(arsize), margins);
-draw("$h$", A -- C, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$f$", BG -- BO, 2*E, fpen, SharpArrow(arsize), margins);
+draw("$\varphi$", M -- BG, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$\tilde{\varphi}$", M -- BO, 2*SW, fpen, SharpArrow(arsize), margins);
 
-/*  Label the points.                                                         */
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
+/*  Label points.                                                             */
+label("$M$", M);
+label("$BO$", BO);
+label("$BG$", BG);
+
+/*  Shift the labels by 2.                                                    */
+T = shift(2.0, 0.0);
+M = T*M;
+BO = T*BO;
+BG = T*BG;
+GO = T*GO;
+
+/*  Draw arrows.                                                              */
+draw("$f$", BG -- BO, 2*E, fpen, SharpArrow(arsize), margins);
+draw("$?$", M -- BG, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$\tilde{\varphi}$", M -- BO, 2*SW, fpen, SharpArrow(arsize), margins);
+
+/*  Label coordinates.                                                        */
+label("$M$", M);
+label("$BO$", BO);
+label("$BG$", BG);
+
+/*  Shift the labels right by 2 and down by 0.5.                              */
+T = shift(2.0, -0.5);
+M = T*M;
+BO = T*BO;
+BG = T*BG;
+GO = T*GO;
+
+/*  Draw the arrows.                                                          */
+draw("$f_{1}$", M -- GO, 2*NW, fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", M -- BG, 2*S,  fpen, SharpArrow(arsize), margins);
+draw("$f_{3}$", M -- BO, 2*SW, fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", GO -- BG, 2*E,  fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", BG -- BO, 2*E,  fpen, SharpArrow(arsize), margins);
+
+/*  Label the labels.                                                         */
+label("$M$", M);
+label("$BO$", BO);
+label("$BG$", BG);
+label("$G/O$", GO);

@@ -17,14 +17,6 @@ zoom = 1.0;
 currentprojection=orthographic(camera = camera_location, target = origin,
                                zoom = zoom, up = up_dir);
 
-currentlight=light(
-    gray(0.4),
-    specularfactor=1,
-    viewport=true,
-    (-0.5,-0.25,0.45),
-    (0.5,-0.5,0.5),
-    (0.5,0.5,0.75)
-);
 
 r = 0.1;
 R = 10;
