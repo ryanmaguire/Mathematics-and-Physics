@@ -24,7 +24,7 @@
 import _custom_arrows;
 
 /*  Size of output.                                                           */
-size(128);
+size(256);
 
 /*  Default font size for labels.                                             */
 defaultpen(fontsize(9pt));
@@ -37,10 +37,10 @@ pen fpen = fontsize(7pt);
 
 /*  Arrow size and coordinates for points.                                    */
 real arsize = 5bp;
-pair M  = (0.0,  0.0);
+pair M  = (0.0, 0.0);
+pair BG = (1.0, 0.0);
+pair GO = (1.0, 1.0);
 pair BO = (1.0, -1.0);
-pair BG = (1.0,  0.0);
-pair GO = (1.0,  1.0);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
@@ -81,10 +81,10 @@ GO = T*GO;
 
 /*  Draw the arrows.                                                          */
 draw("$f_{1}$", M -- GO, 2*NW, fpen, SharpArrow(arsize), margins);
-draw("$f_{2}$", M -- BG, 2*S,  fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", M -- BG, 2*S, fpen, SharpArrow(arsize), margins);
 draw("$f_{3}$", M -- BO, 2*SW, fpen, SharpArrow(arsize), margins);
-draw("$g_{1}$", GO -- BG, 2*E,  fpen, SharpArrow(arsize), margins);
-draw("$g_{2}$", BG -- BO, 2*E,  fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", GO -- BG, 2*E, fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", BG -- BO, 2*E, fpen, SharpArrow(arsize), margins);
 
 /*  Label the labels.                                                         */
 label("$M$", M);

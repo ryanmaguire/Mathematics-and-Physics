@@ -34,16 +34,16 @@ pen fpen = fontsize(7pt);
 
 /*  Arrow size and coordinates for labels.                                    */
 real arsize = 5bp;
-pair A = (0.0,  0.0);
-pair B = (1.0,  0.0);
+pair A = (0.0, 0.0);
+pair B = (1.0, 0.0);
 pair C = (0.0, -1.0);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*N,  fpen, SharpArrow(arsize), margins);
-draw("$\pi$", A -- C, 2*W,  fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- B, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$\pi$", A -- C, 2*W, fpen, SharpArrow(arsize), margins);
 draw("$\tilde{f}$", C -- B, 2*SE, fpen, SharpArrow(arsize), margins);
 
 /*  Add labels.                                                               */
