@@ -1,6 +1,6 @@
-// Boilerplate stuff.
-import _asy_preamble_3d;
-import _euclidean;
+import three;
+import graph3;
+
 size(256);
 
 triple camera_location, origin, up_dir;
@@ -14,17 +14,13 @@ origin = (0.0, 0.0, 0.0);
 up_dir = (0.0, 0.0, 1.0);
 zoom = 1.0;
 
+/*  Commonly used materials in 3D drawing.                                    */
+material blob = material(diffusepen=gray(0.7),
+                         emissivepen=gray(0.2),
+                         specularpen=gray(0.2));
+
 currentprojection=orthographic(camera = camera_location, target = origin,
                                zoom = zoom, up = up_dir);
-
-currentlight=light(
-    gray(0.4),
-    specularfactor=1,
-    viewport=true,
-    (-0.5,-0.25,0.45),
-    (0.5,-0.5,0.5),
-    (0.5,0.5,0.75)
-);
 
 r = 0.1;
 R = 10;
