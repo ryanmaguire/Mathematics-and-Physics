@@ -106,13 +106,16 @@ void draw_water(pair center, real size)
 /*  Function for drawing lightning.                                           */
 void draw_lightning(pair center, real size)
 {
+    /*  Shift the center slightly to the left.                                */
+    pair new_center = center - (0.1*size, 0.0);
+
     /*  Vertices for the lightning.                                           */
-    pair A = center + scale(size)*expi(0.35*pi);
-    pair B = center - (0.2*size, 0.05*size);
-    pair C = center + (0.1*size, -0.1*size);
-    pair D = center + scale(size)*expi(1.4*pi);
-    pair E = center + (0.6*size, 0.0);
-    pair F = center + (0.25*size, 0.15*size);
+    pair A = new_center + scale(size)*expi(0.35*pi);
+    pair B = new_center - (0.2*size, 0.05*size);
+    pair C = new_center + (0.1*size, -0.1*size);
+    pair D = new_center + scale(size)*expi(1.4*pi);
+    pair E = new_center + (0.6*size, 0.0);
+    pair F = new_center + (0.25*size, 0.15*size);
 
     /*  Path for the outline of the lightning.                                */
     path g = A -- B -- C -- D -- E -- F -- cycle;
