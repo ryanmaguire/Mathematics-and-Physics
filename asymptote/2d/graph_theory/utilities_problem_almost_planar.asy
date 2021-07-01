@@ -87,7 +87,7 @@ void draw_water(pair center, real size)
     pair A = new_center + (0.0, 2.2366*size);
 
     /*  The location of the reflection in the water.                          */
-    pair B = new_center + (0.0, 0.9*size);
+    pair B = new_center + (-0.3*size, 0.9*size);
 
     /*  Path for the outline of the water molecule.                           */
     path g = arc(new_center, size, 150.0, 390.0) -- A -- cycle;
@@ -95,8 +95,11 @@ void draw_water(pair center, real size)
     /*  Draw the water molecule.                                              */
     filldraw(g, lightblue, blue + linewidth(0.1pt));
 
+    /*  Path for the reflection.                                              */
+    g = rotate(60.0)*ellipse((0.0, 0.0), 0.4*size, 0.2*size);
+
     /*  Add some reflection.                                                  */
-    filldraw(rotate(60.0) * ellipse(B, 0.4*size, 0.2*size), white, lightblue);
+    filldraw(shift(B)*g, white, lightblue);
 }
 /*  End of draw_water.                                                        */
 
