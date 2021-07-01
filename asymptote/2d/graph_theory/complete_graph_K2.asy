@@ -25,6 +25,10 @@ size(128);
 pair A = (0.0, 0.0);
 pair B = (1.0, 0.0);
 real radius = 0.05;
+
+/*  Fill in two dots for the vertices.                                        */
 filldraw(circle(A, radius), black);
 filldraw(circle(B, radius), black);
+
+/*  And draw the edge.                                                        */
 draw(A -- B);

@@ -59,3 +59,4 @@ for (m = 0; m < N; ++m)
             draw(V[n] -- V[m]);
     }
 }
+/*  End of for loop drawing edges.                                            */

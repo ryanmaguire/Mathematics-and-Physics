@@ -28,14 +28,14 @@ pair[] B = {(-0.5, 1.0), (0.5, 0.0)};
 /*  Radius of the dots.                                                       */
 real radius = 0.02;
 
+/*  Draw the edges.                                                           */
+draw(A[0] -- B[0]);
+draw(A[0] -- B[1]);
+draw(A[1] -- B[0]);
+draw(A[1] -- B[1]);
+
 /*  Dots for the vertices of the graph.                                       */
 filldraw(circle(A[0], radius), blue, black);
 filldraw(circle(A[1], radius), blue, black);
 filldraw(circle(B[0], radius), red, black);
 filldraw(circle(B[1], radius), red, black);
-
-/*  And draw the edges.                                                       */
-draw(A[0] -- B[0]);
-draw(A[0] -- B[1]);
-draw(A[1] -- B[0]);
-draw(A[1] -- B[1]);

@@ -27,7 +27,8 @@ pair[] V;
 /*  Variables for indexing.                                                   */
 int m, n;
 
-/*  Number of points in K_5.                                                  */
+/*  Number of points in a triangle. We'll draw K_5 via a triangle, a point    *
+ *  inside the triangle, and a point outside of it.                           */
 int N = 3;
 
 /*  Variable for the angle a point has on the circle.                         */
@@ -67,3 +68,4 @@ for (m = 0; m < N + 2; ++m)
             draw(V[n] -- V[m]);
     }
 }
+/*  End of for loop drawing edges.                                            */

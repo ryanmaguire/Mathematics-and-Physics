@@ -72,14 +72,14 @@ draw(V[2] -- V[4]);
 dy = fabs(edge - V[1].y) + fabs(-edge - V[3].y);
 dx = fabs(V[1].x - V[3].x);
 
-x0 = V[1].x + dx * (fabs(edge - V[1].y) / dy);
-x1 = V[1].x - dx * (fabs(edge - V[1].y) / dy);
-
-draw(V[1] -- (x1, edge));
-draw((x1, -edge) -- V[3]);
+x0 = V[1].x - dx * (fabs(edge - V[1].y) / dy);
+x1 = V[1].x + dx * (fabs(edge - V[1].y) / dy);
 
 draw(V[1] -- (x0, edge));
-draw((x0, -edge) -- V[4]);
+draw((x0, -edge) -- V[3]);
+
+draw(V[1] -- (x1, edge));
+draw((x1, -edge) -- V[4]);
 
 dx = fabs(edge - V[3].x) + fabs(-edge - V[0].x);
 dy = fabs(V[0].y - V[3].y);
