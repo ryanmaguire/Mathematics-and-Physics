@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(1024);
+size(128);
 
 /*  Array for vertices.                                                       */
 pair[] V;
@@ -28,16 +28,19 @@ pair[] V;
 int m, n;
 
 /*  Number of points in a circle.                                             */
-int N = 8;
+int N = 2;
 
 /*  The number of circles.                                                    */
-int number_of_circles = 8;
+int number_of_circles = 16;
 
 /*  Variable for the angle a point has on a given circle.                     */
 real theta;
 
 /*  And a shift in the angle for alternating circles.                         */
 real shift;
+
+/*  Radius of the dots representing vertices.                                 */
+real radius = 0.4;
 
 /*  Loop through and create the vertices.                                     */
 for (m = 0; m < number_of_circles; ++m)
@@ -76,4 +79,4 @@ for (m = 0; m < number_of_circles * N; ++m)
 
 /*  Place a dot on all of the vertices.                                       */
 for (n = 0; n < number_of_circles * N; ++n)
-    filldraw(circle(V[n], 0.05), blue, black);
+    filldraw(circle(V[n], radius), blue, black);
