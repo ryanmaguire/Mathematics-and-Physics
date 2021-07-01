@@ -52,6 +52,7 @@ draw(A[1] -- B[1]);
 draw(A[1] -- B[2]);
 draw(A[2] -- B[2]);
 
+/*  Some of the edges need to curve around the torus.                         */
 draw(A[0] -- (-edge, 0.0));
 draw((edge, 0.0) -- B[2]);
 
@@ -63,7 +64,6 @@ draw((-0.5, -edge) -- A[1]);
 
 draw(A[2] -- (0.5, -edge));
 draw((0.5, edge) -- B[1]);
-
 
 /*  Draw in lines to indicate the square.                                     */
 draw(V0 -- V1, blue + linewidth(1.0));
