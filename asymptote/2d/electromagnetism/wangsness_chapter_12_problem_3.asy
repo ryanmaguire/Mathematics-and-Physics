@@ -52,6 +52,7 @@ pair A = (1.0, 2.0);
 
 /*  Radius of the sphere.                                                     */
 real R = 1.4;
+
 real thetar = 0.15;
 real yscale = 0.5;
 real escale = sqrt(2.0*yscale*yscale/(1.0+yscale*yscale));
