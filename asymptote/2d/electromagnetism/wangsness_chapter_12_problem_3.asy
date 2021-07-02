@@ -22,7 +22,6 @@
  *  asymptote/ folder of this project. You'll need to edit the                *
  *  ASYMPTOTE_DIR environment variable to include this.                       */
 import custom_arrows;
-import graph;
 
 /*  The opacity will not render correctly for EPS format, so use PDF.         */
 import settings;
@@ -43,123 +42,186 @@ pen cpen = black + linewidth(0.5pt);
 /*  Pen for drawing dashed lines.                                             */
 pen dpen = black + linewidth(0.3pt) + dashed;
 
-/*  Points for the origin, x, y, and z axes, and the point on the sphere.     */
+/*  Points for the origin and the point on the sphere.                        */
 pair O = (0.0, 0.0);
-pair X = (-sqrt(0.5), -sqrt(0.5));
-pair Y = (1.0, 0.0);
-pair Z = (0.0, 1.0);
 pair A = (1.0, 2.0);
 
-/*  Radius of the sphere.                                                     */
+/*  Radius of the drawing.                                                    */
 real R = 1.4;
 
+/*  Radius for a dot indicating a point.                                      */
+real rDot = 0.02;
+
+/*  Radius of the sphere.                                                     */
+real sphere_radius = 1.0;
+
+/*  Radius of the arc of circle used to represent an angle.                   */
 real thetar = 0.15;
+
+/*  The scale factor used to draw an arc of an ellipse to represent the       *
+ *  equator in the sphere.                                                    */
 real yscale = 0.5;
-real escale = sqrt(2.0*yscale*yscale/(1.0+yscale*yscale));
+
+/*  Eccentricity factor for drawing the prime meridian in the sphere.         */
+real escale = sqrt(2.0*yscale*yscale / (1.0 + yscale*yscale));
+
+/*  Size of an arrow.                                                         */
 real arsize = 5bp;
+real small_arr = 4bp;
+
+/*  Default font size for labels.                                             */
 real fsize  = 7pt;
+
+/*  Smaller font size for smaller labels.                                     */
 real fsize2 = 5pt;
+
+/*  And declare a path to be used later for drawing.                          */
 path g;
 
+/*  Margins to prevent lines and arcs from overlapping labels.                */
 margin margins = TrueMargin(0.0, 0.07cm);
 
-pair xyzpoint(real x, real y, real z){
-    return scale(x)*X+scale(y)*Y+scale(z)*Z;
-}
+/*  These 2D points help mimic a 3D Cartesian coordinate system.              */
+pair X = (-0.7071067811865476, -0.7071067811865476);
+pair Y = (1.0, 0.0);
+pair Z = (0.0, 1.0);
 
-pair Plane2Sphere(pair P){
-    real u = 2.0*P.x;
-    real v = 2.0*P.y;
-    real w = 1.0+P.x^2+P.y^2;
-    u /= w;
-    v /= w;
-    w = (w-2.0)/w;
+/*  Function for mimcing 3D drawings with 2D vectors.                         */
+pair xyzpoint(real x, real y, real z)
+{
+    return scale(x)*X + scale(y)*Y + scale(z)*Z;
+}
+/*  End of xyzpoint.                                                          */
+
+/*  Inverse Stereographic projection from the plane to the unit sphere.       */
+pair Plane2Sphere(pair P)
+{
+    real w = 1.0 + P.x*P.x + P.y*P.y;
+    real rcpr_w = 1.0 / w;
+    real u = 2.0*P.x*rcpr_w;
+    real v = 2.0*P.y*rcpr_w;
+    w = (w - 2.0)/w;
     return xyzpoint(u, v, w);
 }
+/*  End of Plane2Sphere.                                                      */
 
-pair Plane2Plane(pair P){
-    real u = 2.0*P.x;
-    real v = 2.0*P.y;
-    real w = 1.0+P.x^2+P.y^2;
-    u /= w;
-    v /= w;
+/*  Function for computing the orthgraphic projection of the point on the     *
+ *  unit sphere corresponding to the inverse stereographic projection of a    *
+ *  given point in the plane.                                                 */
+pair Plane2Plane(pair P)
+{
+    real w = 1.0 + P.x*P.x + P.y*P.y;
+    real rcpr_w = 1.0 / w;
+    real u = 2.0*P.x*rcpr_w;
+    real v = 2.0*P.y*rcpr_w;
     return xyzpoint(u, v, 0.0);
 }
+/*  End of Plane2Plane.                                                       */
 
-pair XProj(pair U){
-    real EPS = 0.01;
-    real dx = 0.005;
-    real u = U.x;
+/*  Function for projecting a point down the x-axis in 3D coordinates.        */
+pair XProj(pair U)
+{
+    real u = U.y;
     real v = U.y;
-    if (u < v){
-        while (v-u>EPS) u += dx;
-    }
-    else {
-        while (u-v>EPS) u -= dx;
-    }
     return (u, v);
 }
+/*  End of XProj.                                                             */
 
-pair YProj(pair U){
-    real EPS = 0.02;
-    real dy = 0.01;
-    real u = U.x;
-    real v = U.y;
-    if (v > 0){
-        while (v>EPS){
-            u -= dy;
-            v -= dy;
-        }
-    }
-    else {
-        while (v<-EPS){
-            u += dy;
-            v += dy;
-        }
-    }
+/*  Function for projection down the y-axis in 3D coordinates.                */
+pair YProj(pair U)
+{
+    real u = U.x - U.y;
+    real v = 0.0;
     return (u, v);
 }
+/*  End of YProj.                                                             */
 
-real AzAngle(pair U){
-    real u = 2.0*U.x;
-    real v = 2.0*U.y;
-    real w = 1.0+U.x^2+U.y^2;
-    u /= w;
-    v /= w;
-    real rho = sqrt(u*u+v*v);
+/*  Function for computing the azimuthal angle of a point in the xy-plane.    */
+real AzAngle(pair P)
+{
+    real w = 1.0 + P.x*P.x + P.y*P.y;
+    real rcpr_w = 1.0 / w;
+    real u = 2.0*P.x*rcpr_w;
+    real v = 2.0*P.y*rcpr_w;
+    real rho = sqrt(u*u + v*v);
     w = (w-2.0)/w;
-    return 180*atan(rho/w)/pi;
+
+    /*  The value 180/pi is roughly 57.29577951308232. Most drawing functions *
+     *  unfortunately want angles in degrees.                                 */
+    return 57.29577951308232*atan(rho/w);
 }
+/*  End of AzAngle.                                                           */
 
+/*  Compute the point on the sphere from the given point in the plane, and    *
+ *  computes the projection onto the unit disk in the xy-plane.               */
 pair PointOnSphere = Plane2Sphere(A);
-pair PointOnPlane  = Plane2Plane(A);
-real theta         = AzAngle(A);
+pair PointOnPlane = Plane2Plane(A);
 
-draw(Label("$x$", position=1.0, SW), O--scale(R)*X, apen, SharpArrow(arsize));
-draw(Label("$y$", position=1.0, E),  O--scale(R)*Y, apen, SharpArrow(arsize));
-draw(Label("$z$", position=1.0, N),  O--scale(R)*Z, apen, SharpArrow(arsize));
-draw(PointOnPlane--XProj(PointOnPlane), dpen);
-draw(PointOnPlane--YProj(PointOnPlane), dpen);
-draw(PointOnSphere--PointOnPlane, dpen);
-draw(O--PointOnPlane, dpen);
-draw(Label("$a$", position=0.7, W, fontsize(fsize2)),
-     O--scale(escale)*(-X.x, X.y), cpen);
-filldraw(circle(O, 1), fpen, cpen);
+/*  Get the angle this point makes in the plane.                              */
+real theta = AzAngle(A);
 
-g = scale(1.0, yscale)*arc((0.0), 1.0, 180, 360);
-draw(g, cpen);
+/*  Points for drawing the three axes.                                        */
+pair XEnd = scale(R)*X;
+pair YEnd = scale(R)*Y;
+pair ZEnd = scale(R)*Z;
 
-arsize = 4bp;
+/*  Point on the equator to later indicate the radius of the sphere.          */
+pair Equator = scale(escale)*(-X.x, X.y);
 
-draw(Z{X}..(scale(escale)*X){S}, cpen);
-draw(Label("$\mathbf{r}$", position=0.4, fontsize(fsize)), O--PointOnSphere, N,
-     cpen+blue, SharpArrow(StealthHead, arsize), margins);
-draw(Label("$\mathbf{v}$", position=0.4, fontsize(fsize)),
-     PointOnSphere--(PointOnSphere+(0.2, 0.3)), W,
-     cpen+red, SharpArrow(StealthHead, arsize), margins);
-filldraw(circle(PointOnSphere, 0.02), black);
+/*  And a point for the prime meridian.                                       */
+pair PrimeMeridian = scale(escale)*X;
 
-draw(Label("$\theta$", position=1.7, N, fontsize(fsize2)),
-     arc(O, thetar, 90, theta));
+/*  Labels for the axes.                                                      */
+Label X_Label = Label("$x$", position=1.0, SW, fontsize(fsize));
+Label Y_Label = Label("$y$", position=1.0, E, fontsize(fsize));
+Label Z_Label = Label("$z$", position=1.0, N, fontsize(fsize));
 
+/*  Draw the axes.                                                            */
+draw(X_Label, O -- XEnd, apen, SharpArrow(arsize));
+draw(Y_Label, O -- YEnd, apen, SharpArrow(arsize));
+draw(Z_Label, O -- ZEnd, apen, SharpArrow(arsize));
+
+/*  Draw dashed lines to indicate where the point is in the xy-plane.         */
+draw(PointOnPlane -- XProj(PointOnPlane), dpen);
+draw(PointOnPlane -- YProj(PointOnPlane), dpen);
+
+/*  And drop a perpendicular dashed line to indicate the z component.         */
+draw(PointOnSphere -- PointOnPlane, dpen);
+
+/*  Draw a dashed line from the origin to the xy projection to show the angle.*/
+draw(O -- PointOnPlane, dpen);
+
+/*  A label for the radius of the sphere, which is "a" in the problem.        */
+Label Equator_Label = Label("$a$", position=0.7, W, fontsize(fsize2));
+
+/*  Draw and label a line from the origin to the equator.                     */
+draw(Equator_Label, O -- Equator, cpen);
+
+/*  Fill in the spherical region.                                             */
+filldraw(circle(O, sphere_radius), fpen, cpen);
+
+/*  Draw the equator.                                                         */
+draw(scale(1.0, yscale)*arc(O, sphere_radius, 180, 360), cpen);
+
+/*  Draw the prime meridian.                                                  */
+draw(Z{X} .. PrimeMeridian{S}, cpen);
+
+/*  Label for the position and velocity vectors.                              */
+Label Pos_Label = Label("$\mathbf{r}$", position=0.4, N, fontsize(fsize));
+Label Vec_Label = Label("$\mathbf{v}$", position=0.4, W, fontsize(fsize));
+
+/*  Draw the position and velocity vectors.                                   */
+draw(Pos_Label, O -- PointOnSphere, cpen + blue,
+     SharpArrow(StealthHead, small_arr), margins);
+draw(Vec_Label, PointOnSphere -- (PointOnSphere+(0.2, 0.3)), cpen + red,
+     SharpArrow(StealthHead, small_arr), margins);
+
+/*  Draw a dot for the point of interest.                                     */
+filldraw(circle(PointOnSphere, rDot), black);
+
+/*  Draw and label the angle.                                                 */
+Label Theta_Label = Label("$\theta$", position=0.7, N, fontsize(fsize2));
+draw(Theta_Label, arc(O, thetar, 90, theta), cpen);
+
+/*  Label the charge on the sphere Q.                                         */
 label("$Q$", (-0.5, 0.7), fontsize(fsize));
