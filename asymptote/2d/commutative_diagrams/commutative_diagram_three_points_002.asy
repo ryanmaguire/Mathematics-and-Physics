@@ -18,16 +18,16 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Make sure _custom_arrows.asy is in your path. This file is found in the   *
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
  *  asymptote/ folder of this project. You'll need to edit the                *
  *  ASYMPTOTE_DIR environment variable to include this.                       */
-import _custom_arrows;
+import custom_arrows;
 
 /*  Size of the output figure.                                                */
 size(64);
 
 /*  Default pen used for labels.                                              */
-defaultpen(fontsize(9pt));
+defaultpen(fontsize(7pt));
 
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
