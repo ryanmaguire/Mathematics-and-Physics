@@ -18,16 +18,17 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Draw the image on a PDF file.                                             */
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
+import custom_arrows;
+
+/*  The opacity will not render correctly for EPS format, so use PDF.         */
 import settings;
 settings.outformat = "pdf";
 
-/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
- *  your path when creating this figure.                                      */
-import _custom_arrows;
-
 /*  Size of the output figure.                                                */
-size(256);
+size(128);
 
 /*  Default pen for drawing figures.                                          */
 defaultpen(black + linewidth(0.5pt) + fontsize(7pt));
@@ -49,7 +50,7 @@ path PolyFromPoints(pair[] Pts, int ArSize, bool closed)
 {
     /*  Declare necessary variables.                                          */
     path g;
-    int i;
+    int n;
 
     /*  Assert that the collection of points has at least 2 points.           */
     assert(ArSize > 1);
@@ -58,12 +59,12 @@ path PolyFromPoints(pair[] Pts, int ArSize, bool closed)
     g = Pts[0] -- Pts[1];
 
     /*  Loop through the array and construct the path.                        */
-    for (i = 2; i < ArSize; ++i)
-        g = g -- Pts[i];
+    for (n = 2; n < ArSize; ++n)
+        g = g -- Pts[n];
 
     /*  If the closed Boolean is true, close the path into a cycle.           */
     if (closed)
-        g = g--cycle;
+        g = g -- cycle;
 
     return g;
 }

@@ -18,16 +18,13 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Draw the image on a PDF file.                                             */
-import settings;
-settings.outformat = "pdf";
-
-/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
- *  your path when creating this figure.                                      */
-import _custom_arrows;
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
+import custom_arrows;
 
 /*  Size of the output figure.                                                */
-size(256);
+size(128);
 
 /*  Default pen for drawing figures.                                          */
 defaultpen(black + linewidth(0.5pt) + fontsize(7pt));
@@ -39,7 +36,7 @@ real arsize = 5bp;
 pen axesp = black + linewidth(0.7pt) + fontsize(9pt);
 
 /*  Radius of the big circle, length of the axes, and radius of circle        *
- *  for used for indicating an angle.                                         */
+ *  that is used to indicate an angle.                                        */
 real R = 1.0;
 real len = 1.8;
 real rAng = 0.2;
