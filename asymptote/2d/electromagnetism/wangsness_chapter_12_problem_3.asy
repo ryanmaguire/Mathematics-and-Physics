@@ -1,34 +1,56 @@
-// Seting output format to "pdf".
-import settings;
+/******************************************************************************
+ *                                 LICENSE                                    *
+ ******************************************************************************
+ *  This file is part of Mathematics-and-Physics.                             *
+ *                                                                            *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************/
+
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
+import custom_arrows;
 import graph;
-import _custom_arrows;
 
-if(settings.render < 0)    settings.render    = 4;
-if(!settings.multipleView) settings.batchView = false;
+/*  The opacity will not render correctly for EPS format, so use PDF.         */
+import settings;
+settings.outformat = "pdf";
 
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
-
-// Size of the output figure.
+/*  Size of the output figure.                                                */
 size(128);
 
-pen fpen = gray(0.7)+opacity(0.5);
-pen apen = black+linewidth(1.0pt);
-pen cpen = black+linewidth(0.5pt);
-pen dpen = black+linewidth(0.3pt)+dashed;
+/*  Pen for filling in the sphere.                                            */
+pen fpen = gray(0.7) + opacity(0.5);
 
+/*  Pen for drawing axes.                                                     */
+pen apen = black + linewidth(1.0pt);
+
+/*  Normal drawing pen.                                                       */
+pen cpen = black + linewidth(0.5pt);
+
+/*  Pen for drawing dashed lines.                                             */
+pen dpen = black + linewidth(0.3pt) + dashed;
+
+/*  Points for the origin, x, y, and z axes, and the point on the sphere.     */
 pair O = (0.0, 0.0);
 pair X = (-sqrt(0.5), -sqrt(0.5));
 pair Y = (1.0, 0.0);
 pair Z = (0.0, 1.0);
 pair A = (1.0, 2.0);
 
+/*  Radius of the sphere.                                                     */
 real R = 1.4;
 real thetar = 0.15;
 real yscale = 0.5;
