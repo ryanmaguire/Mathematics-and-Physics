@@ -18,10 +18,10 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Make sure _custom_arrows.asy is in your path. This file is found in the   *
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
  *  asymptote/ folder of this project. You'll need to edit the                *
  *  ASYMPTOTE_DIR environment variable to include this.                       */
-import _custom_arrows;
+import custom_arrows;
 
 /*  Size of output.                                                           */
 size(256);
@@ -86,7 +86,7 @@ draw("$f_{3}$", M -- BO, 2*SW, fpen, SharpArrow(arsize), margins);
 draw("$g_{1}$", GO -- BG, 2*E, fpen, SharpArrow(arsize), margins);
 draw("$g_{2}$", BG -- BO, 2*E, fpen, SharpArrow(arsize), margins);
 
-/*  Label the labels.                                                         */
+/*  Label the points.                                                         */
 label("$M$", M);
 label("$BO$", BO);
 label("$BG$", BG);
