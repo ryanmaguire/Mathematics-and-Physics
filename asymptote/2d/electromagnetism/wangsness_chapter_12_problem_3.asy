@@ -70,13 +70,10 @@ real arsize = 5bp;
 real small_arr = 4bp;
 
 /*  Default font size for labels.                                             */
-real fsize  = 7pt;
+real fsize = 7pt;
 
 /*  Smaller font size for smaller labels.                                     */
 real fsize2 = 5pt;
-
-/*  And declare a path to be used later for drawing.                          */
-path g;
 
 /*  Margins to prevent lines and arcs from overlapping labels.                */
 margin margins = TrueMargin(0.0, 0.07cm);
@@ -86,7 +83,7 @@ pair X = (-0.7071067811865476, -0.7071067811865476);
 pair Y = (1.0, 0.0);
 pair Z = (0.0, 1.0);
 
-/*  Function for mimcing 3D drawings with 2D vectors.                         */
+/*  Function for mimicing 3D drawings with 2D vectors.                        */
 pair xyzpoint(real x, real y, real z)
 {
     return scale(x)*X + scale(y)*Y + scale(z)*Z;
@@ -96,6 +93,10 @@ pair xyzpoint(real x, real y, real z)
 /*  Inverse Stereographic projection from the plane to the unit sphere.       */
 pair Plane2Sphere(pair P)
 {
+    /*  To compute the factors for stereographic projection we solve where    *
+     *  the line passing through (0, 0, 1) and (x, y, z) hits the xy-plane.   *
+     *  Inverse stereographic projection goes in reverse, from the plane back *
+     *  to the sphere via the same line.                                      */
     real w = 1.0 + P.x*P.x + P.y*P.y;
     real rcpr_w = 1.0 / w;
     real u = 2.0*P.x*rcpr_w;
@@ -110,6 +111,8 @@ pair Plane2Sphere(pair P)
  *  given point in the plane.                                                 */
 pair Plane2Plane(pair P)
 {
+    /*  Same procedure as inverse stereographic projection, but set the z     *
+     *  term to zero.                                                         */
     real w = 1.0 + P.x*P.x + P.y*P.y;
     real rcpr_w = 1.0 / w;
     real u = 2.0*P.x*rcpr_w;
@@ -136,8 +139,8 @@ pair YProj(pair U)
 }
 /*  End of YProj.                                                             */
 
-/*  Function for computing the azimuthal angle of a point in the xy-plane.    */
-real AzAngle(pair P)
+/*  Function for computing the zenith angle of a point in the xy-plane.       */
+real ZenithAngle(pair P)
 {
     real w = 1.0 + P.x*P.x + P.y*P.y;
     real rcpr_w = 1.0 / w;
@@ -150,15 +153,15 @@ real AzAngle(pair P)
      *  unfortunately want angles in degrees.                                 */
     return 57.29577951308232*atan(rho/w);
 }
-/*  End of AzAngle.                                                           */
+/*  End of ZenithAngle.                                                       */
 
 /*  Compute the point on the sphere from the given point in the plane, and    *
- *  computes the projection onto the unit disk in the xy-plane.               */
+ *  compute the projection onto the unit disk in the xy-plane.                */
 pair PointOnSphere = Plane2Sphere(A);
 pair PointOnPlane = Plane2Plane(A);
 
 /*  Get the angle this point makes in the plane.                              */
-real theta = AzAngle(A);
+real theta = ZenithAngle(A);
 
 /*  Points for drawing the three axes.                                        */
 pair XEnd = scale(R)*X;
