@@ -29,7 +29,7 @@ import graph;
 /*  Size of the figure.                                                       */
 size(128);
 
-/*  Default pen used for the axes.                                            */
+/*  Default pen used for the axes and labels.                                 */
 defaultpen(linewidth(0.7pt) + fontsize(7pt));
 
 /*  Size of arrow heads.                                                      */
