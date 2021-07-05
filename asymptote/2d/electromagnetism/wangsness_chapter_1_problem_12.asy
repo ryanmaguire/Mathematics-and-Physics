@@ -23,6 +23,9 @@
  *  ASYMPTOTE_DIR environment variable to include this.                       */
 import custom_arrows;
 
+/*  Needed for drawing the sphere.                                            */
+import graph;
+
 /*  The opacity will not render correctly for EPS format, so use PDF.         */
 import settings;
 settings.outformat = "pdf";
@@ -36,6 +39,13 @@ defaultpen(linewidth(0.7pt) + fontsize(7pt));
 /*  Pens for drawing arrows.                                                  */
 pen redpen = linewidth(0.7pt) + red;
 pen bluepen = linewidth(0.7pt) + blue;
+
+/*  Pens for radial shading.                                                  */
+pen rpen0 = white + opacity(0.5);
+pen rpen1 = black + opacity(0.5);
+
+/*  Center for the radial shading.                                            */
+pair C = (-0.04, 0.3);
 
 /*  Pen for the infinitesimal area.                                           */
 pen rectpen = orange;
@@ -54,7 +64,7 @@ real small_font = 5pt;
 pair xyzpoint(real x, real y, real z)
 {
     /*  Pairs for the points. The help convert from 2D coordinates to 3D.     */
-    pair X = (-0.7071067811865476, -0.7071067811865476);
+    pair X = (-0.5, -0.5);
     pair Y = (1.0, 0.0);
     pair Z = (0.0, 1.0);
 
@@ -74,18 +84,38 @@ pair O = (0.0, 0.0);
 /*  Radius of the sphere.                                                     */
 real r = 0.7;
 
-/*  Points on the sphere.                                                     */
-pair P0 = scale(r)*X;
-pair P1 = scale(r)*Y;
+/*  Function for drawing the three arcs of the sphere.                        */
+pair sphere_arcs(real t)
+{
+    /*  Angle for different parts of the curve.                               */
+    real theta;
+    if (t < 0.0)
+        return scale(r)*xyzpoint(0.0, 1.0, 0.0);
+    else if (t < 1.0)
+    {
+        theta = 0.5*pi*t;
+        return scale(r)*xyzpoint(0.0, cos(theta), sin(theta));
+    }
+    else if (t < 2.0)
+    {
+        theta = 0.5*pi*(t - 1.0);
+        return scale(r)*xyzpoint(sin(theta), 0.0, cos(theta));
+    }
+    else if (t < 3.0)
+    {
+        theta = 0.5*pi*(t - 2.0);
+        return scale(r)*xyzpoint(cos(theta), sin(theta), 0.0);
+    }
+    else
+        return scale(r)*xyzpoint(0.0, 1.0, 0.0);
+}
+/*  End of sphere_arcs.                                                       */
+
+/*  Number of samples for the sphere.                                         */
+int n_samples = 120;
 
 /*  The point of interest on the sphere.                                      */
 pair Q = (0.2, 0.2);
-
-/*  Path for the sphere.                                                      */
-path g = arc(O, r, 0.0, 90.0){SW} .. {S}P0{E} .. P1{NE} -- cycle;
-
-/*  Pen for filling in the sphere.                                            */
-pen fillp = grey + opacity(0.5);
 
 /*  Pairs for displacements to create the infinitesimal area.                 */
 pair dx = (0.05, 0.00);
@@ -95,6 +125,9 @@ pair ds = (0.035, 0.035);
 pair A_Start = Q + scale(0.5)*(dx + ds);
 pair Z_End = A_Start + (0.0, arlength);
 pair N_End = A_Start + scale(arlength)*expi(0.25*pi);
+
+/*  Path for the arc.                                                         */
+path g = graph(sphere_arcs, 0.0, 3.0, n_samples);
 
 /*  Labels for the arrows.                                                    */
 Label Z_Label = Label("$\hat{\mathbf{z}}$", position=1.0);
@@ -106,7 +139,10 @@ draw(Label("$y$", position=1.0), O -- Y, E, SharpArrow(arsize));
 draw(Label("$z$", position=1.0), O -- Z, N, SharpArrow(arsize));
 
 /*  Color in the sphere.                                                      */
-filldraw(g, fillp, black);
+radialshade(g -- cycle, rpen0, C, 0.0, rpen1, C, r);
+
+/*  Draw the outline of the sphere.                                           */
+draw(g -- cycle);
 
 /*  Draw an arrow for the z direction.                                        */
 draw(Z_Label, A_Start -- Z_End, redpen, SharpArrow(arsize));
@@ -118,4 +154,4 @@ draw(N_Label, A_Start -- N_End, bluepen, SharpArrow(arsize));
 filldraw(Q -- (Q+dx) -- (Q+dx+ds) -- (Q+ds) -- cycle, rectpen);
 
 /*  Label the infinitesimal area.                                             */
-label("$\textrm{d}a$", A_Start, S, fontsize(small_font));
+label("$\textrm{d}a$", A_Start, scale(2.0)*S, fontsize(small_font));
