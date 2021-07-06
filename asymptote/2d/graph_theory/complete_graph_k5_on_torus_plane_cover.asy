@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(128);
+size(512);
 
 /*  Array for vertices.                                                       */
 pair[] V;
@@ -29,6 +29,12 @@ int m, n;
 
 /*  Number of points in K_5.                                                  */
 int N = 5;
+
+/*  The number of squares to draw in each axis.                               */
+int number_of_squares = 8;
+
+/*  Transform for shifting.                                                   */
+transform T;
 
 /*  Variable for the angle a point has on the circle.                         */
 real theta;
@@ -53,44 +59,55 @@ for (n = 0; n < N; ++n)
 
     /*  And compute the position of the point.                                */
     V[n] = expi(theta);
-
-    /*  Draw a dot indicating the vertex.                                     */
-    dot(V[n]);
 }
 /*  End of for loop computing the vertices.                                   */
 
-/*  Draw the edges.                                                           */
-draw(V[0] -- V[1]);
-draw(V[0] -- V[2]);
-draw(V[1] -- V[2]);
-draw(V[2] -- V[3]);
-draw(V[3] -- V[4]);
-draw(V[0] -- V[4]);
-draw(V[2] -- V[4]);
-
-/*  The next edges need to wrap around the torus, Pac-Man style.              */
 dy = fabs(edge - V[1].y) + fabs(-edge - V[3].y);
 dx = fabs(V[1].x - V[3].x);
 
 x0 = V[1].x - dx * (fabs(edge - V[1].y) / dy);
 x1 = V[1].x + dx * (fabs(edge - V[1].y) / dy);
 
-draw(V[1] -- (x0, edge));
-draw((x0, -edge) -- V[3]);
-
-draw(V[1] -- (x1, edge));
-draw((x1, -edge) -- V[4]);
-
 dx = fabs(edge - V[0].x) + fabs(-edge - V[3].x);
 dy = V[3].y - V[0].y;
 
 y0 = V[0].y + dy * (fabs(edge - V[0].x) / dx);
 
-draw(V[3] -- (-edge, y0));
-draw((edge, y0) -- V[0]);
+for (m = 0; m < number_of_squares; ++m)
+{
+    for (n = 0; n < number_of_squares; ++n)
+    {
+        T = shift(2.0 * edge *m, 2.0 * edge * n);
+        /*  Draw the edges.                                                   */
+        draw(T * (V[0] -- V[1]));
+        draw(T * (V[0] -- V[2]));
+        draw(T * (V[1] -- V[2]));
+        draw(T * (V[2] -- V[3]));
+        draw(T * (V[3] -- V[4]));
+        draw(T * (V[0] -- V[4]));
+        draw(T * (V[2] -- V[4]));
 
-/*  Draw in lines to indicate the square.                                     */
-draw(A -- B, blue + linewidth(1.0));
-draw(C -- D, blue + linewidth(1.0));
-draw(A -- C, red + linewidth(1.0));
-draw(B -- D, red + linewidth(1.0));
+        /*  The next edges need to wrap around the torus, Pac-Man style.      */
+        draw(T * (V[1] -- (x0, edge)));
+        draw(T * ((x0, -edge) -- V[3]));
+
+        draw(T * (V[1] -- (x1, edge)));
+        draw(T * ((x1, -edge) -- V[4]));
+
+        draw(T * (V[3] -- (-edge, y0)));
+        draw(T * ((edge, y0) -- V[0]));
+
+        /*  Draw in lines to indicate the square.                             */
+        draw(T * (A -- B), blue + linewidth(1.0));
+        draw(T * (C -- D), blue + linewidth(1.0));
+        draw(T * (A -- C), red + linewidth(1.0));
+        draw(T * (B -- D), red + linewidth(1.0));
+
+        /*  Draw a dot indicating the vertex.                                 */
+        dot(T * V[0]);
+        dot(T * V[1]);
+        dot(T * V[2]);
+        dot(T * V[3]);
+        dot(T * V[4]);
+    }
+}
