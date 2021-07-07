@@ -78,6 +78,7 @@ for (m = 0; m < number_of_squares; ++m)
     for (n = 0; n < number_of_squares; ++n)
     {
         T = shift(2.0 * edge *m, 2.0 * edge * n);
+
         /*  Draw the edges.                                                   */
         draw(T * (V[0] -- V[1]));
         draw(T * (V[0] -- V[2]));
