@@ -1,21 +1,8 @@
 // Seting output format to "pdf".
-import settings;
 import graph;
 
-if(settings.render < 0)    settings.render    = 4;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
-
 // Size of the output figure.
-size(300);
+size(128);
 
 // Variable for drawing stuff.
 path p;

@@ -23,7 +23,8 @@ size(256);
 
 /*  Pen for drawing.                                                          */
 pen dpen = black + linewidth(0.3pt);
-pen greyp = grey + linewidth(0.8pt);
+pen handlep = black + linewidth(0.8pt);
+pen dashp = black + linewidth(0.6pt);
 
 pair line_eval(pair A, pair B, real t)
 {
@@ -53,16 +54,19 @@ void draw_handle(pair A, pair B, real t, real s, real theta)
 
     path g1 = H00{B - A} .. H02 .. H01{B - A};
     path g2 = H10{orth(B - A)} .. H12 .. H11{orth(A - B)};
+    path g3 = H02{A - B} .. H12{B - A};
 
     transform T = shift(-line_eval(H00, H01, 0.5));
     transform invT = shift(line_eval(H00, H01, 0.5));
     transform rot = rotate(theta);
 
     g1 = invT*(rot*(T*g1));
-    g2 =  invT*(rot*(T*g2));
+    g2 = invT*(rot*(T*g2));
+    g3 = invT*(rot*(T*g3));
     filldraw(g1 -- reverse(g2) -- cycle, white, white);
-    draw(g1, greyp);
-    draw(g2, greyp);
+    draw(g1, handlep);
+    draw(g2, handlep);
+    draw(g3, dashp);
 }
 
 pair V0 = (0.0, 0.0);
