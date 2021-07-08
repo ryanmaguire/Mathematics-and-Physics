@@ -1,22 +1,8 @@
 // Seting output format to "pdf".
-import settings;
 import graph;
-import fontsize;
-
-if(settings.render < 0)    settings.render    = 4;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
 
 // Size of the output figure.
-size(100);
+size(128);
 
 // Size of the arrowhead.
 real arsize = 5bp;

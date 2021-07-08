@@ -26,7 +26,7 @@ if(!settings.multipleView)
     settings.batchView=false;
 
 settings.render      = 8;
-settings.outformat   = "pdf";
+settings.outformat   = "eps";
 settings.inlineimage = true;
 settings.embed       = true;
 settings.toolbar     = false;
