@@ -52,10 +52,19 @@ pen thickp = black + linewidth(0.8pt);
 /*  Dashed pen for lines that go behind the torus.                            */
 pen dashp = black + linewidth(0.4pt) + linetype("4 4");
 
-draw((1.0, 0.0){E} .. (1.8, 0.3) .. (1.0, 0.7) .. (0.2, 0.3) .. cycle{E});
-draw((1.0, 0.2){E} .. (1.1, 0.0) .. (1.0, -0.2){W}, white+linewidth(4.0pt));
-draw((1.0, 0.2){E} .. (1.1, 0.0) .. (1.0, -0.2){W});
-draw((1.0, -0.2){W} .. (0.9, 0.0) .. (1.0, 0.2){E}, dashp);
+path g1, g2, g3, g4;
+
+g1 = (0.95, -0.2) .. (0.9, 0.0) .. (1.0, 0.05){E};
+g2 = (1.0, 0.05){E} .. (1.2, 0.0) .. (1.8, 0.3) .. (1.0, 0.7){W};
+g3 = (1.0, 0.7){W} .. (0.2, 0.3) .. (0.8, 0.0) .. (1.1, 0.0) .. (1.05, 0.2);
+
+draw(g1);
+draw(g3, white + linewidth(4.0pt));
+draw(g3);
+filldraw(circle((1.12, 0.024), 0.02), white, white);
+draw(g2);
+
+draw((0.95, -0.2) -- (1.05, 0.2), dashp);
 
 /*  Draw the torus.                                                           */
 draw(A0{SE} .. A1{E} .. A2{NE}, thickp);
