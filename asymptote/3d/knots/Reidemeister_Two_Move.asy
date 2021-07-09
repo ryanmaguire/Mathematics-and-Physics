@@ -3,7 +3,6 @@ import tube;
 import graph3;
 import palette;
 settings.render=8;
-outformat="pdf";
 
 size(169, 169);
 
@@ -12,12 +11,12 @@ currentprojection=perspective(camera = (0, 0, 100), up   = (0, 0, 1),
 
 triple f0(real t)
 {
-    return (t*t, t, 0.0);
+    return (0.6*t*t, t, 0.0);
 }
 
 triple f1(real t)
 {
-    return (1-t*t, t, 1.0);
+    return (1-0.6*t*t, t, 1.0);
 }
 
 triple g0(real t)

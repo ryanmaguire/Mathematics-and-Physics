@@ -3,9 +3,8 @@ import tube;
 import graph3;
 import palette;
 settings.render=8;
-outformat="pdf";
 
-size(169, 169);
+size(128);
 
 currentprojection=orthographic(camera = (0, 0, 100), up   = (0, 0, 1),
                                target = (0, 0, 0),   zoom = 0.85);
@@ -28,7 +27,6 @@ triple g(real t)
 currentlight = light(diffuse  = new pen[]    {white},
                      specular = new pen[]    {white},
                      position = new triple[] {0.25*X+0.25*Y+Z});
-malloc(): unsorted double linked list corrupted
 
 material pipe = material(diffusepen  = blue+0.3*green,
                          emissivepen = gray(0.20),
