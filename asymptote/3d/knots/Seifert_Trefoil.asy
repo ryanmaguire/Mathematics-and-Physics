@@ -3,7 +3,6 @@ import tube;
 import graph3;
 import palette;
 settings.render=8;
-outformat="pdf";
 
 size(200, 200);
 
