@@ -3,7 +3,7 @@ import tube;
 import graph3;
 import palette;
 
-outformat="pdf";
+settings.render = 8;
 
 // Size of the created image.
 size(300, 300);
