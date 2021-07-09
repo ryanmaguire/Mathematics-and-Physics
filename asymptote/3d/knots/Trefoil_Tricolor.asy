@@ -3,9 +3,8 @@ import tube;
 import graph3;
 import palette;
 settings.render=8;
-outformat="pdf";
 
-size(169, 169);
+size(128);
 
 currentprojection=perspective(
     camera  = (0,0,-25),
