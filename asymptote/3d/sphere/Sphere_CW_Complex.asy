@@ -2,14 +2,8 @@
 import settings;
 import three;
 
-if(!settings.multipleView)  settings.batchView=false;
-
 settings.render=8;
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2, 2);
+
 
 currentprojection=perspective(camera = (20, -40, 20), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);
