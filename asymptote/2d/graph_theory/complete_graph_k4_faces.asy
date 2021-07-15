@@ -19,52 +19,23 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(128);
 
-/*  Value for the edge of the square.                                         */
-real edge = 1.5;
+/*  Coordinates for the vertices of the graph.                                */
+pair V0 = scale(0.8)*expi(0.5*pi);
+pair V1 = scale(0.8)*expi(3.5*pi / 3.0);
+pair V2 = scale(0.8)*expi(5.5 * pi / 3.0);
+pair V3 = (0.0, 0.0);
 
-/*  Coordinates for the link.                                                 */
-real r = 0.1;
 
-pair P0 = (-edge, 0.0);
-pair P1 = (0.0, edge);
-pair P2 = (edge, 0.0);
-pair P3 = (0.0, -edge);
+/*  And draw the edges.                                                       */
+filldraw((-1, -1) -- (-1, 1) -- (1, 1) -- (1, -1) -- cycle, cyan, invisible);
+filldraw(V0 -- V1 -- V2 -- cycle, blue, black);
+filldraw(V0 -- V1 -- V3 -- cycle, green, black);
+filldraw(V0 -- V2 -- V3 -- cycle, red, black);
 
-pair A = (0.3*edge, -0.3*edge);
-pair B = scale(-1.0)*A;
-
-pair C = (-0.4*edge, -0.4*edge);
-pair D = scale(-1.0)*C;
-
-/*  Pairs for the square representing the torus.                              */
-pair V0 = (-edge, -edge);
-pair V1 = (edge, -edge);
-pair V2 = (-edge, edge);
-pair V3 = (edge, edge);
-
-int n, m;
-int N = 6;
-transform T;
-
-for (m = 0; m < N; ++m)
-{
-    for (n = 0; n < N; ++n)
-    {
-        T = shift(2.0*edge*m, 2.0*edge*n);
-
-        /*  Draw in the link.                                                 */
-        draw(T*(P0{SE} .. A{NE}));
-        filldraw(T*circle(C, r), white, white);
-        draw(T*(P2{NW} .. B .. P3{SE}));
-        filldraw(T*circle(D, r), white, white);
-        draw(T*(A{NE} .. P1{NW}));
-
-        /*  Draw in lines to indicate the square.                             */
-        draw(T*(V0 -- V1), blue + linewidth(1.0));
-        draw(T*(V2 -- V3), blue + linewidth(1.0));
-        draw(T*(V0 -- V2), red + linewidth(1.0));
-        draw(T*(V1 -- V3), red + linewidth(1.0));
-    }
-}
+/*  Dots for the vertices of the graph.                                       */
+dot(V0);
+dot(V1);
+dot(V2);
+dot(V3);

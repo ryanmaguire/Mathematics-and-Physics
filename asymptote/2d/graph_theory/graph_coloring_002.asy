@@ -19,52 +19,48 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(128);
 
-/*  Value for the edge of the square.                                         */
-real edge = 1.5;
+/*  Array for vertices.                                                       */
+pair[] V;
 
-/*  Coordinates for the link.                                                 */
-real r = 0.1;
+/*  Variables for indexing.                                                   */
+int m, n;
 
-pair P0 = (-edge, 0.0);
-pair P1 = (0.0, edge);
-pair P2 = (edge, 0.0);
-pair P3 = (0.0, -edge);
+/*  Number of points in K_5.                                                  */
+int N = 5;
 
-pair A = (0.3*edge, -0.3*edge);
-pair B = scale(-1.0)*A;
+/*  Variable for the angle a point has on the circle.                         */
+real theta;
 
-pair C = (-0.4*edge, -0.4*edge);
-pair D = scale(-1.0)*C;
+/*  Colors for the vertices.                                                  */
+pen[] pens = {blue, red, green, yellow, purple};
 
-/*  Pairs for the square representing the torus.                              */
-pair V0 = (-edge, -edge);
-pair V1 = (edge, -edge);
-pair V2 = (-edge, edge);
-pair V3 = (edge, edge);
+/*  Create the vertices on the circle.                                        */
+for (n = 0; n < N; ++n)
+{
+    /*  Compute the angle of the current point.                               */
+    theta = 2*pi*n/N + 0.5*pi/N;
 
-int n, m;
-int N = 6;
-transform T;
+    /*  And compute the position of the point.                                */
+    V[n] = expi(theta);
+}
+/*  End of for loop computing the vertices.                                   */
 
+/*  Draw all of the edges.                                                    */
 for (m = 0; m < N; ++m)
 {
     for (n = 0; n < N; ++n)
     {
-        T = shift(2.0*edge*m, 2.0*edge*n);
-
-        /*  Draw in the link.                                                 */
-        draw(T*(P0{SE} .. A{NE}));
-        filldraw(T*circle(C, r), white, white);
-        draw(T*(P2{NW} .. B .. P3{SE}));
-        filldraw(T*circle(D, r), white, white);
-        draw(T*(A{NE} .. P1{NW}));
-
-        /*  Draw in lines to indicate the square.                             */
-        draw(T*(V0 -- V1), blue + linewidth(1.0));
-        draw(T*(V2 -- V3), blue + linewidth(1.0));
-        draw(T*(V0 -- V2), red + linewidth(1.0));
-        draw(T*(V1 -- V3), red + linewidth(1.0));
+        /*  No need to draw an edge from a point to itself.                   */
+        if (n == m)
+            continue;
+        else
+            draw(V[n] -- V[m]);
     }
 }
+/*  End of for loop drawing edges.                                            */
+
+/*  Color the vertices.                                                       */
+for (n = 0; n < N; ++n)
+    filldraw(circle(V[n], 0.03), pens[n], black);

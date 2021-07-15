@@ -19,52 +19,42 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(128);
 
-/*  Value for the edge of the square.                                         */
-real edge = 1.5;
+pair V0 = scale(0.5)*expi(0.5*pi);
+pair V1 = scale(0.5)*expi(3.5*pi / 3.0);
+pair V2 = scale(0.5)*expi(5.5 * pi / 3.0);
 
-/*  Coordinates for the link.                                                 */
-real r = 0.1;
+pair W0 = expi(0.333*pi + pi / 6.0);
+pair W1 = expi(0.666*pi + pi / 6.0);
+pair W2 = expi(1.0*pi + pi / 6.0);
+pair W3 = expi(1.333*pi + pi / 6.0);
+pair W4 = expi(1.666*pi + pi / 6.0);
+pair W5 = expi(pi / 6.0);
 
-pair P0 = (-edge, 0.0);
-pair P1 = (0.0, edge);
-pair P2 = (edge, 0.0);
-pair P3 = (0.0, -edge);
+real rDot = 0.03;
 
-pair A = (0.3*edge, -0.3*edge);
-pair B = scale(-1.0)*A;
+draw(V0 -- V1 -- V2 -- cycle);
+draw(W0 -- W1 -- W2 -- W3 -- W4 -- W5 -- cycle);
 
-pair C = (-0.4*edge, -0.4*edge);
-pair D = scale(-1.0)*C;
+draw(V0 -- W0);
+draw(V0 -- W1);
+draw(V0 -- W5);
 
-/*  Pairs for the square representing the torus.                              */
-pair V0 = (-edge, -edge);
-pair V1 = (edge, -edge);
-pair V2 = (-edge, edge);
-pair V3 = (edge, edge);
+draw(V1 -- W1);
+draw(V1 -- W2);
+draw(V1 -- W3);
 
-int n, m;
-int N = 6;
-transform T;
+draw(V2 -- W3);
+draw(V2 -- W4);
+draw(V2 -- W5);
 
-for (m = 0; m < N; ++m)
-{
-    for (n = 0; n < N; ++n)
-    {
-        T = shift(2.0*edge*m, 2.0*edge*n);
-
-        /*  Draw in the link.                                                 */
-        draw(T*(P0{SE} .. A{NE}));
-        filldraw(T*circle(C, r), white, white);
-        draw(T*(P2{NW} .. B .. P3{SE}));
-        filldraw(T*circle(D, r), white, white);
-        draw(T*(A{NE} .. P1{NW}));
-
-        /*  Draw in lines to indicate the square.                             */
-        draw(T*(V0 -- V1), blue + linewidth(1.0));
-        draw(T*(V2 -- V3), blue + linewidth(1.0));
-        draw(T*(V0 -- V2), red + linewidth(1.0));
-        draw(T*(V1 -- V3), red + linewidth(1.0));
-    }
-}
+filldraw(circle(V0, rDot), red, black);
+filldraw(circle(V1, rDot), yellow, black);
+filldraw(circle(V2, rDot), blue, black);
+filldraw(circle(W0, rDot), yellow, black);
+filldraw(circle(W1, rDot), blue, black);
+filldraw(circle(W2, rDot), red, black);
+filldraw(circle(W3, rDot), green, black);
+filldraw(circle(W4, rDot), yellow, black);
+filldraw(circle(W5, rDot), green, black);

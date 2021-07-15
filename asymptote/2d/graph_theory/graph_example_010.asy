@@ -21,60 +21,57 @@
 /*  Size of the figure.                                                       */
 size(128);
 
-real r = 0.5;
+/*  Array for vertices.                                                       */
+pair[] V;
+pair[] W;
 
-pair A0 = expi(1.167*pi);
-pair B0 = expi(1.833*pi);
-pair C0 = expi(0.5*pi);
+/*  Variables for indexing.                                                   */
+int m, n;
 
-pair A1 = scale(r)*(rotate(60)*A0);
-pair B1 = scale(r)*(rotate(60)*B0);
-pair C1 = scale(r)*(rotate(60)*C0);
+/*  Number of points in K_5.                                                  */
+int N = 5;
 
-path g = A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. cycle;
-int samples = 40;
-int n, m;
-real rcpr_samples = 1.0 / samples;
+/*  Variable for the angle a point has on the circle.                         */
+real theta;
 
-real current_point;
-real current_pos;
-real next_pos;
-
-pair P0, P1;
-pair O0, O1, O2, O3;
-current_pos = 0.0;
-
-real rect_size = 0.5;
-real rect_length = 1.0;
-
-pair orth(pair A, pair B)
+/*  Create the vertices on the circle.                                        */
+for (n = 0; n < N; ++n)
 {
-    return (A.y - B.y, B.x - A.x);
+    /*  Compute the angle of the current point.                               */
+    theta = 2*pi*n/N + 0.5*pi/N;
+
+    /*  And compute the position of the point.                                */
+    V[n] = scale(0.5)*expi(theta);
+    W[n] = expi(theta);
 }
+/*  End of for loop computing the vertices.                                   */
 
-pair orth_line(pair A, pair B, real t, real s)
-{
-    pair O = orth(A, B);
-    return scale(1.0 - t)*A + scale(t)*B + scale(s)*O;
-}
+draw(V[0] -- W[0]);
+draw(V[0] -- V[2]);
+draw(V[0] -- V[3]);
 
-for (m = 0; m < 12; ++m)
-{
-    current_point = m;
-    for (n = 1; n < samples; ++n)
-    {
-        next_pos = current_point + n*rcpr_samples;
-        P0 = point(g, current_pos);
-        P1 = point(g, next_pos);
-        current_pos = next_pos;
+draw(V[1] -- W[1]);
+draw(V[1] -- V[3]);
+draw(V[1] -- V[4]);
 
-        O0 = orth_line(P0, P1, 1.0 - rect_length, rect_size);
-        O1 = orth_line(P0, P1, rect_length, rect_size);
-        O2 = orth_line(P0, P1, rect_length, -rect_size);
-        O3 = orth_line(P0, P1, 1.0 - rect_length, -rect_size);
+draw(V[2] -- W[2]);
+draw(V[2] -- V[4]);
 
-        filldraw(O0 -- O1 -- O2 -- O3 -- cycle,
-                 white, white + linewidth(0.1pt));
-        draw(P0 -- P1);
-    }
-}
+draw(V[3] -- W[3]);
+
+draw(V[4] -- W[4]);
+
+draw(W[0] -- W[1] -- W[2] -- W[3] -- W[4] -- cycle);
+
+/*  Color the vertices.                                                       */
+filldraw(circle(V[0], 0.03), black, black);
+filldraw(circle(V[1], 0.03), black, black);
+filldraw(circle(V[2], 0.03), black, black);
+filldraw(circle(V[3], 0.03), black, black);
+filldraw(circle(V[4], 0.03), black, black);
+
+filldraw(circle(W[0], 0.03), black, black);
+filldraw(circle(W[1], 0.03), black, black);
+filldraw(circle(W[2], 0.03), black, black);
+filldraw(circle(W[3], 0.03), black, black);
+filldraw(circle(W[4], 0.03), black, black);

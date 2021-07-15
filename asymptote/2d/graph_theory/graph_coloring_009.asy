@@ -19,52 +19,60 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(128);
 
-/*  Value for the edge of the square.                                         */
-real edge = 1.5;
+/*  Array for vertices.                                                       */
+pair[] V;
+pair[] W;
 
-/*  Coordinates for the link.                                                 */
-real r = 0.1;
+/*  Variables for indexing.                                                   */
+int m, n;
 
-pair P0 = (-edge, 0.0);
-pair P1 = (0.0, edge);
-pair P2 = (edge, 0.0);
-pair P3 = (0.0, -edge);
+/*  Number of points in K_5.                                                  */
+int N = 5;
 
-pair A = (0.3*edge, -0.3*edge);
-pair B = scale(-1.0)*A;
+/*  Variable for the angle a point has on the circle.                         */
+real theta;
 
-pair C = (-0.4*edge, -0.4*edge);
-pair D = scale(-1.0)*C;
-
-/*  Pairs for the square representing the torus.                              */
-pair V0 = (-edge, -edge);
-pair V1 = (edge, -edge);
-pair V2 = (-edge, edge);
-pair V3 = (edge, edge);
-
-int n, m;
-int N = 6;
-transform T;
-
-for (m = 0; m < N; ++m)
+/*  Create the vertices on the circle.                                        */
+for (n = 0; n < N; ++n)
 {
-    for (n = 0; n < N; ++n)
-    {
-        T = shift(2.0*edge*m, 2.0*edge*n);
+    /*  Compute the angle of the current point.                               */
+    theta = 2*pi*n/N + 0.5*pi/N;
 
-        /*  Draw in the link.                                                 */
-        draw(T*(P0{SE} .. A{NE}));
-        filldraw(T*circle(C, r), white, white);
-        draw(T*(P2{NW} .. B .. P3{SE}));
-        filldraw(T*circle(D, r), white, white);
-        draw(T*(A{NE} .. P1{NW}));
-
-        /*  Draw in lines to indicate the square.                             */
-        draw(T*(V0 -- V1), blue + linewidth(1.0));
-        draw(T*(V2 -- V3), blue + linewidth(1.0));
-        draw(T*(V0 -- V2), red + linewidth(1.0));
-        draw(T*(V1 -- V3), red + linewidth(1.0));
-    }
+    /*  And compute the position of the point.                                */
+    V[n] = scale(0.5)*expi(theta);
+    W[n] = expi(theta);
 }
+/*  End of for loop computing the vertices.                                   */
+
+draw(V[0] -- W[0]);
+draw(V[0] -- V[2]);
+draw(V[0] -- V[3]);
+
+draw(V[1] -- W[1]);
+draw(V[1] -- V[3]);
+draw(V[1] -- V[4]);
+
+draw(V[2] -- W[2]);
+draw(V[2] -- V[4]);
+
+draw(V[3] -- W[3]);
+
+draw(V[4] -- W[4]);
+
+draw(W[0] -- W[1] -- W[2] -- W[3] -- W[4] -- cycle);
+
+/*  Color the vertices.                                                       */
+filldraw(circle(V[0], 0.03), red, black);
+filldraw(circle(V[1], 0.03), blue, black);
+filldraw(circle(V[2], 0.03), green, black);
+filldraw(circle(V[3], 0.03), green, black);
+filldraw(circle(V[4], 0.03), red, black);
+
+filldraw(circle(W[0], 0.03), blue, black);
+filldraw(circle(W[1], 0.03), red, black);
+filldraw(circle(W[2], 0.03), blue, black);
+filldraw(circle(W[3], 0.03), red, black);
+filldraw(circle(W[4], 0.03), green, black);
+

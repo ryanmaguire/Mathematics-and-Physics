@@ -18,6 +18,8 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+import custom_arrows;
+
 /*  Size of the figure.                                                       */
 size(128);
 
@@ -30,6 +32,8 @@ pair C0 = expi(0.5*pi);
 pair A1 = scale(r)*(rotate(60)*A0);
 pair B1 = scale(r)*(rotate(60)*B0);
 pair C1 = scale(r)*(rotate(60)*C0);
+
+real arsize = 5bp;
 
 path g = A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. cycle;
 int samples = 40;
@@ -78,3 +82,30 @@ for (m = 0; m < 12; ++m)
         draw(P0 -- P1);
     }
 }
+
+g = A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. A0 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = B1 .. C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. A0 .. A1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = C0{W} .. C1 .. A1 .. B0 ..B1 .. C1 .. A0 .. A1 .. B1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = C1 .. A1 .. B0 ..B1 .. C1 .. A0 .. A1 .. B1 .. C0{W} .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = A1 .. B0 ..B1 .. C1 .. A0 .. A1 .. B1 .. C0{W} .. C1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = B0 .. B1 .. C1 .. A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = B1 .. C1 .. A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));
+
+g = C1 .. A0 .. A1 .. B1 .. C0{W} .. C1 .. A1 .. B0 .. B1 .. cycle;
+draw(g, invisible, MidSharpArrow(arsize));

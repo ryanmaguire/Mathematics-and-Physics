@@ -19,52 +19,28 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(128);
 
-/*  Value for the edge of the square.                                         */
-real edge = 1.5;
+pair A = (0.0, 0.0);
+pair B = (0.3, 0.5);
+pair C = (0.0, 1.0);
 
-/*  Coordinates for the link.                                                 */
-real r = 0.1;
+pair D = (1.0, 1.5);
+pair E = (0.3, 0.0);
+pair F = (0.0, 0.5);
+pair G = (0.3, 1.0);
+pair H = (1.0, -0.5);
 
-pair P0 = (-edge, 0.0);
-pair P1 = (0.0, edge);
-pair P2 = (edge, 0.0);
-pair P3 = (0.0, -edge);
+draw(B -- C);
+draw(C -- D);
+draw(D -- E);
+draw(F -- G, white + linewidth(5pt));
+draw(E -- F);
+draw(F -- G);
+draw(G -- H);
+draw(A -- B, white + linewidth(5pt));
+draw(A -- B);
+draw(H -- A);
+draw(B -- (B + scale(0.1)*(C - B)));
 
-pair A = (0.3*edge, -0.3*edge);
-pair B = scale(-1.0)*A;
-
-pair C = (-0.4*edge, -0.4*edge);
-pair D = scale(-1.0)*C;
-
-/*  Pairs for the square representing the torus.                              */
-pair V0 = (-edge, -edge);
-pair V1 = (edge, -edge);
-pair V2 = (-edge, edge);
-pair V3 = (edge, edge);
-
-int n, m;
-int N = 6;
-transform T;
-
-for (m = 0; m < N; ++m)
-{
-    for (n = 0; n < N; ++n)
-    {
-        T = shift(2.0*edge*m, 2.0*edge*n);
-
-        /*  Draw in the link.                                                 */
-        draw(T*(P0{SE} .. A{NE}));
-        filldraw(T*circle(C, r), white, white);
-        draw(T*(P2{NW} .. B .. P3{SE}));
-        filldraw(T*circle(D, r), white, white);
-        draw(T*(A{NE} .. P1{NW}));
-
-        /*  Draw in lines to indicate the square.                             */
-        draw(T*(V0 -- V1), blue + linewidth(1.0));
-        draw(T*(V2 -- V3), blue + linewidth(1.0));
-        draw(T*(V0 -- V2), red + linewidth(1.0));
-        draw(T*(V1 -- V3), red + linewidth(1.0));
-    }
-}
+draw(circle((0.53, 0.5), 0.05), black);
