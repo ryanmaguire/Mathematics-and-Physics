@@ -18,26 +18,34 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+import custom_arrows;
+
 /*  Size of the figure.                                                       */
 size(128);
 
-pair A1 = (0.0, 0.0);
-pair A2 = (1.0, 1.0);
+real arsize = 5bp;
 
-pair B1 = (1.0, 0.0);
-pair B2 = (0.0, 1.0);
+pair A0 = (1.0, -0.5);
+pair A1 = (1.0, -1.0);
 
-pair C1 = (0.0, 0.7);
-pair C2 = (1.0, 0.7);
+pair B0 = (0.7, -1.0);
+pair B1 = (1.0, -0.8);
+pair B2 = (1.2, -0.5);
+pair B3 = (1.0, -0.2);
+pair B4 = (0.8, -0.5);
+pair B5 = (1.3, -1.0);
 
-draw(A1 -- A2);
-draw(B1 -- B2, white+linewidth(4.0pt));
-draw(B1 -- B2);
-draw(C1 -- C2, white+linewidth(4.0pt));
-draw(C1 -- C2);
+pair C0 = (2.0, -0.75);
 
-draw(shift(1.5, 0.0)*(A1 -- A2));
-draw(shift(1.5, 0.0)*(B1 -- B2), white+linewidth(4.0pt));
-draw(shift(1.5, 0.0)*(B1 -- B2));
-draw(shift(1.5, -0.5)*(C1 -- C2), white+linewidth(4.0pt));
-draw(shift(1.5, -0.5)*(C1 -- C2));
+pair D0 = (1.3, -0.75);
+pair D1 = (1.6, -0.75);
+
+draw(B0 .. B1 .. B2 .. B3{W});
+filldraw(circle(B1, 0.02), white, white);
+draw(B3{W} .. B4 .. B1 .. B5, black);
+draw(A0 -- A1);
+draw(D0 -- D1, SharpArrow(arsize));
+
+filldraw(circle(A0, 0.05), grey, black);
+filldraw(circle(A1, 0.05), grey, black);
+filldraw(circle(C0, 0.05), grey, black);

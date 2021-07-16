@@ -21,23 +21,15 @@
 /*  Size of the figure.                                                       */
 size(128);
 
-pair A1 = (0.0, 0.0);
-pair A2 = (1.0, 1.0);
+pair A = (0.0, 0.0);
+pair B = (1.0, 0.0);
+pair C = (0.5, sqrt(0.75));
+real rDot = 0.03;
 
-pair B1 = (1.0, 0.0);
-pair B2 = (0.0, 1.0);
+draw(A -- C -- B, blue);
+draw(A{NE} .. B{SE}, blue);
+draw(A{SE} .. B{NE}, blue);
 
-pair C1 = (0.0, 0.7);
-pair C2 = (1.0, 0.7);
-
-draw(A1 -- A2);
-draw(B1 -- B2, white+linewidth(4.0pt));
-draw(B1 -- B2);
-draw(C1 -- C2, white+linewidth(4.0pt));
-draw(C1 -- C2);
-
-draw(shift(1.5, 0.0)*(A1 -- A2));
-draw(shift(1.5, 0.0)*(B1 -- B2), white+linewidth(4.0pt));
-draw(shift(1.5, 0.0)*(B1 -- B2));
-draw(shift(1.5, -0.5)*(C1 -- C2), white+linewidth(4.0pt));
-draw(shift(1.5, -0.5)*(C1 -- C2));
+filldraw(circle(A, rDot), grey, black);
+filldraw(circle(B, rDot), grey, black);
+filldraw(circle(C, rDot), grey, black);

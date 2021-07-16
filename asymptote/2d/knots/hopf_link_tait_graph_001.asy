@@ -21,23 +21,17 @@
 /*  Size of the figure.                                                       */
 size(128);
 
-pair A1 = (0.0, 0.0);
-pair A2 = (1.0, 1.0);
+pair A = (0.0, 0.0);
+pair B = (0.9, 0.0);
+real r = 0.5;
+real arsize = 5bp;
+real rDot = 0.05;
 
-pair B1 = (1.0, 0.0);
-pair B2 = (0.0, 1.0);
+draw(arc(A, r, 0, 270), Arrow(arsize, position=0.6), Arrow(arsize, position=2.5));
+draw(circle(B, r), white + linewidth(5pt));
+draw(circle(B, r), Arrow(arsize, position=0.2), Arrow(arsize, position=2.1));
+draw(arc(A, r, 270, 360), white + linewidth(5pt));
+draw(arc(A, r, 180, 380));
 
-pair C1 = (0.0, 0.7);
-pair C2 = (1.0, 0.7);
-
-draw(A1 -- A2);
-draw(B1 -- B2, white+linewidth(4.0pt));
-draw(B1 -- B2);
-draw(C1 -- C2, white+linewidth(4.0pt));
-draw(C1 -- C2);
-
-draw(shift(1.5, 0.0)*(A1 -- A2));
-draw(shift(1.5, 0.0)*(B1 -- B2), white+linewidth(4.0pt));
-draw(shift(1.5, 0.0)*(B1 -- B2));
-draw(shift(1.5, -0.5)*(C1 -- C2), white+linewidth(4.0pt));
-draw(shift(1.5, -0.5)*(C1 -- C2));
+filldraw(circle(A, rDot), grey, black);
+filldraw(circle(B, rDot), grey, black);

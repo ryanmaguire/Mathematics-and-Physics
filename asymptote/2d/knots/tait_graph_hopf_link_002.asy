@@ -21,23 +21,17 @@
 /*  Size of the figure.                                                       */
 size(128);
 
-pair A1 = (0.0, 0.0);
-pair A2 = (1.0, 1.0);
+import custom_arrows;
 
-pair B1 = (1.0, 0.0);
-pair B2 = (0.0, 1.0);
+real arsize = 5bp;
+draw((0,0) -- (1, 1), SharpArrow(arsize));
+draw((1, 0) -- (0, 1), white + linewidth(5pt));
+draw((1, 0) -- (0, 1), SharpArrow(arsize));
 
-pair C1 = (0.0, 0.7);
-pair C2 = (1.0, 0.7);
 
-draw(A1 -- A2);
-draw(B1 -- B2, white+linewidth(4.0pt));
-draw(B1 -- B2);
-draw(C1 -- C2, white+linewidth(4.0pt));
-draw(C1 -- C2);
+draw(shift(0.0, -3.0)*((0,0) -- (1, 1)), SharpArrow(arsize));
+draw(shift(0.0, -3.0)*((1, 0) -- (0, 1)), white + linewidth(5pt));
+draw(shift(0.0, -3.0)*((1, 0) -- (0, 1)), SharpArrow(arsize));
 
-draw(shift(1.5, 0.0)*(A1 -- A2));
-draw(shift(1.5, 0.0)*(B1 -- B2), white+linewidth(4.0pt));
-draw(shift(1.5, 0.0)*(B1 -- B2));
-draw(shift(1.5, -0.5)*(C1 -- C2), white+linewidth(4.0pt));
-draw(shift(1.5, -0.5)*(C1 -- C2));
+filldraw(circle((-2.0, -1.0), 0.04), grey, black);
+filldraw(circle((3.0, -1.0), 0.04), grey, black);

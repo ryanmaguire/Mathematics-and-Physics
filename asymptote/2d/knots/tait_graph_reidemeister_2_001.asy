@@ -21,23 +21,33 @@
 /*  Size of the figure.                                                       */
 size(128);
 
+defaultpen(black + linewidth(0.7pt));
+
 pair A1 = (0.0, 0.0);
-pair A2 = (1.0, 1.0);
+pair A2 = (1.0, -0.5);
+pair A3 = (2.0, 0.0);
 
-pair B1 = (1.0, 0.0);
-pair B2 = (0.0, 1.0);
+pair B1 = (0.0, -0.5);
+pair B2 = (1.0, 0.0);
+pair B3 = (2.0, -0.5);
 
-pair C1 = (0.0, 0.7);
-pair C2 = (1.0, 0.7);
+pair C0 = (0.0, 0.5);
+pair C1 = (2.0, 0.5);
 
-draw(A1 -- A2);
-draw(B1 -- B2, white+linewidth(4.0pt));
-draw(B1 -- B2);
-draw(C1 -- C2, white+linewidth(4.0pt));
-draw(C1 -- C2);
+pair D0 = (0.0, 0.8);
+pair D1 = (2.0, 0.8);
 
-draw(shift(1.5, 0.0)*(A1 -- A2));
-draw(shift(1.5, 0.0)*(B1 -- B2), white+linewidth(4.0pt));
-draw(shift(1.5, 0.0)*(B1 -- B2));
-draw(shift(1.5, -0.5)*(C1 -- C2), white+linewidth(4.0pt));
-draw(shift(1.5, -0.5)*(C1 -- C2));
+pair E1 = (0.5, -0.25);
+pair E2 = (1.5, -0.25);
+
+filldraw(A1 -- E1 -- B1 -- cycle, grey, invisible);
+filldraw(A3 -- E2 -- B3 -- cycle, grey, invisible);
+filldraw(E1 -- A2 -- E2 -- B2 -- cycle, grey, invisible);
+draw(A1 -- A2 -- A3, white+linewidth(5.0pt));
+draw(A1 -- A2 -- A3);
+draw(B1 -- B2 -- B3, white+linewidth(5.0pt));
+draw(B1 -- B2 -- B3);
+
+filldraw(C0 -- C1 -- D1 -- D0 -- cycle, grey, invisible);
+draw(C0 -- C1);
+draw(D0 -- D1);
