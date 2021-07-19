@@ -138,22 +138,14 @@ pair Orthogonal2D(pair V)
 bool IsCollinear(pair A, pair B, pair C)
 {
     /*  Declare necessary variables.                                          */
-    real Ax, Ay, Bx, By, Cx, Cy, a, b, c, d, det;
-
-    /*  Extract the values from the input pairs.                              */
-    Ax = A.x;
-    Ay = A.y;
-    Bx = B.x;
-    By = B.y;
-    Cx = C.x;
-    Cy = C.y;
+    real a, b, c, d, det;
 
     /*  To determine if A, B, and C are collinear, we need the vectors AB and *
-     *  AC. Compute this using the extracted values.                          */
-    a = Bx - Ax;
-    b = Cx - Ax;
-    c = By - Ay;
-    d = Cy - Ay;
+     *  AC. Compute these.                                                    */
+    a = B.x - A.x;
+    b = C.x - A.x;
+    c = B.y - A.y;
+    d = C.y - A.y;
 
     /*  A, B, and C are collinear if and only if the determinant of the       *
      *  matrix formed by a, b, c, d is zero. Compute this.                    */
@@ -170,18 +162,12 @@ bool IsCollinear(pair A, pair B, pair C)
 pair MidPoint2D(pair A, pair B)
 {
     /*  Declare necessary variables.                                          */
-    real Ax, Ay, Bx, By, x, y;
+    real x, y;
     pair out;
 
-    /*  Get the values from A and B.                                          */
-    Ax = A.x;
-    Ay = A.y;
-    Bx = B.x;
-    By = B.y;
-
     /*  Compute the midpoint of A and B using the midpoint formula and return.*/
-    x = 0.5*(Ax + Bx);
-    y = 0.5*(Ay + By);
+    x = 0.5*(A.x + B.x);
+    y = 0.5*(A.y + B.y);
     out = (x, y);
     return out;
 }
@@ -214,8 +200,8 @@ real min = 0.2;
 real max = 1.2;
 
 /*  Draw axes.                                                                */
-draw((-max, 0.0)--(min, 0.0), axesp);
-draw((0.0, -min)--(0.0, max), axesp);
+draw((-max, 0.0) -- (min, 0.0), axesp);
+draw((0.0, -min) -- (0.0, max), axesp);
 
 /*  The three points on the circle we care about.                             */
 pair[] TriPts = {(-1.0, 0.0), (0.0, 1.0), (0.1, 0.0)};
@@ -223,7 +209,7 @@ int TriN = 3;
 
 /*  Obtain the center of the circle these points define and compute radius.   */
 pair P = FindCenter2D(TriPts[0], TriPts[1], TriPts[2]);
-real R = EuclideanNorm2D(P-TriPts[0]);
+real R = EuclideanNorm2D(P - TriPts[0]);
 
 /*  Draw and fill in the triangle.                                            */
 filldraw(PolyFromPoints(TriPts, TriN, true), fillp, defaultpen);
@@ -236,5 +222,5 @@ filldraw(circle(TriPts[2], rDot), black);
 
 /*  Label points on the x and y axes.                                         */
 label("$-1$", (-1.02, -0.1));
-label("$1$",  ( 0.10,  1.0));
+label("$1$",  (0.10, 1.0));
 

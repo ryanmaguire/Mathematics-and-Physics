@@ -50,8 +50,8 @@ pair Y = (0.0, len);
 pair O = (0.0, 0.0);
 
 /*  Labels for the axes.                                                      */
-Label A_Label = Label("$A$", position=1);
-Label B_Label = Label("$B$", position=1);
+Label A_Label = Label("$A$", position=1.0);
+Label B_Label = Label("$B$", position=1.0);
 
 /*  The angle the point D makes.                                              */
 real delta = atan(D.y/D.x);
