@@ -67,26 +67,26 @@ pair x1 = xyzpoint(length, 0.0, length);
 pair y1 = xyzpoint(0.0, length, length);
 pair xy1 = xyzpoint(length, length, length);
 
-/*  Get the centers of top and bottom faces.                                  */
+/*  Get the centers of the top and bottom faces.                              */
 pair center0 = xyzpoint(0.5*length, 0.5*length, 0.0);
 pair center1 = xyzpoint(0.5*length, 0.5*length, length);
 
 /*  Draw all of the edges of the cube.                                        */
-draw(O--x0, dpen);
-draw(O--y0, dpen);
-draw(x0--xy0, dpen);
-draw(y0--xy0, dpen);
-draw(x0--x1, dpen);
-draw(y0--y1, dpen);
-draw(xy0--xy1, dpen);
-draw(O--t, dpen);
-draw(O--x0, dpen);
-draw(O--x0, dpen);
-draw(O--x0, dpen);
-draw(t--x1, dpen);
-draw(t--y1, dpen);
-draw(x1--xy1, dpen);
-draw(y1--xy1, dpen);
+draw(O -- x0, dpen);
+draw(O -- y0, dpen);
+draw(x0 -- xy0, dpen);
+draw(y0 -- xy0, dpen);
+draw(x0 -- x1, dpen);
+draw(y0 -- y1, dpen);
+draw(xy0 -- xy1, dpen);
+draw(O -- t, dpen);
+draw(O -- x0, dpen);
+draw(O -- x0, dpen);
+draw(O -- x0, dpen);
+draw(t -- x1, dpen);
+draw(t -- y1, dpen);
+draw(x1 -- xy1, dpen);
+draw(y1 -- xy1, dpen);
 
 /*  Draw in the 8 vertices of the cube.                                       */
 filldraw(circle(O, r), black, black);
