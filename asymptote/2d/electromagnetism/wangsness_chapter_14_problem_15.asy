@@ -54,7 +54,7 @@ Label L = Label("$\textrm{d}\ell$", fontsize(fsize));
 margin margins = TrueMargin(0.0, 0.02cm);
 
 /*  Angle the position vector makes with the x axis, in degrees.              */
-real theta  = 45.0;
+real theta = 45.0;
 
 /*  Displacement for the angle.                                               */
 real dtheta = 3;
