@@ -63,7 +63,7 @@ real small_font = 5pt;
  *  of a 3D drawing.                                                          */
 pair xyzpoint(real x, real y, real z)
 {
-    /*  Pairs for the points. The help convert from 2D coordinates to 3D.     */
+    /*  Pairs for the points. They help convert from 2D coordinates to 3D.    */
     pair X = (-0.5, -0.5);
     pair Y = (1.0, 0.0);
     pair Z = (0.0, 1.0);
