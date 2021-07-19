@@ -68,15 +68,15 @@ draw(Label("$x$", position=1), XAxes[0] -- XAxes[1], N, apen, SharpArrow(ar));
 draw(Label("$y$", position=1), YAxes[0] -- YAxes[1], E, apen, SharpArrow(ar));
 
 /*  Draw the semicircle.                                                      */
-filldraw(arc(O, R, 0, 180)--cycle, fpen, cpen);
+filldraw(arc(O, R, 0, 180) -- cycle, fpen, cpen);
 
 /*  Draw the lines containing the semicircle.                                 */
-draw(B--(B+2*T));
-draw(A--(A+T));
-draw(A--(A-T));
+draw(B -- (B + scale(2.0)*T));
+draw(A -- (A + T));
+draw(A -- (A - T));
 
 /*  And draw the perpendicular line.                                          */
-draw("$\ell_{\theta}$", C--A);
+draw("$\ell_{\theta}$", C -- A);
 
 /*  Lastly, label the points.                                                 */
 label("$A$", C, SW);

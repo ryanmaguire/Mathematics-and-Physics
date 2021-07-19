@@ -32,15 +32,15 @@ pair MidPoint(pair A, pair B)
 /*  End of MidPoint.                                                          */
 
 /*  Locations of the points on the triangle, and the origin.                  */
-pair O  = ( 0.0, 0.0);
+pair O  = (0.0, 0.0);
 pair X0 = (-1.0, 0.0);
-pair Y0 = ( 0.0, 1.0);
-pair Z0 = ( 0.3, 0.0);
+pair Y0 = (0.0, 1.0);
+pair Z0 = (0.3, 0.0);
 
 /*  Radius of the arc of the circle used to represent an angle.               */
 real r = 0.2;
 
-/*  The angle to be drawin in the triangle.                                   */
+/*  The angle to be drawn in the triangle.                                    */
 real angle = atan((Y0.y - X0.y)/(Y0.x - X0.x));
 
 /*  Draw the lines and label them.                                            */
@@ -50,7 +50,7 @@ draw("$c$", X0 -- Y0, NW);
 draw("$h$", Y0 -- O,  SW);
 
 /*  Draw the angle.                                                           */
-draw("$\alpha$", arc(X0, r, 0, 180*angle/pi));
+draw("$\alpha$", arc(X0, r, 0, 180.0*angle/pi));
 
 /*  And label the lines at their midpoints.                                   */
 label("$\ell_{1}$", MidPoint(X0, O), N);

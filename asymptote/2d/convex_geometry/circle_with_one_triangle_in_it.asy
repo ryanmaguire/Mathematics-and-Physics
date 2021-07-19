@@ -43,7 +43,7 @@ real arsize = 5bp;
 pen axesp = black + linewidth(0.7pt) + fontsize(9pt);
 
 /*  Size of dots used for labels.                                             */
-real rDot = 0.02;
+real rDot = 0.015;
 
 /*  Filler for the triangles.                                                 */
 pen fillp = red + opacity(0.5);
