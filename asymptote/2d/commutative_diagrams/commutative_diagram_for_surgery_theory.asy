@@ -37,7 +37,7 @@ pen fpen = fontsize(7pt);
 
 /*  Arrow size and coordinates for points.                                    */
 real arsize = 5bp;
-pair M  = (0.0, 0.0);
+pair M = (0.0, 0.0);
 pair BG = (1.0, 0.0);
 pair GO = (1.0, 1.0);
 pair BO = (1.0, -1.0);
