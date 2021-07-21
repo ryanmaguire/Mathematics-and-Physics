@@ -66,6 +66,12 @@ pen tickp = black + linewidth(0.2pt);
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
 
+/*  Pen for labels.                                                           */
+pen labelp = fontsize(6pt);
+
+/*  Path for drawing square roots and parabolas.                              */
+path g;
+
 /*  Loop through and draw the lines for the grid.                             */
 for (n = grid_start; n <= grid_end; ++n)
 {
@@ -112,3 +118,23 @@ draw((-10.0, 2.0) -- (10.0, 2.0), purple, SharpArrows(arsize));
 draw((-7.5, 10.0) -- (10.0, -1.667), cyan, SharpArrows(arsize));
 draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, SharpArrows(arsize));
 draw((0.0, -10.0) -- (10.0, 0.0), red, SharpArrows(arsize));
+
+/*  Draw the parabola 2-x^2.                                                  */
+g = (-3.4641, -10.0) .. (-3.0, -7.0) .. (-2.0, -2.0) .. (-1.0, 1.0) ..
+    (0.0, 2.0) .. (1.0, 1.0) .. (2.0, -2.0) .. (3.0, -7.0) .. (3.4641, -10.0);
+draw(g, orange, SharpArrows(arsize));
+
+/*  Lastly, the function sqrt(2 - x).                                         */
+g = (2.0, 0.0) .. (1.0, 1.0) .. (0.0, 1.4141) ..
+    (-2.0, 2.0) .. (-7.0, 3.0) .. (-10.0, 3.4641);
+draw(g, brown, SharpArrow(arsize));
+
+/*  Label all of the functions.                                               */
+label("$|x-3|$", (8.0, 3.7), blue + labelp);
+label("$x=-3$", (-4.1, 4.5), green + labelp);
+label("$y=2$", (8.0, 2.5), purple + labelp);
+label("$y=-\frac{2}{3}x+5$", (3.0, 4.5), cyan + labelp);
+label("$3x-2y=6$", (6.0, 8.4), pink + labelp);
+label("$y=-x^{2}+2$", (4.2, -3.2), orange + labelp);
+label("$y=x-10$", (7.2, -4.5), red + labelp);
+label("$y=\sqrt{2-x}$", (-7.0, 3.5), brown + labelp);
