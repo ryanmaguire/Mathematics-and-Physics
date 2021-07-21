@@ -24,11 +24,13 @@ size(128);
 /*  Coordinates for the vertices of the graph.                                */
 pair V0 = expi(0.5*pi);
 pair V1 = expi(3.5*pi / 3.0);
-pair V2 = expi(5.5 * pi / 3.0);
+pair V2 = expi(5.5*pi / 3.0);
 
+/*  Two points for the dual graph.                                            */
 pair A = (0.0, 0.0);
-pair B = scale(2.5)*expi(pi/6.0);
+pair B = scale(1.1)*expi(pi/6.0);
 
+/*  Size of dots used to indicate points.                                     */
 real rDot = 0.03;
 
 /*  Dots for the vertices of the graph.                                       */
@@ -36,15 +38,16 @@ dot(V0);
 dot(V1);
 dot(V2);
 
-/*  And draw the edges.                                                       */
+/*  Draw the edges of the graph.                                              */
 draw(V0 -- V1);
 draw(V1 -- V2);
 draw(V2 -- V0);
 
+/*  Draw the edges of the dual graph.                                         */
 draw(A -- B);
-draw(A{expi(2.0*pi/3.0)} .. B{expi(pi/6.0 - 0.5*pi)});
-draw(A{expi(5.0*pi/3.0)} .. B{expi(pi/6.0 + 0.5*pi)});
+draw(A{expi(0.833*pi)} .. B{expi(1.5*pi)});
+draw(A{expi(1.5*pi)} .. B{expi(0.833*pi)});
 
+/*  Draw in the vertices of the dual graph.                                   */
 filldraw(circle(A, rDot), red, black);
 filldraw(circle(B, rDot), red, black);
-

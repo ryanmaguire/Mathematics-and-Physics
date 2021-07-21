@@ -27,8 +27,7 @@ pair V1 = scale(0.8)*expi(3.5*pi / 3.0);
 pair V2 = scale(0.8)*expi(5.5 * pi / 3.0);
 pair V3 = (0.0, 0.0);
 
-
-/*  And draw the edges.                                                       */
+/*  Draw the faces.                                                           */
 filldraw((-1, -1) -- (-1, 1) -- (1, 1) -- (1, -1) -- cycle, cyan, invisible);
 filldraw(V0 -- V1 -- V2 -- cycle, blue, black);
 filldraw(V0 -- V1 -- V3 -- cycle, green, black);
