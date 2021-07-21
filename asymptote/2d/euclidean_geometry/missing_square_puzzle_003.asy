@@ -23,40 +23,41 @@
  *  ASYMPTOTE_DIR environment variable to include this.                       */
 import custom_arrows;
 
+/*  The opacity will not render correctly for EPS format, so use PDF.         */
+import settings;
+settings.outformat = "pdf";
+
 /*  Size of the output figure.                                                */
 size(128);
 
-/*  Default pen for drawing figures.                                          */
-defaultpen(black + linewidth(0.5pt) + fontsize(7pt));
+/*  Pens used throughout the drawing.                                         */
+pen graypen = gray(0.7) + linewidth(0.4pt);
+pen outlinepen = deepblue + linewidth(0.6pt);
+pen Afill = green + opacity(0.7);
+pen Bfill = red + opacity(0.8);
 
-/*  Radius used for the two circles in Euclid's construction.                 */
-real radius = 2.0;
+/*  Variables used for making the grid.                                       */
+int n;
+int nx = 8;
+int ny = 3;
 
-/*  Radius of a dot used to mark a point.                                     */
-real dotr = 0.05;
+/*  The bigger triangle.                                                      */
+pair A1 = (0.0, 0.0);
+pair A2 = (8.0, 0.0);
+pair A3 = (8.0, 3.0);
 
-/*  Location of the 4 points for Zeno's construction.                         */
-pair A = (0, 0.0);
-pair B = (radius, 0.0);
-pair C = scale(radius)*expi(0.333*pi);
-pair D = C - (0.0, 0.5*radius);
+/*  Smaller triangle.                                                         */
+pair B1 = A1;
+pair B2 = (5.0, 0.0);
+pair B3 = (5.0, 2.0);
 
-/*  Draw the two circles from Euclid's construction.                          */
-draw(circle(A, radius));
-draw(circle(B, radius));
+/*  Create the background grid.                                               */
+for (n = 0; n <= nx; ++n)
+    draw((n, -0.5) -- (n, ny + 0.5), graypen);
 
-/*  Fill in the "false" triangle from Zeno's construction.                    */
-filldraw(A -- B -- D -- cycle, green, black);
+for (n = 0; n <= ny; ++n)
+    draw((-0.5, n) -- (nx + 0.5, n), graypen);
 
-/*  Draw the "false" line from Zeno's construction.                           */
-draw(C -- D);
-
-/*  Mark and label all of the points.                                         */
-filldraw(circle(A, dotr), black);
-filldraw(circle(B, dotr), black);
-filldraw(circle(C, dotr), black);
-filldraw(circle(D, dotr), black);
-label("$A$", A, SW);
-label("$B$", B, SE);
-label("$C$", C, N);
-label("$D$", D, S);
+/*  Fill in the shapes with color.                                            */
+filldraw(A1 -- A2 -- A3 -- cycle, Afill, outlinepen);
+filldraw(B1 -- B2 -- B3 -- cycle, Bfill, outlinepen);

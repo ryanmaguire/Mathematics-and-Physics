@@ -37,7 +37,7 @@ real DotProduct2D(pair A, pair B)
 }
 /*  End of DotProduct2D.                                                      */
 
-/* Returns the Euclidean norm of a 2-dimensional point.                       */
+/*  Returns the Euclidean norm of a 2-dimensional point.                      */
 real EuclideanNorm2D(pair A)
 {
     /*  Using Pythagoras, we simply compute sqrt(x^2 + y^2).                  */
@@ -45,7 +45,7 @@ real EuclideanNorm2D(pair A)
 }
 /*  End of EuclideanNorm2D.                                                   */
 
-/* Returns the angle between X and Y relative to the point O.                 */
+/*  Returns the angle between X and Y relative to the point O.                */
 real RelAngle2D(pair O, pair X, pair Y)
 {
     /*  Declare necessary variables.                                          */
@@ -94,10 +94,10 @@ pair B = (0.0, 0.0);
 pair C = (4.0, 0.2);
 
 /*  The start and end points on both lines.                                   */
-pair L0_Start = scale(1 - start)*A + scale(start)*C;
-pair L0_End = scale(1 - end)*A + scale(end)*C;
-pair L1_Start = scale(1 - start)*B + scale(start)*C;
-pair L1_End = scale(1 - end)*B + scale(end)*C;
+pair L0_Start = scale(1.0 - start)*A + scale(start)*C;
+pair L1_Start = scale(1.0 - start)*B + scale(start)*C;
+pair L0_End = scale(1.0 - end)*A + scale(end)*C;
+pair L1_End = scale(1.0 - end)*B + scale(end)*C;
 
 /*  The angles the two lines make.                                            */
 real angle1 = RelAngle2D(A, B, C);

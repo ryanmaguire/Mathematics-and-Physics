@@ -45,7 +45,7 @@ draw(circle(A, radius));
 draw(circle(B, radius));
 
 /*  Fill in the equilateral triangle.                                         */
-filldraw(A--B--C--cycle, green);
+filldraw(A -- B -- C -- cycle, green);
 
 /*  Mark and label all of the points.                                         */
 filldraw(circle(A, dotr), black);
