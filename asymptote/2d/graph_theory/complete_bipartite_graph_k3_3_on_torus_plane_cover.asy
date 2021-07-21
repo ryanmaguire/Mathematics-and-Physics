@@ -41,7 +41,7 @@ pair V3 = (edge, edge);
 int m, n;
 
 /*  Number of boxes in x and y axes.                                          */
-int N = 8;
+int N = 5;
 
 /*  Transform for shifting later.                                             */
 transform T;
