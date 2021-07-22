@@ -25,6 +25,7 @@ size(128);
 pair V0 = (0.0, 0.0);
 pair V1 = (1.0, 0.0);
 
+/*  Radius used for a dot.                                                    */
 real rDot = 0.03;
 
 /*  And draw the edges.                                                       */
