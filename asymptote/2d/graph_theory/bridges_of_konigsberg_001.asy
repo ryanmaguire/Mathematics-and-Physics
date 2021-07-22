@@ -66,10 +66,10 @@ pair get_unit_orthogonal(pair A, pair B)
 /*  End of get_unit_orthogonal.                                               */
 
 /*  Function for drawing a bridge between two points.                         */
-void draw_bridge(pair A, pair B, real width)
+void draw_bridge(pair A, pair B, real bridge_width)
 {
     /*  The displacement factor to give the bridge width.                     */
-    pair ds = scale(0.5*width)*get_unit_orthogonal(A, B);
+    pair ds = scale(0.5*bridge_width)*get_unit_orthogonal(A, B);
 
     /*  The four corners of the rectangular bridge.                           */
     pair B0 = A + ds;

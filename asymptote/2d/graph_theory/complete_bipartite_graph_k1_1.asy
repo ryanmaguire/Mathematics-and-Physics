@@ -32,5 +32,5 @@ real radius = 0.02;
 filldraw(circle(A, radius), black);
 filldraw(circle(B, radius), black);
 
-/*  And draw the edges.                                                       */
+/*  And draw the edge.                                                        */
 draw(A -- B);
