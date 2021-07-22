@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(256);
 
 /*  Coordinates for the vertices of the graph.                                */
 pair[] A = {(-1.0, -0.5), (0.0, -0.5), (1.0, -0.5)};
@@ -51,6 +51,7 @@ for (m = 0; m < N; ++m)
 {
     for (n = 0; n < N; ++n)
     {
+        /*  Compute the current shift factor.                                 */
         T = shift(2.0*edge*m, 2.0*edge*n);
 
         /*  Dots for the vertices of the graph.                               */
