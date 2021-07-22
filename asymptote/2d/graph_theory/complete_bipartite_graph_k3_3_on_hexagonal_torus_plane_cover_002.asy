@@ -38,7 +38,7 @@ pair MidPoint2D(pair A, pair B)
 /*  End of MidPoint2D.                                                        */
 
 /*  Variables for indexing.                                                   */
-int k, n, m;
+int k, m, n;
 
 /*  Number of hexagons to draw (NxN will be drawn).                           */
 int N = 6;
@@ -46,6 +46,10 @@ int N = 6;
 /*  Two arrays for vertices in the inner and outter hexagons.                 */
 pair[] V;
 pair[] W;
+
+/*  Two arrays for the vertices centered around the origin.                   */
+pair[] Hex0;
+pair[] Hex1;
 
 /*  The angle made with the x axis and the first point.                       */
 real theta = pi / 6.0;
@@ -62,7 +66,7 @@ real r0 = 1.0;
 real r1 = r0*cos_theta / (1.0 + sin_theta);
 
 /*  Radius of a circle used to indicate a point.                              */
-real rDot = 0.05;
+real rDot = 0.06;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 4bp;
@@ -77,6 +81,13 @@ pair ds = scale(2.0*outter_width)*expi(0.6666667*pi);
 /*  Transform used for shifting later.                                        */
 transform T;
 
+/*  Compute the locations of the two starting hexagons.                       */
+for (k = 0; k < 6; ++k)
+{
+    Hex0[k] = T*(scale(r0)*expi(theta + 0.33333*pi*k));
+    Hex1[k] = T*(scale(r1)*expi(0.33333*pi*k));
+}
+
 /*  Loop through all of the hexagons.                                         */
 for (m = 0; m < N; ++m)
 {
@@ -88,8 +99,8 @@ for (m = 0; m < N; ++m)
         /*  Compute the locations of the points on both hexagons.             */
         for (k = 0; k < 6; ++k)
         {
-            V[k] = T*(scale(r0)*expi(theta + 0.33333*pi*k));
-            W[k] = T*(scale(r1)*expi(0.33333*pi*k));
+            V[k] = T*Hex0[k];
+            W[k] = T*Hex1[k];
         }
 
         /*  Draw the lines for K_3,3.                                         */
@@ -101,18 +112,15 @@ for (m = 0; m < N; ++m)
         draw(W[5] -- MidPoint2D(V[4], V[5]));
         draw(W[0] -- W[1] -- W[2] -- W[3] -- W[4] -- W[5] -- cycle);
 
-        /*  To show that this is K_3,3, draw the "top" points blue and the    *
-         *  "bottom" points red.                                              */
-        filldraw(circle(W[0], rDot), blue, black);
-        filldraw(circle(W[2], rDot), blue, black);
-        filldraw(circle(W[4], rDot), blue, black);
-        filldraw(circle(W[1], rDot), red, black);
-        filldraw(circle(W[3], rDot), red, black);
-        filldraw(circle(W[5], rDot), red, black);
+        /*  To show that this is K_3,3, draw the "top" and "bottom" different.*/
+        filldraw(circle(W[0], rDot), gray(0.3), black);
+        filldraw(circle(W[2], rDot), gray(0.3), black);
+        filldraw(circle(W[4], rDot), gray(0.3), black);
+        filldraw(circle(W[1], rDot), gray(0.7), black);
+        filldraw(circle(W[3], rDot), gray(0.7), black);
+        filldraw(circle(W[5], rDot), gray(0.7), black);
     }
-    /*  End of ds for loop.                                                   */
 }
-/*  End of dx for loop.                                                       */
 
-/*  Clip the drawing into a square.                                           */
+/*  Clip the picture so it fits into a square drawing.                        */
 clip((0.0, 0.0) -- (r0*N, 0.0) -- (r0*N, r0*N) -- (0.0, r0*N) -- cycle);

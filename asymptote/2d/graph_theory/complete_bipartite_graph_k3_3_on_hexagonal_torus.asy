@@ -93,9 +93,9 @@ draw(V[5] -- V[0], red, MidSharpArrow(arsize));
 
 /*  To show that this is K_3,3, draw the "top" points blue and the            *
  *  "bottom" points red.                                                      */
-filldraw(circle(W[0], rDot), blue, black);
-filldraw(circle(W[2], rDot), blue, black);
-filldraw(circle(W[4], rDot), blue, black);
-filldraw(circle(W[1], rDot), red, black);
-filldraw(circle(W[3], rDot), red, black);
-filldraw(circle(W[5], rDot), red, black);
+filldraw(circle(W[0], rDot), gray(0.3), black);
+filldraw(circle(W[2], rDot), gray(0.3), black);
+filldraw(circle(W[4], rDot), gray(0.3), black);
+filldraw(circle(W[1], rDot), gray(0.6), black);
+filldraw(circle(W[3], rDot), gray(0.6), black);
+filldraw(circle(W[5], rDot), gray(0.6), black);
