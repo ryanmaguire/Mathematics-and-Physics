@@ -70,6 +70,9 @@ real arsize = 4bp;
 /*  Width of the outter hexagon.                                              */
 real outter_width = r0*cos_theta;
 
+/*  Dashed pen for the k_3,3 graph.                                           */
+pen dpen = black + linewidth(0.3pt) + linetype("4 4");
+
 /*  Compute the locations of the points on both hexagons.                     */
 for (k = 0; k < 6; ++k)
 {
@@ -79,36 +82,36 @@ for (k = 0; k < 6; ++k)
 }
 
 /*  Draw the lines for K_3,3.                                                 */
-draw(W[0] -- MidPoint2D(V[5], V[0]));
-draw(W[1] -- MidPoint2D(V[0], V[1]));
-draw(W[2] -- MidPoint2D(V[1], V[2]));
-draw(W[3] -- MidPoint2D(V[2], V[3]));
-draw(W[4] -- MidPoint2D(V[3], V[4]));
-draw(W[5] -- MidPoint2D(V[4], V[5]));
-draw(W[0] -- W[1] -- W[2] -- W[3] -- W[4] -- W[5] -- cycle);
-
-/*  Points for the dual graph. Some are in the corners of the hexagon, so     *
- *  you only see a "third" of the point.                                      */
-filldraw(circle(O, rDot), yellow, black);
-filldraw(V[0] -- arc(V[0], rDot, 150.0, 270.0) -- cycle, green, black);
-filldraw(V[2] -- arc(V[2], rDot, 270.0, 390.0) -- cycle, green, black);
-filldraw(V[4] -- arc(V[4], rDot, 30.0, 150.0) -- cycle, green, black);
-filldraw(V[1] -- arc(V[1], rDot, 210.0, 330.0) -- cycle, purple, black);
-filldraw(V[3] -- arc(V[3], rDot, 330.0, 450.0) -- cycle, purple, black);
-filldraw(V[5] -- arc(V[5], rDot, 90.0, 210.0) -- cycle, purple, black);
+draw(W[0] -- MidPoint2D(V[5], V[0]), dpen);
+draw(W[1] -- MidPoint2D(V[0], V[1]), dpen);
+draw(W[2] -- MidPoint2D(V[1], V[2]), dpen);
+draw(W[3] -- MidPoint2D(V[2], V[3]), dpen);
+draw(W[4] -- MidPoint2D(V[3], V[4]), dpen);
+draw(W[5] -- MidPoint2D(V[4], V[5]), dpen);
+draw(W[0] -- W[1] -- W[2] -- W[3] -- W[4] -- W[5] -- cycle, dpen);
 
 /*  Draw lines representing the glueing of the hexagon.                       */
-draw(V[0] -- V[1], gray(0.3), MidSharpArrow(arsize));
-draw(V[4] -- V[3], gray(0.3), MidSharpArrow(arsize));
-draw(V[1] -- V[2], gray(0.5), MidSharpArrow(arsize));
-draw(V[5] -- V[4], gray(0.5), MidSharpArrow(arsize));
-draw(V[3] -- V[2], gray(0.7), MidSharpArrow(arsize));
-draw(V[5] -- V[0], gray(0.7), MidSharpArrow(arsize));
+draw(V[0] -- V[1], red, MidSharpArrow(arsize));
+draw(V[4] -- V[3], red, MidSharpArrow(arsize));
+draw(V[1] -- V[2], green, MidSharpArrow(arsize));
+draw(V[5] -- V[4], green, MidSharpArrow(arsize));
+draw(V[3] -- V[2], blue, MidSharpArrow(arsize));
+draw(V[5] -- V[0], blue, MidSharpArrow(arsize));
 
-/*  To show that this is K_3,3, draw the "top" and "bottom" different colors. */
-filldraw(circle(W[0], rDot), blue, black);
-filldraw(circle(W[2], rDot), blue, black);
-filldraw(circle(W[4], rDot), blue, black);
-filldraw(circle(W[1], rDot), red, black);
-filldraw(circle(W[3], rDot), red, black);
-filldraw(circle(W[5], rDot), red, black);
+/*  To show that this is K_3,3, draw the "top" and "bottom" different.        */
+filldraw(circle(W[0], rDot), gray(0.3), black);
+filldraw(circle(W[2], rDot), gray(0.3), black);
+filldraw(circle(W[4], rDot), gray(0.3), black);
+filldraw(circle(W[1], rDot), gray(0.7), black);
+filldraw(circle(W[3], rDot), gray(0.7), black);
+filldraw(circle(W[5], rDot), gray(0.7), black);
+
+/*  Points for the dual graph. Some are in the corners of the hexagon         *
+ *  so you only see a "third" of the point.                                   */
+filldraw(circle(O, rDot), yellow, black);
+filldraw(circle(V[0], rDot), cyan, black);
+filldraw(circle(V[2], rDot), cyan, black);
+filldraw(circle(V[4], rDot), cyan, black);
+filldraw(circle(V[1], rDot), magenta, black);
+filldraw(circle(V[3], rDot), magenta, black);
+filldraw(circle(V[5], rDot), magenta, black);

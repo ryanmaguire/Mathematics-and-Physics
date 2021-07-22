@@ -39,11 +39,15 @@ pair MidPoint2D(pair A, pair B)
 
 /*  Variables for indexing.                                                   */
 int k, m, n;
+
+/*  Number of hexagons to draw (NxN will be drawn).                           */
 int N = 6;
 
-/*  Two arrays for vertices in the inner and outter hexagons.                 */
+/*  Array for the hexagon.                                                    */
 pair[] V;
-pair[] W;
+
+/*  Array for the vertices centered around the origin.                        */
+pair[] Hex;
 
 /*  The angle made with the x axis and the first point.                       */
 real theta = pi / 6.0;
@@ -78,6 +82,10 @@ pair ds = scale(2.0*outter_width)*expi(0.6666667*pi);
 /*  Transform used for shifting later.                                        */
 transform T;
 
+/*  Compute the locations of the starting hexagon.                            */
+for (k = 0; k < 6; ++k)
+    Hex[k] = T*(scale(r0)*expi(theta + 0.33333*pi*k));
+
 /*  Loop through all of the hexagons.                                         */
 for (m = 0; m < N; ++m)
 {
@@ -89,21 +97,21 @@ for (m = 0; m < N; ++m)
         /*  Compute the locations of the points on both hexagons.             */
         for (k = 0; k < 6; ++k)
         {
-            V[k] = T*(scale(r0)*expi(theta + 0.33333*pi*k));
-            W[k] = T*(scale(r1)*expi(0.33333*pi*k));
+            V[k] = T*Hex[k];
             draw(T*O -- V[k]);
         }
 
         /*  Points for the dual graph. Some are in the corners of the hexagon *
          *  so you only see a "third" of the point.                           */
         filldraw(circle(T*O, rDot), yellow, black);
-        filldraw(circle(V[0], rDot), green, black);
-        filldraw(circle(V[2], rDot), green, black);
-        filldraw(circle(V[4], rDot), green, black);
-        filldraw(circle(V[1], rDot), purple, black);
-        filldraw(circle(V[3], rDot), purple, black);
-        filldraw(circle(V[5], rDot), purple, black);
+        filldraw(circle(V[0], rDot), cyan, black);
+        filldraw(circle(V[2], rDot), cyan, black);
+        filldraw(circle(V[4], rDot), cyan, black);
+        filldraw(circle(V[1], rDot), magenta, black);
+        filldraw(circle(V[3], rDot), magenta, black);
+        filldraw(circle(V[5], rDot), magenta, black);
     }
 }
 
+/*  Clip the picture so it fits into a square drawing.                        */
 clip((0.0, 0.0) -- (r0*N, 0.0) -- (r0*N, r0*N) -- (0.0, r0*N) -- cycle);

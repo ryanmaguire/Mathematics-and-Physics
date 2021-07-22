@@ -19,14 +19,14 @@
  ******************************************************************************/
 
 /*  Size of the figure.                                                       */
-size(512);
+size(256);
 
 /*  Coordinates for the vertices of the graph.                                */
 pair[] A = {(-1.0, -0.5), (0.0, -0.5), (1.0, -0.5)};
 pair[] B = {(-1.0, 0.5), (0.0, 0.5), (1.0, 0.5)};
 
 /*  Radius of the dots.                                                       */
-real radius = 0.05;
+real radius = 0.04;
 
 /*  Value for the edge of the square.                                         */
 real edge = 1.5;
