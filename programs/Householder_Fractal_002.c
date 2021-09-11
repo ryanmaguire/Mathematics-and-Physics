@@ -57,17 +57,21 @@ static const int size = 1024;
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
 static const complex double coeffs[] = {
-    1.0,
+    18.0,
+    6.0,
+    -3.0,
+    -13.0,
+    -6.0,
+    -9.0,
+    12.0,
+    -4.0,
+    8.0,
+    13.0,
+    9.0,
+    -11.0,
+    4.0,
     0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    -1.0
+    -13.0
 };
 
 /*  Values for the min and max of the x and y axes.                           */
@@ -382,7 +386,7 @@ int main(void)
     }
 
     /*  Open a PPM file and give it write permissions.                        */
-    fp = fopen("householder_fractal_001.ppm", "w");
+    fp = fopen("householder_fractal_002.ppm", "w");
 
     /*  fopen returns NULL on failure. Check for this.                        */
     if (!fp)
