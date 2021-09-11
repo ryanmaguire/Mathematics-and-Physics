@@ -22,14 +22,13 @@
  ******************************************************************************
  *  This code creates a Halley fractal for any polynomial up to degree 14.    *
  *  If you add more colors, you can have a higher degree. It works based on   *
- *  an augmentation of the ideas described in "How to find all roots of       *
- *  complex polynomials by Newton's method" by John Hubbard, Dierk Schleicher,*
- *  and Scott Sutherland. Rather than using Newton's method, Halley's is      *
- *  implemented. The idea still works in practice, though I don't know of any *
- *  paper proving such methods should work. This code has been greatly        *
- *  generalized and made C89/C90 compliant in my other project, libtmpl. The  *
- *  code presented here requires C99 features, in particular complex.h.       *
- * 
+ *  the ideas described in "How to find all roots of complex polynomials by   *
+ *  Newton's method" by John Hubbard, Dierk Schleicher, and Scott Sutherland. *
+ *  This algorithm finds the roots, and then Halley's method is used to       *
+ *  create a Halley fractal. This code has been greatly generalized and made  *
+ *  C89/C90 compliant in my other project, libtmpl. The code presented here   *
+ *  requires C99 features, in particular complex.h.                           *
+ *                                                                            *
  *  NOTE:                                                                     *
  *      As of this writing, Microsoft's C library does not support C99        *
  *      features, and does not implement complex numbers according to the     *
@@ -39,6 +38,8 @@
 
 /*  fprintf and fputc are found here.                                         */
 #include <stdio.h>
+
+/*  cos and sin found here.                                                   */
 #include <math.h>
 
 /*  Complex numbers found here.                                               */
@@ -55,7 +56,25 @@ static const int size = 1024;
 
 /*  The coefficients of the polynomial. The zeroth coefficient is for z^deg   *
  *  and the last coefficient is the constant term.                            */
-static const complex double coeffs[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static const complex double coeffs[] = {
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+};
+
+/*  Values for the min and max of the x and y axes.                           */
+static const double x_min = -3.0;
+static const double x_max =  3.0;
+static const double y_min = -3.0;
+static const double y_max =  3.0;
 
 /******************************************************************************
  ******************************************************************************
@@ -63,16 +82,22 @@ static const complex double coeffs[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
  ******************************************************************************
  ******************************************************************************/
 
-/*  Maximum number of iterations for the Newton-Raphson method. This must be  *
+/*  Maximum number of iterations for Halley's method. This must be            *
  *  less than 255, otherwise we'll run out of colors.                         */
-static const unsigned int max_iters = 64;
+static const unsigned int max_iters = 32;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */
-static const unsigned int root_finder_max_iter = 200;
+static const unsigned int root_finder_max_iter = 64;
 
 /*  The degree of the polynomial the user selected.                           */
 #define DEG (sizeof(coeffs)/sizeof(coeffs[0]) - 1U)
+
+/*  Tolerance factor for finding a root.                                      */
+static const double root_toler = 1.0E-8;
+
+/*  Tolerance for the distance between two points to be considered distinct.  */
+static const double dist_toler = 1.0E-6;
 
 /*  A constant for pi. Some implementations include pi as M_PI, but we'll     *
  *  define it here.                                                           */
@@ -114,7 +139,7 @@ static complex double poly_prime_eval(complex double z)
 
     /*  Compute the derivative of the polynomial via Horner's method.         */
     for (n = 1U; n < DEG; ++n)
-        out = z*out + DEG*coeffs[n];
+        out = z*out + (DEG - n)*coeffs[n];
 
     return out;
 }
@@ -131,7 +156,7 @@ static complex double poly_double_prime_eval(complex double z)
 
     /*  Compute the second derivative of the polynomial via Horner's method.  */
     for (n = 1U; n < DEG - 1U; ++n)
-        out = z*out + DEG*(DEG-1)*coeffs[n];
+        out = z*out + (DEG - n)*(DEG - n - 1U)*coeffs[n];
 
     return out;
 }
@@ -141,7 +166,7 @@ static complex double poly_double_prime_eval(complex double z)
  *  is the number of roots. The roots are stored in the pointer roots.        */
 static unsigned int get_roots(unsigned int deg, complex double *roots)
 {
-    complex double p, f_p, df_p, d2f_p;
+    complex double p, f_p, df_p;
     unsigned int m, n, ell, iter, n_roots;
     double r, theta, min, temp;
 
@@ -150,7 +175,7 @@ static unsigned int get_roots(unsigned int deg, complex double *roots)
 
     /*  These special values are from the HSS paper.                          */
     const double s = ceil(0.26632*log(deg));
-    const double N = 1000.0*ceil(8.32547*deg*log(deg));
+    const double N = ceil(8.32547*deg*log(deg));
     const double factor_1 = 1.0 + sqrt(2.0);
     const double factor_2 = (deg - 1.0) / deg;
     const double angle_factor = 2.0*PI / N;
@@ -189,31 +214,27 @@ static unsigned int get_roots(unsigned int deg, complex double *roots)
             /*  Compute the angle.                                            */
             theta = angle_factor*n;
 
-            /*  The starting point for Halley's method is specified by the    *
+            /*  The starting point for Newton's method is specified by the    *
              *  angle and circle we're on. Compute this point.                */
             p = r * (cos(theta) + dbl_I*sin(theta));
 
-            /*  Run Halley's method on this point, see if we converge.        */
+            /*  Run Newton's method on this point, see if we converge.        */
             for (iter = 0U; iter < root_finder_max_iter; ++iter)
             {
-                /*  Halley's method requires f(z), f'(z), and f''(z), unlike  *
-                 *  Newton's which doesn't need f''(z). Compute these.        */
                 f_p = poly_eval(p);
                 df_p = poly_prime_eval(p);
-                d2f_p = poly_double_prime_eval(p);
 
                 /*  Compute the next step in sequence.                        */
-                p = p - 2.0*f_p * df_p / (2*df_p*df_p - f_p * d2f_p);
                 p = p - f_p / df_p;
 
                 /*  Check for convergence.                                    */
-                if (cabs(poly_eval(p)) < 1.0E-10)
+                if (cabs(poly_eval(p)) < root_toler)
                     break;
             }
             /*  End of for (iter = 0U; iter < root_finder_max_iter; ++iter).  */
 
             /*  See if this new element is indeed a root.                     */
-            if (cabs(poly_eval(p)) < 1.0E-8)
+            if (cabs(poly_eval(p)) < root_toler)
             {
                 /*  If this is the first root, add it.                        */
                 if (n_roots == 0)
@@ -234,16 +255,15 @@ static unsigned int get_roots(unsigned int deg, complex double *roots)
                     }
 
                     /*  If we're far enough away, this is a new root.         */
-                    if (min >= 1.0E-8)
+                    if (min >= dist_toler)
                     {
                         roots[n_roots] = p;
                         n_roots += 1;
                     }
                 }
                 /*  End of if (n_roots == 0).                                 */
-
             }
-            /*  End of if (cabs(poly_eval(p)) < 1.0E-8).                      */
+            /*  End of if (cabs(poly_eval(p)) < root_toler).                  */
         }
         /*  End of for (n = 0U; n < N; ++n).                                  */
     }
@@ -265,13 +285,11 @@ static void write_color(struct color c, FILE *fp)
 /*  Function for drawing the Halley fractal of the input polynomial.          */
 int main(void)
 {
-    /*  Declare a variable for the output file and give it write permission.  */
+    /*  Declare all necessary variables.                                      */
     FILE *fp;
-
-    complex double f_z, df_z, d2f_z, z, root, roots[DEG];
-    unsigned int n_roots;
+    complex double f_z, df_z, d2f_z, z, roots[DEG];
+    unsigned int n_roots, x, y;
     const complex double dbl_I = (complex double)_Complex_I;
-    int x, y;
     double z_x, z_y, min, temp, scale;
 
     /*  The colors for the drawing.                                           */
@@ -298,8 +316,8 @@ int main(void)
         /*  Teal. RGB = (0, 128, 128).                                        */
         {0x00U, 0x80U, 0x80U},
 
-        /*  Purple. RGB = (255, 0, 255).                                      */
-        {0xFFU, 0x00U, 0xFFU},
+        /*  Purple. RGB = (128, 0, 128).                                      */
+        {0x80U, 0x00U, 0x80U},
 
         /*  Orange. RGB = (255, 85, 0).                                       */
         {0xFFU, 0x55U, 0x00U},
@@ -320,65 +338,79 @@ int main(void)
         {0x66U, 0x33U, 0x66U}
     };
 
-    /*  Colors for the roots (Red, Green, Blue).                              */
+    /*  Color struct used to draw the basins.                                 */
     struct color brightness;
-    const struct color black = {0x00U, 0x00U, 0x00U};
 
-    /*  Values for the min and max of the x and y axes.                       */
-    const double x_min = -1.0;
-    const double x_max =  1.0;
-    const double y_min = -1.0;
-    const double y_max =  1.0;
+    /*  Black for points that fail to converge.                               */
+    const struct color black = {0x00U, 0x00U, 0x00U};
 
     /*  Factor for giving the image a gradient.                               */
     unsigned char factor = 255/max_iters;
 
-    /* Dummy variables to loop over.                                          */
+    /*  Dummy variables to loop over.                                         */
     unsigned int iters, ind, n;
 
+    /*  Scale factors for the x and y axes.                                   */
+    const double y_scale = (y_min - y_max)/(size - 1.0);
+    const double x_scale = (x_max - x_min)/(size - 1.0);
+
+    /*  Find the roots.                                                       */
     n_roots = get_roots(DEG, roots);
 
+    /*  If none were found, abort.                                            */
     if (n_roots == 0U)
     {
         puts("No Roots Found. Aborting.");
         return -1;
     }
 
-    fp = fopen("halley_fractal.ppm", "w");
+    /*  Open a PPM file and give it write permissions.                        */
+    fp = fopen("halley_fractal_003.ppm", "w");
+
+    /*  fopen returns NULL on failure. Check for this.                        */
+    if (!fp)
+    {
+        puts("Error: fopen returned NULL. Aborting.");
+        return -1;
+    }
+
+    /*  Otherwise, print the preamble to the file.                            */
     fprintf(fp, "P6\n%d %d\n255\n", size, size);
 
+    /*  Loop over pixels in the y axis.                                       */
     for (y = 0U; y < size; ++y)
     {
-        z_y = y * (y_max - y_min)/(size - 1) + y_min;
-        z_y = -z_y;
+        /*  Compute the current imaginary component of the complex number.    */
+        z_y = y * y_scale - y_min;
 
+        /*  Loop of the pixels in the x axis.                                 */
         for (x = 0U; x < size; ++x)
         {
-            z_x = x * (x_max - x_min)/(size - 1) + x_min;
+            /*  Compute the real component of the current point.              */
+            z_x = x * x_scale + x_min;
+
+            /*  Compute the complex number corresponding to (x, y).           */
             z = z_x + dbl_I*z_y;
 
-            /*  Allow max_iters number of iterations of Newton-Raphson.       */
+            /*  Allow max_iters number of iterations of Halley's method.      */
             for (iters = 0U; iters < max_iters; ++iters)
             {
                 /*  Perfrom Halley's Method on the polynomial f.              */
                 f_z = poly_eval(z);
                 df_z = poly_prime_eval(z);
                 d2f_z = poly_double_prime_eval(z);
-                root = z - 2.0*f_z * df_z / (2.0*df_z*df_z - f_z * d2f_z);
-                root = z - f_z / df_z;
+                z = z - 2.0*f_z * df_z / (2.0*df_z*df_z - f_z * d2f_z);
 
                 /*  Checks for convergence.                                   */
-                if (cabs(root - z) < 10e-10)
+                if (cabs(poly_eval(z)) < root_toler)
                     break;
-
-                z = root;
             }
 
-            /*  Find which roots the final iteration is closest too.          */
-            min = cabs(z-roots[0]);
+            /*  Find which root the final iteration is closest too.           */
+            min = cabs(z - roots[0]);
             ind = 0;
 
-            for (n=1; n<n_roots; ++n)
+            for (n = 1U; n < n_roots; ++n)
             {
                 temp = cabs(z - roots[n]);
                 if (temp < min)
@@ -388,11 +420,18 @@ int main(void)
                 }
             }
 
-            if (min > 0.1)
+            /*  If we didn't converge to a root, color it black.              */
+            if (min > dist_toler)
                 write_color(black, fp);
+
+            /*  Else, color the pixel based on which root we converged to.    */
             else
             {
+                /*  Give a gradient to the color based on the number of       *
+                 *  iterations it took to converge.                           */
                 scale = (255.0-factor*iters)/255.0;
+
+                /*  Set the RGB values.                                       */
                 brightness.red = (unsigned char)(scale * colors[ind].red);
                 brightness.green = (unsigned char)(scale * colors[ind].green);
                 brightness.blue = (unsigned char)(scale * colors[ind].blue);
@@ -400,8 +439,11 @@ int main(void)
                 /*  Color the current pixel.                                  */
                 write_color(brightness, fp);
             }
+            /*  End of if (min > dist_toler).                                 */
         }
+        /*  End of x for-loop.                                                */
     }
+    /*  End of y for-loop.                                                    */
 
     return 0;
 }

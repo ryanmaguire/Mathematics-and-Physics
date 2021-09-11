@@ -38,7 +38,7 @@ static int yt = 0;
 static long rrmin = 64UL;
 static long rrmax = 128UL;
 static int center = 0;
-static const int  size  = 32U;
+static const int size = 32U;
 
 /*  Hex code for blue-green. White is the triple (255, 255, 255), which       *
  *  corresponds to the hex value 0xFFFFFF. Similarly, black is (0, 0, 0)      *
@@ -78,7 +78,7 @@ static void fcube(int x, int y, int z, const unsigned int fill, FILE *out)
 /*  Function for determining if we're drawing the cube with center (x, y, z). */
 static int surface(int x, int y, int z)
 {
-    /* Doubled coordinates:                                                   */
+    /*  Doubled coordinates:                                                  */
     long dx = 2*x - center;
     long dy = 2*y - center;
     long dz = 2*z - center;
@@ -94,7 +94,7 @@ int main(void)
     int width, height;
     int x, y, z;
 
-    /* Calculate coordinate range.                                            */
+    /*  Calculate coordinate range.                                           */
     int xmin = get_x(0U, 0U);
     int xmax = get_x(0U, 0U);
 
