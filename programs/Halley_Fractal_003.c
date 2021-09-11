@@ -84,7 +84,7 @@ static const double y_max =  3.0;
 
 /*  Maximum number of iterations for Halley's method. This must be            *
  *  less than 255, otherwise we'll run out of colors.                         */
-static const unsigned int max_iters = 32;
+static const unsigned int max_iters = 24;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */
