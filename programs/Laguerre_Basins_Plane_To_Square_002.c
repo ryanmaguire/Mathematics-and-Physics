@@ -20,14 +20,16 @@
  *  Author: Ryan Maguire                                                      *
  *  Date:   2021/02/13                                                        *
  ******************************************************************************
- *  This code creates a Halley fractal for any polynomial up to degree 14.    *
+ *  This code creates a Laguerre "fractal" for any polynomial up to degree 14.*
  *  If you add more colors, you can have a higher degree. It works based on   *
  *  the ideas described in "How to find all roots of complex polynomials by   *
  *  Newton's method" by John Hubbard, Dierk Schleicher, and Scott Sutherland. *
- *  This algorithm finds the roots, and then Halley's method is used to       *
- *  create a Halley fractal. This code has been greatly generalized and made  *
- *  C89/C90 compliant in my other project, libtmpl. The code presented here   *
- *  requires C99 features, in particular complex.h.                           *
+ *  This algorithm finds the roots, and then Laguerre's method is used to     *
+ *  draw the basins of attraction. This code has been greatly generalized and *
+ *  made C89/C90 compliant in my other project, libtmpl. The code presented   *
+ *  here requires C99 features, in particular complex.h. Unlike Newton's,     *
+ *  Halley's, and Householder's methods, the Laguerre method does not create  *
+ *  a crazy fractal-like structure, but instead is very tame.                 *
  *                                                                            *
  *  NOTE:                                                                     *
  *      As of this writing, Microsoft's C library does not support C99        *
@@ -64,7 +66,7 @@ static const complex double coeffs[] = {1.0, -1.0, 0.0, -1.0, 1.0};
  ******************************************************************************
  ******************************************************************************/
 
-/*  Maximum number of iterations for Halley's method. This must be            *
+/*  Maximum number of iterations for Laguerre's method. This must be          *
  *  less than 255, otherwise we'll run out of colors.                         */
 static const unsigned int max_iters = 16;
 
@@ -82,10 +84,10 @@ static const double root_toler = 1.0E-10;
 static const double dist_toler = 1.0E-4;
 
 /*  Values for the min and max of the x and y axes.                           */
-static const double x_min = -1.0;
-static const double x_max =  1.0;
-static const double y_min = -1.0;
-static const double y_max =  1.0;
+static const double x_min = -2.0;
+static const double x_max =  2.0;
+static const double y_min = -2.0;
+static const double y_max =  2.0;
 
 /*  A constant for pi. Some implementations include pi as M_PI, but we'll     *
  *  define it here.                                                           */
@@ -270,20 +272,22 @@ static void write_color(struct color c, FILE *fp)
 }
 /*  End of write_color.                                                       */
 
-static complex double f(complex double z)
+/*  This function stretches the square [-1, 1]x[-1, 1] to the entire plane.   *
+ *  This allows us to draw the entire plane in the picture.                   */
+static complex double square_to_plane_homeo(complex double z)
 {
     double re = creal(z) / (1.0 - fabs(creal(z)));
     double im = cimag(z) / (1.0 - fabs(cimag(z)));
     return re + (complex double)_Complex_I*im;
 }
+/*  End of square_to_plane_homeo.                                             */
 
-/*  Function for drawing the Halley fractal of the input polynomial.          */
+/*  Function for drawing the Laguerre basins of the input polynomial.         */
 int main(void)
 {
     /*  Declare all necessary variables.                                      */
     FILE *fp;
-    complex double f_z, df_z, d2f_z, z, roots[DEG], H, G, p, denom;
-    complex double denom_minus, denom_plus;
+    complex double f_z, z, roots[DEG], H, G, p, denom, denom_minus, denom_plus;
     unsigned int n_roots, x, y;
     const complex double dbl_I = (complex double)_Complex_I;
     double z_x, z_y, min, temp, scale;
@@ -361,7 +365,7 @@ int main(void)
     }
 
     /*  Open a PPM file and give it write permissions.                        */
-    fp = fopen("halley_fractal_002.ppm", "w");
+    fp = fopen("laguerre_fractal_plane_to_square_002.ppm", "w");
 
     /*  fopen returns NULL on failure. Check for this.                        */
     if (!fp)
@@ -385,8 +389,9 @@ int main(void)
             /*  Compute the real component of the current point.              */
             z_x = x * x_scale + x_min;
 
-            /*  Compute the complex number corresponding to (x, y).           */
-            z = f(z_x + dbl_I*z_y);
+            /*  Compute the complex number corresponding to (x, y). Use the   *
+             *  homeomorphism to stretch the square into the entire plane.    */
+            z = square_to_plane_homeo(z_x + dbl_I*z_y);
 
             /*  Allow max_iters number of iterations of Laguerre's method.    */
             for (iters = 0U; iters < max_iters; ++iters)
@@ -454,4 +459,3 @@ int main(void)
     return 0;
 }
 /*  End of main.                                                              */
-
