@@ -58,17 +58,6 @@ static const int size = 1024;
  *  and the last coefficient is the constant term.                            */
 static const complex double coeffs[] = {1.0, -1.0, 0.0, -1.0, 1.0};
 
-/*  Values for the min and max of the x and y axes.                           */
-static const double x_min = -30.0;
-static const double x_max =  30.0;
-static const double y_min = -30.0;
-static const double y_max =  30.0;
-
-/*  Values for the elliptic curve.                                            */
-const double e_a = 2.5;
-const double e_b = 1.3;
-const double e_shift = 1.0;
-
 /******************************************************************************
  ******************************************************************************
  *                            End User Input                                  *
@@ -91,6 +80,12 @@ static const double root_toler = 1.0E-10;
 
 /*  Tolerance for the distance between two points to be considered distinct.  */
 static const double dist_toler = 1.0E-4;
+
+/*  Values for the min and max of the x and y axes.                           */
+static const double x_min = -1.0;
+static const double x_max =  1.0;
+static const double y_min = -1.0;
+static const double y_max =  1.0;
 
 /*  A constant for pi. Some implementations include pi as M_PI, but we'll     *
  *  define it here.                                                           */
@@ -275,6 +270,13 @@ static void write_color(struct color c, FILE *fp)
 }
 /*  End of write_color.                                                       */
 
+static complex double f(complex double z)
+{
+    double re = creal(z) / (1.0 - fabs(creal(z)));
+    double im = cimag(z) / (1.0 - fabs(cimag(z)));
+    return re + (complex double)_Complex_I*im;
+}
+
 /*  Function for drawing the Halley fractal of the input polynomial.          */
 int main(void)
 {
@@ -285,9 +287,6 @@ int main(void)
     unsigned int n_roots, x, y;
     const complex double dbl_I = (complex double)_Complex_I;
     double z_x, z_y, min, temp, scale;
-
-    /*  Final value for the elliptic curve.                                   */
-    const double e_c = -e_b*pow(-sqrt(0.148) + e_shift, 3.0);
 
     /*  The colors for the drawing.                                           */
     struct color colors[14] = {
@@ -387,7 +386,7 @@ int main(void)
             z_x = x * x_scale + x_min;
 
             /*  Compute the complex number corresponding to (x, y).           */
-            z = z_x + dbl_I*z_y;
+            z = f(z_x + dbl_I*z_y);
 
             /*  Allow max_iters number of iterations of Laguerre's method.    */
             for (iters = 0U; iters < max_iters; ++iters)
@@ -427,12 +426,8 @@ int main(void)
                 }
             }
 
-            z_x = z_x + e_shift;
-            if (fabs(e_a*z_y*z_y - e_b*z_x*z_x*z_x - e_c) < 0.05*fabs(z_y))
-                write_color(black, fp);
-
             /*  If we didn't converge to a root, color it black.              */
-            else if (min > dist_toler)
+            if (min > dist_toler)
                 write_color(black, fp);
 
             /*  Else, color the pixel based on which root we converged to.    */
