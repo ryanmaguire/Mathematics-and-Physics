@@ -1,0 +1,186 @@
+\documentclass{article}
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{hyperref}                   % Hyperlinks.
+
+% Colors for hyperref.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+\title{Computational Topology}
+\author{Ryan Maguire}
+\date{Fall 2021}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{normal}
+\newtheorem{example}{Example}[section]
+
+\begin{document}
+    \maketitle
+    These notes come from the homework, lectures, and project work for
+    the computational topology course offered by the CS department at
+    Dartmouth College during the Fall 2021 semester. Any errors contained
+    in these notes are my own.
+    \tableofcontents
+    \section{Week 1}
+        \subsection{Fun with Groups}
+            A group is an ordered pair $(G,*)$ where $G$ is a set and $*$ is a
+            \textit{binary operation}, a function $*:G\times{G}\rightarrow{G}$
+            such that:
+            \begin{enumerate}
+                \item For all $a,b,c\in{G}$ it is true that $a*(b*c)=(a*b)*c$
+                      (Associativty).
+                \item There exists an element $e\in{G}$ such that, for all
+                      $a\in{G}$ it is true that $a*e=e*a=a$
+                      (Existence of Identity).
+                \item For all $a\in{G}$ there exists $b\in{G}$ such that
+                      $a*b=b*a=e$. (Existence of Inverses).
+            \end{enumerate}
+            The given $a,b\in{G}$ such that $a*b=e$, the element $b$ is often
+            labeled $b=a^{-1}$.
+            \begin{example}
+                Letting $\mathbb{R}$ denote the real numbers,
+                $\mathbb{R}^{+}$ denote the set of all positive real numbers,
+                and $+$ and $\cdot$ denoting addition and multiplication of
+                real numbers, respectively, $(\mathbb{R},+)$ and
+                $(\mathbb{R}^{+},\cdot)$ are groups. This is because addition
+                and multiplication are both associative:
+                \begin{align}
+                    a+(b+c)&=(a+b)+c\\
+                    a\cdot(b\cdot{c})&=(a\cdot{b})\cdot{c}
+                \end{align}
+                $(\mathbb{R},+)$ has 0 as the identity since $a+0=0+a=a$ for
+                any real number $a$. $(\mathbb{R}^{+},\cdot)$ has 1 as the
+                identity since $a\cdot{1}=1\cdot{a}=a$. Lastly, inverses always
+                exist. Given $a\in\mathbb{R}$, the negative of $a$, denoted
+                $-a$, acts as the additive inverse since $a+(-a)=0$. Given
+                $a\in\mathbb{R}^{+}$, the reciprocal $1/a$ is the
+                multiplicative inverse since $a\cdot(1/a)=1$. Since all three
+                properties are satisfied, both $(\mathbb{R},+)$ and
+                $(\mathbb{R}^{+},\cdot)$ are groups.
+            \end{example}
+            \begin{example}
+                \label{ex:sym_diff_is_group}%
+                If $A$ is a set, if $G=\mathcal{P}(A)$ is the power set of $A$,
+                and if $\ominus$ is the \textit{symmetric difference} of sets,
+                then $(G,\ominus)$ is a group. The symmetric difference of two
+                sets $\mathcal{U}$ and $\mathcal{V}$ is the set all of elements
+                that are in either $\mathcal{U}$ or $\mathcal{V}$, but not
+                both. In set theory notation we can write:
+                \begin{equation}
+                    \mathcal{U}\ominus\mathcal{V}=
+                        (\mathcal{U}\cup\mathcal{V})\setminus
+                        (\mathcal{U}\cap\mathcal{V})
+                \end{equation}
+                The identity element is the empty set $\emptyset=\{\}$ since:
+                \begin{equation}
+                    \mathcal{U}\ominus\emptyset
+                        =(\mathcal{U}\cup\emptyset)\setminus
+                            (\mathcal{U}\cap\emptyset)
+                        =\mathcal{U}\setminus\emptyset
+                        =\mathcal{U}
+                \end{equation}
+                And similarly for $\emptyset\ominus\mathcal{U}$.
+                It is associative, but this requires a little bit of work.
+                The inverse of $\mathcal{U}\in{G}$ is $\mathcal{U}$ since:
+                \begin{align}
+                    \mathcal{U}\ominus\mathcal{U}
+                    &=(\mathcal{U}\cup\mathcal{U})\setminus
+                      (\mathcal{U}\cap\mathcal{U})\\
+                    &=\mathcal{U}\setminus\mathcal{U}\\
+                    &=\emptyset
+                \end{align}
+                Since this structure satisfies the three properties,
+                $(\mathcal{P}(A),\ominus)$ is a group.
+            \end{example}
+            A group homomorphism between two groups $(G,*)$ and $(H,\circ)$ is
+            a function $f:G\rightarrow{H}$ such that, for all $a,b\in{G}$, it
+            is true that:
+            \begin{equation}
+                f(a*b)=f(a)\circ{f}(b)
+            \end{equation}
+            That is, $f$ \textit{respects} the group operations.
+            \begin{example}
+                If $G=\mathbb{R}$, the set of all real numbers,
+                $H=\mathbb{R}^{+}$, the set of all positive real numbers, and
+                if $f:G\rightarrow{H}$ is the function $f(x)=\exp(x)$, then
+                $f$ is a homomorphism with respect to the group structures
+                $(\mathbb{R},+)$ and $(\mathbb{R}^{+},\cdot)$, where
+                $+$ and $\cdot$ are the familiar notions of addition and
+                multiplication, respectively. This is because of one of the
+                fundamental identities for exponentiation:
+                \begin{equation}
+                    \exp(x+y)=\exp(x)\cdot\exp(y)
+                \end{equation}
+                This is also written as $e^{x+y}=e^{x}e^{y}$ and the
+                multiplication symbol is dropped.
+            \end{example}
+            The kernel of a homomorphism $f:G\rightarrow{H}$ between two
+            groups $(G,*)$ and $(H,\circ)$ is the set all all elements in
+            $G$ which map to the identity element of $H$. In set theory
+            notation, this is the fiber of the identity $e_{H}$, denoted
+            $f^{-1}[\{e_{H}\}]$, where $e_{H}$ is the identity of $H$. We can
+            also use set builder notation as follows:
+            \begin{equation}
+                \ker(f)=\{\,x\in{G}\,|\,f(x)=e_{H}\,\}
+            \end{equation}
+            A graph is an ordered pair $(V,E)$, where $V$ is a set, and
+            $E\subset\mathcal{P}(V)$, the power set of $V$, with the property
+            that for all $e\in{E}$, there are exactly two distinct elements
+            $v_{0},v_{1}\in{e}$. The set $V$ is called the \textit{vertex set},
+            and the set $E$ is called the \textit{edge set}. An element
+            $e\in{E}$ tells us two vertices are connected by an edge, hence
+            the requirement that $e=\{v_{0},v_{1}\}$ is a subset of $V$ with
+            exactly two distinct elements.
+            \par\hfill\par
+            If $(V,E)$ is a graph, there are two groups we can associate to the
+            graph. First is the \textit{vertex space}, which is the set of
+            all subsets of vertices of the graph. In set theory notation, this
+            is the set $\mathcal{P}(V)$, the power set of $V$. This is made a
+            group with the symmetric difference operation $\ominus$, as we saw
+            in Ex,~\ref{ex:sym_diff_is_group}. Similarly, there is the set of
+            all subgraphs and this is called the \textit{edge space}, and it
+            too becomes a group with $\ominus$
+            \begin{theorem}
+                If $(V,E)$ is a graph, if $(\mathcal{P}(V),\ominus)$ is the
+                vertex space, if $(\mathcal{P}(E),\ominus)$ is the edge space,
+                and if $f:\mathcal{P}(E)\rightarrow\mathcal{P}(V)$ is the
+                function defined by $f(\mathcal{W})=\mathcal{U}$ where
+                $\mathcal{W}\in\mathcal{P}(E)$ is a subset of edges, and
+                $\mathcal{U}$ is the set of all elements of $V$ that have
+                odd degree in the graph $(V,\mathcal{W})$, then $f$ is a
+                group homomorphism.
+            \end{theorem}
+            \begin{proof}
+                We must prove that, for two collections of edges
+                $\mathcal{W}_{0}$ and $\mathcal{W}_{1}$, it is true that:
+                \begin{equation}
+                    f(\mathcal{W}_{0}\ominus\mathcal{W}_{1})
+                    =f(\mathcal{W}_{0})\ominus{f}(\mathcal{W}_{1})
+                \end{equation}
+                Let $\mathcal{U}_{0}$ be the set of all vertices with odd
+                degree in the graph $(V,\mathcal{W}_{0}\ominus\mathcal{W}_{1})$
+                and $\mathcal{U}_{1}$ be the set
+                $f(\mathcal{W}_{0})\ominus{f}(\mathcal{W}_{1})$. If
+                $v\in\mathcal{U}_{0}$, then $v$ has odd degree in the subgraph
+                $\mathcal{W}_{0}\ominus\mathcal{W}_{1}$ by definition.
+            \end{proof}
+\end{document}
