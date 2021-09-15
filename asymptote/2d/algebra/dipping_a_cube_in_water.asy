@@ -28,7 +28,6 @@ defaultpen(black + linewidth(0.3pt));
 pen dashp = defaultpen + linetype("4 4");
 pen thinp = black + linewidth(0.1pt);
 pen bluep = blue + linewidth(0.3pt);
-
 pen thindashp = thinp + linetype("4 4");
 pen bluedashp = bluep + linetype("4 4");
 pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
@@ -42,6 +41,7 @@ pair xyzpoint(real x, real y, real z)
 
     return scale(x)*X + scale(y)*Y + scale(z)*Z;
 }
+/*  End of xyzpoint.                                                          */
 
 /*  Coordinates for all of the points in the cube.                            */
 pair O = xyzpoint(0, 0, 0);
