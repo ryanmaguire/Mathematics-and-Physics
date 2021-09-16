@@ -4,8 +4,6 @@ if [ ! "$BASH_VERSION" ] ; then
         exit 1
 fi
 
-./make_figs.sh
-
 # Run pdflatex to create auxiliary files.
 pdflatex main.tex
 

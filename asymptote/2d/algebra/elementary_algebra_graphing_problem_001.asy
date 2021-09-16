@@ -18,6 +18,10 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+/*  PDF is easiest to use in LaTeX, so output this.                           */
+import settings;
+settings.outformat = "pdf";
+
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *
  *  asymptote/ folder of this project. You'll need to edit the                *
  *  ASYMPTOTE_DIR environment variable to include this.                       */
