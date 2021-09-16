@@ -54,7 +54,7 @@ real tickfont = 5pt;
 /*  Label for the tick marks.                                                 */
 Label ticklabel;
 
-/*  Think grey pen used for the grid.                                         */
+/*  Thin grey pen used for the grid.                                          */
 pen thingreyp = gray(0.8) + linewidth(0.3pt);
 
 /*  Thicker black pen used for the axes.                                      */
