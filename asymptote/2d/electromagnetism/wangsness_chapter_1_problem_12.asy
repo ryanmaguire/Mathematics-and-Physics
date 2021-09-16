@@ -89,6 +89,9 @@ pair sphere_arcs(real t)
 {
     /*  Angle for different parts of the curve.                               */
     real theta;
+
+    /*  The sphere consists of 3 arcs which will be drawn using the           *
+     *  projection function xyzpoint above.                                   */
     if (t < 0.0)
         return scale(r)*xyzpoint(0.0, 1.0, 0.0);
     else if (t < 1.0)
