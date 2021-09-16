@@ -44,7 +44,7 @@ int N_Nodes = 5;
 /*  Pairs for drawing the nodes later in the for-loop.                        */
 pair A, B, C, D;
 
-/*  size of the arrow heads.                                                  */
+/*  Size of the arrow heads.                                                  */
 real arsize = 5bp;
 
 /*  Loop over all of the points and label various functions and nodes.        */
