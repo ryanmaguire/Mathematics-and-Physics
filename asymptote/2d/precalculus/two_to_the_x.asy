@@ -51,7 +51,6 @@ real f(real x)
 /*  Graph the function.                                                       */
 draw(graph(f, -xlen, xlen, n=n_samples, operator ..), deepblue);
 
-
 /*  Draw the axes.                                                            */
 xaxis("$x$", RightTicks(NoZero), SharpArrows(arsize));
 yaxis("$y$", LeftTicks(NoZero), SharpArrows(arsize));

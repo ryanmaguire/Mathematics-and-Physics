@@ -33,8 +33,8 @@ settings.outformat = "pdf";
 /*  Size of the drawing.                                                      */
 size(256, IgnoreAspect);
 
-/*  Length of the x and y axes.                                               */
-real xlen = 1.3;
+/*  Length of the x axis.                                                     */
+real xlen = 1.1;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
