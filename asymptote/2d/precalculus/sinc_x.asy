@@ -35,6 +35,10 @@ size(256, IgnoreAspect);
 
 /*  Length of the x and y axes.                                               */
 real xlen = 10.3;
+real xmin = -10.5;
+real xmax = 10.5;
+real ymin = -0.3;
+real ymax = 1.1;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
@@ -42,6 +46,7 @@ real arsize = 5bp;
 /*  Number of samples in the drawing.                                         */
 int n_samples = 1000;
 
+/*  The function to be plotted, the sinc function.                            */
 real sinc(real x)
 {
     if (x == 0.0)
@@ -54,8 +59,12 @@ real sinc(real x)
 draw(graph(sinc, -xlen, xlen, n=n_samples), deepblue);
 
 /*  Draw the axes.                                                            */
-xaxis("$x$", RightTicks(NoZero), SharpArrows(arsize));
-yaxis("$y$", LeftTicks(NoZero, Step=0.2), SharpArrows(arsize));
+xaxis(RightTicks(NoZero, Step=3.0), SharpArrows(arsize), xmin=xmin, xmax=xmax);
+yaxis(LeftTicks(NoZero, Step=1.0), SharpArrows(arsize), ymin=ymin, ymax=ymax);
 
 /*  Label the function.                                                       */
 label("$f(x)=\textrm{sinc}(x)$", (0.5*xlen, 0.5), deepblue);
+
+/*  Label the axes.                                                           */
+label("$x$", (xlen, 0.07));
+label("$y$", (0.95, 1.0));
