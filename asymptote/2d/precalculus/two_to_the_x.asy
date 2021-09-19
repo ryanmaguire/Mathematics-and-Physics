@@ -40,7 +40,7 @@ real xlen = 2.2;
 real arsize = 5bp;
 
 /*  Number of samples in the drawing.                                         */
-int n_samples = 1000;
+int n_samples = 100;
 
 /*  The function to be plotted, 2^x.                                          */
 real f(real x)
@@ -49,7 +49,7 @@ real f(real x)
 }
 
 /*  Graph the function.                                                       */
-draw(graph(f, -xlen, xlen, n=n_samples), deepblue);
+draw(graph(f, -xlen, xlen, n=n_samples, operator ..), deepblue);
 
 
 /*  Draw the axes.                                                            */

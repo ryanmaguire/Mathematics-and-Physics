@@ -44,7 +44,7 @@ real ymax = 1.1;
 real arsize = 5bp;
 
 /*  Number of samples in the drawing.                                         */
-int n_samples = 200;
+int n_samples = 100;
 
 /*  Graph the function.                                                       */
 draw(graph(sin, -xlen, xlen, n=n_samples, operator ..), deepblue);

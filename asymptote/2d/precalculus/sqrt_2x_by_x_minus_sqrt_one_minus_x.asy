@@ -35,7 +35,7 @@ size(256, IgnoreAspect);
 
 /*  Length of the x and y axes.                                               */
 real xlen = 2.2;
-real ylen = 10.2;
+real ylen = 9.8;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
@@ -57,6 +57,7 @@ bool3 branch(real x)
     bool b;
     static int lastsign = 0;
 
+    /*  The value 0.61... is (-1 + sqrt(5))/2.                                */
     if (x <= 0.0 || x >= 1.0 || x == 0.61803398874989484820458683436563)
         return false;
 
@@ -81,7 +82,7 @@ crop();
 
 /*  Draw the axes.                                                            */
 xaxis("$x$", RightTicks(NoZero), SharpArrows(arsize));
-yaxis("$y$", LeftTicks(NoZero), SharpArrows(arsize));
+yaxis("$y$", LeftTicks(NoZero), SharpArrows(arsize), ymin=-ylen, ymax=ylen);
 
 /*  Label the function.                                                       */
 label("$f(x)=\frac{\sqrt{2x}}{x-\sqrt{1-x}}$", (-1.0, 2.0), deepblue);

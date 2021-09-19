@@ -40,15 +40,15 @@ real xlen = 1.3;
 real arsize = 5bp;
 
 /*  Number of samples in the drawing.                                         */
-int n_samples = 1000;
+int n_samples = 100;
 
-/*  Graph the function.                                                       */
-draw(graph(sin, -xlen, xlen, n=n_samples), deepblue);
+/*  Graph the functions.                                                      */
+draw(graph(sin, -xlen, xlen, n=n_samples, operator ..), deepblue);
 draw((-xlen, -xlen) -- (xlen, xlen), deepred);
 
 /*  Draw the axes.                                                            */
-xaxis("$x$", RightTicks(NoZero), SharpArrows(arsize));
-yaxis("$y$", LeftTicks(NoZero), SharpArrows(arsize));
+xaxis("$x$", RightTicks(NoZero, Step=0.5), SharpArrows(arsize));
+yaxis("$y$", LeftTicks(NoZero, Step=0.5), SharpArrows(arsize));
 
 /*  Label the function.                                                       */
 label("$f(x)=\sin(x)$", (0.8, 0.3), deepblue);

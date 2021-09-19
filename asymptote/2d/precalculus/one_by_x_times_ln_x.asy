@@ -41,7 +41,7 @@ real ylen = 10.2;
 real arsize = 5bp;
 
 /*  Number of samples in the drawing.                                         */
-int n_samples = 1000;
+int n_samples = 100;
 
 /*  The function to be plotted, 1 / xln(x).                                   */
 real f(real x)
@@ -71,7 +71,7 @@ bool3 branch(real x)
 }
 
 /*  Graph the function.                                                       */
-draw(graph(f, 0.0, xlen, n=n_samples, branch), deepblue);
+draw(graph(f, 0.0, xlen, n=n_samples, branch, operator ..), deepblue);
 
 /*  Crop the drawing to avoid the asymptotes.                                 */
 scale(false);
