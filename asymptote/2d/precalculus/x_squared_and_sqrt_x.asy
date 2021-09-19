@@ -40,16 +40,17 @@ real xlen = 1.3;
 real arsize = 5bp;
 
 /*  Number of samples in the drawing.                                         */
-int n_samples = 1000;
+int n_samples = 50;
 
-real f(real x)
+/*  The square function, f(x) = x^2.                                          */
+real square(real x)
 {
     return x*x;
 }
 
 /*  Graph the function.                                                       */
-draw(graph(sqrt, 0.0, xlen, n=n_samples), deepblue);
-draw(graph(f, 0.0, xlen, n=n_samples), deepred);
+draw(graph(sqrt, 0.0, xlen, n=n_samples, operator ..), deepblue);
+draw(graph(square, 0.0, xlen, n=n_samples, operator ..), deepred);
 draw((0.0, 0.0) -- (xlen, xlen), dashed);
 
 /*  Draw the axes.                                                            */
