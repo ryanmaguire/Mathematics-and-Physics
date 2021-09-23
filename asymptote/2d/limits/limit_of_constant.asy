@@ -99,7 +99,7 @@ filldraw(circle(X, rbig), black, black);
 filldraw(circle(XY, rbig), black, black);
 draw(X -- XY, dpen);
 label("$x_{0}$", (1.0, -0.1));
-label("$f(x_{0})$", (-0.2, 1.0));
+label("$f(x_{0})$", (-0.2, c + 0.1));
 
 /*  Draw the function f(x) = c.                                               */
 draw((start, c) -- (end, c));
