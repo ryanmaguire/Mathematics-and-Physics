@@ -29,6 +29,9 @@ import custom_arrows;
 /*  Module needed for the animation.                                          */
 import animation;
 
+/*  Used for drawing functions.                                               */
+import graph;
+
 /*  Size of the gif.                                                          */
 size(1024);
 
@@ -45,10 +48,7 @@ real arsize = 20bp;
 
 /*  Start and end of the x and y axes.                                        */
 real start = -0.4;
-real end = 1.4;
-
-/*  The value of interest.                                                    */
-real x0 = 0.5*end;
+real end = 1.0;
 
 /*  Radius used to draw dots.                                                 */
 real rdot = 0.008;
@@ -57,21 +57,27 @@ real rdot = 0.008;
 int n;
 
 /*  The number of frames in the GIF.                                          */
-int n_frames = 40;
+int n_frames = 50;
+
+/*  The value of interest.                                                    */
+real x0 = 0.5*end;
+real dx = 0.5*end / n_frames;
+
+/*  Number of samples for plotting f(x) = x^2.                                */
+int n_samples = 100;
 
 /*  Variable for looping over values of epsilon.                              */
-real eps = 0.2;
-real factor = 0.9;
+real eps = 0.1;
+
+/*  The function f(x) = x^2.                                                  */
+real square(real x)
+{
+    return x*x;
+}
 
 /*  Set up the background of the picture. This is the axes, the function, and *
  *  the labels of points of interest.                                         */
-label("$f(x)=x$", (0.6*end, 0.7*end));
-label("$x_{0}$", (x0, -0.08));
-label("$f(x_{0})$", (-0.08, x0));
-
-/*  Mark dots are x0 and f(x0).                                               */
-filldraw(circle((x0, 0.0), rdot), black, black);
-filldraw(circle((0.0, x0), rdot), black, black);
+label("$f(x)=x^{2}$", (0.6*end, 0.7*end));
 
 /*  Labels for the axes.                                                      */
 Label xlabel = Label("$x$", position = 1.0);
@@ -80,18 +86,29 @@ Label ylabel = Label("$y$", position = 1.0);
 /*  Draw the axes.                                                            */
 draw(xlabel, (start, 0.0) -- (end, 0.0), N, axesp, SharpArrow(arsize));
 draw(ylabel, (0.0, start) -- (0.0, end), E, axesp, SharpArrow(arsize));
-draw((end, end) -- (start, start));
-draw((0.0, x0) -- (x0, x0) -- (x0, 0.0), thinp);
+
+/*  Draw the function.                                                        */
+draw(graph(square, start, end, n=n_samples, operator ..));
 
 /*  Function for drawing dashed lines for the epsilon-delta problem.          */
 void draw_frame(real x, real epsilon)
 {
-    real xminus = x - epsilon;
-    real xplus = x + epsilon;
+    real y = square(x);
+    real delta = min(0.5*x, 0.5*epsilon/x);
 
-    draw((xminus, 0.0) -- (xminus, xminus) -- (0.0, xminus), dashed);
-    draw((xplus, 0.0) -- (xplus, xplus) -- (0.0, xplus), dashed);
-    draw((xminus, xplus) -- (xminus, xminus) -- (xplus, xminus), dashed);
+    real xminus = x - delta;
+    real xplus = x + delta;
+    real yminus = y - epsilon;
+    real yplus = y + epsilon;
+
+    filldraw(circle((x, 0.0), rdot), black, black);
+    filldraw(circle((0.0, y), rdot), black, black);
+    draw((0.0, y) -- (x, y) -- (x, 0.0), thinp);
+    draw((xminus, 0.0) -- (xminus, yminus) -- (0.0, yminus), dashed);
+    draw((xplus, 0.0) -- (xplus, yplus) -- (0.0, yplus), dashed);
+    draw((xminus, yplus) -- (xminus, yminus) -- (xplus, yminus), dashed);
+    label("$x_{0}$", (x, -0.08));
+    label("$f(x_{0})$", (-0.08, y));
 }
 /*  End of draw_frame.                                                        */
 
@@ -110,8 +127,8 @@ for (n = 0; n < n_frames; ++n)
     /*  Reset the picture so it's just the background again.                  */
     restore();
 
-    /*  Compute the next epsilon.                                             */
-    eps *= factor;
+    /*  Increment x0.                                                         */
+    x0 += dx;
 }
 
 /*  Render the gif.                                                           */
