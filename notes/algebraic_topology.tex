@@ -1,0 +1,244 @@
+\documentclass{article}
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{hyperref}                   % Hyperlinks.
+
+% Colors for hyperref.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+\title{Algebraic Topology}
+\author{Ryan Maguire}
+\date{Fall 2021}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+
+% TODO
+%   PL Structures
+%   transversality
+%   surgery
+%   Morse theory
+%   intersection theory
+%   cobordism
+%   bundles
+%   characteristic classes
+%   geometric topology
+%   Smale, sphere inversion
+
+\begin{document}
+    \maketitle
+    These notes come from my personal study of algebraic topology. Many of
+    the concepts come from Allen Hatcher's Algebraic Topology.
+    Any errors in these notes are my own.
+    \tableofcontents
+    \section{Homotopy}
+        In point-set topology one talks about a
+        \textit{homeomorphism} between topological spaces which is a
+        continuous function $f:X\rightarrow{Y}$ that is bijective and such that
+        the inverse function $f^{-1}:Y\rightarrow{X}$ is also continuous. Two
+        topological spaces can be considered the same if there exists a
+        homeomorphism, but often is it useful to have a weaker notion of
+        \textit{sameness} between topological spaces. This is the notion of
+        \textit{homotopy equivalence}. We need a few definitions before we
+        can fully describe the idea.
+        \begin{definition}
+            \label{def:homotopy}%
+            A homotopy from a topological space $(X,\tau_{X})$ to a topological
+            space $(Y,\tau_{Y})$ is a continuous function
+            $H:X\times[0,1]\rightarrow{Y}$ where $[0,1]$ is the closed unit
+            interval, and with respect to the product topology
+            on $X\times[0,1]$.
+        \end{definition}
+        A homotopy can be thought of as a continuous deformation of one
+        function to another. We start with a continuous function
+        $f_{0}:X\rightarrow{Y}$ and continuously deform it into a new function
+        $f_{1}:X\rightarrow{Y}$. If the homotopy
+        $H:X\times[0,1]\rightarrow{Y}$ is such that $H(x,0)=f_{0}(x)$ and
+        $H(x,1)=f_{1}(x)$, then $H$ can be throught of as the function that
+        continuously deforms $f_{0}$ into $f_{1}$.
+        \begin{example}
+            Let $f,g:\mathbb{R}\rightarrow\mathbb{R}$ be continuous functions
+            and $H:\mathbb{R}\times[0,1]\rightarrow\mathbb{R}$ be the
+            function:
+            \begin{equation}
+                H(x,t)=(1-t)f(x)+tg(x)
+            \end{equation}
+            $H$ is continuous since it is the product and sum of continuous
+            functions, but moreover $H(x,0)=f(x)$ and $H(x,1)=g(x)$. That is,
+            $H$ is a homotopy that drags $f$ to $g$. Visually, every point
+            $f(x)$ gets dragged to $g(x)$ via the straight line connecting the
+            two. Because of this, it is called the
+            \textit{straight-line homotopy}.
+        \end{example}
+        \begin{definition}
+            \label{def:homotopic}%
+            Homotopic functions from a topological space $(X,\tau_{X})$ to a
+            topological space $(Y,\tau_{Y})$ are continuous functions
+            $f,g:X\rightarrow{Y}$ such that there exists a homotopy
+            $H:X\times[0,1]\rightarrow{Y}$ where for all $x\in{X}$ it is
+            true that $H(x,0)=f(x)$ and $H(x,1)=g(x)$.
+        \end{definition}
+        \begin{example}
+            If $f,g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ are continuous
+            functions, and if
+            $H:\mathbb{R}^{n}\times[0,1]\rightarrow\mathbb{R}^{m}$ is the
+            function:
+            \begin{equation}
+                H(\mathbf{x},t)=(1-t)f(\mathbf{x})+tg(\mathbf{x})
+            \end{equation}
+            Then $H$ is a homotopy between $f$ and $g$. $H$ is continuous, and
+            we have $H(\mathbf{x},0)=f(\mathbf{x})$ and
+            $H(\mathbf{x},1)=g(\mathbf{x})$. That is, $f$ and $g$ are homotopic.
+        \end{example}
+        The previous example has to do with the fact that $\mathbb{R}^{m}$ is
+        \textit{contractible}, a term we'll define later. This is a feature
+        of topological vector spaces over $\mathbb{R}$.
+        \begin{theorem}
+            If $V$ is a topological vector space over $\mathbb{R}$, if
+            $(X,\tau)$ is a topological space, and if
+            $f,g:X\rightarrow{V}$ are continuous functions, then $f$ and $g$
+            are homotopic.
+        \end{theorem}
+        \begin{proof}
+            Let $H:X\times[0,1]\rightarrow{V}$ be the function:
+            \begin{equation}
+                H(x,t)=(1-t)\cdot{f}(x)+t\cdot{g}(x)
+            \end{equation}
+            Since $V$ is a topological vector space,
+            $(1-t)\cdot{f}(x)$ is continuous, and similarly for $t\cdot{g}(x)$.
+            Since addition is continuous in a topological vector space,
+            $H(x,t)$ is continuous. Thus $H$ is a homotopy by definition
+            (Def.~\ref{def:homotopy}). But $H(x,0)=f(x)$ and $H(x,1)=g(x)$.
+            Hence, $f$ and $g$ are homotopic (Def.~\ref{def:homotopic}).
+        \end{proof}
+        If we wish to be as general as possible, we could write the following.
+        \begin{theorem}
+            If $K$ is a topological field with a path between $0_{K}$ and
+            $1_{K}$, if $V$ is a topological vector space over $K$, if
+            $(X,\tau)$ is a topological space, and if $f,g:X\rightarrow{V}$
+            are continuous functions, then $f$ and $g$ are homotopic.
+        \end{theorem}
+        \begin{proof}
+            By hypothesis there is a path $\alpha:[0,1]\rightarrow{K}$ such
+            that $\alpha(0)=0_{K}$ and $\alpha(1)=1_{K}$. Let
+            $H:X\times[0,1]\rightarrow{V}$ be the function:
+            \begin{equation}
+                H(x,t)=(1_{K}-\alpha(t))f(x)+\alpha(t)g(x)
+            \end{equation}
+            Since $K$ is a topological field and $\alpha$ is continuous,
+            $1_{K}-\alpha$ is continuous. But since $V$ is a topological
+            vector space, $(1_{K}-\alpha(t))f(x)$ is continuous. Similarly for
+            $\alpha(t)g(x)$. But then $H$ is a continuous function, and is
+            therefore a homotopy (Def.~\ref{def:homotopy}). But
+            $H(x,0)=f(x)$ and $H(x,1)=g(x)$. Thus, $f$ and $g$ are homotopic
+            (Def.~\ref{def:homotopic}).
+        \end{proof}
+        Application of the previous theorem shows that for any topological
+        space $(X,\tau)$ and for any complex vector space $V$, all continuous
+        functions $f,g:X\rightarrow{V}$ are homotopic. Because of this,
+        vector spaces are in a sense \textit{boring} as far as homotopy is
+        concerned.
+        \par\hfill\par
+        Returning to more examples of homotopies, let's consider again
+        $\mathbb{R}^{n}$. Moreover, let's consider a homotopy between
+        $\mathbb{R}^{n}$ and itself.
+        \begin{example}
+            Consider the function
+            $H:\mathbb{R}^{n}\times[0,1]\rightarrow\mathbb{R}^{n}$ defined by:
+            \begin{equation}
+                H(\mathbf{x},t)=(1-t)\mathbf{x}
+            \end{equation}
+            At time $t=0$ we have the identity map since
+            $H(\mathbf{x},0)=\mathbf{x}$ and at time $t=1$ we have the zero
+            map since $H(\mathbf{x},1)=\mathbf{0}$. In a sense, this map
+            \textit{contracts} the entire Euclidean space $\mathbb{R}^{n}$ down
+            to a point. 
+        \end{example}
+        Homotopies from a topological space to itself give rise to several
+        other notions, one of the more commonly discussed is that of
+        \textit{deformation retractions}. First, a definition.
+        \begin{definition}
+            A retract of a topological space $(X,\tau)$ onto a subspace
+            $(A,\tau|_{A})$, with $A\subseteq{X}$ and $\tau|_{A}$ the subspace
+            topology, is a continuous function $f:X\rightarrow{X}$ such that
+            $f[X]=A$ and for all $x\in{A}$ it is true that $f(x)=x$.
+        \end{definition}
+        That is, a retract is a continuous function that maps entirely onto
+        a specific subspace while leaving that subspace fixed.
+        \begin{example}
+            If $(X,\tau)$ is a topological space and if $x_{0}\in{X}$, then
+            the function $f:X\rightarrow\{x_{0}\}$ defined by
+            $f(x)=x_{0}$ is a retract. Since constant functions are always
+            continuous, and since $f(x_{0})=x_{0}$ by definition, we have that
+            $f$ is a retract of $X$ to $\{x_{0}\}$.
+        \end{example}
+        This shows that any topology space can always retract to a single
+        point, but can any topological space \textit{continuously deform}
+        onto a single point? Intuitively the answer should be \textit{no},
+        since if we were to continuously deform one point to another this would
+        give us a \textit{path} between the two points and so
+        path connectedness seems to be a requirement. To make intuition
+        rigorous requires a definition.
+        \begin{definition}
+            A deformation retraction from a topological space $(X,\tau)$ to a
+            subspace $(A,\tau|_{A})$ is a homotopy
+            $H:X\times[0,1]\rightarrow{X}$ such that for all $x\in{X}$ we
+            have that $H(x,0)=x$ and $H(x,1)$ is a retract of $X$ onto $A$.
+        \end{definition}
+        We are now in the position to define \textit{contractible}.
+        \begin{definition}
+            A contractible topological space is a topological space $(X,\tau)$
+            such that there exists $x_{0}\in{X}$ such that there is a
+            deformation retraction of $X$ onto $\{x_{0}\}$.
+        \end{definition}
+        With this, we can prove our intuition is correct. That for a space to
+        \textit{continuously deform} down to a point, it must at least be
+        path connected.
+        \begin{theorem}
+            If $(X,\tau)$ is contractible, then it is path connected.
+        \end{theorem}
+        \begin{proof}
+            If $(X,\tau)$ is contractible, then there is a point $x_{0}\in{X}$
+            and a deformation retraction $H:X\times[0,1]\rightarrow\{x_{0}\}$.
+            Let $x,y\in{X}$ and defined $\alpha:[0,1]\rightarrow{X}$ by:
+            \begin{equation}
+                \alpha(t)=
+                \begin{cases}
+                    H(x,2t)&0\leq{t}\leq\frac{1}{2}\\
+                    H(y,2-2t)&\frac{1}{2}\leq{t}\leq{1}
+                \end{cases}
+            \end{equation}
+            $\alpha$ is continuous by the gluing lemma, but also
+            $\alpha(0)=H(x,0)=x$ and $\alpha(1)=H(y,0)=y$, so $\alpha$ is a
+            path from $x$ to $y$. Hence, $(X,\tau)$ is path connected.
+        \end{proof}
+        Recapping, every topological space has a \textit{retract} to a
+        point, but to have a \textit{deformation retraction} to a point
+        requires, at the very least, the space to be path connected. This is
+        not sufficient. The circle $\mathbb{S}^{1}$ does not have a
+        deformation retraction to a point. We can't continuously deform the
+        circle to a point since there's a \textit{hole} in it that we would
+        need to cut. Proving this in a rigorous setting is difficult and one
+        of the historical aims of algebraic topology, and one of its successes.
+\end{document}
