@@ -108,7 +108,6 @@ filldraw(A0 -- A1 -- D1 -- D0 -- cycle, red);
 filldraw(D0 -- D1 -- C1 -- C0 -- cycle, blue);
 filldraw(B0 -- B1 -- C1 -- C0 -- cycle, red);
 
-
 /*  Draw the hex board.                                                       */
 for (m = 0; m < N; ++m)
 {
