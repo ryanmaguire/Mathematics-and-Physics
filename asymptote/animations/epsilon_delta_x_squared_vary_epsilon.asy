@@ -82,9 +82,9 @@ label("$f(x)=x^{2}$", (0.6*end, 0.7*end));
 label("$x_{0}$", (x0, -0.08));
 label("$f(x_{0})$", (-0.08, y0));
 
-/*  Mark dots are x0 and f(x0).                                               */
+/*  Mark dots at x0 and f(x0).                                                */
 filldraw(circle((x0, 0.0), rdot), black, black);
-filldraw(circle((0.0, x0), rdot), black, black);
+filldraw(circle((0.0, y0), rdot), black, black);
 
 /*  Labels for the axes.                                                      */
 Label xlabel = Label("$x$", position = 1.0);
