@@ -363,7 +363,7 @@ int main(void)
     }
 
     /*  Open a PPM file and give it write permissions.                        */
-    fp = fopen("laguerre_fractal_plane_to_square_001.ppm", "w");
+    fp = fopen("laguerre_fractal_plane_to_disk_001.ppm", "w");
 
     /*  fopen returns NULL on failure. Check for this.                        */
     if (!fp)

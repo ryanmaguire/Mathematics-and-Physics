@@ -362,7 +362,7 @@ int main(void)
     }
 
     /*  Open a PPM file and give it write permissions.                        */
-    fp = fopen("halley_fractal_002.ppm", "w");
+    fp = fopen("laguerre_basin_with_elliptic_curve.ppm", "w");
 
     /*  fopen returns NULL on failure. Check for this.                        */
     if (!fp)
