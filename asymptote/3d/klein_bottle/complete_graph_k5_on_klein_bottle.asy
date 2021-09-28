@@ -18,21 +18,36 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+/*  Used for rendering the Klein bottle.                                      */
+import graph3;
+
+/*  Used for setting the output to PDF and setting the rendering factor.      */
+import settings;
+
+/*  EPS is sometimes weird with opacity, so output PDF.                       */
+settings.outformat = "pdf";
+
+/*  Render with high quality.                                                 */
+settings.render = 8;
+
 /*  Size of the figure.                                                       */
 size(256);
 
-import graph3;
-import settings;
+/*  Set up the camera.                                                        */
+currentprojection = perspective(
+    camera = (50, 0, 30),
+    up = (0, 0, 1),
+    target = (0,  0,  0),
+    zoom = 1.0
+);
 
-settings.render = 8;
-
-currentprojection=perspective(camera = (50, 0, 30), up   = (0, 0, 1),
-                              target = (0,  0,  0),  zoom = 0.85);
-
-// Radii of the torus.
+/*  Radii of the "torus", the factors used to draw the Klein bottle.          */
 real R = 4;
 real a = 1;
+
+/*  Size of dots for vertices of the graph.                                   */
 real rDot = 0.05;
+
 
 pair[] V;
 triple[] P;
@@ -54,8 +69,9 @@ material orb = material(diffusepen=blue+lightgreen,
 
 surface s;
 
-// Parameterization of a torus.
-triple f(pair t) {
+/* Parameterization of the Klein bottle.                                      */
+triple f(pair t)
+{
     real v = 2*pi*t.x;
     real u = 2*pi*t.y;
     real cu = cos(u);

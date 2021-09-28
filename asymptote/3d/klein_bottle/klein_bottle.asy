@@ -6,14 +6,6 @@ import palette;
 currentprojection=perspective(camera = (20, 80, 30), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);
 
-currentlight=light(
-    gray(0.4),
-    specularfactor=1,
-    viewport=true,
-    (-0.5,-0.25,0.45),
-    (0.5,-0.5,0.5),
-    (0.5,0.5,0.75)
-);
 
 // Size of the created image.
 size(128);
