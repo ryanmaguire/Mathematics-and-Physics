@@ -23,7 +23,6 @@
 
 /*  Used for drawing surfaces in 3D.                                          */
 import graph3;
-import three;
 
 /*  Used for coloring the Boy surface.                                        */
 import palette;
@@ -37,7 +36,7 @@ settings.render = 8;
 settings.outformat = "gif";
 
 /*  Size of the created image.                                                */
-size(256);
+size(1024);
 
 currentprojection = orthographic(
     camera = (20, 80, 30),
@@ -181,12 +180,13 @@ triple real_proj_plane(pair t)
 surface s = surface(real_proj_plane, (0.0, 0.0), (1.0, 2.0*pi), 40, 40, Spline);
 s.colors(palette(s.map(zpart), Gradient(blue, green)));
 
+draw(scale(1.9, 1.9, 1.9)*unitsphere, surfacepen=invisible);
 
 /*  Loop over the frames and draw the GIF.                                    */
 for (n = 0; n <= n_frames; ++n)
 {
     save();
-    draw(rotate(theta, (0.0, 1.0, 0.0))*s, render(merge=true));
+    draw(rotate(theta, (1.0, 1.0, 0.0))*s, render(merge=true));
     out.add();
     restore();
     theta += dtheta;
