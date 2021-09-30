@@ -38,15 +38,13 @@ settings.outformat = "gif";
 /*  Size of the created image.                                                */
 size(1024);
 
+/*  Setup the camera.                                                         */
 currentprojection = orthographic(
     camera = (20, 80, 30),
     up = (0, 0, 1),
     target = (0, 0, 0),
-    zoom = 0.85
+    zoom = 1.0
 );
-
-/*  Pen used for mesh lines.                                                  */
-pen meshpen = black+linewidth(0.5pt);
 
 /*  Precompute sqrt(5).                                                       */
 real SQRT_5 = sqrt(5.0);
@@ -155,12 +153,17 @@ complex operator / (real a, complex z)
     return complex(a*z.re*denom, -a*z.im*denom);
 }
 
-/*  Apery's immersion for the Boy Surface, a model for RP^2.                  */
+/*  Bryant-Kusner immersion for the Boy Surface, a model for RP^2.            */
 triple real_proj_plane(pair t)
 {
+    /*  The surface is parameterized by the points in the unit disk.          */
     real x = t.x*cos(t.y);
     real y = t.x*sin(t.y);
+
+    /*  Treat this as a complex number.                                       */
     complex z = complex(x, y);
+
+    /*  The rest of these factors are the actual immersion.                   */
     complex z3 = z*z*z;
     complex z4 = z3*z;
     complex z6 = z3*z3;
@@ -177,20 +180,37 @@ triple real_proj_plane(pair t)
 }
 /*  End of real_proj_plane.                                                   */
 
+/*  Create the Boy Surface.                                                   */
 surface s = surface(real_proj_plane, (0.0, 0.0), (1.0, 2.0*pi), 40, 40, Spline);
+
+/*  Give it a nice color gradient.                                            */
 s.colors(palette(s.map(zpart), Gradient(blue, green)));
 
-draw(scale(1.9, 1.9, 1.9)*unitsphere, surfacepen=invisible);
+/*  Draw an invisible sphere of radius 2. This gives some "buffer" room so    *
+ *  the screen doesn't move as the Boy surface rotates. The result is rather  *
+ *  annoying without this buffer. The "zoom" option in the camera can also be *
+ *  fiddled with, but this worked best and produced a nice result.            */
+draw(scale(2.0, 2.0, 2.0)*unitsphere, invisible);
 
 /*  Loop over the frames and draw the GIF.                                    */
 for (n = 0; n <= n_frames; ++n)
 {
+    /*  Save the blank screen for the next frame in the GIF.                  */
     save();
+
+    /*  Draw the Boy surface.                                                 */
     draw(rotate(theta, (1.0, 1.0, 0.0))*s, render(merge=true));
+
+    /*  Add this frame to the GIF.                                            */
     out.add();
+
+    /*  Reset the frame back to a blank screen.                               */
     restore();
+
+    /*  Increase the rotating angle.                                          */
     theta += dtheta;
 }
+/*  End of for-loop creating the GIF.                                         */
 
 /*  Render the gif.                                                           */
 erase();
