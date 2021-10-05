@@ -83,8 +83,7 @@ void draw_ladder(real phi)
     int m;
 
     /*  Factor for shifting the rails up the ladder.                          */
-    real val = rail_factor*height;
-    triple move = rotate(phi, (1.0, 0.0, 0.0))*(0.0, 0.0, val);
+    transform3 move = shift(0.0, 0.0, rail_factor*height);
 
     /*  The rectangular part of the ladder.                                   */
     surface s = scale(depth, width, height)*unitcube;
@@ -97,13 +96,13 @@ void draw_ladder(real phi)
     /*  Create a cylinder for the rails of the ladder.                        */
     s = scale(rail_radius, rail_radius, rail_length)*unitcylinder;
     s = rotate(90.0, (0.0, 1.0, 0.0))*s;
-    s = shift(0.0, 0.25*width + move.y, 0.5*width + move.z)*s;
+    s = shift(0.0, 0.5*width, rail_factor*height)*s;
 
     /*  Loop over and draw the rails.                                         */
     for (m = 1; m < n_rails; ++m)
     {
-        draw(s, surfacepen=blob);
-        s = shift(0.0, move.y, move.z)*s;
+        draw(rotate(phi, (1.0, 0.0, 0.0))*s, surfacepen=blob);
+        s = move*s;
     }
 }
 /*  End of draw_ladder.                                                       */
