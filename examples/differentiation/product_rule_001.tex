@@ -1,0 +1,237 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+\title{Differentiation}
+\author{Ryan Maguire}
+\date{Fall 2021}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    The product rule allows us to easily compute the derivative of a function
+    $h(x)=f(x)g(x)$ if we already know how to differentiate $f$ and $g$.
+    The rule says $(fg)'(x)=f'(x)g(x)+f(x)g'(x)$. The proof of this requires
+    the following fact: A differentiable function is continuous. The intuition
+    behind differentiable and continuous should imply this. A continuous
+    function is one that has no \textit{jumps}, whereas a differentiable
+    function is one where if you zoom in enough, the function starts to
+    look like a straight line (the tangent line). It seems natural that
+    differentiable should imply continuous. Let's prove this.
+    \par\hfill\par
+    Differentiable implies the following limit exists:
+    \begin{equation}
+        \lim_{x\rightarrow{x}_{0}}\frac{f(x)-f(x_{0})}{x-x_{0}}
+    \end{equation}
+    Let's label this limit $L$. By the definition of limit, that means for
+    all $\varepsilon>0$ there is a $\delta_{0}>0$ such that:
+    \begin{equation}
+        0<|x-x_{0}|<\delta_{0}\Rightarrow
+        \Big|\frac{f(x)-f(x_{0})}{x-x_{0}}-L\Big|<\varepsilon
+    \end{equation}
+    Remember that the $\Rightarrow$ symbol reads as \textit{implies}. So,
+    $0<|x-x_{0}|<\delta_{0}$ implies that
+    $|(f(x)-f(x_{0}))/(x-x_{0})-L|<\varepsilon$. This implies
+    $|f(x)-f(x_{0})-L(x-x_{0})|<\varepsilon|x-x_{0}|$ by simply
+    multiplying the inequality by $|x-x_{0}|$ on both sides. Thus:
+    \begin{equation}
+        -\varepsilon|x-x_{0}|<f(x)-f(x_{0})-L(x-x_{0})<\varepsilon|x-x_{0}|
+    \end{equation}
+    Adding $L(x-x_{0})$ to both all sides, we get:
+    \begin{equation}
+        L(x-x_{0})-\varepsilon|x-x_{0}|<f(x)-f(x_{0})
+            <L(x-x_{0})+\varepsilon|x-x_{0}|
+    \end{equation}
+    Using the laws of the absolute value symbol we can reduce this to
+    \begin{equation}
+        -|x-x_{0}|(|L|+\varepsilon)<f(x)-f(x_{0})<|x-x_{0}|(|L|+\varepsilon)
+    \end{equation}
+    This is equivalent to:
+    \begin{equation}
+        |f(x)-f(x_{0})|<|x-x_{0}|(|L|+\varepsilon)
+    \end{equation}
+    To show that $f$ is continuous, we need $|x-x_{0}|$ being small to
+    imply $|f(x)-f(x_{0})|$ is small. From this last inequality,
+    $|f(x)-f(x_{0})|<|x-x_{0}|(|L|+\varepsilon)$, we should choose
+    $|x-x_{0}|$ smaller than $\varepsilon/(|L|+\varepsilon)$. To make the
+    above argument work we also restricted to $|x-x_{0}|<\delta_{0}$. So we
+    need to pick the minimum of these two.
+    \begin{theorem}
+        If $f:\mathbb{R}\rightarrow\mathbb{R}$ is a function that is
+        differentiable at $x_{0}\in\mathbb{R}$, then $f$ is continuous
+        at $x_{0}$.
+    \end{theorem}
+    \begin{proof}
+        Like every continuity proof, let $\varepsilon>0$. Since $f$ is
+        differentiable at $x_{0}$, the limit
+        \begin{equation}
+            \lim_{x\rightarrow{x}_{0}}\frac{f(x)-f(x_{0})}{x-x_{0}}
+        \end{equation}
+        exists. Label this limit $L$. By the definition of limit, since
+        $\varepsilon>0$, there is a $\delta_{0}>0$ such that
+        \begin{equation}
+            0<|x-x_{0}|<\delta_{0}\Rightarrow
+            \Big|\frac{f(x)-f(x_{0})}{x-x_{0}}-L\Big|<\varepsilon
+        \end{equation}
+        Choose $\delta=\min(\delta_{0},\varepsilon/(|L|+\varepsilon))$.
+        If $|x-x_{0}|<\delta$, then we have the following:
+        \begin{align}
+            &\Big|\frac{f(x)-f(x_{0})}{x-x_{0}}-L\Big|<\varepsilon\\
+            \Rightarrow&|f(x)-f(x_{0})-L(x-x_{0})|<\varepsilon|x-x_{0}|\\
+            \Rightarrow&-\varepsilon|x-x_{0}|<
+                f(x)-f(x_{0})-L(x-x_{0})<\varepsilon|x-x_{0}|\\
+            \Rightarrow&
+                L(x-x_{0})-\varepsilon|x-x_{0}|<
+                    f(x)-f(x_{0})<L(x-x_{0})+\varepsilon|x-x_{0}|\\
+            \Rightarrow&
+                -|x-x_{0}|(|L|+\varepsilon)<f(x)-f(x_{0})
+                    <|x-x_{0}|(|L|+\varepsilon)\\
+            \Rightarrow&
+                |f(x)-f(x_{0})|<|x-x_{0}|(|L|+\varepsilon)\\
+            \Rightarrow&
+                |f(x)-f(x_{0})|<\delta(|L|+\varepsilon)\\
+            \Rightarrow&
+                |f(x)-f(x_{0})|<\frac{\varepsilon}{|L|+\varepsilon}
+                    (|L|+\varepsilon)\\
+            \Rightarrow&|f(x)-f(x_{0})|<\varepsilon
+        \end{align}
+        That is, $f$ is continuous at $x_{0}$.
+    \end{proof}
+    If the proof is too complex, don't worry. The important thing is the
+    result: Differentiable implies continuous. Another way to see this is by
+    rephrasing continuity as follows. A function that is continuous at $x_{0}$
+    is a function such that $\lim_{x\rightarrow{x_{0}}}(f(x)-f(x_{0}))=0$. Using
+    this definition, we have that if $f$ is differentiable at $x_{0}$, then
+    \begin{align}
+        \lim_{x\rightarrow{x}_{0}}\big(f(x)-f(x_{0})\big)
+        &=\lim_{x\rightarrow{x}_{0}}\frac{f(x)-f(x_{0})}{x-x_{0}}(x-x_{0})\\
+        &=\lim_{x\rightarrow{x}_{0}}\frac{f(x)-f(x_{0})}{x-x_{0}}
+            \lim_{x\rightarrow{x_{0}}}(x-x_{0})\\
+        &=f'(x_{0})\lim_{x\rightarrow{x}_{0}}(x-x_{0})\\
+        &=0
+    \end{align}
+    Of course, this \textit{proof} really sweeps the $\epsilon-\delta$
+    definition under the rug. The $\varepsilon-\delta$ definition is still
+    needed to rigorously define limit in the first place.
+    \par\hfill\par
+    Anyways, let's use this.
+    \begin{theorem}[The Product Rule for Derivatives]
+        If $f:\mathbb{R}\rightarrow\mathbb{R}$ and
+        $g:\mathbb{R}\rightarrow\mathbb{R}$ are functions, and if $f$ and $g$
+        are differentiable at $x_{0}\in\mathbb{R}$, then $fg$ is differentiable
+        at $x_{0}$ and:
+        \begin{equation}
+            (fg)'(x)=f'(x)g(x)+f(x)g'(x)
+        \end{equation}
+    \end{theorem}
+    \begin{proof}
+        We have:
+        \begin{align}
+            &\lim_{h\rightarrow{0}}
+                \frac{f(x+h)g(x+h)-f(x)g(x)}{h}\nonumber\\
+            &=\lim_{h\rightarrow{0}}\frac{f(x+h)g(x+h)+0-f(x)g(x)}{h}\\
+            &=\lim_{h\rightarrow{0}}
+                \frac{f(x+h)g(x+h)+\big(-f(x+h)g(x)+f(x+h)g(x)\big)-f(x)g(x)}
+                     {h}\\
+            &=\lim_{h\rightarrow{0}}
+                \frac{\big(f(x+h)g(x+h)-f(x+h)g(x)\big)
+                      +\big(f(x+h)g(x)-f(x)g(x)\big)}{h}\\
+            &=
+                \lim_{h\rightarrow{0}}
+                \frac{f(x+h)g(x+h)-f(x+h)g(x)}{h}+
+                \lim_{h\rightarrow{0}}
+                    \frac{f(x+h)g(x)-f(x)g(x)}{h}\\
+            &=\lim_{h\rightarrow{0}}
+                f(x+h)\frac{g(x+h)-g(x)}{h}+
+                \lim_{h\rightarrow{0}}g(x)
+                    \frac{f(x+h)-f(x)}{h}\\
+                    &=\lim_{h\rightarrow{0}}
+                        f(x+h)\frac{g(x+h)-g(x)}{h}+
+                        g(x)\lim_{h\rightarrow{0}}
+                        \frac{f(x+h)-f(x)}{h}\\
+                    &=\lim_{h\rightarrow{0}}
+                        f(x+h)\frac{g(x+h)-g(x)}{h}+
+                        g(x)f'(x)
+        \end{align}
+        Now to simplify the expression on the left. This is where
+        continuity comes in. Since $f$ is differentiable, it is continuous.
+        But then $f(x+h)$ tends to $f(x)$ as $h$ approaches zero. Using this, we
+        have:
+        \begin{align}
+            &\lim_{h\rightarrow{0}}
+                f(x+h)\frac{g(x+h)-g(x)}{h}+g(x)f'(x)\nonumber\\
+            &=f(x)\lim_{h\rightarrow{0}}\frac{g(x+h)-g(x)}{h}+g(x)f'(x)\\
+            &=f(x)g'(x)+g(x)f'(x)\\
+            &=f'(x)g(x)+f(x)g'(x)
+        \end{align}
+        The last step just uses commutativity of addition and multiplication.
+        That is, the fact that $a+b=b+a$ and $a\cdot{b}=b\cdot{a}$.
+    \end{proof}
+    The product rule allows us to prove the \textit{power rule}. Let's first
+    examine $f(x)=x^{2}$. We can differentiate this using the product rule
+    by writing $f(x)=x\cdot{x}$. The derivative is then:
+    \begin{equation}
+        \frac{\textrm{d}f}{\textrm{d}x}(x)=
+        \frac{\textrm{d}(x)}{\textrm{d}x}x+x\frac{\textrm{d}(x)}{\textrm{d}x}
+        =x+x=2x
+    \end{equation}
+    We can differentiate $f(x)=x^{3}$ as well by writing
+    $f(x)=x^{2}\cdot{x}$. We then have:
+    \begin{equation}
+        \frac{\textrm{d}f}{\textrm{d}x}(x)=
+        \frac{\textrm{d}(x^{2})}{\textrm{d}x}x
+            +x^{2}\frac{\textrm{d}(x)}{\textrm{d}x}
+        =(2x)x+x^{2}=3x^{2}
+    \end{equation}
+    By continuing we can prove, for any positive integer $n$, that the
+    derivative of $f(x)=x^{n}$ is $f'(x)=nx^{n-1}$. This is the
+    \textit{power rule}. It turns out that for any $r\in\mathbb{R}$, if
+    $f(x)=x^{r}$, then $f'(x)=rx^{r-1}$. So in particular, if
+    $f(x)=\sqrt{x}=x^{1/2}$, we have
+    $f'(x)=\frac{1}{2}x^{-1/2}=\frac{1}{2\sqrt{x}}$.
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}
