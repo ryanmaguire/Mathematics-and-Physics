@@ -1,0 +1,202 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem{example}{Example}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newcommand{\ceil}[2][]{#1\lceil#2#1\rceil}
+
+\title{Limits of Sequences}
+\author{Ryan Maguire}
+\date{Fall 2021}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    We've discussed what it means for a limit to exist at a point. The precise
+    definition is that a function $f$ has a limit $L$ at a point $x_{0}$ if,
+    for every $\varepsilon>0$ there exists a $\delta>0$ such that, if $x$ is a
+    real number and $0<|x-x_{0}|<\delta$, then it is true that
+    $|f(x)-L|<\varepsilon$. In other words, points that are no more than
+    $\delta$ away from $x_{0}$ in the $x$ axis have values $f(x)$ that are no
+    more than $\varepsilon$ away from $L$ in the $y$ axis. This definition
+    works well, but we need to expand on it slightly.
+    \par\hfill\par
+    Consider the function $f$ given by:
+    \begin{equation}
+        f(x)=\frac{1}{x}
+    \end{equation}
+    What happens as $x$ gets really big? In other words, what happens as
+    $x$ \textit{tends to infinity}? At first glance, we might say $f(x)$
+    approaches zero as $x$ approaches infinity. This makes sense, if $x$ is
+    really large, then $1/x$ is really small, so $f(x)=1/x$ is getting closer
+    and closer to zero as $x$ aproaches infinity. How do we make this precise?
+    Our limit definition gives the definition of the limit at a real number
+    $x_{0}\in\mathbb{R}$ but $\infty$ is not a real number. More importantly,
+    the expression $0<|x-\infty|<\delta$ would never be true for any real
+    number $\delta>0$, so how do we fix this?
+    \par\hfill\par
+    Let's first look at sequences. A sequence is an ordered list of numbers.
+    For example 0, 1, 4, 9, 16, 25, and so forth. This is $n^{2}$ for the
+    natural numbers $n=0$, $1$, $2$, and so on. To be more precise, a sequence
+    is a \textit{function} that takes in an integer and returns a real number.
+    We can write this $a:\mathbb{N}\rightarrow\mathbb{R}$. The set
+    $\mathbb{N}$ is the set of natural numbers:
+    \begin{equation}
+        \mathbb{N}=\{0,1,2,3,4,\dots\}
+    \end{equation}
+    And as always, $\mathbb{R}$ denotes the real numbers. There is some special
+    notation with sequences, however.
+    \begin{notation}
+        If $a:\mathbb{N}\rightarrow\mathbb{R}$ is a sequence, and if
+        $n\in\mathbb{N}$ is a non-negative integer, then we write:
+        \begin{equation}
+            a(n)=a_{n}
+        \end{equation}
+    \end{notation}
+    This notation is usually reserved for sequences only. The notation is best
+    demonstrated by example.
+    \begin{example}
+        Let $a:\mathbb{N}\rightarrow{R}$ be the sequence defined by:
+        \begin{equation}
+            a_{n}=n^{2}
+        \end{equation}
+        Then $a_{0}=0^{2}=0$, $a_{1}=1^{2}=1$, and $a_{2}=2^{2}=4$. If we keep
+        writing this sequence out, we get 0, 1, 4, 9, 16, 25, 36, 49, and so on.
+    \end{example}
+    \begin{example}
+        Let $a:\mathbb{N}\rightarrow\mathbb{R}$ be the sequence defined by:
+        \begin{equation}
+            a_{n}=\frac{1}{n+1}
+        \end{equation}
+        Using this definition, $a_{0}=\frac{1}{0+1}=1$,
+        $a_{1}=\frac{1}{1+1}=\frac{1}{2}$, and so on. Writing out the sequence,
+        we'd get 1, $\frac{1}{2}$, $\frac{1}{3}$, $\frac{1}{4}$,
+        $\frac{1}{5}$, and so forth.
+    \end{example}
+    Let's examine this second example. It's very similar to the function
+    $f(x)=1/x$, defined for all $x\in(0,\infty)$. When we look at the sequence
+    $a_{n}=1/(n+1)$ it's easy to convince ourselves that this sequence
+    \textit{tends to zero} as $n$ tends to infinity. How do we precisely say
+    this? What does it mean for $a_{n}$ to get arbitrarily close to zero?
+    How about for any positive number $\varepsilon>0$, there is an integer
+    $N\in\mathbb{N}$ such that, for every larger integer $n>N$ we have that
+    $|a_{n}|<\varepsilon$. That is, if $a_{n}$ is getting arbitrarily close to
+    zero as $n$ gets bigger, we can make $|a_{n}|$ smaller than $\varepsilon$
+    as long as we only consider $n$ large enough. We can use this to give the
+    definition of a sequence in general.
+    \begin{definition}
+        The limit of a sequence $a:\mathbb{N}\rightarrow{R}$ is a real number
+        $L\in\mathbb{R}$ such that for all $\varepsilon>0$ there exists a
+        non-negative integer $N\in\mathbb{N}$ such that for all larger integers
+        $n>N$ it is true that $|a_{n}-L|<\varepsilon$.
+    \end{definition}
+    Let's examine $a_{n}=\frac{1}{n+1}$. We believe, intuitively, that the
+    limit is zero. Suppose $\varepsilon=0.1$. We want to
+    find a non-negative integer $N$ such that for all larger integers $n>N$ it
+    is true that $\frac{1}{n+1}<0.1$. Rewriting $0.1$ as $1/10$, we want an
+    $N$ such that $n>N$ implies $\frac{1}{n+1}<\frac{1}{10}$. This last
+    inequality seems to indicate that we should simply choose $N=9$. If
+    $N=9$ and $n>N$ we have:
+    \begin{equation}
+        \frac{1}{n+1}<\frac{1}{N+1}=\frac{1}{9+1}=\frac{1}{10}
+    \end{equation}
+    So, as along as we skip the first 10 integers ($n=0$ through $n=9$), the
+    value of $a_{n}=\frac{1}{n+1}$ is closer than $0.1$ to zero. What about
+    $\varepsilon=0.01$? Can we formulate an argument for this value? We now
+    want a non-negative integer $N\in\mathbb{N}$ such that, if $n$ is a
+    non-negative integer and $n>N$, it is true that
+    $\frac{1}{n+1}<0.01$. Rewriting $0.01$ as $1/100$, we want
+    $\frac{1}{n+1}<\frac{1}{100}$. Again it seems natural, from the formula of
+    $a_{n}$, to pick $N=99$. If $N=99$ and $n>N$, we have:
+    \begin{equation}
+        \frac{1}{n+1}<\frac{1}{N+1}=\frac{1}{99+1}=\frac{1}{100}
+    \end{equation}
+    So, if we skip the first 100 entries in our sequence, the remaining
+    elements have $a_{n}$ closer than $0.01$ to zero. What about
+    \textit{any} positive real number $\varepsilon>0$? Well, we want an
+    integer $N\in\mathbb{N}$ such that for every $n\in\mathbb{N}$ with $n>N$
+    it is true that $|a_{n}|<\varepsilon$. That is, we want to make the
+    following chain of inequalities work:
+    \begin{equation}
+        \frac{1}{n+1}<\frac{1}{N+1}<\frac{1}{N}\leq\varepsilon
+    \end{equation}
+    If we find an $N$ that makes this true, we may conclude that
+    $\frac{1}{n+1}<\varepsilon$, that is, that $|a_{n}|<\varepsilon$. The
+    last inequality seems to indicate we should pick $N=1/\varepsilon$. The
+    problem is this is certainly \textit{not} going to be an integer, and $N$
+    is required to be an integer. So, let's pick the first integer that is
+    \textit{greater than or equal to} $1/\varepsilon$. This is called the
+    ceiling function and is denoted $\ceil{x}$. So, for example,
+    $\ceil{\pi}=4$, $\ceil{\sqrt{2}}=2$, $\ceil{4.1}=5$, $\ceil{3}=3$. We can
+    now show that $a_{n}=\frac{1}{n+1}$ tends to zero as $n$ tends to infinity.
+    \begin{theorem}
+        If $a:\mathbb{N}\rightarrow\mathbb{R}$ is the sequence defined by:
+        \begin{equation}
+            a_{n}=\frac{1}{n+1}
+        \end{equation}
+        Then the limit of $a_{n}$ as $n$ tends to infinity is zero. That is:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}\frac{1}{n+1}=0
+        \end{equation}
+    \end{theorem}
+    \begin{proof}
+        Let $\varepsilon>0$ and choose $N=\ceil{1/\varepsilon}$. If $n$ is a
+        non-negative integer and $n>N$, then:
+        \begin{align}
+            |a_{n}-0|&=\Big|\frac{1}{n+1}-0\Big|\tag{Definition of $a_{n}$}\\
+                &=\Big|\frac{1}{n+1}\Big|\tag{Subtract Zero}\\
+                &=\frac{1}{n+1}\tag{$\frac{1}{n+1}$ is positive for $n>0$}\\
+                &<\frac{1}{N+1}\tag{Since $N<n$}\\
+                &<\frac{1}{N}\tag{Since $N<N+1$}\\
+                &=\frac{1}{\ceil{1/\varepsilon}}\tag{Definition of $N$}\\
+                &\leq\frac{1}{1/\varepsilon}\tag{Since $x\leq\ceil{x}$}\\
+                &=\varepsilon\tag{Simplify}
+        \end{align}
+        That is, if $n>N$, then $|a_{n}-0|<\varepsilon$.
+    \end{proof}
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}
