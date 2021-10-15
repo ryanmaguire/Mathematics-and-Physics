@@ -244,6 +244,31 @@ pair HyperbolicPathPoincarePlane(real t, pair A, pair B)
     return (x, y);
 }
 
+pair HyperbolicLinePoincarePlane(real t, pair A, pair B)
+{
+    pair C;
+    pair P, Q, O;
+
+    O = (0.0, 0.0);
+
+    real x, dist;
+
+    P = MidPoint2D(A, B);
+
+    if (A.x != B.x)
+    {
+        C = (A.y-B.y, B.x-A.x);
+
+        x = P.x - C.x*P.y/C.y;
+        Q = (x, 0.0);
+        dist = EuclideanNorm2D(Q - A);
+
+        return Q + scale(dist)*(cos(t), sin(t));
+    }
+    else
+        return scale(1-t)*A + scale(t)*B;
+}
+
 pen thinp = black + linewidth(0.4pt);
 real arsize = 5bp;
 int samples = 100;
