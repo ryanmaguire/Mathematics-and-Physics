@@ -43,8 +43,8 @@ real func_prime(real x)
     return 2.0*x;
 }
 
-/*  Size of the GIF.                                                          */
-size(512);
+/*  Size of the image.                                                        */
+size(256);
 
 /*  Number of samples for the function.                                       */
 int samples = 30;

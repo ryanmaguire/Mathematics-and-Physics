@@ -38,8 +38,8 @@ real func(real x)
     return x*(2.0 + x2*(-3.0 + x2));
 }
 
-/*  Size of the GIF.                                                          */
-size(512);
+/*  Size of the image.                                                        */
+size(256);
 
 /*  Number of samples for the function.                                       */
 int samples = 30;
@@ -50,7 +50,7 @@ real end = 1.6;
 
 /*  Start and end points for the function.                                    */
 real fstart = -0.1;
-real fend = 1.56;
+real fend = 1.35;
 
 /*  Size of a dot.                                                            */
 real rDot = 0.005;

@@ -45,7 +45,7 @@ real func_prime(real x)
     return 2.0 + x2*(-9.0 + 5.0*x2);
 }
 
-/*  Size of the GIF.                                                          */
+/*  Size of the image.                                                        */
 size(512);
 
 /*  Number of samples for the function.                                       */
@@ -56,8 +56,8 @@ real start = -0.2;
 real end = 1.6;
 
 /*  Start and end points for the function.                                    */
-real fstart = -0.1;
-real fend = 1.56;
+real fstart = 0.08;
+real fend = 1.32;
 
 /*  Size of a dot.                                                            */
 real rDot = 0.005;
@@ -91,7 +91,6 @@ draw(yl, (0.0, start) -- (0.0, end), E, axesp, SharpArrow(arsize));
 
 /*  And draw the function.                                                    */
 draw(graph(func, fstart, fend, n=samples, operator ..), funcp);
-
 
 /*  Compute the slope and y-intercept of the secant line.                     */
 m = func_prime(x0);

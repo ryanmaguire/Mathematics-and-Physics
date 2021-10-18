@@ -37,8 +37,8 @@ real func(real x)
     return x*x;
 }
 
-/*  Size of the GIF.                                                          */
-size(512);
+/*  Size of the image.                                                        */
+size(256);
 
 /*  Number of samples for the function.                                       */
 int samples = 30;
