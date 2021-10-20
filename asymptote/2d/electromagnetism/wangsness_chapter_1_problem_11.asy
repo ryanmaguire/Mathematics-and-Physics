@@ -26,6 +26,10 @@ import custom_arrows;
 /*  Needed to draw the sqrt function.                                         */
 import graph;
 
+/*  PDF is easiest to use in LaTeX, so output this.                           */
+import settings;
+settings.outformat = "pdf";
+
 /*  Size of the figure.                                                       */
 size(128);
 
