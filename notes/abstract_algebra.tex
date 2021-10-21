@@ -1,0 +1,166 @@
+\documentclass{article}
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{hyperref}                   % Hyperlinks.
+
+% Colors for hyperref.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+\title{Abstract Algebra}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{notation}{Notation}[section]
+
+% TODO
+%   PL Structures
+%   transversality
+%   surgery
+%   Morse theory
+%   intersection theory
+%   cobordism
+%   bundles
+%   characteristic classes
+%   geometric topology
+%   Smale, sphere inversion
+
+\begin{document}
+    \maketitle
+    These notes come from my personal study of algebra. Many of
+    the concepts come from Dummit and Foote's Abstract Algebra.
+    Any errors in these notes are my own.
+    \tableofcontents
+    \section{Preliminaries}
+        The basic ideas of set theory will not be discussed in detail, but
+        should be familiar. These concepts are as follows.
+        \begin{definition}
+            \label{def:set}%
+            A \textit{set} $A$ is a collection of objects called the
+            \textit{elements} of the set. If $x$ is an element of $A$, this is
+            denoted $x\in{A}$. If not, this is written as $x\notin{A}$.
+        \end{definition}
+        There are two major operations we can do with sets.
+        \begin{definition}
+            \label{def:union}%
+            The \textit{union} of two sets $A$ and $B$ is the set $A\cup{B}$
+            defined by:
+            \begin{equation}
+                A\cup{B}=\{\,x\;|\;x\in{A}\textrm{ or }x\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        The word \textit{or} is the inclusive or. So $x\in{A}\cup{B}$ means
+        either $x\in{A}$ or $x\in{B}$ or both.
+        For example, if $A=\{1,2,3\}$ and $B=\{3,4,5\}$, then
+        $A\cup{B}=\{1,2,3,4,5\}$. Sets do not consider the possibility of
+        repetition of elements so the sets $\{1,1\}$ and $\{1\}$ are identical.
+        \begin{definition}
+            \label{def:intersection}%
+            The \textit{intersection} of two sets $A$ and $B$ is the set
+            $A\cap{B}$ defined by:
+            \begin{equation}
+                A\cap{B}=\{\,x\;|\;x\in{A}\textrm{ and }x\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        If $A=\{1,2,3\}$ and $B=\{3,4,5\}$, then $A\cap{B}=\{3\}$.
+        \begin{definition}
+            \label{def:cardinality}%
+            The \textit{cardinality} of a set $A$ is the size of the set,
+            denoted $\textrm{Card}(A)$.
+        \end{definition}
+        A rigorous treatement of cardinality requires a discussion of cardinal
+        numbers, but that is beyond our topics. For finite sets, the
+        cardinality is simply the number of distinct elements in the set.
+        So if $A=\{1,2,3\}$ and $B=\{a,b,c,d\}$, then
+        $\textrm{Card}(A)=3$ and $\textrm{Card}(B)=4$.
+        \par\hfill\par
+        The axioms of Zermelo-Fraenkel Set Theory tell us that if $A$ and $B$
+        are sets, there is a set $A\times{B}$ defined by the set of all
+        \textit{ordered pairs}. This is the called the
+        \textit{Cartesian product} of $A$ and $B$.
+        \begin{definition}
+            \label{def:cartesian_product}%
+            The \textit{Cartesian product} of sets $A$ and $B$ is the set
+            $A\times{B}$ defined by:
+            \begin{equation}
+                A\times{B}=\{\,(a,b)\;|\;a\in{A},\,b\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        If $A=\{1,2\}$ and $B=\{a,b\}$, then $A\times{B}$ is the set
+        $\{(1,a),(1,b),(2,a),(2,b)\}$.
+        There's some (near) universally agreed upon notation in mathematics for
+        certain sets.
+        \begin{notation}
+            \label{not:natural_numbers}%
+            The set of all natural number 0, 1, 2, and so on is denoted
+            $\mathbb{N}$. That is:
+            \begin{equation}
+                \mathbb{N}=\{\,0,\,1,\,2,\,3,\,4,\,\dots\,\}
+            \end{equation}
+        \end{notation}
+        \begin{notation}
+            \label{not:integers}%
+            The set of all integers (positive, negative, and zero) is denoted
+            $\mathbb{Z}$. That is:
+            \begin{equation}
+                \mathbb{Z}=\{\,\dots,\,-2,\,-1,\,0,\,1,\,2,\,\dots\,\}
+            \end{equation}
+        \end{notation}
+        Thet letter Z isn't random. It comes from the German word for number:
+        \textit{Zahlen}.
+        \begin{notation}
+            \label{not:rationals}%
+            The set of all rational numbers, ratios of integers, is denoted
+            $\mathbb{Q}$. That is:
+            \begin{equation}
+                \mathbb{Q}=\{\,\frac{p}{q}\;|\;p,q\in\mathbb{Z}\textrm{ and }
+                    q\ne{0}\,\}
+            \end{equation}
+        \end{notation}
+        I'd like to believe Q stands for \textit{quotient}, but I've never
+        directly looked into this.
+        \begin{notation}
+            \label{not:reals}%
+            The set of all real numbers is denoted $\mathbb{R}$:
+            \begin{equation}
+                \mathbb{R}=\{\,r\;|\;r\textrm{ is a real number}\,\}
+            \end{equation}
+        \end{notation}
+        The definition of $\mathbb{R}$ seems circular. It is very
+        difficult to precisely state what a real number is. Alas, this is a
+        problem for set theorists and real analysis.
+        \begin{notation}
+            The set of \textit{complex number} of the form $z=x+iy$, where
+            $x,y\in\mathbb{R}$ and $i$ is the \textit{imaginary unit}, is
+            denoted $\mathbb{C}$. That is:
+            \begin{equation}
+                \mathbb{C}=\{\,x+iy\;|\;x,y\in\mathbb{R}\,\}
+            \end{equation}
+        \end{notation}
+        Topologically speaking, $\mathbb{C}$ is the same as the cartesian
+        product $\mathbb{R}\times\mathbb{R}=\mathbb{R}^{2}$. It is a
+        \textit{plane}. Algebraically it has more structure, and is one of the
+        more fundamental objects in abstract algebra.
+\end{document}
