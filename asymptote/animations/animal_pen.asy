@@ -110,6 +110,10 @@ draw(graph(area_func, shift, shift+0.5*L, n=n_samples, operator ..), drawp);
 draw((shift, 0.0) -- (shift + xlen, 0.0), thickp, SharpArrow(arsize));
 draw((shift, 0.0) -- (shift, ylen), thickp, SharpArrow(arsize));
 
+/*  Label the graph.                                                          */
+label("Area", (shift + 0.1, ylen));
+label("Width", (shift + xlen, -0.2));
+
 /*  Loop over the possible values for w.                                      */
 for (n = 0; n < n_frames; ++n)
 {
