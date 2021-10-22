@@ -1,3 +1,20 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+
 \documentclass{article}
 \usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
 \usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
@@ -163,4 +180,165 @@
         product $\mathbb{R}\times\mathbb{R}=\mathbb{R}^{2}$. It is a
         \textit{plane}. Algebraically it has more structure, and is one of the
         more fundamental objects in abstract algebra.
+        \begin{definition}
+            A \textit{function} from a set $A$ to a set $B$, denoted
+            $f:A\rightarrow{B}$, is a subset
+            $f\subseteq{A}\times{B}$ such that for all $a\in{A}$ there is a
+            unique $b\in{B}$ such that $(a,b)\in{f}$.
+        \end{definition}
+        Intuitively, a function is a \textit{rule} that assigns to each element
+        in $A$ a unique element in $B$. This is usually given by some formula.
+        If $a\in{A}$ corresponds to $b\in{B}$, we often use the notation
+        $b=f(a)$. The words \textit{map}, \textit{operator},
+        \textit{transformation}, etc., are all synomymns for functions that are
+        usually restricted to particular areas of mathematics. I'm of the
+        opinion that this creates an unnecessary confusion on the reader,
+        having to memorize where which synomymn applies, and prefer to refer
+        to functions as just that: \textit{functions}. I'm the minority in this
+        belief, and the reader should acquaint themselves with these terms if
+        they wish to discuss mathematics with others. For this document, the
+        word function will suffice.
+        \begin{example}
+            Defining functions by formulas can be a tricky thing. We have to
+            check if the formula is \textit{well-defined}. For example, suppose
+            we have the following formula which takes in a rational number
+            $a/b\in\mathbb{Q}$ and returns an integer in $\mathbb{Z}$:
+            \begin{equation}
+                f\big(\frac{a}{b}\big)=a
+            \end{equation}
+            This looks like its a function, I used the letter $f$, gave it
+            some parenthesis, and a nice equation for it, but it's not.
+            If I give the same rational number, but in a different form, it
+            yields a different answer. For example,
+            $\frac{1}{2}=\frac{2}{4}$, however $f(\frac{1}{2})=1$ and
+            $f(\frac{2}{4})=2$. Two different values for the same input.
+            Hence, $f$ is not a function.
+        \end{example}
+        \begin{example}
+            Suppose we have the following formula that takes in a rational
+            number and returns a rational:
+            \begin{equation}
+                f\big(\frac{a}{b}\big)=\frac{a^{2}}{b^{2}}
+            \end{equation}
+            Is this a function? It does indeed take in any rational number,
+            and does return a rational number. The question is whether or not
+            the function is undefined. If two rational numbers $a/b$ and
+            $c/d$ are equal, then $c/d = ka/kb$ for some non-zero integer $k$.
+            But then:
+            \begin{equation}
+                f\big(\frac{c}{d}\big)=f\big(\frac{ka}{kb}\big)
+                    =\frac{(ka)^{2}}{(kb)^{2}}
+                    =\frac{a^{2}}{b^{2}}
+                    =f\big(\frac{a}{b}\big)
+            \end{equation}
+            So the formula is well-defined, and defines a function
+            $f:\mathbb{Q}\rightarrow\mathbb{Q}$.
+        \end{example}
+        \begin{example}
+            A more challenging example from Dummit and Foote's book. Suppose
+            we have the following formula that takes in a real number and
+            returns a positive integer between 0 and 9. We write the real
+            number $x$ in decimal and return the first digit to the right of
+            the decimal point. So for $\pi=3.14159...$ we return 1. For
+            $\sqrt{2}=1.414...$ we return 4. Is this a well-defined function?
+            The answer is no since the same number can have two different
+            decimal expansions. For example, $1=1.0$. However,
+            $1=0.999...$ This second equality usually irks undergraduates, but
+            it is true. The is no \textit{last decimal place} where the
+            number differs. The real numbers do not have such a notion. There
+            are number systems that do such as the hyper-reals, but these
+            systems are fundamentally different than the real numbers. Here's
+            a short algebraic proof that $1.0=0.999...$ First label
+            $0.999...=x$. Then:
+            \begin{align}
+                10x&=10\cdot0.999...\\
+                    &=9.999...\\
+                    &=9+0.999...\\
+                    &=9+x
+            \end{align}
+            So we have $10x=9+x$, which implies $9x=9$, and therefore $x=1$.
+            Because $1.0=0.999...$, the formula $f$ is ambiguous at $1$.
+            Should $f(1)=0$ or should $f(1)=9$? $f$ does not define a function.
+        \end{example}
+        The sets $A$ and $B$ are called the \textit{domain} and
+        \textit{codomain}, respectively. More synomymns, in topology the
+        codomain is often called the \textit{target}. Again, I will stick with
+        codomain and avoid synomymns. The codomain should not be confused with
+        the \textit{range} of a function. The range is a subset of the domain.
+        Namely, it is the set of all elements $b\in{B}$ that have a
+        corresponding element $a\in{A}$ with $f(a)=b$.
+        \begin{example}
+            Letting $f:\mathbb{R}\rightarrow\mathbb{R}$ be defined by
+            $f(x)=x^{2}$, the range of $f$ is the set of all
+            \textit{non-negative} real numbers. There is no real number that
+            squares to $-1$, and hence $f(x)=x^{2}=-1$ has no real solution.
+            So $-1$ is \textit{not} in the range. It is in the codomain,
+            however, by the definition of $f$
+            (that is, $f:\mathbb{R}\rightarrow{R}$ is defined as a function
+            from $\mathbb{R}$ to $\mathbb{R}$).
+        \end{example}
+        \begin{definition}
+            The image of a subset $\mathcal{U}\subseteq{A}$ of a function
+            $f:A\rightarrow{B}$ between two sets $A$ and $B$ is the set
+            $f[\mathcal{U}]$ defined by:
+            \begin{equation}
+                f[\mathcal{U}]=\{\,b\in{B}\;|\;
+                    b=f(a)\,\textrm{for some }a\in\mathcal{U}\,\}
+            \end{equation}
+        \end{definition}
+        The range of a function is precisely the image of the domain. That is,
+        if $f:A\rightarrow{B}$ is a function, the range is $f[A]$.
+        \begin{definition}
+            The pre-image of a subset $\mathcal{V}\subseteq{B}$ of a function
+            $f:A\rightarrow{B}$ between two sets $A$ and $B$ is the function
+            $f^{-1}[\mathcal{V}]$ defined by:
+            \begin{equation}
+                f^{-1}[\mathcal{V}]=\{\,a\in{A}\;|\;
+                    f(a)\in\mathcal{V}\,\}
+            \end{equation}
+        \end{definition}
+        The notation $f[\mathcal{U}]$ and $f^{-1}[\mathcal{V}]$ is not
+        universal. Many texts write $f(\mathcal{U})$ and
+        $f^{-1}(\mathcal{V})$. This creates ambiguity as to whether or not I
+        mean the inverse function $f^{-1}$ or the pre-image. A similar
+        ambiguity exists for $f(\mathcal{U})$. Indeed, suppose
+        $C=\{1,2\}$ and $A=\{1,2,\{1,2\}\}$. Then both $C\in{A}$ and
+        $C\subseteq{A}$ (strange, I know). Given any other set $B$ and any
+        function $f:A\rightarrow{B}$, what should $f(C)$ mean? The value of
+        $f$ at the element $C\in{A}$, or the image of the subset
+        $C\subseteq{A}$? I once stumbled across the notation
+        $f[C]$ for subsets and thought it was genius, and have adopted it
+        since.
+        \begin{definition}
+            The fiber of an element $b\in{B}$ under a function
+            $f:A\rightarrow{B}$ between two sets $A$ and $B$ is the pre-image
+            $f^{-1}[\{b\}]$.
+        \end{definition}
+        The fiber of an element $b\in{B}$ can be empty, and it can also have
+        many elements. For example, $f:\mathbb{R}\rightarrow\mathbb{R}$ defined
+        by $f(x)=x^2$, the fiber of $-1$ is empty since $f(x)=-1$ has no
+        solution. On the other hand, the fiber of $1$ is the set $\{1,-1\}$
+        since $1^{2}=1$ and $(-1)^{2}=1$.
+        \begin{definition}
+            The composition of two functions $f:A\rightarrow{B}$ and
+            $g:B\rightarrow{C}$ is the function $g\circ{f}:A\rightarrow{C}$
+            defined by:
+            \begin{equation}
+                (g\circ{f})(x)=g\big(f(x)\big)
+            \end{equation}
+        \end{definition}
+        Note that the domain of $g$ needs to be the codomain of $f$ for this
+        to be well-defined.
+        \begin{definition}
+            An injective function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that for all $a_{0},a_{1}\in{A}$ with
+            $f(a_{0})=f(a_{1})$, it is true that $a_{0}=a_{1}$.
+        \end{definition}
+        \begin{example}
+            The function $f:\mathbb{R}\rightarrow\mathbb{R}$ defined by
+            $f(x)=x^{3}$ is injective. If $a^{3}=b^{3}$, then $a=b$. The
+            function $g:\mathbb{R}\rightarrow\mathbb{R}$ defined by
+            $g(x)=x^{2}$ is not injective. $(-1)^{2}=1^{2}$, but
+            $-1\ne{1}$.
+        \end{example}
 \end{document}
