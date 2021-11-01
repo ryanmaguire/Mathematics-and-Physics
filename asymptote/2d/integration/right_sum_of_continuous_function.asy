@@ -42,6 +42,7 @@ pen thinp = black + linewidth(0.5pt);
 pen funcfill = blue;
 pen minfill = red;
 pen maxfill = green;
+pen fillp = gray(0.7);
 
 real xstart = 0.0;
 real xend = 1.0;
@@ -54,24 +55,31 @@ real func(real x)
     return x*x*x - x + 1.0;
 }
 
-real xmin = 1.0 / sqrt(3.0);
-real ymin = func(xmin);
-real ymax = 1.0;
+path g;
+
+int n;
+int n_rectangles = 20;
+
+real x0 = xstart;
+real dx = (xend - xstart) / n_rectangles;
+real x1, y;
 
 Label xl = Label("$x$", (end, 0.0), position = 1.0);
 Label yl = Label("$y$", (0.0, end), position = 1.0);
 
-path g = (xstart, 0.0);
-
-g = (xstart, 0.0) -- (xstart, ymax) -- (xend, ymax) -- (xend, 0.0) -- cycle;
-filldraw(g, maxfill, black);
-
-g = (xstart, 0.0) -- graph(func, xstart, xend) -- (xend, 0.0) -- cycle;
-filldraw(g, funcfill, black);
-
-g = (xstart, 0.0) -- (xstart, ymin) -- (xend, ymin) -- (xend, 0.0) -- cycle;
-filldraw(g, minfill, black);
-
 draw(xl, (start, 0.0) -- (end, 0.0), N, axesp, SharpArrow(arsize));
 draw(yl, (0.0, start) -- (0.0, end), E, axesp, SharpArrow(arsize));
+
+for (n = 0; n < n_rectangles; ++n)
+{
+    x1 = x0 + dx;
+    y = func(x1);
+
+    g = (x0, 0.0) -- (x0, y) -- (x1, y) -- (x1, 0.0) -- cycle;
+    filldraw(g, fillp, black);
+    x0 = x1;
+}
+
+g = (xstart, 0.0) -- graph(func, xstart, xend) -- (xend, 0.0) -- cycle;
+draw(g);
 

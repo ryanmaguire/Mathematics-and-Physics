@@ -39,9 +39,7 @@ defaultpen(black + linewidth(0.6pt));
 /*  Pens used throughout the drawing.                                         */
 pen axesp = black + linewidth(0.8pt);
 pen thinp = black + linewidth(0.5pt);
-pen funcfill = blue;
-pen minfill = red;
-pen maxfill = green;
+pen funcfill = gray(0.7);
 
 real xstart = 0.0;
 real xend = 1.0;
@@ -63,14 +61,8 @@ Label yl = Label("$y$", (0.0, end), position = 1.0);
 
 path g = (xstart, 0.0);
 
-g = (xstart, 0.0) -- (xstart, ymax) -- (xend, ymax) -- (xend, 0.0) -- cycle;
-filldraw(g, maxfill, black);
-
 g = (xstart, 0.0) -- graph(func, xstart, xend) -- (xend, 0.0) -- cycle;
 filldraw(g, funcfill, black);
-
-g = (xstart, 0.0) -- (xstart, ymin) -- (xend, ymin) -- (xend, 0.0) -- cycle;
-filldraw(g, minfill, black);
 
 draw(xl, (start, 0.0) -- (end, 0.0), N, axesp, SharpArrow(arsize));
 draw(yl, (0.0, start) -- (0.0, end), E, axesp, SharpArrow(arsize));

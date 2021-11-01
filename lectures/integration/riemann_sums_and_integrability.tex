@@ -19,6 +19,7 @@
 \usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
 
 \newtheoremstyle{normal}
     {\topsep}               % Amount of space above the theorem.
@@ -39,8 +40,8 @@
 \newtheorem{theorem}{Theorem}
 \newcommand{\ceil}[2][]{#1\lceil#2#1\rceil}
 
-\title{All Horses are the Same Color}
-\author{Math 3}
+\title{Integrability}
+\author{Ryan Maguire}
 \date{Fall 2021}
 
 % No indent and no paragraph skip.
@@ -49,15 +50,97 @@
 
 \begin{document}
     \maketitle
-    Intuitively, a continuous function on a close bounded interval
-    $f:[a,b]\rightarrow\mathbb{R}$ should have a well defined under below
+    Intuitively, a continuous function on a closed bounded interval
+    $f:[a,b]\rightarrow\mathbb{R}$ should have a well-defined area below
     the curve. The extreme value theorem tells us there is a minimum value
     $m$ that $f$ reaches, and a maximum value $M$. The area under $f$ should
-    then be bounded between $m(b-a)$ and $M(b-a)$. $m(b-a)$ is the area of the
-    rectangle with height $m$ and width $b-a$ and $M(b-a)$ is the area of the
-    rectangle width height $M$ and width $b-a$. The function $f$ is contained
-    within the area $M(b-a)$ and above the area $m(b-a)$, so the area under
-    $f$ should lie between these two values.
+    then be bounded between $m(b-a)$ and $M(b-a)$. $m(b-a)$ is the (red) area
+    of the rectangle with height $m$ and width $b-a$ and $M(b-a)$ is the
+    (green) area of the rectangle width height $M$ and width $b-a$. The
+    function $f$ is contained within the area $M(b-a)$ and above the area
+    $m(b-a)$, so the (blue) area under $f$ should lie between these two values.
+    \begin{figure}[H]
+        \centering
+        \includegraphics{../../images/continuous_bounded_function_has_bounded_area.pdf}
+        \caption{Continuous functions $f:[a,b]\rightarrow\mathbb{R}$ have a
+                 well-defined area.}
+    \end{figure}
+    A partition of a closed interval $[a,b]$ is a finite sequence of points
+    $a=x_{0}<x_{1}<\cdots<x_{N}=b$. The lower sum of a continuous function
+    $f:[a,b]\rightarrow\mathbb{R}$ is the sum:
+    \begin{equation}
+        L(f,x_{n})=\sum_{n=0}^{N-1}f(m_{n})\Delta{x}_{n}
+    \end{equation}
+    Where $\Delta{x}_{n}=x_{n+1}-x_{n}$ is the distance between the
+    $n^{th}$ point and the $(n+1)^{th}$ point, and
+    $m_{n}$ is the minimum value of $f(x)$ on the interval $[x_{n},x_{n+1}]$.
+    By the extreme value theorem, $m_{n}$ is well-defined since $f$ is
+    continuous on $[x_{n},x_{n+1}]$.
+    \begin{figure}[H]
+        \centering
+        \includegraphics{../../images/lower_sum_of_continuous_function.pdf}
+        \caption{Lower Sum of a Continuous Function}
+    \end{figure}
+    This sum represents the area underneath the rectangles of height $m_{n}$
+    and width $\Delta_{n}$, as shown above. The upper sum of a continuous
+    function is similarly defined:
+    \begin{equation}
+        U(f,x_{n})=\sum_{n=0}^{N-1}f(M_{n})\Delta{x}_{n}
+    \end{equation}
+    Where $M_{n}$ is the maximum of $f(x)$ on the interval $[x_{n},x_{n+1}]$.
+    Again, this is well-defined by the extreme value theorem.
+    \begin{figure}[H]
+        \centering
+        \includegraphics{../../images/upper_sum_of_continuous_function.pdf}
+        \caption{Upper Sum of a Continuous Function}
+    \end{figure}
+    This has a similar interpretation as the area beneath rectangles of height
+    $M_{n}$ and width $\Delta{x}_{n}$.
+    \begin{theorem}
+        If $f:[a,b]\rightarrow\mathbb{R}$ is a continuous function, then for
+        every $\varepsilon>0$ there is a partition
+        $a=x_{0}<x_{1}<\cdots<x_{N}=b$ with
+        $U(f,x_{n})-L(f,x_{n})<\varepsilon$.
+    \end{theorem}
+    This theorem shows that, as the partitions get finer and finer, the
+    values $U(f,x_{n})$ and $L(f,x_{n})$ converge, and they converge to the
+    same number. We define this value as the \textit{integral} of $f$ and write
+    this as:
+    \begin{equation}
+        \int_{a}^{b}f(x)\;\textrm{d}x
+            =\lim_{\textrm{partition gets finer}}L(f,x_{n})
+            =\lim_{\textrm{partition gets finer}}U(f,x_{n})
+    \end{equation}
+    \begin{figure}[H]
+        \centering
+        \includegraphics{../../images/integral_of_continuous_function.pdf}
+        \caption{Integral of a Continuous Function}
+    \end{figure}
+    We can be more general. If we have a bounded function
+    $f:[a,b]\rightarrow\mathbb{R}$ we can give the same definitions, and can
+    say what it means for a function to be \textit{integrable}. From the above
+    discussion we have the following:
+    \begin{theorem}
+        If $f:[a,b]\rightarrow\mathbb{R}$ is a continuous function, then it is
+        integrable.
+    \end{theorem}
+    Is \textit{every} function integrable? Consider the function
+    $f:[0,1]\rightarrow\mathbb{R}$ defined by:
+    \begin{equation}
+        f(x)=
+        \begin{cases}
+            0&x\in\mathbb{Q}\\
+            1&x\notin\mathbb{Q}
+        \end{cases}
+    \end{equation}
+    For any partition $0=x_{0}<x_{1}\cdots<x_{N}=1$, and for any interval
+    $[x_{n},x_{n+1}]$, the minimum is $m_{n}=0$ and the maximum is $M_{n}=1$.
+    The lower sum is 0 and the upper sum is 1, regardless of partition. Because
+    of this the function is not integrable.
+    \par\hfill\par
+    Courses like real analysis and measure theory handle all sorts of
+    pathological functions like this. For calculus, we'll stick with continuous
+    functions for the most part.
     \newpage
     I, the copyright holder of this work, release it into the public domain.
     This applies worldwide. In some countries this may not be legally possible;
