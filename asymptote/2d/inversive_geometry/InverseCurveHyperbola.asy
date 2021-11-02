@@ -1,9 +1,7 @@
 /* Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in     *
  *  your ASYMPTOTE_DIR environment variable. These are found in the           *
  *  asymptote/ folder.                                                        */
-import _asy_preamble_2d;
-import _custom_arrows;
-import _inversive;
+import custom_arrows;
 import graph;
 
 /* Size of the output figure.                                                 */
@@ -14,6 +12,48 @@ pair[] XAxes, YAxes;
 int samples;
 path g, ginv, xaxis, yaxis;
 Label Lx, Ly;
+
+pen axesp = black + linewidth(0.7pt);
+pen thinp = black + linewidth(0.4pt);
+pen dashp = black + linewidth(0.5pt) + linetype("4 4");
+real arsize = 5bp;
+
+real EuclideanNorm2D(pair P)
+{
+    return sqrt(P.x*P.x + P.y*P.y);
+}
+
+pair InverseCurve(pair f(real), real t)
+{
+    /*  Declare necessary variables.                                          */
+    real X, Y, Px, Py, normsq;
+    pair P, invP;
+
+    /*  Compute the point from the given function f and the value t.          */
+    P = f(t);
+
+    /*  If P is the origin, the inverse of it is the point "at infinity" so   *
+     *  we'll return the pair (inf, inf).                                     */
+    normsq = EuclideanNorm2D(P);
+    if (normsq == 0.0)
+        return (inf, inf);
+
+    /*  Otherwise, square the current value to get normsq.                    */
+    else
+        normsq = normsq*normsq;
+
+    /*  Extract the x and y values from P.                                    */
+    Px = P.x;
+    Py = P.y;
+
+    /*  Compute the inverse X and Y values with respect to the unit circle.   */
+    X = Px/normsq;
+    Y = Py/normsq;
+
+    /*  The inverse of P is just (X, Y) so compute this and return.           */
+    invP = (X, Y);
+    return invP;
+}
 
 /* Points used to define the x and y axes.                                    */
 lim = 2.5;
