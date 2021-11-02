@@ -31,7 +31,7 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.6pt));
@@ -67,13 +67,14 @@ Label xl = Label("$x$", (end, 0.0), position = 1.0);
 Label yl = Label("$y$", (0.0, end), position = 1.0);
 
 xa = xstart;
+ya = func(xa);
 for (n = 0; n < n_samples; ++n)
 {
     xb = xa + dx;
-    ya = func(xa);
     yb = tan_line(xb, xa);
-    draw((xa, ya) -- (xb, yb), SharpArrow(arsize));
+    draw((xa, ya) -- (xb, yb), blue, SharpArrow(arsize));
     xa = xb;
+    ya = yb;
 }
 
 draw(graph(func, xstart, xend));
