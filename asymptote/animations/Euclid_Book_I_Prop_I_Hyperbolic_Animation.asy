@@ -26,8 +26,9 @@ texpreamble("\usepackage{amssymb}");
 // Commonly used pens.
 pen thinp  = black + linewidth(0.3pt);
 
-// Make sure _custom_arrows.asy, _asy_preamble_2d, and _euc_geo_2d are in your
-// ASYMPTOTE_DIR environment variable. These are found in the asymptote/ folder.
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
 import _euc_geo_2d;
 import _complex_math;
 import graph;
