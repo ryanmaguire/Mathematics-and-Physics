@@ -1,8 +1,5 @@
 // Boilerplate stuff.
 import settings;
-
-// Make sure _custom_arrows.asy and _mimic_three.asy are in your ASYMPTOTE_DIR
-// environment variable. These files are found in the asymptote/ folder.
 import custom_arrows;
 settings.outformat = "pdf";
 
