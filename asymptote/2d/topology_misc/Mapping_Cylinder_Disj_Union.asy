@@ -1,8 +1,7 @@
 // Some boiler plate stuff.
 import settings;
 import graph;
-import _custom_arrows;
-settings.render = 8;
+import custom_arrows;
 settings.outformat="pdf";
 
 // Needed for mathbb command.

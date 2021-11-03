@@ -1,11 +1,8 @@
 // Import necessary stuff, set format to PDF file.
 import graph;
 import settings;
-
-import _custom_arrows;
-
+import custom_arrows;
 settings.outformat="pdf";
-settings.render=4;
 
 // Size of the output figure.
 size(256);

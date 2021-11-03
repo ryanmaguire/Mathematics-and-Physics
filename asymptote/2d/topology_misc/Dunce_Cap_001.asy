@@ -3,18 +3,8 @@ import settings;
 
 // Make sure _custom_arrows.asy is in your ASYMPTOTE_DIR environment variable.
 // This file is found in the asymptote/ folder.
-import _custom_arrows;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+import custom_arrows;
+settings.outformat = "pdf";
 
 // Size of the output figure.
 size(256);

@@ -1,16 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+settings.outformat = "pdf";
 
 // Size of the output figure.
 size(128);

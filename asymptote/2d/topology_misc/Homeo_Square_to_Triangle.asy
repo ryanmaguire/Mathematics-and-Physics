@@ -1,17 +1,7 @@
 // Seting output format to "pdf".
 import settings;
-import _custom_arrows;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
+import custom_arrows;
 settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
 
 defaultpen(black+linewidth(0.5pt));
 
@@ -63,7 +53,7 @@ n = (int)(1.0/dx);
 arsize = 2bp;
 
 for(i=0; i<n; ++i){
-    
+
     Z0 = (r, 1);
     Z1 = homeo(Z0);
     g = Z0--Z1;
