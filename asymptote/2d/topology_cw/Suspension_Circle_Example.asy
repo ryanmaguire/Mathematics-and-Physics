@@ -1,22 +1,19 @@
 // Seting output format to "pdf".
 import settings;
-import _euclidean;
 texpreamble("\usepackage{amssymb}");
-
-if(settings.render < 0)    settings.render    = 4;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+settings.outformat = "pdf";
 
 // Size of the output.
 size(128);
+
+/* Find midpoint given two points in the plane.                               */
+pair MidPoint2D(pair A, pair B)
+{
+    /*  Compute the midpoint of A and B using the midpoint formula and return.*/
+    real x = 0.5*(A.x + B.x);
+    real y = 0.5*(A.y + B.y);
+    return (x, y);
+}
 
 // Solid pen and dashed pen.
 pen spen = black+linewidth(0.4);

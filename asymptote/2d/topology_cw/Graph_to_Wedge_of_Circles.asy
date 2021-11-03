@@ -1,6 +1,6 @@
 // Seting output format to "pdf".
 import settings;
-import _custom_arrows;
+import custom_arrows;
 
 if(settings.render < 0)    settings.render    = 4;
 if(!settings.multipleView) settings.batchView = false;
