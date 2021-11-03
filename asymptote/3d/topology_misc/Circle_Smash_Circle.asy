@@ -1,6 +1,4 @@
-// Make sure _asy_preamble_3d.asy is in your ASYMPTOTE_DIR environment variable.
-// This file is located in the asymptote/ directory.
-import _asy_preamble_3d;
+import graph3;
 import tube;
 
 // Specify the camera setup and light.
@@ -22,6 +20,31 @@ real theta1 = pi;
 int samples = 24;
 surface s;
 path3 q1, q2;
+
+material blob = material(
+    diffusepen=gray(0.7),
+    emissivepen=gray(0.2),
+    specularpen=gray(0.2)
+);
+
+material redpipe = material(
+    diffusepen=red,
+    emissivepen=gray(0.2),
+    specularpen=gray(0.2)
+);
+
+material bluepipe = material(
+    diffusepen=blue+0.3*green,
+    emissivepen=gray(0.2),
+    specularpen=gray(0.2)
+);
+
+/*  The equation for a torus centered at the origin with inner radius iR and  *
+ *  outer radius oR. The pair t should lie in [0,2pi]x[0,2pi]                 */
+triple TorusEquation(pair t, real iR, real oR)
+{
+    return ((oR+iR*cos(t.y))*cos(t.x), (oR+iR*cos(t.y))*sin(t.x), iR*sin(t.y));
+}
 
 // Create three functions based on the torus.
 triple f(pair t){return TorusEquation(t, a, R);}

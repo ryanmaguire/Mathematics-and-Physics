@@ -100,21 +100,6 @@ real DotProduct2D(pair A, pair B)
     return dot_prod;
 }
 
-/* Returns the Euclidean norm of a 2-dimensional point.                       */
-real EuclideanNorm2D(pair A)
-{
-    /*  Declare necessary variables.                                          */
-    real x, y, norm;
-
-    /*  Get the values from the input pair A.                                 */
-    x = A.x;
-    y = A.y;
-
-    /*  Using Pythagoras, we simply compute sqrt(x^2 + y^2).                  */
-    norm = sqrt(x*x + y*y);
-    return norm;
-}
-
 /* Returns the angle between X and Y relative to the point O.                 */
 real RelAngle2D(pair O, pair X, pair Y)
 {
@@ -437,19 +422,6 @@ pair[] CircleIntersection(pair P0, real r0, pair P1, real r1)
  ******************************************************************************
  ******************************************************************************/
 
-/*  Scale a three dimensional vector by a real number.                        */
-triple ScaleThreeVector(real r, triple V)
-{
-    /*  Declare necessary variables.                                          */
-    real x, y, z;
-
-    /*  Scale the components by r and return.                                 */
-    x = r*V.x;
-    y = r*V.y;
-    z = r*V.z;
-    return (x, y, z);
-}
-
 /*  Get a point on the line PQ with respect to the parameter t. This is the   *
  *  equation L(t) = (1-t)*P + t*Q;                                            */
 triple LinePQ3D(real t, triple P, triple Q)
@@ -477,21 +449,7 @@ triple MidPoint3D(triple A, triple B)
     return out;
 }
 
-/* Returns the Euclidean norm of a 3-dimensional point.                       */
-real EuclideanNorm3D(triple A)
-{
-    /*  Declare necessary variables.                                          */
-    real x, y, z, norm;
 
-    /*  Extract the values from the triple A.                                 */
-    x = A.x;
-    y = A.y;
-    z = A.z;
-
-    /*  Use Pythagoras to compute the length of A.                            */
-    norm = sqrt(x*x + y*y + z*z);
-    return norm;
-}
 
 /*  Given a non-zero vector, convert it to a unit vector.                     */
 triple NormalizeVector3D(triple V)
@@ -588,27 +546,6 @@ triple SpaceToBall(triple P)
     return out;
 }
 
-/*  Convert spherical coordinates to rectangular. Note, this uses the         *
- *  physicists convention and NOT the mathematicians (old habbits die hard).  *
- *  r is the distance to the origin, phi is the azimuth angle (the angle in   *
- *  the xy plane), and theta is the zenith angle (the angle made with z).     */
-triple SphericalToRect(real r, real phi, real theta)
-{
-    /*  Declare necessary variables.                                          */
-    real x, y, z, cos_theta, sin_theta, cos_phi, sin_phi;
-
-    /*  Pre-compute the trigonometric factors to save excess computations.    */
-    cos_theta = cos(theta);
-    sin_theta = sin(theta);
-    cos_phi   = cos(phi);
-    sin_phi   = sin(phi);
-
-    /*  Compute the x, y, and z coordinates and return.                       */
-    x = r*cos_phi*sin_theta;
-    y = r*sin_phi*sin_theta;
-    z = r*cos_theta;
-    return (x, y, z);
-}
 
 /*  Convert Cartesian to spherical coordinates.                               */
 triple RectToSpherical(real x, real y, real z)

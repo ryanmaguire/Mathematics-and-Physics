@@ -1,11 +1,6 @@
 // Boilerplate stuff.
-import _asy_preamble_3d;
 import graph3;
 import palette;
-
-currentprojection=perspective(camera = (20, 80, 30), up   = (0, 0, 1),
-                              target = (0,  0,  0),  zoom = 0.85);
-
 
 // Size of the created image.
 size(128);
