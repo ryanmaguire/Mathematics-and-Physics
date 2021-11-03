@@ -20,11 +20,8 @@
 
 /*  Draw the image on a PDF file.                                             */
 import settings;
-settings.outformat = "pdf";
-
-/*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
- *  your path when creating this figure.                                      */
 import custom_arrows;
+settings.outformat = "pdf";
 
 /*  Size of the output figure.                                                */
 size(256);

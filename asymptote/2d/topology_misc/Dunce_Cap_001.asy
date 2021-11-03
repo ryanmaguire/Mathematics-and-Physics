@@ -1,8 +1,5 @@
 // Boilerplate stuff.
 import settings;
-
-// Make sure _custom_arrows.asy is in your ASYMPTOTE_DIR environment variable.
-// This file is found in the asymptote/ folder.
 import custom_arrows;
 settings.outformat = "pdf";
 
