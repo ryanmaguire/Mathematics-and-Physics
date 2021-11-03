@@ -2,7 +2,6 @@ import settings;
 import tube;
 import graph3;
 import palette;
-import _custom_arrows;
 settings.render=8;
 settings.outformat="pdf";
 
