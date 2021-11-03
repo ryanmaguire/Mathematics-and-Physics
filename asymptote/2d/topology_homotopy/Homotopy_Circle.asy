@@ -1,8 +1,7 @@
 // Some boiler plate stuff.
 import settings;
-import _custom_arrows;
+import custom_arrows;
 texpreamble("\usepackage{amssymb}");
-settings.render = 4;
 settings.outformat="pdf";
 
 defaultpen(fontsize(10pt));

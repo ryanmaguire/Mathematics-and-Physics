@@ -1,20 +1,7 @@
 // Some boiler plate stuff.
 import settings;
-
-if(!settings.multipleView) settings.batchView = false;
-if(settings.render < 0)    settings.render = 4;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
-
-// Make sure _custom_arrows.asy is in your $PATH.
-// This file is found in the asymptote/ folder of this project.
-import _custom_arrows;
+import custom_arrows;
+settings.outformat = "pdf";
 
 // Needed for mathbb command.
 texpreamble("\usepackage{amssymb}");

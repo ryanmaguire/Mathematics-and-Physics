@@ -1,7 +1,6 @@
 // Some boiler plate stuff.
-import _custom_arrows;
+import custom_arrows;
 import settings;
-settings.render = 8;
 settings.outformat="pdf";
 
 // Size of the output figure.
