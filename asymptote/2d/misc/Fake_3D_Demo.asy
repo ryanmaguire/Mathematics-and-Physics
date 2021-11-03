@@ -3,22 +3,53 @@ import settings;
 
 // Make sure _custom_arrows.asy and _mimic_three.asy are in your ASYMPTOTE_DIR
 // environment variable. These files are found in the asymptote/ folder.
-import _custom_arrows;
-import _mimic_three;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+import custom_arrows;
+settings.outformat = "pdf";
 
 // Size of output.
 size(128);
+
+// Function for mimicing 3D drawing using 2D coordinates.
+struct xyzpoint {
+    pair P, R, ProjX, ProjY, ProjZ;
+
+    // Mimic 3D drawing with these.
+    private pair O = (0.0, 0.0);
+    private pair X = scale(sqrt(0.5))*(-1.0, -1.0);
+    private pair Y = (1.0, 0.0);
+    private pair Z = (0.0, 1.0);
+
+    // The reverse of X for flipped orientation.
+    private pair RevX =  (-X.x, X.y);
+
+    // Convert 3D coordinates to 2D.
+    private pair three2two(real a, real b, real c){
+        return  scale(a)*X + scale(b)*Y + scale(c)*Z;
+    }
+
+    // Use this function when the orientation flips.
+    private pair revthree2two(real a, real b, real c){
+        return scale(a)*RevX + scale(b)*Y + scale(c)*Z;
+    }
+
+    // Functions for returning various projections of the given point.
+    private pair xproj(real a, real b, real c){return scale(b)*Y+scale(c)*Z;}
+    private pair yproj(real a, real b, real c){return scale(a)*X+scale(c)*Z;}
+    private pair zproj(real a, real b, real c){return scale(a)*X+scale(b)*Y;}
+
+    void operator init(real x, real y, real z){
+        this.P = three2two(x, y, z);
+        this.R = revthree2two(x, y, z);
+        this.ProjX = xproj(x, y, z);
+        this.ProjY = yproj(x, y, z);
+        this.ProjZ = zproj(x, y, z);
+    }
+}
+
+pair xyzO = xyzpoint(0, 0, 0).P;
+pair xyzX = xyzpoint(1, 0, 0).P;
+pair xyzY = xyzpoint(0, 1, 0).P;
+pair xyzZ = xyzpoint(0, 0, 1).P;
 
 // Default pen used for drawing.
 defaultpen(black+linewidth(0.1pt));
