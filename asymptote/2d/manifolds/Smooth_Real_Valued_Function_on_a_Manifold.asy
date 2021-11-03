@@ -3,18 +3,8 @@ import settings;
 
 // Make sure _custom_arrows.asy is in your ASYMPTOTE_DIR environment variable.
 // This file is found in the asymptote/ folder.
-import _custom_arrows;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+import custom_arrows;
+settings.outformat = "pdf";
 
 // Default pen for drawing.
 defaultpen(black+linewidth(0.5pt));
@@ -55,7 +45,7 @@ g = (0,0){dir(90)} ..(1,  1.0){dir(0)}  ..(2,  1.0){dir(-30)}..(4,  0.0)
          {dir(-90)}..(2, -2.5){dir(180)}..(0, -2.5){dir(150)}..cycle;
 draw(shift(xshift, yshift)*g);
 
-        
+
 draw(shift(xshift, yshift)*((0.5, -1.7){dir(310)}..{dir(50)}(1.8, -1.7)));
 draw(shift(xshift, yshift)*((0.6, -1.8){dir(50)} ..{dir(310)}(1.7, -1.8)));
 

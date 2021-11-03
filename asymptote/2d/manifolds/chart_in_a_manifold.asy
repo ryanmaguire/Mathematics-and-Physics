@@ -24,7 +24,7 @@ settings.outformat = "pdf";
 
 /*  Custom arrows mimicing the tikz style. _custom_arrows.asy must be in      *
  *  your path when creating this figure.                                      */
-import _custom_arrows;
+import custom_arrows;
 
 /*  Size of the output figure.                                                */
 size(256);

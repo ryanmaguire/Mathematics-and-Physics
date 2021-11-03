@@ -1,7 +1,7 @@
 // Some boiler plate stuff.
 import settings;
 import graph;
-import _custom_arrows;
+import custom_arrows;
 settings.render = 4;
 settings.outformat="pdf";
 

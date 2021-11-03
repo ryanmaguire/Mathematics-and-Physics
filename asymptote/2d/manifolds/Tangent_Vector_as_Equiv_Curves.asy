@@ -1,9 +1,8 @@
 // Some boiler plate stuff.
 import settings;
 import graph;
-import _custom_arrows;
-settings.render = 8;
-settings.outformat="pdf";
+import custom_arrows;
+settings.outformat = "pdf";
 
 // Size of the output figure.
 size(128);
