@@ -1,19 +1,8 @@
 // Seting output format to "pdf".
 import settings;
 import graph;
-import _custom_arrows;
-
-if(settings.render < 0)    settings.render    = 4;
-if(!settings.multipleView) settings.batchView = false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-settings.prc         = false;
-
-viewportmargin = (2, 2);
+import custom_arrows;
+settings.outformat = "pdf";
 
 defaultpen(black+linewidth(0.4pt)+fontsize(7pt));
 
