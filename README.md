@@ -18,7 +18,7 @@ You will need:
   4. `convert` - Image Magick tool for converting images to different formats.
 
 TeX-Live and Mac-Tex (GNU/Linux and macOS, respectively) have both `pdflatex`
-and asymptote. macOS users cab find this at <https://www.tug.org/mactex/>.
+and `asy`. macOS users cab find this at <https://www.tug.org/mactex/>.
 GNU/Linux users for Debian based distributions (Debian, Ubuntu, Pop!_OS, etc.)
 can install tex-live using their package manager:
 ```
