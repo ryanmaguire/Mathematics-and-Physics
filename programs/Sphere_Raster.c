@@ -1,16 +1,13 @@
-// This creates a rasterized image of a sphere. To run, do:
-//      ./circle >> circle.ppm
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
 // This function colors the current pixel in the format (R, G, B).
-void color(int red, int green, int blue)
+void color(int red, int green, int blue, FILE *fp)
 {
-    fputc((char)red,   stdout);
-    fputc((char)green, stdout);
-    fputc((char)blue,  stdout);
+    fputc((char)red, fp);
+    fputc((char)green, fp);
+    fputc((char)blue, fp);
 }
 
 // Function for computing the Euclidean distance from z0 to z1.
@@ -44,9 +41,15 @@ int main(int argc, char *argv[])
     // Array for the current point being computed.
     double point[2];
 
-    // Set the the center to the origin (0, 0).
-    center[0] = 0;
-    center[1] = 0;
+    // File we're printing too.
+    FILE *fp = fopen("sphere_raster.ppm", "w");
+
+    // Check if fopen failed.
+    if (!fp)
+    {
+        puts("fopen failed and return NULL. Aborting.");
+        return -1;
+    }
 
     // Variable used for determining how bright a given pixel is.
     int brightness;
@@ -57,8 +60,12 @@ int main(int argc, char *argv[])
     // Variable used for the distance from point to center.
     double dist;
 
-    printf("P6\n# CREATOR: Ryan Maguire\n");
-    printf("%d %d\n255\n", size, size);
+    fprintf(fp, "P6\n# CREATOR: Ryan Maguire\n");
+    fprintf(fp, "%d %d\n255\n", size, size);
+
+    // Set the the center to the origin (0, 0).
+    center[0] = 0;
+    center[1] = 0;
 
     //  Loop through each pixel.
     for(y = 0; y < size; y++){
@@ -72,10 +79,10 @@ int main(int argc, char *argv[])
             dist = norm(point, center);
 
             // If the point is outside of the circle, skip.
-            if(dist > circle_radius) color(255, 255, 255);
+            if(dist > circle_radius) color(255, 255, 255, fp);
             else {
-                brightness = (int)255*(1.0-dist/circle_radius);;
-                color(brightness, brightness, brightness);
+                brightness = (int)255*(1.0-dist/circle_radius);
+                color(brightness, brightness, brightness, fp);
             }
         }
     }

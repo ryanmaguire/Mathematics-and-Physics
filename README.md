@@ -4,26 +4,52 @@
      not had the time to correct them yet. I am working though in order,
      correcting information, and have made good progress in book 1 on Logic and
      Set Theory.
-  2. The figures were originally written in tikz, then asymptote, and now I am
-     moving on to my own vector graphics library called KissVG (Keep It Simple,
-     Stupid - Vector Graphics) that uses the cairo library as a back-end, though
-     I may eventually write my own back-end tools. It is written in C89/C90
-     compliant code and is also hosted on GitHub. KissVG is currently having a
-     substantial part of its code moved to my other project, libtmpl, which is
-     a simple library of mathematical functions and routines, also written in
-     C. The goal is that libtmpl will provide a wide variety of math functions
-     (complex analysis, numerical analysis, special functions, graph theory,
-     linear algebra, knot theory, geometry, etc.), KissVG will provide the
-     vector graphics library (and eventually some ray-tracing ideas for 3D
-     drawings, which are useful for depicting manifolds such as a torus), and
-     Mathematics-and-Physics will be the tex files. The tikz and asymptote code
-     will not be removed, but simply moved to the "old" directory. The reason
-     for changing to C for the graphics is portability. C compilers are easily
-     accessible, so in the end one would hopefully only need a good LaTeX
-     compiler with a few packages, and a C compiler, to build this project.
-  3. As noted below, I changed to A5 geometry paper to improve readability. This
-     means some of the older notes that I have not yet gotten too will have
-     equations falling outside of the lines. This will be corrected in time.
+  2. I'm experimenting with writing figures in different languages. I used to
+     use tikz, now I mostly use asymptote. Lately I've been experimenting with
+     a library I've written in C to produce SVG figures. Currently the figures
+     in the text use both tikz and asymptote. This will likely change over time
+     to just asymptote.
+
+# Compiling
+You will need:
+  1. `asy` - The Asymptote Vector Graphics Language.
+  2. `pdflatex` - A LaTeX compiler.
+  3. `gcc` - The GNU C compiler.
+  4. `convert` - Image Magick tool for converting images to different formats.
+
+TeX-Live and Mac-Tex (GNU/Linux and macOS, respectively) have both `pdflatex`
+and asymptote. macOS users cab find this at <https://www.tug.org/mactex/>.
+GNU/Linux users for Debian based distributions (Debian, Ubuntu, Pop!_OS, etc.)
+can install tex-live using their package manager:
+```
+sudo apt-get install tex-live
+```
+Different Linux distributions will need to use their respective package manager.
+`gcc` comes pre-installed on many GNU/Linux distributions. If it is not,
+install it via:
+```
+sudo apt-get install gcc
+```
+macOS users will need to install `xcode` to use Apple's C compiler
+(it is labelled `gcc` but is actually based on LLVM's `clang`). This is done
+via:
+```
+xcode-select --install
+```
+As of this writing, `convert` comes pre-installed on macOS and Debian. If it is
+not available for a particular GNU/Linux distribution, try:
+```
+sudo apt-get install imagemagick
+```
+To make the figures, give the `make_figs.sh` executable permissions, and then
+run it:
+```
+chmod +x make_figs.sh
+./make_figs.sh
+```
+There are several hundred figures, so this will take a while. 10 minutes on a
+fast computer, about 30 minutes on a slower one.
+To make the C figures, do the same.
 
 # Mathematics_and_Physics
 Various notes on mathematics and physics organized in several volumes. **This
@@ -71,44 +97,3 @@ Knot theory, low dimensional topology, and surgery theory.
 ## Physics
 Classical mechanics, electromagnetism, quantum mechanics, and astronomy.
 
-# Installation
-This details how to go about reading the contents of Mathematics-and-Physics.
-The repository has been updated so that the actual `png` and `pdf` files used
-for images through the project are not included in the `images/` folder. This is
-to save space on the repository and prevent git from keeping track of changes to
-the images themselved. Git should only be used to keep track of changes to the
-code. All of the images are made from code (tikz, asymptote, and the C
-programming language). To run the setup scripts you will need `gcc` which is the
-standard C compiler, and a latex distribution which has asympote (tex-live and
-mactex both provide the `asy` command). In creating and organizing figures,
-Linux users will need `ImageMagick`, which is free and open source. Mac users
-will also need this, but it comes standard with OSX. See the README in `images/`
-to installation instructions. If you are not interested in the code, but simply
-want access to the document, see `The Easiest Method`.
-
-## The Easiest Method
-Download Mathematics_and_Physics.pdf file and read away. Note, you will not be
-able to compile `main.tex` or have access to the high resolution standalone
-figures (The figures will be in the PDF document, however).
-
-## Full Installation
-**You will need:**
-  1. `gcc` The GNU Compiler Collection (Only C compiler is needed).
-  2. `asy` The Asymptote Compiler (Comes with tex-live and mactex).
-  3. `ImageMagick` (comes standard with OSX).
-
-See `images/README.md` for installation instructions. Once these are installed:
-  1. Cloan or Download the repository onto your computer.
-  2. Navigate to where it's located (ex: /Documents/Mathematics_and_Physics)
-  ```Bash
-    Ryans-iMac:~ ryan$ cd ~/GitHub/Mathematics_and_Physics/
-  ```
-  3. Make sure `make_main.sh` has executable permissions:
-  ```Bash
-    Ryans-iMac:Mathematics_and_Physics ryan$ chmod +x make_main.sh
-  ```
-  4. Run the make_main.sh shell script.
-  ```Bash
-    Ryans-iMac:Mathematics_and_Physics ryan$ ./make_main.sh
-  ```
-Since there are a lot of figures to generate this will take about 10 minutes.

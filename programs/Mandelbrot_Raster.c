@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     /*  Declare a variable for the output file and give it write permission.  */
     FILE *fp;
     fp = fopen("mandelbrot_raster.ppm", "w");
-    int size = 4*1024;
+    int size = 1024;
     int brightness, x, y, i;
     double pr, pi;
     double newRe, newIm, oldRe, oldIm;

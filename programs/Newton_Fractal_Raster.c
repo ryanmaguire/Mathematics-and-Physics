@@ -30,7 +30,7 @@
 #include <complex.h>
 
 /*  The number of pixels in the x and y axes.                                 */
-const unsigned int size = 4*1024;
+const unsigned int size = 1024;
 
 /*  Maximum number of iterations allowed before giving up on the root finding *
  *  algorithm. If no roots are found, the computation aborts.                 */

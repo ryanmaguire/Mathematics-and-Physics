@@ -24,7 +24,7 @@ typedef struct root_struct {
  ******************************************************************************/
 
 /*  The number of pixels in the x and y axes.                                 */
-const int size = 4*1024;
+const int size = 1024;
 
 /*  Values for the min and max of the x and y axes.                           */
 const double x_min = -1.0;
@@ -254,13 +254,6 @@ static root_struct *get_roots(void)
     }
     else
         out->n_roots = n_roots;
-
-    printf("Number of roots: %d\n", n_roots);
-    for (n=0; n<n_roots; ++n)
-        printf(
-            "\troot %d: %f + i%f\n", n,
-            creal(out->roots[n]), cimag(out->roots[n])
-        );
 
     return out;
 }
