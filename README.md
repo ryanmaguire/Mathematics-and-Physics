@@ -22,7 +22,7 @@ and asymptote. macOS users cab find this at <https://www.tug.org/mactex/>.
 GNU/Linux users for Debian based distributions (Debian, Ubuntu, Pop!_OS, etc.)
 can install tex-live using their package manager:
 ```
-sudo apt-get install tex-live
+sudo apt-get install texlive-full
 ```
 Different Linux distributions will need to use their respective package manager.
 `gcc` comes pre-installed on many GNU/Linux distributions. If it is not,
@@ -49,7 +49,11 @@ chmod +x make_figs.sh
 ```
 There are several hundred figures, so this will take a while. 10 minutes on a
 fast computer, about 30 minutes on a slower one.
-To make the C figures, do the same.
+To make the C figures, do the same with `make_cfigs.sh`.
+```
+chmod +x make_cfigs.sh
+./make_cfigs.sh
+```
 
 # Mathematics_and_Physics
 Various notes on mathematics and physics organized in several volumes. **This
