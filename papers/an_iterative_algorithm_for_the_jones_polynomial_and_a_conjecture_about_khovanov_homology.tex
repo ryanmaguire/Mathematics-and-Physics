@@ -19,6 +19,41 @@
 \usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
+\usepackage[nottoc]{tocbibind}                  % Bibliography in toc.
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}            % Figure captions.
+\usepackage{hyperref}
+
+\definecolor{background}{rgb}{0.9,0.9,0.9}
+
+\lstdefinestyle{CStyle}{ 
+    backgroundcolor=\color{background},
+    commentstyle=\color{gray},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{red},
+    stringstyle=\color{orange},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue
+}
 
 \newtheoremstyle{normal}
     {\topsep}               % Amount of space above the theorem.
@@ -63,9 +98,106 @@
         Given a knot diagram, it is reasonable for a mathematician to wish to
         describe the knot with finite data in such a way that a computer can
         understand and perform computations. This is achieved via Gauss code.
+        This is achieved by orienting the knot, labeling the crossings, and
+        picking any point on the knot. You then walk along the knot, following
+        the orientation, and keep track of the crossings you encounter. That is,
+        we label the crossing number, and whether we're on the under strand or
+        over strand with a $U$ and $O$, respectively. This is
+        illustrated via example for the right handle trefoil knot in
+        Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../images/trefoil_knot_oriented_with_gauss_code.pdf}
+            \caption{Gauss Code for the Right Handed Trefoil}
+            \label{fig:right_handed_trefoil_gauss_code}
+        \end{figure}
+        Gauss code is not unique to a knot diagram since the code is dependent
+        on the choice of starting point. This causes two different issues.
+        First, when trying to determine if two knots are the same, we must
+        check if one Gauss code is a cyclic permutation of another. Secondly,
+        and more importantly, this version of Gauss code cannot distinguish
+        between a knot and its mirror. If we take the left handed trefoil,
+        give it a similar orientation as before, but choose a different
+        starting point, we end up with
+        Fig.~\ref{fig:left_handed_trefoil_gauss_code}. The resulting Gauss code
+        is the same as the Gauss code we get for the right handed trefoil.
+        The right handed and left handed trefoil knots are not equivalent
+        (they have different Jones' polynomials), meaning Gauss code can't
+        distinguish mirrors.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../images/trefoil_knot_mirror_oriented_with_gauss_code.pdf}
+            \caption{Gauss Code for the Left Handed Trefoil}
+            \label{fig:left_handed_trefoil_gauss_code}
+        \end{figure}
+        The solution is to \textit{sign} the crossings. Given an oriented knot,
+        we label a crossing positive or negative depending on which strand is
+        the over strand and which one is the under strand. This is shown in
+        Fig.~\ref{fig:crossing_signs}.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../images/crossing_signs.pdf}
+            \caption{Gauss Code for the Left Handed Trefoil}
+            \label{fig:crossing_signs}
+        \end{figure}
+        By keeping track of the signs, in addition to whether or not we're on
+        the under strand or over strand, we get the extended Gauss code. This
+        is also called signed Gauss code.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../images/trefoil_knot_oriented_with_extended_gauss_code.pdf}
+            \caption{Extended Gauss Code for the Right Handed Trefoil}
+            \label{fig:right_hand_trefoil_extended_gauss}
+        \end{figure}
+        Note the orientation does not matter. If we reverse the orientation,
+        the signs are still preserved. Examine Fig.~\ref{fig:crossing_signs} to
+        convince yourself of this.
+        \par\hfill\par
+        Computationally, Extended Gauss code is a finite sequence of ordered
+        triples. The length of the sequence is $2n$ where $n$ is the number of
+        crossings in the diagram, and the ordered triples are of the form
+        $(t,k,s)$ where $t\in\{O,U\}$, $s\in\{+1,-1\}$, and
+        $0\leq{k}\leq{n-1}$ ($t$ for \textit{type}, $s$ for \textit{sign}, and
+        $k$ for indexing). One could represent this in the C programming
+        language as follows.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            enum crossing_sign {negative_crossing, positive_crossing};
 
+            enum crossing_type {under_crossing, over_crossing};
+
+            struct knot {
+                unsigned int number_of_crossings;
+                enum crossing_sign *sign;
+                enum crossing_type *type;
+                unsigned int *crossing_number;
+            };
+        \end{lstlisting}
+        Similar definitions could easily be given with classes using the
+        Python programming language. Regardless of preference, we now have a
+        means of representing a knot in a computer.
+    \section{Resolving a Crossing}
+        The Kauffman bracket polynomial is an invariant for
+        \textit{framed links}. It is not a link invariant since the polynomial
+        is not preserved by Reidemeister I moves (though this can be salvaged
+        by a proper normalization, resulting in the Jones' polynomial). The
+        definition we'll give in the next section is a mimicry of the
+        description provided in \cite{barnatan2002khovanov}. It is recursive
+        and requires us to \textit{resolve crossings}. Resolving a crossings
+        equates to making it \textit{go away}. There are two ways to get rid of
+        a crossing. Given an unoriented knot diagram, we rotate our heads until
+        the over crossing travels from the top left to the bottom right. The
+        0 and 1 resolution of the crossing are given in
+        Fig.~\ref{fig:resolving_crossing}.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../images/resolving_crossings.pdf}
+            \caption{Resolving a Crossing}
+            \label{fig:resolving_crossing}
+        \end{figure}
     \newpage
-    \par\hfill\par
+    \bibliographystyle{annotate}
+    \bibliography{../biblio.bib}
+    \newpage
     The source code used to generate this document is free software and released
     under version 3 of the GNU General Public License.
 \end{document}
