@@ -18,6 +18,10 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+/*  PDF works best in LaTeX, so use this.                                     */
+import settings;
+settings.outformat = "pdf";
+
 /*  Size of the figure.                                                       */
 size(128);
 

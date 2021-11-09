@@ -98,14 +98,14 @@
         Given a knot diagram, it is reasonable for a mathematician to wish to
         describe the knot with finite data in such a way that a computer can
         understand and perform computations. This is achieved via Gauss code.
-        This is achieved by orienting the knot, labeling the crossings, and
+        This is obtained by orienting the knot, labeling the crossings, and
         picking any point on the knot. You then walk along the knot, following
         the orientation, and keep track of the crossings you encounter. That is,
         we label the crossing number, and whether we're on the under strand or
         over strand with a $U$ and $O$, respectively. This is
         illustrated via example for the right handle trefoil knot in
         Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
-        \begin{figure}[H]
+        \begin{figure}
             \centering
             \includegraphics{../images/trefoil_knot_oriented_with_gauss_code.pdf}
             \caption{Gauss Code for the Right Handed Trefoil}
@@ -124,7 +124,7 @@
         The right handed and left handed trefoil knots are not equivalent
         (they have different Jones' polynomials), meaning Gauss code can't
         distinguish mirrors.
-        \begin{figure}[H]
+        \begin{figure}
             \centering
             \includegraphics{../images/trefoil_knot_mirror_oriented_with_gauss_code.pdf}
             \caption{Gauss Code for the Left Handed Trefoil}
@@ -134,7 +134,7 @@
         we label a crossing positive or negative depending on which strand is
         the over strand and which one is the under strand. This is shown in
         Fig.~\ref{fig:crossing_signs}.
-        \begin{figure}[H]
+        \begin{figure}
             \centering
             \includegraphics{../images/crossing_signs.pdf}
             \caption{Gauss Code for the Left Handed Trefoil}
@@ -143,7 +143,7 @@
         By keeping track of the signs, in addition to whether or not we're on
         the under strand or over strand, we get the extended Gauss code. This
         is also called signed Gauss code.
-        \begin{figure}[H]
+        \begin{figure}
             \centering
             \includegraphics{../images/trefoil_knot_oriented_with_extended_gauss_code.pdf}
             \caption{Extended Gauss Code for the Right Handed Trefoil}
@@ -175,6 +175,63 @@
         Similar definitions could easily be given with classes using the
         Python programming language. Regardless of preference, we now have a
         means of representing a knot in a computer.
+        \par\hfill\par
+        Not all finite sequences of length $2n$ will be valid Gauss code. For
+        the code to be valid every integer $0\leq{k}\leq{n-1}$ must occur
+        exactly twice, one with an $t=O$ and once with a $t=U$, and the sign
+        $s$ must be the same for both crossings.
+    \section{Virtual Knots}
+        Consider the following Gauss code:
+        \begin{equation}
+            O0+O1+U0+U1+
+        \end{equation}
+        The code tells us we have a two crossing knot. A quick look through any
+        table of knots tells us the smallest number of crossings a non-trivial
+        knot can have is 3 (the left and right handed trefoils). The
+        Reidemeister moves can translate to operations on extended Gauss code,
+        but you'll find they're of no help here. Let's try to draw it
+        (Fig.~\ref{fig:chain_link_fence_knot}).
+        \begin{figure}
+            \centering
+            \includegraphics{../images/chain_link_fence_knot_virtual.pdf}
+            \caption{The Chain Link Fence Knot}
+            \label{fig:chain_link_fence_knot}
+        \end{figure}
+        To draw it on a piece of paper requires us to \textit{pretend} one of
+        the crossing is fake, or \textit{virtual}. The problem of emedding
+        graphs from graph theory tells us we really want to draw this on a
+        higher genus surface. Let's try the torus $T^{2}$.
+        \begin{figure}
+            \centering
+            \includegraphics{../images/chain_link_fence_knot_on_torus.pdf}
+            \caption{The Chain Link Fence Knot on a Torus}
+            \label{fig:chain_link_fence_knot_on_torus}
+        \end{figure}
+        The label \textit{chain-link-fence-knot} comes from trying to draw it
+        on the flat torus
+        (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}.)
+        \begin{figure}
+            \centering
+            \includegraphics{../images/chain_link_fence_knot_on_flat_torus.pdf}
+            \caption{The Chain Link Fence Knot on a Flat Torus}
+            \label{fig:chain_link_fence_knot_on_flat_torus}
+        \end{figure}
+        Lifting this drawing to the universal cover, we see a chain-link fence
+        (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_universal_cover}).
+        These objects are called \textit{virtual knots}, knots that can be
+        embedded into some 3-manifold of the form $M\times\mathbb{R}$ where
+        $M$ is a smooth surface. A classic knot is just a virtual knot embedded
+        into $\mathbb{S}^{2}\times\mathbb{R}$.
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{%
+                    ../images/chain_link_fence_knot_on_flat_torus_universal_cover.pdf%
+                }%
+            }
+            \caption{Lift of the Chain Link Fence Knot to $\mathbb{R}^{2}$}
+            \label{fig:chain_link_fence_knot_on_flat_torus_universal_cover}
+        \end{figure}
     \section{Resolving a Crossing}
         The Kauffman bracket polynomial is an invariant for
         \textit{framed links}. It is not a link invariant since the polynomial
@@ -188,12 +245,20 @@
         the over crossing travels from the top left to the bottom right. The
         0 and 1 resolution of the crossing are given in
         Fig.~\ref{fig:resolving_crossing}.
-        \begin{figure}[H]
+        \begin{figure}
             \centering
             \includegraphics{../images/resolving_crossings.pdf}
             \caption{Resolving a Crossing}
             \label{fig:resolving_crossing}
         \end{figure}
+        Given a knot diagram with $n$ crossings, and a number
+        $0\leq{k}\leq{2}^{n}-1$, there is a unique resolution of all of the
+        crossings corresponding to $k$. To obtain this we first label all of
+        the crossings $0$ to $n-1$. Given a number $0\leq{k}\leq{2}^{n}-1$,
+        we write $k$ out in binary. The value of this $m^{th}$ entry of the
+        binary representation of $k$ corresponds to how the $m^{th}$ crossing
+        is smoothed. Take the right handed trefoil as an example with its
+        standard knot diagram (Fig.~\ref{fig:right_handed_trefoil_gauss_code}).
     \newpage
     \bibliographystyle{annotate}
     \bibliography{../biblio.bib}
