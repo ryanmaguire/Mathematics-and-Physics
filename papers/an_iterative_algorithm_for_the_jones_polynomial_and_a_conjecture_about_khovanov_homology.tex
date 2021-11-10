@@ -16,11 +16,9 @@
 %------------------------------------------------------------------------------%
 \documentclass{article}
 \usepackage{graphicx}                           % Needed for figures.
-\usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
 \usepackage[nottoc]{tocbibind}                  % Bibliography in toc.
-\usepackage{float}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage[font={scriptsize},
@@ -30,22 +28,22 @@
 
 \definecolor{background}{rgb}{0.9,0.9,0.9}
 
-\lstdefinestyle{CStyle}{ 
+\lstdefinestyle{CStyle}{
     backgroundcolor=\color{background},
     commentstyle=\color{gray},
     keywordstyle=\color{blue},
     numberstyle=\tiny\color{red},
     stringstyle=\color{orange},
     basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2,
     language=C
 }
@@ -55,27 +53,10 @@
     linkcolor=blue
 }
 
-\newtheoremstyle{normal}
-    {\topsep}               % Amount of space above the theorem.
-    {\topsep}               % Amount of space below the theorem.
-    {}                      % Font used for body of theorem.
-    {}                      % Measure of space to indent.
-    {\bfseries}             % Font of the header of the theorem.
-    {}                      % Punctuation between head and body.
-    {.5em}                  % Space after theorem head.
-    {}
-
-\theoremstyle{normal}
-\newtheorem{definition}{Definition}
-
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
 
-\title{%
-    An Iterative Algorithm for the Jones' Polynomial and a
-    Conjecture about Khovanov Homology%
-}
-
+\title{An Iterative Algorithm for the Jones' Polynomial}
 \author{Ryan Maguire\hspace{2em}Vladimir Chernov\hspace{2em}Peter Doyle}
 \date{Fall 2021}
 
@@ -87,6 +68,7 @@
     \maketitle
     \tableofcontents
     \begin{abstract}
+        \noindent
         An iterative algorithm for computing the Jones' polynomial of a knot
         is described and an analysis of the computational complexity is given.
         A generalized conjecture about the Jones' polynomial is shown to be
@@ -172,13 +154,16 @@
                 unsigned int *crossing_number;
             };
         \end{lstlisting}
+        The pointers to the arrays \texttt{sign}, \texttt{type}, and
+        \texttt{crossing\_number} each having 2 times
+        \texttt{number\_of\_crossings} many elements.
         Similar definitions could easily be given with classes using the
         Python programming language. Regardless of preference, we now have a
         means of representing a knot in a computer.
         \par\hfill\par
         Not all finite sequences of length $2n$ will be valid Gauss code. For
         the code to be valid every integer $0\leq{k}\leq{n-1}$ must occur
-        exactly twice, one with an $t=O$ and once with a $t=U$, and the sign
+        exactly twice, once with an $t=O$ and once with a $t=U$, and the sign
         $s$ must be the same for both crossings.
     \section{Virtual Knots}
         Consider the following Gauss code:
@@ -200,14 +185,16 @@
         To draw it on a piece of paper requires us to \textit{pretend} one of
         the crossing is fake, or \textit{virtual}. The problem of emedding
         graphs from graph theory tells us we really want to draw this on a
-        higher genus surface. Let's try the torus $T^{2}$.
+        higher genus surface.
         \begin{figure}
             \centering
             \includegraphics{../images/chain_link_fence_knot_on_torus.pdf}
             \caption{The Chain Link Fence Knot on a Torus}
             \label{fig:chain_link_fence_knot_on_torus}
         \end{figure}
-        The label \textit{chain-link-fence-knot} comes from trying to draw it
+        Using the torus $\mathbb{T}^{2}$ we can draw this knot without virtual
+        crossings (Fig.~\ref{fig:chain_link_fence_knot_on_torus}).
+        The label \textit{chain-link-fence} comes from trying to draw it
         on the flat torus
         (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}.)
         \begin{figure}
@@ -240,8 +227,8 @@
         definition we'll give in the next section is a mimicry of the
         description provided in \cite{barnatan2002khovanov}. It is recursive
         and requires us to \textit{resolve crossings}. Resolving a crossings
-        equates to making it \textit{go away}. There are two ways to get rid of
-        a crossing. Given an unoriented knot diagram, we rotate our heads until
+        equates to making it \textit{go away}. There are two ways to do this.
+        Given an unoriented knot diagram, we rotate our heads until
         the over crossing travels from the top left to the bottom right. The
         0 and 1 resolution of the crossing are given in
         Fig.~\ref{fig:resolving_crossing}.
@@ -255,10 +242,16 @@
         $0\leq{k}\leq{2}^{n}-1$, there is a unique resolution of all of the
         crossings corresponding to $k$. To obtain this we first label all of
         the crossings $0$ to $n-1$. Given a number $0\leq{k}\leq{2}^{n}-1$,
-        we write $k$ out in binary. The value of this $m^{th}$ entry of the
+        we write $k$ in binary. The value of this $m^{th}$ bit of the
         binary representation of $k$ corresponds to how the $m^{th}$ crossing
-        is smoothed. Take the right handed trefoil as an example with its
-        standard knot diagram (Fig.~\ref{fig:right_handed_trefoil_gauss_code}).
+        is smoothed. Take the left handed trefoil as an example with its
+        standard knot diagram (Fig.~\ref{fig:left_handed_trefoil_gauss_code}).
+        There are 3 crossings, so $2^{3}=8$ possible resolutions. The diagram
+        below is called the \textit{cube of resolutions} for the left-handed
+        trefoil. This language is slightly misleading since the cube of
+        resolutions is dependent on the knot diagram, so it is better to say
+        this is the cube of resolutions for the \textit{standard} diagram for
+        the left-handed trefoil.
     \newpage
     \bibliographystyle{annotate}
     \bibliography{../biblio.bib}
