@@ -35,6 +35,7 @@ settings.outformat = "pdf";
 /*  Size of the figure.                                                       */
 size(256);
 
+/*  Default pen for drawings and text.                                        */
 defaultpen(black + linewidth(0.6pt) + fontsize(7pt));
 
 real r0 = 0.4;
