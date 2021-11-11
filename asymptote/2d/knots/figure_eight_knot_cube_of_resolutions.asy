@@ -24,6 +24,8 @@ import settings;
 /*  Needed for parameteric equations.                                         */
 import graph;
 
+import custom_arrows;
+
 /*  PDF works best in LaTeX, so use this.                                     */
 settings.outformat = "pdf";
 
@@ -65,25 +67,26 @@ pair F2 = figeight(4.0*pi/3.0) + (dx, 0.0);
 pair F3 = figeight(4.0*pi/3.0) + (-dx, 0.0);
 pair G = figeight(pi);
 pair H = figeight(0.5*pi);
-pair labelpos = (3.7, -2.5);
+pair labelpos = (1.8, -3.8);
 
 real xshift = 9.0;
-real yshift = 3.5;
-path g0, g1, g2, g3;
-transform T = shift(0.0, 5.0*yshift);
+real yshift = 4.5;
+real knotscale = 1.7;
+path g0, g1, g2;
+transform T = shift(0.2*xshift, 4.5*yshift);
 
 /*  Draw the knot in pieces to mimic crossings.                               */
-draw(T*graph(figeight, 0.00, 0.50, operator ..));
-draw(T*graph(figeight, 0.55, 2.07, operator ..));
-draw(T*graph(figeight, 2.12, 3.63, operator ..));
-draw(T*graph(figeight, 3.69, 5.21, operator ..));
-draw(T*graph(figeight, 5.26, 2.0*pi, operator ..));
+draw(T*(scale(knotscale)*graph(figeight, 0.00, 0.50, operator ..)));
+draw(T*(scale(knotscale)*graph(figeight, 0.55, 2.07, operator ..)));
+draw(T*(scale(knotscale)*graph(figeight, 2.12, 3.63, operator ..)));
+draw(T*(scale(knotscale)*graph(figeight, 3.69, 5.21, operator ..)));
+draw(T*(scale(knotscale)*graph(figeight, 5.26, 2.0*pi, operator ..)));
 
 /*  Label the crossings.                                                      */
-label("$0$", T*(figeight(pi/6.0) + (0.0, 0.4)));
-label("$1$", T*(figeight(4.0*pi/3.0) + (0.4, 0.0)));
-label("$2$", T*(figeight(pi/3.0) + (-0.4, 0.0)));
-label("$3$", T*(figeight(7.0*pi/6.0) + (0.0, -0.4)));
+label("$0$", T*(scale(knotscale)*(figeight(pi/6.0) + (0.0, 0.4))));
+label("$1$", T*(scale(knotscale)*(figeight(4.0*pi/3.0) + (0.4, 0.0))));
+label("$2$", T*(scale(knotscale)*(figeight(pi/3.0) + (-0.4, 0.0))));
+label("$3$", T*(scale(knotscale)*(figeight(7.0*pi/6.0) + (0.0, -0.4))));
 
 /*  I royally messed up the order. The shifts indicate which is which, as do  *
  *  the comments. This is the 0110 resolution.                                */
@@ -179,12 +182,13 @@ draw(T*g0);
 draw(T*g1);
 label("$0001$", T*labelpos);
 
-/*  This is the 1011 resolution.                                              */
+/*  This is the 1000 resolution.                                              */
 g0 = reflect((0.0, 0.0), (1.0, 0.0))*g0;
 g1 = reflect((0.0, 0.0), (1.0, 0.0))*g1;
 T = shift(xshift, -3.0*yshift);
 draw(T*g0);
 draw(T*g1);
+label("$1000$", T*labelpos);
 
 /*  This is the 1011 resolution.                                              */
 g0 = A2 .. B .. C2 .. F2 .. cycle;
