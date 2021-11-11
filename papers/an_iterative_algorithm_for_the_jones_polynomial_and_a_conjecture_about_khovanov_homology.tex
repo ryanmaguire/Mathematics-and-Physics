@@ -18,6 +18,7 @@
 \usepackage{graphicx}                           % Needed for figures.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
+\usepackage{amsmath}                            % Needed for align.
 \usepackage[nottoc]{tocbibind}                  % Bibliography in toc.
 \usepackage{xcolor}
 \usepackage{listings}
@@ -80,12 +81,12 @@
         Given a knot diagram, it is reasonable for a mathematician to wish to
         describe the knot with finite data in such a way that a computer can
         understand and perform computations. This is achieved via Gauss code.
-        This is obtained by orienting the knot, labeling the crossings, and
+        Start by orienting the knot, labeling the crossings, and
         picking any point on the knot. You then walk along the knot, following
         the orientation, and keep track of the crossings you encounter. That is,
         we label the crossing number, and whether we're on the under strand or
-        over strand with a $U$ and $O$, respectively. This is
-        illustrated via example for the right handle trefoil knot in
+        over strand with a $U$ or $O$, respectively. This is
+        illustrated via example for the right-handed trefoil knot in
         Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
         \begin{figure}
             \centering
@@ -163,7 +164,7 @@
         \par\hfill\par
         Not all finite sequences of length $2n$ will be valid Gauss code. For
         the code to be valid every integer $0\leq{k}\leq{n-1}$ must occur
-        exactly twice, once with an $t=O$ and once with a $t=U$, and the sign
+        exactly twice, once with $t=O$ and once with $t=U$, and the sign
         $s$ must be the same for both crossings.
     \section{Virtual Knots}
         Consider the following Gauss code:
@@ -207,8 +208,8 @@
         (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_universal_cover}).
         These objects are called \textit{virtual knots}, knots that can be
         embedded into some 3-manifold of the form $M\times\mathbb{R}$ where
-        $M$ is a smooth surface. A classic knot is just a virtual knot embedded
-        into $\mathbb{S}^{2}\times\mathbb{R}$.
+        $M$ is a smooth surface. A classical knot is just a virtual knot
+        that can be embedded into $\mathbb{S}^{2}\times\mathbb{R}$.
         \begin{figure}
             \centering
             \resizebox{\textwidth}{!}{%
@@ -227,7 +228,7 @@
         definition we'll give in the next section is a mimicry of the
         description provided in \cite{barnatan2002khovanov}. It is recursive
         and requires us to \textit{resolve crossings}. Resolving a crossings
-        equates to making it \textit{go away}. There are two ways to do this.
+        equates to making it go away. There are two ways to do this.
         Given an unoriented knot diagram, we rotate our heads until
         the over crossing travels from the top left to the bottom right. The
         0 and 1 resolution of the crossing are given in
@@ -252,7 +253,10 @@
         trefoil. This language is slightly misleading since the cube of
         resolutions is dependent on the knot diagram, so it is better to say
         this is the cube of resolutions for the \textit{standard} diagram for
-        the left-handed trefoil.
+        the left-handed trefoil. The image gets complicated quickly since the
+        size of the cube is exponential in the number of crossings. The cube of
+        resolutions for the figure-eight knot is shown in
+        Fig.~\ref{fig:figure_eight_knot_cube_of_resolutions}.
         \begin{figure}
             \centering
             \includegraphics{../images/trefoil_knot_cube_of_resolutions.pdf}
@@ -269,6 +273,50 @@
             \caption{Cube of Resolutions for the Figure-Eight}
             \label{fig:figure_eight_knot_cube_of_resolutions}
         \end{figure}
+        If we connect the appropriate images with arrows we would see a
+        tesseract. The figure becomes messy with these arrows, and so have
+        been omitted.
+    \section{The Kauffman Bracket}
+        The Kauffman bracket polynomial of a link $L$ is defined recursively
+        in terms of smoothings of a link diagram. The definition is:
+        \begin{align}
+            \langle\emptyset\rangle&=1\\
+            \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
+            \langle{L}\rangle&=
+                \langle{L_{m,0}}\rangle-q\langle{L_{m,1}}\rangle
+        \end{align}
+        where $L_{m,0}$ is the link obtained from the 0-smoothing of $L$ at
+        the $m^{th}$ crossing, and $L_{m,1}$ is the link obtained from the
+        1-smoothing at the $m^{th}$ crossing. The notation
+        $\langle{L\sqcup\mathbb{S}^{1}}\rangle$ means the disjoint union of
+        $L$ with an unknot. So, in particular, the Kaufmann bracket of the
+        unknot is $q+q^{-1}$.
+        \par\hfill\par
+        The third equation reduces an $n$ crossing link to two $n-1$ crossing
+        links. If we continue this recursive step we'll end up with
+        $2^{n}$ completely resolved links, which is just the disjoint union of
+        circles. Applying the second equation, we can inductively prove the
+        following formula for the Kauffman bracket:
+        \begin{equation}
+            \langle{L}\rangle=\sum_{k=0}^{2^{n}-1}
+                (-q)^{w(k)}(q+q^{-1})^{c(k)}
+        \end{equation}
+        Here, $w(k)$ is the Hamming weight of $k$. This is the number of 1's
+        that occur in the binary expansion of $k$. Recalling that an integer
+        $0\leq{k}\leq{2}^{n}-1$ represents a complete smoothing of a link,
+        $c(k)$ is the number of circles that result from the $k$ smoothing.
+        The Hamming weight is a well studied function in computer science and
+        efficient methods of computing it are known. This includes
+        constant-time algorithms if one restricts their attention to
+        16-bit, 32-bit, or 64-bit unsigned integers, and the general algorithm
+        can be done in $\log(k)$ time. To compute the Kauffman bracket, the
+        only information needed is the number of circles that result from the
+        $k^{th}$ smoothing ($0\leq{k}\leq{2}^{n}-1$). The point of this paper
+        is to outline a simple algorithm that counts the number of circles in a
+        smoothing using extended Gauss code. The code outlined works for knots,
+        but simple extensions could be made for more general links. In
+        particular, the algorithm works for \textit{virtual knots} and there is
+        no restriction to the classical setting.
     \newpage
     \bibliographystyle{annotate}
     \bibliography{../biblio.bib}
