@@ -86,9 +86,9 @@ pair tref(real t)
 }
 
 /*  Draw in the arcs of the trefoil.                                          */
-draw(shift(0.0, yshift)*graph(tref, -0.75, 1.29));
-draw(shift(0.0, yshift)*graph(tref, 1.35, 3.38));
-draw(shift(0.0, yshift)*graph(tref, 3.45, 5.48));
+draw(shift(0.0, yshift)*graph(tref, -0.73, 1.28));
+draw(shift(0.0, yshift)*graph(tref, 1.36, 3.37));
+draw(shift(0.0, yshift)*graph(tref, 3.46, 5.46));
 
 /*  Label the crossings.                                                      */
 label("$0$", shift(0.0, yshift)*(scale(1.4)*tref(pi/4.0)));
