@@ -44,7 +44,7 @@
 \usepackage{hyperref}
 
 % Background color for code.
-\definecolor{background}{rgb}{0.9,0.9,0.9}
+\definecolor{background}{rgb}{0.9, 0.9, 0.9}
 
 % Display style used for the C programming language in this document.
 \lstdefinestyle{CStyle}{
@@ -82,7 +82,7 @@
 \setlength{\parskip}{0em}
 
 % Title page information.
-\title{An Iterative Algorithm for the Jones' Polynomial}
+\title{An Iterative Algorithm for the Jones' Polynomial via Extended Gauss Code}
 \author{Ryan Maguire\hspace{2em}Vladimir Chernov\hspace{2em}Peter Doyle}
 \date{Fall 2021}
 
@@ -93,8 +93,8 @@
         \noindent
         An iterative algorithm for computing the Jones' polynomial of a knot
         is described and an analysis of the computational complexity is given.
-        A generalized conjecture about the Jones' polynomial is shown to be
-        false via counterexample, and a conjecture generalizing Kronheimer and
+        Generalized conjectures about the Jones' polynomial are shown to be
+        false by counterexamples, and a conjecture generalizing Kronheimer and
         Mrowka's result on the unknot is made, with supporting numerical
         evidence.
     \end{abstract}
@@ -102,13 +102,12 @@
         Given a knot diagram, it is reasonable for a mathematician to wish to
         describe the knot with finite data in such a way that a computer can
         understand and perform computations. This is achieved via Gauss code.
-        Start by orienting the knot, labeling the crossings, and
-        picking any point on the knot. You then walk along the knot, following
-        the orientation, and keep track of the crossings you encounter. That is,
-        we label the crossing number, and whether we're on the under strand or
-        over strand with a $U$ or $O$, respectively. This is
-        illustrated via example for the right-handed trefoil knot in
-        Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
+        Orient the knot, label the crossings, and choose a starting point.
+        Walk along the diagram, following the orientation, and record the
+        crossings. That is, write down the crossing number, and whether the
+        the path goes under or over the crossing with a $U$ or $O$,
+        respectively. This is illustrated via example for the right-handed
+        trefoil knot in Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
         \begin{figure}
             \centering
             \includegraphics{%
@@ -140,17 +139,15 @@
         \end{figure}
         The solution is to \textit{sign} the crossings. Given an oriented knot,
         we label a crossing positive or negative depending on which strand is
-        the over strand and which one is the under strand. This is shown in
-        Fig.~\ref{fig:crossing_signs}.
+        over and which is under. This is shown in Fig.~\ref{fig:crossing_signs}.
         \begin{figure}
             \centering
             \includegraphics{../images/crossing_signs.pdf}
             \caption{Gauss Code for the Left Handed Trefoil}
             \label{fig:crossing_signs}
         \end{figure}
-        By keeping track of the signs, in addition to whether or not we're on
-        the under strand or over strand, we get the extended Gauss code. This
-        is also called signed Gauss code.
+        By keeping track of the sign we get extended Gauss code
+        (also called signed Gauss code).
         \begin{figure}
             \centering
             \includegraphics{%
@@ -164,15 +161,14 @@
         convince yourself of this.
         \par\hfill\par
         Computationally, Extended Gauss code is a finite sequence of ordered
-        triples. The length of the sequence is $2n$ where $n$ is the number of
+        triples. The length of the sequence is $2N$ where $N$ is the number of
         crossings in the diagram, and the ordered triples are of the form
-        $(t,k,s)$ where $t\in\{O,U\}$, $s\in\{+1,-1\}$, and
-        $0\leq{k}\leq{n-1}$ ($t$ for \textit{type}, $s$ for \textit{sign}, and
-        $k$ for indexing). One could represent this in the C programming
+        $(t,n,s)$ where $t\in\{O,U\}$, $s\in\{+1,-1\}$, and
+        $0\leq{n}\leq{N-1}$ ($t$ for \textit{type}, $s$ for \textit{sign}, and
+        $n$ for indexing). One could represent this in the C programming
         language as follows.
         \begin{lstlisting}[style=CStyle, gobble=12]
             enum crossing_sign {negative_crossing, positive_crossing};
-
             enum crossing_type {under_crossing, over_crossing};
 
             struct knot {
@@ -188,16 +184,16 @@
         Similar definitions could easily be given with classes using the
         Python programming language. Regardless of preference, we now have a
         means of representing a knot in a computer.
-        \par\hfill\par
-        Not all finite sequences of length $2n$ will be valid Gauss code. For
-        the code to be valid every integer $0\leq{k}\leq{n-1}$ must occur
-        exactly twice, once with $t=O$ and once with $t=U$, and the sign
-        $s$ must be the same for both crossings.
     \section{Virtual Knots}
-        Consider the following Gauss code:
+        Not all finite sequences of length $2N$ will be valid Gauss code. For
+        the code to be valid every integer $0\leq{n}\leq{N-1}$ must occur
+        exactly twice, once with $t=O$ and once with $t=U$, and the sign
+        $s$ must be the same for both crossings. Consider the following Gauss
+        code:
         \begin{equation}
             O0+O1+U0+U1+
         \end{equation}
+        It satisfies the above criterion.
         The code tells us we have a two crossing knot. A quick look through any
         table of knots tells us the smallest number of crossings a non-trivial
         knot can have is 3 (the left and right handed trefoils). The
@@ -210,21 +206,19 @@
             \caption{The Chain Link Fence Knot}
             \label{fig:chain_link_fence_knot}
         \end{figure}
-        To draw it on a piece of paper requires us to \textit{pretend} one of
-        the crossing is fake, or \textit{virtual}. The problem of emedding
-        graphs from graph theory tells us we really want to draw this on a
-        higher genus surface.
+        To draw it on a piece of paper requires us to pretend one crossing is
+        fake, or \textit{virtual}. Graph theory tells us we really want to draw
+        this on a higher genus surface. Using the torus $\mathbb{T}^{2}$ we can
+        draw this knot without virtual crossings
+        (Fig.~\ref{fig:chain_link_fence_knot_on_torus}). This will be called
+        the \textit{chain-link-fence} knot. The name makes sense if we draw it
+        on the flat torus (Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}).
         \begin{figure}
             \centering
             \includegraphics{../images/chain_link_fence_knot_on_torus.pdf}
             \caption{The Chain Link Fence Knot on a Torus}
             \label{fig:chain_link_fence_knot_on_torus}
         \end{figure}
-        Using the torus $\mathbb{T}^{2}$ we can draw this knot without virtual
-        crossings (Fig.~\ref{fig:chain_link_fence_knot_on_torus}).
-        The label \textit{chain-link-fence} comes from trying to draw it
-        on the flat torus
-        (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}.)
         \begin{figure}
             \centering
             \includegraphics{../images/chain_link_fence_knot_on_flat_torus.pdf}
@@ -232,11 +226,15 @@
             \label{fig:chain_link_fence_knot_on_flat_torus}
         \end{figure}
         Lifting this drawing to the universal cover, we see a chain-link fence
-        (see Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_universal_cover}).
+        (Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_universal_cover}).
         These objects are called \textit{virtual knots}, knots that can be
         embedded into some 3-manifold of the form $M\times\mathbb{R}$ where
         $M$ is a smooth surface. A classical knot is just a virtual knot
-        that can be embedded into $\mathbb{S}^{2}\times\mathbb{R}$.
+        that can be embedded into $\mathbb{S}^{2}\times\mathbb{R}$. The
+        chain-link-fence knot is the simplest non-trivial virtual knot.
+        There are no virtual knots with one crossing
+        (but there are virtual \textit{links} with one crossing). This will be
+        useful later when we perform computations by hand.
         \begin{figure}
             \centering
             \resizebox{\textwidth}{!}{%
@@ -254,8 +252,8 @@
         by a proper normalization, resulting in the Jones' polynomial). The
         definition we'll give in the next section is a mimicry of the
         description provided in \cite{barnatan2002khovanov}. It is recursive
-        and requires us to \textit{resolve crossings}. Resolving a crossings
-        equates to making it go away. There are two ways to do this.
+        and requires us to \textit{resolve crossings}. Resolving a crossing
+        equates to removing it. There are two ways to do this.
         Given an unoriented knot diagram, we rotate our heads until
         the over crossing travels from the top left to the bottom right. The
         0 and 1 resolution of the crossing are given in
@@ -266,21 +264,19 @@
             \caption{Resolving a Crossing}
             \label{fig:resolving_crossing}
         \end{figure}
-        Given a knot diagram with $n$ crossings, and a number
-        $0\leq{k}\leq{2}^{n}-1$, there is a unique resolution of all of the
-        crossings corresponding to $k$. To obtain this we first label all of
-        the crossings $0$ to $n-1$. Given a number $0\leq{k}\leq{2}^{n}-1$,
-        we write $k$ in binary. The value of the $m^{th}$ bit in the
-        binary representation of $k$ corresponds to how the $m^{th}$ crossing
-        is smoothed. Take the left handed trefoil as an example with its
-        standard knot diagram (Fig.~\ref{fig:left_handed_trefoil_gauss_code}).
+        Given the Gauss code of a knot diagram with $N$ crossings, and a number
+        $0\leq{n}\leq{2}^{N}-1$, there is a unique resolution of all of the
+        crossings corresponding to $n$. Write $n$ in binary. The value of the
+        $k^{th}$ bit in the binary representation of $n$ corresponds to how the
+        $k^{th}$ crossing is smoothed. Examine the right handed trefoil with its
+        standard knot diagram (Fig.~\ref{fig:right_handed_trefoil_gauss_code}).
         There are 3 crossings, so $2^{3}=8$ possible resolutions. The diagram
         in Fig.~\ref{fig:trefoil_knot_cube_of_resolutions} is called the
-        \textit{cube of resolutions} for the left-handed
+        \textit{cube of resolutions} for the right-handed
         trefoil. This language is slightly misleading since the cube of
         resolutions is dependent on the knot diagram, so it is better to say
         this is the cube of resolutions for the \textit{standard} diagram for
-        the left-handed trefoil. The image gets complicated quickly since the
+        the right-handed trefoil. The image gets complicated quickly since the
         size of the cube is exponential in the number of crossings. The cube of
         resolutions for the figure-eight knot is shown in
         Fig.~\ref{fig:figure_eight_knot_cube_of_resolutions}.
@@ -300,9 +296,8 @@
             \caption{Cube of Resolutions for the Figure-Eight}
             \label{fig:figure_eight_knot_cube_of_resolutions}
         \end{figure}
-        If we connect the appropriate images with arrows we would see a
-        tesseract. The figure becomes messy with these arrows, and so have
-        been omitted.
+        Connecting the appropriate images with arrows results in a tesseract.
+        For neatness, this has been omitted.
     \section{The Kauffman Bracket}
         The Kauffman bracket polynomial of a link $L$ is defined recursively
         in terms of smoothings of a link diagram. The definition is:
@@ -310,109 +305,33 @@
             \langle\emptyset\rangle&=1\\
             \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
             \langle{L}\rangle&=
-                \langle{L_{m,0}}\rangle-q\langle{L_{m,1}}\rangle
+                \langle{L_{n,0}}\rangle-q\langle{L_{n,1}}\rangle
         \end{align}
-        where $L_{m,0}$ is the link obtained from the 0-smoothing of $L$ at
-        the $m^{th}$ crossing, and $L_{m,1}$ is the link obtained from the
-        1-smoothing at the $m^{th}$ crossing. The notation
-        $L\sqcup\mathbb{S}^{1}$ means the disjoint union of
-        $L$ with an unknot. So, in particular, the Kaufmann bracket of the
+        where $L_{n,0}$ and $L_{n,1}$ are the links obtained from the
+        0 and 1 smoothings of $L$ at the $n^{th}$ crossing, respectively. The
+        notation $L\sqcup\mathbb{S}^{1}$ means the disjoint union of
+        $L$ with an unknot. Hence the Kaufmann bracket of the
         unknot is $q+q^{-1}$.
         \par\hfill\par
-        The third equation reduces an $n$ crossing link to two $n-1$ crossing
+        The third equation reduces an $N$ crossing link to two $N-1$ crossing
         links. If we continue this recursive step we'll end up with
-        $2^{n}$ completely resolved links, which is just the disjoint union of
-        circles. Applying the second equation, we can inductively prove the
-        following formula for the Kauffman bracket:
+        $2^{N}$ completely resolved links, each being the disjoint union of
+        circles. Applying the first and second equations, we can inductively
+        prove the following formula for the Kauffman bracket:
         \begin{equation}
-            \langle{L}\rangle=\sum_{k=0}^{2^{n}-1}
-                (-q)^{w(k)}(q+q^{-1})^{c(k)}
+            \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
+                (-q)^{w(n)}(q+q^{-1})^{c(n)}
         \end{equation}
-        Here, $w(k)$ is the Hamming weight of $k$. This is the number of 1's
-        that occur in the binary expansion of $k$. Recalling that an integer
-        $0\leq{k}\leq{2}^{n}-1$ represents a complete smoothing of a link,
-        $c(k)$ is the number of circles that result from the $k$ smoothing.
+        Here, $w(n)$ is the Hamming weight of $n$, the number of 1's
+        that occur in the binary expansion of $n$. Recalling that an integer
+        $0\leq{n}\leq{2}^{N}-1$ represents a complete smoothing of a knot,
+        $c(n)$ is the number of circles that result from the $n$ smoothing.
         The Hamming weight is a well studied function in computer science and
         efficient methods of computing it are known. This includes
         constant-time algorithms if one restricts their attention to
         16-bit, 32-bit, or 64-bit unsigned integers, and the general algorithm
-        can be done in $\log(k)$ time. To compute the Kauffman bracket, the
-        only information needed is the number of circles that result from the
-        $k^{th}$ smoothing ($0\leq{k}\leq{2}^{n}-1$). The point of this paper
-        is to outline a simple algorithm that counts the number of circles in a
-        smoothing using extended Gauss code. The code outlined works for knots,
-        but simple extensions could be made for more general links. In
-        particular, the algorithm works for \textit{virtual knots} and there is
-        no restriction to the classical setting.
-        \par\hfill\par
-        The visual for the algorithm goes as follows. Given a knot, we thicken
-        it into a framed knot (see Fig.~\ref{fig:trefoil_knot_framed_001}).
-        Every crossing becomes a four-way intersection
-        (see Fig.~\ref{fig:thickened_crossings}), and the idea is to loop
-        over then $4n$ roads in this thickened knot ($n$ being the number of
-        crossings).
-        \begin{figure}
-            \centering
-            \includegraphics{../images/trefoil_knot_framed_001.pdf}
-            \caption{Framed Left-Handed Trefoil}
-            \label{fig:trefoil_knot_framed_001}
-        \end{figure}
-        \begin{figure}
-            \centering
-            \includegraphics{../images/thickened_crossings.pdf}
-            \caption{Signed Crossings in a Framed Knot}
-            \label{fig:thickened_crossings}
-        \end{figure}
-        We first examine the negative crossing. The 1-smoothing is shown in
-        \begin{figure}
-            \centering
-            \includegraphics{../images/thickened_negative_crossing_smoothings.pdf}
-            \caption{Smoothing a Negative Crossing in a Framed Knot}
-            \label{fig:thickened_negative_crossing_smoothings}
-        \end{figure}
-        \begin{figure}
-            \centering
-            \includegraphics{../images/thickened_positive_crossing_smoothings.pdf}
-            \caption{Smoothing a Positive Crossing in a Framed Knot}
-            \label{fig:thickened_positive_crossing_smoothings}
-        \end{figure}
-    \section{The Code}
-        The preamble only requires standard library tools.
-        \begin{lstlisting}[style=CStyle, gobble=12]
-            #include <stdio.h>
-            #include <stdlib.h>
-            #include <limits.h>
-        \end{lstlisting}
-        Next, the basic data types of the code. We need structures for knots,
-        Laurent polynomials, and keeping track of the indices of crossings in
-        the Gauss code. The crossing sign and type are given
-        by \texttt{enum}'s and we use a \texttt{char} for the direction.
-        \begin{lstlisting}[style=CStyle, gobble=12]
-            enum crossing_sign {negative_crossing, positive_crossing};
-            enum crossing_type {under_crossing, over_crossing};
-            static unsigned char backward = 0x00U;
-            static unsigned char forward = 0x01U;
-
-            struct knot {
-                unsigned int number_of_crossings;
-                enum crossing_sign *sign;
-                enum crossing_type *type;
-                unsigned int *crossing_number;
-            };
-
-            struct laurent_polynomial {
-                signed int lowest_degree;
-                signed int highest_degree;
-                signed int *coeffs;
-            };
-
-            struct CrossingIndices {
-                unsigned int under;
-                unsigned int over;
-            };
-        \end{lstlisting}
-        The function used to compute the Hamming weight is not to creative,
-        but it is portable since it does not assume the width of
+        can be done in $\log(n)$ time. Our implementation of the Hamming weight
+        is not creative, but is portable since it does not assume the width of
         \texttt{unsigned int}.
         \begin{lstlisting}[style=CStyle, gobble=12]
             static unsigned int hamming_weight(unsigned int val)
@@ -429,24 +348,95 @@
             }
         \end{lstlisting}
         The code \texttt{result += val \& 1U} may need explanation.
-        \texttt{val \& 1U} performs a bitwise and with \texttt{val} and
+        \texttt{val \& 1U} performs a bitwise \texttt{AND} with \texttt{val} and
         1. Since the binary representation of 1 is zero in all slots except the
         zeroth bit, \texttt{val \& 1U} is simply checking the zeroth bit of
         \texttt{val}. We add this value to \texttt{result}, ultimately giving
-        us the Hamming weight. The code
-        \texttt{val = val >> 1U} takes val and shifts it 1 bit to the right.
-        So, if we had $111_{2}$ and shift it to the right, we'd end up with
-        $011_{2}$. Because of this, after (at most) \texttt{log(val)} steps
-        \texttt{val} would be zero, exiting the while-loop.
+        us the Hamming weight. The code \texttt{val = val >> 1U} takes val and
+        shifts it 1 bit to the right. So, if we had $111_{2}$ and shift it to
+        the right, we'd end up with $011_{2}$. Because of this, after
+        \texttt{log(val)} steps \texttt{val} would be zero, exiting the
+        while-loop.
         \par\hfill\par
         It is $O(\log(n))$ since it loops over the bits of the input. This is
         used with inputs of size $2^{N}-1$, where $N$ is the number of
         crossings, and so the worst-case time complexity at this step is $O(N)$.
-        For example, considering the resolution of the left-handed trefoil
+        For example, considering the resolution of the right-handed trefoil
         in Fig.~\ref{fig:right_hand_trefoil_extended_gauss} corresponding to
         $7=111_{2}$, the loop will end after 3 steps, one step for each
-        crossing. The $000_{2}$ resolution exists in constant time.
+        crossing. The $000_{2}$ resolution exists in constant time. If we know
+        the width of \texttt{unsigned int} (usually 16-bit or 32-bit) we could
+        implement $O(1)$ time algorithms. Because of this, we will assume the
+        Hamming weight has negligible contribution to the complexity of the
+        algorithm.
         \par\hfill\par
+        To compute the Kauffman bracket, the
+        only information needed is the number of circles that result from the
+        $n^{th}$ smoothing ($0\leq{n}\leq{2}^{N}-1$). This paper gives a simple
+        algorithm using extended Gauss code. The code outlined works for knots,
+        but simple extensions could be made for links. In particular, the
+        algorithm works for \textit{virtual knots} and there is no restriction
+        to the classical setting.
+    \section{The Circle Counting Algorithm}
+        The visual for the algorithm goes as follows. Given a knot, we thicken
+        it into a framed knot (Fig.~\ref{fig:trefoil_knot_framed_001}). Every
+        crossing becomes a four-way intersection
+        (Fig.~\ref{fig:thickened_crossings}), and the idea is to loop
+        over then $4N$ roads in this thickened knot, $N$ being the number of
+        crossings. We first examine the negative crossing. The 0 and 1
+        smoothings are shown in
+        Fig.~\ref{fig:thickened_negative_crossing_smoothings}. If we
+        start on the bottom-left road and walk towards the crossing, the
+        road-block created by the 0-smoothing forces us to go down the road
+        on the bottom right. However, the arrow is going the wrong way so we
+        must walk backwards. This translates as follows for extended Gauss
+        code. Approaching a negative crossing from the bottom left road means
+        we have approached $Un-$ in the code reading left-to-right, $n$ being
+        the crossing number. The road block tells us to go down the bottom right
+        road, but in reverse. That is, look for $On-$ in the code and then go
+        to the \textit{previous} entry in the code.
+        This is equivalent to walking backwards. We end up at a new crossing.
+        We now know the rule for approaching a crossing from the bottom left
+        road for a negative crossing given the 0-smoothing. In total there are
+        16 possible cases: Is the sign $+1$ or $-1$, is the type $U$ or $O$, is
+        the smoothing $0$ or $1$, is the direction forwards or backwards. The
+        visuals for these 16 combinations are shown in
+        Fig.~\ref{fig:thickened_negative_crossing_smoothings} and
+        Fig.~\ref{fig:thickened_positive_crossing_smoothings}.
+        \begin{figure}
+            \centering
+            \includegraphics{../images/trefoil_knot_framed_001.pdf}
+            \caption{Framed Left-Handed Trefoil}
+            \label{fig:trefoil_knot_framed_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../images/thickened_crossings.pdf}
+            \caption{Signed Crossings in a Framed Knot}
+            \label{fig:thickened_crossings}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../images/thickened_negative_crossing_smoothings.pdf}
+            \caption{Smoothing a Negative Crossing in a Framed Knot}
+            \label{fig:thickened_negative_crossing_smoothings}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../images/thickened_positive_crossing_smoothings.pdf}
+            \caption{Smoothing a Positive Crossing in a Framed Knot}
+            \label{fig:thickened_positive_crossing_smoothings}
+        \end{figure}
+        \begin{table}
+            \centering
+            \begin{tabular}{c|c|c|c|c}
+                \text{Sign}&\text{Type}&\text{Smoothing}&
+                    \text{Direction}&\text{Next}\\
+                \hline
+                
+            \end{tabular}
+        \end{table}
+    \section{The Code}
         Jumping from the over-crossing to the under-crossing, and vice-verse,
         as is needed in the algorithm is made easier if we have an array
         \texttt{ind} such that \texttt{ind[n]} is an ordered pair whose
