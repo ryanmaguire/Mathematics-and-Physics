@@ -14,21 +14,39 @@
 %   You should have received a copy of the GNU General Public License along    %
 %   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
 %------------------------------------------------------------------------------%
+%       Author: Ryan Maguire, Dartmouth College                                %
+%       Date:   2021/11/16                                                     %
+%------------------------------------------------------------------------------%
 \documentclass{article}
-\usepackage{graphicx}                           % Needed for figures.
-\usepackage{amssymb}                            % Needed for mathbb.
-\usepackage{amsthm}                             % For the theorem environment.
-\usepackage{amsmath}                            % Needed for align.
-\usepackage[nottoc]{tocbibind}                  % Bibliography in toc.
+
+% Needed for figures.
+\usepackage{graphicx}
+
+% Needed for mathbb font style.
+\usepackage{amssymb}
+
+% Tools for creating the theorem environment.
+\usepackage{amsthm}
+
+% The align environment is here.
+\usepackage{amsmath}
+
+% Library of colors, used here for displaying code.
 \usepackage{xcolor}
+
+% Used for displaying code in a LaTeX document.
 \usepackage{listings}
-\usepackage[font={scriptsize},
-            hypcap=true,
-            labelsep=colon]{caption}            % Figure captions.
+
+% Used for correct hyperlinks with figures.
+\usepackage[font={scriptsize}, hypcap=true, labelsep=colon]{caption}
+
+% Hyperlinks for labels.
 \usepackage{hyperref}
 
+% Background color for code.
 \definecolor{background}{rgb}{0.9,0.9,0.9}
 
+% Display style used for the C programming language in this document.
 \lstdefinestyle{CStyle}{
     backgroundcolor=\color{background},
     commentstyle=\color{gray},
@@ -49,21 +67,24 @@
     language=C
 }
 
+% Display style for hyperlinks.
 \hypersetup{
     colorlinks=true,
     linkcolor=blue
 }
 
+% Create a theorem environment, similar to most textbooks.
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
-
-\title{An Iterative Algorithm for the Jones' Polynomial}
-\author{Ryan Maguire\hspace{2em}Vladimir Chernov\hspace{2em}Peter Doyle}
-\date{Fall 2021}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0em}
+
+% Title page information.
+\title{An Iterative Algorithm for the Jones' Polynomial}
+\author{Ryan Maguire\hspace{2em}Vladimir Chernov\hspace{2em}Peter Doyle}
+\date{Fall 2021}
 
 \begin{document}
     \maketitle
@@ -355,8 +376,359 @@
             \caption{Smoothing a Positive Crossing in a Framed Knot}
             \label{fig:thickened_positive_crossing_smoothings}
         \end{figure}
+    \section{The Code}
+        The preamble only requires standard library tools.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            #include <stdio.h>
+            #include <stdlib.h>
+            #include <limits.h>
+        \end{lstlisting}
+        Next, the basic data types of the code. We need structures for knots,
+        Laurent polynomials, and keeping track of the indices of crossings in
+        the Gauss code. The crossing sign and type are given
+        by \texttt{enum}'s and we use a \texttt{char} for the direction.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            enum crossing_sign {negative_crossing, positive_crossing};
+            enum crossing_type {under_crossing, over_crossing};
+            static unsigned char backward = 0x00U;
+            static unsigned char forward = 0x01U;
+
+            struct knot {
+                unsigned int number_of_crossings;
+                enum crossing_sign *sign;
+                enum crossing_type *type;
+                unsigned int *crossing_number;
+            };
+
+            struct laurent_polynomial {
+                signed int lowest_degree;
+                signed int highest_degree;
+                signed int *coeffs;
+            };
+
+            struct CrossingIndices {
+                unsigned int under;
+                unsigned int over;
+            };
+        \end{lstlisting}
+        The function used to compute the Hamming weight is not to creative,
+        but it is portable since it does not assume the width of
+        \texttt{unsigned int}.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            static unsigned int hamming_weight(unsigned int val)
+            {
+                unsigned int result = 0U;
+
+                while(val != 0U)
+                {
+                    result += val & 1U;
+                    val = val >> 1U;
+                }
+
+                return result;
+            }
+        \end{lstlisting}
+        The code \texttt{result += val \& 1U} may need explanation.
+        \texttt{val \& 1U} performs a bitwise and with \texttt{val} and
+        1. Since the binary representation of 1 is zero in all slots except the
+        zeroth bit, \texttt{val \& 1U} is simply checking the zeroth bit of
+        \texttt{val}. We add this value to \texttt{result}, ultimately giving
+        us the Hamming weight. The code
+        \texttt{val = val >> 1U} takes val and shifts it 1 bit to the right.
+        So, if we had $111_{2}$ and shift it to the right, we'd end up with
+        $011_{2}$. Because of this, after (at most) \texttt{log(val)} steps
+        \texttt{val} would be zero, exiting the while-loop.
+        \par\hfill\par
+        It is $O(\log(n))$ since it loops over the bits of the input. This is
+        used with inputs of size $2^{N}-1$, where $N$ is the number of
+        crossings, and so the worst-case time complexity at this step is $O(N)$.
+        For example, considering the resolution of the left-handed trefoil
+        in Fig.~\ref{fig:right_hand_trefoil_extended_gauss} corresponding to
+        $7=111_{2}$, the loop will end after 3 steps, one step for each
+        crossing. The $000_{2}$ resolution exists in constant time.
+        \par\hfill\par
+        Jumping from the over-crossing to the under-crossing, and vice-verse,
+        as is needed in the algorithm is made easier if we have an array
+        \texttt{ind} such that \texttt{ind[n]} is an ordered pair whose
+        zeroth entry is the index of the under-crossing for the $n^{th}$
+        crossing, and first entry is the index of the over-crossing. That is,
+        \texttt{ind[n]} is an instance of the
+        \texttt{CrossingIndices} struct previously described, whose values
+        give the indices for the $n^{th}$ crossing. This is achieved in
+        $O(N)$ time, $N$ being the number of crossings, by looping over the
+        Gauss code.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            static struct CrossingIndices *get_indices(struct knot *K)
+            {
+                unsigned int n;
+                struct CrossingIndices *ind;
+
+                if (!K)
+                    return NULL;
+
+                if (K->number_of_crossings == 0U)
+                    return NULL;
+
+                ind = malloc(sizeof(*ind)*K->number_of_crossings);
+
+                if (!ind)
+                    return NULL;
+
+                for (n = 0U; n < 2U * K->number_of_crossings; ++n)
+                {
+                    if (K->type[n] == over_crossing)
+                        ind[K->crossing_number[n]].over = n;
+                    else
+                         ind[K->crossing_number[n]].under = n;
+                }
+
+                return ind;
+            }
+        \end{lstlisting}
+        The error checks are for code programming practice: Check if your
+        input pointer is \texttt{NULL}, don't assume \texttt{malloc} was
+        successful, and don't pass zero to \texttt{malloc}. The actual algorithm
+        is contained in the for loop.
+        \newpage
+        Now, for the main part of the algorithm, counting the number of circles
+        corresponding to a resolution from the Gauss code.
+        The setup of this function is as follows:
+        \begin{lstlisting}[style=CStyle, gobble=12]
+        static unsigned int
+            number_of_circles_in_resolution(struct knot *K,
+                                            struct CrossingIndices *ind,
+                                            unsigned int resolution)
+            {
+                unsigned int number_of_circles, n, k, m;
+                unsigned char dir, crossing_resolution;
+                unsigned char *have_visited;
+        \end{lstlisting}
+        We are representing a resolution via the binary representation of an
+        integer. The C89/C90 (and higher) standards of the C programming
+        language require \texttt{unsigned int} to be \textbf{at least} 16 bits.
+        In practice it is 32 bits. This means the code is valid for knots up
+        to 16 crossings, but in practice it is valid for knots up to 32
+        crossings. Larger sizes are achievable by rewriting this code with
+        \texttt{unsigned long} or \texttt{unsigned long long}, which is usually
+        64 bits. However, since the algorithm is exponential, it may take
+        billions of years to compute for a 64 crossing knot.
+        \par\hfill\par
+        Next in the algorithm we check for errors, initialize variables, and
+        create a $4N$ array of zeros to reference to later. We will be filling
+        this table with 1's as we walk along the \textit{roads} formed by the
+        resolution of the crossings.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+                if (!K)
+                    return 0U;
+
+                if (K->number_of_crossings == 0U)
+                    return 1U;
+
+                if (!ind)
+                    return 0U;
+
+                have_visited = calloc(sizeof(*have_visited), 4U*K->number_of_crossings);
+
+                if (!have_visited)
+                    return 0U;
+
+                number_of_circles = 0U;
+        \end{lstlisting}
+        A \texttt{NULL} pointer for the knot will be interpreted as the empty
+        knot, which has zero circles in its resolution. If the number of
+        crossings is zero, this is the unknot, which has 1 circle in its
+        resolution. The checks for \texttt{ind} and
+        \texttt{have\_visited} are standard checks for \texttt{NULL} poiunters.
+        \par\hfill\par
+        We now need to loop over the Gauss code. The four roads into a crossing
+        are labelled $4n$ to $4n+3$, where $n$ is the crossing number. First we
+        check if all 4 roads have been visited. If so, we continue to the next
+        crossing in the Gauss code. If not, we begin our walk along the roads
+        formed by the resolution. The roads corresponding to
+        $4n$ and $4n+1$ are the roads where you walk \textit{forwards} to
+        get to the crossing, whereas the roads $4n+2$ and $4n+3$ require you to
+        walk \textit{backwards} to get to the crossing.
+        See Figs.~\ref{fig:thickened_negative_crossing_smoothings} and
+        \ref{fig:thickened_positive_crossing_smoothings} for the visual.
+        We set the \texttt{dir} variable appropriately.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+                for (n = 0U; n < 2U*K->number_of_crossings; ++n)
+                {
+                    k = 4U*K->crossing_number[n];
+                    for (m = 0U; m < 3; ++m)
+                    {
+                        if (!have_visited[k])
+                            break;
+                        else
+                            ++k;
+                    }
+
+                    if (have_visited[k])
+                        continue;
+
+                    if (m < 2U)
+                        dir = forward;
+                    else
+                        dir = backward;
+        \end{lstlisting}
+        Now we perform our walk. All that is needed to do is, given the
+        current road we're on, and the direction we're heading, determine the
+        next crossing. This is done case-by-case depending on the sign and
+        type of the crossing, as well as the resolution of the crossing and the
+        direction we're travelling. Unfortunately this makes the code quite
+        lengthy, 16 cases total to check.
+        \begin{lstlisting}[style=CStyle, gobble=12]
+                    m = n;
+                    while (!have_visited[k])
+                    {
+                        crossing_resolution
+                            = (resolution >> K->crossing_number[m]) & 0x01U;
+                        have_visited[k] = 0x01U;
+
+                        if (K->sign[m] == positive_crossing)
+                        {
+                            if (K->type[m] == over_crossing)
+                            {
+                                if (crossing_resolution == 0x00U)
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 3U;
+                                    else
+                                        k = 4U*K->crossing_number[m] + 1U;
+                                }
+                                else
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 1U;
+                                    else
+                                        k = 4U*K->crossing_number[m] + 3U;
+
+                                    dir = 0x01U - dir;
+                                }
+                                m = ind[K->crossing_number[m]].under;
+                            }
+                            else
+                            {
+                                if (crossing_resolution == 0x00U)
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 2U;
+                                    else
+                                        k = 4U*K->crossing_number[m];
+                                }
+                                else
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m];
+                                    else
+                                        k = 4U*K->crossing_number[m] + 2U;
+
+                                    dir = 0x01U - dir;
+                                }
+                                m = ind[K->crossing_number[m]].over;
+                            }
+                        }
+                        else
+                        {
+                            if (K->type[m] == over_crossing)
+                            {
+                                if (crossing_resolution == 0x00U)
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 2U;
+                                    else
+                                        k = 4U*K->crossing_number[m];
+                                }
+                                else
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m];
+                                    else
+                                        k = 4U*K->crossing_number[m] + 2U;
+
+                                    dir = 0x01U - dir;
+                                }
+
+                                m = ind[K->crossing_number[m]].under;
+                            }
+                            else
+                            {
+                                if (crossing_resolution == 0x00U)
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 3U;
+                                    else
+                                        k = 4U*K->crossing_number[m] + 1U;
+                                }
+                                else
+                                {
+                                    if (dir == forward)
+                                        k = 4U*K->crossing_number[m] + 1U;
+                                    else
+                                        k = 4U*K->crossing_number[m] + 3U;
+
+                                    dir = 0x01U - dir;
+                                }
+                                m = ind[K->crossing_number[m]].over;
+                            }
+                        }
+
+                        if (dir == forward)
+                        {
+                            if (m == 2U*K->number_of_crossings - 1U)
+                                m = 0U;
+                            else
+                                ++m;
+                        }
+                        else
+                        {
+                            if (m == 0U)
+                                m = 2U*K->number_of_crossings - 1U;
+                            else
+                                --m;
+                        }
+
+                        have_visited[k] = 0x01U;
+
+                        k = 4U*K->crossing_number[m];
+                        if (K->sign[m] == positive_crossing)
+                        {
+                            if (K->type[m] == over_crossing)
+                            {
+                                if (dir == backward)
+                                    k += 2U;
+                            }
+                            else
+                            {
+                                if (dir == forward)
+                                    k += 1U;
+                                else
+                                    k += 3U;
+                            }
+                        }
+                        else
+                        {
+                            if (K->type[m] == over_crossing)
+                            {
+                                if (dir == forward)
+                                    k += 1U;
+                                else
+                                    k += 3U;
+                            }
+                            else
+                            {
+                                if (dir == backward)
+                                    k += 2U;
+                            }
+                        }
+                    }
+                    ++number_of_circles;
+                }
+                return number_of_circles;
+            }
+        \end{lstlisting}
     \newpage
-    \bibliographystyle{annotate}
+    \bibliographystyle{plain}
     \bibliography{../biblio.bib}
     \newpage
     The source code used to generate this document is free software and released
