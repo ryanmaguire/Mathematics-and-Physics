@@ -9,6 +9,9 @@
      a library I've written in C to produce SVG figures. Currently the figures
      in the text use both tikz and asymptote. This will likely change over time
      to just asymptote.
+  3. **This project is currently incomplete and will remain so for quite**
+     **some time.** I am actively working on it, but there's a lot of cleaning
+     up to do.
 
 # Compiling
 You will need:
@@ -18,7 +21,7 @@ You will need:
   4. `convert` - Image Magick tool for converting images to different formats.
 
 TeX-Live and Mac-Tex (GNU/Linux and macOS, respectively) have both `pdflatex`
-and `asy`. macOS users cab find this at <https://www.tug.org/mactex/>.
+and `asy`. macOS users can find this at <https://www.tug.org/mactex/>.
 GNU/Linux users for Debian based distributions (Debian, Ubuntu, Pop!_OS, etc.)
 can install tex-live using their package manager:
 ```
@@ -56,16 +59,7 @@ chmod +x make_cfigs.sh
 ```
 
 # Mathematics_and_Physics
-Various notes on mathematics and physics organized in several volumes. **This
-project is currently incomplete and will remain so for quite some time**. I am
-actively working on it, but the end goal is rather big. Recently I've updated
-the geometry to be A5 paper with 14mm margins and some of the older notes that
-I have not yet gotten to will have equations falling out of the page. I've
-also rewritten several environments for displaying and emphasizing theorems and
-definitions, but this means some of the older ones will be poorly formatted. I
-am working to getting this project both aesthetically appealing and
-mathematically accurate. Suggestions are more than welcome.
-
+Various notes on mathematics and physics organized in several volumes.
 The books are currently arranged as follows:
 
 ## Foundations
