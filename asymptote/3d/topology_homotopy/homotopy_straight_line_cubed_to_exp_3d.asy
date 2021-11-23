@@ -1,13 +1,15 @@
 // Boilerplate stuff.
 import settings;
-import tube;
 import graph3;
-import palette;
 settings.outformat="pdf";
 settings.render=4;
 
-currentprojection=perspective(camera = (20, 60, 20), up   = (0, 0, 1),
-                              target = (0,  0,  0),  zoom = 0.85);
+currentprojection = perspective(
+    camera = (20, 60, 20),
+    up = (0, 0, 1),
+    target = (0,  0,  0),
+    zoom = 1.0
+);
 
 // Size of the output figure.
 size(200);
