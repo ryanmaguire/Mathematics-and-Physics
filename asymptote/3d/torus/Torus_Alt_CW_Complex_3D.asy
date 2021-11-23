@@ -2,26 +2,17 @@
 import settings;
 import graph3;
 import tube;
-
-if(settings.render < 0)    settings.render    = 8;
-if(!settings.multipleView) settings.batchView = false;
-
 settings.outformat="pdf";
 settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2, 2);
 
 currentprojection=perspective(camera = (20, -80, 25), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);
 
 currentlight=light(
-    gray(0.38),
-    specularfactor=1,
-    viewport=true,
-    (100, 0, 25),
-    (20, 100, 25),
-    (0,0,1000)
+    diffuse = new pen[] {gray(0.38), gray(0.38), gray(0.38)},
+    specular = new pen[] {gray(0.38), gray(0.38), gray(0.38)},
+    specularfactor = 1.0,
+    position = new triple[] {(100, 0, 25), (20, 100, 25), (0,0,1000)}
 );
 
 // Size of the output figure.

@@ -2,27 +2,18 @@
 import settings;
 import graph3;
 import palette;
-
-if(!settings.multipleView)  settings.batchView=false;
-
 settings.render      = 8;
 settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
 
-viewportmargin = (2, 2);
 
 currentprojection=perspective(camera = (20, 80, 30), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);
 
 currentlight=light(
-    gray(0.4),
-    specularfactor=2,
-    viewport=true,
-    (-0.5,-0.25,0.45),
-    (0.5,-0.5,0.5),
-    (0.5,0.5,0.75)
+    diffuse = new pen[] {gray(0.38), gray(0.38), gray(0.38)},
+    specular = new pen[] {gray(0.38), gray(0.38), gray(0.38)},
+    specularfactor = 2.0,
+    position = new triple[] {(-0.5,-0.25,0.45), (0.5,-0.5,0.5), (0.5,0.5,0.75)}
 );
 
 // Size of the created image.
