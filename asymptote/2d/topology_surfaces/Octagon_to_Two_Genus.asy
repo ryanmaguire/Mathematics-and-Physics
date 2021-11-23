@@ -1,14 +1,11 @@
 // Seting output format to "pdf".
 import graph;
-import fontsize;
-
 
 // Size of the output figure.
 size(256);
 
 // Size of the arrow head.
 real arsize = 5bp;
-
 
 // Variable for indexing.
 int i;
@@ -34,7 +31,8 @@ real yshift = 0.0;
 
 A = expi(pi/n);
 
-for (i=0; i<n; ++i){
+for (i=0; i<n; ++i)
+{
     phi = 2*pi*(i+1)/n + pi/n;
     B = expi(phi);
     g = A--B;

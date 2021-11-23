@@ -1,27 +1,20 @@
 // Boilerplate stuff.
 import settings;
-import graph3;
 import palette;
-
-if(!settings.multipleView)  settings.batchView=false;
-
-settings.render      = 8;
-settings.outformat   = "pdf";
-settings.inlineimage = true;
-settings.embed       = true;
-settings.toolbar     = false;
-
-viewportmargin = (2, 2);
-
+import graph3;
+settings.render = 8;
+settings.outformat = "pdf";
 size(256);
 
-currentprojection=orthographic(4, 0, 1);
-currentlight=light(gray(0.8), specularfactor=2, viewport=true, (2.0, 2.0, 2.0));
+currentprojection = orthographic(4, 0, 1);
 
-currentprojection=orthographic(2, 2, 1);
-currentlight = light(diffuse  = new pen[]    {white},
-                     specular = new pen[]    {0.5*white},
-                     position = new triple[] {Y+Z});
+currentlight = light(
+    diffuse = new pen[] {white},
+    specular = new pen[] {0.5*white},
+    specularfactor = 1.0,
+    position = new triple[] {X+Y+Z}
+);
+
 
 pen tcolor = blue+0.3*green;
 
