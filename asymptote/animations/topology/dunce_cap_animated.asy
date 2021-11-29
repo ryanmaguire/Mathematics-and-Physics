@@ -2,6 +2,8 @@ import settings;
 settings.outformat="gif";
 settings.render=0;
 
+size(512);
+
 import graph3;
 import tube;
 import animation;
@@ -50,8 +52,6 @@ draw(tube(q, scale(pipR)*unitcircle), invisible);
 
 for (i = 0; i < n; ++i) {
     save();
-    write("Computing image with " + (string)i + " dominoes toppled.");
-
     s = surface(f, (0, 0.0), (2pi, r), samplex, sampley, Spline);
     draw(s, surfacepen=blob, meshpen=mpen, render(merge=true));
 
