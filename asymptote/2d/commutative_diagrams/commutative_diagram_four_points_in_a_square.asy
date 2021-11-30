@@ -51,10 +51,10 @@ pair D = (2.0, -2.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$\alpha$", A -- B, 2*N, fpen, SharpArrow(arsize), margins);
-draw("$\beta$",  B -- D, 2*E, fpen, SharpArrow(arsize), margins);
-draw("$\gamma$", A -- C, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$\delta$", C -- D, 2*S, fpen, SharpArrow(arsize), margins);
+draw("$\alpha$", A -- B, N, fpen, SharpArrow(arsize), margins);
+draw("$\beta$",  B -- D, E, fpen, SharpArrow(arsize), margins);
+draw("$\gamma$", A -- C, W, fpen, SharpArrow(arsize), margins);
+draw("$\delta$", C -- D, S, fpen, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);
