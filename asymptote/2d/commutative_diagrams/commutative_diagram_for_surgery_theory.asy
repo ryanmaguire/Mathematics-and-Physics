@@ -47,8 +47,10 @@ pen fpen = fontsize(7pt);
 real arsize = 5bp;
 pair M = (0.0, 0.0);
 pair BG = (1.0, 0.0);
-pair GO = (1.0, 1.0);
 pair BO = (1.0, -1.0);
+
+/*  This label is only used on the third diagram.                             */
+pair GO = (5.0, 0.5);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
@@ -68,7 +70,6 @@ T = shift(2.0, 0.0);
 M = T*M;
 BO = T*BO;
 BG = T*BG;
-GO = T*GO;
 
 /*  Draw arrows.                                                              */
 draw("$f$", BG -- BO, 2*E, fpen, SharpArrow(arsize), margins);
@@ -85,7 +86,6 @@ T = shift(2.0, -0.5);
 M = T*M;
 BO = T*BO;
 BG = T*BG;
-GO = T*GO;
 
 /*  Draw the arrows.                                                          */
 draw("$f_{1}$", M -- GO, 2*NW, fpen, SharpArrow(arsize), margins);
