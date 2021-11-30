@@ -113,7 +113,7 @@
             \includegraphics{%
                 ../images/trefoil_knot_oriented_with_gauss_code.pdf%
             }
-            \caption{Gauss Code for the Right Handed Trefoil}
+            \caption{Gauss Code for the Right-Handed Trefoil}
             \label{fig:right_handed_trefoil_gauss_code}
         \end{figure}
         Gauss code is not unique to a knot diagram since the code is dependent
@@ -133,7 +133,7 @@
             \includegraphics{%
                 ../images/trefoil_knot_mirror_oriented_with_gauss_code.pdf%
             }
-            \caption{Gauss Code for the Left Handed Trefoil}
+            \caption{Gauss Code for the Left-Handed Trefoil}
             \label{fig:left_handed_trefoil_gauss_code}
         \end{figure}
         The solution is to \textit{sign} the crossings. Given an oriented knot,
@@ -142,7 +142,7 @@
         \begin{figure}
             \centering
             \includegraphics{../images/crossing_signs.pdf}
-            \caption{Gauss Code for the Left Handed Trefoil}
+            \caption{Crossing Signs}
             \label{fig:crossing_signs}
         \end{figure}
         By keeping track of the sign we get extended Gauss code
@@ -152,7 +152,7 @@
             \includegraphics{%
                 ../images/trefoil_knot_oriented_with_extended_gauss_code.pdf%
             }
-            \caption{Extended Gauss Code for the Right Handed Trefoil}
+            \caption{Extended Gauss Code for the Right-Handed Trefoil}
             \label{fig:right_hand_trefoil_extended_gauss}
         \end{figure}
         Note the orientation does not matter. If we reverse the orientation,
@@ -324,6 +324,7 @@
         circles. Applying the first and second equations, we can inductively
         prove the following formula for the Kauffman bracket:
         \begin{equation}
+            \label{eqn:kauffman_bracket}%
             \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
                 (-q)^{w(n)}(q+q^{-1})^{c(n)}
         \end{equation}
@@ -361,7 +362,7 @@
         \texttt{log(val)} steps \texttt{val} would be zero, exiting the
         while-loop.
         \par\hfill\par
-        For the Kauffman bracket this is function is used with inputs of size
+        For the Kauffman bracket this function is used with inputs of size
         $2^{N}-1$, where $N$ is the number of crossings, so the worst-case
         time complexity at this step is $O(N)$. For example, considering the
         resolution of the right-handed trefoil
@@ -481,11 +482,207 @@
         execute the algorithm at the start and then store the result in
         memory.
         \par\hfill\par
-        Because of the 16 possibilies, the full algorithm is lengthy and given
-        in the appendix of this paper. To determine where you go next, given
-        where you're coming from, you simply examine
-        Fig.~\ref{fig:thickened_negative_crossing_smoothings} and
-        Fig.~\ref{fig:thickened_positive_crossing_smoothings}.
+        Because of the 16 possibilies, the full algorithm is lengthy. To make
+        this easier we label the roads so that we can make a table. This is
+        done in Fig.~\ref{fig:thickened_crossings_labeled}. By examining
+        Fig.~\ref{fig:thickened_crossings_resolved_labeled} we can tell where
+        we need to go as we walk along the knot. This is done explicitly in
+        Tab.~\ref{tab:circle_counting_algorithm_where_go}. The table reads as follows.
+        The left \textit{In} column tells you which road you are approaching the
+        crossing from. Note if you are approaching from roads 0 or 1, you are
+        walking forward, and if you are approaching from roads 2 or 3, you are
+        walking backwards. Using the information about the sign and resolution
+        of the crossing, you know which road to leave from. In the Gauss code,
+        if you approaching an under crossing, you find the corresponding
+        over crossing (and vice-versa). You then go to the next entry or
+        previous entry in the code depending on the road you are travelling
+        on (leaving from roads 0 and 1 means go backwards, leaving from roads
+        2 or 3 means go forwards). Eventually you will return to an entry in
+        the Gauss code you have already been to. This amounts to 1 circle from
+        the resolution. Move on to the next element of the Gauss code you have
+        yet to encounter and repeat. Tab.~\ref{tab:circle_counting_algorithm_where_start}
+        then tells which road number you are entering based on the sign and type
+        of the crossing, and the direction you are walking. Eventually the code
+        will be exhausted, and the resulting tally of circles is the number of
+        circles from this resolution.
+        \begin{figure}
+            \centering
+            \includegraphics{../images/thickened_crossing_labeled.pdf}
+            \caption{Thickened Crossings with Labels}
+            \label{fig:thickened_crossings_labeled}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../images/thickened_crossings_resolved_labeled.pdf}
+            \caption{Thickened Resolved Crossings with Labels}
+            \label{fig:thickened_crossings_resolved_labeled}
+        \end{figure}
+        \begin{table}
+            \centering
+            \begin{tabular}{c c c c}
+                In&Sign&Resolution&Out\\
+                \hline
+                0&-&0&1\\
+                0&-&1&3\\
+                0&+&0&3\\
+                0&+&1&1\\
+                \hline
+                1&-&0&0\\
+                1&-&1&2\\
+                1&+&0&2\\
+                1&+&1&0\\
+                \hline
+                2&-&0&3\\
+                2&-&1&1\\
+                2&+&0&1\\
+                2&+&1&3\\
+                \hline
+                3&-&0&2\\
+                3&-&1&0\\
+                3&+&0&0\\
+                3&+&1&2
+            \end{tabular}
+            \caption{The Circle Counting Algorithm - Where to Go}
+            \label{tab:circle_counting_algorithm_where_go}
+        \end{table}
+        \begin{table}
+            \centering
+            \begin{tabular}{c c c c}
+                Type&Sign&Direction&In\\
+                \hline
+                $O$&-&Forward&1\\
+                $O$&-&Backward&3\\
+                $O$&+&Forward&0\\
+                $O$&+&Backward&2\\
+                \hline
+                $U$&-&Forward&0\\
+                $U$&-&Backward&2\\
+                $U$&+&Forward&1\\
+                $U$&+&Backward&3
+            \end{tabular}
+            \caption{The Circle Counting Algorithm - Where to Start}
+            \label{tab:circle_counting_algorithm_where_start}
+        \end{table}
+        \par\hfill\par
+        Let's use the trefoil as an example. The $000_{2}$ resolution results
+        in 2 circles (Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}). Let's
+        check that the algorithm detects this. The Gauss code is
+        $O0+U1+O2+U0+O1+U2+$. We start by entering the zeroth crossing
+        (road 0). It is an over crossing, so we look ahead in the code and
+        find the corresponding under crossing. It is a positive crossing with
+        the zero resolution, so Tab.~\ref{tab:circle_counting_algorithm_where_go} tells
+        us to leave through road 3. We mark road 0 and road 3 of the zeroth
+        crossing as travelled and proceed. Leaving through road 3 means we
+        travel forward. Hence we wind up at $O1+$ in the code and we are
+        walking forwards. Over-crossing, positive sign, walking forwards means
+        we are entering the crossing from road 0
+        (Tab.~\ref{tab:circle_counting_algorithm_where_start}). We will again
+        leave through road 3 and enter the $O2+$ crossing walking forwards.
+        We again enter road 0 and leave through road 3 and wind up at
+        $O0+$ walking forward, completing our first cycle. The next untouched
+        road is road 1 for the zeroth crossing. This corresponding to $U0+$
+        walking forwards. Tab.~\ref{tab:circle_counting_algorithm_where_go}
+        tells us to leave through road 2. We end up at $U1+$ at road 1. Again
+        we leave through road 2 and end up at $U2+$ road 1. We leave through
+        road 3 entering $U0+$, completing our cycle. All of the roads have been
+        marked, and we have 2 circles total, in agreement with
+        Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}.
+        \par\hfill\par
+        To compute the Kauffman bracket, we loop over all integers
+        $0\leq{n}\leq{2}^{N}-1$, $N$ being the number of crossings, compute the
+        number of circles corresponding to the $n$ resolution using this
+        algorithm, and perform the sum in Eqn.~\ref{eqn:kauffman_bracket}. The
+        circle counting algorithm requires $4N$ steps since we loop over the
+        $4N$ roads, and the Hamming weight has worst-case complexity $O(N)$,
+        meaning each stage is $O(4N)+O(N)=O(N)$ in time complexity. There are
+        $2^{N}$ total steps, so $O(N2^{N})$ is the total complexity of the
+        computation. The computation of the array of indices at the beginning
+        is $O(N)$, but as mentioned is only required once and is not part of
+        the inner for-loop. The result for the entire algorithm is
+        $O(N+N2^{N})=O(N2^{N})$. This is the same complexity as most useable
+        algorithms. There are known algorithms in time $O(2^{C\sqrt{n}})$ for a
+        constant $C$, but the constant is large enough that the algorithm is
+        no useable for most knots.
+        \par\hfill\par
+        To obtain the unnormalized Jones' polynomial we simply need to shift
+        the degree of the resulting Kauffman bracket polynomial. This is
+        defined by:
+        \begin{equation}
+            \tilde{J}(L)=(-1)^{N_{-}}q^{N_{-}-2N_{+}}\langle{L}\rangle
+        \end{equation}
+        Where $N_{-}$ is the number of negative crossings and $N_{+}$ is the
+        number of positive crossings. We represent Laurent polynomials by the
+        following simply struct:
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            struct laurent_polynomial {
+                signed int lowest_degree;
+                signed int highest_degree;
+                signed int *coeffs;
+            };
+        \end{lstlisting}
+        The $q^{N_{-}-2N_{+}}$ term thus takes $O(1)$ in time, we simply
+        add $N_{-}-2N_{+}$ to \texttt{highest\_degree} and
+        \texttt{lowest\_degree}. This step does not impact the computation time
+        in any significant way.
+        \par\hfill\par
+        The main benefit is that the algorithm is \textit{iterative} instead of
+        recursive. The complexity is bad enough that the recursive
+        algorithms may result in stack overflows. Such is the case with some of
+        the Python packages that exist to compute the Jones' polynomial. The
+        computation of the Jones' polynomial of a 30 crossing knot results in
+        runtime errors do to too many recursions. With infinite memory, 30
+        crossing knots could have their Jones' polynomials computed na\"{i}vely
+        in about a day or so if one wishes to wait that long. The benefit of
+        this iterative method is that it does not requires only $O(N)$ space,
+        not $O(2^{N})$, so infinite memory isn't needed. One could hit
+        \textit{go} and wait a day and then have the Jones' polynomial of their
+        knot.
+    \section{Results}
+        A theorem of Mrowka and Kronheimer states that the Khovanov homology
+        detects the unknots. That is, if a given knot has the same Khovanov
+        homology as the unknot, then that knot \textit{is} the unknot.
+        The unnormalized Jones' polynomial is the graded Euler characteristic of
+        Khovanov homology, so it has been conjectured that the Jones's
+        polynomial also detects the unknot. This is currently unknown. The
+        algorithm described here has been used, in combination with the
+        Python packages \texttt{snappy} and \texttt{regina}, to look for
+        numerical evidence of stronger conjectures. The unknot is the simplest
+        of the torus knots, so a natural generalization is
+        \textit{does the Jones' polynomial distinguish torus knots}? That is,
+        if a knot has the same Jones' polynomial as a torus knot, is that knot
+        a torus knot itself? The answer is no via counterexample. Just in the
+        Rolfsen table, the $10_{132}$ knot matches in $T(2,5)$ torus knot.
+        The 12 crossing knot K12n749 has the same Jones'
+        polynomial as the the torus knot $T(2,7)$. In both instances the
+        Khovanov homologies were different, leading to the following conjecutre:
+        \textit{Does Khovanov homology distinguish torus knots?} This is a
+        natural generalization of Kronheimer and Mrowka's theorem, and there is
+        supporting evidence amongst the first 2,977 knots (all knots of less
+        than or equal to 12 crossings).
+        The unknot is also the simplest of the twist knots. A modification of
+        the Jones' polynomial conjecture for the unknot is whether the Jones'
+        polynomial distinguishes twist knots. This is also false, but the first
+        counterexamples don't occur until 11 crossings. These knots are
+        described in Tab.~\ref{tab:counterexamples_twist_knot_conjecture}. Since
+        a twist knot can be described by a single integer (the number of twists)
+        the integers in the right column of this table show which twist knot
+        matched a given knot in the HT non-alternating table. Two 12 crossing
+        knots were also found, the knot K12a803 matches the $m_{10}$ twist knot,
+        and the knot K12n475 matches $m_{3}$.
+        \begin{table}
+            \centering
+            \begin{tabular}{c | c}
+                HT Table&Twist Knot\\
+                \hline
+                K11n13&$m_{7}$\\
+                K11n19&$m_{2}$\\
+                K11n57&$m_{3}$\\
+                K11n70&$m_{6}$\\
+                K11n88&$m_{5}$
+            \end{tabular}
+            \caption{Counterexamples to Twist-Knot Conjecture}
+            \label{tab:counterexamples_twist_knot_conjecture}
+        \end{table}
     \newpage
     \bibliographystyle{plain}
     \bibliography{../biblio.bib}
