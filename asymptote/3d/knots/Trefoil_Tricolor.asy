@@ -3,6 +3,7 @@ import tube;
 import graph3;
 import palette;
 settings.render=8;
+settings.outformat = "pdf";
 
 size(128);
 
@@ -20,7 +21,7 @@ triple f(real t){
 currentlight = light(
     diffuse  = new pen[] {white},
     specular = new pen[] {white},
-    position = new triple[] {-100Z}
+    position = new triple[] {100Z}
 );
 
 path section=scale(0.35)*unitcircle;
