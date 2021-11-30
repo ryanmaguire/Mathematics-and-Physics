@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Commutative diagram for the free object in topology. This is the      *
+ *      discrete topology. Given a set X the free topological object on X is  *
+ *      the topological space (C(X), CT) and map alpha : X -> C(X) such that  *
+ *      for any topological space (Y, T) and any function f: X -> Y there is  *
+ *      an induced continuous function f':C(X) -> Y such that                 *
+ *      f(x) = f'(alpha(x)). The space (C(X), CT) is (X, P(X)), where P(X) is *
+ *      the power set of X. The map alpha is the identity. This figure        *
+ *      demonstrates this idea via commutative diagram.                       *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *

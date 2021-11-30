@@ -16,6 +16,11 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      This draws a large commutative diagram featuring 10 vertices arranged *
+ *      in two rows. This could be used, for example, to demonstrate the      *
+ *      the Five-Lemma that occurs in homological algebra.                    *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *
