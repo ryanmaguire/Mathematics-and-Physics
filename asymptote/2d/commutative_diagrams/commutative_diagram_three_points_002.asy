@@ -35,7 +35,7 @@ settings.outformat = "pdf";
 size(64);
 
 /*  Default pen used for labels.                                              */
-defaultpen(fontsize(7pt));
+defaultpen(fontsize(9pt));
 
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);

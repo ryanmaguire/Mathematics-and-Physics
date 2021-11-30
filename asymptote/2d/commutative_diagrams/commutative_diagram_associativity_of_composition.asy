@@ -36,6 +36,9 @@ size(128);
 /*  Default pen for labels and drawings.                                      */
 defaultpen(black + fontsize(7pt) + linewidth(0.7pt));
 
+/*  Pen for labels.                                                           */
+pen labelp = fontsize(9pt);
+
 /*  Four points for the vertices of the commutative diagram.                  */
 pair A = (-3.0, 0.0);
 pair B = (0.0, 5.196);
@@ -46,10 +49,10 @@ pair D = (0.0, 1.732);
 real arsize = 5bp;
 
 /*  Label the points.                                                         */
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
-label("$D$", D);
+label("$A$", A, labelp);
+label("$B$", B, labelp);
+label("$C$", C, labelp);
+label("$D$", D, labelp);
 
 /*  Margins to prevent lines from overlapping with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);

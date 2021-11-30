@@ -43,20 +43,22 @@ pen fpen = fontsize(7pt);
 
 /*  Mark coordinates for the points, and specify the arrow size.              */
 real arsize = 5bp;
+real height = -0.7;
+real width = 0.9;
 pair A = (0.0, 0.0);
-pair B = (0.0, -1.0);
-pair C = (0.0, -2.0);
-pair D = (1.0, -1.0);
+pair B = (0.0, -height);
+pair C = (0.0, -2.0*height);
+pair D = (width, -height);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.4cm, 0.4cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f_{1}$", A -- D, 2*NE, fpen, SharpArrow(arsize), margins);
-draw("$f_{2}$", B -- D, 2*S, fpen, SharpArrow(arsize), margins);
-draw("$f_{3}$", C -- D, 2*SE, fpen, SharpArrow(arsize), margins);
-draw("$g_{1}$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$g_{2}$", B -- C, 2*W, fpen, SharpArrow(arsize), margins);
+draw("$f_{1}$", A -- D, SE, fpen, SharpArrow(arsize), margins);
+draw("$f_{2}$", B -- D, S, fpen, SharpArrow(arsize), margins);
+draw("$f_{3}$", C -- D, NE, fpen, SharpArrow(arsize), margins);
+draw("$g_{1}$", A -- B, W, fpen, SharpArrow(arsize), margins);
+draw("$g_{2}$", B -- C, W, fpen, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);
