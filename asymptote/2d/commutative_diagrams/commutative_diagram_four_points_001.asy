@@ -16,6 +16,11 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draws a commutative diagram with 4 vertices, three in 1 column on the *
+ *      left and 1 by itself on the right, with arrows connecting to form     *
+ *      two triangular regions. This is used in various lecture notes.        *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *

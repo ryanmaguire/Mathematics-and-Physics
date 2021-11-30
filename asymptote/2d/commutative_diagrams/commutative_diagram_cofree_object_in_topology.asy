@@ -16,7 +16,17 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
- ******************************************************************************/
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draw a commutative diagram for the cofree object in topology. This is *
+ *      the trivial topology, also called the chaotic topology. Given any     *
+ *      set X, the cofree topological object of X is the topological space    *
+ *      (C(X), CT) and map alpha:X -> C(X) such that for any topological      *
+ *      space (Y, T) and any function f:Y -> X there is an induced continuous *
+ *      function f':Y -> C(X) such that f'(y) = alpha(f(y)). The space that   *
+ *      does this is the trivial topological space on X, the only open sets   *
+ *      are the empty set and X. This figure shows this commutative diagram.  *
+ ******************************************************************************/ 
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *
  *  asymptote/ folder of this project. You'll need to edit the                *
