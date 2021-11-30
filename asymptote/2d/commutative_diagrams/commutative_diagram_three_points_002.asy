@@ -50,9 +50,9 @@ pair C = (0.0, -1.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*N, fpen, SharpArrow(arsize), margins);
-draw("$\pi$", A -- C, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$\tilde{f}$", C -- B, 2*SE, fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- B, N, fpen, SharpArrow(arsize), margins);
+draw("$\pi$", A -- C, W, fpen, SharpArrow(arsize), margins);
+draw("$\tilde{f}$", C -- B, SE, fpen, SharpArrow(arsize), margins);
 
 /*  Add labels.                                                               */
 label("$A$", A);

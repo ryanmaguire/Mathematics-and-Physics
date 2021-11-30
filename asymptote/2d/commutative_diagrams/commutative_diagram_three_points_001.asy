@@ -50,9 +50,9 @@ pair C = (1.0, 0.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, 2*W, fpen, SharpArrow(arsize), margins);
-draw("$g$", B -- C, 2*SE, fpen, SharpArrow(arsize), margins);
-draw("$h$", A -- C, 2*N, fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- B, W, fpen, SharpArrow(arsize), margins);
+draw("$g$", B -- C, SE, fpen, SharpArrow(arsize), margins);
+draw("$h$", A -- C, N, fpen, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);
