@@ -66,9 +66,9 @@ for (n = 1; n < N_Nodes; ++n)
     D = (2.0*(n + 1.0), 0.0);
 
     /*  Draw arrows and label the functions between these nodes.              */
-    draw("$f_{"+string(n)+"}$", A -- B, 2*E, fpen, SharpArrow(arsize), margins);
-    draw("$g_{"+string(n)+"}$", A -- C, 2*S, fpen, SharpArrow(arsize), margins);
-    draw("$h_{"+string(n)+"}$", B -- D, 2*N, fpen, SharpArrow(arsize), margins);
+    draw("$f_{"+string(n)+"}$", A -- B, E, fpen, SharpArrow(arsize), margins);
+    draw("$g_{"+string(n)+"}$", A -- C, S, fpen, SharpArrow(arsize), margins);
+    draw("$h_{"+string(n)+"}$", B -- D, N, fpen, SharpArrow(arsize), margins);
 
     /*  Label the actual nodes.                                               */
     label("$A_{"+string(n)+"}$", A);
@@ -79,6 +79,6 @@ for (n = 1; n < N_Nodes; ++n)
 /*  Label and draw the final nodes.                                           */
 A = (2.0*n, 2.0);
 B = (2.0*n, 0.0);
-draw("$f_{"+string(n)+"}$", A -- B, 2*E, fpen, SharpArrow(arsize), margins);
+draw("$f_{"+string(n)+"}$", A -- B, E, fpen, SharpArrow(arsize), margins);
 label("$A_{"+string(n)+"}$", A);
 label("$B_{"+string(n)+"}$", B);
