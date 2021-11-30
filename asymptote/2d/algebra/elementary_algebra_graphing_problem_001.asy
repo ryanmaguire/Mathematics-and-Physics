@@ -33,6 +33,71 @@ import custom_arrows;
 /*  Size of the figure.                                                       */
 size(256);
 
+/*  Function for producing a path from a real-valued function.                */
+path PathFromFunction(real func(real), real a, real b, int n_samples)
+{
+    /*  Declare necessary variables.                                          */
+    path g;
+    real dx, x, start, end;
+
+    /*  There must be at least two samples to create a path.                  */
+    assert(n_samples >= 2);
+
+    /*  The end points can not be equal.                                      */
+    assert(a != b);
+
+    /*  Set the starting point. This is whichever value is smaller.           */
+    if (a < b)
+    {
+        start = a;
+        end = b;
+    }
+    else
+    {
+        start = b;
+        end = a;
+    }
+
+    /*  The samples are uniformly spaced throughout the interval (start, end).*/
+    dx = (end - start) / (real)n_samples;
+    x = start;
+
+    /*  Initialize the path to the starting point.                            */
+    g = (x, func(x));
+    x += dx;
+
+    /*  Loop over the samples and append them to the path.                    */
+    while (x < end)
+    {
+        g = g .. (x, func(x));
+        x += dx;
+    }
+
+    /*  Add the end point to the path.                                        */
+    g = g .. (end, func(end));
+
+    /*  If a < b, then start = a and end = b. Return as normal.               */
+    if (a < b)
+        return g;
+
+    /*  Otherwise, start = b and end = a. Reverse the path and return.        */
+    else
+        return reverse(g);
+}
+/*  End of PathFromFunction.                                                  */
+
+/*  The parabola function to be drawn.                                        */
+real two_minus_x_squared(real x)
+{
+    return 2.0 - x*x;
+}
+
+/*  The square root function to be drawn.                                     */
+real sqrt_two_minus_x(real x)
+{
+    return sqrt(2.0 - x);
+}
+
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.2mm) + fontsize(8pt));
 
@@ -76,7 +141,10 @@ real arsize = 5bp;
 /*  Pen for labels.                                                           */
 pen labelp = fontsize(6pt);
 
-/*  Path for drawing square roots and parabolas.                              */
+/*  Number of samples for square root and parabola functions.                 */
+int samples = 20;
+
+/*  Path used for the square root and parabola functions.                     */
 path g;
 
 /*  Loop through and draw the lines for the grid.                             */
@@ -127,13 +195,11 @@ draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, SharpArrows(arsize));
 draw((0.0, -10.0) -- (10.0, 0.0), red, SharpArrows(arsize));
 
 /*  Draw the parabola 2-x^2.                                                  */
-g = (-3.4641, -10.0) .. (-3.0, -7.0) .. (-2.0, -2.0) .. (-1.0, 1.0) ..
-    (0.0, 2.0) .. (1.0, 1.0) .. (2.0, -2.0) .. (3.0, -7.0) .. (3.4641, -10.0);
+g = PathFromFunction(two_minus_x_squared, -3.46, 3.46, samples);
 draw(g, orange, SharpArrows(arsize));
 
 /*  Lastly, the function sqrt(2 - x).                                         */
-g = (2.0, 0.0) .. (1.0, 1.0) .. (0.0, 1.4141) ..
-    (-2.0, 2.0) .. (-7.0, 3.0) .. (-10.0, 3.4641);
+g = PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
 draw(g, brown, SharpArrow(arsize));
 
 /*  Label all of the functions.                                               */
