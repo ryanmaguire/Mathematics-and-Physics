@@ -44,11 +44,10 @@ pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
 /*  Function for making 3D drawings with 2D points.                           */
 pair xyzpoint(real x, real y, real z)
 {
-    pair X = (-0.7071067811865476, -0.7071067811865476);
-    pair Y = (1.0, 0.0);
-    pair Z = (0.0, 1.0);
-
-    return scale(x)*X + scale(y)*Y + scale(z)*Z;
+    pair X = (-0.5*x, -0.5*x);
+    pair Y = (y, 0.0);
+    pair Z = (0.0, z);
+    return X + Y + Z;
 }
 /*  End of xyzpoint.                                                          */
 
