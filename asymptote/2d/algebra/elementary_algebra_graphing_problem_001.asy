@@ -16,6 +16,9 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Plots for a graphing problem for students studying elementary algebra.*
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */

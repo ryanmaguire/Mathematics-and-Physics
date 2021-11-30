@@ -16,6 +16,11 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draws the intersection of a plane with a cube, revealing a hexagon.   *
+ *      This is what you'd get if you dipped a cube into water with one of    *
+ *      vertices of the cube facing down.                                     *
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
