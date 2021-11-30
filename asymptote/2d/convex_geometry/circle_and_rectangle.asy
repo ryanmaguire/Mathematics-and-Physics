@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Figure for convex geometry made while studying with Dan Klain at UML. *
+ *      It features a circle with a rectangle to depict a given projection.   *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *

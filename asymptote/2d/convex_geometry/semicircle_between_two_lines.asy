@@ -36,10 +36,10 @@ size(128);
 /*  Axes pen.                                                                 */
 pen apen = black + linewidth(0.8pt);
 
-/*  Pen for the circle and triangles.                                         */
+/*  Pen for the semicircle.                                                   */
 pen cpen = black + linewidth(0.2pt);
 
-/*  Filler for the triangles.                                                 */
+/*  Filler for the semicircle.                                                */
 pen fpen = red + opacity(0.5);
 
 /*  Radius of the circle.                                                     */

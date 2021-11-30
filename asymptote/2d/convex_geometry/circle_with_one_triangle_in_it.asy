@@ -16,6 +16,11 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draws a triangle inside a circle. The triangle is defined as the      *
+ *      convex hull of three given points. The circle is also described by    *
+ *      these three (non-colinear) points.                                    *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *
@@ -78,19 +83,19 @@ path PolyFromPoints(pair[] Pts, int ArSize, bool closed)
 pair LineIntersect2D(pair P0, pair V0, pair P1, pair V1)
 {
     /*  Declare necessary variables.                                          */
-    real a, b, c, d, diffx, diffy, t0, det, intersectx, intersecty, inva, invb;
+    real diffx, diffy, t0, det, intersectx, intersecty, inva, invb;
     pair out;
 
     /*  We will solve this by finding the solution to t0*V0 - t1*V1 = P1 - P0 *
      *  and then return P0 + t0*V0. To do this we'll set this up as a matrix  *
      *  equation, so first we'll compute the matrix values.                   */
-    a = V0.x;
-    b = -V1.x;
-    c = V0.y;
-    d = -V1.y;
+    real a = V0.x;
+    real b = -V1.x;
+    real c = V0.y;
+    real d = -V1.y;
 
     /*  The solution exists if and only if the determinant is non-zero.       */
-    det = a*d - b*c;
+    real det = a*d - b*c;
     assert(det != 0.0);
 
     /*  If the determinant is non-zero, compute the upper row of the inverse  *
@@ -124,12 +129,9 @@ real EuclideanNorm2D(pair V)
 /*  Return a 2D vector orthogonal to the input.                               */
 pair Orthogonal2D(pair V)
 {
-    /*  Declare necessary variables.                                          */
-    pair orth;
-
     /*  The vector (-y, x) will be orthgonal to (x, y) since we have          *
      *  <(x, y)|(-y, x)> = x(-y) + yx = 0, so return this.                    */
-    orth = (-V.y, V.x);
+    pair orth = (-V.y, V.x);
     return orth;
 }
 /*  End of Orthogonal2D.                                                      */
@@ -137,19 +139,16 @@ pair Orthogonal2D(pair V)
 /*  Function for determining if three points in the plane are collinear.      */
 bool IsCollinear(pair A, pair B, pair C)
 {
-    /*  Declare necessary variables.                                          */
-    real a, b, c, d, det;
-
     /*  To determine if A, B, and C are collinear, we need the vectors AB and *
      *  AC. Compute these.                                                    */
-    a = B.x - A.x;
-    b = C.x - A.x;
-    c = B.y - A.y;
-    d = C.y - A.y;
+    real a = B.x - A.x;
+    real b = C.x - A.x;
+    real c = B.y - A.y;
+    real d = C.y - A.y;
 
     /*  A, B, and C are collinear if and only if the determinant of the       *
      *  matrix formed by a, b, c, d is zero. Compute this.                    */
-    det = a*d - b*c;
+    real det = a*d - b*c;
 
     if (det == 0.0)
         return true;
@@ -161,14 +160,10 @@ bool IsCollinear(pair A, pair B, pair C)
 /* Find midpoint given two points in the plane.                               */
 pair MidPoint2D(pair A, pair B)
 {
-    /*  Declare necessary variables.                                          */
-    real x, y;
-    pair out;
-
     /*  Compute the midpoint of A and B using the midpoint formula and return.*/
-    x = 0.5*(A.x + B.x);
-    y = 0.5*(A.y + B.y);
-    out = (x, y);
+    real x = 0.5*(A.x + B.x);
+    real y = 0.5*(A.y + B.y);
+    pair out = (x, y);
     return out;
 }
 /*  End of MidPoint2D.                                                        */
