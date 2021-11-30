@@ -38,15 +38,15 @@ arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
                       pen p = currentpen, real size = 0,
                       real angle = arrowangle)
     {
-        if(size == 0)
+        if (size == 0)
             size = a.size(p);
 
         angle = min(angle*arrowhookfactor, 45);
         bool relative = position.relative;
         real position = position.position.x;
 
-        if(relative)
-            position=reltime(g, position);
+        if (relative)
+            position = reltime(g, position);
 
         /*  This is mostly a copy of the original asymptote code. The change  *
          *  at the end results in a "stealth" arrow head.                     */
@@ -95,7 +95,7 @@ private real position(position currentpos, real size, path g, bool center)
     /*  Set pos to the real value equivalent of position.                     */
     real pos = currentpos.position.x;
 
-    if(currentpos.relative)
+    if (currentpos.relative)
     {
         pos *= arclength(g);
         if (center)
@@ -164,7 +164,6 @@ private void drawsharparrow(frame f, arrowhead arhead = DefaultHead,
 
     /*  Set information about the arrow head.                                 */
     head = arhead.head(g, pos, p, size, angle);
-
     endpoint = pos > L-sqrtEpsilon;
 
     if (cyclic(head) && (fill == NoFill || endpoint))
@@ -184,10 +183,10 @@ private void drawsharparrow(frame f, arrowhead arhead = DefaultHead,
 /*  End of drawsharparrow.                                                    */
 
 /*  Function for drawing sharp arrows at both ends of a path.                 */
-private void drawsharparrow2(frame f, arrowhead arhead=DefaultHead,
-                             path g, pen p=currentpen, real size=0,
-                             real angle=arrowangle, filltype fill=null,
-                             margin the_margin=NoMargin)
+private void drawsharparrow2(frame f, arrowhead arhead = DefaultHead,
+                             path g, pen p = currentpen, real size = 0,
+                             real angle = arrowangle, filltype fill = null,
+                             margin the_margin = NoMargin)
 {
     /*  Paths for a portion of the path g, the arrow head, and arrow tail.    */
     path head, tail, r;
@@ -222,7 +221,7 @@ private void drawsharparrow2(frame f, arrowhead arhead=DefaultHead,
     if (cyclic(head))
         draw(f, subpath(r, arctime(r, size), L - arctime(g, size)), p);
     else
-        draw(f,g,p);
+        draw(f, g, p);
 
     /*  Fill in the head and tail ends of the path with arrows.               */
     fill.fill(f, head, p + linewidth(0.0) + solid);
@@ -295,8 +294,10 @@ picture sharparrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
     if (size == 0)
         size = arhead.size(p);
 
+    /*  Add the arrow drawing function to the picture.                        */
     pic.add(
-        new void(frame f, transform t) {
+        new void(frame f, transform t)
+        {
             drawsharparrow2(f, arhead, t*g, p, size, angle, fill, the_margin);
         }
     );
@@ -314,6 +315,7 @@ picture sharparrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
 }
 /*  End of sharparrow2.                                                       */
 
+/*  Function to be used with draw for adding an arrow at the start of a path. */
 arrowbar BeginSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
                          real angle = arrowangle, filltype fill = null,
                          position currentpos = BeginPoint)
@@ -331,7 +333,9 @@ arrowbar BeginSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
         return false;
     };
 }
+/*  End of BeginSharpArrow.                                                   */
 
+/*  Function to be used with draw for adding an arrow at the end of a path.   */
 arrowbar SharpArrow(arrowhead arhead=DefaultHead, real size=0,
                     real angle=arrowangle, filltype fill=null,
                     position currentpos=EndPoint)
@@ -346,11 +350,14 @@ arrowbar SharpArrow(arrowhead arhead=DefaultHead, real size=0,
         return false;
     };
 }
+/*  End of SharpArrow.                                                        */
 
+/*  Another alias for SharpArrow.                                             */
 arrowbar EndSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
                        real angle = arrowangle, filltype fill = null,
                        position currentpos = EndPoint) = SharpArrow;
 
+/*  Function to be used with draw for adding arrows in the middle of a path.  */
 arrowbar MidSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
                        real angle = arrowangle, filltype fill = null)
 {
@@ -367,7 +374,9 @@ arrowbar MidSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
         return false;
     };
 }
+/*  End of MidSharpArrow.                                                     */
 
+/*  Function to be used with draw for adding arrows at both ends of a path.   */
 arrowbar SharpArrows(arrowhead arhead = DefaultHead, real size = 0,
                      real angle = arrowangle, filltype fill = null)
 {
@@ -377,3 +386,5 @@ arrowbar SharpArrows(arrowhead arhead = DefaultHead, real size = 0,
         return false;
     };
 }
+/*  End of SharpArrows.                                                       */
+
