@@ -43,9 +43,8 @@ size(64);
 /*  Default pen used for labels.                                              */
 defaultpen(fontsize(7pt));
 
-/*  Pens used to label functions.                                             */
-pen fpen = fontsize(7pt);
-pen dpen = fpen + linetype("4 4");
+/*  Pen used to label the induced function.                                   */
+pen dpen = fontsize(7pt) + linetype("4 4");
 
 /*  Set arrow size, and mark three points for A, B, and C.                    */
 real arsize = 5bp;
@@ -57,9 +56,9 @@ pair C = (1.0, -0.5);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$\alpha$", A -- B, NW, fpen, SharpArrow(arsize), margins);
+draw("$\alpha$", A -- B, NW, SharpArrow(arsize), margins);
 draw("$\tilde{f}$", B -- C, E, dpen, SharpArrow(arsize), margins);
-draw("$f$", A -- C, SW, fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- C, SW, SharpArrow(arsize), margins);
 
 /*  Label the points.                                                         */
 label("$X$", A);
