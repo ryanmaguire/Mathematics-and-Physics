@@ -82,8 +82,9 @@
 \setlength{\parskip}{0em}
 
 % Title page information.
-\title{An Iterative Algorithm for the Jones' Polynomial via Extended Gauss Code}
-\author{Ryan Maguire\hspace{2em}Vladimir Chernov\hspace{2em}Peter Doyle}
+\title{Conjectures on Legendrian and Transversally Simple Knots and Links and an
+       Iterative Algorithm for the Jones' Polynomial}
+\author{Vladimir Chernov\hspace{2em}Ryan Maguire}
 \date{Fall 2021}
 
 \begin{document}
@@ -91,12 +92,20 @@
     \tableofcontents
     \begin{abstract}
         \noindent
-        An iterative algorithm for computing the Jones' polynomial of a knot
-        is described and an analysis of the computational complexity is given.
-        Generalized conjectures about the Jones' polynomial are shown to be
-        false by counterexamples, and a conjecture generalizing Kronheimer and
-        Mrowka's result on the unknot is made, with supporting numerical
-        evidence.
+        A theorem of Kronheimer and Mrowka states that Khovanov homology is
+        able to detect the unknot \cite{kronheimermrowka2010}. That is, if a
+        knot has the Khovanov homology of the unknot, then it is
+        isomorphic to it. A similar result holds for Knot Floer
+        homology. The unknot is the simplest of the torus knots, which is a
+        class of knots known to be Legendrian simple. It is conjectured that
+        Khovanov and Knot Floer homology are able to distinguish Legendrian
+        and Transversally simple knot. An iterative algorithm for computing
+        the Jones' polynomial of a knot is described and an analysis of the
+        computational complexity is given. This algorithm is then used to
+	efficiently compare the Khovanov homologies of all knots of up to 13
+	crossings with all torus knots of up to 50 crossings, providing
+	numerical evidence for this conjecture on the first $\approx12,000$
+	knots.
     \end{abstract}
     \section{Extended Gauss Code}
         Given a knot diagram, it is reasonable for a mathematician to wish to
@@ -493,17 +502,16 @@
         walking forward, and if you are approaching from roads 2 or 3, you are
         walking backwards. Using the information about the sign and resolution
         of the crossing, you know which road to leave from. In the Gauss code,
-        if you approaching an under crossing, you find the corresponding
-        over crossing (and vice-versa). You then go to the next entry or
-        previous entry in the code depending on the road you are travelling
-        on (leaving from roads 0 and 1 means go backwards, leaving from roads
-        2 or 3 means go forwards). Eventually you will return to an entry in
+        if you approach an under crossing, find the corresponding over crossing
+        in the code (and vice-versa). Then go to the previous entry if you are
+        leaving from roads 0 and 1, and the next entry if leaving from roads
+        2 or 3. Eventually you will return to an entry in
         the Gauss code you have already been to. This amounts to 1 circle from
         the resolution. Move on to the next element of the Gauss code you have
         yet to encounter and repeat. Tab.~\ref{tab:circle_counting_algorithm_where_start}
         then tells which road number you are entering based on the sign and type
         of the crossing, and the direction you are walking. Eventually the code
-        will be exhausted, and the resulting tally of circles is the number of
+        will be exhausted, and the resulting tally is the number of
         circles from this resolution.
         \begin{figure}
             \centering
@@ -517,6 +525,24 @@
             \caption{Thickened Resolved Crossings with Labels}
             \label{fig:thickened_crossings_resolved_labeled}
         \end{figure}
+        \begin{table}
+            \centering
+            \begin{tabular}{c c c c}
+                Type&Sign&Direction&In\\
+                \hline
+                $O$&-&Forward&1\\
+                $O$&-&Backward&3\\
+                $O$&+&Forward&0\\
+                $O$&+&Backward&2\\
+                \hline
+                $U$&-&Forward&0\\
+                $U$&-&Backward&2\\
+                $U$&+&Forward&1\\
+                $U$&+&Backward&3
+            \end{tabular}
+            \caption{The Circle Counting Algorithm - Where to Start}
+            \label{tab:circle_counting_algorithm_where_start}
+        \end{table}
         \begin{table}
             \centering
             \begin{tabular}{c c c c}
@@ -544,24 +570,6 @@
             \end{tabular}
             \caption{The Circle Counting Algorithm - Where to Go}
             \label{tab:circle_counting_algorithm_where_go}
-        \end{table}
-        \begin{table}
-            \centering
-            \begin{tabular}{c c c c}
-                Type&Sign&Direction&In\\
-                \hline
-                $O$&-&Forward&1\\
-                $O$&-&Backward&3\\
-                $O$&+&Forward&0\\
-                $O$&+&Backward&2\\
-                \hline
-                $U$&-&Forward&0\\
-                $U$&-&Backward&2\\
-                $U$&+&Forward&1\\
-                $U$&+&Backward&3
-            \end{tabular}
-            \caption{The Circle Counting Algorithm - Where to Start}
-            \label{tab:circle_counting_algorithm_where_start}
         \end{table}
         \par\hfill\par
         Let's use the trefoil as an example. The $000_{2}$ resolution results
