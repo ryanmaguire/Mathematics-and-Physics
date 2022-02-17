@@ -1,0 +1,100 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire, Dartmouth College                                %
+%       Date:   2021/11/16                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+
+% Needed for figures.
+\usepackage{graphicx}
+
+% Needed for mathbb font style.
+\usepackage{amssymb}
+
+% Tools for creating the theorem environment.
+\usepackage{amsthm}
+
+% The align environment is here.
+\usepackage{amsmath}
+
+% Library of colors, used here for displaying code.
+\usepackage{xcolor}
+
+% Used for correct hyperlinks with figures.
+\usepackage[font={scriptsize}, hypcap=true, labelsep=colon]{caption}
+
+% Hyperlinks for labels.
+\usepackage{hyperref}
+
+% Used for writing algorithms.
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+% Display style for hyperlinks.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue
+}
+
+% Create a theorem environment, similar to most textbooks.
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+% Title page information.
+\title{A Survey of Algorithms for the Jones Polynomial}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        The Jones polynomial is one of the simpler knot invariants available
+        to topologists. It is easy enough to describe, and powerful enough to
+        distinguish a great many knots (thought it is not a perfect invariant).
+        It is amazing, then, that all known algorithms for its computation are
+        tremendously slow. In this survey different methods for computing the
+        Jones' polynomial are described and implemented in the C programming
+        language, to see which algorithm is best suited to the task of computing
+        the invariant for \textit{every day} knots
+        (say, less than 50 crossings).
+    \end{abstract}
+    \section{The Na\"{i}ve Algorithm}
+        The simplest algorithm for the Jones polynomial simply uses the
+        definition. The Kauffman bracket $\langle{L}\rangle$ of a link $L$ is
+        defined as follows:
+        \begin{align}
+            \langle{\emptyset}\rangle&=1\\
+            \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
+            \langle{L}\rangle&=\langle{L_{n,0}}\rangle-q\langle{L_{n,1}}\rangle
+        \end{align}
+        Here, $L\sqcup\mathbb{S}^{1}$ is the disjoint union
+        (the \textit{unlink}) of a circle $\mathbb{S}^{1}$ and a link $L$.
+        $L_{n,0}$ and $L_{n,1}$ are the links obtained from the 0 and 1
+        smoothing of the $n^{th}$ crossing in $L$. The list equation takes an
+        $N$ crossing link and reduces it to two $N-1$ crossing links. Using
+        the first two equations tells us how to compute the Kauffman bracket
+        once we have the disjoint union of a bunch of circles.
+\end{document}
+
