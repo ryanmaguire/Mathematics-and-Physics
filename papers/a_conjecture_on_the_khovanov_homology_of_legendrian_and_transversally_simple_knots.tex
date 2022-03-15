@@ -24,6 +24,7 @@
 
 % Tools for creating the theorem environment.
 \usepackage{amsthm}
+\usepackage{amsmath}
 
 % Hyperlinks for labels.
 \usepackage{hyperref}
@@ -37,6 +38,7 @@
 % Create a theorem environment, similar to most textbooks.
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -54,7 +56,7 @@
     \begin{abstract}
         \noindent
         A theorem of Kronheimer and Mrowka states that Khovanov homology is
-        able to detect the unknot \cite{JoshuaMSabloffWhatIsLegendrianKnot}.
+        able to detect the unknot \cite{kronheimermrowka2010}.
         That is, if a knot has the Khovanov homology of the unknot, then it is
         isomorphic to it. A similar result holds for Knot Floer
         homology. The unknot is the simplest of the torus knots, which is a
@@ -96,20 +98,155 @@
 	    \cite{EliashbergFraserClassificationTopTrivialLegKnots}, torus knots,
 	    and the figure eight knot \cite{EtnyreHondaContactTopologyI}. The torus
 	    knots are of particular importance since it provides an infinite
-	    family to test conjectures and computations with. On the other hand,
+	    family to test conjectures and computations. On the other hand,
 	    not every knot is Legendrian simple, the $m_{3}$ twist knot (also
 	    known as the $5_{2}$ knot) being an example discovered by Chekanov
 	    \cite{ChekanovDifAlgOfLegLinks}.
 	\section{Khovanov Homology}
 	    The Khovanov homology of a knot is a powerful, if computationally
 	    expensive%
-	    \footnote{The na\"{i}ve algorithm is exponential in time. Improvements
+	    \footnote{The na\"{i}ve algorithm is exponential in the number of
+	    crossings. Improvements
 	    by Bar-Natan \cite{Khovanov1999CatJonesPoly} have sped up computations
 	    but no polynomial-time algorithm is known at the time of this writing.},
 	    invariant first described by Mikhail Khovanov
 	    \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
 	    for an excellent introduction). It is closely related to the Jones
-	    polynomial of a knot but is able to distinguish many more knots.
+	    polynomial, but is able to distinguish many more knots. The homology
+	    groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum of
+	    homogeneous components $KH_{\ell}^{r}(L)$ and the
+	    \textit{Khovanov Polynomial} (See \cite{KatlasKhoHo}) is given by:
+	    \begin{equation}
+	        Kh(L)(q,t)=
+	        \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
+	    \end{equation}
+	    The Jones polynomial of $L$ is recovered via:
+	    \begin{equation}
+	        J(L)(q)=Kh(q,-1)
+	    \end{equation}
+	    Khovanov homology is not a perfect invariant. That is, there are
+	    distinct knots with the same Khovanov homology, but it is a powerful
+	    invariant and is capable of detecting certain knot types.
+	    \begin{theorem}[Kronheimer and Mrowka]
+            If a knot has the same Khovanov homology as the unknot, then the
+            knot is equivalent to the unknot.
+	    \end{theorem}
+	    The unknotting problem asks one to determine if a given knot diagram is
+	    equivalent to the unknot. Khovanov homology is a powerful enough tool
+	    to accomplish this task. Since the Khovanov polynomial is a
+	    generalization of the Jones polynomial, the following has been
+	    conjectured:
+	    \begin{conjecture}
+	        If a knot has the same Jones polynomial as the unknot, is the knot
+	        equivalent to the unknot?
+	    \end{conjecture}
+	    This is a restatement of Kronheimer and Mrowka's result, but for the
+	    Jones polynomial. At the time of this writing it has not been proven,
+	    but there is evidence for and against the claim. Morwen Thistlewaite
+	    has found links with the same Jones polynomial as the unlink
+	    \cite{Thistlethwaite2001LINKSWT}, and there is a 3-crossing virtual
+	    knot that has the same Jones polynomial as the unknot. For the claim,
+	    all knots of up to 24 crossings are either the unknot, or have a
+	    Jones polynomial different from the unknot
+	    \cite{VerificationUnknotJonesConjUpTo24}.
+	\section{Conjectures on Khovanov and Knot Floer Homology}
+	    Another homology theory that is deeply study is Knot Floer Homology
+	    (abbreviated KFH). KFH is also capable of detecting the unknot. Just as
+	    Khovanov homology is the categorification of the Jones polynomial, so
+	    is Knot Floer Homology for the Alexander polynomial.
+	    The question we wish to ask in this paper is whether the unknot is
+	    a special case of a broader class of knots for which Khovanov homology
+	    (and Knot Floer homology) is capable of detecting. There are two
+	    natural routes to take. The unknot is the simplest of the torus knots,
+	    and it is the simplest of the twist knots. Torus knots being an
+	    infinite family of Legendrian simple knots, we make the following
+	    conjecture:
+	    \begin{conjecture}
+	        If a knot type is Legendrian simple, does Khovanov homology and
+	        Knot Floer homology distinguish it from all other knot types?
+	    \end{conjecture}
+	    Numerical evidence has been tallied for all Torus knots with up to 50
+	    crossings against all knots of up to 17 crossings. There are many
+	    torus knots that have the same Jones polynomial as a non-torus knot
+	    ($T(2,5)$ matches a 10 crossing knot and a 17 crossing knot, $T(2,7)$
+	    matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
+	    so we cannot generalize the Jones unknot conjecture. Nevertheless, in
+	    all cases the Khovanov homologies were different.
+	    \par\hfill\par
+	    The computation was done as follows. There are libraries for Python and
+	    Sage for working with knot polynomials. In particular, we used
+	    Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
+	    \cite{sage}, and our own ever-growing C library. The need for four
+	    different libraries was for the sake of sanity. One library alone is
+	    sufficient for the computation of the Jones polynomial but it never
+	    hurts to double check. The Jones polynomials of all torus knots up to
+	    50 crossings were computed using the formula:
+	    \begin{equation}
+	        J(T(m,n))(q)=q^{(m-1)(n-1)/2}
+	            \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
+	    \end{equation}
+	    Using any of the aforementioned libraries, the Jones polynomial of all
+	    knots up to 17 crossings was computed and compared against the table of
+	    torus knot Jones polynomials we've computed. If a match was found,
+	    the regina Library was used to determine if the knots were actually
+	    identical. That is, if the knot whose Jones polynomial was being
+	    compared against the torus knots was indeed a torus knot itself. If the
+	    knots were distinct, this knot was saved in a text file for later
+	    examination. At the end of the computation 4 non-torus knots had the
+	    same Jones polynomial as a torus knot (the 4 mentioned previously).
+	    Since the Khovanov polynomial contains the Jones polynomial in it
+	    (recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
+	    the same Khovanov homology as a torus knot were these 4.
+	    \par\hfill\par
+        Using the Java library JavaKh\footnote{%
+            Thanks must be paid to Nikolay Pultsin who made edits to
+            JavaKh-v2 so that it may run on a GNU/Linux machine using
+            OpenJDK 17.
+        }
+        we found that these four knots with the same Jones polynomials as some
+        torus knots all had different Khovanov homologies. Thus, we have the
+        following claim:
+        \begin{theorem}
+            If a knot has less than or equal to 17 crossings and has the
+            Khovanov homology of a torus knot with less than 50 crossings, then
+            the knot is equivalent to the torus knot.
+        \end{theorem}
+        A similar search for Knot Floer Homology has been performed for up to 15
+        crossings. First, the Alexander polynomial was computed.
+        In comparison to the Jones polynomial (which has no known
+        \textit{classical} polynomial-time algorithm)\footnote{%
+            A \textit{quantum} algorithm has been discovered
+            \cite{JonesQuantumAlgorithm}.
+        }, the na\"{i}ve algorithm for the Alexander polynomial is cubic in
+        time (one need only compute the determinant of a particular matrix), but
+        improvements have been made here as well. Needless to say, this greatly
+        improves performance in the search for a match for Knot Floer homology.
+        \begin{theorem}
+            If a knot with less than or equal to 15 crossings has the same
+            Knot Floer homology as a torus knot with less than or equal to 50
+            crossings, then the knot is equivalent to the torus knot.
+        \end{theorem}
+        Lastly, a search through the twist knots yielded some more results.
+        The Jones polynomials of the twist knots are known, with the formula:
+        \begin{equation}
+            J(m_{n})(q)=
+            \begin{cases}
+                (1+q^{-2}+q^{-n}+q^{-n-3})/(1+q),&n\textrm{ odd}\\
+                (1+q-q^{3-n}+q^{-n})/(1+q),&n\textrm{ even}
+            \end{cases}
+        \end{equation}
+        A search through all knots up to 17 crossings against all twist knots
+        up to 40 crossings provided many matches for the Jones polynomial, but
+        none for Khovanov homology.
+    \section{Future Work}
+        The process of looping through knots and comparing invariants is
+        \textit{embarrassingly parallelizable} and yet no attempts at
+        parallel processing has been attempted. We wish to check all crossings
+        up to 20 crossings in the near future and multiprocessing may be the
+        key to doing this in a sane amount of time. We also wish to check
+        Knot Floer Homology up to 17 crossings as we did Khovanov homology.
+        At present, only up to 15 crossings have been checked for the Knot
+        Floer homology conjecture.
     \newpage
     \bibliographystyle{plain}
     \bibliography{bib.bib}
