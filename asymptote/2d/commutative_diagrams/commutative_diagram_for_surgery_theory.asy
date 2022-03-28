@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -65,7 +65,7 @@ label("$M$", M);
 label("$BO$", BO);
 label("$BG$", BG);
 
-/*  Shift the labels by 2.                                                    */
+/*  Shift the labels to the right.                                            */
 T = shift(1.5, 0.0);
 M = T*M;
 BO = T*BO;
@@ -81,7 +81,8 @@ label("$M$", M);
 label("$BO$", BO);
 label("$BG$", BG);
 
-/*  Shift the labels right by 2 and down by 0.5.                              */
+/*  Shift the labels right and down. This last set of labels is bigger, hence *
+ *  the need for the vertical shift.                                          */
 T = shift(1.5, -0.5);
 M = T*M;
 BO = T*BO;

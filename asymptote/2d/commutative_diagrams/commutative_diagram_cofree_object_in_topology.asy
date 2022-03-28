@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -26,7 +26,7 @@
  *      function f':Y -> C(X) such that f'(y) = alpha(f(y)). The space that   *
  *      does this is the trivial topological space on X, the only open sets   *
  *      are the empty set and X. This figure shows this commutative diagram.  *
- ******************************************************************************/ 
+ ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *
  *  asymptote/ folder of this project. You'll need to edit the                *
