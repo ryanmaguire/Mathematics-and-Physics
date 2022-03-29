@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -19,12 +19,18 @@
  ******************************************************************************
  *  Author:     Ryan Maguire                                                  *
  *  Date:       October 6, 2021                                               *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Figure from a first semester calculus course. This shows a secant     *
+ *      line approximating the derivative at a particular point.              *
  ******************************************************************************/
 
 /*  Graphing tools are here.                                                  */
 import graph;
 
-/*  tikz style arrows are here.                                               */
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
 import custom_arrows;
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
@@ -52,7 +58,7 @@ real fstart = -0.1;
 real fend = 1.0;
 
 /*  Size of a dot.                                                            */
-real rDot = 0.005;
+real rDot = 0.01;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;

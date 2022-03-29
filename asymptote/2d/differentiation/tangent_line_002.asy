@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -19,12 +19,18 @@
  ******************************************************************************
  *  Author:     Ryan Maguire                                                  *
  *  Date:       October 6, 2021                                               *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Figure from a first semester calculus course. This shows the tangent  *
+ *      line for a function at a point.                                       *
  ******************************************************************************/
 
 /*  Graphing tools are here.                                                  */
 import graph;
 
-/*  tikz style arrows are here.                                               */
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
 import custom_arrows;
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
@@ -50,21 +56,18 @@ size(256);
 int samples = 30;
 
 /*  Start and end for the x and y axes.                                       */
-real start = -0.2;
-real end = 1.2;
+real start = -0.1;
+real end = 1.1;
 
 /*  Start and end points for the function.                                    */
-real fstart = -0.1;
+real fstart = 0.0;
 real fend = 1.0;
-
-/*  Size of a dot.                                                            */
-real rDot = 0.005;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
 
 /*  The point we care about.                                                  */
-real x0 = 0.2;
+real x0 = 0.3;
 real y0 = func(x0);
 pair P0 = (x0, y0);
 
@@ -90,7 +93,7 @@ draw(yl, (0.0, start) -- (0.0, end), E, axesp, SharpArrow(arsize));
 /*  And draw the function.                                                    */
 draw(graph(func, fstart, fend, n=samples, operator ..), funcp);
 
-/*  Compute the slope and y-intercept of the secant line.                     */
+/*  Compute the slope and y-intercept of the tangent line.                    */
 m = func_prime(x0);
 b = y0 - m*x0;
 
