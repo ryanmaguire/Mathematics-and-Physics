@@ -32,5 +32,5 @@ size(128);
 defaultpen(black + linewidth(0.4pt));
 
 /*  Draw the two lines from Galileo's paradox.                                */
-draw((-1.0,  0.0)--(1.0,  0.0));
-draw((-0.5, -0.5)--(0.5, -0.5));
+draw((-1.0,  0.0) -- (1.0,  0.0));
+draw((-0.5, -0.5) -- (0.5, -0.5));
