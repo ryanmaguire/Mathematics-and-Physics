@@ -210,7 +210,7 @@
             \end{equation}
             Is this a function? It does indeed take in any rational number,
             and does return a rational number. The question is whether or not
-            the function is undefined. If two rational numbers $a/b$ and
+            the function is well-defined. If two rational numbers $a/b$ and
             $c/d$ are equal, then $c/d = ka/kb$ for some non-zero integer $k$.
             But then:
             \begin{equation}
@@ -245,14 +245,14 @@
                     &=9+x
             \end{align}
             So we have $10x=9+x$, which implies $9x=9$, and therefore $x=1$.
-            Because $1.0=0.999...$, the formula $f$ is ambiguous at $1$.
+            Because $1.0=0.999...$, the formula $f$ is ambiguous for $1$.
             Should $f(1)=0$ or should $f(1)=9$? $f$ does not define a function.
         \end{example}
         The sets $A$ and $B$ are called the \textit{domain} and
         \textit{codomain}, respectively. More synomymns, in topology the
         codomain is often called the \textit{target}. Again, I will stick with
         codomain and avoid synomymns. The codomain should not be confused with
-        the \textit{range} of a function. The range is a subset of the domain.
+        the \textit{range} of a function. The range is a subset of the codomain.
         Namely, it is the set of all elements $b\in{B}$ that have a
         corresponding element $a\in{A}$ with $f(a)=b$.
         \begin{example}
@@ -262,8 +262,8 @@
             squares to $-1$, and hence $f(x)=x^{2}=-1$ has no real solution.
             So $-1$ is \textit{not} in the range. It is in the codomain,
             however, by the definition of $f$
-            (that is, $f:\mathbb{R}\rightarrow{R}$ is defined as a function
-            from $\mathbb{R}$ to $\mathbb{R}$).
+            (that is, $f:\mathbb{R}\rightarrow\mathbb{R}$ is defined as a
+            function from $\mathbb{R}$ to $\mathbb{R}$).
         \end{example}
         \begin{definition}
             The image of a subset $\mathcal{U}\subseteq{A}$ of a function
@@ -285,7 +285,7 @@
                     f(a)\in\mathcal{V}\,\}
             \end{equation}
         \end{definition}
-        The notation $f[\mathcal{U}]$ and $f^{-1}[\mathcal{V}]$ is not
+        The notations $f[\mathcal{U}]$ and $f^{-1}[\mathcal{V}]$ are not
         universal. Many texts write $f(\mathcal{U})$ and
         $f^{-1}(\mathcal{V})$. This creates ambiguity as to whether or not I
         mean the inverse function $f^{-1}$ or the pre-image. A similar
@@ -295,8 +295,8 @@
         function $f:A\rightarrow{B}$, what should $f(C)$ mean? The value of
         $f$ at the element $C\in{A}$, or the image of the subset
         $C\subseteq{A}$? I once stumbled across the notation
-        $f[C]$ for subsets and thought it was genius, and have adopted it
-        since.
+        $f[C]$ for subsets in some text whose name I've forgotten and thought
+        it was genius. I have adopted it since.
         \begin{definition}
             The fiber of an element $b\in{B}$ under a function
             $f:A\rightarrow{B}$ between two sets $A$ and $B$ is the pre-image
@@ -316,7 +316,21 @@
             \end{equation}
         \end{definition}
         Note that the domain of $g$ needs to be the codomain of $f$ for this
-        to be well-defined.
+        to be well-defined. The identity function on a set $A$ is the function
+        $\textrm{id}_{A}:A\rightarrow{A}$ such that $\textrm{id}_{A}(a)=a$ for
+        all $a\in{A}$.
+        \begin{definition}
+            The inverse of a function $f:A\rightarrow{B}$ from a set $A$ to
+            a set $B$ is a function $g:B\rightarrow{A}$ such that
+            $f\circ{g}=\textrm{id}_{B}$ and
+            $g\circ{f}=\textrm{id}_{A}$.
+        \end{definition}
+        Weaker notions exist, such as left and right inverses.
+        \begin{definition}
+            A left inverse of a function $f:A\rightarrow{B}$ from a set $A$ to
+            a set $B$ is a function $g:B\rightarrow{A}$ such that
+            $g\circ{f}=\textrm{id}_{A}$.
+        \end{definition}
         \begin{definition}
             An injective function from a set $A$ to a set $B$ is a function
             $f:A\rightarrow{B}$ such that for all $a_{0},a_{1}\in{A}$ with
@@ -329,4 +343,95 @@
             $g(x)=x^{2}$ is not injective. $(-1)^{2}=1^{2}$, but
             $-1\ne{1}$.
         \end{example}
+        \begin{theorem}
+            If $A$ and $B$ are non-empty sets, and if $f:A\rightarrow{B}$ is a
+            function, then $f$ has a left inverse $g:B\rightarrow{A}$ if and
+            only if $f$ is injective.
+        \end{theorem}
+        \begin{proof}
+            If $f$ is injective, then for all $a\in{A}$ there is a unique
+            $b\in{B}$ such that $f(a)=b$. Since $A$ is non-empty, there exists
+            an element $x\in{A}$. Define $g:B\rightarrow{A}$ as follows:
+            \begin{equation}
+                g(b)=
+                \begin{cases}
+                    a&b\in{f[A]}\textrm{ and }f(a)=b\\
+                    x&\textrm{otherwise}
+                \end{cases}
+            \end{equation}
+            Since $f$ is injective, $g$ is well-defined. Moreover, for all
+            $a\in{A}$, $(g\circ{f})(a)=g(f(a))=g(b)=a$, so
+            $g\circ{f}=\textrm{id}_{A}$. Next, if $f:A\rightarrow{A}$ has a
+            a left-inverse $g:B\rightarrow{A}$, then suppose $a_{1},a_{2}\in{A}$
+            and $f(a_{1})=f(a_{2})$. Then
+            $g(f(a_{1}))=g(f(a_{2}))$. But $g$ is a left inverse so
+            $a_{1}=g(f(a_{1}))=g(f(a_{2}))=a_{2}$ and therefore $a_{1}=a_{2}$.
+            That is, $f$ is injective.
+        \end{proof}
+        \begin{definition}
+            A right inverse of a function $f:A\rightarrow{B}$ from a set $A$ to
+            a set $B$ is a function $g:B\rightarrow{A}$ such that
+            $f\circ{g}=\textrm{id}_{B}$.
+        \end{definition}
+        \begin{definition}
+            A surjective function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that for all $b\in{B}$ there is an
+            $a\in{A}$ such that $f(a)=b$.
+        \end{definition}
+        \begin{theorem}
+            If $A$ and $B$ are sets, and if $f:A\rightarrow{B}$ is a function,
+            then $f$ has a right inverse $g:A\rightarrow{B}$ if and only if
+            $f$ is surjective.
+        \end{theorem}
+        \begin{proof}
+            If $f:A\rightarrow{B}$ is surjective, then for all $b\in{B}$ there
+            is an $a\in{A}$ such that $f(a)=b$. Given a $b\in{A}$, label such
+            a value $a\in{A}$ as $a_{b}$. Define $g$ to be:
+            \begin{equation}
+                g(b)=a_{b}
+            \end{equation}
+            Then $(f\circ{g})(b)=f(g(b))=f(a_{b})=b$ and thus $g$ is a right
+            inverse. Next, if $f$ has a right inverse, let $g:B\rightarrow{A}$
+            be such a right inverse, and let $b\in{B}$. Let $a=g(b)$. Since
+            $g$ is a right inverse, $f(a)=f(g(b))=(f\circ{g})(b)=b$. That is,
+            $f$ is surjective.
+        \end{proof}
+        \begin{definition}
+            A bijective function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that $f$ is injective and surjective.
+        \end{definition}
+        \begin{theorem}
+            If $A$ and $B$ are sets, if $f:A\rightarrow{B}$ is a function,
+            if $g_{R}:B\rightarrow{A}$ is a right inverse of $f$, and if
+            $g_{L}:B\rightarrow{A}$ is a left inverse of $f$, then
+            $g_{R}=g_{L}$.
+        \end{theorem}
+        \begin{proof}
+            If $f$ has a left inverse, then $f$ is injective. If $f$ has a
+            right inverse, then $f$ is surjective. Therefore $f$ is bijective.
+            If $b\in{B}$, there is an $a\in{A}$ such that $f(a)=b$. But then
+            $g_{L}(b)=g_{L}(f(a))=(g_{L}\circ{f})(a)$. But since
+            $g_{L}$ is a left inverse, $(g_{L}\circ{f})(a)=a$. Thus,
+            $g_{L}(b)=a$. But since $g_{R}$ is a right inverse,
+            $(f\circ{g}_{R})(b)=b$ and therefore $f(g_{R}(b))=b$. But
+            $f(a)=b$ and $f$ is injective. Therefore $g_{R}(b)=a$. But
+            $g_{L}(b)=a$ and $b\in{B}$ is arbitrary. Therefore, $g_{L}=g_{R}$.
+        \end{proof}
+        \begin{theorem}
+            If $A$ and $B$ are sets, and if $f:A\rightarrow{B}$ is a function,
+            then $f$ is invertible if and only if it is bijective.
+        \end{theorem}
+        \begin{proof}
+            If $f$ is invertible, then it has a left inverse and a right
+            inverse. By the previous theorem, $f$ is therefore injective and
+            surjective, and is therefore bijective. Next, if $f$ is bijective,
+            then it is injective and surjective. By the previous theorems, $f$
+            has a left inverse and a right inverse. But if $f$ has a right
+            inverse $g_{R}$ and a left inverse $g_{L}$, then $g_{R}=g_{L}$.
+            Thus, $f$ is invertible with inverse $g=g_{L}=g_{R}$.
+        \end{proof}
+        \begin{definition}
+            A permutation on a set $A$ is a bijective function
+            $f:A\rightarrow{A}$.
+        \end{definition}
 \end{document}
