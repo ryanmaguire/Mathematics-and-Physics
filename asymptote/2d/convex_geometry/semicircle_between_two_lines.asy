@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Figure from convex geometry notes. This depicts a semicircle bounded  *
+ *      by two lines in the plane.                                            *
  ******************************************************************************/
 
 /*  Make sure custom_arrows.asy is in your path. This file is found in the    *

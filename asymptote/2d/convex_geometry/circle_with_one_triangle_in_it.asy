@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -218,4 +218,3 @@ filldraw(circle(TriPts[2], rDot), black);
 /*  Label points on the x and y axes.                                         */
 label("$-1$", (-1.02, -0.1));
 label("$1$",  (0.10, 1.0));
-

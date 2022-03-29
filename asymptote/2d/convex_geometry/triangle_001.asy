@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Figure from convex geometry notes. This shows a triangle with a       *
+ *      perpendicular to the x-axis drawn. All sides and lengths are labelled.*
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
