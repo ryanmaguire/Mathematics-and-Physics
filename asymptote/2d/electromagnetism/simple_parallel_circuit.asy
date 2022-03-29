@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draw a parallel circuit. This figure is for an intro course in        *
+ *      electromagnetism or in circuit theory.                                *
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
