@@ -68,17 +68,13 @@ real arsize = 5bp;
 pen labelp = fontsize(6pt);
 
 /*  Start and end points for the line representing the linear equation.       */
-pair start = (-2.32, -4.2);
-pair end = (2.72, 4.2);
+pair start = (-4.0, -1.0);
+pair end = (4.0, 3.0);
 
 /*  Radius for dots representing points in the plane.                         */
 real rDot = 0.07;
 
-/*  Points for the line.                                                      */
-pair start = (-4.0, -1.0);
-pair end = (4.0, 3.0);
-
-/*  Coordinates for the points on the triangle indicated rise over run.       */
+/*  Coordinates for the points on the triangle indicating rise over run.      */
 pair p1 = (0.0, 1.0);
 pair p2 = (2.0, 1.0);
 pair p3 = (2.0, 2.0);
