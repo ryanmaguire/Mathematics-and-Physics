@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -72,4 +72,4 @@ draw(P -- Y, dpen);
 draw(graph(sqrt, 0.0, 2.0, n_samples, operator ..), MidSharpArrow(arsize));
 
 /*  Label the function.                                                       */
-label("$y=x^{2}$", (1.0, 0.8));
+label("$y^{2}=x$", (1.0, 0.8));
