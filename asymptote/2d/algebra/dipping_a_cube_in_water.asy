@@ -31,12 +31,12 @@ settings.outformat = "pdf";
 size(128);
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.3pt));
+defaultpen(black + linewidth(0.5pt));
 
 /*  Other pens used.                                                          */
 pen dashp = defaultpen + linetype("4 4");
 pen thinp = black + linewidth(0.1pt);
-pen bluep = blue + linewidth(0.3pt);
+pen bluep = blue + linewidth(0.5pt);
 pen thindashp = thinp + linetype("4 4");
 pen bluedashp = bluep + linetype("4 4");
 pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
@@ -44,7 +44,7 @@ pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
 /*  Function for making 3D drawings with 2D points.                           */
 pair xyzpoint(real x, real y, real z)
 {
-    pair X = (-0.5*x, -0.5*x);
+    pair X = (-0.4*x, -0.4*x);
     pair Y = (y, 0.0);
     pair Z = (0.0, z);
     return X + Y + Z;
