@@ -1,0 +1,270 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+
+\documentclass{article}
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{hyperref}                   % Hyperlinks.
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+% Colors for hyperref.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+\title{Complex Analysis}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{notation}{Notation}[section]
+\newtheorem{problem}{Problem}[section]
+
+\begin{document}
+    \maketitle
+    \section{HW 1}
+        \begin{problem}
+            $\exp(z)$ is periodic with period $2\pi{i}$ since for all
+            $z\in\mathbb{C}$, $z=(x,y)$ we have:
+            \begin{align}
+                \exp(z)&=\Big(\exp(x)\cos(y),\,\exp(x)\cos(y+2\pi)\Big)\\
+                    &=\Big(\exp(x)\cos(y+2\pi),\,\exp(x)\sin(y+2\pi)\Big)\\
+                    &=\exp(z+2\pi{i})
+            \end{align}
+            For all $z,w\in\mathbb{Z}$, $z=(x_{0},y_{0})$, $w=(x_{1},y_{1})$,
+            we have $\exp(z+w)=\exp(z)\exp(w)$ since:
+            \begin{align}
+                \exp(z+w)&=
+                    \Big(
+                        \exp(x_{0}+x_{1})\cos(y_{0}+y_{1}),\,
+                        \exp(x_{0}+x_{1})\sin(y_{0}+y_{1})
+                    \Big)\\
+                    &=\Big(
+                        \exp(x_{0})\exp(x_{1})\cos(y_{0}+y_{1}),\,
+                        \exp(x_{0})\exp(x_{1})\sin(y_{0}+y_{1})
+                    \Big)\\
+                    &=\exp(x_{0})\exp(x_{1})\Big(
+                        \cos(y_{0}+y_{1}),\,
+                        \sin(y_{0}+y_{1})
+                    \Big)\\
+                    &=\exp(x_{0})\exp(x_{1})\Big(
+                        \cos(y_{0})\cos(y_{1})-\sin(y_{0})\sin(y_{1}),\,
+                        \sin(y_{0})\cos(y_{1})+\cos(y_{0})\sin(y_{1})
+                    \Big)\\
+                    &=\exp(x_{0})\exp(x_{1})\Big(
+                        \cos(y_{0}),\,\sin(y_{0})
+                    \Big)\Big(
+                        \cos(y_{1}),\,\sin(y_{1})
+                    \Big)\\
+                    &=\Big(
+                        \exp(x_{0})\cos(y_{0}),\,\exp(x_{0})\sin(y_{0})
+                    \Big)\Big(
+                        \exp(x_{1})\cos(y_{1}),\,\exp(x_{1})\sin(y_{1})
+                    \Big)\\
+                    &=\exp(z)\exp(w)
+            \end{align}
+            $\exp(-z)=1/\exp(z)$ since:
+            \begin{equation}
+                \frac{1}{\exp(z)}=
+                    \frac{\textrm{conj}\big(\exp(z)\big)}{|\exp(z)|^{2}}
+            \end{equation}
+            But for $z=(x,y)$, $|\exp(z)|^{2}=\exp(2x)$ since
+            $\cos^{2}(y)+\sin^{2}(y)=1$, hence:
+            \begin{align}
+                |\exp(z)|^{2}&=
+                    \Big(\exp(x)\cos(y)\Big)^{2}+\Big(\exp(x)\sin(y)\Big)^{2}\\
+                    &=\exp(x)^{2}\Big(\cos(y)^{2}+\sin(y)^{2}\Big)\\
+                    &=\exp(x)^{2}\\
+                    &=\exp(2x)
+            \end{align}
+            By the definition of conjugate:
+            \begin{equation}
+                \textrm{conj}\big(\exp(z)\big)
+                =\Big(\exp(x)\cos(y),\,-\exp(x)\sin(y)\Big)
+            \end{equation}
+            By trigonometric rules, we have:
+            \begin{equation}
+                \textrm{conj}\big(\exp(z)\big)
+                =\Big(\exp(x)\cos(-y),\,\exp(x)\sin(-y)\Big)
+            \end{equation}
+            But then:
+            \begin{align}
+                \frac{1}{\exp(z)}&=
+                \frac{\textrm{conj}\big(\exp(z)\big)}{|\exp(z)|^{2}}\\
+                &=\frac{\exp(x)\Big(\cos(-y),\,\sin(-y)\Big)}{\exp(2x)}\\
+                &=\exp(-x)\Big(\cos(-y),\,\sin(-y)\Big)\\
+                &=\Big(\exp(-x)\cos(-y),\,\exp(-x)\sin(-y)\Big)\\
+                &=\exp(-z)
+            \end{align}
+            Lastly, $\exp(z-w)=\exp(z)/\exp(w)$ since:
+            \begin{align}
+                \exp(z-w)&=\exp\big(z+(-w)\big)\\
+                    &=\exp(z)\exp(-w)\\
+                    &=\exp(z)\frac{1}{\exp(w)}\\
+                    &=\frac{\exp(z)}{\exp(w)}
+            \end{align}
+        \end{problem}
+        \begin{problem}
+            This is the Dirichlet kernel, so named because it appears in
+            Dirichlet's proof that certain Fourier series converge. We have:
+            \begin{align}
+                \sum_{n=0}^{N}\cos(n\theta)&=
+                    \sum_{n=0}^{N}\Big(
+                        \frac{\exp(in\theta)+\exp(-in\theta)}{2}
+                    \Big)\\
+                &=\frac{1}{2}\sum_{n=0}^{N}\exp(in\theta)+
+                    \frac{1}{2}\sum_{n=0}^{N}\exp(-in\theta)\\
+                &=\frac{1}{2}\sum_{n=0}^{N}\exp(i\theta)^{n}+
+                    \frac{1}{2}\sum_{n=0}^{N}\exp(-i\theta)^{n}\\
+                &=\frac{1}{2}\Big(
+                    \frac{1-\exp(i\theta)^{N+1}}{1-\exp(i\theta)}
+                \Big)+\frac{1}{2}\Big(
+                    \frac{1-\exp(-i\theta)^{N+1}}{1-\exp(-i\theta)}
+                \Big)\\
+                &=\frac{1}{2}\Big(
+                    \frac{1-\exp(i\theta)^{N+1}}{1-\exp(i\theta)}
+                \Big)-\frac{\exp(i\theta)}{2}\Big(
+                    \frac{1-\exp(-i\theta)^{N+1}}{1-\exp(i\theta)}
+                \Big)\\
+                &=\frac{1}{2(1-\exp(i\theta)}
+                \Big(
+                    1-\exp\big(i(N+1)\theta\big)-\exp(i\theta)
+                    +\exp(i\theta)\exp\big(-i(N+1)\theta\big)
+                \Big)\\
+                &=\frac{1}{2(1-\exp(i\theta)}
+                \Big(
+                    1-\exp\big(i(N+1)\theta\big)-\exp(i\theta)
+                    +\exp(-iN\theta)
+                \Big)\\
+                &=\frac{1}{2}+
+                \frac{\exp(-iN\theta)-\exp\big(i(N+1)\theta\big)}
+                     {2\big(1-\exp(i\theta)\big)}\\
+                &=\frac{1}{2}+
+                    \frac{\cos(N\theta)-i\sin(N\theta)-
+                          \cos\big((N+1)\theta)-i\sin\big((N+1)\theta\big)}
+                         {2\big(1-\cos(\theta)-i\sin(\theta)\big)}\\
+                &=\frac{1}{2}+
+                    \frac{1}{2}\frac{1-\cos(\theta)+i\sin(\theta)}
+                         {\big(1-\cos(\theta)\big)^{2}+\sin^{2}(\theta)}
+                    \Big(\cos(N\theta)-i\sin(N\theta)-
+                          \cos\big((N+1)\theta)-i\sin\big((N+1)\theta\Big)\\
+                &=\frac{1}{2}+
+                    \frac{1}{2}\frac{1-\cos(\theta)+i\sin(\theta)}
+                         {2-2\cos(\theta)\sin(\theta)}
+                    \Big(\cos(N\theta)-i\sin(N\theta)-
+                          \cos\big((N+1)\theta)-i\sin\big((N+1)\theta\Big)\\
+                &=\textrm{I got bored. See next page.}
+            \end{align}
+            Induction is easier. Base case is $\tfrac{1}{2}=\tfrac{1}{2}$.
+            We have:
+            \begin{align}
+                \sum_{n=0}^{N+1}\cos(n\theta)
+                &=\sum_{n=0}^{N}\cos(n\theta)+\cos\big((N+1)\theta\big)\\
+                &=\frac{1}{2}+
+                    \frac{\sin\big((N+\frac{1}{2})\theta\big)}
+                         {\sin\big(\frac{\theta}{2}\big)}
+                +\cos\big((N+1)\theta)\\
+                &=\frac{1}{2}+\frac{\sin\big((N+\frac{1}{2})\theta)+
+                    \sin\big(\frac{\theta}{2}\big)\cos\big((N+1)\theta\big)}
+                    {\sin\big(\frac{\theta}{2}\big)}\\
+                &=\frac{1}{2}+\frac{\sin\big((N+1+\frac{1}{2})\theta\big)}
+                    {\sin\big(\frac{\theta}{2}\big)}
+            \end{align}
+            This last equality comes from the expansion of $\sin(a+b)$.
+        \end{problem}
+        \begin{problem}
+            We have:
+            \begin{align}
+                \sum_{n=0}^{N-1}\omega^{n}
+                    &=\frac{1-\omega^{N}}{1-\omega}\\
+                    &=\frac{1-\exp\big(\frac{2\pi{i}}{N}\big)^{N}}{1-\omega}\\
+                    &=\frac{1-1}{1-\omega}\\
+                    &=0
+            \end{align}
+            For $N^{th}$ roots of $-1$, $\omega=\exp(\tfrac{\pi{i}}{N})$.
+            The same geometric sum shows that $1+\omega+\cdots+\omega^{N-1}=0$.
+        \end{problem}
+        \begin{problem}
+            If $z_{0}$ is a root of $p$, then so is $\textrm{conj}(z_{0})$ where
+            $p$ is a polynomial with \textit{real} coefficients, since:
+            \begin{align}
+                p\big(\textrm{conj}(z_{0})\big)
+                &=\sum_{n=0}^{N}a_{n}\big(\textrm{conj}(z_{0})\big)^{n}\\
+                &=\sum_{n=0}^{N}a_{n}\textrm{conj}(z_{0}^{n})\\
+                &=\sum_{n=0}^{N}\textrm{conj}(a_{n}z_{0}^{n})\\
+                &=\textrm{conj}\Big(\sum_{n=0}^{N}a_{n}z_{0}^{n}\Big)\\
+                &=\textrm{conj}\big(p(z_{0})\big)\\
+                &=\textrm{conj}(0)\\
+                &=0
+            \end{align}
+        \end{problem}
+        \begin{problem}
+            We have:
+            \begin{equation}
+                \sum_{n=0}^{N}ca^{n}=c\frac{1-a^{N+1}}{1-a}
+            \end{equation}
+            The term $a^{N+1}$ diverges for $|a|>1$ and converges to zero for
+            $|a|<1$. The can be seen via $a=r\exp(i\theta)$, so
+            $a^{n}=r^{n}\exp(in\theta)$. Hence:
+            \begin{equation}
+                \sum_{n=0}^{\infty}ca^{n}=\frac{c}{1-a}\quad\quad|a|<1
+            \end{equation}
+            If $|a|=1$ then the sum also diverges since $|a^{n}|=|a|^{n}=1$,
+            which violates Cauchy's test that the magnitude of the terms must
+            tend to zero as $n$ tends to infinity.
+        \end{problem}
+        \begin{problem}
+            Let $\varepsilon>0$. For each $n\in\mathbb{N}$, let
+            $A_{n}=f_{n}^{-1}[(-\infty,\varepsilon)]$. Since
+            $f_{n}$ converges to zero, for all $x\in{K}$ there is an
+            $n\in\mathbb{N}$ such that $f_{n}(x)<\varepsilon$, and hence
+            $x\in{A}_{n}$. Since each $f_{n}$ is continuous, each $A_{n}$ is
+            open. Hence $A_{n}$ is an open cover of $K$. Since $K$ is compact,
+            there is a finite subcover. Since $f_{n}$ is monotonically
+            decreasing to zero, if $n_{0}<n_{1}$, then
+            $A_{n_{0}}\subseteq{A}_{n_{1}}$. That is, if
+            $f_{n_{0}}(x)<\varepsilon$, then $f_{n_{1}}(x)<\varepsilon$ as
+            well since $f_{n}$ is monotonically decreasing. Let $N$ be the
+            largest $n\in\mathbb{N}$ such that $A_{n}$ is contained in the
+            finite subcover. Then for all $n<N$, $A_{n}\subseteq{A_{N}}$ and
+            hence $\cup_{n=0}^{N}A_{n}=A_{N}$. But since $A_{0},\dots,A_{N}$
+            forms a finite subcover, $K=\cup_{n=0}^{N}A_{n}$ and hence
+            $A_{N}=K$. That is, for all $x\in{K}$, and for all $n>N$,
+            $f_{n}(x)<\varepsilon$. Thus, the convergence is uniform.
+        \end{problem}
+\end{document}
