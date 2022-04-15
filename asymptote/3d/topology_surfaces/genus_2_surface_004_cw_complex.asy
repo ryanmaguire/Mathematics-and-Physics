@@ -1,20 +1,43 @@
-// Boilerplate stuff.
-import settings;
+/******************************************************************************
+ *                                  LICENSE                                   *
+ ******************************************************************************
+ *  This file is part of Mathematics-and-Physics.                             *
+ *                                                                            *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draw a genus 2 surface and decompose it as a CW complex.              *
+ ******************************************************************************/
+
+/*  Used for rendering implicitly defined 3D objects.                         */
 import smoothcontour3;
+
+/*  Used for graphing 3D functions and curves.                                */
 import graph3;
 
-if(!settings.multipleView)  settings.batchView=false;
+/*  PDF works best with LaTeX, output this. Also set the render factor high.  */
+import settings;
+settings.outformat = "pdf";
+settings.render = 8;
 
-settings.render=8;
-settings.outformat="pdf";
-settings.inlineimage=true;
-settings.embed=true;
-settings.toolbar=false;
-viewportmargin=(2, 2);
+/*  Size of the image. For 3D objects it seems best to have this set to a     *
+ *  power of 2, otherwise weird vertical or horizontal black lines may appear.*/
+size(256);
 
-currentprojection=perspective(camera = (20, 80, 30), up   = (0, 0, 1),
-                              target = (0,  0,  0),  zoom = 0.85);
-
+/*  How the image is being drawn on a 2D picture.                             */
+currentprojection = perspective(20.0, 80.0, 30.0);
 // Size of the output figure.
 size(256);
 

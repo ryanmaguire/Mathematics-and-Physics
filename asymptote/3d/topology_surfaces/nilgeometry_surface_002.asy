@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -35,7 +35,7 @@ settings.render = 8;
 size(256);
 
 /*  Camera angle.                                                             */
-currentprojection = perspective(-10, -8, 4);
+currentprojection = perspective(-10.0, -8.0, 4.0);
 
 /*  Setup the light.                                                          */
 currentlight = light(
