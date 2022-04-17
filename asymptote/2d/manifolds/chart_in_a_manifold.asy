@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -18,9 +18,13 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
+import custom_arrows;
+
 /*  Draw the image on a PDF file.                                             */
 import settings;
-import custom_arrows;
 settings.outformat = "pdf";
 
 /*  Size of the output figure.                                                */
@@ -75,20 +79,22 @@ transform TShift = shift(xshift, yshift);
 /*  Pens used for filling.                                                    */
 pen[] fillp = {cyan, red + 0.3*white};
 
-/*------------------------SPECIFY POINTS AND ANGLES---------------------------*/
+/*-------------------------SPECIFY POINTS AND ANGLES--------------------------*/
 
 /*  Points used to define the x and y axes.                                   */
 pair[] XAxes = {(-0.5,  0.0), (3.0, 0.0)};
 pair[] YAxes = {( 0.0, -0.5), (0.0, 3.0)};
 
 /*  Points and angles for the manifold X, the open set U, and its image.      */
-pair[] UPts = {(2.0, 0.0), (2.7, 0.5), (3.5, 0.0), (3.2,-0.9), (2.2,-0.8)};
+pair[] UPts = {(2.0, 0.0), (2.7, 0.5), (3.5, 0.0), (3.2, -0.9), (2.2, -0.8)};
 pair[] ImUPts = {(0.5, 1.5), (1.2, 1.9), (1.9, 1.4), (1.4, 0.2), (0.4, 0.3)};
-pair[] XPts = {(0, 0), (1,  0.8), (2,  0.8), (4, 0), (2, -1.5), (0, -1.5)};
+pair[] XPts = {
+    (0.0, 0.0), (1.0,  0.8), (2.0,  0.8), (4.0, 0.0), (2.0, -1.5), (0.0, -1.5)
+};
 
-real[] UAng = {30, 0, -90, 180, 150};
-real[] ImUAng = {30, 0, -90, 180, 150};
-real[] XAng = {90, 0, -30, -90, 180, 150};
+real[] UAng = {30.0, 0.0, -90.0, 180.0, 150.0};
+real[] ImUAng = {30.0, 0.0, -90.0, 180.0, 150.0};
+real[] XAng = {90.0, 0.0, -30.0, -90.0, 180.0, 150.0};
 
 /*  The number of points for X, U, and the image of U.                        */
 int XN = 6;
@@ -108,7 +114,7 @@ pair ImULabel = (1.1, 1.0);
 pair ULabel = TShift*(2.8,-0.2);
 pair XLabel = TShift*(1.0, 0.4);
 
-/*-------------------------------DRAW CURVES----------------------------------*/
+/*--------------------------------DRAW CURVES---------------------------------*/
 
 /*  Draw the coordinate axes for R^n.                                         */
 draw(XAxes[0] -- XAxes[1], axesp, SharpArrow(arsize));
