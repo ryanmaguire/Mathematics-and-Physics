@@ -116,8 +116,18 @@ pair[] varphiUVpts = {(1.0, 0.8), (3.1, 2.1), (1.0, 2.1)};
 real[] varphiUVangles = {70.0, 90.0, -170.0};
 int nvarphiUVpts = 3;
 
+/*  Sets in R^n, the image of V under psi and psi[V cap phi[U]].              */
+pair[] psiVpts = {(0.2, 0.9), (2.4, 0.3), (3.0, 1.0), (1.5, 1.9)};
+real[] psiVangles = {-60.0, 30.0, 90.0, -170.0};
+int npsiVpts = 4;
+
+pair[] psiUVpts = {(1.5, 1.9), (0.2, 0.9), (2.0, 1.2)};
+real[] psiUVangles = {-170.0, -60.0, 90.0};
+int npsiUVpts = 3;
+
 transform NShift = shift(6.4, 0.0);
 transform RmShift = shift(0.0, -5.0);
+transform RnShift = shift(8.0, -5.0);
 
 /*  Draw M and N and the open sets inside the two manifolds.                  */
 g = PathFromPointsAndAngles(Mpts, Mangles, nMpts, true);
@@ -142,13 +152,24 @@ filldraw(NShift*g, Vpen, dpen);
 draw(RmShift * ((-0.5, 0.0) -- (3.0, 0.0)));
 
 L = Label("$\mathbb{R}^{m}$", position=1.0);
-draw(L, RmShift*((0.0, -0.5) -- (0.0, 3.0)), SharpArrow(arsize));
+draw(L, RmShift*((0.0, -0.5) -- (0.0, 3.0)), E, SharpArrow(arsize));
 
 g = PathFromPointsAndAngles(varphiUpts, varphiUangles, nvarphiUpts, true);
 filldraw(RmShift*g, Upen, dpen);
 
 g = PathFromPointsAndAngles(varphiUVpts, varphiUVangles, nvarphiUVpts, true);
 filldraw(RmShift*g, Vpen, dpen);
+
+/*  Draw R^n and the open set psi[V], and psi[V cap phi[U]].                  */
+L = Label("$\mathbb{R}^{n}$", position=1.0);
+draw(RnShift*((-0.5, 0.0) -- (3.0, 0.0)), SharpArrow(arsize));
+draw(L, RnShift*((0.0, -0.5) -- (0.0, 3.0)), E, SharpArrow(arsize));
+
+g = PathFromPointsAndAngles(psiVpts, psiVangles, npsiVpts, true);
+filldraw(RnShift*g, Vpen, dpen);
+
+g = PathFromPointsAndAngles(psiUVpts, psiUVangles, npsiUVpts, true);
+filldraw(RnShift*g, Upen, dpen);
 
 /*  Draw a donut hole inside the manifold M.                                  */
 draw((0.5, 0.1){dir(-50.0)} .. (1.8, 0.1){dir(50.0)});
@@ -175,3 +196,19 @@ label("$\varphi[\mathcal{U}]$", RmShift * (1.6, 0.4));
 
 L = "$\varphi\Big[\mathcal{U}\cap\phi^{-1}[\mathcal{V}]\Big]$";
 label(L, RmShift * (1.6, 1.7));
+
+/*  Label things in R^n.                                                      */
+label("$\psi[\mathcal{V}]$", RnShift * (2.4, 1.1));
+
+L = "$\psi\Big[\mathcal{V}\cap\phi[\mathcal{U}]\Big]$";
+label(L, RnShift * (1.1, 1.2));
+
+/*  Label functions and charts on the two manifolds.                          */
+L = Label("$\psi\circ\phi\circ\varphi^{-1}$");
+draw(L, (3.5, -4.5){dir(-30)} .. (7.5, -4.5){dir(30)}, SharpArrow(arsize));
+
+L = Label("$\varphi$");
+draw(L, (2.0, -1.5) -- (1.5, -2.5), SharpArrow(arsize));
+
+L = Label("$\psi$");
+draw(L, (9.2, -1.7) -- (9.6, -2.7), SharpArrow(arsize));
