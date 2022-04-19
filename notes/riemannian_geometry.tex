@@ -1,0 +1,824 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+
+\documentclass{article}
+\usepackage{mathtools, esint, mathrsfs} % amsmath and integrals.
+\usepackage{amsthm, amsfonts, amssymb}  % Fonts and theorems.
+\usepackage{graphics}                   % Embedding PDF images.
+\usepackage{subcaption}                 % Subfigures and subcaptions.
+\usepackage{hyperref}                   % Hyperlinks.
+
+\renewcommand\thesubfigure{%
+    \arabic{section}.\arabic{figure}.\arabic{subfigure}}
+
+% Colors for hyperref.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+\title{Riemannian Geometry}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{notation}{Notation}[section]
+
+\begin{document}
+    \maketitle
+    These notes come from my personal study of Riemannian geometry. Many of
+    the concepts come from Manfredo do Carmo's Riemannian Geoemtry, John
+    M. Lee's Introduction to Riemannian Geometry, and J\"{u}rgen Jost's
+    Riemannian Geometry and Geometric Analysis, as well as Vladimir Chernov's
+    lectures for his Math 72 course during the Spring 2022 semester at
+    Dartmouth College. Any errors in these notes are my own.
+    \tableofcontents
+    \listoffigures
+    \newpage
+    There are three notions of manifold that have increasingly more structure.
+    A topological manifold is a space that \textit{locally} looks like
+    $\mathbb{R}^{n}$ and is topologically \textit{nice}. A smooth manifold is
+    a topological manifold that has enough structure on it to perform calculus.
+    A Riemannian manifold is a smooth manifold in which one can perform
+    geometry (measure angles, lengths of curves, etc.). These notes are on
+    Riemannian manifolds. A brief introduction to the other notions is given.
+    \section{General Topology}
+        An extremely brief review of point-set topology is given.
+        \begin{definition}{\textbf{(Topological Space)}}
+            A topological space is an ordered pair $(X,\tau)$ where $X$ is a
+            set and $\tau\subseteq\mathcal{P}(X)$ is a collection of subsets of
+            $X$ such that:
+            \begin{enumerate}
+                \item $X\in\tau$ and $\emptyset\in\tau$.
+                \item For all $\mathcal{U},\mathcal{V}\in\tau$ it is true that
+                    $\mathcal{U}\cap\mathcal{V}\in\tau$.
+                \item For any $\mathcal{O}\subseteq\tau$ it is true that
+                    $\bigcup\mathcal{O}\in\tau$.
+            \end{enumerate}
+        \end{definition}
+        The set $\tau$ is called the \textit{topology} on $X$. Sets
+        $\mathcal{U}\in\tau$ are called \textit{open subsets}. Topological
+        spaces can be rephrased as requiring that the entire set $X$ and the
+        empty set $\emptyset$ are open, the intersection of two open sets is
+        open, and the union or arbitrarily many open sets is open. A
+        \textit{closed} set is a set $\mathcal{C}$ such that
+        $X\setminus\mathcal{C}$ is open. That is, a closed set is the complement
+        of an open set.
+        \begin{example}
+            If $X$ is any set, and if $\mathcal{P}(X)$ is the power set of $X$,
+            then $(X,\mathcal{P}(X))$ is a topological space. This is called the
+            \textit{discrete} topology on $X$.
+        \end{example}
+        \begin{example}
+            If $X$ is any set, and if $\tau=\{\emptyset,X\}$, then
+            $(X,\tau)$ is a topological space. This is called the
+            \textit{indiscrete} or \textit{chaotic} or \textit{trivial} topology
+            on $X$.
+        \end{example}
+        \begin{example}
+            If $(X,d)$ is a metric space, and if $\tau$ is the set of all
+            \textit{metrically open} subsets of $X$, which are sets
+            $\mathcal{U}\subseteq{X}$ such that for all $x\in\mathcal{U}$ there
+            is an $r>0$ such that the open ball $B_{r}(x)$ of radius $r$
+            centered at $x$ is such that $B_{r}(x)\subseteq\mathcal{U}$, then
+            $(X,\tau)$ is a topological space.
+        \end{example}
+        \begin{definition}{\textbf{(Subspace Topology)}}
+            The subspace topology of a set $A\subseteq{X}$ with respect to a
+            topological space $(X,\tau)$ is the set $\tau|_{A}$ defined by:
+            \begin{equation}
+                \tau|_{A}=\{\,\mathcal{U}\cap{A}\;|\;\mathcal{U}\in\tau\,\}
+            \end{equation}
+        \end{definition}
+        If $(X,\tau)$ is a topological space, if $A\subseteq{X}$, and if
+        $\tau|_{A}$ is the subspace topology, then $(A,\tau|_{A})$ is indeed
+        a topological space.
+        \begin{definition}{\textbf{(Continuous Function)}}
+            A continuous function from a topological space $(X,\tau_{X})$ to
+            a topological space $(Y,\tau_{Y})$ is a function $f:X\rightarrow{Y}$
+            such that for all $\mathcal{V}\in\tau_{Y}$ it is true that
+            $f^{-1}[\mathcal{V}]\in\tau_{X}$. That is, the pre-image of open
+            sets is open.
+        \end{definition}
+        \begin{example}
+            If $(X,\mathcal{P}(X))$ is the discrete topological space on $X$,
+            if $(Y,\tau)$ is any topological space, and if $f:X\rightarrow{Y}$
+            is any function, then $f$ is continuous. This earns the discrete
+            topological space the title of the \textit{free object} in topology.
+            This is analogous to the \textit{free group} or \textit{free module}
+            of a set that one encounters in abstract algebra.
+        \end{example}
+        \begin{example}
+            If $(Y,\tau)$ is any topological space, if $(X,\{\emptyset,X\})$ is
+            the indiscrete topological space on $X$, and if $f:Y\rightarrow{X}$
+            is any function, then $f$ is continuous. This earns the indiscrete
+            topology the title of the \textit{cofree object} in topology. It is
+            \textit{co-free} because the arrows are flipped (See
+            Fig.~\ref{fig:free_and_cofree_objects_in_topology}).
+            People interested in category theory may care about this.
+        \end{example}
+        \begin{figure}
+        	\centering
+        	\begin{subfigure}[b]{0.48\textwidth}
+                \centering
+                \includegraphics{%
+                    ../images/commutative_diagram_free_object_in_topology.pdf%
+                }
+                \caption{The Free Object in Topology}
+                \label{fig:commutative_diagram_free_object_in_topology}
+            \end{subfigure}
+            \begin{subfigure}[b]{0.5\textwidth}
+                \centering
+                \includegraphics{%
+                    ../images/commutative_diagram_cofree_object_in_topology.pdf%
+                }
+                \caption{The Cofree Object in Topology}
+                \label{fig:commutative_diagram_cofree_object_in_topology}
+            \end{subfigure}
+            \caption{The Free and Cofree Objects in Topology}
+            \label{fig:free_and_cofree_objects_in_topology}
+        \end{figure}
+        \begin{definition}{\textbf{(Open Mapping)}}
+            An open mapping from a topological space $(X,\tau_{X})$ to a
+            topological space $(Y,\tau_{Y})$ is a function $f:X\rightarrow{Y}$
+            such that for all $\mathcal{U}\in\tau_{X}$ it is true that
+            $f[\mathcal{U}]\in\tau_{Y}$. That is, the image of open sets is
+            open.
+        \end{definition}
+        An open mapping need not be continuous. Continuous bijective open
+        mappings are given a special name.
+        \begin{definition}{\textbf{(Homeomorphism)}}
+            A homeomorphism from a topological space $(X,\tau_{X})$ to a
+            topological space $(Y,\tau_{Y})$ is a function $f:X\rightarrow{Y}$
+            such that $f$ is continuous, bijective, and an open mapping.
+        \end{definition}
+        There is an equivalent notion of homeomorphism given as follows.
+        \begin{theorem}
+            If $(X,\tau_{X})$ and $(Y,\tau_{Y})$ are topological spaces, and if
+            $f:X\rightarrow{Y}$ is a function, then $f$ is a homeomorphism if
+            and only if $f$ is continuous, bijective, and the inverse function
+            $f^{-1}:Y\rightarrow{X}$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            If $f$ is a homeomorphism, then for all $\mathcal{U}\in\tau_{X}$ we
+            have $(f^{-1})^{-1}[\mathcal{U}]=f[\mathcal{U}]$. That is, the
+            pre-image of the inverse function $f^{-1}$ of $\mathcal{U}$ is given
+            by the image $f[\mathcal{U}]$. But homeomorphisms are open mappings,
+            so $(f^{-1})^{-1}[\mathcal{U}]$ is open, and therefore $f^{-1}$ is
+            continuous. Conversely, if $f^{-1}$ is continuous, then $f$ is an
+            open mapping.
+        \end{proof}
+        \begin{definition}{\textbf{(Topological Embedding)}}
+            A topological embedding of a topological space $(X,\tau_{X})$ into a
+            topological space $(Y,\tau_{Y})$ is a function $f:X\rightarrow{Y}$
+            such that $f$ is a homeomorphism between $(X,\tau_{X})$ and
+            $(f[X],\tau_{Y}|_{f[X]})$ where $\tau_{Y}|_{f[X]}$ is the subspace
+            topology on $f[X]$.
+        \end{definition}
+        \begin{example}
+            Surfaces in $\mathbb{R}^{3}$ of the form $\big(x,y,f(x,y)\big)$
+            where $f:\mathbb{R}^{2}\rightarrow\mathbb{R}$ is a continuous
+            function are topological embeddings of $\mathbb{R}^{2}$ into
+            $\mathbb{R}^{3}$.
+        \end{example}
+        There are many \textit{separation} properties that ony studies in
+        general topology. Two of the weaker ones are usually sufficient for a
+        study of smooth manifolds.
+        \begin{definition}{\textbf{(Hausdorff Topological Space)}}
+            A Hausdorff topological space, also called a $T_{2}$ topological
+            space, is a topological space $(X,\tau)$ such that for all
+            $x,y\in{X}$ there are open subsets $\mathcal{U},\mathcal{V}\in\tau$
+            such that $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+        \end{definition}
+        A Hausdorff space is one where points can be separated by open sets.
+        Discrete topological spaces are Hausdorff, as are metric spaces, but
+        the trivial topology is only Hausdorff if $X$ contains a single point
+        (or if $X$ is empty).
+        \begin{figure}
+            \centering
+            \includegraphics{../images/hausdorff_condition_001.pdf}
+            \caption{The Hausdorff Condition on a Topological Space}
+            \label{fig:hausdorff_condition_001}
+        \end{figure}
+        The Hausdorff property is usually imposed on manifolds, but need not be.
+        Indeed, in Lorentz geometry, Lorentzian manifolds can give rise to
+        \textit{non-Hausdorff manifolds}. Because of this it is useful to
+        describe the following type of space.
+        \begin{definition}{\textbf{(Fr\'{e}chet Topological Spaces)}}
+            A Fr\'{e}chet topological space, also called a $T_{1}$ space, is a
+            topological space $(X,\tau)$ such that for all $x,y\in{X}$ there
+            are open sets $\mathcal{U},\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{U}$, $y\in\mathcal{V}$, and also $x\notin\mathcal{V}$
+            and $y\notin\mathcal{U}$.
+        \end{definition}
+        Be careful not to confuse the term Fr\'{e}chet topological space with
+        the term Fr\'{e}chet-Urysohn topological space, and do not confuse these
+        with Fr\'{e}chet spaces, which occur in functional analysis. To reduce
+        confusion many authors refer to Fr\'{e}chet topological spaces
+        exclusively as $T_{1}$ spaces.
+        \begin{figure}
+            \centering
+            \includegraphics{../images/frechet_condition_001.pdf}
+            \caption{The Fr\'{e}chet Condition on a Topological Space}
+            \label{fig:frechet_condition_001}
+        \end{figure}
+        The difference between a Fr\'{e}chet topological space and a Hausdorff
+        topological space is that in a Hausdorff space the set $\mathcal{U}$
+        and $\mathcal{V}$ must be disjoint, whereas in a Fr\'{e}chet
+        topological space they are allowed to overlap. See
+        Figs.~\ref{fig:hausdorff_condition_001} and
+        \ref{fig:frechet_condition_001} for a visual comparison.
+        \begin{theorem}
+            If $(X,\tau)$ is a Hausdorff topological space, then it is a
+            Fr\'{e}chet topological space.
+        \end{theorem}
+        \begin{proof}
+            For let $x,y\in{X}$. Since $(X,\tau)$ is Hausdorff, there are
+            disjoint open sets $\mathcal{U},\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{U}$ and $y\in\mathcal{V}$. But if $\mathcal{U}$ and
+            $\mathcal{V}$ are disjoint, then $x\notin\mathcal{V}$ and
+            $y\notin\mathcal{U}$. Thus, $(X,\tau)$ is a Fr\'{e}chet topological
+            space.
+        \end{proof}
+        One of the useful properties of Hausdorffness is that it is preserved
+        by products. That is, if $(X,\tau_{X})$ and $(Y,\tau_{Y})$ are
+        Hausdorff topological spaces, then so is the product space
+        $X\times{Y}$ with the topology generated by $\tau_{X}\times\tau_{Y}$.
+        \begin{definition}{\textbf{(Open Covering)}}
+            An open covering of a topological space $(X,\tau)$ is a set
+            $\mathcal{O}\subseteq\tau$ such that $\bigcup\mathcal{O}=X$. That
+            is, for all $x\in{X}$ there is an open set
+            $\mathcal{U}\in\mathcal{O}$ such that $x\in\mathcal{U}$.
+        \end{definition}
+        \begin{example}
+            If $(X,\tau)$ is a topological space, then $\tau$ is an open
+            covering.
+        \end{example}
+        \begin{example}
+            The set of all open intervals in $\mathbb{R}$:
+            \begin{equation}
+                \mathcal{O}=
+                    \{\,(a,\,b)\;|\;a,b\in\mathbb{R}\textrm{ and }a<b\,\}
+            \end{equation}
+            is an open covering of $\mathbb{R}$.
+        \end{example}
+        \begin{example}
+            The set of all open balls in $\mathbb{R}^{n}$:
+            \begin{equation}
+                \mathcal{O}=
+                    \{\,B_{r}(\mathbf{x})\;|\;
+                        r>0\textrm{ and }\mathbf{x}\in\mathbb{R}^{n}\,\}
+            \end{equation}
+            is an open covering of $\mathbb{R}^{n}$.
+        \end{example}
+        \begin{example}
+            More generally, the set of all open balls in a metric space $(X,d)$:
+            \begin{equation}
+                \mathcal{O}=
+                    \{\,B_{r}(x)\;|\;r>0\textrm{ and }x\in{X}\,\}
+            \end{equation}
+            is an open covering of $X$.
+        \end{example}
+        \begin{definition}{\textbf{(Refinement of an Open Covering})}
+            A refinement of an open covering $\mathcal{O}$ of a topological
+            space $(X,\tau)$ is an open covering $\Delta$ such that for all
+            $\mathcal{U}\in\Delta$ there is a set $\mathcal{V}\in\mathcal{O}$
+            such that $\mathcal{U}\subseteq\mathcal{V}$.
+        \end{definition}
+        A refinement of an open covering $\mathcal{O}$ is another open covering
+        made by taking the open sets in $\mathcal{O}$ and making them
+        \textit{smaller}.
+        \begin{example}
+            If $\mathcal{O}$ is the set of all open intervals in $\mathbb{R}$,
+            and if $\Delta$ is the set of all open intervals with rational
+            endpoints, then $\Delta$ is a refinement of $\mathcal{O}$.
+        \end{example}
+        \begin{example}
+            If $\mathcal{O}$ is the set of all open balls in $\mathbb{R}^{n}$,
+            and if $\Delta$ is the set of all open balls in $\mathbb{R}^{n}$
+            with radius 1, then $\Delta$ is a refinement of $\mathcal{O}$.
+        \end{example}
+        \begin{example}
+            If $\mathcal{O}$ is the set of all open balls in a metric space
+            $(X,d)$, and if $\Delta$ is the set of all open balls of radius 1,
+            then $\Delta$ is a refinement of $\mathcal{O}$.
+        \end{example}
+        \begin{definition}{\textbf{(Locally Finite Open Covering)}}
+            A locally finite open covering of a topological space $(X,\tau)$
+            is an open covering $\mathcal{O}$ of $(X,\tau)$ such that for all
+            $x\in{X}$ there is an open set $\mathcal{U}\in\tau$ such
+            that $x\in\mathcal{U}$ and only finitely many elements of
+            $\mathcal{O}$ have non-empty intersection with $\mathcal{U}$.
+        \end{definition}
+        \begin{example}
+            The set $\mathcal{O}$ defined by:
+            \begin{equation}
+                \mathcal{O}=\{\,(n-2,\,n+2)\;|\;n\in\mathbb{Z}\,\}
+            \end{equation}
+            is a locally finite open covering of $\mathbb{R}$. For any point
+            $x\in\mathbb{R}$, the set $(x-1,x+1)$ intersects at most 3 of the
+            sets in $\mathcal{O}$.
+        \end{example}
+        \begin{definition}{\textbf{(Compact Topological Space)}}
+            A compact topological space is a topological space $(X,\tau)$
+            such that for any open covering $\mathcal{O}$ there is a subset
+            $\Delta\subseteq\mathcal{O}$ such that $\Delta$ is an open covering
+            of $(X,\tau)$ and $\Delta$ is a finite set.
+        \end{definition}
+        The slogan for compactness is that
+        \textit{every open cover has a finite subcover}. In general, manifolds
+        need not be compact, but many nice properties exist when they are.
+        A weaker notion is usually tied to manifolds.
+        \begin{definition}{\textbf{(Paracompact Topological Space)}}
+            A paracompact topological space is a topological space $(X,\tau)$
+            such that for all open coverings $\mathcal{O}$ there is a refinement
+            $\Delta$ of $\mathcal{O}$ such that $\Delta$ is a locally finite
+            open covering.
+        \end{definition}
+        The slogan for paracompactness is that
+        \textit{every open cover has a locally finite refinement}.
+        \begin{theorem}
+            If $(X,\tau)$ is a compact topological space,
+            then it is paracompact.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\tau)$ is compact, given any open cover $\mathcal{O}$,
+            there is a finite open cover $\Delta\subseteq\mathcal{O}$. If
+            $x\in{X}$, let $\mathcal{U}=X$. Since $\Delta$ is finite, only
+            finitely many elements of $\Delta$ have non-empty intersection with
+            $\mathcal{U}$. Hence, $\Delta$ is a locally finite open covering,
+            and $(X,\tau)$ is therefore paracompact.
+        \end{proof}
+        Paracompactness is strictly weaker than compactness.
+        \begin{theorem}{\textbf{(Stone's Paracompactness Theorem)}}
+            If $(X,d)$ is a metric space and if $\tau$ is the set of all
+            metrically open subsets of $X$, then $(X,\tau)$ is a paracompact
+            topological space.
+        \end{theorem}
+        \begin{proof}
+            \textit{Hard}.
+        \end{proof}
+        That is, every metric space is paracompact, showing paracompactness is
+        strictly weaker than compactness. Paracompactness is such a strange
+        property, one may ask why it deserves a name. The reason is the
+        connection between paracompactness and partitions of unity.
+        \begin{definition}{\textbf{(Partition of Unity)}}
+            A partition of unity of a topological space $(X,\tau)$ is a set
+            $\mathcal{F}$ of continuous functions $f:X\rightarrow[0,1]$ such
+            that for all $x\in{X}$ there is an open subset $\mathcal{U}\in\tau$
+            such that for all but finitely many $f\in\mathcal{F}$, the
+            restriction $f|_{\mathcal{U}}$ is the zero function, and such that
+            for all $x\in{X}$ the following holds:
+            \begin{equation}
+                \sum_{f\in\mathcal{F}}f(x)=1
+            \end{equation}
+        \end{definition}
+        Since only finitely many functions $f$ are such that $f(x)\ne{0}$ there
+        is no issue of convergence in this sum, we are adding only finitely
+        many numbers. Partitions of unity are usually tied to open coverings.
+        \begin{definition}%
+            {\textbf{(Partition of Unity Subordinate to an Open Covering)}}
+            A partition of unity subordinate to an open covering $\mathcal{O}$
+            of a topological space $(X,\tau)$ is a partition of unity
+            $\mathcal{F}$ of $(X,\tau)$ such that for all $f\in\mathcal{F}$
+            there is an open set $\mathcal{U}\in\mathcal{O}$ such that
+            $\textrm{supp}(f)\subseteq\mathcal{O}$.
+        \end{definition}
+        For those unfamiliar with notation, $\textrm{supp}(f)$ is the
+        \textit{support} of $f$. There are two definitions that are common:
+        \begin{equation}
+            \textrm{supp}(f)=\{\,x\in{X}\;|\;f(x)\ne{0}\,\}
+        \end{equation}
+        But also:
+        \begin{equation}
+            \textrm{supp}(f)
+                =\textrm{Cl}_{\tau}\Big(\{\,x\in{X}\;|\;f(x)\ne{0}\,\}\Big)
+        \end{equation}
+        where $\textrm{Cl}_{\tau}(A)$ denotes the topological closure of the
+        set $A\subseteq{X}$, which is the \textit{smallest} closed set
+        containing $A$. That is, the intersection of all closed sets
+        $\mathcal{C}\subseteq{X}$ such that $A\subseteq\mathcal{C}$. Since the
+        entire space $X$ is closed, being the complement of the emptyset,
+        $\textrm{Cl}_{\tau}(A)$ is non-empty, and indeed
+        $A\subseteq\textrm{Cl}_{\tau}(A)$. Moreover, since the arbitrary union
+        of open sets is open, by DeMorgan's Laws the arbitrary intersection of
+        closed sets is closed, meaning $\textrm{Cl}_{\tau}(A)$ is closed. For
+        partitions of unity we'll use the closure definition. Note that for a
+        continuous function $f:X\rightarrow[0,1]$, the subset $(0,1]$ is open
+        with respect to $[0,1]$, meaning $f^{-1}\big[(0,1]\big]$ is open.
+        \begin{theorem}
+            If $(X,\tau)$ is a Fr\'{e}chet topological space, then $(X,\tau)$ is
+            Hausdorff and paracompact if and only if for every open covering
+            $\mathcal{O}$ of $(X,\tau)$ there is a partition of unity
+            $\mathcal{F}$ subordinate to $\mathcal{O}$.
+        \end{theorem}
+        The proof involves several technical details from point-set topology.
+        It is not particularly hard, just long. Partitions of unity have many
+        useful applications to smooth manifolds, such as showing the existence
+        of a \textit{Riemannian metric} on any smooth manifold, something these
+        notes will spend a lot of time talking about.
+        \par\hfill\par
+        The last point-set property to discuss is that of a \textit{basis}.
+        \begin{definition}{\textbf{(Topological Basis)}}
+            A topological basis for a topological space $(X,\tau)$ is an open
+            covering $\mathcal{B}$ for $(X,\tau)$ such that for all
+            $\mathcal{U},\mathcal{V}\in\mathcal{O}$ and for all
+            $x\in\mathcal{U}\cap\mathcal{V}$, there is an open set
+            $\mathcal{W}\in\mathcal{B}$ such that $x\in\mathcal{W}$ and
+            $\mathcal{W}\subseteq\mathcal{U}\cap\mathcal{V}$.
+        \end{definition}
+        \begin{definition}{\textbf{(Second-Countable Topological Space)}}
+            A second-countable topological space is a topological space
+            $(X,\tau)$ such that there exists a countable topological basis
+            $\mathcal{B}$ for $(X,\tau)$.
+        \end{definition}
+        \begin{example}
+            The real line $\mathbb{R}$ is second-countable. Take $\mathcal{B}$
+            to be set set of all open intervals with rational endpoints. This
+            set has size bounded $\textrm{Card}(\mathbb{Q}\times\mathbb{Q})$,
+            and is hence countable, and is also a basis for the standard
+            topology on $\mathbb{R}$.
+        \end{example}
+        \begin{example}
+            More generally, $\mathbb{R}^{n}$ is second-countable. Take the set
+            of all open balls with radii $r\in\mathbb{Q}^{+}$ centered at
+            points $\mathbf{x}$ with rational coordinates.
+        \end{example}
+        The finite product of second-countable spaces is second-countable.
+        In metric spaces, second-countability is equivalent to the notion of
+        begin \textit{separable}, meaning there exists a countable dense
+        subset. Second-countable always implies separable, but separable
+        topological spaces (that are not metric spaces) need not be
+        second-countable.
+    \section{Topological Manifolds}
+        \begin{definition}{\textbf{(Locally Euclidean Topological Space)}}
+            A locally Euclidean topological space is a topological space
+            $(X,\tau)$ such that for all $x\in{X}$ there exists an open
+            subset $\mathcal{U}\in\tau$ and a continuous injective open
+            mapping $f:\mathcal{U}\rightarrow\mathbb{R}^{n}$ for some
+            $n\in\mathbb{N}$ such that $x\in\mathcal{U}$.
+        \end{definition}
+        Since $f$ is an injective continuous open mapping from $\mathcal{U}$ to
+        $\mathbb{R}^{n}$, it is a homeomorphism from $\mathcal{U}$ to
+        $f[\mathcal{U}]$, which is necessarily an open subset of
+        $\mathbb{R}^{n}$ since $f$ is an open mapping. That is, an equivalent
+        description of locally Euclidean topological spaces is that for every
+        point $x\in{X}$ there is an open subset $\mathcal{U}\subseteq{X}$ with
+        $x\in\mathcal{U}$, an open subset $\mathcal{V}\subseteq\mathbb{R}^{n}$,
+        and a homeomorphism $f:\mathcal{U}\rightarrow\mathcal{V}$. For manifolds
+        we usually reserve the letter $f$ for smooth functions from the manifold
+        to the reals. These homeomorphisms are thus labelled either $\varphi$ or
+        $\psi$. The ordered pair $(\mathcal{U},\varphi)$ is given a name.
+        \begin{definition}{\textbf{(Chart)}}
+            A chart in a topological space $(X,\tau)$ is an ordered pair
+            $(\mathcal{U},\varphi)$ where $\mathcal{U}\in\tau$ and
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is a continuous
+            injective open mapping.
+        \end{definition}
+        Yet another way to describe locally Euclidean topological spaces is that
+        it is a topological space $(X,\tau)$ such that for all $x\in{X}$ there
+        is a chart $(\mathcal{U},\varphi)$ such that $x\in\mathcal{U}$.
+        \begin{definition}{\textbf{(Atlas)}}
+            An atlas for a topological space $(X,\tau)$ is a set
+            $\mathcal{A}$ of charts on $(X,\tau)$ such that for all
+            $x\in{X}$ there is a chart $(\mathcal{U},\varphi)\in\mathcal{A}$
+            such that $x\in\mathcal{U}$.
+        \end{definition}
+        The words chart and atlas are not randomly chosen. Imagine the Earth.
+        We can describe the Earth locally about a point with a square map.
+        We cannot globally describe the Earth as a square map, since a sphere
+        and a square are not homeomorphic. Nonetheless, if we collect a bunch
+        of square maps into a book we can locally describe any point on Earth.
+        Such a book is called an \textit{atlas} and the individual pages are
+        called \textit{charts} in the atlas. In a similar way, an atlas for a
+        topological space is a book of charts that locally describe any point
+        in the space.
+        \par\hfill\par
+        A few questions immediately arise. Is it possible for a point to be
+        locally like $\mathbb{R}^{n}$ and $\mathbb{R}^{m}$ with $m\ne{n}$?
+        \begin{theorem}{\textrm{(Invariance of Dimension)}}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}$ and
+            $\mathcal{V}\subseteq\mathbb{R}^{m}$ are non-empty open subsets,
+            and if $f:\mathcal{U}\rightarrow\mathcal{V}$ is a homeomorphism,
+            then $n=m$.
+        \end{theorem}
+        The proof is surprisingly hard, requiring Brauer's
+        \textit{invariance of domain} theorem which is proved using tools from
+        algebraic topology. Nevertheless, let us use this.
+        \begin{theorem}
+            If $(X,\tau)$ is a topological space, if $x\in{X}$, if
+            $(\mathcal{U},\varphi)$ is an $n$ dimensional chart,
+            $(\mathcal{V},\psi)$ is an $m$ dimensional chart, and if
+            $x\in\mathcal{U}$ and $x\in\mathcal{V}$, then $n=m$.
+        \end{theorem}
+        \begin{proof}
+            Since $\mathcal{U}$ and $\mathcal{V}$ are open, so is
+            $\mathcal{U}\cap\mathcal{V}$. Let
+            $\mathcal{W}=\mathcal{U}\cap\mathcal{V}$. Since $x\in\mathcal{U}$
+            and $x\in\mathcal{V}$, $\mathcal{W}$ is non-empty. Since $\varphi$
+            is a continuous injective open mapping, $\varphi|_{\mathcal{W}}$ is
+            a homeomorphism onto it's image. Similarly,
+            $\psi^{-1}|_{\psi[\mathcal{W}]}$ is a homeomorphism from
+            $\psi[\mathcal{W}]$ to $\mathcal{W}$. But then
+            $\varphi|_{\mathcal{W}}\circ\psi^{-1}|_{\psi[\mathcal{W}]}$ is the
+            composition of homeomorphisms, which is a homeomorphism. Moreover,
+            $\varphi|_{\mathcal{W}}\circ\psi^{-1}|_{\psi[\mathcal{W}]}$
+            is a homeomorphism from $\psi[\mathcal{W}]$ to
+            $\varphi[\mathcal{W}]$, a non-empty open subset in $\mathbb{R}^{m}$
+            to a non-empty open subset in $\mathbb{R}^{n}$. By the invariance
+            of dimension, $m=n$.
+        \end{proof}
+        The definition of locally Euclidean does not exclude the disjoint
+        union of a line with a plane. This theorem prevents a point from being
+        locally like $\mathbb{R}^{n}$ and like $\mathbb{R}^{m}$ unless $m=n$.
+        If $(X,\tau)$ is a \textit{connected} locally Euclidean topological
+        space, then each point $x\in{X}$ is locally like $\mathbb{R}^{n}$ for
+        some \textit{fixed} integer $n\in\mathbb{N}$. In this case we can
+        unambiguously say that this is the \textit{dimension} of $(X,\tau)$.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{../images/bug_eyed_line_001.pdf}
+            \caption{Bug-Eyed Line Construction}
+            \label{fig:bug_eyed_line_construction}
+        \end{figure}
+        Locally Euclidean spaces need not be Hausdorff, strange as it is.
+        Probably the easiest example to describe is the \textit{bug-eyed line},
+        also known as the line with two origins.
+        Take $\mathbb{R}\times\{-1,1\}$, two disjoint lines in the plane.
+        Glue $(x,1)$ together with $(x,-1)$ for all $x\ne{0}$. By \textit{glue}
+        it is meant to use the quotient topology. The result is a space that
+        is locally Euclidean but not Hausdorff. The points $(0,1)$ and $(0,-1)$
+        can not be separated by disjoint open sets. The construction is shown
+        in Fig.~\ref{fig:bug_eyed_line_construction}. To see this, note that
+        open sets containing $(0,1)$ or $(0,-1)$ must also contain points that
+        are $\pm\varepsilon$ away from the center, see
+        Fig.~\ref{fig:bug_eyed_line_open_sets}. Thus, if $\mathcal{U}$
+        contains $(0,1)$ and $\mathcal{V}$ contains $(0,-1)$, then
+        $\mathcal{U}\cap\mathcal{V}$ is non-empty.
+        \begin{figure}
+            \centering
+            \includegraphics{../images/bug_eyed_line_002.pdf}
+            \caption{Open Sets in the Bug-Eyed Line}
+            \label{fig:bug_eyed_line_open_sets}
+        \end{figure}
+        This space is, however, locally Euclidean. For points other than
+        $(0,1)$ and $(0,-1)$ this is intuitively clear, and for the two origins
+        the open sets in Fig.~\ref{fig:bug_eyed_line_open_sets} show that those
+        points are also locally Euclidean. This space is a Fr\'{e}chet
+        topological space, however, again the sets in
+        Fig.~\ref{fig:bug_eyed_line_open_sets} show why this is true. This is
+        true of all locally Euclidean spaces.
+        \begin{theorem}
+            If $(X,\tau)$ is a locally Euclidean topological space, then
+            $(X,\tau)$ is a Fr\'{e}chet ($T_{1}$) topological space.
+        \end{theorem}
+        \begin{proof}
+            If $x,y\in{X}$ are distinct points such that there are charts
+            $(\mathcal{U},\varphi)$ and $(\mathcal{V},\psi)$ with
+            $x\in\mathcal{U}$, $x\notin\mathcal{V}$ and
+            $y\in\mathcal{V}$, $y\notin\mathcal{U}$, then we are done.
+            Otherwise, there is a chart $(\mathcal{U},\varphi)$ such that
+            $x\in\mathcal{U}$ and $y\in\mathcal{U}$. Since
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is injective and
+            $x\ne{y}$ we have $\varphi(x)\ne\varphi(y)$. Since $\mathbb{R}^{n}$
+            is Hausdorff there are open sets $\tilde{\mathcal{V}}_{0}$ and
+            $\tilde{\mathcal{V}}_{1}$ with
+            $\varphi(x)\in\tilde{\mathcal{V}}_{0}$,
+            $\varphi(y)\in\tilde{\mathcal{V}}_{1}$, and
+            $\tilde{\mathcal{V}}_{0}\cap\tilde{\mathcal{V}}_{1}=\emptyset$.
+            Since $\varphi$ is an open mapping, $\varphi[\mathcal{U}]$ is open.
+            Thus, $\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{0}$ and
+            $\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{1}$ are open disjoint
+            sets, with
+            $\varphi(x)\in\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{0}$ and
+            $\varphi(y)\in\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{0}$.
+            Let $\mathcal{V}_{0}=\varphi^{-1}[\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{0}]$
+            and $\mathcal{V}_{1}=\varphi^{-1}[\varphi[\mathcal{U}]\cap\tilde{\mathcal{V}}_{1}]$.
+            Since $\varphi$ is continuous, $\mathcal{V}_{0}$ and
+            $\mathcal{V}_{1}$ are open. Moreover,
+            $x\in\mathcal{V}_{0}$, $y\in\mathcal{V}_{1}$, and
+            $\mathcal{V}_{0}\cap\mathcal{V}_{1}=\emptyset$. But then
+            $x\in\mathcal{V}_{0}$, $x\notin\mathcal{V}_{1}$ and
+            $y\in\mathcal{V}_{1}$, $y\notin\mathcal{V}_{0}$. That is,
+            $(X,\tau)$ is a Fr\'{e}chet topological space.
+        \end{proof}
+        Lastly, locally Euclidean does not prohibit a space from being massive.
+        The space in mind is the \textit{long line}. The real line can be
+        thought of as countably many copies of the half-open interval $[0,1)$
+        placed next to each other. The long line can be thought of as
+        \textit{uncountably} many such copies. The name is very appropriate.
+        It is like the real line, but \textit{significantly} longer. This space
+        is neither second-countable nor paracompact. Since subspaces of
+        second-countable spaces are second-countable, this shows that it is
+        impossible to embed the long line into $\mathbb{R}^{n}$ for any
+        $n\in\mathbb{N}$. This is at odds with the celebrated Whitney embedding
+        theorem which says that every smooth manifold can be embedded into
+        $\mathbb{R}^{n}$ for sufficiently large $n$. If one wants this theorem
+        to be true, the definition of manifold must exclude the long line.
+        \begin{definition}{\textbf{(Topological Manifold)}}
+            A topological manifold is a topological space $(X,\tau)$ that is
+            Hausdorff, locally Euclidean, and second-countable.
+        \end{definition}
+        I'd like to think the reason for the Hausdorff and second-countable
+        requirements is so that the Whitney embedding theorem has the hope of
+        being true. Neither the long line nor the bug-eyed line can be
+        embedded into $\mathbb{R}^{n}$ for any $n$ since subspaces of
+        $\mathbb{R}^{n}$ are both Hausdorff and second-countable. There are
+        several \textbf{inequivalent} definitions of topological manifold. Some
+        say that topological manifolds are Hausdorff, locally Euclidean, and
+        paracompact. This is strictly weaker. The disjoint union of uncountably
+        many copies of the unit circle $\mathbb{S}^{1}$ is Hausdorff, locally
+        Euclidean, and paracompact, but not second-countable. However, all
+        topological manifolds are paracompact.
+        \begin{theorem}
+            If $(X,\tau)$ is a topological manifold, then $(X,\tau)$ is
+            paracompact.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\tau)$ is locally Euclidean, it is locally compact.
+            But locally compact Hausdorff topological spaces are regular.
+            Since manifolds are also second-countable,
+            by Urysohn's meterization theorem $(X,\tau)$ is metrizable.
+            By Stone's paracompactness theorem, $(X,\tau)$ is paracompact.
+        \end{proof}
+        Several of the ideas in this proof are from point-set topology that I
+        haven't covered, but can be readily found in any textbook on general
+        topology. If we add connectedness, the reverse is true.
+        \begin{theorem}
+            If $(X,\tau)$ is a Hausdorff, second-countable, connected,
+            paracompact topological space, then $(X,\tau)$ is a topological
+            manifold.
+        \end{theorem}
+        The only thing missing is second-countability. The proof involves mostly
+        ideas from point-set topology and cannot be made as succinct as the
+        previous theorem. The desire for paracompactness is so we can prove
+        that every smooth manifold can be made into a Riemannian manifold.
+    \section{Smooth Manifolds}
+        Topological manifolds do not have a notion of calculus. That only way
+        we know how to compute derivatives is in $\mathbb{R}^{n}$
+        (or in a more general Banach space via the Fr\'{e}chet derivative).
+        The notion of the derivative of a function
+        $f:X\rightarrow{Y}$ between topological spaces is meaningless, in
+        general. Smooth manifolds are topological manifolds with added structure
+        so that it makes sense to ask a function
+        $f:X\rightarrow{Y}$ from one manifold to another is differentiable.
+        \begin{definition}{\textbf{(Smoothly Compatible Charts)}}
+            Smoothly compatible charts in a topological space
+            $(X,\tau)$ are charts $(\mathcal{U},\varphi)$,
+            $(\mathcal{V},\psi)$ is $(X,\tau)$ such that either
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$ or such that the functions
+            $\varphi\circ\psi^{-1}$, defined from
+            $\psi[\mathcal{U}\cap\mathcal{V}]$ to
+            $\varphi[\mathcal{U}\cap\mathcal{V}]$, are smooth functions.
+        \end{definition}
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.5\textheight}{%
+                \includegraphics{../images/smoothly_overlapping_charts.pdf}%
+            }
+            \caption{Smoothly Compatible Charts}
+            \label{fig:smoothly_overlapping_charts}
+        \end{figure}
+        The \textit{transition maps} $\psi\circ\varphi^{-1}$ take points from
+        an open subset
+        $\varphi[\mathcal{U}\cap\mathcal{V}]\subseteq\mathbb{R}^{n}$ to an
+        open subset $\psi[\mathcal{U}\cap\mathcal{V}]\subseteq\mathbb{R}^{n}$
+        meaning it is perfectly valid to ask if this function is differentiable.
+        \begin{definition}{\textbf{(Smooth Atlas)}}
+            A smooth atlas on a locally Euclidean topological space
+            $(X,\tau)$ is an atlas $\mathcal{A}$ on $(X,\tau)$ such that for
+            all charts $(\mathcal{U},\varphi)$ and $(\mathcal{V},\psi)$ in
+            $\mathcal{A}$ it is true that they are smoothly compatible.
+        \end{definition}
+        There can be different smooth atlases on a given locally Euclidean
+        space. Two atlases $\mathcal{A}_{1}$ and $\mathcal{A}_{2}$ are
+        compatible if every chart in $\mathcal{A}_{1}$ is compatible with
+        every chart in $\mathcal{A}_{2}$, and vice-versa. Two atlases are
+        compatible if and only if $\mathcal{A}_{1}\cup\mathcal{A}_{2}$ is a
+        smooth atlases.
+        \begin{definition}{\textbf{(Maximal Smooth Atlas)}}
+            A maximal smooth atlas on a locally Euclidean topological space
+            $(X,\tau)$ is a smooth atlas $\mathcal{A}$ such that for every
+            chart $(\mathcal{U},\varphi)$ on $(X,\tau)$ that is smoothly
+            compatible with every chart in $\mathcal{A}$, it is true that
+            $(\mathcal{U},\varphi)\in\mathcal{A}$.
+        \end{definition}
+        There are two ways to prove the existence and uniqueness of a maximal
+        smooth atlas containing a given atlas. The first way is the standard,
+        given a smooth atlas $\mathcal{A}$ you define $\tilde{\mathcal{A}}$ to
+        be the set of all charts that are smoothly compatible with charts in
+        $\mathcal{A}$. Given two charts $(\tilde{\mathcal{U}},\tilde{\varphi})$
+        and $(\tilde{\mathcal{V}},\tilde{\psi})$ in $\tilde{\mathcal{A}}$ such
+        that $\tilde{\mathcal{U}}\cap\tilde{\mathcal{V}}\ne\emptyset$, and a
+        point $x$ contained in this intersection, choose a
+        chart $(\mathcal{W},\phi)\in\mathcal{A}$ such that $x\in\mathcal{W}$.
+        Such a chart exists since $\mathcal{A}$ is a smooth atlas and hence
+        covers $X$. Then we have, locally around $x$, the following:
+        \begin{align}
+            \tilde{\psi}\circ\tilde{\varphi}^{-1}
+                &=\tilde{\psi}\circ\big(
+                    \phi^{-1}\circ\phi
+                \big)\circ\varphi^{-1}\\
+                &=\big(\tilde{\psi}\circ\phi^{-1}\big)\circ
+                    \big(\phi\circ\varphi^{-1}\big)
+        \end{align}
+        But $(\tilde{\mathcal{U}},\tilde{\varphi})$ and
+        $(\tilde{\mathcal{V}},\tilde{\psi})$ are smoothly compatible with all
+        charts in $\mathcal{A}$, and hence are smoothly compatible with
+        $(\mathcal{W},\phi)$. Therefore
+        $\tilde{\psi}\circ\phi^{-1}$ and $\phi\circ\tilde{\varphi}^{-1}$ are
+        smooth. Since the composition of smooth functions is smooth,
+        $\tilde{\psi}\circ\tilde{\varphi}^{-1}$ is smooth. In a similar manner,
+        $\tilde{\varphi}\circ\tilde{\psi}^{-1}$ is smooth. Hence,
+        $\tilde{\mathcal{A}}$ is a smooth atlas, and it is certainly maximal.
+        \par\hfill\par
+        The second proof uses Zorn's lemma. Note that since the union of
+        compatible atlases is again a smooth atlas, the set of all smooth
+        atlases on $(X,\tau)$ is partially ordered by inclusion $\subseteq$
+        and every chain in this partial ordering is bounded (take the union
+        over all elements in the chain). By Zorn's lemma, given $\mathcal{A}$,
+        there is a unique maximal element $\tilde{\mathcal{A}}$ such that
+        $\mathcal{A}\subseteq\tilde{\mathcal{A}}$. A bit quicker, but uses
+        Zorn's lemma and some people don't like that.
+        \begin{definition}{\textbf{(Smooth Manifold)}}
+            A smooth manifold is an ordered triple $(X,\tau,\mathcal{A})$
+            such that $(X,\tau)$ is a topological manifold and $\mathcal{A}$
+            is a maximal smooth atlas on $(X,\tau)$.
+        \end{definition}
+        The maximality condition avoids giving two ordered triples
+        $(\mathbb{S}^{2},\tau|_{\mathbb{S}^{2}},\mathcal{A}_{1})$ and
+        $(\mathbb{S}^{2},\tau|_{\mathbb{S}^{2}},\mathcal{A}_{2})$ different
+        names even though they both mean the standard smooth structure on the
+        sphere. There are other technical reasons for such a definition.
+        \par\hfill\par
+        Two comments. The inverse of the function $\varphi\circ\psi^{-1}$
+        is $\psi\circ\varphi^{-1}$ meaning the function and its inverse are
+        smooth, and bijections onto their image, meaning it is a
+        diffeomorphism from an open subset of $\mathbb{R}^{n}$ to another open
+        subset of $\mathbb{R}^{n}$. Next, the topology $\tau$ in a smooth
+        manifold $(X,\tau,\mathcal{A})$ is recoverable from $X$ and
+        $\mathcal{A}$. A set $\mathcal{U}\subseteq{X}$ is open if and only if
+        for all charts $(\mathcal{V},\psi)\in\mathcal{A}$ the set
+        $\psi\big[\mathcal{U}\cap\mathcal{V}]$ is open in $\mathbb{R}^{n}$. In
+        one direction, if $\mathcal{U}$ is open, then
+        $\mathcal{U}\cap\mathcal{V}$ is open, and since $\psi$ is an open
+        mapping, $\psi[\mathcal{U}\cap\mathcal{V}]$ is open. In the other,
+        for all $x\in\mathcal{U}$ there is a chart
+        $(\mathcal{V}_{x},\psi_{x})$. By hypothesis
+        $\psi_{x}[\mathcal{U}\cap\mathcal{V}_{x}]$ is open,
+        and since $\psi_{x}$ is a continuous function,
+        $\mathcal{U}\cap\mathcal{V}_{x}$ is open. But $\mathcal{U}$ can be
+        written as the union of all such $\mathcal{U}\cap\mathcal{V}_{x}$ as
+        $x$ varies over $\mathcal{U}$. Since the union of open sets is open,
+        $\mathcal{U}$ is open.
+        \par\hfill\par
+        Because of this it is standard to denote a smooth manifold by
+        $(X,\mathcal{A})$ where $\mathcal{A}$ is a maximal smooth atlas. It is
+        even more standard to denote a smooth manifold as just $X$ (or $M$ for
+        \textit{manifold}), but this implicitly assumes there is only one
+        possible smooth structure on a topological manifold, and this is false.
+        Milnor showed there are \textit{exotic spheres}, non-standard smooth
+        structures on the 7 dimensional sphere $\mathbb{S}^{7}$. What's more,
+        there are \textit{uncountably} many different smooth structures on
+        $\mathbb{R}^{4}$. If this sounds bizarre, it's because it is. For
+        dimensions 0, 1, 2, and 3, every topological manifold is also a
+        smooth manifold, and there is a unique smooth structure for it.
+        For dimensions beyond our intuition, things become strange. Indeed,
+        Kervaire showed there are higher dimensional topological manifolds that
+        cannot be smoothed, meaning there is no smooth structure on it at all.
+\end{document}

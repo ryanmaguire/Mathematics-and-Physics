@@ -38,13 +38,13 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Size of the output figure.                                                */
-size(64);
+size(128);
 
 /*  Default pen used for labels.                                              */
-defaultpen(fontsize(7pt));
+defaultpen(fontsize(10pt));
 
 /*  Pen used to label the induced function.                                   */
-pen dpen = fontsize(7pt) + linetype("4 4");
+pen dpen = fontsize(10pt) + linetype("4 4");
 
 /*  Set arrow size, and mark three points for A, B, and C.                    */
 real arsize = 5bp;
@@ -53,7 +53,7 @@ pair B = (1.0, 0.5);
 pair C = (1.0, -0.5);
 
 /*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
+margin margins = TrueMargin(0.5cm, 0.5cm);
 
 /*  Draw the arrows.                                                          */
 draw("$\alpha$", A -- B, NW, SharpArrow(arsize), margins);
