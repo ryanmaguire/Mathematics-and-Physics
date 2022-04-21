@@ -6,6 +6,7 @@ import tube;
 if(!settings.multipleView)  settings.batchView=false;
 
 settings.render=8;
+settings.outformat = "pdf";
 
 currentprojection=perspective(camera = (20, 80, 25), up   = (0, 0, 1),
                               target = (0,  0,  0),  zoom = 0.85);

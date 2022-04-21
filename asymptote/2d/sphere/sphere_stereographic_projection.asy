@@ -5,7 +5,7 @@ import settings;
 settings.outformat = "pdf";
 
 // Size of the output figure.
-size(128);
+size(256);
 
 pen fpen = gray(0.7)+opacity(0.5);
 pen apen = black+linewidth(1.0pt);
