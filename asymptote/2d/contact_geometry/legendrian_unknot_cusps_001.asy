@@ -1,6 +1,5 @@
-
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -29,15 +28,13 @@ import graph;
 settings.outformat = "pdf";
 
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
-/*  Projection of the trefoil parameterization onto the xy plane.             */
-pair tref(real t)
+/*  Projection of the Legendrian unknot parameterization onto the xz plane.   */
+pair f(real t)
 {
-    return (2*sin(2*t)-sin(t), 2*cos(2*t)+cos(t));
+    return (cos(t), sin(t)^3);
 }
 
 /*  Draw in the arcs of the trefoil.                                          */
-draw(graph(tref, -0.75, 1.29));
-draw(graph(tref, 1.35, 3.38));
-draw(graph(tref, 3.45, 5.48));
+draw(graph(f, 0.0, 2.0*pi));

@@ -26,6 +26,9 @@
 \usepackage{amsthm}
 \usepackage{amsmath}
 
+% Used for pictures.
+\usepackage{graphics}
+
 % Hyperlinks for labels.
 \usepackage{hyperref}
 
@@ -48,7 +51,7 @@
 \title{Conjectures on the Khovanov and Knot Floer Homologies of
        Legendrian and Transversally Simple Knots}
 \author{Vladimir Chernov\hspace{2em}Ryan Maguire}
-\date{March 2022}
+\date{April 2022}
 
 \begin{document}
     \maketitle
@@ -64,140 +67,195 @@
         Khovanov and Knot Floer homology are able to distinguish Legendrian
         and Transversally simple knots. Numerical evidence is provided for
         all knots up to and including 17 crossings. 
-	\end{abstract}
-	\section{Legendrian Knots}
-	    A knot is a smooth embedding of the circle $\mathbb{S}^{1}$ into
-	    $\mathbb{R}^{3}$. We may impose extra structure by considering the
-	    standard \textit{contact structure} of $\mathbb{R}^{3}$ (an assignment
-	    of a plane to every point in $\mathbb{R}^{3}$ such that there is no
-	    surface $M\subset\mathbb{R}^{3}$ where for every $p\in{M}$ the tangent
-	    plane $T_{p}M$ is given by the plane of the contact structure). A
-	    \textit{Legendrian knot} is a knot that is everywhere tangent to the
-	    contact structure. A gentle introduction to the subject can be found in
-	    \cite{JoshuaMSabloffWhatIsLegendrianKnot}. Transverse knots are knots
-	    that are everywhere transverse to the contact structure. Any Legendrian
-	    knot can be made transverse by a small perturbation in the direction
-	    normal to the given plane in the contact structure.
-	    \par\hfill\par
-	    Two Legendrian knots are considered to be Legendrian equivalent if
-	    there is a isotopy
-	    $H:\mathbb{S}^{1}\times[0,1]\rightarrow\mathbb{R}^{3}$ between them
-	    such that for all $t\in[0,1]$ the knot $H_{t}$ is Legendrian. It is
-	    possible for two knot embeddings to be topologically equivalent but not
-	    Legendrian. In the other direction, any knot can be made Legendrian by
-	    an appropriate isotopy (See the introduction of
-	    \cite{VeraVertessiTransNonSimpleKnots}). The two classical invariants
-	    of Legendrian knots are the Thurston-Bennequin number and rotation
-	    numbers. A knot type is said to be \textit{Legendrian simple} if
-	    any two Legendrian embeddings of it with the same Thurston-Bennequin
-	    and rotation numbers are Legendrian equivalent. That is, the classical
-	    invariants uniquely classify all Legendrian representations of the
-	    knot.
-	    \par\hfill\par
-	    Certain knot types are known to be Legendrian simple such as the unknot
-	    \cite{EliashbergFraserClassificationTopTrivialLegKnots}, torus knots,
-	    and the figure eight knot \cite{EtnyreHondaContactTopologyI}. The torus
-	    knots are of particular importance since it provides an infinite
-	    family to test conjectures and computations. On the other hand,
-	    not every knot is Legendrian simple, the $m_{3}$ twist knot (also
-	    known as the $5_{2}$ knot) being an example discovered by Chekanov
-	    \cite{ChekanovDifAlgOfLegLinks}.
-	\section{Khovanov Homology}
-	    The Khovanov homology of a knot is a powerful, if computationally
-	    expensive%
-	    \footnote{The na\"{i}ve algorithm is exponential in the number of
-	    crossings. Improvements
-	    by Bar-Natan \cite{Khovanov1999CatJonesPoly} have sped up computations
-	    but no polynomial-time algorithm is known at the time of this writing.},
-	    invariant first described by Mikhail Khovanov
-	    \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
-	    for an excellent introduction). It is closely related to the Jones
-	    polynomial, but is able to distinguish many more knots. The homology
-	    groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum of
-	    homogeneous components $KH_{\ell}^{r}(L)$ and the
-	    \textit{Khovanov Polynomial} (See \cite{KatlasKhoHo}) is given by:
-	    \begin{equation}
-	        Kh(L)(q,t)=
-	        \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
-	    \end{equation}
-	    The Jones polynomial of $L$ is recovered via:
-	    \begin{equation}
-	        J(L)(q)=Kh(q,-1)
-	    \end{equation}
-	    Khovanov homology is not a perfect invariant. That is, there are
-	    distinct knots with the same Khovanov homology, but it is a powerful
-	    invariant and is capable of detecting certain knot types.
-	    \begin{theorem}[Kronheimer and Mrowka]
+    \end{abstract}
+    \section{Legendrian Knots and Links}
+        A knot is a smooth embedding of the circle $\mathbb{S}^{1}$ into
+        $\mathbb{R}^{3}$. A link is a smooth embedding of $N\in\mathbb{N}$
+        disjoint circles in $\mathbb{R}^{3}$. We may impose
+        extra structure by considering the standard \textit{contact structure}
+        of $\mathbb{R}^{3}$. This is an assignment
+        of a plane to every point in $\mathbb{R}^{3}$ such that there is no
+        surface $M\subset\mathbb{R}^{3}$ where for every $p\in{M}$ the tangent
+        plane $T_{p}M$ is given by the plane of the contact structure). In
+        $\mathbb{R}^{3}$ this is described by the one-form
+        $\textrm{d}z-y\,\textrm{d}x$, the plane at $(x,y,z)$ being spanned by
+        the vectors $\partial_{x}+y\partial_{z}$ and $\partial_{y}$. The
+        hyperplane distribution is shown in Fig.~\ref{fig:darboux_form_001}.
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{../images/darboux_form_001.pdf}
+            }
+            \caption{Hyperplane Distribution for $\textrm{d}z-y\,\textrm{d}x$}
+            \label{fig:darboux_form_001}
+        \end{figure}
+        While there are no everywhere tangent surfaces, it is possible for a
+        curve to be everywhere tangent to this distribution of planes. Indeed,
+        $\gamma(t)=(t,0,0)$ is such a curve.
+        A \textit{Legendrian link} is a link that is everywhere tangent to
+        the contact structure. A gentle introduction to the subject can be found
+        in \cite{JoshuaMSabloffWhatIsLegendrianKnot}. Transverse links are links
+        that are everywhere transverse to the contact structure. Any Legendrian
+        link can be made transverse by a small perturbation in the direction
+        normal to the given plane in the contact structure.
+        \par\hfill\par
+        The condition $\textrm{d}z-y\,\textrm{d}x$ tells us that for a
+        Legendrian knot with parameterization $\gamma(t)=(x(t),y(t),z(y))$ we
+        need, for all $t$, the following:
+        \begin{equation}
+            y(t)=\frac{\dot{z}(t)}{\dot{x}(t)}
+        \end{equation}
+        Since knots are closed loops, the $x$ component will be cyclic, meaning
+        there are values $t_{0}$ such that $\dot{x}(t_{0})=0$. For the $y$
+        value not to tend off to infinity it is then required that
+        $\dot{z}(t_{0})=0$. The projection of $\gamma$ onto the $xz$ plane then
+        has \textit{cusps} (See Fig.~\ref{fig:legendrian_unknot_cusps_001}).
+        A parameterization of a Legendrian unknot can be obtained from this
+        figure. The curve in the plane is $(\cos(t),\sin^{3}(t))$. Solving for
+        $y(t)=\dot{z}(t)/\dot{x}(t)$ we get:
+        \begin{equation}
+            \gamma(t)=\Big(\cos(t),\,-3\cos(t)\sin(t),\,\sin^{3}(t)\Big)
+        \end{equation}
+        The validity of $\textrm{d}z-y\,\textrm{d}x$ can be computed directly.
+        This embedding is shown in
+        Fig.~\ref{fig:legendrian_unknot_001}.
+        Fig~\ref{fig:legendrian_unknot_002} shows that it is indeed tangent to
+        the hyperplane distribution.
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.4\textheight}{%
+                \includegraphics{../images/legendrian_unknot_cusps_001.pdf}
+            }
+            \caption{Projection of a Legendrian Unknot}
+            \label{fig:legendrian_unknot_cusps_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.4\textheight}{%
+                \includegraphics{../images/legendrian_unknot_001.pdf}
+            }
+            \caption{Legendrian Unknot in $\mathbb{R}^{3}$}
+            \label{fig:legendrian_unknot_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.4\textheight}{%
+                \includegraphics{../images/legendrian_unknot_002.pdf}
+            }
+            \caption{Legendrian Unknot in $\mathbb{R}^{3}$ with Hyperplanes}
+            \label{fig:legendrian_unknot_002}
+        \end{figure}
+        Two Legendrian links are considered to be Legendrian equivalent if
+        there is an isotopy $H:L\times[0,1]\rightarrow\mathbb{R}^{3}$ between
+        them, $L=\sqcup_{k=0}^{N-1}\mathbb{S}^{1}$, such that for all
+        $t\in[0,1]$ the link $H_{t}$ is Legendrian. It is possible for two links
+        to be topologically equivalent but not Legendrian. In the other
+        direction, any link can be made Legendrian by an appropriate isotopy
+        (See the introduction of \cite{VeraVertessiTransNonSimpleKnots}). The
+        two classical invariants of Legendrian links are the Thurston-Bennequin
+        and rotation numbers. A link type is said to be
+        \textit{Legendrian simple} if any two Legendrian embeddings of it with
+        the same Thurston-Bennequin and rotation numbers are Legendrian
+        equivalent. That is, the classical invariants uniquely classify all
+        Legendrian representations of the knot.
+        \par\hfill\par
+        Certain knot types are known to be Legendrian simple such as the unknot
+        \cite{EliashbergFraserClassificationTopTrivialLegKnots}, torus knots,
+        and the figure eight knot \cite{EtnyreHondaContactTopologyI}. The torus
+        knots are of particular importance since it provides an infinite
+        family to test conjectures and computations. On the other hand,
+        not every knot is Legendrian simple, the $m_{3}$ twist knot (also
+        known as the $5_{2}$ knot) being an example discovered by Chekanov
+        \cite{ChekanovDifAlgOfLegLinks}.
+    \section{Khovanov Homology}
+        The Khovanov homology of a knot is a powerful, if computationally
+        expensive%
+        \footnote{The na\"{i}ve algorithm is exponential in the number of
+        crossings. Improvements
+        by Bar-Natan \cite{Khovanov1999CatJonesPoly} have sped up computations
+        but no polynomial-time algorithm is known at the time of this writing.},
+        invariant first described by Mikhail Khovanov
+        \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
+        for an excellent introduction). It is closely related to the Jones
+        polynomial, but is able to distinguish many more knots. The homology
+        groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum of
+        homogeneous components $KH_{\ell}^{r}(L)$ and the
+        \textit{Khovanov Polynomial} (See \cite{KatlasKhoHo}) is given by:
+        \begin{equation}
+            Kh(L)(q,t)=
+            \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
+        \end{equation}
+        The Jones polynomial of $L$ is recovered via:
+        \begin{equation}
+            J(L)(q)=Kh(q,-1)
+        \end{equation}
+        Khovanov homology is not a perfect invariant. That is, there are
+        distinct knots with the same Khovanov homology, but it is a powerful
+        invariant and is capable of detecting certain knot types.
+        \begin{theorem}[Kronheimer and Mrowka]
             If a knot $K$ has the same Khovanov homology as the unknot, then $K$
             is equivalent to the unknot.
-	    \end{theorem}
-	    The unknotting problem asks one to determine if a given knot diagram is
-	    equivalent to the unknot. Khovanov homology is a powerful enough tool
-	    to accomplish this task. Since the Khovanov polynomial is a
-	    generalization of the Jones polynomial, the following has been
-	    conjectured:
-	    \begin{conjecture}[Jones Unknot Conjecture]
-	        If a knot has the same Jones polynomial as the unknot, is the knot
-	        equivalent to the unknot?
-	    \end{conjecture}
-	    This is a restatement of Kronheimer and Mrowka's result, but for the
-	    Jones polynomial. At the time of this writing it has not been proven,
-	    but there is evidence for and against the claim. Morwen Thistlewaite
-	    has found links with the same Jones polynomial as the unlink
-	    \cite{Thistlethwaite2001LINKSWT}, and there is a 3-crossing virtual
-	    knot that has the same Jones polynomial as the unknot. For the claim,
-	    all knots of up to 24 crossings are either the unknot, or have a
-	    Jones polynomial different from the unknot
-	    \cite{VerificationUnknotJonesConjUpTo24}.
-	\section{Conjectures on Khovanov and Knot Floer Homology}
-	    Another homology theory that is deeply studied is Knot Floer Homology
-	    (abbreviated KFH). KFH is also capable of detecting the unknot. Just as
-	    Khovanov homology is the categorification of the Jones polynomial, so
-	    is Knot Floer Homology for the Alexander polynomial.
-	    The question we wish to ask in this paper is whether the unknot is
-	    a special case of a broader class of knots for which Khovanov homology
-	    (and Knot Floer homology) is capable of detecting. There are two
-	    natural routes to take. The unknot is the simplest of the torus knots,
-	    and it is the simplest of the twist knots. Torus knots being an
-	    infinite family of Legendrian simple knots, we make the following
-	    conjecture:
-	    \begin{conjecture}
-	        If a knot type is Legendrian simple, does Khovanov homology and
-	        Knot Floer homology distinguish it from all other knot types?
-	    \end{conjecture}
-	    Numerical evidence has been tallied for all Torus knots with up to 50
-	    crossings against all knots of up to 17 crossings. There are many
-	    torus knots that have the same Jones polynomial as a non-torus knot
-	    ($T(2,5)$ matches a 10 crossing knot and a 17 crossing knot, $T(2,7)$
-	    matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
-	    so we cannot generalize the Jones unknot conjecture. Nevertheless, in
-	    all cases the Khovanov homologies were different.
-	    \par\hfill\par
-	    The computation was done as follows. There are libraries for Python and
-	    Sage for working with knot polynomials. In particular, we used
-	    Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
-	    \cite{sage}, and our own ever-growing C library. The need for four
-	    different libraries was for the sake of sanity. One library alone is
-	    sufficient for the computation of the Jones polynomial but it never
-	    hurts to double check. The Jones polynomials of all torus knots up to
-	    50 crossings were computed using the formula:
-	    \begin{equation}
-	        J(T(m,n))(q)=q^{(m-1)(n-1)/2}
-	            \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
-	    \end{equation}
-	    Using any of the aforementioned libraries, the Jones polynomial of all
-	    knots up to 17 crossings was computed and compared against the table of
-	    torus knot Jones polynomials we've computed. If a match was found,
-	    the regina Library was used to determine if the knots were actually
-	    identical. That is, if the knot whose Jones polynomial was being
-	    compared against the torus knots was indeed a torus knot itself. If the
-	    knots were distinct, this knot was saved in a text file for later
-	    examination. At the end of the computation 4 non-torus knots had the
-	    same Jones polynomial as a torus knot (the 4 mentioned previously).
-	    Since the Khovanov polynomial contains the Jones polynomial in it
-	    (recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
-	    the same Khovanov homology as a torus knot were these 4.
-	    \par\hfill\par
+        \end{theorem}
+        The unknotting problem asks one to determine if a given knot diagram is
+        equivalent to the unknot. Khovanov homology is a powerful enough tool
+        to accomplish this task. Since the Khovanov polynomial is a
+        generalization of the Jones polynomial it has be conjectured that if a
+        knot has the same Jones polynomial as the unknot, then that knot is
+        equivalent to the unknot. At the time of this writing it has not been
+        proven, but there is evidence for and against the claim. Morwen
+        Thistlewaite found links with the same Jones polynomial as the unlink
+        \cite{Thistlethwaite2001LINKSWT}, and there is a 3-crossing virtual
+        knot that has the same Jones polynomial as the unknot. For the claim,
+        all knots of up to 24 crossings are either the unknot, or have a
+        Jones polynomial different from the unknot
+        \cite{VerificationUnknotJonesConjUpTo24}.
+    \section{Conjectures on Khovanov and Knot Floer Homology}
+        Another homology theory that is deeply studied is Knot Floer Homology
+        (abbreviated KFH). KFH is also capable of detecting the unknot. Just as
+        Khovanov homology is the categorification of the Jones polynomial, so
+        is Knot Floer Homology for the Alexander polynomial.
+        The question we wish to ask in this paper is whether the unknot is
+        a special case of a broader class of knots for which Khovanov homology
+        (and Knot Floer homology) is capable of detecting.
+        \begin{conjecture}
+            If a link type $L$ is Legendrian simple, then the Khovanov and Knot
+            Floer homologies of $L$ distinguish it. That is, if $\tilde{L}$
+            is another link with the same Khovanov or Knot Floer homology,
+            then $\tilde{L}$ is equivalent to $L$.
+        \end{conjecture}
+        Numerical evidence has been tallied for all Torus knots with up to 50
+        crossings against all knots of up to 17 crossings. There are many
+        torus knots that have the same Jones polynomial as a non-torus knot
+        ($T(2,5)$ matches a 10 crossing knot and a 17 crossing knot, $T(2,7)$
+        matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
+        so we cannot generalize the Jones unknot conjecture. Nevertheless, in
+        all cases the Khovanov homologies were different.
+        \par\hfill\par
+        The computation was done as follows. There are libraries for Python and
+        Sage for working with knot polynomials. In particular, we used
+        Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
+        \cite{sage}, and our own ever-growing C library. The need for four
+        different libraries was for the sake of sanity. One library alone is
+        sufficient for the computation of the Jones polynomial but it never
+        hurts to double check. The Jones polynomials of all torus knots up to
+        50 crossings were computed using the formula:
+        \begin{equation}
+            J(T(m,n))(q)=q^{(m-1)(n-1)/2}
+                \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
+        \end{equation}
+        Using any of the aforementioned libraries, the Jones polynomial of all
+        knots up to 17 crossings was computed and compared against the table of
+        torus knot Jones polynomials we've computed. If a match was found,
+        the regina Library was used to determine if the knots were actually
+        identical. That is, if the knot whose Jones polynomial was being
+        compared against the torus knots was indeed a torus knot itself. If the
+        knots were distinct, this knot was saved in a text file for later
+        examination. At the end of the computation 4 non-torus knots had the
+        same Jones polynomial as a torus knot (the 4 mentioned previously).
+        Since the Khovanov polynomial contains the Jones polynomial in it
+        (recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
+        the same Khovanov homology as a torus knot were these 4.
+        \par\hfill\par
         Using the Java library JavaKh\footnote{%
             Thanks must be paid to Nikolay Pultsin who made edits to
             JavaKh-v2 so that it may run on a GNU/Linux machine using
