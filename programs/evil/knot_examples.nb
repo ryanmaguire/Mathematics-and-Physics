@@ -1,0 +1,108 @@
+(******************************************************************************)
+(*                                 LICENSE                                    *)
+(******************************************************************************)
+(*  This file is part of libtmpl.                                             *)
+(*                                                                            *)
+(*  libtmpl is free software: you can redistribute it and/or modify it        *)
+(*  it under the terms of the GNU General Public License as published by      *)
+(*  the Free Software Foundation, either version 3 of the License, or         *)
+(*  (at your option) any later version.                                       *)
+(*                                                                            *)
+(*  libtmpl is distributed in the hope that it will be useful,                *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of            *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *)
+(*  GNU General Public License for more details.                              *)
+(*                                                                            *)
+(*  You should have received a copy of the GNU General Public License         *)
+(*  along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.         *)
+(******************************************************************************)
+(*    This code was written by Jacob Swenberg for studying knots. It makes    *)
+(*    heavy use of Dror Bar-Natan's KnotTheory` library. Python, Sage, and C  *)
+(*    equivalents are contained in this repo for the sake of comparing.       *)
+(******************************************************************************)
+
+(* make sure to download the KnotTheory package first                         *)
+<<KnotTheory`
+
+(* Putting comments so we know what's going on                                *)
+tref = Knot[3,1]
+Knot[3,1]
+DrawPD[tref]
+
+(* VVV this just simplifies laurent polynomials in a nice way *)
+laurent[p_]:=Expand[Together[p]]
+
+(* does a knot have the same Jones as the trefoil?                            *)
+matchesTrefQ[knot_] := ContainsAny[
+    {
+        Jones[tref][t],
+        Jones[Mirror[tref]][t]
+    },
+    {Jones[knot][t]}
+]
+
+matchesTrefJonesQ[polynomial_] := ContainsAny[
+    {
+        Jones[tref][t],
+        Jones[Mirror[tref]][t]
+    },
+    {polynomial}
+]
+
+(* do any knots up to 11 crossings have the same Jones as the trefoil?        *)
+Select[AllKnots[], matchesTrefQ]
+
+(* we only need to check prime knots because the polynomial is irreducible    *)
+Factor[Jones[tref][t]]
+
+fig8 = Knot[4, 1]
+DrawPD[fig8]
+Jones[fig8][t]
+Factor[Jones[fig8][t]]
+Select[AllKnots[], Jones[#][t] == Jones[fig8][t]&]
+
+(* It looks like there's a knot with the same Jones as the figure 8.          *)
+Knot[11, NonAlternating, 19]
+Conway[Knot[4, 1]][z]
+Conway[Knot[11, NonAlternating, 19]][z]
+DrawPD[Knot[11, NonAlternating, 19]]
+Jones[Knot[11, NonAlternating, 19]][t]
+Jones[TorusKnot[5, 2]][t]
+Jones[TorusKnot[5, 3]][t]
+Jones[Knot[10, 124]][t]
+
+
+(* ^^^ These knots have the same polynomial...                                *)
+Conway[TorusKnot[5, 3]][z]
+Conway[Knot[10, 124]][z]
+
+(* they are probably the same knot                                            *)
+(* the following function can select knots that have Jones polynomial that is *)
+(* possibly equal to the Jones polynomial of a torus knot                     *)
+isMaybeTorusKnotQ[knot_] := Length[
+    MonomialList[laurent[(1 - t^2)*Jones[knot][t]], {t, t^-1}]
+] == 4
+
+Select[AllKnots[], isMaybeTorusKnotQ]
+laurent[Jones[Knot[5, 1]][t]*(1-t^2)]/.t->t^-1
+Jones[Mirror[Knot[10, 132]]][t]
+Jones[TorusKnot[5, 2]][t]
+Conway[Mirror[Knot[10, 132]]][z]
+Conway[TorusKnot[5, 2]][z]
+(* are these the same knot? let's check HOMFLY                                *)
+HOMFLYPT[Mirror[Knot[5,2]]][a,z]
+HOMFLYPT[TorusKnot[5,2]][a,z]
+
+(* so K5_2 and T(5,2) have the same Jones and Conway polynomials but are      *)
+(* different knots (probably, unless there's a bug?)                          *)
+laurent[Jones[Knot[9, 42]][t]*(1-t^2)]
+laurent[Jones[Knot[11, Alternating, 367]][t]*(1-t^2)]
+Jones[TorusKnot[11, 2]][t]
+Jones[Knot[11, Alternating, 367]][t]
+Conway[TorusKnot[11, 2]][z]
+Conway[Knot[11, Alternating, 367]][t]
+HOMFLYPT[Knot[11, Alternating, 367]][a,z]
+HOMFLYPT[TorusKnot[11, 2]][a, z]
+
+(* ^^^ these are the same knot                                                *)
+laurent[Jones[Knot[11, NonAlternating, 19]][t]*(1-t^2)]
