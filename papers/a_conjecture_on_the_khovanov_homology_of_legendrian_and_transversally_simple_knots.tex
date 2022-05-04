@@ -117,7 +117,7 @@
         \begin{equation}
             \gamma(t)=\Big(\cos(t),\,-3\cos(t)\sin(t),\,\sin^{3}(t)\Big)
         \end{equation}
-        The validity of $\textrm{d}z-y\,\textrm{d}x$ can be computed directly.
+        The validity of $\textrm{d}z-y\,\textrm{d}x=0$ can be computed directly.
         Fig~\ref{fig:legendrian_unknot_002} shows that this embedding is indeed
         everywhere tangent to the plane distribution.
         \begin{figure}
@@ -216,14 +216,36 @@
         \end{theorem}
         See \cite{BaldwinSivekKhovanovTrefoils} and
         \cite{BaldwinDowlinKhovanovFigureEight}, respectively.
+    \section{Knot Floer Homology}
+        Knot Floer Homology (abbreviated KFH) is to the Alexander polynomial as
+        Khovanov homology is to the Jones polynomial. That is, it is the
+        \textit{categorification} of it. It too is a powerful and deeply studied
+        invariant and has been shown, much like Khovanov homology, to be able to
+        distinguish certain knot types.
+        \begin{theorem}[Ozv\'{a}th and Szab\'{o}, 2004]
+            If $K$ is a knot with the same Knot Floer Homology as the unknot,
+            then $K$ is equivalent to the unknot.
+        \end{theorem}
+        See \cite{Ozsvath04holomorphicdisks}.
+        \begin{theorem}{Ghiggini, 2008}
+            If $K$ is a knot with the same Knot Floer Homology as one of the
+            trefoils, then $K$ is equivalent to one of them.
+        \end{theorem}
+        \begin{theorem}{Ghiggini, 2008}
+            If $K$ is a knot with the same Knot Floer Homology as the
+            figure-eight, then $K$ is equivalent to the figure-eight.
+        \end{theorem}
+        See \cite{Ghiggini08knotfloer}.
     \section{Conjectures on Khovanov and Knot Floer Homology}
-        Another deeply studied homology theory is Knot Floer Homology
-        (abbreviated KFH). KFH is also capable of detecting the unknot. Just as
-        Khovanov homology is the categorification of the Jones polynomial, so
-        is Knot Floer Homology for the Alexander polynomial.
-        The question we wish to ask in this paper is whether the unknot is
-        a special case of a broader class of knots for which these homologies
-        are capable of detecting.
+        Both Khovanov and Knot Floer Homology are capable of detecting the
+        unknot, trefoils, and figure-eight knot. The Khovanov homology with
+        coefficients in $\mathbb{Z}/2\mathbb{Z}$ is also capable of detecting
+        the cinquefoil knot \cite{BaldwinYingSivekCinquefoilKhovanov},
+        which is the $T(5,2)$ torus knot. The Jones
+        polynomial, on the other hand, is not capable of detecting the
+        $T(5,2)$ torus knot since the $10_{132}$ knot yields the same
+        polynomial. These are the easiest of the Legendrian simple knots
+        leading us to the following.
         \begin{conjecture}
             If a link type $L$ is Legendrian simple, then the Khovanov and Knot
             Floer homologies of $L$ distinguish it. That is, if $\tilde{L}$
@@ -248,18 +270,20 @@
         hurts to double check. The Jones polynomials of all torus knots up to
         50 crossings were computed using the formula:
         \begin{equation}
+            \label{eqn:jones_poly_torus}%
             J(T(m,n))(q)=q^{(m-1)(n-1)/2}
                 \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
         \end{equation}
         Using any of the aforementioned libraries, the Jones polynomial of all
-        knots up to 17 crossings were computed and compared against the table of
-        torus knot Jones polynomials we've computed. If a match was found,
-        the regina Library was used to determine if the knots were actually
-        identical. That is, if the knot whose Jones polynomial was being
-        compared against the torus knots was indeed a torus knot itself. If the
-        knots were distinct, this knot was saved in a text file for later
-        examination. At the end of the computation 4 non-torus knots had the
-        same Jones polynomial as a torus knot (the 4 mentioned previously).
+        knots up to 17 crossings were computed and compared against this table
+        of torus knot Jones polynomials (Eqn.~\ref{eqn:jones_poly_torus}).
+        If a match was found the regina library was used to determine if the
+        knots were actually identical. That is, if the knot whose Jones
+        polynomial was being compared against the torus knots was indeed a
+        torus knot itself. If the knots were distinct, this knot was saved in a
+        text file for later examination. At the end of the computation 4
+        non-torus knots had the same Jones polynomial as a torus knot
+        (the 4 mentioned previously).
         Since the Khovanov polynomial contains the Jones polynomial in it
         (recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
         the same Khovanov homology as a torus knot were these 4.
@@ -287,6 +311,19 @@
         time (one need only compute the determinant of a particular matrix), but
         improvements have been made here as well. Needless to say, this greatly
         improves performance in the search for a match for Knot Floer homology.
+        Much like the Jones polynomial, the Alexander polynomial of a torus
+        knot $T(p,q)$ has a well-known closed form solution:
+        \begin{equation}
+            \Delta_{T(p,q)}(t)=
+            t^{-\frac{(p-1)(q-1)}{2}}\frac{(t^{pq}-1)(t-1)}{(t^{p}-1)(t^{q}-1)}
+        \end{equation}
+        While the computation of the Alexander polynomial is more efficient
+        than the Jones' polynomial, this comes at a cost. Only four non-torus
+        knots had the same Jones polynomial as a torus knot, but thousands of
+        non-torus knots had the same Alexander polynomial as a torus knot.
+        The Knot Floer Homologies of these matching knots were computed using
+        the SnapPy python library. In the end none of these knots had the same
+        KFH as a torus knot, giving us the following.
         \begin{theorem}
             If a knot with less than or equal to 17 crossings has the same
             Knot Floer homology as a torus knot with less than or equal to 50
@@ -301,18 +338,26 @@
                 (1+q-q^{3-n}+q^{-n})/(1+q),&n\textrm{ even}
             \end{cases}
         \end{equation}
+        The Alexander polynomial for this family is known as well.
+        \begin{equation}
+            \Delta_{m_{n}}(t)=
+            \begin{cases}
+                \frac{n+1}{2}t-n+\frac{n+1}{2}t^{-1}&n\textrm{ odd}\\
+                -\frac{n}{2}t+(n+1)-\frac{n}{2}t^{-1}&n\textrm{ even}
+            \end{cases}
+        \end{equation}
         A search through all knots up to 17 crossings against all twist knots
         up to 40 crossings provided many matches for the Jones polynomial, but
-        none for Khovanov homology.
+        none for Khovanov homology. Similarly for the Alexander polynomial and
+        KFH.
+    \section{Numerical Results}
+
     \section{Future Work}
         The process of looping through knots and comparing invariants is
         \textit{embarrassingly parallelizable} and yet no attempts at
         parallel processing has been attempted. We wish to check all crossings
         up to 20 crossings in the near future and multiprocessing may be the
-        key to doing this in a sane amount of time. We also wish to check
-        Knot Floer Homology up to 17 crossings as we did Khovanov homology.
-        At present, only up to 15 crossings have been checked for the Knot
-        Floer homology conjecture.
+        key to doing this in a sane amount of time.
     \newpage
     \bibliographystyle{plain}
     \bibliography{bib.bib}
