@@ -1,0 +1,289 @@
+\documentclass{beamer}
+\usepackage{amsmath}
+
+\title{Computations with Affine Connections}
+\author{Ryan Maguire}
+\date{May 2022}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        An Affine connection on a manifold is used to describe the notion of
+        \textit{parallel translation}. The definition of such an object is
+        motivated by the \textit{covariant derivative} from the calculus of
+        $\mathbb{R}^{n}$. We'll use this to compute the angle of deviation of
+        a pendulum in Paris swinging north-to-south over a 24 hour period.
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        A \textit{section} of a manifold to it's tangent bundle is a function
+        $f:M\rightarrow{TM}$ such that for all $p\in{M}$ we have
+        $\textrm{proj}\big(f(p)\big)=p$, where
+        $\textrm{proj}\big((x,v)\big)=x$, $(x,v)\in{TM}$.
+        A vector field on a smooth manifold $(M,\mathcal{A})$ is a smooth
+        section $X:M\rightarrow{TM}$ of the manifold to it's tangent bundle.
+        \par\hfill\par
+        An equivalent formulation is an assignment at each $p\in{M}$ a
+        tangent vector $X_{p}\in{T}_{p}M$ and this assignment is done
+        \textit{smoothly}. That is, for any given function
+        $f\in{C}^{\infty}(M,\mathbb{R})$ the function $Xf$, defined in a
+        local chart $(\mathcal{U},\varphi)$ as:
+        \begin{equation}
+            Xf(p)=X_{p}f
+                =\sum_{n=0}^{N-1}a_{n}\frac{\partial{f}}{\partial\varphi_{n}}
+        \end{equation}
+        is smooth.
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        Since a vector field $X:M\rightarrow{TM}$ can be applied to smooth
+        functions $f\in{C}^{\infty}(M,\mathbb{R})$, the result of which being
+        a smooth function, it is possible to compose vector fields
+        $X,Y:M\rightarrow{TM}$. That is, given a function
+        $f\in{C}^{\infty}(M,\mathbb{R})$ and two smooth vector fields $X$ and
+        $Y$, we obtain a new smooth function $X(Yf)$. The composition of two
+        vector fields need not be a vector field. Looking in local
+        coordinates $(\mathcal{U},\varphi)$, and representing the tangent
+        vectors $X_{p}$ and $Y_{p}$ as following:
+        \begin{align}
+            X_{p}&=\sum_{n=0}^{N-1}a_{n}(p)\frac{\partial}{\partial\varphi_{n}}\\
+            Y_{p}&=\sum_{n=0}^{N-1}b_{n}(p)\frac{\partial}{\partial\varphi_{n}}
+        \end{align}
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        The composition $X(Yf)$ is then:
+        \begin{align}
+            X\Big(
+                \sum_{m=0}^{N-1}b_{n}\frac{\partial{f}}{\partial\varphi_{m}}
+            \Big)
+            &=\sum_{n=0}^{N-1}a_{n}\frac{\partial}{\partial\varphi_{n}}
+            \Big(
+                \sum_{m=0}^{N-1}b_{n}\frac{\partial{f}}{\partial\varphi_{m}}
+            \Big)\\
+            &=\sum_{n=0}^{N-1}\sum_{m=0}^{N-1}\Big(
+                a_{n}\frac{\partial{b}_{m}}{\partial\varphi_{n}}
+                \frac{\partial{f}}{\partial\varphi_{m}}+
+                a_{n}b_{m}
+                \frac{\partial^{2}{f}}{\partial\varphi_{n}\partial\varphi_{m}}
+            \Big)
+        \end{align}
+        So $XYf$ involves second order derivatives, which is not Liebnizian.
+        If we subtract $YXf$ and invoke the Clairaut formula, we see that
+        $XY-YX$ involves only first order derivatives, and hence is a
+        vector field. This is called the \textit{Lie Bracket} of $X$ with
+        respect to $Y$, $[X,Y]=XY-YX$.
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        A Riemannian metric on a smooth manifold $(M,\mathcal{A})$ is a
+        function $g$ on $M$ such that for all $p\in{M}$
+        $g_{p}$ is a symmetric bilinear form that is positive-definite. That
+        is, for all $u_{0},u_{1},v_{0},v_{1}\in{T}_{p}M$ and
+        $a,b,c,d\in\mathbb{R}$
+        \begin{align}
+            g_{p}(u_{0},u_{1})&=g_{p}(u_{1},u_{0})\\
+            g_{p}(au_{0}+bu_{1},cv_{0}+dv_{1})
+                &=acg_{p}(u_{0},v_{0})+adg_{p}(u_{0},v_{1})+\nonumber\\
+                    &\hspace{1.3em}bcg_{p}(u_{1},v_{0})+bdg_{p}(u_{1},v_{1})\\
+            g_{p}(u_{0},u_{0})&\geq{0}\\
+            g_{p}(u_{0},u_{0})&=0\quad\textrm{iff}\quad{u}_{0}=0
+        \end{align}
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        Moreover, the function $g$ should vary \textit{smoothly} with $p$.
+        That is, for any two smooth vector fields $X$ and $Y$, the function
+        $f:M\rightarrow\mathbb{R}$ defined by:
+        \begin{equation}
+            f(p)=g_{p}(X_{p},Y_{p})
+        \end{equation}
+        should be smooth. Such a function $g$ is called a Riemannian metric,
+        and a Riemannian manifold is an ordered triple
+        $(M,\mathcal{A},g)$ where $(M,\mathcal{A})$ is a smooth manifold and
+        $g$ is a Riemannian metric on $(M,\mathcal{A})$.
+    \end{frame}
+    \begin{frame}{Basic Definitions}
+        The \textit{covariant} derivative in $\mathbb{R}^{n}$ gives us a way
+        of specifying the \textit{derivative} of one vector field with respect
+        to another. Given $X=\sum{a}_{n}(\mathbf{x})\partial{x}_{n}$ and
+        $Y=\sum{b}_{m}(\mathbf{x})\partial{x}_{m}$, the covariant derivative
+        of $Y$ with respect to $X$ is:
+        \begin{equation}
+            \sum_{n=0}^{N-1}\sum_{m=0}^{N-1}a_{n}
+                \frac{\partial{b}_{m}}{\partial{x}_{n}}
+                \frac{\partial}{\partial{x}_{m}}
+        \end{equation}
+        This is the part of $XY$ that does not involve second order terms.
+    \end{frame}
+    \begin{frame}{Affine Connections}
+        An affine connection of a smooth manifold $(M,\mathcal{A})$
+        axiomatizes the properties of the covariant derivative. This is a
+        function
+        $\nabla:\mathfrak{X}(M)\times\mathfrak{X}(M)\rightarrow\mathfrak{X}(M)$,
+        where $\mathfrak{X}(M)$ is the set of all smooth vector fields on
+        $(M,\mathcal{A})$, with the following properties:
+        \begin{itemize}
+            \item $\nabla$ is bilinear.
+            \item $\nabla$ is $C^{\infty}(M,\mathbb{R})$ linear in the first
+                coordinate:
+                \begin{equation}
+                    \nabla_{fX}Y=f\nabla_{X}Y
+                \end{equation}
+            \item $\nabla$ is Liebnizean in the second coordinate:
+                \begin{equation}
+                    \nabla_{X}fY=(Xf)Y+f\nabla_{X}Y
+                \end{equation}
+        \end{itemize}
+        Recall that since $X$ is a smooth vector field, $Xf$ is a smooth
+        function, so $(Xf)Y$ is the product of a smooth function with a smooth
+        vector field, which is again a smooth vector field. The third condition
+        is thus the sum of two vector fields, which is a vector field, meaning
+        all of this is well defined.
+    \end{frame}
+    \begin{frame}{Affine Connections}
+        All of this is defined for smooth manifolds and no Riemannian metric is
+        yet needed. Affine connections are called \textit{torsion free} if they
+        are related to the Lie bracket:
+        \begin{equation}
+            \nabla_{X}Y-\nabla_{Y}X=[X,Y]
+        \end{equation}
+        Given a Riemannian manifold $(M,\mathcal{A},g)$, the connection is said
+        to be \textit{compatible} with $g$ if for all smooth vector fields
+        $X,Y,Z$ we have
+        \begin{equation}
+            Xg(Y,Z)=g(\nabla_{X}Y,Z)+g(Y,\nabla_{X}Z)
+        \end{equation}
+        A \textit{Levi-Civita} connection is an affine connection that is
+        torsion free and is compatible with the metric $g$.
+    \end{frame}
+    \begin{frame}{Affine Connections}
+        \begin{theorem}[Fundamental Theorem of Riemannian Geometry]
+            Every Riemannian manifold $(M,\mathcal{A},g)$ has a unique
+            Levi-Civita connection $\nabla$.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{Parallel Transport}
+        Given a smooth curve $\gamma:[0,1]\rightarrow{M}$, if $\gamma$ is
+        injective, then the image $\gamma\big[[0,1]\big]$ defines a
+        submanifold with boundary in $M$. The velocity vector
+        $\dot{\gamma}(t_{0})$ is defined as the derivation
+        $\dot{\gamma}(t_{0}):C^{\infty}(M,\mathbb{R})\rightarrow\mathbb{R}$
+        given by:
+        \begin{equation}
+            \dot{\gamma}(t_{0})(f)=
+                \frac{\textrm{d}}{\textrm{d}t}\Big(f\circ\gamma\Big)
+        \end{equation}
+        Note that $f\circ\gamma$ is a function from $[0,1]$ to $\mathbb{R}$ so
+        we may differentiate in the usual sense. $\dot{\gamma}$ defines a vector
+        field on a closed submanifold with boundary of $M$. It is always
+        possible to extend a smooth vector field on a closed submanifold to a
+        smooth vector field on all of $M$. This follows from a partition of
+        unity argument.
+    \end{frame}
+    \begin{frame}{Parallel Transport}
+        \begin{theorem}
+            If $(M,\mathcal{A})$ is a smooth manifold, if $\nabla$ is an affine
+            connection on $M$, if $\gamma$ is a smooth injective curve in $M$,
+            if $X$ and $Y$ are smooth extensions of $\dot{\gamma}$, and if $Z$
+            is a smooth vector field, then for all $p\in{M}$ such that
+            $p=\gamma(t)$ for some $t\in[0,1]$, we have:
+            \begin{equation}
+                \nabla_{X_{p}}Z_{p}=\nabla_{Y_{p}}Z_{p}
+            \end{equation}
+        \end{theorem}
+        Because of this we may abuse notation and write
+        $\nabla_{\dot{\gamma}}Z$ to mean the derivative of the vector field $Z$
+        along the curve $\gamma$.
+    \end{frame}
+    \begin{frame}{Parallel Transport}
+        A vector field that is \textit{parallel} along a curve $\gamma$ is a
+        smooth vector field $X$ such that $\nabla_{\dot{\gamma}}X=0$. Given a
+        curve $\gamma$ and a tangent vector $v\in{T}_{\gamma(0)}M$ we can
+        \textit{solve} for a vector field that is parallel along $\gamma$ in
+        local coordinates by solving a system of differential equations. This
+        allows one numerically solve for how a given tangent vector will be
+        transported along a curve.
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        Given a Riemannian manifold $(M,\mathcal{A},g)$ and a smooth embedding
+        $f:X\rightarrow{M}$ of a smooth manifold $(X,\mathcal{A}_{X})$ it is
+        possible to endow $(X,\mathcal{A}_{X})$ with a metric via
+        \textit{pull-back}. Give $x\in{X}$, $u_{0},u_{1}\in{T}_{x}X$, let
+        $p=f(x)$ and $v_{0}=\textrm{d}f_{x}(u_{0})$,
+        $v_{1}=\textrm{d}f_{x}(u_{1})$, where $\textrm{d}f_{x}$ is the
+        differential push-forward of $f$ at the point $x$. We may defined
+        $\tilde{g}_{x}$ via:
+        \begin{equation}
+            \tilde{g}_{x}(u_{0},u_{1})=g_{p}(v_{0},v_{1})
+        \end{equation}
+        Since the differential push-forward of a smooth vector field is a
+        smooth vector field, if $g$ is smooth, then so is $\tilde{g}$. This
+        gives $(X,\mathcal{A}_{X},\tilde{g})$ the structure of a Riemannian
+        manifold.
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        The round metric on $\mathbb{S}^{2}$ is obtained via pull-back.
+        $\mathbb{R}^{3}$ has the standard dot product:
+        \begin{equation}
+            \langle\mathbf{x}|\mathbf{y}\rangle
+                =\sum_{n=0}^{N-1}{x}_{n}{y}_{n}
+        \end{equation}
+        The inclusion mapping $\iota:\mathbb{S}^{2}\rightarrow\mathbb{R}^{3}$
+        is a smooth embedding, and hence induces a metric on $\mathbb{S}^{2}$
+        via pull-back of the dot product. This Riemannian metric on
+        $\mathbb{S}^{2}$ is called the \textit{round metric}.
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        There is a correspondence between vector fields on $\mathbb{S}^{2}$ and
+        functions $X:\mathbb{S}^{2}\rightarrow\mathbb{R}^{3}$ such that
+        for all $p\in\mathbb{S}^{2}$ we have
+        $\langle{p}|X_{p}\rangle=0$. A smooth vector field is in particular a
+        smooth function $X:\mathbb{S}^{2}\rightarrow\mathbb{R}^{3}$ with this
+        property. The function
+        $\nabla:\mathfrak{X}(\mathbb{S}^{2})\times\mathfrak{X}(\mathbb{S}^{2})%
+            \rightarrow\mathfrak{X}(\mathbb{S}^{2})$ defined by:
+        \begin{equation}
+            \nabla_{X_{p}}Y_{p}(f)=
+            \textrm{d}Y_{p}(X_{p})(f)+\langle{X}_{p}|Y_{p}\rangle{f}(p)
+        \end{equation}
+        determines a Levi-Civita connection on $\mathbb{S}^{2}$.
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        Now imagine it is 1851, you are in Paris, and have a 67 meter long
+        pendulum attached to the dome of the French Panth\'{e}on. You have it
+        swing north-to-south. You then ask what will the angle be after one
+        full rotation of the Earth.
+        \par\hfill\par
+        It is easy to convince your self that if you were in Brazil on the
+        equator and performed this experiment, the angle would not deviate at
+        all. It is also easy to believe that if you performed this experiment
+        next to polar bears in the north pole the pendulum would simply rotate
+        with the Earth a full $2\pi$ radians.
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        The path the pendulum traverses is a circle of constant latitude.
+        We can cover this in a single coordinate chart via stereographic
+        projection about either the north or south pole. In these coordinates
+        $x$ and $y$ correspond to east-west and south-north directions,
+        respectively. The system of differential equations we need to solve is:
+        \begin{align}
+            \ddot{x}(t)&=-x+4\pi\dot{y}(t)\sin(\phi)\\
+            \ddot{y}(t)&=-y-4\pi\dot{x}(t)\sin(\phi)
+        \end{align}
+        Here $\phi$ is the angle of latitude of Paris. This converts into a
+        single complex differential equation:
+        \begin{equation}
+            \ddot{z}(t)+4\pi{i}\sin(\phi)\dot{z}(t)+z(t)=0
+        \end{equation}
+    \end{frame}
+    \begin{frame}{The Foucault Pendulum}
+        We can solve directly:
+        \begin{equation}
+            z(t)=\exp\Big(-2\pi{i}\sin(\phi)t\Big)\Big(A\exp(it)+B\exp(-it)\Big)
+        \end{equation}
+        where $A$ and $B$ are constants corresponding to the initial tangent
+        vector $v$ (which is north-south). Here, $t$ is measured in days. The
+        angle of deviation after one rotation of the Earth is then
+        $-2\pi\sin(\phi)$. The latitude of Paris is 48 degrees and 51 minutes,
+        or about 0.85 radians. The resulting deviation is
+        $-4.73$, or about $-271.1$ degrees. The pendulum will be oscillating
+        in the east-west direction.
+    \end{frame}
+\end{document}
