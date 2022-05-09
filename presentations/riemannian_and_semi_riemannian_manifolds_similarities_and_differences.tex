@@ -1,0 +1,294 @@
+\documentclass{beamer}
+\usepackage{amsmath}
+
+\title{Riemannian and Semi-Riemannian Manfifolds}
+\subtitle{Similarities and Differences}
+\author{Ryan Maguire}
+\date{May 2022}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}
+        A smooth manifold is a locally Euclidean Hausdorff topological space
+        that is second countable such that there is an atlas $\mathcal{A}$
+        consisting of smoothly compatible charts.
+        \par\hfill\par
+        Diffeomorphisms are
+        smooth bijective functions with smooth inverses.
+        \par\hfill\par
+        Things like \textit{distance} and \textit{volume} are not preserved by
+        diffeomorphisms, indeed these concepts aren't even well-defined for
+        the general smooth manifold.
+    \end{frame}
+    \begin{frame}
+        A smooth vector field on a manifold $M$ is a smooth section of the
+        tangent bundle $X:M\rightarrow{TM}$.
+        \par\hfill\par
+        Let's define a
+        \textit{generalized metric} to be a function $g$ on $M$ such that for
+        all $p\in{M}$, $g_{p}:T_{p}M\rightarrow\mathbb{R}$ is a smooth
+        symmetric bilinear form. By smooth it is meant that for all smooth
+        vector fields $X,Y:M\rightarrow{TM}$ the function
+        $g_{p}(X_{p},Y_{p})$, which is a function from $M$ to $\mathbb{R}$, is
+        smooth.
+        \par\hfill\par
+        At this point there is no requirement of positive definiteness
+        or non-degeneracy.
+    \end{frame}
+    \begin{frame}
+        A \textit{Riemannian} metric on a manifold $M$ is a generalized metric
+        $g$ that is positive-definite. That is, for all $p\in{M}$ and for all
+        $v\in{T}_{p}M$, $g_{p}(v,v)\geq{0}$ and $g_{p}(v,v)=0$ if and only if
+        $v$ is the zero tangent vector.
+        \par\hfill\par
+        A \textit{semi-Riemannian} metric is a generalized metric that is
+        non-degenerate. That is, for all $p\in{M}$ and all non-zero
+        $v\in{T}_{p}M$, there is a $w\in{T}_{p}M$ such that
+        $g_{p}(v,w)\ne{0}$.
+    \end{frame}
+    \begin{frame}
+        By Sylvester's Law of Inertia (I have absolutely no idea why it is
+        called that), for each $p\in{M}$ there is a basis of $T_{p}M$ such that
+        the matrix representation of the symmetric bilinear form $g_{p}$
+        is diagonal and consists entirely of $1$, $0$, and $-1$ on the diagonal.
+        \par\hfill\par
+        By Sylvester's Conservation of Inertia (again, no idea why the name),
+        the number of $1$'s, $0$'s, and $-1$'s is a constant. This allows one to
+        define the \textit{signature} of a generalized metric. This is the
+        ordered triple $(a,b,c)$ where $a\in\mathbb{N}$ is the number of 1's
+        in such a representation, $b\in\mathbb{N}$ is the number of 0's, and
+        $c\in\mathbb{N}$ is the number of $-1$'s.
+    \end{frame}
+    \begin{frame}
+        An $N\in\mathbb{N}$ dimensional Riemannian manifold is just a smooth
+        manifold with a generalized metric of signature $(N,0,0)$. A
+        semi-Riemannian manifold is a smooth manifold with a generalized metric
+        of signature $(n,0,m)$ with $n+m=N$, $n,m\geq{0}$.
+        \par\hfill\par
+        Many of the results about Riemannian manifolds hold for semi-Riemannian,
+        and many do not not. In this talk we'll discuss some of these central
+        ideas.
+        \par\hfill\par
+        Note, since a semi-Riemannian metric $g$ is non-degenerate by
+        definition, the number $b$ in the signature $(a,b,c)$ of $g$ is always
+        zero. Because of this many authors write the signature of $g$ to be
+        $(a,c)$.
+    \end{frame}
+    \begin{frame}
+        An affine connection on a smooth manifold is a function
+        $\nabla:\mathfrak{X}(M)\times\mathfrak{X}(M)\rightarrow\mathfrak{X}(M)$
+        such that:
+        \begin{itemize}
+            \item $\nabla$ is bilinear.
+            \item $\nabla$ is $C^{\infty}(M,\mathbb{R})$ linear in the first
+                component. That is, $\nabla_{fX}Y=f\nabla_{X}Y$.
+            \item $\nabla$ is Liebnizean in the second component. That is,
+                $\nabla_{X}fY=(Xf)Y+f\nabla_{X}Y$.
+        \end{itemize}
+        A torsion-free affine connection is one compatible with the
+        \textit{Lie Bracket}. That is:
+        \begin{equation}
+            \nabla_{X}Y-\nabla_{Y}X=[X,Y]
+        \end{equation}
+    \end{frame}
+    \begin{frame}
+        Given a generalized metric $g$ on a smooth manifold $M$, a
+        \textit{compatible} affine connection is an affine connection
+        $\nabla$ such that for all smooth vector fields $X,Y,Z$ we have:
+        \begin{equation}
+            Xg_{p}(Y_{p},Z_{p})=
+                g_{p}(\nabla_{X}Y,Z)+g_{p}(Y,\nabla_{X}Z)
+        \end{equation}
+        A Levi-Civita connection on a smooth manifold with a (generalized)
+        metric $g$ is an affine connection that is torsion free and compatible
+        with $g$.
+    \end{frame}
+    \begin{frame}
+        A theorem dating back to the early 1900's states if $M$ is a smooth
+        manifold with a \textit{Riemannian} metric, then there is a unique
+        Levi-Civita connection on $M$. This generalizes to the semi-Riemannian
+        case.
+        \begin{theorem}[Fundamental Theorem of Semi-Riemannian Geometry]
+            If $M$ is a smooth manifold, and if $g$ is a semi-Riemannian metric,
+            then there is a unique Levi-Civita connection on $M$.
+        \end{theorem}
+        This does not generalize to generalized metrics, the non-degenaracy
+        is needed. Indeed, take $g$ to be the \textit{zero} metric with
+        signature $(0,N,0)$. Then \textit{any} affine connection is compatible
+        with $g$ since the compatibility equation reduces to $0=0+0$, which is
+        true.
+    \end{frame}
+    \begin{frame}
+        For both Riemannian and semi-Riemannian the fundamental theorem
+        generalizes as follows. Define any function
+        $F:\mathfrak{X}(M)\times\mathfrak{X}(M)\rightarrow\mathfrak{X}(M)$.
+        We have the following.
+        \begin{theorem}[Generalized Fundamental Theorem of Semi-Riemannian Geometry]
+            If $M$ is a smooth manifold with a semi-Riemannian metric $g$,
+            then there is a unique affine connection that is compatible with $g$
+            such that for all $X,Y\in\mathfrak{X}(M)$ we have:
+            \begin{equation}
+                \nabla_{X}Y-\nabla_{Y}X-[X,Y]=F(X,Y)
+            \end{equation}
+            That is, there is a unique affine connection compatible with $g$
+            with the prescribed torsion.
+        \end{theorem}
+        The proof is the same as the proof of the previous theorem. One takes
+        the \textit{Koszul formula}, shows that any such metric mush satisfy it,
+        and that the equation does indeed define an affine connection
+        compatible with $g$.
+    \end{frame}
+    \begin{frame}
+        Affine connections can be defined locally on curves, and need not be
+        defined on the entirety of $M$. A smooth curve $\gamma$ in $M$ is called
+        a \textit{geodesic} with respect to $\nabla$ if:
+        \begin{equation}
+            \nabla_{\dot{\gamma}}\dot{\gamma}=0
+        \end{equation}
+        This makes sense for Riemannian, semi-Riemannian, or generalized
+        metrics, meaning there is always a way to define geodesics.
+    \end{frame}
+    \begin{frame}
+        What differs is the use of geodesics to define a
+        \textit{distance function} (a regular metric-space metric) on $M$
+        induced by $g$. For Riemannian metrics $g$ one may define:
+        \begin{equation}
+            d(p,q)=
+            \begin{cases}
+                \underset{\gamma:p\rightarrow{q}}{\inf}\int_{\gamma}
+                    \sqrt{g_{\gamma(t)}(\dot{\gamma(t)},\dot{\gamma(t)})}
+                    \textrm{d}t&p\textrm{ connected to }q\\
+                1&\textrm{else}
+            \end{cases}
+        \end{equation}
+        Positive-definiteness shows that this is well-defined, and with a
+        bit of work one can show this transforms $(M,d)$ into a metric space.
+    \end{frame}
+    \begin{frame}
+        It is not so easy to extend this idea to semi-Riemannian manifolds, at
+        least without modification. Take a \textit{Lorentz manifold}, which is
+        a semi-Riemannian manifold with metric $(N-1,0,1)$. Given $p\in{M}$
+        there are points $v\in{T}_{p}M$ such that
+        $g_{p}(v,v)=0$ but $v\ne{0}$. The set of all such points is called the
+        \textit{light-cone} of $p$ since the set of points satisfies the
+        equation:
+        \begin{equation}
+            \Big(\sum_{n=0}^{N-2}\textrm{d}x_{n}^{2}\Big)-\textrm{d}t^{2}=0
+        \end{equation}
+        Solving for $\textrm{d}t$ as a function of the other one-forms
+        $\textrm{d}x_{n}$ gives the equation of a cone. Abusing notation, it is
+        the \textit{light-cone} since we have:
+        \begin{equation}
+            \sum_{n=0}^{N-2}\Big(\frac{\textrm{d}x_{n}}{\textrm{d}t}\Big)^{2}=1
+        \end{equation}
+        That is, the velocity vector has norm 1 which in \textit{natural units}
+        corresponds to the speed of light.
+    \end{frame}
+    \begin{frame}
+        The formula for distance between points does not work with a Lorentzian
+        metric. There are vectors $v\in{T}_{p}M$ with
+        $g_{p}(v,v)<0$, the so-called \textit{time-like} vectors which
+        represent movement at less than the speed of light. The square root of
+        $g_{\gamma}(t),(\dot{v}(t),\dot{v}(t))$ is not a real number so this formula
+        does not make sense. Moreover, when it does make sense it may not define
+        a metric. Points the differs by a light-like curve (a curve with
+        $g_{\gamma(t)}(\dot{\gamma}(t),\dot{\gamma}(t))=0$) will have a
+        \textit{distance} between them of zero.
+    \end{frame}
+    \begin{frame}
+        Another celebrated theorem of Riemannian geometry does not hold in
+        semi-Riemannian geometry.
+        \begin{theorem}[Hopf-Rinow Theorem]
+            If $(M,g)$ is a connected Riemannian manifold, then the following
+            are equivalent ($d$ being the metric induced by $g$):
+            \begin{enumerate}
+                \item Closed bounded subsets of $M$ are compact.
+                \item $(M,d)$ is a complex metric space.
+                \item M is geodesically complex.
+            \end{enumerate}
+        \end{theorem}
+        Geodesically complex means geodesics may flow for all time. This theorem
+        is \textit{false} for (and not well-posed) for semi-Riemannian
+        manifolds. However, even if we omit the second statement, conditions
+        1 and 3 are not equivalent in a semi-Riemannian manifold.
+    \end{frame}
+    \begin{frame}
+        Let $M=\mathbb{R}^{2}\setminus\{(0,0)\}$. Define $g$ on $M$ as follows:
+        \begin{equation}
+            g=2\frac{\textrm{d}x\,\textrm{d}y}{x^{2}+y^{2}}
+        \end{equation}
+        The function $\lambda:M\rightarrow{M}$ defined by
+        $\lambda((x,y))=(2x,2y)$ is an isometry. Let $\Gamma$ be the subgroup
+        of the isometry group of $(M,g)$ generated by $\lambda$. There is a
+        properly discontinuous group action of $\Gamma$ on $M$ and the space
+        $M/\Gamma$ is, topologically, the torus $\mathbb{T}^{2}$. In particular,
+        $M/\Gamma$ is compact and hence \textit{any} metric on $M/\Gamma$ that
+        induces it's topology must be bounded. The induced metric gives a
+        \textit{Lorentz surface}, and this ordered pair
+        $(M/\Gamma,\tilde{g})$ is called the
+        \textit{Clifton-Pohl} torus.
+    \end{frame}
+    \begin{frame}
+        The Clifton-Pohl torus is \textit{not} geodesically complete, even
+        though it is compact. The geodesic:
+        \begin{equation}
+            \gamma(t)=\Big(\frac{1}{1-t},0\Big)
+        \end{equation}
+        in $M$ induces a geodesic $\tilde{\gamma}$ in $M/\Gamma$, but this
+        induced curve cannot flow for time $t\geq{1}$.
+    \end{frame}
+    \begin{frame}
+        A theorem that surprised me goes as follows. First, a classic result
+        about \textit{Riemannian} metrics.
+        \begin{theorem}
+            If $M$ is a smooth manifold, then there is a Riemannian metric $g$
+            on $M$ and $(M,g)$ is a Riemannian manifold.
+        \end{theorem}
+        This \textit{fails} for semi-Riemannian.
+        \begin{theorem}
+            There is no Lorentz metric (signature $(1,0,1)$) on $\mathbb{S}^{2}$.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}
+        What's truly surprising is that the existence of metrics of a given
+        signature is entirely related to the algebraic topology of the
+        underlying manifold.
+        \par\hfill\par
+        A real smooth vector bundle over a smooth manifold $M$ is an ordered
+        pair $(E,\pi)$ where $E$ is a smooth manifold and
+        $\pi:E\rightarrow{M}$ is a smooth surjection such that for all
+        $p\in{M}$, $\pi^{-1}[\{p\}]$ has the structure of a finite dimensional
+        real vector space. Moreover, for all $p\in{M}$ there is an open
+        subset $\mathcal{U}\subseteq{M}$ with $p\in\mathcal{U}$ such that
+        $\mathcal{U}\times\mathbb{R}^{N}$ is diffeomorphic to
+        $\pi^{-1}[\mathcal{U}]$. This is an immediate generalization of the
+        tangent bundle of a smooth manifold.
+        \par\hfill\par
+        For connected vector bundles, the dimension of the vector space of the
+        fiber of $p$ is a constant for all $p\in{M}$. This is the
+        \textit{rank} of the vector bundle.
+    \end{frame}
+    \begin{frame}
+        \begin{theorem}
+            A smooth manifold $M$ has a metric with signature $(p,0,q)$ if and
+            only if there are smooth real vector bundles $(E,\pi_{E})$ and
+            $(F,\pi_{F})$ of ranks $p$ and $q$, respectively,
+            such that $TM\simeq{E}\oplus{F}$.
+        \end{theorem}
+        For the case of Lorentzian manifolds, $p=N-1$ and $q=1$. That is, we
+        wish to write $TM$ as the product of a rank $N-1$ and a
+        \textit{line bundle}.
+    \end{frame}
+    \begin{frame}
+        \begin{theorem}
+            A smooth manifold $M$ has a Lorentz metric if and only if
+            $M$ is non-compact, or $M$ has Euler characteristic zero.
+        \end{theorem}
+        The torus has Euler characteristic zero, and we've already given a
+        Lorentz metric on it. There are others, such that the Lorentz metric
+        induced by the Minkowski metric on $\mathbb{R}^{2}$ by the group action
+        of $\mathbb{Z}^{2}$ of integer translations. The sphere has Euler
+        characteristic 2 and is compact, so there is no Lorentz metric on it.
+    \end{frame}
+\end{document}
