@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -18,29 +18,20 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  PDF is easiest with LaTeX, output this.                                   */
+/*  PDF is easiest to use in LaTeX, so output this.                           */
 import settings;
 settings.outformat = "pdf";
 
-/*  Size of the figure.                                                       */
+/*  Size of the output figure.                                                */
 size(128);
 
-/*  Locations of the 4 vertices.                                              */
-pair A = (0.0, 0.0);
-pair B = (1.0, 1.0);
-pair C = (2.0, 0.0);
-pair D = (1.0, -1.0);
+path g = (0.0, 0.0) .. (1.0, -0.3) .. (1.4, 0.8) ..
+         (0.8, 0.4) .. (-0.1, 0.3) .. cycle;
 
-/*  Draw the straight-line edges.                                             */
-draw(A -- B -- C -- D -- cycle);
-draw(A -- C);
+pair A = (1.3, 0.7);
+pair B = (0.1, 0.3);
 
-/*  Draw the edges that make a multi-graph.                                   */
-draw(A{N} .. B{E});
-draw(A{S} .. D{E});
-
-/*  Draw the vertices.                                                        */
+filldraw(g, gray(0.6), black);
+draw(A -- B);
 dot(A);
 dot(B);
-dot(C);
-dot(D);

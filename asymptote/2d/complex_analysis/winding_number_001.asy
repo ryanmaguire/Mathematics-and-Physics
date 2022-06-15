@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -18,29 +18,45 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  PDF is easiest with LaTeX, output this.                                   */
+/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
+ *  asymptote/ folder of this project. You'll need to edit the                *
+ *  ASYMPTOTE_DIR environment variable to include this.                       */
+import custom_arrows;
+
+/*  PDF is easiest to use in LaTeX, so output this.                           */
 import settings;
 settings.outformat = "pdf";
 
-/*  Size of the figure.                                                       */
-size(128);
+/*  Size of the output figure.                                                */
+size(256);
 
-/*  Locations of the 4 vertices.                                              */
+defaultpen(black + linewidth(0.7pt) + fontsize(10pt));
+
+real arsize = 8bp;
+real r = 1.0;
 pair A = (0.0, 0.0);
-pair B = (1.0, 1.0);
-pair C = (2.0, 0.0);
-pair D = (1.0, -1.0);
+pair B = (2.9*r, 0.0);
+pair C = (4.7*r, -1.0*r);
+pair D = (2.9*r, -2.5*r);
+pair E = (0.0, -2.5*r);
 
-/*  Draw the straight-line edges.                                             */
-draw(A -- B -- C -- D -- cycle);
-draw(A -- C);
+path g = (0.0, r) .. (0.6*r, 0.0) .. (0.0, -r) .. (-0.6*r, 0.0) ..
+         (0.0, r) .. (0.2*r, 1.1*r) .. (0.0, -1.2*r) ..
+         (-0.2*r, 1.1*r) .. cycle;
 
-/*  Draw the edges that make a multi-graph.                                   */
-draw(A{N} .. B{E});
-draw(A{S} .. D{E});
-
-/*  Draw the vertices.                                                        */
+draw(reverse(circle(B, r)), MidSharpArrow(arsize));
+draw(circle(D, r), MidSharpArrow(arsize));
+draw(circle(C + (r, 0.0), 0.7*r), MidSharpArrow(arsize));
+draw(g, MidSharpArrow(arsize));
+draw(shift(E)*reverse(g), MidSharpArrow(arsize));
 dot(A);
 dot(B);
 dot(C);
 dot(D);
+dot(E);
+
+label("$-2$", A, 2.0*SW);
+label("$-1$", B, 2.0*SW);
+label("$0$", C, 2.0*SW);
+label("$1$", D, 2.0*SW);
+label("$2$", E, 2.0*SW);

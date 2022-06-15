@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -18,8 +18,12 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+/*  PDF is easiest with LaTeX, output this.                                   */
+import settings;
+settings.outformat = "pdf";
+
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
 /*  Points for the river.                                                     */
 pair r0 = (0.0, 0.9);

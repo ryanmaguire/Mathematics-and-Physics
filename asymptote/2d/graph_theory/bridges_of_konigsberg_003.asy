@@ -44,3 +44,9 @@ dot(A);
 dot(B);
 dot(C);
 dot(D);
+
+/*  Label the degrees of the vertices.                                        */
+label("$4$", A, NW);
+label("$3$", B, NW);
+label("$3$", C, NE);
+label("$3$", D, SW);
