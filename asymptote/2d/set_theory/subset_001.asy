@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -16,37 +16,25 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Give a visual depiction of Galileo's infinity paradox.                *
  ******************************************************************************/
 
-/*  PDF is easiest with LaTeX, output this.                                   */
+/*  PDF is easiest to use in LaTeX, so output this.                           */
 import settings;
 settings.outformat = "pdf";
 
-/*  Size of the figure.                                                       */
+/*  Size of the output figure.                                                */
 size(128);
 
-/*  Locations of the 4 vertices.                                              */
-pair A = (0.0, 0.0);
-pair B = (1.0, 1.0);
-pair C = (2.0, 0.0);
-pair D = (1.0, -1.0);
+pair P0 = (0.0, 0.0);
+pair P1 = (0.2, 0.3);
+real r0 = 1.0;
+real r1 = 0.4;
 
-/*  Draw the straight-line edges.                                             */
-draw(A -- B -- C -- D -- cycle);
-draw(A -- C);
+filldraw(circle(P0, r0), blue+opacity(0.7), black);
+filldraw(circle(P1, r1), red+opacity(0.7), black);
+label("$A$", P1);
+label("$B$", (-0.5, 0.6));
 
-/*  Draw the edges that make a multi-graph.                                   */
-draw(A{N} .. B{E});
-draw(A{S} .. D{E});
-
-/*  Draw the vertices.                                                        */
-dot(A);
-dot(B);
-dot(C);
-dot(D);
-
-/*  Label the degrees of the vertices.                                        */
-label("$5$", A, NW);
-label("$3$", B, NW);
-label("$3$", C, NE);
-label("$3$", D, SW);
