@@ -25,13 +25,25 @@ settings.outformat = "pdf";
 /*  Size of the output figure.                                                */
 size(128);
 
-pair P0 = (0.0, 0.0);
-pair P1 = (0.2, 0.3);
-real r0 = 1.0;
-real r1 = 0.4;
+pair C1 = (-1.3, 0.0);
+pair C2 = (1.3, 0.0);
+pair A = (-1.6, 1.4);
+pair B = (1.6, 1.4);
+pair U = (0.0, 3.1);
 
-filldraw(circle(P0, r0), blue+opacity(0.7), black);
-filldraw(circle(P1, r1), red+opacity(0.7), black);
-label("$A$", P1);
-label("$B$", (-0.5, 0.6));
+pair R0 = (-4.5, 3.6);
+pair R1 = (4.5, 3.6);
+pair R2 = (4.5, -3.6);
+pair R3 = (-4.5, -3.6);
+real r = 2.6;
+
+draw(R0 -- R1 -- R2 -- R3 -- cycle);
+filldraw(arc(C1, r, 60.0, -60.0) .. arc(C2, r, 240.0, 120.0) -- cycle, cyan);
+draw(circle(C1, r), black);
+draw(circle(C2, r), black);
+
+label("$A$", A);
+label("$B$", B);
+label("$A\cup{B}$", U);
+
 
