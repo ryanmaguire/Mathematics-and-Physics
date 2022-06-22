@@ -1,0 +1,384 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\newenvironment{notation}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\notationx%
+}{%
+    \popQED\endnotationx%
+}
+
+\title{Point-Set Topology: Lecture 1}
+\author{Ryan Maguire}
+\date{Fall 2021}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Motivation}
+        Topology is the study of \textit{continuous deformations}. Continuously
+        changing a space without tearing or cutting. Ask yourself if you think
+        it is possible to continuously morph a square into a circle.
+        See Fig.~\ref{fig:homeo_square_to_circle} for a demonstration.
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../../images/homeo_square_to_circle.pdf}
+            \caption{Changing a Square to a Circle}
+            \label{fig:homeo_square_to_circle}
+        \end{figure}
+        Now ask yourself if it is possible to change a sphere into a torus
+        (Fig.~\ref{fig:torus_next_to_sphere}).
+        \begin{figure}[H]
+            \centering
+            \includegraphics{../../images/torus_next_to_sphere.pdf}
+            \caption{A Torus and a Sphere}
+            \label{fig:torus_next_to_sphere}
+        \end{figure}
+        The first problems in topology
+        stemmed from graph theory, such as the bridges of K\"{o}nigsberg
+        problem. You are asked to traverse the seven bridges in the city of
+        K\"{o}nigsberg, crossing each bridge exactly once
+        (Fig.~\ref{fig:bridges_of_konigsberg_001}). Is this possible?
+        \par\hfill\par
+        We can simplify the problem by treating plots of land as single dots,
+        and bridges as curves and line segments, resulting in the graph
+        shown in Fig.~\ref{fig:bridges_of_konigsberg_002}. The problem asks to
+        traverse each of the edges of this graph once and only once. This turns
+        out to be impossible. Turning the problem into a graph problem is the
+        start of topology. We may move the edges and vertices of the graph
+        around without changing the problem. If we cut an edge or remove a
+        vertex, we will change the problem. That is, we may change the graph
+        \textit{continuously} without altering the problem.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/bridges_of_konigsberg_001.pdf}
+            \caption{The Seven Bridges of K\"{o}nigsberg}
+            \label{fig:bridges_of_konigsberg_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/bridges_of_konigsberg_002.pdf}
+            \caption{The Graph of the Seven Bridges of K\"{o}nigsberg}
+            \label{fig:bridges_of_konigsberg_002}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/tetrahedron_001.pdf}
+            \caption{A Tetrahedron}
+            \label{fig:tetrahedron_001}
+        \end{figure}
+        \par\hfill\par
+        The next discovery that motivates topology is the
+        \textit{Euler characteristic}. A polyhedron is a collection of vertices,
+        edges, and faces. A convex polyhedron has the property that if it has
+        $V$ vertices, $E$ edges, and $F$ faces, then:
+        \begin{equation}
+            V-E+F=2
+        \end{equation}
+        The convexity is not actually needed. The formula $V-E+F=2$ is true as
+        long as the polyhedron can be \textit{continuously deformed} into a
+        sphere. If we have a polyhedron that can be continuously deformed into
+        a torus, we get a different number. Look at
+        Fig.~\ref{fig:polyhedral_torus_001}. We can count:
+        \begin{equation}
+            V-E+F=0
+        \end{equation}
+        This \textit{alternating sum} is called the
+        \textit{Euler characteristic}
+        of the polyhedron and it is preserved by continuous deformations.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/polyhedral_torus_001.pdf}
+            \caption{A Polyhedral Torus}
+            \label{fig:polyhedral_torus_001}
+        \end{figure}
+    \section{Sets}
+        Sets are the main object dealt with in most branches of mathematics.
+        \begin{definition}[\textbf{Set}]
+            A set is a collection of objects called elements.
+        \end{definition}
+        Sets are often denoted using capital Latin letters such as
+        $A$, $B$, $C$, $X$, $Y$, and $Z$. Elements of sets are usually denoted
+        by lower case Latin letters like $a$, $b$, $c$, $x$, $y$, and $z$. This
+        need not always be the case, but it is fairly common.
+        \begin{example}
+            Finite sets are denoted with braces and commas separating the
+            elements. For example, if $A$ is the set consisting of the elements
+            1, 2, and 3, we write:
+            \begin{equation}
+                A=\{\,1,\,2,\,3\,\}
+            \end{equation}
+            Order does not matter for sets, we can also write:
+            \begin{equation}
+                A=\{\,3,\,1,\,2\,\}
+            \end{equation}
+            And repetition is also irrelevant:
+            \begin{equation}
+                A=\{\,1,\,1,\,2,\,3\,\}
+            \end{equation}
+            All of these mean the set $A$.
+        \end{example}
+        \begin{notation}[\textbf{Containment}]
+            If $A$ is a set and $a$ is an element of $a$, we write
+            $a\in{A}$. If $a$ is not an element of $a$, we write
+            $a\notin{A}$.
+        \end{notation}
+        The expression $a\in{A}$ reads aloud as
+        $a$ \textit{is in} $A$ or $a$ \textit{is an element of} $A$. Similarly,
+        $a\notin{A}$ reads allowed as $a$ \textit{is not in} $A$.
+        \begin{example}
+            Using $A=\{\,1,\,2,\,3\,\}$, we have that
+            $1\in{A}$, $2\in{A}$, and $3\in{A}$ since 1, 2, and 3 are elements
+            of the set $A$. However, $4\notin{A}$ since 4 is not an element of
+            $A$.
+        \end{example}
+        Sets are usually constructed with set-builder notation. If we have
+        some set $X$ that we know exists, we can take a sentence $P$, and
+        apply it to all elements $x\in{X}$.
+        This is expressed
+        \begin{equation}
+            A=\{\,x\in{X}\;|\;P(x)\,\}
+        \end{equation}
+        which reads $A$ \textit{is the set of all} $x$ \textit{in} $X$
+        \textit{such that} $P(x)$ \textit{is true}.
+        \begin{example}
+            Let $\mathbb{N}$ be the set of natural numbers
+            \begin{equation}
+                \mathbb{N}=\{\,0,\,1,\,2,\,3,\,4,\,\dots\,\}
+            \end{equation}
+            Let $P(n)$ be the sentence $n$ \textit{is even}. Consider the
+            set
+            \begin{equation}
+                A=\{\,n\in\mathbb{N}\;|\;P(n)\,\}
+            \end{equation}
+            This is the set of all natural numbers that are even. We can write
+            this explicitly as follows:
+            \begin{equation}
+                A=\{\,0,\,2,\,4,\,\dots\,\}
+            \end{equation}
+        \end{example}
+        Be careful of abusing set-builder notation. If you have some sentence
+        $P(x)$ you can \textbf{not} write the following:
+        \begin{equation}
+            A=\{\,x\;|\;P(x)\,\}
+        \end{equation}
+        That is, you may not consider the set of all $x$ such that $P(x)$ is
+        true. You may only apply your sentence to some set $X$ you already
+        know exists, and then collect all $x\in{X}$ satisfying your sentence
+        $P$. Failure to do this results in Russell's paradox. Consider the
+        sentences $P(x)=x$ \textit{is a set}. Then
+        $A=\{\,x\;|\;P(x)\,\}$ is the \textit{set of all sets}. Is
+        $A$ an element of itself? If allowed, it is possible to construct
+        a statement that is both true and false, something that should be
+        avoided.
+        \begin{definition}[\textbf{Subset}]
+            A subset of a set $B$ is a set $A$ such that for all $a\in{A}$
+            it is true that $a\in{B}$.
+        \end{definition}
+        Subsets can be denoted by blobs in the plane. See
+        Fig.~\ref{fig:subset_001}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/subset_001.pdf}
+            \caption{Diagram for Subsets}
+            \label{fig:subset_001}
+        \end{figure}
+        \par\hfill\par
+        The axioms of set theory provide the existence of four operations on
+        sets: union, intersection, set difference, and symmetric difference.
+        \begin{definition}[\textbf{Union of Two Sets}]
+            The union of two sets $A$ and $B$ is the set $A\cup{B}$ defined
+            by:
+            \begin{equation}
+                A\cup{B}=\{\,x\;|\;x\in{A}\textrm{ or }x\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        The union of two sets can be visualized with a
+        \textit{Venn diagram} (Fig.~\ref{fig:venn_diagram_union_001}). It is
+        worth detailing what the word \textit{or} means. In English there are
+        two uses of the word or, the \textit{inclusive or} and the
+        \textit{exclusive or}. Given two sentences $P$ and $Q$, the exclusive
+        means $P$ is true or $Q$ is true, but not both. The inclusive or means
+        $P$ is true, $Q$ is true, or both are true. In mathematics we always
+        use the inclusive or. The exclusive or is denoted \textit{xor}. It is
+        a useful concept in computer science and analysis of algorithms, but we
+        will not need it in topology.
+        \begin{example}
+            Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,3,\,4,\,5\,\}$. The union
+            is then:
+            \begin{equation}
+                A\cup{B}=\{\,1,\,2,\,3,\,4,\,5\,\}
+            \end{equation}
+            Remember, sets have no notion of repetition, so including 3 twice
+            would be redundant.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/venn_diagram_union_001.pdf}
+            \caption{Venn Diagram for Union}
+            \label{fig:venn_diagram_union_001}
+        \end{figure}
+        \begin{definition}[\textbf{Intersection of Two Sets}]
+            The intersection of two sets $A$ and $B$ is the set $A\cap{B}$
+            defined by:
+            \begin{equation}
+                A\cap{B}=\{\,x\;|\;x\in{A}\textrm{ and }x\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        The word \textit{and} is easier to understand since its mathematical
+        use matches the grammatical one. Given two sentences $P$ and $Q$,
+        the statement $P$ \textit{and} $Q$ means both $P$ is true and $Q$ is
+        true, and both are true simultaneously.
+        \begin{example}
+            Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,3,\,4,\,5\,\}$. The
+            intersection is then:
+            \begin{equation}
+                A\cup{B}=\{\,3\,\}
+            \end{equation}
+            The only element $A$ and $B$ have in common is 3.
+        \end{example}
+        Intersection can also be represented by a Venn diagram
+        (See Fig.~\ref{fig:venn_diagram_intersection_001}). What if $A$ and $B$
+        have no sets in common? Let's consider the following example.
+        \begin{example}
+            Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,4,\,5,\,6\,\}$. The
+            intersection $A\cap{B}$ is the set of elements in both $A$ and $B$.
+            But $A$ and $B$ have no elements in common, so the intersection
+            is \textit{empty}. This is the empty set, denoted $\emptyset$, and
+            occasionally written as $\emptyset=\{\,\}$. We have
+            $A\cap{B}=\emptyset$.
+        \end{example}
+        Disjoint sets are sets $A$ and $B$ such that $A\cap{B}=\emptyset$.
+        In the previous example, $A$ and $B$ are disjoint.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/venn_diagram_intersection_001.pdf}
+            \caption{Venn Diagram for Intersection}
+            \label{fig:venn_diagram_intersection_001}
+        \end{figure}
+        The next operation is set difference. It is somewhat like subtraction
+        for sets.
+        \begin{definition}[\textbf{Set Difference}]
+            The set difference of a set $A$ from a set $B$ is the set
+            $B\setminus{A}$ defined by:
+            \begin{equation}
+                B\setminus{A}=\{\,x\in{B}\;|\;x\notin{A}\,\}
+            \end{equation}
+            That is, the set of all elements in $B$ that are not in $A$.
+        \end{definition}
+        The Venn diagram for set difference is given in
+        Fig.~\ref{fig:venn_diagram_set_difference_001}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/venn_diagram_set_difference_001.pdf}
+            \caption{Venn Diagram for Set Difference}
+            \label{fig:venn_diagram_set_difference_001}
+        \end{figure}
+        \begin{example}
+            Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,3,\,4,\,5\,\}$. The set
+            difference $B\setminus{A}$ is:
+            \begin{equation}
+                B\setminus{A}=\{\,4,\,5\,\}
+            \end{equation}
+            That is, the only element common to $A$ and $B$ is 3, so
+            $B\setminus{A}$ is everything in $B$ except for 3.
+        \end{example}
+        The last operation is \textit{symmetric difference} and it is defined
+        in terms of the other three. We will not use it, but for completeness
+        the Venn diagram is shown.
+        \begin{definition}[\textbf{Symmetric Difference}]
+            The symmetric difference of two sets $A$ and $B$ is the set
+            $A\ominus{B}$ defined by:
+            \begin{equation}
+                A\ominus{B}=(A\cup{B})\setminus(A\cap{B})
+            \end{equation}
+            That is, the set of all elements in either $A$ or $B$, but not both.
+        \end{definition}
+        Symmetric difference is the set equivalent of the exclusive or.
+        The Venn diagram is shown in Fig.~\ref{fig:venn_diagram_symmetric_difference_001}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/venn_diagram_symmetric_difference_001.pdf}
+            \caption{Venn Diagram for Symmetric Difference}
+            \label{fig:venn_diagram_symmetric_difference_001}
+        \end{figure}
+        \par\hfill\par
+        There are several theorems relating union, intersection, and set
+        difference. They are proven in the text, but will just be listed here.
+        \begin{align}
+            A\cup{B}&=B\cup{A}\tag{Commutativity of Unions}\\
+            A\cap{B}&=B\cap{A}\tag{Commutativity of Intersections}\\
+            A\cup(B\cup{C})&=(A\cup{B})\cup{C}\tag{Associativity of Unions}\\
+            A\cap(B\cap{C})&=(A\cap{B})\cap{C}\tag{Associativity of Intersections}\\
+            A\cup\emptyset&=A\tag{Identity Law of Unions}\\
+            A\subseteq{B}\Rightarrow{A}\cap{B}&=A\tag{Identity Law of Intersections}\\
+            A\cup(B\cap{C})&=(A\cup{B})\cap(A\cup{C})\tag{Distributive Law of Unions}\\
+            A\cap(B\cup{C})&=(A\cap{B})\cup(A\cap{C})\tag{Distributive Law of Intersections}\\
+            X\setminus(A\cup{B})&=(X\setminus{A})\cap(X\setminus{B})\tag{De Morgan's Law of Unions}\\
+            X\setminus(A\cap{B})&=(X\setminus{A})\cup(X\setminus{B})\tag{De Morgan's Law of Intersections}
+        \end{align}
+\end{document}
