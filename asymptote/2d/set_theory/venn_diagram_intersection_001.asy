@@ -44,6 +44,6 @@ draw(circle(C2, r), black);
 
 label("$A$", A);
 label("$B$", B);
-label("$A\cup{B}$", U);
+label("$A\cap{B}$", U);
 
 
