@@ -1,0 +1,232 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\newenvironment{notation}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\notationx%
+}{%
+    \popQED\endnotationx%
+}
+
+\title{Point-Set Topology: Lecture 2}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{The Cartesian Product and Power Sets}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/power_set_001.pdf}
+            \caption{Power Set of $\{\,1,\,2,\,3\,\}$}
+            \label{fig:power_set_001}
+        \end{figure}
+        The axioms of set theory allow for two more constructions from sets.
+        If $A$ is a set, we can think of the set of all \textit{subsets} of
+        $A$.
+        \begin{definition}[\textbf{Power Sets}]
+            The power set of a set $A$ is the set $\mathcal{P}(A)$ defined by:
+            \begin{equation}
+                \mathcal{P}(A)=\{\,B\;|\;B\subseteq{A}\,\}
+            \end{equation}
+            That is, the set of all subsets of $A$.
+        \end{definition}
+        \begin{example}
+            Let $A=\emptyset$. The power set of $A$ is
+            $\mathcal{P}(A)=\{\,\emptyset\,\}$. Do not confuse this set with
+            the empty set. $\{\,\emptyset\,\}$ is the set that contains the
+            empty set, and hence is not empty.
+        \end{example}
+        \begin{example}
+            Let $A=\{\,1,\,2\,\}$. The power set $\mathcal{P}(A)$ is:
+            \begin{equation}
+                \mathcal{P}(A)=\big\{\,\emptyset,\,\{\,1\,\},\,
+                    \{\,2\,\},\,\{1,\,2\,\}\,\big\}
+            \end{equation}
+        \end{example}
+        Note that for any set $A$, $\emptyset\subseteq{A}$ is true. So
+        $\emptyset\in\mathcal{P}(A)$ is always true. Also, $A\subseteq{A}$
+        is true, so $A\in\mathcal{P}(A)$ is also true. We can visualize the
+        power set of finite sets via \textit{Hasse Diagrams}
+        (Fig.~\ref{fig:power_set_001}).
+        \par\hfill\par
+        The axioms of set theory also give us the \textit{Cartesian product}.
+        Kuratowski, one of the pioneers of point-set topology, tells us how
+        we can define \textit{ordered pairs}. Given $a$ and $b$, we write:
+        \begin{equation}
+            (a,b)=\big\{\,a,\,\{\,a,\,b\,\}\,\big\}
+        \end{equation}
+        This definition allows us to define ordered pairs using sets. It has
+        the property that $(a,b)=(c,d)$ if and only if $a=c$ and $b=d$. In
+        particular, if $a$ and $b$ are distinct, then $(a,b)$ and $(b,a)$ are
+        different objects. That is, ordered pairs have \textit{order}.
+        \begin{definition}[\textbf{Cartesian Product}]
+            The Cartesian of a set $A$ with a set $B$ is the set $A\times{B}$
+            defined by:
+            \begin{equation}
+                A\times{B}=\{\,(a,\,b)\;|\;a\in{A}\textrm{ and }b\in{B}\,\}
+            \end{equation}
+        \end{definition}
+        \begin{example}
+            If $A=\{\,1,\,2\,\}$ and $B=\{\,a,\,b\,\}$, the Cartesian product
+            $A\times{B}$ is the set:
+            \begin{equation}
+                A\times{B}=\{\,(1,\,a),\,(1,\,b),\,(2,\,a),\,(2,\,b)\,\}
+            \end{equation}
+            The Cartesian product $B\times{A}$ is slightly different:
+            \begin{equation}
+                B\times{A}=\{\,(a,\,1),\,(a,\,2),\,(b,\,1),\,(b,\,2)\,\}
+            \end{equation}
+            In general, if $A$ and $B$ are different sets, then $A\times{B}$
+            and $B\times{A}$ are not equal.
+        \end{example}
+        \begin{example}
+            The Euclidean plane $\mathbb{R}^{2}$ is the Cartesian product
+            $\mathbb{R}^{2}=\mathbb{R}\times\mathbb{R}$.
+        \end{example}
+        If we have two subsets $A$ and $B$ of the real line $\mathbb{R}$, we
+        can visualize $A\times{B}$ as a subset of $\mathbb{R}^{2}$.
+        This is done in Fig.~\ref{fig:cartesian_product_003}. Points in $A$ are
+        shown in green, points in $B$ in red, and the Cartesian product is in
+        blue.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/cartesian_product_003.pdf}
+            \caption{Cartesian Product of Sets in $\mathbb{R}$}
+            \label{fig:cartesian_product_003}
+        \end{figure}
+        \par\hfill\par
+        A function from a set $A$ to a set $B$ is a \textit{rule} that assigns
+        to each $a\in{A}$ a unique element $b\in{B}$. We could adopt the word
+        function as a primitive, but it is possible to define functions
+        precisely using our already developed vocabulary from set theory.
+        \begin{definition}[\textbf{Function}]
+            A function from a set $A$ to a set $B$ is a subset
+            $f\subseteq{A}\times{B}$, denoted $f:A\rightarrow{B}$, such that
+            for all $a\in{A}$ there is a unique $b\in{B}$ with $(a,b)\in{f}$.
+            We write $b=f(a)$.
+        \end{definition}
+        Fig.~\ref{fig:function_example_001} shows this definition in action.
+        The green denotes $\mathbb{R}^{2}$ and the blue curve that cuts through
+        the plane is a subset $f\subseteq\mathbb{R}\times\mathbb{R}$. This is
+        our usual notion of \textit{function}, especially functions of a real
+        variable.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/function_example_001.pdf}
+            \caption{A Function $f:\mathbb{R}\rightarrow\mathbb{R}$}
+            \label{fig:function_example_001}
+        \end{figure}
+        \par\hfill\par
+        Functions can be more abstract and do not need to be represented by
+        curves in the plane. Let $A=\{\,1,\,2,\,3,\,4\,\}$ and
+        $B=\{\,a,\,b,\,c\,\}$. The diagram in
+        Fig.~\ref{fig:function_example_002} depicts a valid function
+        $f:A\rightarrow{B}$. To each element in $A$ there is a unique element
+        in $B$ it is assigned to. Contrast this with
+        Figs.~\ref{fig:non_function_example_001},
+        \ref{fig:non_function_example_002}, and \ref{fig:non_function_example_003}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/function_example_002.pdf}
+            \caption{A Function from $A$ to $B$}
+            \label{fig:function_example_002}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/non_function_example_001.pdf}
+            \caption{A Non-Function on $\mathbb{R}$}
+            \label{fig:non_function_example_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/non_function_example_002.pdf}
+            \caption{An Abstract Non-Function}
+            \label{fig:non_function_example_002}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/non_function_example_003.pdf}
+            \caption{Another Non-Function}
+            \label{fig:non_function_example_003}
+        \end{figure}
+        \par\hfill\par
+        There are three special types of functions.
+        \begin{definition}[\textbf{Injective Function}]
+            An injective function from a set $A$ to a set $B$ is a function
+            $f:A\rightarrow{B}$ such that for all $x,y\in{A}$,
+            $f(x)=f(y)$ if and only if $x=y$.
+        \end{definition}
+        \begin{example}
+            The functions $f(x)=\sqrt{x}$ defined on $\mathbb{R}_{\geq{0}}$,
+            $\exp(x)$ defined on $\mathbb{R}$, and
+            $\ln(x)$ defined on $\mathbb{R}^{+}$ are all injective.
+        \end{example}
+        \begin{definition}[\textbf{Surjective Function}]
+            
+        \end{definition}
+\end{document}
