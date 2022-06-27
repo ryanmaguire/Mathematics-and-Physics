@@ -37,35 +37,45 @@ defaultpen(black + linewidth(0.4pt) + fontsize(10pt));
 pen thickp = black + linewidth(0.7pt) + fontsize(14pt);
 real r = 0.05;
 real arsize = 5bp;
-int n;
-real x;
+margin margins = TrueMargin(0.4cm, 0.4cm);
 
-/*  Coorindates for the curve.                                                */
-pair P1 = (-4.0, -2.0);
-pair P2 = (-2.0, -3.0);
-pair P3 = (0.0, 0.0);
-pair P4 = (2.0, 3.0);
-pair P5 = (4.0, 3.9);
+/*  Coorindates.                                                              */
+pair Ba = (1.5, 0.7);
+pair Bb = (1.5, 0.0);
+pair Bc = (1.5, -0.7);
 
-for (n = -40; n < 40; ++n)
-{
-    x = (real)n / 10.0;
-    draw((x, -4.0) -- (-4.0, x), green);
-    draw((4.0, x) -- (x, 4.0), green);
-}
+pair A1 = (-1.5, 1.2);
+pair A2 = (-1.5, 0.4);
+pair A3 = (-1.5, -0.4);
+pair A4 = (-1.5, -1.2);
 
-draw((4.0, 4.0) -- (4.0, 4.0));
-draw((-4.3, 0.0) -- (4.3, 0.0), thickp, SharpArrows(arsize));
-draw((0.0, -4.3) -- (0.0, 4.3), thickp, SharpArrows(arsize));
+pair A = (-1.5, 2.5);
+pair B = (1.5, 2.5);
 
-label("$\mathbb{R}$", (4.3, 0.3));
-label("$\mathbb{R}$", (0.3, 4.3));
+/*  Draw ellipses representing the sets A and B.                              */
+draw(ellipse((-1.5, 0.0), 1.0, 2.0));
+draw(ellipse((1.5, 0.0), 1.0, 2.0));
 
-draw(P1{dir(-30.0)} .. P2{dir(-30.0)} ..
-     P3{dir(30.0)} .. P4{dir(0.0)} ..
-     P5, blue);
+/*  Draw circles for the various points.                                      */
+filldraw(circle(Ba, r), black);
+filldraw(circle(Bb, r), black);
+filldraw(circle(Bc, r), black);
+filldraw(circle(A1, r), black);
+filldraw(circle(A2, r), black);
+filldraw(circle(A3, r), black);
+filldraw(circle(A4, r), black);
 
-filldraw((1.3, 2.0) -- (1.6, 2.0) -- (1.6, 1.4) -- (1.3, 1.4) -- cycle,
-         white, invisible);
+draw(A1 -- Bc, SharpArrow(arsize), margins);
+draw(A2 -- Ba, SharpArrow(arsize), margins);
+draw(A3 -- Bb, SharpArrow(arsize), margins);
+draw(A4 -- Ba, SharpArrow(arsize), margins);
 
-label("$f$", (1.45, 1.7));
+label("$A$", A, thickp);
+label("$B$", B, thickp);
+label("$a$", Ba, 2*E);
+label("$b$", Bb, 2*E);
+label("$c$", Bc, 2*E);
+label("$1$", A1, 2*W);
+label("$2$", A2, 2*W);
+label("$3$", A3, 2*W);
+label("$4$", A4, 2*W);
