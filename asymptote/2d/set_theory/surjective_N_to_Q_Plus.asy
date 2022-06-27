@@ -33,7 +33,7 @@ size(256);
 /*  Default pen for drawing.                                                  */
 defaultpen(black + linewidth(0.4pt) + fontsize(14pt));
 
-margin margins = TrueMargin(0.4cm, 0.4cm);
+margin margins = TrueMargin(0.5cm, 0.5cm);
 real arsize = 5bp;
 int n = 1;
 int m = 1;
