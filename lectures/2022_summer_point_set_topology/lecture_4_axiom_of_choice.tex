@@ -1,0 +1,458 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\newenvironment{notation}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\notationx%
+}{%
+    \popQED\endnotationx%
+}
+
+\newenvironment{axiom}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\axiomx%
+}{%
+    \popQED\endaxiomx%
+}
+
+\title{Point-Set Topology: Lecture 4}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Generalized Operations on Sets}
+        In topology, set theory, analysis, etc., we often need to consider more
+        than just two sets at a time. We may have a set $X$ and a set
+        $\mathcal{O}$ consisting of subsets $A\subseteq{X}$. The union over
+        such a collection exists by the axiom of the union. The definition of
+        this set is:
+        \begin{definition}[\textbf{Union of a Collection}]
+            The over a set $\mathcal{O}$ is the set $\bigcup\mathcal{O}$
+            defined by:
+            \begin{equation}
+                \bigcup\mathcal{O}=
+                    \{\,x\;|\;\textrm{there exists }A\in\mathcal{O}
+                        \textrm{ such that }x\in{A}\,\}
+            \end{equation}
+            That is, the set of all elements contained in some set
+            $A\in\mathcal{O}$.
+        \end{definition}
+        The intersection does not need an axiom, and can be defined via the
+        union set and the axiom schema of specification.
+        \begin{definition}[\textbf{Intersection of a Collection}]
+            The intersection over a set $\mathcal{O}$ is the set
+            $\bigcap\mathcal{O}$ defined by:
+            \begin{equation}
+                \bigcap\mathcal{O}=\{\,x\in\bigcup\mathcal{O}\;|\;x\in{A}
+                    \textrm{ for all }A\in\mathcal{O}\;\}
+            \end{equation}
+            That is, the set of all elements common to all $A\in\mathcal{O}$.
+        \end{definition}
+        If the set $\mathcal{O}$ is indexed by the natural numbers,
+        say:
+        \begin{equation}
+            \mathcal{O}=\{\,A_{0},\,A_{1},\,A_{2},\,\dots\,\}
+        \end{equation}
+        We write the intersection and union as follows:
+        \begin{align}
+            \bigcup\mathcal{O}&=\bigcup_{n=0}^{\infty}A_{n}\\
+            \bigcap\mathcal{O}&=\bigcap_{n=0}^{\infty}A_{n}
+        \end{align}
+        We may also write:
+        \begin{align}
+            \bigcup\mathcal{O}&=\bigcup_{A\in\mathcal{O}}A\\
+            \bigcap\mathcal{O}&=\bigcap_{A\in\mathcal{O}}A
+        \end{align}
+        If $\mathcal{O}$ is indexed by some \textit{indexing set} $I$
+        (for example, the real numbers), where $A_{\alpha}\in\mathcal{O}$
+        for all $\alpha\in{I}$, we write:
+        \begin{align}
+            \bigcup\mathcal{O}&=\bigcup_{\alpha\in{I}}A_{\alpha}\\
+            \bigcap\mathcal{O}&=\bigcap_{\alpha\in{I}}A_{\alpha}
+        \end{align}
+        The \textit{generalized distributive laws} then say:
+        \begin{align}
+            A\cap\bigcup_{B\in\mathcal{O}}B
+                &=\bigcup_{B\in\mathcal{O}}(A\cap{B})\\
+            A\cup\bigcap_{B\in\mathcal{O}}B
+                &=\bigcap_{B\in\mathcal{O}}(A\cup{B})
+        \end{align}
+        The \textit{generalized De Morgan's Laws} read:
+        \begin{align}
+            X\setminus\bigcup_{A\in\mathcal{O}}A
+                &=\bigcap_{A\in\mathcal{O}}(X\setminus{A})\\
+            X\setminus\bigcap_{A\in\mathcal{O}}A
+                &=\bigcup_{A\in\mathcal{O}}(X\setminus{A})
+        \end{align}
+    \section{Product Sets and the Axiom of Choice}
+        My goal, now, is to convince you there is another way of thinking of
+        Cartesian products. A \textit{better} way. The axioms of set theory
+        tell us there exists a \textit{function set}. That is, given sets $A$
+        and $B$, there is a set $\mathcal{F}(A,\,B)$ such that for all $f$,
+        $f\in\mathcal{F}(A,\,B)$ if and only if $f:A\rightarrow{B}$ is a
+        function from $A$ to $B$. This can be proven using the axiom of the
+        power set and of specification, but we won't bother. Let us redefine
+        Cartesian product of a set $A$ with a set $B$ to be the set of all
+        function $f:\mathbb{Z}_{2}\rightarrow{A}\cup{B}$ with the property
+        that $f(0)\in{A}$ and $f(1)\in{B}$. Take $\mathbb{R}^{2}$ for example.
+        An element of $\mathbb{R}^{2}$ is then a function
+        $\mathbf{x}:\mathbb{Z}_{2}\rightarrow\mathbb{R}\cup\mathbb{R}$,
+        which we may simply write
+        $\mathbf{x}:\mathbb{Z}_{2}\rightarrow\mathbb{R}$, such that
+        $\mathbf{x}(0)\in\mathbb{R}$ and $\mathbf{x}(1)\in\mathbb{R}$.
+        Let's rewrite $\mathbf{x}(0)=x_{0}$ and $\mathbf{x}(1)=x_{1}$.
+        Then the \textit{function} $\mathbf{x}$ is really just the
+        \textit{vector} $\mathbf{x}=(x_{0},\,x_{1})$. Why might we do this?
+        It allows us to more easily define the product of three sets.
+        $A\times(B\times{C})$ and $(A\times{B})\times{C}$ are different sets.
+        $A\times(B\times{C})$ consists of elements of the form
+        $\big(a,\,(b,\,c)\big)$, whereas elements of
+        $(A\times{B})\times{C}$ are of the form
+        $\big((a,\,b),\,c\big)$. Very nitpicky, but alas, this is how the
+        Cartesian product was defined. Instead, we can define the product over
+        three sets $A$, $B$, and $C$ to be the set of all function
+        $f:\mathbb{Z}_{3}\rightarrow{A}\cup{B}\cup{C}$ with the property that
+        $f(0)\in{A}$, $f(1)\in{B}$, and $f(2)\in{C}$. We can say that this
+        function is an \textit{ordered triple} and write
+        $f=\big(f(0),\,f(1),\,f(1)\big)$, which is more in line with our usual
+        notion of higher order products. The main benefit is that we may define
+        \textit{arbitrary} products. If we have a set $\mathcal{O}$, we may
+        define the \textit{product set}.
+        \begin{definition}[\textbf{Product Set}]
+            The product set over a set $\mathcal{O}$ is the set
+            $\prod\mathcal{O}$ defined by:
+            \begin{equation}
+                \prod\mathcal{O}=\{\,f:\mathcal{O}\rightarrow\bigcup\mathcal{O}
+                    \;|\;f(A)\in{A}\textrm{ for all }A\in\mathcal{O}\,\}
+            \end{equation}
+        \end{definition}
+        Intuitively, this is the set of all \textit{generalized ordered tuples}
+        $(a_{0},\,a_{1},\,a_{2},\,\dots)$. The problem with this notation is
+        it seems to imply the product is over a countable set, but it need not
+        be. We can have \textit{uncountably long} ordered tuples. The ordered
+        tuple notation is just for convenience. The definition given above is
+        rigorous. If $\mathcal{O}$ is indexed by the natural numbers, we can
+        write:
+        \begin{equation}
+            \prod\mathcal{O}=\prod_{n=0}^{\infty}A_{n}
+                =\{\,f:\mathcal{O}\rightarrow\bigcup_{n=0}^{\infty}A_{n}\;|\;
+                    f(A_{n})\in{A}_{n}\textrm{ for all }n\in\mathbb{N}\,\}
+        \end{equation}
+        We may also write:
+        \begin{equation}
+            \prod\mathcal{O}=\prod_{A\in\mathcal{O}}A=
+                \{\,f:\mathcal{O}\rightarrow\bigcup_{A\in\mathcal{O}}A\;|\;
+                    f(A)\in{A}\textrm{ for all }A\in\mathcal{O}\,\}
+        \end{equation}
+        Lastly, if $\mathcal{O}$ is indexed by some indexing set $I$, we can
+        write:
+        \begin{equation}
+            \prod\mathcal{O}=\prod_{\alpha\in{I}}A_{\alpha}=
+                \{\,f:\mathcal{O}\rightarrow\bigcup_{\alpha\in{I}}A_{\alpha}
+                    \;|\;f(A_{\alpha})\in{A}_{\alpha}\textrm{ for all }
+                        \alpha\in{I}\;\}
+        \end{equation}
+        Now for some controversy. If $\mathcal{O}$ is a set such that for
+        all $A\in\mathcal{O}$ it is true that $A$ is not empty, is
+        $\prod\mathcal{O}$ empty? Let's suppose $\mathcal{O}=\{\,A,\,B\,\}$.
+        Suppose $a\in{A}$ and $b\in{B}$. The product $\prod\mathcal{O}$
+        then consists of the element
+        $f:\mathcal{O}\rightarrow{A}\cup{B}$ such that
+        $f(A)=a$ and $f(B)=b$, so in particular,
+        $\prod\mathcal{O}$ is not empty. Hurray! Indeed, if $\mathcal{O}$ is any
+        \textit{finite} set, $\prod\mathcal{O}$ is non-empty, by a similar
+        argument. What if $\mathcal{O}$ is countable? We can write each set as
+        $A_{n}$ for some $n\in\mathbb{N}$. Since each $A_{n}$ is non-empty,
+        there is an element $a_{n}\in{A}_{n}$. We can then define the function
+        $f:\mathcal{O}\rightarrow\bigcup_{n=0}^{\infty}A_{n}$ by
+        $f(A_{n})=a_{n}$. But hold on! What axiom allows us to define such a
+        function? In the finite case, the axioms of set theory can prove the
+        function given previously exists, but what about this infinite case?
+        As it turns out, the existence of this function can \textit{not} be
+        proven using the axioms of set theory that we've so far discussed
+        (union, pairing, power set, specification, infinity, extensionality,
+        and the other two we have not mentioned). The claim is
+        \textit{independent} of these axioms. It is impossible to prove it is
+        true and it is impossible to prove it is false. Contrast this with
+        Euclidean geometry. The axioms are:
+        \begin{enumerate}
+            \item Given two points, there is a line segment between them.
+            \item Given a line segment, there is a line extending it on either side.
+            \item Given a point and a length, there is a circle with the point as
+                its center and the length as its radius.
+            \item All right angles are equal in size.
+            \item If two straight lines fall on a third line, and if the
+                sum of the angles the two straight lines make with the third
+                sum to less than $\pi$, then the two straight lines intersect.
+        \end{enumerate}
+        As mentioned a few classes ago, the fifth axiom is equivalent to
+        Playfair's axiom.
+        \begin{enumerate}
+            \item[5a.)] Given a straight lines and point not on that line,
+                there is a unique parallel line passing through the point.
+        \end{enumerate}
+        For 2100 years many mathematicians (several quite rudely) attempted to
+        prove the fifth axiom is redundant. That is, to prove the fifth axiom
+        can be proven using the first four. In the 1800's C.E. it was shown that
+        the fifth axiom is \textit{independent} of the first four, meaning it
+        cannot be proven or disproven. The \textit{proofs} other mathematicans
+        had that the fifth axiom can be proven simply introduced new
+        assumptions (Khayyam introduced the quadrilateral axiom, Playfair
+        introduced his axiom, and so on). There are two \textit{models} of
+        geometry that obey the first four but not the fifth. In
+        hyperbolic geometry, given a point and a line, there are infinitely
+        many parallel lines passing through the point. In spherical geometry
+        there are no parallel lines.%
+        \footnote{%
+            Not too important, but spherical geometry does not obey the third
+            axiom as it is worded here. It obeys the axiom that
+            \textit{given two points, there is a circle with one point as the}
+            \textit{center, and the other lying on the circle}.
+        }
+        \par\hfill\par
+        Just like Euclid's fifth axiom can not be proven from the other four,
+        the axiom of choice can not be proven from the other axioms of set
+        theory. Now you may say, \textit{oh come on, obviously that set is not}
+        \textit{empty. In fact, that set is probably huge!} The
+        \textit{construction} given above certainly seems convincing, and this
+        is why most accept the \textit{axiom of countable choice}.
+        \begin{axiom}[\textbf{Axiom of Countable Choice}]
+            If $\mathcal{O}$ is a countable non-empty set such that for all
+            $A\in\mathcal{O}$ it is true that $A$ is non-empty, then
+            $\prod\mathcal{O}$ is non-empty. 
+        \end{axiom}
+        Richard Dedekind gave another definition of infinite. He says that
+        an infinite set is a set $A$ such that there is a proper subset
+        $B\subsetneq{A}$ with $\textrm{Card}(A)=\textrm{Card}(B)$. This is
+        now called \textit{Dedekind infinite}. A set is
+        \textit{Dedekind finite} if it is not Dedekind infinite. The question
+        is: Is $A$ finite if and only if $A$ is Dedekind finite? When you
+        think about this question, it may eventually become
+        \textit{obvious} that these are the same definition. You may say
+        \textit{if I through a single element away, I end up with a smaller set}
+        \textit{and hence the set must be finite!} Without the axiom of
+        countable choice, it is not possible to prove this statement.
+        \par\hfill\par
+        Let's use the axiom of countable choice to prove that every subset
+        of a countable set is countable.
+        \begin{theorem}
+            If $X$ is a countable set, and $A\subseteq{X}$, then $A$ is
+            countable.
+        \end{theorem}
+        \begin{proof}
+            If $X$ is finite, then $A$ is a subset of a finite set, and hence
+            finite. Suppose $X$ is countably infinite. If $A$ is finite, we're
+            done, so suppose not. Since $A$ is infinite, for all
+            $N\in\mathbb{N}$, there exist finite sets $B_{n}\subseteq{A}$,
+            $n\in\mathbb{Z}_{N+1}$, such that $\textrm{Card}(B_{n})=n+1$
+            and $B_{n}\subseteq{B}_{n+1}$ (if not, $A$ must be finite).
+            Let $C_{n}=B_{n+1}\setminus{B}_{n}$. Let
+            $\mathcal{O}$ be the set of all $C_{n}$ for all $n\in\mathbb{N}$.
+            By the axiom of countable choice, the product set
+            $\prod\mathcal{O}$ is not empty ($C_{n}$ is never empty since
+            $\textrm{Card}(B_{n})=n+1$). Let $f\in\prod\mathcal{O}$.
+            Then $f(C_{n})\in{C}_{n}$ for all $n\in\mathbb{N}$. This function
+            is injective. For if not, suppose $m<n$ and
+            $f(C_{m})=f(C_{n})$. Then $f(C_{m})\in{C}_{n}$. But
+            $C_{n}=B_{n+1}\setminus{B}_{n}$ and
+            $C_{m}\subseteq{B}_{n}$ since $m<n$, a
+            contradiction. Hence, $f(C_{n})\ne{f}(C_{m})$. Define the injection
+            $g:\mathbb{N}\rightarrow{A}$ by $g(n)=f(C_{n})$. We can define an
+            injection $h:A\rightarrow\mathbb{N}$ as follows. Since $X$ is
+            countable, there is a bijection $F:X\rightarrow\mathbb{N}$.
+            By restricting $F$ to $A$ we get an injection from
+            $A$ to $\mathbb{N}$. By the Cantor-Schr\"{o}eder-Bernstein theorem,
+            there is a bijection $h$ from $A$ to $\mathbb{N}$, and hence
+            $A$ is countable.
+        \end{proof}
+        It would be quite strange if there was a set with size between
+        finite and countable, which is one of the reasons the axiom of
+        countable choice is accepted without much contraversy. The general
+        axiom of choice is not so embraced.
+        \begin{axiom}[\textbf{Axiom of Choice}]
+            If $\mathcal{O}$ is a non-empty set such that for all
+            $A\in\mathcal{O}$ it is true that $A$ is non-empty, then
+            $\prod\mathcal{O}$ is non-empty.
+        \end{axiom}
+        Again, you might be screaming
+        \textit{of course that set is non-empty, it's probably uncountable!}
+        This is impossible to prove, however. So, we may accept it as true
+        and we may accept it as false. For this course, we will accept it as
+        true. Here are a few equivalent statements that make it
+        \textit{obvious} that the statement is true.
+        \begin{theorem}
+            If $f:A\rightarrow{B}$ is surjective, then there is a
+            right inverse, a function $g:B\rightarrow{A}$ such that
+            $(f\circ{g})(b)=b$ for all $b\in{B}$.
+        \end{theorem}
+        \begin{proof}
+            Since $f$ is surjective, for all $b\in{B}$, there is an
+            $a\in{A}$ such that $f(a)=b$. \textit{Choose} $g(b)=a$.
+        \end{proof}
+        We are not allowed to do this \textit{choosing} without the axiom of
+        choice. Indeed, if you think this proof should be valid, you are
+        accepting the axiom of choice. This statement is
+        \textit{equivalent} to the axiom of choice.
+        \begin{theorem}
+            If $A$ and $B$ are sets, either there is a surjection
+            $f:A\rightarrow{B}$ or a surjection $g:B\rightarrow{A}$.
+        \end{theorem}
+        Again, this is equivalent to choice. There are some algebraic
+        equivalents.
+        \begin{itemize}
+            \item Every vector space has a basis.
+            \item Every set has a group structure.
+            \item Every ring has a maximal ideal.
+        \end{itemize}
+        In this course we will prove two topological facts that are also
+        equivalent to the axiom of choice.
+        \begin{itemize}
+            \item The product of compact sets is compact.
+            \item The product of connected sets is connected.
+        \end{itemize}
+        Lastly, an important theorem about quotient sets.
+        \begin{theorem}
+            If $A$ is a set, and $R$ is an equivalence relation on $A$, then
+            there is an injective function $f:A/R\rightarrow{A}$. Given
+            $\mathcal{U}\in{A}/R$ and $f(\mathcal{U})=x$, we write
+            $\mathcal{U}=[x]$ and call this a \textit{representative} for
+            $\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            For all $a\in{A}$, $[a]$ is non-empty set since $a\in[a]$. By the
+            axiom of choice, there is a function
+            $f:A/R\rightarrow\bigcup{A}/R$ such that for all
+            $\mathcal{U}\in{A}/R$, $f(\mathcal{U})\in\mathcal{U}$. But
+            $\bigcup{A}/R=A$ (Remember, $A/R$ is a set of subsets of $A$, the
+            equivalence classes of $A$), so $f$ is a function from
+            $A/R$ to $A$. This is injective. If
+            $\mathcal{U}$ and $\mathcal{V}$ are equivalence classes,
+            then $f(\mathcal{U})=f(\mathcal{V})$ implies
+            $\mathcal{U}=\mathcal{V}$ since
+            $f(\mathcal{U})\in\mathcal{V}$ and $f(\mathcal{V})\in\mathcal{U}$
+            must be true. Hence, $f$ is injective.
+        \end{proof}
+        This is another intuitively \textit{obvious} claim.
+        \textit{Of course I can pick a representative of an equivalence class!}
+        \par\hfill\par
+        As you study algebra and topology more, you may become convinced that
+        these statements \textit{must} be true, and then you will become a
+        defender of the axiom of choice. So why would anyone say it isn't true?
+        \begin{theorem}[\textbf{Banach-Tarski Paradox}]
+            It is possible to take a sphere, cut it into five disjoint subsets,
+            and using only rotation and translation, put the pieces back
+            together into two new spheres, both being the same size as the
+            original. 
+        \end{theorem}
+        The proof relies on the axiom of choice. Reading this statement over
+        a few times you may think \textit{that's clearly false}.
+        \par\hfill\par
+        The big theorem that is \textit{clearly false} we will need to use a
+        few times. It is also equivalent to the axiom of choice.
+        First, a few definitions.
+        \begin{definition}[\textbf{Partial Order}]
+            A partial order on a set $A$ is a relation $R$ such that
+            $R$ is reflexive, transitive, and if $aRb$ and $bRa$, then
+            $a=b$.
+        \end{definition}
+        The two canonical examples are less than or equal to $(\leq)$ and
+        inclusion. $a\leq{a}$ is true. $a\leq{b}$ and $b\leq{c}$ implies
+        $a\leq{c}$ is also true. Lastly, if $a\leq{b}$ and $b\leq{a}$, then
+        $a=b$. Inclusion has the same properties.
+        $A\subseteq{A}$, $A\subseteq{B}$ and $B\subseteq{C}$ implies
+        $A\subseteq{C}$, and $A\subseteq{B}$ and $B\subseteq{A}$ implies
+        $A=B$. Inclusion is perhaps a \textit{better} example because it is
+        not a total order.
+        \begin{definition}[\textbf{Total Order}]
+            A total order on a set $A$ is a partial order $R$ such that for all
+            $a,b\in{A}$, either $aRb$ is true, or $bRa$ is true (or both).
+        \end{definition}
+        $\leq$ is a total order on $\mathbb{R}$, but $\subseteq$ is
+        not a total order. Let $A=\{\,1,\,2,\,3\,\}$ and
+        $B=\{\,2,\,3,\,4\,\}$. Then $A\not\subseteq{B}$ and
+        $B\not\subseteq{A}$, hence $\subseteq$ is not a total order. It is
+        still a partial order. There is a special type of total order called
+        \textit{well-orderings}.
+        \begin{definition}[\textbf{Well-Ordering}]
+            A well-ordering on a set $A$ is a total order $\leq$ on $A$ such
+            that for every non-empty subset $B\subseteq{A}$ there is a
+            least element $a\in{B}$. That is, an element $a\in{B}$ such that
+            for all other $b\in{B}$ it is true that $a\leq{b}$.
+        \end{definition}
+        The natural numbers have this property. The standard ordering on the
+        real numbers does \textit{not} have this property. Let
+        $A=(0,\,1)$. There is no least element. If you pick a number
+        $0<r<1$, I can pick $\frac{r}{2}$ and obtain a smaller number. It may
+        seem impossible to order the real numbers in a way that gives a
+        well-ordering, but the axiom of choice says it is possible.
+        \begin{theorem}
+            If $A$ is a set, then there exists a well-ordering $\leq$ on $A$.
+        \end{theorem}
+        We will talk more about the well-ordering theorem when we discuss the
+        \textit{order topology} and the \textit{long line}.
+\end{document}

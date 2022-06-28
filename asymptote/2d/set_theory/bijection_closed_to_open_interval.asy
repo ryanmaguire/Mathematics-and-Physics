@@ -58,7 +58,7 @@ real x = xend;
 int number_of_dots = 8;
 
 /*  Size of a dot.                                                            */
-real rDot = 0.02;
+real rDot = 0.03;
 
 /*  Size of arrow heads.                                                      */
 real arsize = 5bp;
@@ -75,7 +75,7 @@ draw(Label("$y$", position=1.0), Y[0] -- Y[1], E, axesp, SharpArrow(arsize));
 draw(O -- P);
 
 /*  Draw a dot a f(0).                                                        */
-filldraw(circle((0.0, 0.5), rDot), black, black);
+filldraw(circle((0.0, 0.5*xend), rDot), black, black);
 
 /*  Loop over the points to be drawn.                                         */
 for (n = 0; n < number_of_dots; ++n)

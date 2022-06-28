@@ -1,0 +1,380 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\newenvironment{notation}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\notationx%
+}{%
+    \popQED\endnotationx%
+}
+
+\title{Point-Set Topology: Lecture 3}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{More Cardinality}
+        In the last lecture we showed
+        $\textrm{Card}(\mathbb{N})=\textrm{Card}(\mathbb{Z})=\textrm{Card}(\mathbb{Q})$.
+        A \textit{countably infinite} set is a set that can be put into a
+        bijection with $\mathbb{N}$. A \textit{countable} set is a set that
+        is either countably infinite or finite. An \textit{uncountable} set is
+        a set that is infinite but not countable. We now arrive at our first
+        uncountable set, the real numbers $\mathbb{R}$. Suppose they are
+        countable. Then there is a bijection
+        $f:\mathbb{N}\rightarrow\mathbb{R}$. For simplicity, let us assume there
+        is a bijection $f:\mathbb{N}\rightarrow(0,1)$. Then we can write out
+        this bijection with a list.
+        \begin{align}
+            f(0)&=0.d_{0,0}d_{0,1}d_{0,2}d_{0,3}d_{0,4}d_{0,5}\dots\\
+            f(1)&=0.d_{1,0}d_{1,1}d_{1,2}d_{1,3}d_{1,4}d_{1,5}\dots\\
+            f(2)&=0.d_{2,0}d_{2,1}d_{2,2}d_{2,3}d_{2,4}d_{2,5}\dots\\
+            f(3)&=0.d_{3,0}d_{3,1}d_{3,2}d_{3,3}d_{3,4}d_{3,5}\dots\\
+            f(4)&=0.d_{4,0}d_{4,1}d_{4,2}d_{4,3}d_{4,4}d_{4,5}\dots\\
+            f(5)&=0.d_{5,0}d_{5,1}d_{5,2}d_{5,3}d_{5,4}d_{5,5}\dots
+        \end{align}
+        where $d_{m,n}$ is the decimal of the $m^{th}$ number in the
+        $n^{th}$ decimal place. Since the bijection is between
+        $\mathbb{N}$ and $(0,1)$, the interger part of each $f(n)$ is zero.
+        We now show that $f$ is not a bijection by giving a new number that is
+        not on the list. Define $r\in(0,1)$ as follows:
+        \begin{equation}
+            r=0.r_{0}r_{1}r_{2}r_{3}r_{4}r_{5}\dots
+        \end{equation}
+        where
+        \begin{equation}
+            r_{n}=
+            \begin{cases}
+                d_{n,n}+1&d_{n,n}\ne{9}\\
+                0&d_{n,n}=9
+            \end{cases}
+        \end{equation}
+        This number is not equal to $f(n)$ for any $n$. It is not
+        $f(0)$ since $r_{0}$ and $d_{0,0}$ are different. It is not
+        $f(1)$ since $r_{1}$ and $d_{1,1}$ differ. Similarly, it is not
+        $f(n)$ since $r_{n}$ and $d_{n,n}$ are not the same decimal. So
+        $r$ is not on our list, meaning $f(n)\ne{r}$ for any $n\in\mathbb{N}$,
+        contradicting the fact that $f$ is a bijection.
+        \par\hfill\par
+        There are small gaps here, meaning this is a \textit{sketch of proof}
+        and not a full proof. The argument does not take into account the fact
+        that $0.1=0.0\overline{9}$, for example, but this can be corrected.
+        \begin{theorem}[\textbf{Cantor's Theorem}]
+            If $A$ is a set, then there is an injective function
+            $f:A\rightarrow\mathcal{P}(A)$, where $\mathcal{P}(A)$ is the power
+            set of $A$, but there exists no surjection, and hence no bijection.
+        \end{theorem}
+        \begin{proof}
+            Homework.
+        \end{proof}
+        There is a bijection from $\mathcal{P}(\mathbb{N})$ to
+        $\mathbb{R}$. Again, a sketch of proof is given. We'll construct a
+        surjection $f:\mathcal{P}(\mathbb{N})\rightarrow[0,1]$, the closed
+        unit interval. Given a set $A\subseteq\mathbb{N}$, construct the number
+        $r\in[0,1]$ using binary as follows:
+        \begin{equation}
+            f(A)=r=0.r_{0}r_{1}r_{2}\dots
+        \end{equation}
+        where $r_{n}=1$ if $n\in{A}$ and $r_{n}=0$ if $n\notin{A}$. For
+        example, if $A=\emptyset$, then
+        $f(\emptyset)=0.000\dots=0$. If $A=\mathbb{N}$, then
+        $f(\mathbb{N})=0.111\dots=1$. If $A=\{\,0,\,2,\,4,\,\dots\,\}$, then
+        $f(A)=0.101010\dots$. If $A=\{\,1,\,2,\,3\,\}$, then
+        $f(A)=0.01110000\dots$. Since every number $r\in[0,1]$ can be written
+        in binary form in such a way, $f$ is a surjection. We can reverse this
+        process as well, but again the issue of $1$ vs. $0.\overline{9}$ arises
+        and needs correcting. It is possible to do this, but not currently worth
+        our time investigating.
+        \par\hfill\par
+        You may now ask \textit{this is a bijection from the natural numbers to}
+        \textit{the closed unit interval}. \textit{What about} $\mathbb{R}$?
+        We can construct a bijection $g:[0,1]\rightarrow(0,1)$, the closed
+        unit interval to the open unit interval, via:
+        \begin{equation}
+            g(x)=
+            \begin{cases}
+                \frac{1}{2}&x=0\\
+                \frac{x}{4}&x=\frac{1}{2^{n}}\textrm{ for some }n\in\mathbb{N}\\
+                x&\textrm{otherwise}
+            \end{cases}
+        \end{equation}
+        The graph is shown in Fig.~\ref{fig:bijection_closed_to_open_interval}.
+        We will eventually prove that there is no \textit{continuous} bijection
+        $f:[0,1]\rightarrow(0,1)$. For those interested, try to find a
+        bijection $f:[0,1]\rightarrow(0,1)$ that has only
+        \textit{finitely many} discontinuities.
+        \par\hfill\par
+        Using this bijection $g$, we need a bijection from $(0,1)$ to
+        $\mathbb{R}$. This is given by:
+        \begin{equation}
+            h(x)=\frac{2x-1}{x(1-x)}
+        \end{equation}
+        By composing $h\circ{g}\circ{f}$ we get a bijection from
+        $\mathcal{P}(\mathbb{N})$ to $\mathbb{R}$. This means that cardinality
+        is \textit{transitive}.
+        \begin{theorem}
+            If $\textrm{Card}(A)=\textrm{Card}(B)$ and
+            $\textrm{Card}(B)=\textrm{Card}(C)$, then
+            $\textrm{Card}(A)=\textrm{Card}(C)$.
+        \end{theorem}
+        \begin{proof}
+            Since $A$ and $B$ are of the same cardinality, there is a
+            bijection $f:A\rightarrow{B}$. Similarly, there is a bijection
+            $g:B\rightarrow{C}$. By composing we get a bijection
+            $g\circ{f}:A\rightarrow{C}$, meaning
+            $\textrm{Card}(A)=\textrm{Card}(C)$.
+        \end{proof}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/bijection_closed_to_open_interval.pdf}
+            \caption{Bijection from $[0,1]$ to $(0,1)$}
+            \label{fig:bijection_closed_to_open_interval}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/2x_minus_1_over_x_times_1_minus_x.pdf}
+            \caption{Bijection from $(0,1)$ to $\mathbb{R}$}
+            \label{fig:2x_minus_1_over_x_times_1_minus_x}
+        \end{figure}
+    \section{Relations}
+        Relations are ways of saying certain elements of a set are related to
+        each other. There are many relations you use daily in mathematics.
+        Equality $(=)$, less than $(<)$, greater than $(>)$, less than or equal
+        $(\leq)$, and greater than or equal $(\geq)$. We've also seen relations
+        on sets such as \textit{inclusion} $(\subseteq)$ and
+        \textit{proper inclusion} $(\subsetneq)$. Cardinality can also be
+        thought of as a type of relation on sets. The most general definition
+        of a relation is as follows.
+        \begin{definition}[\textbf{Relation}]
+            A relation on a set $A$ is a subset $R\subseteq{A}\times{A}$.
+        \end{definition}
+        If $(a,b)\in{R}$ we write this as $aRb$.
+        \begin{example}
+            Suppose we know what \textit{less than} means for real numbers.
+            We can define $<$ to be the set:
+            \begin{equation}
+                <\;=\{\,(a,b)\in\mathbb{R}\times\mathbb{R}\;|\;
+                    a\textrm{ is less than }b\,\}
+            \end{equation}
+            Rather than writing $(a,b)\in{<}$, we write
+            $a<b$. It's weird to think of the symbol $<$ as a set, and in
+            practice we don't. We think of it as a way of relating elements
+            in $\mathbb{R}$. Similarly, for a set $A$ and a relation $R$,
+            you should think of $R$ as a way of relating elements.
+        \end{example}
+        \begin{example}
+            The natural numbers can be given a precise construction. We write
+            $0=\emptyset$, $1=\{\,0\,\}$, $2=\{\,0,\,1\,\}$,
+            $3=\{\,0,\,1,\,2\,\}$, and so on. We can now define
+            $<$ on $\mathbb{N}$ as follows:
+            \begin{equation}
+                <\;=\{\,(m,n)\in\mathbb{N}\times\mathbb{N}\;|\;m\in{n}\,\}
+            \end{equation}
+            This is bizarre, but makes precise what inequality means.
+            Since $3=\{\,0,\,1,\,2\,\}$, we see that $1\in{3}$, meaning
+            we can write $1<3$. This is in agreement with the way we intuitively
+            think of the \textit{less than} relation.
+        \end{example}
+        \begin{example}
+            If $X$ is a set, and $R\subseteq\mathcal{P}(X)\times\mathcal{P}(X)$
+            is defined by:
+            \begin{equation}
+                R=\{\,(A,B)\in\mathcal{P}(X)\times\mathcal{P}(X)\;|\;
+                    A\subseteq{B}\,\}
+            \end{equation}
+            then $R$ is the \textit{inclusion} relation on the set of all
+            subsets of $X$.
+        \end{example}
+        Since the definition of relation is so general
+        (\textit{any} subset of $A\times{A}$), it is often the case the we
+        restrict our attention to special types of relations.
+        \begin{definition}[\textbf{Reflexive Relation}]
+            A reflexive relation on a set $A$ is a relation $R$ such that
+            for all $a\in{A}$, $aRa$. That is, for all $a\in{A}$, $a$ is related
+            to itself by $R$.
+        \end{definition}
+        \begin{example}
+            Equality $(=)$ is reflexive, as is inclusion $(\subseteq)$.
+        \end{example}
+        \begin{example}
+            Proper inclusion $(\subsetneq)$ is not reflexive, neither is
+            less than $(<)$ nor greater than $(>)$.
+        \end{example}
+        Given a set $A$, the \textit{diagonal} of $A\times{A}$ is the set
+        of all ordered pairs $(a,a)$ for all $a\in{A}$. If we look at
+        $\mathbb{R}\times\mathbb{R}$, the diagonal is the line $y=x$ in the plane,
+        hence the name. A reflexive relation is a relation $R$ the contains
+        the diagonal.
+        \begin{definition}[\textbf{Symmetric Relation}]
+            A symmetric relation on a set $A$ is a relation $R$ such that
+            for all $a,b\in{A}$, $aRb$ if and only if $bRa$.
+        \end{definition}
+        \begin{example}
+            Equality is symmetric. $a=b$ implies $b=a$.
+        \end{example}
+        \begin{example}
+            Containment $(\in)$ is not symmetric. It is a theorem of set theory
+            that $x\in{y}$ implies $y\notin{x}$. The importance of this claim
+            is that it helps us avoid Russell's paradox, one of the reasons for
+            developing set theory in the first place.
+        \end{example}
+        \begin{example}
+            Inclusion is a relation that is reflexive but not symmetric. It is
+            possible for $A\subseteq{B}$ but $B\not\subseteq{A}$. For example,
+            $A=\mathbb{Q}$ and $B=\mathbb{R}$.
+        \end{example}
+        \begin{definition}[\textbf{Transitive Relation}]
+            A transitive relation on a set $A$ is a relation $R$ such that
+            for all $a,b,c\in{A}$, $aRb$ and $bRc$ implies $aRc$.
+        \end{definition}
+        \begin{example}
+            Equality is transitive. This is one of the assumptions dating back
+            to Euclid. If $a=b$ and $b=c$, then $a=c$.
+        \end{example}
+        \begin{example}
+            Inequality is also transitive. If $a<b$ and $b<c$, then
+            $a<c$.
+        \end{example}
+        \begin{example}
+            Inclusion is transitive. If $A\subseteq{B}$ and $B\subseteq{C}$,
+            then $A\subseteq{C}$.
+        \end{example}
+        \begin{example}
+            Containment does not need to be transitive. Let
+            $a=\emptyset$, $b=\{\,\emptyset\,\}$, and
+            $c=\{\,\{\,\emptyset\,\}\,\}$. Then $a\in{b}$, $b\in{c}$,
+            but $a\notin{c}$.
+        \end{example}
+        \begin{definition}[\textbf{Equivalence Relation}]
+            An equivalence relation on a set $A$ is a relation $R$ that is
+            reflexive, symmetric, and transitive.
+        \end{definition}
+        Equivalence relations allow us to define equivalence classes.
+        \begin{definition}[\textbf{Equivalence Class}]
+            The equivalence class of an element $a\in{A}$ with respect to an
+            equivalence relation $R$ is the set $[a]$ defined by:
+            \begin{equation}
+                [a]=\{\,b\in{A}\;|\;aRb\,\}
+            \end{equation}
+        \end{definition}
+        \begin{theorem}
+            If $A$ is a set, if $R$ is an equivalence relation, and if
+            $a,b\in{A}$, then $[a]=[b]$ if and only if $aRb$.
+        \end{theorem}
+        \begin{proof}
+            Since $R$ is reflexive, $a\in[a]$ and $b\in[b]$. If $aRb$,
+            then $b\in[a]$, by definition. But $R$ is symmetric,
+            so $bRa$ and hence $a\in[b]$. If $c\in[a]$ then $aRc$. But
+            $bRa$, and since $R$ is transitive, $bRc$. Therefore
+            $c\in[b]$. Similarly, $c\in[b]$ implies $c\in[a]$. That is,
+            $[a]$ and $[b]$ consist of precisely the same elements, so
+            $[a]=[b]$. In the other direction, if $[a]=[b]$, then by definition
+            $a\in[b]$ and $b\in[a]$, and hence $aRb$ and $bRa$.
+        \end{proof}
+        \begin{definition}[\textbf{Quotient Set}]
+            The quotient set of a set $A$ with respect to an equivalence
+            relation $R$ is the set $A/R$ defined by:
+            \begin{equation}
+                A/R=\{\,A\in\mathcal{P}(A)\;|\;A=[a]\textrm{ for some }a\in{A}\;\}
+            \end{equation}
+            That is, $A/R$ is the set of all equivalence classes of $A$ with
+            respect to $R$.
+        \end{definition}
+        The notation $A/R$ is just notation. We are not \textit{dividing} sets.
+        Intuitively, we are forming a new set by taking all of the elements
+        $b\in{A}$ such that $b\in[a]$ and \textit{gluing} them to $a$, creating
+        a single element. This will be very important in topology when we talk
+        about \textit{quotient spaces}.
+        \begin{example}
+            We can think of a fraction $\frac{a}{b}$ as an ordered pair
+            $(a,b)\in\mathbb{Z}\times(\mathbb{Z}\setminus\{\,0\,\})$. We do not
+            want $\frac{1}{2}$ and $\frac{2}{4}$ to be different elements, so
+            we need to \textit{glue} some elements of this product together.
+            That is, $\mathbb{Z}\times(\mathbb{Z}\setminus\{\,0\,\})$ is a set
+            of points in the plane $\mathbb{R}^{2}$ and the points
+            $(1,\,2)$ and $(2,\,4)$ are different. We ask
+            \textit{how can we say} $\frac{a}{b}=\frac{c}{d}$
+            \textit{using only integers}? We are trying to define what a
+            rational number is, so it would be circular to use the notation
+            $\frac{a}{b}$ in our argument. We obtain the answer via
+            cross-multiplying. We know that $\frac{a}{b}=\frac{c}{d}$ is true
+            (essentially by definition) when $ad=bc$. This allows us to define
+            an equivalence relation on
+            $\mathbb{Z}\times(\mathbb{Z}\setminus\{\,0\,\})$. Let
+            $A=\mathbb{Z}\times(\mathbb{Z}\setminus\{\,0\,\})$ and define
+            \begin{equation}
+                R=\{\,\big((a,\,b),\,(c,\,d)\,\big)\in{A}\times{A}\;|\;
+                    ad=bc\,\}
+            \end{equation}
+            The quotient set $A/R$ is the set of \textit{rational numbers}.
+            The equivalence classes $[(1,\,2)]$ and $[(2,\,4)]$ are the same
+            since $1\cdot{4}=2\cdot{2}$. That is, we have glued together
+            $(1,\,2)$ and $(2,\,4)$ to form a single object, the fraction
+            $\frac{1}{2}$. We write $[(a,\,b)]=\frac{a}{b}$ for convenience.
+        \end{example}
+\end{document}
