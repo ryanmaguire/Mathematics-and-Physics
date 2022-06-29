@@ -3,7 +3,6 @@ import settings;
 import graph;
 settings.outformat = "pdf";
 
-
 // Needed for the use of mathbb and mathcal commands.
 texpreamble("\usepackage{amssymb}");
 
