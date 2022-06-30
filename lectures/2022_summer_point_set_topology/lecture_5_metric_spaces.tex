@@ -74,10 +74,523 @@
 \begin{document}
     \maketitle
     \section{Metric Spaces}
+        Most of the analysis of the real numbers comes from the absolute value
+        function $|\cdot|:\mathbb{R}\rightarrow\mathbb{R}_{\geq{0}}$ defined
+        by:
+        \begin{equation}
+            |x|=
+            \begin{cases}
+                x&x\geq{0}\\
+                -x&x<0
+            \end{cases}
+        \end{equation}
+        The function $d:\mathbb{R}\times\mathbb{R}\rightarrow\mathbb{R}$
+        defined by $d(x,\,y)=|y-x|$ acts as a \textit{distance} function. It is
+        the length of the line segment between $x$ and $y$ on the real line.
+        Many theorems in real analysis repeatedly use three key facts about this
+        function. First, it is \textit{positive-definite}. This means that
+        $|x-y|$ is always non-negative, and $|x-y|=0$ if and only if $x=y$.
+        This is what a distance function should do, assigned a non-negative
+        real number to two points, the distance between them. Negative distance
+        doesn't have any meaning, and zero distance means the points are
+        identical. Second, the function $d(x,\,y)=|y-x|$ is symmetric. That is,
+        $d(x,\,y)=d(y,\,x)$ for all $x,y\in\mathbb{R}$. Again, this is what
+        distance should mean. The distance from Boston to New York is the same
+        as the distance from New York to Boston. The last property is very
+        geometrical, the \textit{triangle inequality}. It says that for any
+        real numbers $x,y,z\in\mathbb{R}$, $|x-z|\leq|x-y|+|y-z|$. That is,
+        the distance from $x$ to $z$ is not greater than the distance from
+        $x$ to $y$ plus the distance from $y$ to $z$. This is called the
+        triangle inequality since it mimics one of the theorems from Euclid's
+        elements relating lengths of triangles. Euclid writes that the length
+        of any side of a triangle is not greater than the sum of the lengths of
+        the other two sides (Fig.~\ref{fig:triangle_inequality_001}). To put
+        this into physical terms, the shortest distance between two points in
+        the plane is the straight line segment between them. Deviating off of
+        this line results in a longer distance.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/triangle_inequality_001.pdf}
+            \caption{Geometric Interpretation of the Triangle Inequality}
+            \label{fig:triangle_inequality_001}
+        \end{figure}
+        We take these three properties and say that this is what
+        \textit{distance} means. Metric spaces are sets that have a method of
+        assigning distance between points.
+        \begin{definition}[\textbf{Metric Space}]
+            A metric space is an ordered pair $(X,\,d)$ where $X$ is a set,
+            and $d:X\times{X}\rightarrow\mathbb{R}$ is a function such that:
+            \begin{itemize}
+                \item $d(x,\,y)\geq{0}$ for all $x,y\in{X}$ and $d(x,\,y)=0$ if
+                    and only if $x=y$ (Positive Definite)
+                \item $d(x,\,y)=d(y,\,x)$ (Symmetry)
+                \item $d(x,\,z)\leq{d}(x,\,y)+d(y,\,z)$ (Triangle Inequality) 
+            \end{itemize}
+            The function $d$ is called a \textit{metric} function.
+        \end{definition}
+        For those who wish to go on to geometry, a word of warning. In geometry
+        one studies \textit{Riemannian metrics}. These are not metric functions,
+        they do not measure distances (they measure angles). An author should
+        take care to differentiate between the two, calling one a
+        \textit{metric}, and the other a \textit{Riemannian metric}. The author
+        should especially do this because Riemannian metrics create metrics,
+        called the \textit{metric induced by a Riemannian metric}. Unfortunately
+        far too many omit the word \textit{Riemannian} and just call the
+        function a metric, hoping it is clear from context which is which.
+        You then get gibberish sentences like
+        \textit{the metric induced by the metric}. We most certainly will not
+        get to geometry in this class, so there should be no confusion
+        (However, a course in Riemannian manifolds is perfect after this course.
+        We will end on topological manifolds).
+        \begin{example}
+            If $X=\mathbb{R}$ and $d(x,\,y)=|x-y|$, then $(X,\,d)$ is a metric
+            space.
+        \end{example}
+        \begin{example}
+            Define $d(\mathbf{x},\,\mathbf{y})$ on $\mathbb{R}^{2}$ via:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=
+                \sqrt{(y_{0}-x_{0})^{2}+(y_{1}-x_{1})^{2}}
+            \end{equation}
+            This is the Euclidean distance. It is positive-definite since
+            the inside of the square root is positive-definite and the square
+            root function is increasing. It is symmetric since
+            $(x-y)^{2}=(y-x)^{2}$. The hard part is the triangle inequality.
+            This turns out to be equivalent to showing that
+            $||\mathbf{x}+\mathbf{y}||_{2}\leq||\mathbf{x}||_{2}+||\mathbf{y}||_{2}$
+            where $||\mathbf{x}||_{2}$ is the \textit{Euclidean length} of
+            $\mathbf{x}$:
+            \begin{equation}
+                ||\mathbf{x}||_{2}=\sqrt{x_{0}^{2}+x_{1}^{2}}
+            \end{equation}
+            To see why the triangle inequality is equivalent to this,
+            substitute $\mathbf{x}-\mathbf{z}$ for $\mathbf{x}$ and
+            $\mathbf{z}-\mathbf{y}$ for $\mathbf{y}$. So, we need only prove
+            that $||\mathbf{x}+\mathbf{y}||_{2}\leq||\mathbf{x}||_{2}+||\mathbf{y}||_{2}$.
+            We have:
+            \begin{align}
+                ||\mathbf{x}+\mathbf{y}||_{2}^{2}
+                &=(x_{0}+y_{0})^{2}+(x_{1}+y_{1})^{2}\\
+                &=x_{0}^{2}+x_{1}^{2}+2(x_{0}y_{0}+x_{1}y_{1})+y_{0}^{2}+y_{1}^{2}\\
+                &=||\mathbf{x}||_{2}^{2}+2(x_{0}y_{0}+x_{1}y_{1})+||\mathbf{y}||_{2}^{2}\\
+                &=||\mathbf{x}||_{2}^{2}+2\,\mathbf{x}\cdot\mathbf{y}+||\mathbf{y}||_{2}^{2}\\
+                &=||\mathbf{x}||_{2}^{2}+2\,||\mathbf{x}||_{2}\,||\mathbf{y}||_{2}\,\cos(\theta)+||\mathbf{y}||_{2}^{2}\\
+                &\leq||\mathbf{x}||_{2}^{2}+2\,||\mathbf{x}||_{2}\,||\mathbf{y}||_{2}+||\mathbf{y}||_{2}^{2}\\
+                &=(||\mathbf{x}||_{2}+||\mathbf{y}||_{2})^{2}
+            \end{align}
+            where $\theta$ is the angle between the vectors $\mathbf{x}$ and
+            $\mathbf{y}$. By taking the square root of the first and last lines
+            we obtain
+            the inequality. This makes $(\mathbb{R}^{2},\,d)$ a metric space.
+            This is called the \textit{two dimensional Euclidean space} or the
+            \textit{standard metric on} $\mathbb{R}^{2}$.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/metric_space_example_r2_001.pdf}
+            \caption{Euclidean Metric on $\mathbb{R}^{2}$}
+            \label{fig:metric_space_example_r2_001}
+        \end{figure}
+        \begin{example}
+            Let $X=\mathbb{R}^{2}$ and
+            $d(\mathbf{x},\,\mathbf{y})=|x_{0}-y_{0}|+|x_{1}-y_{1}|$. This is
+            called the \textit{Manhattan metric} on $\mathbb{R}^{2}$.
+            The function $d$ is indeed a metric on $\mathbb{R}^{2}$
+            (prove this!). It is called the Manhattan metric since this metric
+            is formed by the following sentence:
+            \textit{To move from} $\mathbf{x}$ \textit{to} $\mathbf{y}$
+            \textit{you must move horizontally (left-right) or vertically}
+            \textit{(up-down). You may not move diagonal.}
+            This is similar to how you'd move in Manhattan. You
+            can't move diagonally because there are buildings in the way,
+            but you may move horizontally and vertically along the streets.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/metric_space_example_manhattan_r2_001.pdf}
+            \caption{Manhattan Metric on $\mathbb{R}^{2}$}
+            \label{fig:metric_space_example_manhattan_r2_001}
+        \end{figure}
+        \begin{example}
+            The function $d$ on $\mathbb{R}\times\mathbb{R}$ defined by
+            $d(x,\,y)=\textrm{max}(|x|,\,|y|)$ is a metric. This is the
+            \textit{maximum} metric.
+        \end{example}
+        \begin{example}
+            The function $d:\mathbb{R}^{2}\times\mathbb{R}^{2}\rightarrow\mathbb{R}$
+            defined by:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=
+                \textrm{max}(||\mathbf{x}||_{2},\,||\mathbf{y}||_{2})
+            \end{equation}
+            is a metric. This is the metric that describes how a king can move
+            on a chess board. The distance from the position of a king on the
+            board to another position is the maximum of the vertical and
+            horizontal distances since the king is allowed to move horizontally,
+            vertically, and diagonally.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/metric_space_example_paris_metric_001.pdf}
+            \caption{Paris Metric on $\mathbb{R}^{2}$}
+            \label{fig:metric_space_example_paris_metric_001}
+        \end{figure}
+        \begin{example}
+            To those who have been to Paris, perhaps you have visited the
+            Arc de Triomphe. It is surrounded by several roads that all lead
+            radially inwards towards the monument, somewhat like spokes on
+            a wheel. To walk from one street to another requires walking towards
+            the Arc de Triomphe and then outwards along the appropriate street.
+            This allows us to define the \textit{Paris metric} on
+            $\mathbb{R}^{2}$. Define $d$ as follows:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=
+                \begin{cases}
+                    ||\mathbf{x}-\mathbf{y}||_{2}&
+                        \mathbf{y}=\lambda\mathbf{x}\textrm{ for some }
+                        \lambda\in\mathbb{R}\\
+                    ||\mathbf{x}||_{2}+||\mathbf{y}||_{2}&
+                        \textrm{else}
+                \end{cases}
+            \end{equation}
+            That is, if $\mathbf{x}$ and $\mathbf{y}$ lie on the same line
+            passing through the origin, their distance is the usual Euclidean
+            distance. Otherwise to get from $\mathbf{x}$ to $\mathbf{y}$ you
+            must walk radially inwards from $\mathbf{x}$ to the origin, and
+            then radially outwards from the origin to $\mathbf{y}$. This makes
+            $(\mathbb{R}^{2},\,d)$ a metric spaces.
+        \end{example}
+        \begin{example}
+            There's a Manhattan metric, a Paris metric, and a London metric.
+            If you want to get from point $a$ to point $b$ in England, you take
+            the train. It always seems that no matter where you're trying to
+            go, your train will first make a stop in London. This gives us the
+            \textit{London metric}. Define $d$ by:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=
+                \begin{cases}
+                    0&\mathbf{x}=\mathbf{y}\\
+                    ||\mathbf{x}||_{2}+||\mathbf{y}||_{2}&\textrm{otherwise}
+                \end{cases}
+            \end{equation}
+            That is, if $\mathbf{x}=\mathbf{y}$, there's no point getting on
+            the train since you're already where you want to be. Otherwise,
+            take the train from $\mathbf{x}$ to London (the origin) and then
+            from London to $\mathbf{y}$.
+        \end{example}
+        \begin{example}
+            If $X$ is any set and $d:X\times{X}\rightarrow\mathbb{R}$ is defined
+            by:
+            \begin{equation}
+                d(x,\,y)=
+                \begin{cases}
+                    0&x=y\\
+                    1&x\ne{y}
+                \end{cases}
+            \end{equation}
+            Then $(X,\,d)$ is a metric space. This is called the
+            \textit{discete} metric.
+        \end{example}
+        \begin{example}
+            Consider $[a,\,b]\subseteq\mathbb{R}$ for some $a,b\in\mathbb{R}$
+            with $a<b$ and let $C\big([a,\,b],\,\mathbb{R}\big)$ be the set of
+            all continuous functions $f:[a,\,b]\rightarrow\mathbb{R}$. Since
+            $[a,\,b]$ is closed and bounded, if
+            $f\in{C}\big([a,\,b],\,\mathbb{R}\big)$ then $f$ is continuous and
+            by the extreme value theorem $f$ is bounded above and below, so the
+            integral of $f$ is finite. Given two function
+            $f,g\in{C}\big([a,\,b],\,\mathbb{R}\big)$ we can define
+            $d(f,\,g)$ by:
+            \begin{equation}
+                d(f,\,g)=\int_{a}^{b}|f(x)-g(x)|\,\textrm{d}x
+            \end{equation}
+            This makes the set of continuous functions into a metric space.
+        \end{example}
+        Why require three things for a metric space when you can just as
+        easily require two. If instead of writing the triangle inequality
+        as $d(x,\,z)\leq{d}(x,\,y)+d(y,\,z)$ we write
+        $d(x,\,z)\leq{d}(x,\,y)+d(z,\,y)$, we can prove $d$ is symmetric.
+        \begin{theorem}
+            If $X$ is a set and $d:X\times{X}\rightarrow\mathbb{R}$ is
+            positive-definite and for all
+            $a,b,c\in{X}$ it is true that
+            $d(x,\,z)\leq{d}(x,\,y)+d(z,\,y)$, then $d$ is symmetric and
+            $(X,\,d)$ is a metric space.
+        \end{theorem}
+        \begin{proof}
+            Letting $z=x$ we have:
+            \begin{equation}
+                d(x,\,y)\leq{d}(x,\,x)+d(y,\,x)=d(y,\,x)
+            \end{equation}
+            Similarly if we let $z=y$ we get:
+            \begin{equation}
+                d(y,\,x)\leq{d}(y,\,y)+d(x,\,y)=d(x,\,y)
+            \end{equation}
+            So $d(x,\,y)\leq{d}(y,\,x)$ and $d(y,\,x)\leq{d}(x,\,y)$, so
+            $d(x,\,y)=d(y,\,x)$ and hence
+            $d$ is symmetric. Thus, $(X,\,d)$ is a metric space.
+        \end{proof}
+    \section{Open and Closed Sets}
+        Most of the important properties of metric spaces can be defined by
+        \textit{sequences} and \textit{convergence}.
         \begin{definition}[\textbf{Sequence}]
             A sequence in a set $A$ is a function $a:\mathbb{N}\rightarrow{A}$.
             Instead of writing $a(n)$ for the value of $n\in\mathbb{N}$, we
             write $a_{n}$.
         \end{definition}
-    \section{Continuity}
+        \begin{definition}[\textbf{Convergent Sequence in a Metric Space}]
+            A convergent sequence in a metric space $(X,\,d)$ is a sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that there exists an $x\in{X}$
+            where for all $\varepsilon>0$ there is an $N\in\mathbb{N}$ such that
+            $n\in\mathbb{N}$ and $n>N$ implies $d(x,\,a_{n})<\varepsilon$.
+            $x$ is called a limit of $a$ and we write $a_{n}\rightarrow{x}$.
+        \end{definition}
+        Contrast this with the definition of convergent sequences of real
+        numbers. These are sequences $a:\mathbb{N}\rightarrow\mathbb{R}$ where
+        there is an $x\in\mathbb{R}$ such that for all $\varepsilon>0$ there
+        is an $N\in\mathbb{N}$ where $n\in\mathbb{N}$ and $n>N$ implies
+        $|x-a_{n}|<\varepsilon$. We've merely replaced $|x-a_{n}|$ with
+        $d(x,\,a_{n})$. Like the real numbers, convergence in a metric space
+        is unique.
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $a:\mathbb{N}\rightarrow{X}$
+            is a convergent sequence, and if $x,y\in{X}$ are such that
+            $a_{n}\rightarrow{x}$ and $a_{n}\rightarrow{y}$, then
+            $x=y$.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. If $x\ne{y}$, then since $d$ is a metric function,
+            $d(x,\,y)>0$. Let $\varepsilon=\frac{1}{2}d(x,\,y)$. Then since
+            $\varepsilon>0$ and $a_{n}\rightarrow{x}$, there is an
+            $N_{0}\in\mathbb{N}$ such that $n\in\mathbb{N}$ and $n>N_{0}$
+            implies $d(x,\,a_{n})<\varepsilon$. But since $a_{n}\rightarrow{y}$
+            there is an $N_{1}\in\mathbb{N}$ such that $n\in\mathbb{N}$ and
+            $n>N_{1}$ implies $d(y,\,a_{n})<\varepsilon$. Let
+            $N=\textrm{max}(N_{0},\,N_{1})$. Then $n>N$ implies
+            $d(x,\,a_{n})<\varepsilon$ and $d(y,\,a_{n})<\varepsilon$. But by
+            the triangle inequality,
+            \begin{align}
+                d(x,\,y)&\leq{d}(x,\,a_{N+1})+d(y,\,a_{N+1})\\
+                &<\varepsilon+\varepsilon\\
+                &=\frac{d(x,\,y)}{2}+\frac{d(x,\,y)}{2}\\
+                &=d(x,\,y)
+            \end{align}
+            a contradiction. Thus, $x=y$.
+        \end{proof}
+        \begin{definition}[\textbf{Open Ball}]
+            An open ball of radius $r$ centered about $x\in{X}$ in a metric
+            space $(X,\,d)$ is the set:
+            \begin{equation}
+                B_{r}^{(X,\,d)}(x)=\{\,y\in{X}\;|\;d(x,\,y)<r\,\}
+            \end{equation}
+            That is, the set of all points $y\in{X}$ that are closer than
+            $r$ away from $X$.
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/open_set_in_a_metric_space_001.pdf}
+            \caption{Open Ball in a Metric Space}
+            \label{fig:open_set_in_a_metric_space_001}
+        \end{figure}
+        \begin{definition}[\textbf{Open Subsets}]
+            An open subset of a metric space $(X,\,d)$ is a set
+            $\mathcal{U}\subseteq{X}$ such that for all
+            $x\in{X}$ there is an $\varepsilon>0$ such that
+            $B_{r}^{(X,d)}(x)\subseteq\mathcal{U}$.
+        \end{definition}
+        A theorem every student of mathematics must prove in their life
+        is that \textit{open balls are open}. It seems almost like the proof
+        comes by definition, but there's a bit of work needed.
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $x\in{X}$, and if
+            $r\in\mathbb{R}^{+}$, then $B_{r}^{(X,\,d)}(x)$ is open.
+        \end{theorem}
+        \begin{proof}
+            Let $y\in{B}_{r}^{(X,\,d)}(x)$. Let
+            $\varepsilon=r-d(x,\,y)$. Since
+            $y\in{B}_{r}^{(X,\,d)}(x)$, $d(x,\,y)<r$ and hence
+            $\varepsilon>0$. If
+            $z\in{B}_{\varepsilon}^{(X,\,d)}(y)$ then:
+            \begin{align}
+                d(x,\,z)&\leq{d}(x,\,y)+d(y,\,z)\\
+                    &<d(x,\,y)+\varepsilon\\
+                    &=d(x,\,y)+r-d(x,\,y)\\
+                    &=r
+            \end{align}
+            and therefore $z\in{B}_{r}^{(X,\,d)}(x)$, and thus
+            $B_{r}^{(X,\,d)}(x)$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then $\emptyset$ is open.
+        \end{theorem}
+        \begin{proof}
+            This is true vacuously. There are no elements
+            $x\in\emptyset$ such that the definition of open fails, so
+            we say $\emptyset$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then
+            $X$ is open.
+        \end{theorem}
+        \begin{proof}
+            Let $x\in{X}$ and $r=1$. Then, by definition,
+            $B_{1}^{(X,\,d)}(x)\subseteq{X}$, so $X$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, and if
+            $\mathcal{O}\subseteq\mathcal{P}(X)$ is such that for all
+            $\mathcal{U}\in\mathcal{O}$ it is true that $\mathcal{U}$ is open,
+            then $\bigcup\mathcal{O}$ is open.
+        \end{theorem}
+        \begin{proof}
+            Let $x\in\bigcup\mathcal{O}$. Since $x\in\bigcup\mathcal{O}$
+            there is a $\mathcal{U}\in\mathcal{O}$ such that
+            $\mathcal{U}\in\mathcal{O}$. Then by the definition of
+            $\mathcal{O}$, $\mathcal{U}$ is open. Hence there is an
+            $r>0$ such that $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{U}$.
+            But then $B_{r}^{(X,\,d)}(x)\subseteq\bigcup\mathcal{O}$, and
+            hence $\bigcup\mathcal{O}$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $\mathcal{U}$ and
+            $\mathcal{V}$ are open subsets, then
+            $\mathcal{U}\cap\mathcal{V}$ is open.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{U}\cap\mathcal{V}$ is empty we are done.
+            Suppose $x\in\mathcal{U}\cap\mathcal{V}$. Since
+            $x\in\mathcal{U}$ and $\mathcal{U}$ is open, there is an
+            $r_{0}$ such that
+            $B_{r_{0}}^{(X,\,d)}(x)\subseteq\mathcal{U}$. Since
+            $x\in\mathcal{V}$ and $\mathcal{V}$ is open there is an
+            $r_{1}>0$ such that $B_{r_{1}}^{(X,\,d)}(x)\subseteq\mathcal{V}$.
+            Let $r=\textrm{min}(r_{0},\,r_{1})$. Then
+            $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{U}$ and
+            $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{V}$, and hence
+            $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{U}\cap\mathcal{V}$, so
+            $\mathcal{U}\cap\mathcal{V}$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, and if $\mathcal{U}\subseteq{X}$,
+            then $\mathcal{U}$ is open if and only if there is a set
+            $\mathcal{O}$ such that for all $\mathcal{V}\in\mathcal{O}$ it
+            is true that $\mathcal{V}$ is an open ball in $X$, and such that
+            $\bigcup\mathcal{O}=\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{U}$ is open, then for all $x\in\mathcal{U}$ there
+            is an $r_{x}>0$ such that
+            $B_{r_{x}}^{(X,\,d)}(x)\subseteq\mathcal{U}$. Let
+            $\mathcal{O}$ be defined by:
+            \begin{equation}
+                \mathcal{O}=\{\,B_{r_{x}}^{(X,\,d)}(x)\;|\;x\in\mathcal{U}\,\}
+            \end{equation}
+            Since $x\in{B}_{r_{x}}^{(X,\,d)}(x)$ for all $x\in\mathcal{U}$,
+            $\mathcal{U}\subseteq\bigcup\mathcal{O}$. But
+            $B_{r_{x}}^{(X,\,d)}(x)\subseteq\mathcal{U}$ and hence
+            $\bigcup\mathcal{O}\subseteq\mathcal{U}$. Hence,
+            $\bigcup\mathcal{O}=\mathcal{U}$. In the other direction, if
+            $\mathcal{U}$ is of this form, then it is the union of open sets,
+            and hence open.
+        \end{proof}
+        \begin{definition}[\textbf{Limit Point in a Metric Space}]
+            A limit point of a subset $A\subseteq{X}$ of a metric space
+            $(X,\,d)$ is a point $x\in{X}$ such that there is a sequence
+            $a:\mathbb{N}\rightarrow{A}$ such that
+            $a_{n}\rightarrow{x}$.
+        \end{definition}
+        \begin{definition}[\textbf{Closed Set in a Metric Space}]
+            A closed subset of a metric space $(X,\,d)$ is a subset
+            $\mathcal{C}\subseteq{X}$ such that for all $x\in{X}$ such that
+            $x$ is a limit point of $\mathcal{C}$, it is true that
+            $x\in\mathcal{C}$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then $\emptyset$ is closed.
+        \end{theorem}
+        \begin{proof}
+            Again, this is vacuously true. There are no points
+            $x\in\emptyset$ that fail to satisfy the criterion.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then $X$ is closed.
+        \end{theorem}
+        \begin{proof}
+            For if $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence,
+            then by definition $a_{n}\rightarrow{x}$ for some $x\in{X}$,
+            and hence $X$ has all of its limit points.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if
+            $\mathcal{O}\subseteq\mathcal{P}(X)$ is such that for all
+            $\mathcal{C}\in\mathcal{O}$ it is true that $\mathcal{C}$ is closed
+            in $X$, then $\bigcap\mathcal{O}$ is closed.
+        \end{theorem}
+        \begin{proof}
+            If the intersection is empty, we're done. Suppose
+            $a:\mathbb{N}\rightarrow\bigcap\mathcal{O}$ is a convergent
+            sequence. Then for all $\mathcal{C}\in\mathcal{O}$,
+            $a:\mathbb{N}\rightarrow\mathcal{C}$ is a convergent sequence.
+            Suppose the limit is $x\in{X}$. But $\mathcal{C}$ is closed, and
+            hence $x\in\mathcal{C}$. Since limits are unique, this is the
+            same $x$ for all $\mathcal{C}\in\mathcal{O}$, and hence
+            $x\in\bigcap\mathcal{O}$, That is, $\bigcap\mathcal{O}$ is closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then
+            $\mathcal{U}$ is open if and only if $X\setminus\mathcal{U}$ is
+            closed.
+        \end{theorem}
+        \begin{proof}
+            Suppose $\mathcal{U}$ is open and let
+            $a:\mathbb{N}\rightarrow{X}\setminus\mathcal{U}$ be a convergent
+            sequence converging to $x\in{X}$. Suppose
+            $x\notin{X}\setminus\mathcal{U}$. Then $x\in\mathcal{U}$, and hence
+            there is an $\varepsilon>0$ such that
+            $B_{\varepsilon}^{(X,\,d)}(x)\subseteq\mathcal{U}$. But then,
+            since $a_{n}\rightarrow{x}$, there is an $N\in\mathbb{N}$ such that
+            $n\in\mathbb{N}$ and $n>N$ implies
+            $d(x,\,a_{n})<\varepsilon$. That is, $n>N$ implies
+            $a_{n}\in{B}_{\varepsilon}^{(X,\,d)}(x)$. But
+            $a_{n}\in{X}\setminus\mathcal{U}$ for all $n\in\mathbb{N}$, a
+            contradiction. So $X\setminus\mathcal{U}$ is closed. Now,
+            suppose $X\setminus\mathcal{U}$ is closed. Suppose
+            $\mathcal{U}$ is not open. Then there is an
+            $x\in\mathcal{U}$ such that for all $\varepsilon>0$ there is an
+            $a\in{X}$ such that $d(x,\,a)<\varepsilon$ but
+            $a\notin\mathcal{U}$. In particular, for each
+            $n\in\mathbb{N}$ there is an $a_{n}$ such that
+            $d(x,\,a_{n})<\frac{1}{n+1}$ but $a_{n}\notin\mathcal{U}$.
+            But then $a_{n}\rightarrow{x}$. But $X\setminus\mathcal{U}$
+            is closed and $a:\mathbb{N}\rightarrow{X}\setminus\mathcal{U}$
+            is a convergent sequence, so the limit is in
+            $X\setminus\mathcal{U}$. But $x\in\mathcal{U}$, a contradiction.
+            Hence, $\mathcal{U}$ is open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then
+            $\mathcal{C}\subseteq{X}$ is closed if and only if
+            $X\setminus\mathcal{C}$ is open.
+        \end{theorem}
+        \begin{proof}
+            Since $X\setminus(X\setminus\mathcal{C})=\mathcal{C}$,
+            this follows from the previous theorem.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space and if $\mathcal{C}$ and
+            $\mathcal{D}$ are closed subsets, then
+            $\mathcal{C}\cup\mathcal{D}$ is closed.
+        \end{theorem}
+        \begin{proof}
+            This follows from De Morgan's laws.
+            $\mathcal{C}$ and $\mathcal{D}$ are closed and if and only if
+            $X\setminus\mathcal{C}$ and $X\setminus\mathcal{D}$ are open.
+            But:
+            \begin{equation}
+                X\setminus(\mathcal{C}\cup\mathcal{D})
+                    =(X\setminus\mathcal{C})\cap(X\setminus\mathcal{D})
+            \end{equation}
+            This is the intersection of two open sets, which is open. Hence,
+            $\mathcal{C}\cup\mathcal{D}$ is closed.
+        \end{proof}
 \end{document}
