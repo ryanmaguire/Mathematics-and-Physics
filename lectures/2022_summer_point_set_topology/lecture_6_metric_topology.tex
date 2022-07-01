@@ -1,0 +1,394 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 5}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{More on Open and Closed}
+        Sets are not doors. If $A\subseteq{X}$ is a subset of a metric space
+        $(X,\,d)$ it does not need to be true that $A$ is either closed or
+        open. $A$ can be open, $A$ can be closed, $A$ can be neither open nor
+        closed, and $A$ can be both open and closed.
+        \begin{example}
+            In the real line $\mathbb{R}$ with the standard metric
+            $d(x,\,y)=|x-y|$ there are no sets that are both open and closed.
+            Open sets are formed by open intervals $(a,\,b)$ and the union of
+            such sets. Closed sets are the complements of these sets. Examples
+            include closed intervals $[a,\,b]$ single points $\{\,x\,\}$ and
+            finite subsets of the real line. There are many other examples
+            not of this form. The rationals $\mathbb{Q}$ are neither closed
+            nor open. They are not open since $(a,\,b)$ always contains
+            irrational numbers for $a<b$, and hence can't be a subset of
+            $\mathbb{Q}$. It is not closed since every irrational can be
+            approximated by a sequence of rationals.
+        \end{example}
+        \begin{example}
+            Let $X$ be a non-empty set and let $d$ be the discrete metric:
+            \begin{equation}
+                d(x,\,y)=
+                \begin{cases}
+                    1&x\ne{y}\\
+                    0&x=y
+                \end{cases}
+            \end{equation}
+            Then \textit{every} subset of $X$ is open, and since the complements
+            of open sets are closed, every set is also closed. To see that every
+            set is open, note that $\{\,x\,\}$ is open for all $x\in{X}$.
+            Let $r=\frac{1}{2}$. Then
+            $y\in{B}_{r}^{(X,\,d)}(x)$ means $d(x,\,y)<\frac{1}{2}$. But the
+            only element that does this is $x$, so $\{\,x\,\}$ is open.
+            Given $A\subseteq{X}$ we can write:
+            \begin{equation}
+                A=\bigcup_{x\in{A}}\{\,x\,\}
+            \end{equation}
+            $A$ being the union of open sets, and is thus open.
+        \end{example}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, then $\mathcal{U}\subseteq{X}$ is
+            open if and only if for every convergent sequence
+            $a:\mathbb{N}\rightarrow{X}$ with limit $x\in\mathcal{U}$ it is
+            true that there is an $N\in\mathbb{N}$ such that for all
+            $n\in\mathbb{N}$ with $n>N$ it is true that $a_{n}\in\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            Suppose $\mathcal{U}$ is open and $a:\mathbb{N}\rightarrow{X}$
+            converges to $x\in\mathcal{U}$. Since $x\in\mathcal{U}$ and
+            $\mathcal{U}$ is open, there is an $\varepsilon>0$ such that
+            $B_{\varepsilon}^{(X,\,d)}(x)\subseteq\mathcal{U}$. But
+            $a_{n}\rightarrow{x}$ and hence there is an $N\in\mathbb{N}$
+            such that $n\in\mathbb{N}$ and $n>N$ implies
+            $d(x,\,a_{n})<\varepsilon$. Thus $n>N$ implies
+            $a_{n}\in{B}_{\varepsilon}^{(X,\,d)}(x)$, so
+            $a_{n}\in\mathcal{U}$. Now, suppose for every convergent sequence
+            $a:\mathbb{N}\rightarrow{X}$ with limit $x\in\mathcal{U}$ there is
+            an $N\in\mathbb{N}$ with $n\in\mathbb{N}$ and $n>N$ implying
+            $a_{n}\in\mathcal{U}$. Suppose $\mathcal{U}$ is not open.
+            Then there is an $x\in\mathcal{U}$ such that for all
+            $\varepsilon>0$ there is a point $y\in{X}$ such that
+            $d(x,\,y)<\varepsilon$ but $y\notin\mathcal{U}$. In particular,
+            for all $n\in\mathbb{N}$ there is an $a_{n}$ such that
+            $d(x,\,a_{n})<\frac{1}{n+1}$ but $a_{n}\notin\mathcal{U}$.
+            Then $a_{n}\rightarrow{x}$. But $x\in\mathcal{U}$ and hence there
+            is an $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and $n>N$ implies
+            $a_{n}\in\mathcal{U}$. But $a_{n}\notin\mathcal{U}$, a
+            contradiction. Therefore, $\mathcal{U}$ is open.
+        \end{proof}
+    \section{Subspaces}
+        Many new metric spaces are formed by considering metric spaces we've
+        already constructed and examining subsets of these spaces.
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $A\subseteq{X}$, and if
+            $d_{A}$ is the restriction of $d$ to $A\times{A}$, then
+            $(A,\,d_{A})$ is a metric space.
+        \end{theorem}
+        \begin{proof}
+            For all $a,b,c\in{A}$ it is true that $a,b,c\in{X}$ since
+            $A\subseteq{X}$. Hence $d_{A}(a,\,b)=d(a,\,b)$ and so
+            $d_{A}$ is positive-definite, symmetric, and satisfies the
+            triangle inequality. Thus, $(A,\,d_{A})$ is a metric space.
+        \end{proof}
+        \begin{definition}[\textbf{Metric Subspace}]
+            A metric subspace of a metric space $(X,\,d)$ is the metric space
+            $(A,\,d_{A})$ where $A\subseteq{X}$ and $d_{A}$ is the restriction
+            of $d$ to $A\times{A}$.
+        \end{definition}
+        \begin{example}
+            Equip $\mathbb{R}^{2}$ with the Euclidean metric and define
+            $\mathbb{S}^{1}$ to be the set of all $\mathbf{x}\in\mathbb{R}^{2}$
+            such that $||\mathbf{x}||_{2}=1$. This is the unit circle in the
+            plane. We turn this into a metric space by equipping it with the
+            subspace metric from $\mathbb{R}^{2}$. This is the standard metric
+            on $\mathbb{S}^{1}$. This is shown in
+            Fig.~\ref{fig:circle_as_subspace_of_r2}.
+        \end{example}
+        \begin{example}
+            The unit sphere is defined similarly as a subspace of
+            $\mathbb{R}^{2}$. It is the set of all points
+            $\mathbf{x}\in\mathbb{R}^{3}$ such that $||\mathbf{x}||_{2}=1$.
+            In general the $n$ dimensional sphere $\mathbb{S}^{n}$ is the
+            subset of all points in $\mathbb{R}^{n+1}$ such that
+            $||\mathbf{x}||_{2}=1$.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/circle_as_subspace_of_r2.pdf}
+            \caption{$\mathbb{S}^{1}$ as a Subspace of $\mathbb{R}^{2}$}
+            \label{fig:circle_as_subspace_of_r2}
+        \end{figure}
+        If $(X,\,d)$ is a metric space, if $(A,\,d_{A})$ is a metric subspace,
+        and if $\mathcal{U}\subseteq{A}$ is open with respect to $d_{A}$, it
+        need not be true that $\mathcal{U}$ is open with respect to $d$.
+        For example, the real line can be viewed as a subset of the plane
+        by identifying $x\in\mathbb{R}$ with $(x,\,0)\in\mathbb{R}^{2}$. An
+        open subset of the real line is a interval, but open subsets in the
+        plane are blobs (\textit{two dimensional}). What is true is the
+        following.
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $A\subseteq{X}$ and
+            $(A,\,d_{A})$ is a metric subspace, then
+            $\mathcal{U}\subseteq{A}$ is open with respect to $d_{A}$ if and
+            only if there is an open subset $\mathcal{V}\subseteq{X}$ with
+            respect to $d$ such that
+            $\mathcal{U}=\mathcal{V}\cap{A}$.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{U}$ is open in $A$, then for all
+            $x\in\mathcal{U}$ there is an $r_{x}>0$ such that
+            $B_{r_{x}}^{(A,\,d_{A})}(x)\subseteq\mathcal{U}$. Define
+            $\mathcal{O}$ by:
+            \begin{equation}
+                \mathcal{O}=\{\,B_{r_{x}}^{(X,\,d)}(x)\;|\;x\in\mathcal{U}\,\}
+            \end{equation}
+            Note that these open balls are open balls in $(X,\,d)$, not
+            $(A,\,d_{A})$. Let $\mathcal{V}=\bigcup\mathcal{O}$. Since
+            $\mathcal{V}$ is the union of open balls, it is open in $X$.
+            If $x\in\mathcal{U}$, then $x\in{A}$ since
+            $\mathcal{U}\subseteq{A}$, and also
+            $x\in\mathcal{V}$ since $x\in{B}_{r_{x}}^{(X,\,d)}(x)$ which is
+            a subset of $\bigcup\mathcal{O}$. Hence
+            $x\in\mathcal{V}\cap{A}$, and therefore
+            $\mathcal{U}\subseteq\mathcal{V}\cap{A}$. Next, suppose
+            $x\in\mathcal{V}\cap{A}$. Then $x\in\mathcal{V}$ and hence there
+            is a $y\in\mathcal{U}$ such that
+            $x\in{B}_{r_{y}}^{(X,\,d)}(y)$. But $y\in{A}$, and hence
+            $d(x,\,y)=d_{A}(x,\,y)$, and so
+            $x\in{B}_{r_{y}}^{(A,\,d_{A})}(y)$, and thus
+            $x\in\mathcal{U}$. That is,
+            $\mathcal{V}\cap{A}\subseteq\mathcal{U}$, and therefore
+            $\mathcal{U}=\mathcal{V}\cap{A}$. Now suppose
+            $\mathcal{U}=\mathcal{V}\cap{A}$ where $\mathcal{V}$ is open in
+            $X$. Let $x\in\mathcal{U}$. Then $x\in\mathcal{V}\cap{A}$, and
+            hence $x\in\mathcal{V}$. But $\mathcal{V}$ is open, and therefore
+            there is an $r>0$ such that
+            $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{V}$. Now given
+            $y\in{B}_{r}^{(A,\,d_{A})}(x)$, by definition $y\in{A}$ and
+            $d(x,\,y)=d_{A}(x,\,y)$. Therefore
+            $y\in\mathcal{V}\cap{A}$. But $\mathcal{U}=\mathcal{V}\cap{A}$,
+            so $y\in\mathcal{U}$. Since $y\in{B}_{r}^{(A,\,d_{A})}(x)$ is
+            arbitrary, we have that
+            $B_{r}^{(A,\,d_{A})}(x)\subseteq\mathcal{U}$, so
+            $\mathcal{U}$ is open in $A$.
+        \end{proof}
+        \begin{example}
+            An \textit{open arc} in the circle, an arc that does not include
+            the endpoints, is open. See Fig.~\ref{fig:open_subset_of_circle_001}.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/open_subset_of_circle_001.pdf}
+            \caption{An Open Subset of $\mathbb{S}^{1}$}
+            \label{fig:open_subset_of_circle_001}
+        \end{figure}
+    \section{Continuity}
+        Like most branches of mathematics, there's a notion of
+        \textit{identical} metric spaces, or \textit{equivalent} metric spaces.
+        The only thing that defines a metric is the set $X$ and the metric $d$.
+        If we relabel the points in $X$, forming a new set $Y$, but preserve
+        the distances, then we haven't really changed the metric space.
+        For example, we can define on $\mathbb{R}^{2}$ the metric
+        $d_{\mathbb{R}^{2}}(\mathbf{x},\,\mathbf{y})$ to be the Euclidean
+        metric,
+        $d_{\mathbb{R}^{2}}(\mathbf{\mathbf{x}},\,\mathbf{y})=||\mathbf{x}-\mathbf{y}||_{2}$.
+        We can relabel $(x,\,y)=x+iy$ and call this the \textit{complex plane},
+        denote it $\mathbb{C}$, and given $z=x_{0}+ix_{1}$ and
+        $w=y_{0}+iy_{1}$, we could define $d_{\mathbb{C}}(z,\,w)=|z-w|$ where
+        $|\cdot|$ is the complex absolute value. This is
+        no different from the Euclidean metric, all we've done is relabel
+        everything. We use this to motivate isometries.
+        \begin{definition}[\textbf{Metric Space Isometry}]
+            A metric space isometry from a metric space
+            $(X,\,d_{X})$ to a metric space $(Y,\,d_{Y})$ is a function
+            $f:X\rightarrow{Y}$ such that for all $x_{0},x_{1}\in{X}$ it 
+            is true that:
+            \begin{equation}
+                d_{X}(x_{0},\,x_{1})=d_{Y}\big(f(x_{0}),\,f(x_{1})\big)
+            \end{equation}
+            That is, $f$ preserves the metrics.
+        \end{definition}
+        \begin{example}
+            In Euclidean geometry one often ponders isometries of the plane
+            to itself. It is a classic result that all isometries
+            $f:\mathbb{R}^{2}\rightarrow\mathbb{R}^{2}$ are combinations
+            of \textit{translations}, \textit{reflections}, and
+            \textit{rotations} (The so-called \textit{glide-reflections}
+            are reflections followed by translations). A translation
+            is a function $f:\mathbb{R}^{2}\rightarrow\mathbb{R}^{2}$
+            defined by $f(\mathbf{x})=\mathbf{x}+\mathbf{y}$ for some
+            fixed $\mathbf{y}\in\mathbb{R}^{2}$. Reflections are functions that
+            \textit{flip} bases. For example, a reflection about the $y$ axis
+            is the function $f(\mathbf{x})=(-x_{0},\,x_{1})$. A reflection
+            about the $x$ axis is of the form
+            $f(\mathbf{x})=(x_{0},\,-x_{1})$. Reflections about other lines
+            through the origin can be defined similarly. Lastly, rotation
+            by an angle $\theta$ is the function defined by:
+            \begin{align}
+                f(\mathbf{x})&=
+                \begin{bmatrix}
+                    \cos(\theta)&\sin(\theta)\\
+                    -\sin(\theta)&\cos(\theta)
+                \end{bmatrix}
+                \begin{bmatrix}
+                    x_{0}\\
+                    x_{1}
+                \end{bmatrix}\\
+                &=(\cos(\theta)x_{0}+\sin(\theta)x_{1},\,
+                    -\sin(\theta)x_{0}+\cos(\theta)x_{1})
+            \end{align}
+            An isometry $f:\mathbb{R}^{2}\rightarrow\mathbb{R}^{2}$ is a
+            combination of these operations.
+        \end{example}
+        \begin{theorem}
+            If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
+            $f:X\rightarrow{Y}$ is a metric space isometry, then
+            $f$ is injective.
+        \end{theorem}
+        \begin{proof}
+            For if $x_{0}\ne{x}_{1}$, then $d_{X}(x_{0},\,x_{1})>0$, and thus
+            $d_{Y}\big(f(x_{0}),\,f(x_{1})\big)=d_{X}(x_{0},\,x_{1})>0$,
+            so $f(x_{0})\ne{f}(x_{1})$
+        \end{proof}
+        \begin{definition}[\textbf{Global Metric Space Isometry}]
+            A global metric space isometry from a metric space
+            $(X,\,d_{X})$ to a metric space $(Y,\,d_{Y})$ is a bijective
+            metric space isometry $f:X\rightarrow{Y}$.
+        \end{definition}
+        Global isometries mean $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are, in a sense,
+        the \textit{same} metric space. Just like $\mathbb{R}^{2}$ and
+        $\mathbb{C}$ can be thought of as the same, so can
+        $X$ and $Y$ by identifying $x\in{X}$ with $f(x)\in{Y}$ and
+        $y\in{Y}$ with $f^{-1}(y)\in{X}$.
+        \par\hfill\par
+        There is a much weaker notion than isometries for metric spaces, and
+        this notion is far more useful.
+        \begin{definition}[\textbf{Continuous Function Between Metric Spaces}]
+            A continuous function from a metric space $(X,\,d_{X})$ to a
+            metric space $(Y,\,d_{Y})$ is a function
+            $f:X\rightarrow{Y}$ such that for every convergent sequence
+            $a:\mathbb{N}\rightarrow{X}$ with limit $x\in{X}$ it is true that
+            $f(a_{n})\rightarrow{f}(x)$.
+        \end{definition}
+        Using notation from calculus, this says that:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}f(a_{n})=
+                f\big(\lim_{n\rightarrow\infty}a_{n}\big)=f(x)
+        \end{equation}
+        \begin{theorem}
+            If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
+            $f:X\rightarrow{Y}$ is a function, then $f$ is continuous if and
+            only if for all open $\mathcal{V}\subseteq{Y}$ it is true that
+            $f^{-1}[\mathcal{V}]\subseteq{X}$ is open.
+        \end{theorem}
+        \begin{proof}
+            Suppose $f$ is continuous and $\mathcal{V}\subseteq{Y}$ is open.
+            Let $\mathcal{U}=f^{-1}[\mathcal{V}]$. Suppose
+            $a:\mathbb{N}\rightarrow{X}$ is such that
+            $a_{n}\rightarrow{x}$ with $x\in\mathcal{U}$. Since
+            $a_{n}\rightarrow{x}$ and $f$ is continuous,
+            $f(a_{n})\rightarrow{f}(x)$. But since $x\in{f}^{-1}[\mathcal{V}]$
+            it is true that $f(x)\in\mathcal{V}$. But $\mathcal{V}$ is open, so
+            there exists an $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and
+            $n>N$ implies $f(a_{n})\in\mathcal{V}$. But then for all
+            $n>N$, $a_{n}\in\mathcal{U}=f^{-1}[\mathcal{V}]$, so
+            $\mathcal{U}$ is open. Now, suppose $f:X\rightarrow{Y}$ is such
+            that for all open $\mathcal{V}\subseteq{Y}$ it is true that
+            $f^{-1}[\mathcal{V}]$ is open. Let
+            $a:\mathbb{N}\rightarrow{X}$ be a convergent sequence that
+            converges to $x\in{X}$. Suppose
+            $f(a_{n})$ does not converge to $f(x)$. Then there exists an
+            $\varepsilon>0$ such that for all $N\in\mathbb{N}$ there is an
+            $n\in\mathbb{N}$ with $n>N$ but
+            $d_{Y}\big(f(x),\,f(a_{n})\big)\geq\varepsilon$. But
+            $B_{\varepsilon}^{(Y,\,d_{Y})}\big(f(x)\big)$ is open, so by
+            assumption the pre-image is open. Letting
+            $\mathcal{V}=B_{\varepsilon}^{(Y,\,d_{Y})}\big(f(x)\big)$, we have
+            that $f^{-1}[\mathcal{V}]$ is open. But $x\in{f}^{-1}[\mathcal{V}]$
+            since $f(x)\in\mathcal{V}$. Since $f^{-1}[\mathcal{V}]$ is open
+            there is an $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and
+            $n>N$ implies $f(a_{n})\in{f}^{-1}[\mathcal{V}]$. But then
+            $f(a_{n})\in\mathcal{V}$ for all $n>N$ which is a contradiction.
+            Therefore, $f(a_{n})\rightarrow{f}(x)$ and $f$ is continuous.
+        \end{proof}
+    \section{Metric Topology}
+        \begin{definition}[\textbf{Metric Topology}]
+            The metric topology on a metric space $(X,\,d)$ is the
+            set $\tau_{d}\subseteq\mathcal{P}(X)$ such that for all
+            $\mathcal{U}$, $\mathcal{U}\in\tau_{d}$ if and only if
+            $\mathcal{U}$ is open in $(X,\,d)$. That is, $\tau_{d}$ is the
+            set of all open subsets of $(X,\,d)$.
+        \end{definition}
+        \begin{definition}[\textbf{Equivalent Metrics}]
+            Equivalent metrics on a set $X$ are metrics
+            $d_{0}$ and $d_{1}$ with equal metric topologies
+            $\tau_{d_{0}}$ and $\tau_{d_{1}}$. That is,
+            $\tau_{d_{0}}=\tau_{d_{1}}$.
+        \end{definition}
+\end{document}
