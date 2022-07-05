@@ -51,24 +51,24 @@ g = (0.0,  0.0){dir(90)}..(2.0,   1.0){dir(0)}..
 draw(g, dpen);
 
 /*  Draw a cyan blob for U.                                                   */
-fpen = cyan;
+fpen = red;
 
 g = (2.0, 0.0){dir(30)}.. (2.7,  0.5){dir(0)}..
     (3.5, 0.0){dir(-90)}..(3.2, -0.6){dir(180)}..
     (2.2, -0.8){dir(150)}..cycle;
 
-filldraw(g, fpen, dpen+linetype("8 4"));
+filldraw(g, fpen, defaultpen);
 
 /*  Pen for ball about the point x.                                           */
-fpen = red;
+fpen = cyan;
 
 g = A + (0.4, 0.3) .. (A + (0.5, -0.1)) .. (A + (0.0, -0.2)) ..
     (A + (-0.3, -0.12)) .. (A + (-0.3, 0.2)) .. cycle; 
-filldraw(g, fpen, defaultpen);
+filldraw(g, fpen, dpen+linetype("8 4"));
 dot(A);
 label("$x$", A, SW);
 
 /*  Add some labels.                                                          */
-label("$\mathcal{U}$", (3.1, 0.25));
+label("$K$", (3.1, 0.25));
 label("$X$", (1.0,  0.4));
-label("$K$", A, NE);
+label("$\mathcal{U}$", A, NE);
