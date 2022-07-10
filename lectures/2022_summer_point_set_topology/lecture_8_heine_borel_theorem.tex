@@ -1,0 +1,124 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 8}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Theorems on Compactness}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space and
+            $a:\mathbb{N}\rightarrow\mathbb{R}$ is a convergent sequence,
+            then $a$ is a Cauchy sequence.
+        \end{theorem}
+        \begin{proof}
+            Since $a:\mathbb{N}\rightarrow{X}$ converges, there is an
+            $x\in{X}$ such that $a_{n}\rightarrow{x}$. Let
+            $\varepsilon>0$. Since $a_{n}\rightarrow{x}$ there is an
+            $N\in\mathbb{N}$ such that $n>N$ implies
+            $d(x,\,a_{n})<\frac{\varepsilon}{2}$. But then $n,m>N$ implies:
+            \begin{equation}
+                d(a_{m},\,a_{n})\leq{d}(x,\,a_{m})+d(x,\,a_{n})
+                    <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}
+                    =\varepsilon
+            \end{equation}
+            and therefore $a$ is a Cauchy sequence.
+        \end{proof}
+        Without completeness, a metric space $(X,\,d)$ can have non-convergent
+        Cauchy sequences. But given a Cauchy sequence with a convergent
+        subsequence, the entire sequence must then convergent. The intuition is
+        that a Cauchy sequence is a sequence where all of the points start to
+        get really close together as the indices increase. Since there is a
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space, if $a:\mathbb{N}\rightarrow{X}$
+            is a Cauchy sequence, and if $a_{k}$ is a convergent subsequence,
+            then $a$ is a convergent sequence.
+        \end{theorem}
+        \begin{proof}
+            Since $a_{k}$ is a convergent sequence, there is an
+            $x\in{X}$ such that $a_{k_{n}}\rightarrow{x}$. Let
+            $\varepsilon>0$. Since $a_{k_{n}}\rightarrow{x}$, there is an
+            $N_{0}\in\mathbb{N}$ such that $n>N_{0}$ implies
+            $d(x,\,a_{k_{n}})<\frac{\varepsilon}{2}$. Since $a$ is a Cauchy
+            sequence there is an $N_{1}\in\mathbb{N}$ such that
+            $n,m>N_{1}$ implies $d(a_{m},\,a_{n})<\frac{\varepsilon}{2}$.
+            Let $N=\textrm{max}(k_{N_{0}},\,k_{N_{1}})$.
+            Then since $k$ is strictly increasing,
+            $m>N$ implies $k_{m}>N_{0}$. But then, since $a$ is a Cauchy
+            sequence, we have for all $n,m>N$:
+            \begin{equation}
+                d(x,\,a_{n})\leq{d}(a_{n},\,a_{m})+d(x,\,a_{m})
+                    <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
+            \end{equation}
+            and therefore $a_{n}\rightarrow{x}$. That is, $a$ is a convergent
+            sequence.
+        \end{proof}
+\end{document}
