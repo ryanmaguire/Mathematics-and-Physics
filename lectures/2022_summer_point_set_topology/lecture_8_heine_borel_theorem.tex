@@ -97,6 +97,11 @@
         subsequence, the entire sequence must then convergent. The intuition is
         that a Cauchy sequence is a sequence where all of the points start to
         get really close together as the indices increase. Since there is a
+        convergent subsequence, there is some point $x\in{X}$ where
+        \textit{some} of the points in the sequence start to get really close
+        to. But since all of the points get close together at higher and higher
+        indices, all of the points must also get closer to $x$, and hence the
+        entire sequence converges to $x$. Let's prove this.
         \begin{theorem}
             If $(X,\,d)$ is a metric space, if $a:\mathbb{N}\rightarrow{X}$
             is a Cauchy sequence, and if $a_{k}$ is a convergent subsequence,
@@ -115,7 +120,7 @@
             $m>N$ implies $k_{m}>N_{0}$ and $k_{m}>N_{1}$.
             But then for all $n,m>N$:
             \begin{equation}
-                d(x,\,a_{n})\leq{d}(a_{n},\,a_{k_{m}})+d(x,\,a_{m})
+                d(x,\,a_{n})\leq{d}(a_{n},\,a_{k_{m}})+d(x,\,a_{k_{m}})
                     <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
             \end{equation}
             and therefore $a_{n}\rightarrow{x}$. That is, $a$ is a convergent
@@ -125,7 +130,7 @@
         complete metric space $(X,\,d)$, the only complete subspaces are the
         closed ones. In particular, since $(\mathbb{R},\,|\cdot|)$, the standard
         metric on the real line, is complete, we see that the open unit interval
-        is \textit{not} complete. In particular, the sequence
+        is \textit{not} complete. The sequence
         $a:\mathbb{N}\rightarrow(0,\,1)$ defined by $a_{n}=\frac{1}{n+1}$
         is a Cauchy sequence, but it does not converge. We want to say it
         ``converges'' to zero, but zero is not an element of this subspace.
@@ -211,25 +216,34 @@
             $\mathbf{x}_{n}$ is bounded since $A$ is bounded. By
             the Bolzano-Weierstrass theorem there is a
             convergent subsequence $x_{k}^{0}$. That is, there is some
-            real number $r_{0}\in\mathbb{N}$ such that
+            real number $r_{0}\in\mathbb{R}$ such that
             $x_{k_{n}}^{0}\rightarrow{r}_{0}$. But then
             $x_{k}^{1}$ is a (not necessarily convergent) subsequence of the
             sequence $x^{1}:\mathbb{N}\rightarrow\mathbb{R}$, the sequence
             defined by setting $x_{n}^{1}$ equal to the first component of
             $\mathbf{x}_{n}$. But then $x_{k}^{1}$ is a bounded sequence of
             real numbers and hence by the Bolzano-Weierstrass theorem, there
-            is a convergen subsequence $x_{k_{k'}}^{1}$. But
+            is a convergent subsequence $x_{k_{k'}}^{1}$. That is, there is
+            some $r_{1}\in\mathbb{R}$ such that
+            $x_{k_{k'n}}^{1}\rightarrow{r}_{1}$. But
             $x_{k_{k'}}^{0}$ is a subsequence of $x_{k}^{0}$, and hence
             $x_{k_{k'}}^{0}$ is a subsequence of a convergent subsequence.
             But subsequences of convergent sequences converge and they converge
             to the same limit. That is, we now have that
-            $x_{k_{k'}}^{0}$ and $x_{k_{k'}}^{1}$ are convergent sequences.
+            $x_{k_{k'}}^{0}$ and $x_{k_{k'}}^{1}$ are convergent sequences
+            converging to $r_{0}$ and $r_{1}$, respectively.
             Continuing inductively, we obtain subseqence
-            $k''$, $k'''$, up to $k^{N-1}$ such that
-            $x_{k\dots{k}^{N-1}}^{m}$ is a convergent sequence for all
-            $m\in\mathbb{Z}_{N}$. But then
-            $\mathbf{x}_{k\dots{k}^{N-1}}$ is a sequence in $A$ that converges
-            to some $\mathbf{y}\in\mathbb{R}^{N}$. But
+            $k''$, $k'''$, up to $k^{(N-1)}$ such that
+            $x_{k\dots{k}^{(N-1)}}^{m}$ is a convergent sequence for all
+            $m\in\mathbb{Z}_{N}$ where $k\dots{k}^{(N-1)}$ denotes the sequence
+            obtain by repeated composition:
+            \begin{equation}
+                k\dots{k}^{N-1}(n)=k\bigg(k'\Big(\cdots\big(k^{(N-1)}(n)\big)\Big)\cdots\bigg)
+            \end{equation}
+            But then
+            $\mathbf{x}_{k\dots{k}^{(N-1)}}$ is a sequence in $A$ that converges
+            to the $\mathbf{y}\in\mathbb{R}^{N}$ defined by
+            $\mathbf{y}=(r_{0},\,r_{1},\,\dots,\,r_{N-1})$. But
             $A\subseteq\mathbb{R}^{N}$ is closed and hence contains all of its
             limit points, so $\mathbf{y}\in{A}$. That is, $\mathbf{x}$ has a
             convergent subsequence. Therefore $(A,\,d_{A})$ is compact.
@@ -252,142 +266,4 @@
         $a:\mathbb{N}\rightarrow{A}$. $A$ is indeed closed and bounded, but
         $a$ has no convergent subsequence. So $A$ is not compact with the
         discrete metric.
-        \par\hfill\par
-        The generalization of the Heine-Borel theorem for general metric spaces
-        needs stronger notions than just \textit{closed} and \textit{bounded}.
-        If we replace \textit{closed} with \textit{complete} and
-        \textit{bounded} with \textit{totally bounded}, we get the
-        generalized Heine-Borel theorem.
-        \begin{theorem}[\textbf{Generalized Heine-Borel Theorem}]
-            If $(X,\,d)$ is a metric space, then it is compact if and only
-            if it is complete and totally bounded.
-        \end{theorem}
-        \begin{proof}
-            We have already proven that compact implies complete. Now let's
-            show compact implies totally bounded. Suppose not. Then there is
-            an $\varepsilon>0$ such that no matter what finite collection of
-            points $a_{0},\,\dots,\,a_{n}$ you pick, there is another point
-            $a_{n+1}$ where $a_{n+1}\notin{B}_{\varepsilon}^{(X,\,d)}(a_{k})$
-            for all $0\leq{k}\leq{n}$. Inductively this defines a sequence
-            $a:\mathbb{N}\rightarrow{X}$. But $(X,\,d)$ is compact, so there
-            is a convergent subsequence $a_{k}$. But convergent sequences are
-            Cauchy sequences, and therefore there there is an
-            $N\in\mathbb{N}$ such that $m,n>N$ implies
-            $d(a_{k_{n}},\,a_{k_{m}})<\varepsilon$. But by construction
-            $d(a_{k_{n}},\,a_{k_{m}})\geq\varepsilon$ for all
-            $n,m\in\mathbb{N}$, a contradiction. So $(X,\,d)$ is complete.
-            Now, suppose $(X,\,d)$ is closed and totally bounded. Let
-            $a:\mathbb{N}\rightarrow{X}$ be any sequence. Since
-            $(X,\,d)$ is totally bounded, there are finitely many points
-            $b_{0},\,\dots,\,b_{N}$ such that the open balls
-            $B_{1}^{(X,\,d)}(b_{k})$ completely cover $X$. Since there are
-            infinitely integers and only finitely many open balls, there
-            must be a point $b_{k}$ such that infinitely many $n\in\mathbb{N}$
-            are such that $a_{n}\in{B}_{1}^{(X,\,d)}(b_{k})$. Let
-            $k_{0}\in\mathbb{N}$ be such a value
-            with $a_{k_{0}}\in{B}_{0}^{(X,\,d)}(b_{k})$. Again by total
-            boundedness, we can cover $B_{1}^{(X,\,d)}(b_{k})$ with finitely
-            many open balls $B_{\frac{1}{2}}^{(X,\,d)}(c_{m})$ with points
-            $c_{m}\in{B}_{1}^{(X,\,d)}(b_{k})$. Since infinitely many integers
-            $n\in\mathbb{N}$ are such that $a_{n}\in{B}_{1}^{(X,\,d)}(b_{k})$
-            and there are only finitely many balls covering this set,
-            one of these open balls must again be such that there are
-            infinitely many integers $n\in\mathbb{N}$ with
-            $a_{n}\in{B}_{\frac{1}{2}}^{(X,\,d)}(c_{\ell})$. Let
-            $k_{1}$ be such that $k_{1}>k_{0}$ and
-            $a_{k_{1}}\in{B}_{\frac{1}{2}}^{(X,\,d)}(c_{\ell})$. Inductively
-            we get a sequence $a_{k}$. This sequence is Cauchy since
-            $d(a_{k_{m}},\,a_{k_{n}})$ is bounded by $\frac{1}{N+1}$ where
-            $N=\textrm{min}(m,\,n)$. But $(X,\,d)$ is complete, so this sequence
-            converges. Hence $a$ has a convergent subsequence.
-        \end{proof}
-        \begin{definition}[\textbf{Open Cover of a Metric Space}]
-            An open cover of a metric space $(X,\,d)$ is a subset
-            $\mathcal{O}\subseteq\tau_{d}$, where $\tau_{d}$ is the metric
-            topology, such that $\bigcup\mathcal{O}=X$. That is, for all
-            $x\in{X}$, there is an open set $\mathcal{U}\in\mathcal{O}$ such
-            that $x\in\mathcal{U}$.
-        \end{definition}
-        \begin{theorem}[\textbf{Lebesgue's Number Lemma}]
-            If $(X,\,d)$ is compact, and if $\mathcal{O}$ is an open cover of
-            $(X,\,d)$, then there is a $\delta>0$ such that for all
-            $x\in{X}$ there is a $\mathcal{U}\in\mathcal{O}$ such that
-            $B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}$.
-        \end{theorem}
-        \begin{proof}
-            Suppose not. Then for all $n\in\mathbb{N}$ there is an
-            $a_{n}$ such that $B_{\frac{1}{n+1}}^{(X,\,d)}(a_{n})$ is not
-            contained entirely inside of $\mathcal{U}$ for any
-            $\mathcal{U}\in\mathcal{O}$. But $(X,\,d)$ is compact, so there
-            is a convergent subsequence $a_{k}$. Let $x\in{X}$ be the limit,
-            $a_{k_{n}}\rightarrow{x}$. Since $\mathcal{O}$ is an open cover,
-            there is a $\mathcal{U}$ with $x\in\mathcal{U}$. But $\mathcal{U}$
-            is open, so there is an $\varepsilon>0$ such that
-            $B_{\varepsilon}^{(X,\,d)}(x)\subseteq\mathcal{U}$. But since
-            $a_{k_{n}}\rightarrow{x}$ there is an $N_{0}\in\mathbb{N}$ such that
-            $k_{n}>N$ implies $d(x,\,a_{k_{n}})<\frac{\varepsilon}{2}$. Let
-            $N_{1}\in\mathbb{N}$ be such that $N+1>\frac{2}\varepsilon$ and
-            let $N=\textrm{max}(N_{0},\,N_{1})$. Then
-            $y\in{B}_{\frac{1}{N+1}}^{(X,\,d)}(a_{N})$ implies:
-            \begin{equation}
-                d(x,\,y)\leq{d}(x,\,a_{N})+d(a_{N},\,y)
-                    <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
-            \end{equation}
-            and hence $y\in{B}_{\varepsilon}^{(X,\,d)}(x)$. But then
-            $B_{\frac{1}{N+1}}^{(X,\,d)}(a_{N})\subseteq\mathcal{U}$, which is
-            a contradiction, completing the proof.
-        \end{proof}
-        \begin{theorem}[\textbf{The Equivalence of Compactness Theorem}]
-            If $(X,\,d)$ is a metric space, then $(X,\,d)$ is compact if and
-            only if for every open cover $\mathcal{O}$ of $(X,\,d)$ there exists
-            a finite open cover $\Delta\subseteq\mathcal{O}$.
-        \end{theorem}
-        \begin{proof}
-            If $(X,\,d)$ is compact and $\mathcal{O}$ is an open cover, then
-            by the Lebesgue number lemma there is a $\delta>0$ such that for
-            all $x\in{X}$ there is a $\mathcal{U}_{x}$ such that
-            $B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}_{x}$. Since
-            $(X,\,d)$ is compact, it is totally bounded, and hence there are
-            finitely many points $x_{0},\,\dots,\,x_{N}$ such that the
-            $\delta$ balls centered at $x_{n}$ cover $X$. But then the set:
-            \begin{equation}
-                \Delta=\{\,\mathcal{U}_{x_{0}},\,\dots,\,\mathcal{U}_{n_{N}}\,\}
-            \end{equation}
-            is a finite open cover that is a subset of $\mathcal{O}$. In the
-            other direction, suppose $(X,\,d)$ is such that every open cover
-            $\mathcal{O}$ contains a finite subset $\Delta\subseteq\mathcal{O}$
-            that is also an open cover of $(X,\,d)$. Given $\varepsilon>0$,
-            create the set $\mathcal{O}$ by:
-            \begin{equation}
-                \mathcal{O}=\{\,B_{\varepsilon}^{(X,\,d)}(x)\;|\;x\in{X}\,\}
-            \end{equation}
-            $\mathcal{O}$ is an open cover of $(X,\,d)$, and hence there is a
-            finite open cover $\Delta\subseteq\mathcal{O}$. But then $(X,\,d)$
-            can be covered by finitely many balls of radius $\varepsilon$, so
-            $(X,\,d)$ is totally bounded. Next, suppose $(X,\,d)$ is not
-            complete. There there is a Cauchy sequence
-            $a:\mathbb{N}\rightarrow{X}$ that does not converge. Then for all
-            $x\in{X}$ there is a $\varepsilon_{x}>0$ such that for all
-            $N\in\mathbb{N}$ there exists $n>N$ with
-            $d(x,\,a_{n})\geq\varepsilon$. Let $\mathcal{O}$ be defined by:
-            \begin{equation}
-                \mathcal{O}=\{\,B_{\varepsilon_{x}/2}^{(X,\,d)}(x)\;|\;x\in{X}\,\}
-            \end{equation}
-            $\mathcal{O}$ is an open cover of $(X,\,d)$, so there is a finite
-            open cover $\Delta\subseteq\mathcal{O}$. Let
-            $x_{0},\,\dots,x_{N}$ be the finite set of points such that:
-            \begin{equation}
-                X=\bigcup_{n=0}^{N}B_{\varepsilon_{n}}^{(X,\,d)}(x_{n})
-            \end{equation}
-            where $\varepsilon_{n}=\varepsilon_{x_{n}}$. Let
-            $\varepsilon=\frac{1}{2}\textrm{min}(\varepsilon_{0},\,\dots,\,\varepsilon_{N})$.
-            Since $a:\mathbb{N}\rightarrow{X}$ is a Cauchy sequence, there is
-            an $N\in\mathbb{N}$ such that $n,m>N$ implies
-            $d(a_{m},\,a_{n})<\varepsilon$. But then:
-            \begin{equation}
-                d(x,\,a_{n})\leq{d}(a_{n},\,a_{m})+d(x,\,a_{n})<\varepsilon
-            \end{equation}
-            a contradiction, so $(X,\,d)$ is complete. But then
-            $(X,\,d)$ is complete and totally bounded, and therefore compact.
-        \end{proof}
 \end{document}

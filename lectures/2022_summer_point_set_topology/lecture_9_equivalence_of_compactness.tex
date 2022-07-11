@@ -1,0 +1,214 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 9}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{The Equivalence of Compactness Theorem}
+        The generalization of the Heine-Borel theorem for general metric spaces
+        needs stronger notions than just \textit{closed} and \textit{bounded}.
+        If we replace \textit{closed} with \textit{complete} and
+        \textit{bounded} with \textit{totally bounded}, we get the
+        generalized Heine-Borel theorem.
+        \begin{theorem}[\textbf{Generalized Heine-Borel Theorem}]
+            If $(X,\,d)$ is a metric space, then it is compact if and only
+            if it is complete and totally bounded.
+        \end{theorem}
+        \begin{proof}
+            We have already proven that compact implies complete. Now let's
+            show compact implies totally bounded. Suppose not. Then there is
+            an $\varepsilon>0$ such that no matter what finite collection of
+            points $a_{0},\,\dots,\,a_{n}$ you pick, there is another point
+            $a_{n+1}$ where $a_{n+1}\notin{B}_{\varepsilon}^{(X,\,d)}(a_{k})$
+            for all $0\leq{k}\leq{n}$. Inductively this defines a sequence
+            $a:\mathbb{N}\rightarrow{X}$. But $(X,\,d)$ is compact, so there
+            is a convergent subsequence $a_{k}$. But convergent sequences are
+            Cauchy sequences, and therefore there there is an
+            $N\in\mathbb{N}$ such that $m,n>N$ implies
+            $d(a_{k_{n}},\,a_{k_{m}})<\varepsilon$. But by construction
+            $d(a_{k_{n}},\,a_{k_{m}})\geq\varepsilon$ for all
+            $n,m\in\mathbb{N}$, a contradiction. So $(X,\,d)$ is complete.
+            Now, suppose $(X,\,d)$ is closed and totally bounded. Let
+            $a:\mathbb{N}\rightarrow{X}$ be any sequence. Since
+            $(X,\,d)$ is totally bounded, there are finitely many points
+            $b_{0},\,\dots,\,b_{N}$ such that the open balls
+            $B_{1}^{(X,\,d)}(b_{k})$ completely cover $X$. Since there are
+            infinitely integers and only finitely many open balls, there
+            must be a point $b_{k}$ such that infinitely many $n\in\mathbb{N}$
+            are such that $a_{n}\in{B}_{1}^{(X,\,d)}(b_{k})$. Let
+            $k_{0}\in\mathbb{N}$ be such a value
+            with $a_{k_{0}}\in{B}_{0}^{(X,\,d)}(b_{k})$. Again by total
+            boundedness, we can cover $B_{1}^{(X,\,d)}(b_{k})$ with finitely
+            many open balls $B_{\frac{1}{2}}^{(X,\,d)}(c_{m})$ with points
+            $c_{m}\in{B}_{1}^{(X,\,d)}(b_{k})$. Since infinitely many integers
+            $n\in\mathbb{N}$ are such that $a_{n}\in{B}_{1}^{(X,\,d)}(b_{k})$
+            and there are only finitely many balls covering this set,
+            one of these open balls must again be such that there are
+            infinitely many integers $n\in\mathbb{N}$ with
+            $a_{n}\in{B}_{\frac{1}{2}}^{(X,\,d)}(c_{\ell})$. Let
+            $k_{1}$ be such that $k_{1}>k_{0}$ and
+            $a_{k_{1}}\in{B}_{\frac{1}{2}}^{(X,\,d)}(c_{\ell})$. Inductively
+            we get a sequence $a_{k}$. This sequence is Cauchy since
+            $d(a_{k_{m}},\,a_{k_{n}})$ is bounded by $\frac{1}{N+1}$ where
+            $N=\textrm{min}(m,\,n)$. But $(X,\,d)$ is complete, so this sequence
+            converges. Hence $a$ has a convergent subsequence.
+        \end{proof}
+        \begin{definition}[\textbf{Open Cover of a Metric Space}]
+            An open cover of a metric space $(X,\,d)$ is a subset
+            $\mathcal{O}\subseteq\tau_{d}$, where $\tau_{d}$ is the metric
+            topology, such that $\bigcup\mathcal{O}=X$. That is, for all
+            $x\in{X}$, there is an open set $\mathcal{U}\in\mathcal{O}$ such
+            that $x\in\mathcal{U}$.
+        \end{definition}
+        \begin{theorem}[\textbf{Lebesgue's Number Lemma}]
+            If $(X,\,d)$ is compact, and if $\mathcal{O}$ is an open cover of
+            $(X,\,d)$, then there is a $\delta>0$ such that for all
+            $x\in{X}$ there is a $\mathcal{U}\in\mathcal{O}$ such that
+            $B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}$.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then for all $n\in\mathbb{N}$ there is an
+            $a_{n}$ such that $B_{\frac{1}{n+1}}^{(X,\,d)}(a_{n})$ is not
+            contained entirely inside of $\mathcal{U}$ for any
+            $\mathcal{U}\in\mathcal{O}$. But $(X,\,d)$ is compact, so there
+            is a convergent subsequence $a_{k}$. Let $x\in{X}$ be the limit,
+            $a_{k_{n}}\rightarrow{x}$. Since $\mathcal{O}$ is an open cover,
+            there is a $\mathcal{U}$ with $x\in\mathcal{U}$. But $\mathcal{U}$
+            is open, so there is an $\varepsilon>0$ such that
+            $B_{\varepsilon}^{(X,\,d)}(x)\subseteq\mathcal{U}$. But since
+            $a_{k_{n}}\rightarrow{x}$ there is an $N_{0}\in\mathbb{N}$ such that
+            $k_{n}>N$ implies $d(x,\,a_{k_{n}})<\frac{\varepsilon}{2}$. Let
+            $N_{1}\in\mathbb{N}$ be such that $N+1>\frac{2}\varepsilon$ and
+            let $N=\textrm{max}(N_{0},\,N_{1})$. Then
+            $y\in{B}_{\frac{1}{N+1}}^{(X,\,d)}(a_{N})$ implies:
+            \begin{equation}
+                d(x,\,y)\leq{d}(x,\,a_{N})+d(a_{N},\,y)
+                    <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
+            \end{equation}
+            and hence $y\in{B}_{\varepsilon}^{(X,\,d)}(x)$. But then
+            $B_{\frac{1}{N+1}}^{(X,\,d)}(a_{N})\subseteq\mathcal{U}$, which is
+            a contradiction, completing the proof.
+        \end{proof}
+        \begin{theorem}[\textbf{The Equivalence of Compactness Theorem}]
+            If $(X,\,d)$ is a metric space, then $(X,\,d)$ is compact if and
+            only if for every open cover $\mathcal{O}$ of $(X,\,d)$ there exists
+            a finite open cover $\Delta\subseteq\mathcal{O}$.
+        \end{theorem}
+        \begin{proof}
+            If $(X,\,d)$ is compact and $\mathcal{O}$ is an open cover, then
+            by the Lebesgue number lemma there is a $\delta>0$ such that for
+            all $x\in{X}$ there is a $\mathcal{U}_{x}$ such that
+            $B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}_{x}$. Since
+            $(X,\,d)$ is compact, it is totally bounded, and hence there are
+            finitely many points $x_{0},\,\dots,\,x_{N}$ such that the
+            $\delta$ balls centered at $x_{n}$ cover $X$. But then the set:
+            \begin{equation}
+                \Delta=\{\,\mathcal{U}_{x_{0}},\,\dots,\,\mathcal{U}_{n_{N}}\,\}
+            \end{equation}
+            is a finite open cover that is a subset of $\mathcal{O}$. In the
+            other direction, suppose $(X,\,d)$ is such that every open cover
+            $\mathcal{O}$ contains a finite subset $\Delta\subseteq\mathcal{O}$
+            that is also an open cover of $(X,\,d)$. Given $\varepsilon>0$,
+            create the set $\mathcal{O}$ by:
+            \begin{equation}
+                \mathcal{O}=\{\,B_{\varepsilon}^{(X,\,d)}(x)\;|\;x\in{X}\,\}
+            \end{equation}
+            $\mathcal{O}$ is an open cover of $(X,\,d)$, and hence there is a
+            finite open cover $\Delta\subseteq\mathcal{O}$. But then $(X,\,d)$
+            can be covered by finitely many balls of radius $\varepsilon$, so
+            $(X,\,d)$ is totally bounded. Next, suppose $(X,\,d)$ is not
+            complete. There there is a Cauchy sequence
+            $a:\mathbb{N}\rightarrow{X}$ that does not converge. Then for all
+            $x\in{X}$ there is a $\varepsilon_{x}>0$ such that for all
+            $N\in\mathbb{N}$ there exists $n>N$ with
+            $d(x,\,a_{n})\geq\varepsilon$. Let $\mathcal{O}$ be defined by:
+            \begin{equation}
+                \mathcal{O}=\{\,B_{\varepsilon_{x}/2}^{(X,\,d)}(x)\;|\;x\in{X}\,\}
+            \end{equation}
+            $\mathcal{O}$ is an open cover of $(X,\,d)$, so there is a finite
+            open cover $\Delta\subseteq\mathcal{O}$. Let
+            $x_{0},\,\dots,x_{N}$ be the finite set of points such that:
+            \begin{equation}
+                X=\bigcup_{n=0}^{N}B_{\varepsilon_{n}}^{(X,\,d)}(x_{n})
+            \end{equation}
+            where $\varepsilon_{n}=\varepsilon_{x_{n}}$. Let
+            $\varepsilon=\frac{1}{2}\textrm{min}(\varepsilon_{0},\,\dots,\,\varepsilon_{N})$.
+            Since $a:\mathbb{N}\rightarrow{X}$ is a Cauchy sequence, there is
+            an $N\in\mathbb{N}$ such that $n,m>N$ implies
+            $d(a_{m},\,a_{n})<\varepsilon$. But then:
+            \begin{equation}
+                d(x,\,a_{n})\leq{d}(a_{n},\,a_{m})+d(x,\,a_{n})<\varepsilon
+            \end{equation}
+            a contradiction, so $(X,\,d)$ is complete. But then
+            $(X,\,d)$ is complete and totally bounded, and therefore compact.
+        \end{proof}
+\end{document}
