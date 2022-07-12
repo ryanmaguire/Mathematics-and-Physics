@@ -1,0 +1,164 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Mathematical Induction}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    Peano arithmetic is a weaker system of axioms that is sufficient to prove a
+    lot of the elementary properties of the natural numbers. The system of
+    set theory we have been working with, Zermelo-Fraenkel set theory with the
+    the axiom of choice (ZFC) contains Peano arithmetic as a \textit{subset}
+    (via the axiom of infinity, and a few others). This system postulates the
+    following:
+    \begin{enumerate}
+        \item There is a set $\mathbb{N}$ with $0\in\mathbb{N}$.
+        \item There is a function $\sigma:\mathbb{N}\rightarrow\mathbb{N}$.
+        \item If $m,n\in\mathbb{N}$ and $\sigma(m)=\sigma(n)$, then $m=n$.
+        \item $\sigma(n)=0$ is always false.
+        \item If $A\subseteq\mathbb{N}$ is such that $0\in{A}$ and
+            $n\in{A}$ implies $\sigma(n)\in{A}$, then $A=\mathbb{N}$.
+    \end{enumerate}
+    This is constructable in ZFC, the function $\sigma$ is the
+    \textit{plus one} function, $\sigma(n)=n+1$. This last property is
+    crucial. It says if $A\subseteq\mathbb{N}$ is such that
+    $0\in{A}$ and $n\in{A}$ implies $n+1\in{A}$, then $A=\mathbb{N}$. The
+    intuition goes like this. $0\in{A}$ is true. But $0\in{A}$ implies
+    $0+1\in{A}$, so $1\in{A}$. But $1\in{A}$ implies $1+1\in{A}$, so
+    $2\in{A}$. But $2\in{A}$ implies $2+1\in{A}$, so $3\in{A}$. And so on.
+    This fact is also provable in ZFC (it is an \textit{axiom} in Peano
+    arithmetic). Containment $\in$ defines an order on the integers.
+    Remember, in ZFC, that $0=\emptyset$, $1=\{\,0\,\}$,
+    $2=\{\,0,\,1\,\}$, and so on. We write $m<n$ if and only if $m\in{n}$.
+    This defines a \textit{well-order}. Every non-empty subset of $\mathbb{N}$
+    has a \textit{smallest} element. This well-ordering property gives us
+    property 5 in Peano arithmetic.
+    \par\hfill\par
+    Let $P$ be a predicate on the natural numbers. That is,
+    for every $n\in\mathbb{N}$, $P(n)$ is a sentence which we may say is
+    true or false. Suppose $P(0)$ is true, and the truth of $P(n)$ implies
+    the truth of $P(n+1)$. Then $P(n)$ is true for all $n\in\mathbb{N}$. Why?
+    Well, $P(1)$ is true since $P(0)$ is true, and $P(0)$ being true implies
+    $P(0+1)$ is true. Then $P(2)$ is true since $P(1)$ is true and $P(1)$ being
+    true implies $P(2)$ is true, and so on. We can prove this rigorously.
+    \begin{theorem}[\textbf{Principle of Mathematical Induction}]
+        If $P$ is a predicate on the natural numbers such that $P(0)$ is true
+        and for all $n\in\mathbb{N}$ the truth of $P(n)$ implies the truth of
+        $P(n+1)$, then $P(n)$ is true for all $n\in\mathbb{N}$.
+    \end{theorem}
+    \begin{proof}
+        Suppose not. Then there is some $m\in\mathbb{N}$ such that
+        $P(m)$ is false. Define $A$ via:
+        \begin{equation}
+            A=\{\,k\in\mathbb{N}\;|\;P(k)\textrm{ is false.}\,\}
+        \end{equation}
+        Since $m\in\mathbb{N}$, $A$ is non-empty. So there is a least element
+        $N\in{A}$. But $N\ne{0}$ since $P(0)$ is true by hypothesis. Since
+        $N\ne{0}$ and $N\in\mathbb{N}$, we can write $N=n+1$ for some
+        $n\in\mathbb{N}$. But then $n<N$, and since $N$ is the least element
+        of $A$, $P(n)$ must be true. But the truth of $P(n)$ implies the
+        truth of $P(n+1)$, so $P(n+1)$ is true. But $n+1=N$, so $P(N)$ is true,
+        a contradiction. Hence, $P(n)$ is true for all $n\in\mathbb{N}$.
+    \end{proof}
+    Let's use this.
+    \begin{example}
+        Consider the partial sums $S_{N}$ for $N\in\mathbb{N}$ defined by:
+        \begin{equation}
+            S_{N}=\sum_{n=0}^{N}n
+        \end{equation}
+        We can provide a closed-form formula for this via the principle of
+        induction. We want to prove that:
+        \begin{equation}
+            S_{N}=\frac{N(N+1)}{2}
+        \end{equation}
+        That is, $P(N)$ is the predicate on the natural numbers that
+        $S_{N}=N(N+1)/2$. We prove $P(N)$ is true for all $N\in\mathbb{N}$
+        via induction. The case $N=0$ says
+        $0=0(0+1)/2$, which is true. Suppose the statement is true for
+        some $N\in\mathbb{N}$. We must prove this implies the statement is
+        true for $N+1$. We compute:
+        \begin{align}
+            S_{N+1}
+            &=\sum_{n=0}^{N+1}n\\
+            &=N+1+\sum_{n=0}^{N}n\\
+            &=N+1+S_{N}
+        \end{align}
+        But $P(N)$ is true, by hypothesis, so $S_{N}=N(N+1)/2$. We get:
+        \begin{align}
+            S_{N+1}
+            &=N+1+S_{N}\\
+            &=N+1+\frac{N(N+1)}{2}\\
+            &=\frac{2N+2+N^{2}+N}{2}\\
+            &=\frac{N^{2}+3N+2}{2}\\
+            &=\frac{(N+1)(N+2)}{2}
+        \end{align}
+        and therefore $P(N+1)$ is true. Since the formula is true for
+        $N=0$ and $P(N)$ implies $P(N+1)$, we see that by the principle of
+        induction $P(N)$ is true for all $N\in\mathbb{N}$.    
+    \end{example}
+\end{document}

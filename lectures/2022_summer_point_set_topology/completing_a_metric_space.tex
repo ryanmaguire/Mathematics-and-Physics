@@ -1,0 +1,367 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{definitionx}{Definition}
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Completing a Metric Space}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \begin{definition}[\textbf{Dense Subspace in a Metric Space}]
+        A dense subspace in a metric space $(X,\,d)$ is a metric subspace
+        $(A,\,d_{A})$, $A\subseteq{X}$, such that for every $x\in{X}$ there
+        is a sequence $a:\mathbb{N}\rightarrow{A}$ such that
+        $a_{n}\rightarrow{x}$. That is, a sequence in $A$ that converges to
+        $x$ in $(X,\,d)$.
+    \end{definition}
+    The motivating examples are the rational and irrational numbers in the real
+    line. Every real number can be approximated arbitrarily well by a rational
+    number, and every real number can also be approximated by
+    an irrational number.
+    \begin{definition}[\textbf{Completion of a Metric Space}]
+        A completion of a metric space $(X,\,d)$ is a complete metric space
+        $(\tilde{X},\,\tilde{d})$ such that there is an isometry
+        $f:X\rightarrow\tilde{X}$ where $f[X]\subseteq\tilde{X}$ is a
+        dense subspace.
+    \end{definition}
+    We will prove in these notes that every metric space $(X,\,d)$ has a
+    completion, and that this completion is essentially unique.
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, and if $a,b:\mathbb{N}\rightarrow{X}$
+        are Cauchy sequences, then the sequence
+        $r:\mathbb{N}\rightarrow\mathbb{R}$ defined by
+        $r_{n}=d(a_{n},\,b_{n})$ is bounded.
+    \end{theorem}
+    \begin{proof}
+        Let $\varepsilon=1$. Since $a$ and $b$ are Cauchy, there are
+        $N_{0},N_{1}\in\mathbb{N}$ such that $m,n>N_{0}$ implies
+        $d(a_{m},\,a_{n})<\varepsilon$ and $m,n>N_{1}$ implies
+        $d(b_{m},\,b_{n})<\varepsilon$. Let $N=\textrm{max}(N_{0},\,N_{1})$
+        and let
+        $M=\textrm{max}\big(d(a_{0},\,b_{0}),\,\dots,\,d(a_{N+1},\,b_{N+1})\big)+2$.
+        $M$ is a bound for $r$. For given any $n\in\mathbb{N}$, if $n\leq{N}$
+        we have:
+        \begin{equation}
+            r_{n}=d(a_{n},\,b_{n})\leq\textrm{max}
+                \big(d(a_{0},\,b_{0}),\,\dots,\,d(a_{N+1},\,b_{N+1})\big)
+                <M
+        \end{equation}
+        by definition of $M$. If $n>N$ we get:
+        \begin{align}
+            r_{n}
+            &=d(a_{n},\,b_{n})\\
+            &\leq{d}(a_{n},\,a_{N+1})+d(a_{N+1},\,b_{N+1})
+                +d(b_{N+1},\,b_{n})\\
+            &<\varepsilon+
+                \textrm{max}\big(d(a_{0},\,b_{0}),\,\dots,\,d(a_{N+1},\,b_{N+1})\big)+
+                \varepsilon\\
+            &=2+\textrm{max}\big(d(a_{0},\,b_{0}),\,\dots,\,d(a_{N+1},\,b_{N+1})\big)\\
+            &=M
+        \end{align}
+        So $r_{n}$ is bounded between $0$ and $M+2$, and so is bounded.
+    \end{proof}
+    \begin{theorem}[\textbf{The Trapezoid Inequality}]
+        If $(X,\,d)$ is a metric space, if
+        $a,b,c,d\in{X}$, then $|d(a,\,c)-d(b,\,d)|\leq{d}(a,\,b)+d(c,\,d)$.
+    \end{theorem}
+    \begin{proof}
+        There are two cases, $d(a,\,c)\geq{d}(b,\,d)$ and
+        $d(a,\,c)\leq{d}(b,\,d)$. Suppose $d(a,\,c)\geq{d}(b,\,d)$. The
+        argument is symmetric in the other case. Then:
+        \begin{equation}
+            |d(a,\,c)-d(b,\,d)|=d(a,\,c)-d(b,\,d)
+        \end{equation}
+        By the triangle inequality,
+        $d(b,\,c)\leq{d}(b,\,d)+d(c,\,d)$, and therefore:
+        \begin{equation}
+            d(b,\,c)-d(b,\,d)\leq{d}(c,\,d)
+        \end{equation}
+        Using this we then have:
+        \begin{align}
+            |d(a,\,c)-d(b,\,d)|
+            &=d(a,\,c)-d(b,\,d)\\
+            &\leq{d}(a,\,b)+d(b,\,c)-d(b,\,d)\\
+            &\leq{d}(a,\,b)+d(c,\,d)
+        \end{align}
+        Completing the proof.
+    \end{proof}
+    The trapezoid inequality gets its name from
+    Fig.~\ref{fig:trapezoid_inequality_001}.
+    \begin{figure}
+        \centering
+        \includegraphics{../../images/trapezoid_inequality_001.pdf}
+        \caption{The Trapezoid Inequality}
+        \label{fig:trapezoid_inequality_001}
+    \end{figure}
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, if $a,b:\mathbb{N}\rightarrow{X}$ are
+        Cauchy sequences, and if $r:\mathbb{N}\rightarrow\mathbb{R}$ is defined
+        by $r_{n}=d(a_{n},\,b_{n})$, then $r$ is a convergent sequence in
+        $\mathbb{R}$.
+    \end{theorem}
+    \begin{proof}
+        Let $\varepsilon>0$. Since $a$ and $b$ are
+        Cauchy, there is an $N_{0},N_{1}\in\mathbb{N}$ such that
+        $m,n>N_{0}$ implies $d(a_{m},\,a_{n})<\varepsilon/4$ and
+        $m,n>N_{1}$ implies $d(b_{m},\,b_{m})<\varepsilon/4$. Let
+        $N=\textrm{max}(N_{0},\,N_{1})+1$. Then by the trapezoid inequality,
+        $m,n>N$ implies:
+        \begin{align}
+            |r_{m}-r_{n}|
+            &=|r_{m}-r_{N}+r_{N}-r_{n}|\\
+            &\leq|r_{m}-r_{N}|+|r_{N}-r_{n}|\\
+            &=|d(a_{m},\,b_{m})-d(a_{N},\,b_{N})|
+                +|d(a_{N},\,b_{N})-d(a_{n},\,b_{n})|\\
+            &\leq{d}(a_{N},\,a_{m})+d(b_{N},\,b_{m})
+                +d(a_{N},\,a_{n})+d(b_{N},\,b_{n})\\
+            &<\frac{\varepsilon}{4}+\frac{\varepsilon}{4}
+                +\frac{\varepsilon}{4}+\frac{\varepsilon}{4}\\
+            &=\varepsilon
+        \end{align}
+        so $r$ is a Cauchy sequence. But $(\mathbb{R},\,|\cdot|)$ is complete,
+        so Cauchy sequences converge. Hence, $r$ is a convergent sequence.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, if $\mathcal{A}$ is the set of all
+        Cauchy sequences $a:\mathbb{N}\rightarrow{X}$, and if
+        $R$ is the relation defined on $\mathcal{A}$ by
+        $aRb$ if and only if $d(a_{n},\,b_{n})\rightarrow{0}$, then
+        $R$ is an equivalence relation on $\mathcal{A}$.
+    \end{theorem}
+    \begin{proof}
+        $R$ is reflexive since $d(a_{n},\,a_{n})=0$, so $aRa$. $R$ is
+        symmetric since $aRb$ implies $d(a_{n},\,b_{n})\rightarrow{0}$,
+        but $d(a_{n},\,b_{n})=d(b_{n},\,a_{n})$, so
+        $d(b_{n},\,a_{n})\rightarrow{0}$, and hence $bRa$. Lastly, it is
+        transitive. If $aRb$ and $bRc$, then
+        $d(a_{n},\,c_{n})\leq{d}(a_{n},\,b_{n})+d(b_{n},\,c_{n})$, and both of
+        these latter two expressions tend to zero since $aRb$ and $bRc$, so
+        $d(a_{n},\,c_{n})\rightarrow{0}$. That is, $aRc$. So $R$ is
+        reflexive, symmetric, and transitive, and is therefore an
+        equivalence relation.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, if $\mathcal{A}$ is the set of all
+        Cauchy sequences $a:\mathbb{N}\rightarrow{X}$, if
+        $R$ is equivalence relation $aRb$ if and only if
+        $d(a_{n},\,b_{n})\rightarrow{0}$, if $\tilde{X}=\mathcal{A}/R$, and
+        if $\tilde{d}$ is defined by the formula:
+        \begin{equation}
+            \tilde{d}\big([a],\,[b]\big)=\lim_{n\rightarrow{\infty}}
+                d(a_{n},\,b_{n})
+        \end{equation}
+        then $\tilde{d}$ is a well-defined function
+        $\tilde{d}:\tilde{X}\times\tilde{X}\rightarrow\mathbb{R}$.
+    \end{theorem}
+    \begin{proof}
+        Let $a,b,c,d\in\mathcal{A}$ be Cauchy sequences with
+        $aRc$ and $bRd$. Then $d(a_{n},\,c_{n})\rightarrow{0}$ and
+        $d(b_{n},\,d_{n})\rightarrow{0}$. But then:
+        \begin{align}
+            \tilde{d}\big([c],\,[d]\big)
+            &=\lim_{n\rightarrow\infty}d(c_{n},\,d_{n})\\
+            &\leq\lim_{n\rightarrow\infty}\big(d(a_{n},\,c_{n})
+                +d(a_{n},\,d_{n}\big)\\
+            &\leq\lim_{n\rightarrow\infty}\big(
+                d(a_{n},\,c_{n})+d(a_{n},\,b_{n})+d(b_{n},\,d_{n})\big)\\
+            &=\lim_{n\rightarrow\infty}d(a_{n},\,c_{n})+
+                \lim_{n\rightarrow\infty}d(a_{n},\,b_{n})+
+                \lim_{n\rightarrow\infty}d(b_{n},\,d_{n})\\
+            &=0+\lim_{n\rightarrow\infty}d(a_{n},\,b_{n})+0\\
+            &=\lim_{n\rightarrow\infty}d(a_{n},\,b_{n})\\
+            &=\tilde{d}\big([a],\,[b]\big)
+        \end{align}
+        so $\tilde{d}$ is well-defined.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, if $\mathcal{A}$ is the set of all
+        Cauchy sequences $a:\mathbb{N}\rightarrow{X}$, and if
+        $R$ is the equivalence relation $aRb$ if and only if
+        $d(a_{n},\,b_{n})\rightarrow{0}$, if $\tilde{X}=\mathcal{A}/R$, and
+        if $\tilde{d}$ is the function:
+        \begin{equation}
+            \tilde{d}\big([a],\,[b]\big)=\lim_{n\rightarrow\infty}
+                d(a_{n},\,b_{n})
+        \end{equation}
+        then $(\tilde{X},\,\tilde{d})$ is a complete metric space.
+    \end{theorem}
+    \begin{proof}
+        $\tilde{d}$ is indeed a metric. Since $(X,\,d)$ is a metric space,
+        $\tilde{d}$ is non-negative since $d$ is non-negative. Also:
+        \begin{align}
+            &\tilde{d}\big([a],\,[b]\big)=0\\
+            \Leftrightarrow&{d}(a_{n},\,b_{n})\rightarrow{0}\\
+            \Leftrightarrow&{a}Rb\\
+            \Leftrightarrow&[a]=[b]
+        \end{align}
+        so $\tilde{d}$ is positive-definite. It is symmetric since:
+        \begin{align}
+            \tilde{d}\big([a],\,[b]\big)
+            &=\lim_{n\rightarrow\infty}d(a_{n},\,b_{n})\\
+            &=\lim_{n\rightarrow\infty}d(b_{n},\,a_{n})\\
+            &=\tilde{d}\big([b],\,[a]\big)
+        \end{align}
+        Lastly, it satisfies the triangle inequality. Given $[a]$, $[b]$, and
+        $[c]$, we have:
+        \begin{align}
+            \tilde{d}\big([a],\,[b]\big)
+            &=\lim_{n\rightarrow\infty}d(a_{n},\,b_{n})\\
+            &\leq\lim_{n\rightarrow\infty}
+                \big(d(a_{n},\,c_{n})+d(c_{n},\,b_{n}\big)\\
+            &=\lim_{n\rightarrow\infty}d(a_{n},\,c_{n})+
+                \lim_{n\rightarrow\infty}d(c_{n},\,b_{n})\\
+            &=\tilde{d}\big([a],\,[c]\big)+\tilde{d}\big([c],\,[b]\big)
+        \end{align}
+        It is also complete. Let $\mathbf{x}:\mathbb{N}\rightarrow\tilde{X}$
+        be a Cauchy sequence. That is, $\mathbf{x}$ is a
+        \textit{sequence of equivalence classes of Cauchy sequences}. For every
+        $n\in\mathbb{N}$ there is a Cauchy sequence
+        $x^{n}:\mathbb{N}\rightarrow{X}$ such that $\mathbf{x}_{n}=[x^{n}]$.
+        Since $x^{n}$ is a Cauchy sequence, there is an $N_{n}\in\mathbb{N}$
+        such that $k,\ell>N_{n}$ implies
+        $d(x_{k}^{n},\,x_{\ell}^{n})<\frac{1}{n+1}$. Define
+        $a:\mathbb{N}\rightarrow{X}$ by $a_{n}=x_{N_{n}}^{n}$. We now must
+        show that $a$ is a Cauchy sequence and that
+        $\mathbf{x}_{n}\rightarrow[a]$. Let $\varepsilon>0$. Let
+        $M_{0}$ be such that $N_{M_{0}}+1>3/\varepsilon$. Since
+        $\mathbf{x}$ is Cauchy there is an $M_{1}\in\mathbb{N}$ such that
+        $k,\ell\in\mathbb{N}$ and $k,\ell>M_{1}$ implies
+        $\tilde{d}(\mathbf{x}_{k},\,\mathbf{x}_{\ell})<\varepsilon/3$.
+        That is:
+        \begin{equation}
+            \tilde{d}(\mathbf{x}_{k},\,\mathbf{x}_{\ell})
+            =\lim_{n\rightarrow\infty}d(x_{n}^{k},\,x_{n}^{\ell})
+            <\frac{\varepsilon}{3}
+        \end{equation}
+        Let $M=\textrm{max}(M_{0},\,M_{1})+1$. Then $m,n>M$ implies:
+        \begin{align}
+            d(a_{m},\,a_{n})
+            &=d(x_{N_{m}}^{m},\,x_{N_{n}}^{n})\\
+            &\leq{d}(x_{N_{m}}^{m},\,x_{M}^{m})
+                +d(x_{M}^{m},\,x_{M}^{n})
+                +d(x_{M}^{n},\,x_{N_{n}}^{n})\\
+            &<\frac{\varepsilon}{3}
+                +\frac{\varepsilon}{3}+\frac{\varepsilon}{3}\\
+            &=\varepsilon
+        \end{align}
+        So $a$ is a Cauchy sequence. Now we must show that
+        $\mathbf{x}_{n}\rightarrow[a]$. We have:
+        \begin{align}
+            \tilde{d}([a],\,\mathbf{x}_{n})
+            &=\lim_{m\rightarrow\infty}d(a_{m},\,x_{m}^{n})\\
+            &=\lim_{m\rightarrow\infty}d(x_{N_{m}}^{m},\,x_{m}^{n})
+        \end{align}
+        and this converges to zero as $n$ tends to infinity. So,
+        $\mathbf{x}_{n}\rightarrow[a]$ and thus $(\tilde{X},\,\tilde{d})$
+        is complete.
+    \end{proof}
+    \begin{theorem}
+        If $(X,\,d)$ is a metric space, if $\mathcal{A}$ is the set of all
+        Cauchy sequences $a:\mathbb{N}\rightarrow{X}$, and if
+        $R$ is the equivalence relation $aRb$ if and only if
+        $d(a_{n},\,b_{n})\rightarrow{0}$, if $\tilde{X}=\mathcal{A}/R$, and
+        if $\tilde{d}$ is the function:
+        \begin{equation}
+            \tilde{d}\big([a],\,[b]\big)=\lim_{n\rightarrow\infty}
+                d(a_{n},\,b_{n})
+        \end{equation}
+        then there is an isometry $f:X\rightarrow\tilde{X}$ into the
+        complete metric space $(\tilde{X},\,\tilde{d})$ such that
+        $f[X]\subseteq\tilde{X}$ is a dense subspace.
+    \end{theorem}
+    \begin{proof}
+        Given $x\in{X}$, define $g:X\rightarrow\mathcal{A}$ via
+        $g(x)=a$ where $a:\mathbb{N}\rightarrow{X}$ is the sequence
+        $a_{n}=x$. Since $a$ is a constant sequence, it is a Cauchy sequence.
+        Let $f:X\rightarrow\tilde{X}$ be defined by
+        $f(x)=[g(x)]$. $f$ is an isometry. For if $x,y\in{X}$, then:
+        \begin{align}
+            \tilde{d}\big(f(x),\,f(y)\big)
+            &=\tilde{d}\big([g(x)],\,[g(y)]\big)\\
+            &=\lim_{n\rightarrow\infty}d\big(g(x)_{n},\,g(y)_{n}\big)\\
+            &=\lim_{n\rightarrow\infty}d(x,\,y)\\
+            &=d(x,\,y)
+        \end{align}
+        and hence, $f$ is an isometry. Moreover, $f[X]$ is a dense subset of
+        $\tilde{X}$. Let $[a]\in\tilde{X}$ where $a\in\mathcal{A}$
+        is a Cauchy sequence. Define the
+        sequence $\mathbf{x}:\mathbb{N}\rightarrow{f}[X]$ via
+        $\mathbf{x}_{n}=f(a_{n})$. Then:
+        \begin{align}
+            \lim_{n\rightarrow\infty}\tilde{d}([a],\,\mathbf{x}_{n})
+            &=\lim_{n\rightarrow\infty}
+                \lim_{m\rightarrow\infty}d(a_{m},\,a_{n})\\
+            &=0
+        \end{align}
+        so $\mathbf{x}$ is a sequence in $f[X]$ that converges to
+        $[a]$ in $(\tilde{X},\,\tilde{d})$, and hence $f[X]$ is dense.
+    \end{proof}
+    This is essentially the unique metric space that completes
+    $(X,\,d)$. If $(Y,\,d_{Y})$ is another complete metric space such that
+    there exists an isometry $f:X\rightarrow{Y}$ such that
+    $f[X]\subseteq{Y}$ is a dense subspace, then there is a global
+    isometry between $(Y,\,d_{Y})$ and $(\tilde{X},\,\tilde{d})$.
+\end{document}
