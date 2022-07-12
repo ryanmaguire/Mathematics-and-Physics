@@ -1,0 +1,237 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{problem}{Problem}
+
+\title{The Axiom of Choice}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    Throughout our discussion of metric spaces we've repeatedly used the axiom
+    of choice, but neglected mentioning it. Let's review Lebesgue's number
+    lemma. We wish to show that for any open cover $\mathcal{O}$ of a compact
+    metric space $(X,\,d)$ there is a $\delta>0$ such that for all $x\in{X}$
+    there is a $\mathcal{U}\in\mathcal{O}$ such that
+    $B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}$. We say \textit{suppose not}.
+    We are negating our claim. Using quantifier notation, our claim says:
+    \begin{equation}
+        \forall_{\mathcal{O}\subseteq\tau_{d},\bigcup\mathcal{O}=X}
+            \exists_{\delta>0}\forall_{x\in{X}}
+            \exists_{\mathcal{U}\in\mathcal{O}}
+            \Big(B_{\delta}^{(X,\,d)}(x)\subseteq\mathcal{U}\Big)
+    \end{equation}
+    the negation of this swaps $\forall$ with $\exists$ and vice-versa.
+    \begin{equation}
+        \exists_{\mathcal{O}\subseteq\tau_{d},\bigcup\mathcal{O}=X}
+            \forall_{\delta>0}\exists_{x\in{X}}
+            \forall_{\mathcal{U}\in\mathcal{O}}
+            \Big(B_{\delta}^{(X,\,d)}(x)\nsubseteq\mathcal{U}\Big)
+    \end{equation}
+    That is, there exists an open cover $\mathcal{O}$ of $X$ such that
+    for all $\delta>0$ there is an $x\in{X}$ with the property that for every
+    $\mathcal{U}\in\mathcal{O}$ the $\delta$ ball centered at $x$ is not
+    entirely contained in $\mathcal{U}$. In particular, since the negation
+    says this is true \textit{for all} $\delta>0$, it is true for
+    $\delta=1$. It is also true for $\delta=\frac{1}{2}$ and
+    $\delta=\frac{1}{3}$. We define (using the axiom schema of specification)
+    the set $A_{n}$ to be:
+    \begin{equation}
+        A_{n}=\Big\{\,x\in{X}\;|\;\forall_{\mathcal{U}\in\mathcal{O}}
+            \Big(
+                B_{\frac{1}{n+1}}^{(X,\,d)}(x)\nsubseteq\mathcal{U}
+            \Big)\,
+        \Big\}
+    \end{equation}
+    $A_{n}$ is not empty for all $n\in\mathbb{N}$ since we are assuming the
+    negation of the orignal claim is true. That is, we are assuming for all
+    $\delta>0$ there is an $x\in{X}$ such that no $\mathcal{U}$ in the open
+    cover $\mathcal{O}$ completely contains the $\delta$ ball centered at $x$.
+    Applying this to $\delta=\frac{1}{n+1}$ we then see that $A_{n}$ is a
+    non-empty set for all $n\in\mathbb{N}$. We then (using the axiom of the
+    power set and the axiom schema of specification) collect a new set
+    $\mathcal{A}$ defined by:
+    \begin{equation}
+        \mathcal{A}=\{\,A_{n}\in\mathcal{P}(X)\;|\;n\in\mathbb{N}\,\}
+    \end{equation}
+    To be extremely pedantic and using the axioms precisely as stated, we
+    are defining $\mathcal{A}$ by:
+    \begin{equation}
+        \mathcal{A}=\bigg\{\,B\in\mathcal{P}(X)\;\Big|\;
+            \exists_{n\in\mathbb{N}}\bigg(
+                \big(x\in{B}\big)\Leftrightarrow\Big(
+                    \forall_{\mathcal{U}\in\mathcal{O}}
+                    \big(B_{\frac{1}{n+1}}^{(X,\,d)}(x)\nsubseteq\mathcal{U}\big)
+                \Big)
+            \bigg)\,
+        \bigg\}
+    \end{equation}
+    This reads, cryptically, that $\mathcal{A}$ is the set of all
+    $B$ such that $B=A_{n}$ for some $n\in\mathbb{N}$.
+    We then we examine the product set. Since the elements of
+    $\mathcal{A}$ are indexed by the natural numbers, we may write:
+    \begin{equation}
+        \prod\mathcal{A}=\prod_{n=0}^{\infty}A_{n}
+            =\big\{\,f:\mathbb{N}\rightarrow\bigcup_{n=0}^{\infty}A_{n}\;|\;
+                \forall_{n\in\mathbb{N}}\big(f(n)\in{A}_{n}\big)\,\big\}
+    \end{equation}
+    Intuitively, an element $f\in\prod\mathcal{A}$ is a
+    \textit{countably infinite tuple}:
+    \begin{equation}
+        f=(a_{0},\,a_{1},\,\dots,\,a_{n},\,\dots)
+    \end{equation}
+    with the property that
+    $a_{n}\in{A}_{n}$ for all $n\in\mathbb{N}$. This is for intuition, not
+    rigor. Now we note that $A_{n}$ is non-empty for all $n\in\mathbb{N}$.
+    By the axiom of countable choice (which is implied by the full axiom of
+    choice), there is an element $a\in\prod\mathcal{A}$. What is this element?
+    It is a sequence $a:\mathbb{N}\rightarrow\bigcup_{n=0}^{\infty}A_{n}$
+    such that for all $n\in\mathbb{N}$ it is true that $a_{n}\in{A}_{n}$.
+    Realizing that $A_{n}\subseteq{X}$ for all $n\in\mathbb{N}$, we see that
+    $\bigcup_{n=0}^{\infty}A_{n}\subseteq{X}$, and so $a$ is also a sequence
+    $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\in{A}_{n}$ for all
+    $n\in\mathbb{N}$. But what does it mean to be in $A_{n}$? We now go back
+    to Lebesgue's number lemma, $a_{n}$ in $A_{n}$ means for every open set
+    $\mathcal{U}$ in the open cover $\mathcal{O}$ it is not true that
+    the $\frac{1}{n+1}$ ball centered about $a_{n}$ is contained in
+    $\mathcal{U}$. That is, $a:\mathbb{N}\rightarrow{X}$ is a sequence such
+    that, for all $n\in\mathbb{N}$, and for all $\mathcal{U}\in\mathcal{O}$, we
+    have:
+    \begin{equation}
+        B_{\frac{1}{n+1}}^{(X,\,d)}(a_{n})\nsubseteq\mathcal{U}
+    \end{equation}
+    In the proof of Lebesgue's number lemma this was entirely swept under the
+    rug. \textit{Obviously} I can pick a point $a_{n}$ for each $n$ satisfying
+    the negation of our original claim. But just because something is
+    \textit{obvious}, does not make it true. The axiom of countable choice can
+    not be proven using the other axioms of set theory. Defining sequences
+    recursively requires some form of the axiom of choice as well. Since the
+    axiom of choice is confusing and controversial it is all too common to
+    appeal to more intuitive language that \textit{hides} the axiom of choice,
+    but it is important for a mathematician to realize that it is indeed there.
+    \par\hfill\par
+    We have appealed to the full axiom of choice as well. For the most part we
+    were satisfied with the axiom of countable choice, which is a far less
+    contraversial axiom, but at times we have used the stronger version.
+    Consider the equivalence of compactness theorem. We said consider a Cauchy
+    sequence $a:\mathbb{N}\rightarrow{X}$ that does not converge in the metric
+    space $(X,\,d)$. To converge means there is an $x\in{X}$ such that for all
+    $\varepsilon>0$ there is an $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and
+    $n>N$ implies $d(x,\,a_{n})<\varepsilon$. We denoted this by
+    $a_{n}\rightarrow{x}$. Using quantifer notation, convergence means:
+    \begin{equation}
+        \exists_{x\in{X}}\forall_{\varepsilon>0}
+            \exists_{N\in\mathbb{N}}\forall_{n\in\mathbb{N},n>N}
+            \big(d(x,\,a_{n})<\varepsilon\big)
+    \end{equation}
+    The negation of this means for all $x\in{X}$ there is an
+    $\varepsilon>0$ such that for all $N\in\mathbb{N}$ there exists an
+    $n\in\mathbb{N}$ with $n>N$ such that
+    $d(x,\,a_{n})\geq\varepsilon$. That is:
+    \begin{equation}
+        \forall_{x\in{X}}\exists_{\varepsilon>0}\forall_{N\in\mathbb{N}}
+            \exists_{n\in\mathbb{N},n>N}\big(d(x,\,a_{n})\geq\varepsilon\big)
+    \end{equation}
+    I \textit{conveniently} labelled such an $\varepsilon$ as
+    $\varepsilon_{x}$ to denote that $\varepsilon_{x}$ is a positive value that
+    makes the property fail for the point $x\in{X}$. Why am I allowed to do
+    this? I define the set $A_{x}\subseteq\mathbb{R}$ as follows:
+    \begin{equation}
+        A_{x}=\big\{\,\varepsilon\in\mathbb{R}^{+}\;|\;
+            \forall_{N\in\mathbb{N}}
+            \exists_{n\in\mathbb{N},n>N}\big(d(x,\,a_{n})\geq\varepsilon\big)
+        \,\big\}
+    \end{equation}
+    Since we are assuming the sequence does \textit{not} converge, for all
+    $x\in{X}$, the set $A_{x}$ is non-empty. We then consider the collection
+    of all of these sets $\mathcal{A}$:
+    \begin{equation}
+        \mathcal{A}=\{\,A_{x}\in\mathcal{P}(\mathbb{R}^{+})\;|\;x\in{X}\,\}
+    \end{equation}
+    Again, being overly formal, we are writing:
+    \begin{equation}
+        \mathcal{A}=\Big\{\,B\in\mathcal{P}(\mathbb{R}^{+})\;\big|\;
+            \exists_{x\in{X}}\Big(\big(\varepsilon\in{B}\big)\Leftrightarrow
+            \forall_{N\in\mathbb{N}}
+            \exists_{n\in\mathbb{N},n>N}\big(d(x,\,a_{n})\geq\varepsilon\big)
+            \Big)
+        \,\Big\}
+    \end{equation}
+    This is the set of all $B\subseteq\mathbb{R}^{+}$ such that
+    $B=A_{x}$ for some $x\in{X}$. We consider the product set. This time,
+    unlike in the previous example, since we don't know the cardinality of
+    $X$, we may not be able to index the product set over the natural numbers.
+    We may still write:
+    \begin{equation}
+        \prod\mathcal{A}=\prod_{x\in{X}}A_{x}
+            =\big\{\,f:X\rightarrow\bigcup_{x\in{X}}A_{x}\;|\;
+                \forall_{x\in{X}}\big(f(x)\in{A}_{x}\big)\,\big\}
+    \end{equation}
+    Since $A_{x}\subseteq\mathbb{R}^{+}$ for all $x\in{X}$, an element
+    of $\prod\mathcal{A}$ is a function $f:X\rightarrow\mathbb{R}^{+}$.
+    That is, a function from our metric space to the positive real numbers.
+    This function $f$ has the special property that for all $x\in{X}$,
+    $f(x)$ is an element of $A_{x}$. That is, $f(x)$ is a positive
+    number $\varepsilon_{x}=f(x)$ such that for all $N\in\mathbb{N}$ there is
+    an $n\in\mathbb{N}$ with $n>N$ such that
+    $d(x,\,a_{n})\geq\varepsilon_{x}$. Since none of the elements of
+    $\mathcal{A}$ are empty, by the axiom of choice the product is non-empty.
+    Let $\varepsilon\in\prod\mathcal{A}$ be an element of the product. That is,
+    let $\varepsilon:X\rightarrow\bigcup_{x\in{X}}A_{x}$ be our
+    \textit{choice} function. Given $x\in{X}$, instead of writing the image of
+    $x$ as $\varepsilon(x)$, let us write it as $\varepsilon_{x}$. Then
+    $\varepsilon_{x}$ is a value such that for all $N\in\mathbb{N}$ there is
+    an $n\in\mathbb{N}$ with $n>N$ such that
+    $d(x,\,a_{n})\geq\varepsilon_{x}$, and now we're back to where we started
+    in the proof of the equivalence of compactness. The axiom of choice
+    justifies the notation $\varepsilon_{x}$ where we \textit{choose} a value
+    $\varepsilon_{x}>0$ for each $x$.
+\end{document}

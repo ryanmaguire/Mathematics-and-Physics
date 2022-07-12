@@ -1,0 +1,136 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\newenvironment{notation}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\notationx%
+}{%
+    \popQED\endnotationx%
+}
+
+\title{Geometric Series}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    Given a real number $r\in\mathbb{R}$ with $|r|<1$ it can be shown that
+    $r^{n}$ tends to zero as $n$ increases to infinity. This fact will be used
+    freely throughout. Consider the series of partial sums of $r^{n}$:
+    \begin{equation}
+        S_{N}=\sum_{n=0}^{N}r^{n}
+    \end{equation}
+    We can rewrite this in a smaller closed-form. Multiplying both sides
+    by $1-r$ we get:
+    \begin{align}
+        S_{N}(1-r)
+        &=(1-r)\sum_{n=0}^{N}r^{n}\\
+        &=\sum_{n=0}^{N}r^{n}(1-r)\\
+        &=\sum_{n=0}^{N}\big(r^{n}-r^{n+1}\big)\\
+        &=\sum_{n=0}^{N}r^{n}-\sum_{n=0}^{N}r^{n+1}\\
+        &=1+\sum_{n=1}^{N}r^{n}-\sum_{n=0}^{N}r^{n+1}\\
+        &=1+\sum_{n=1}^{N}r^{n}-r^{N+1}-\sum_{n=0}^{N-1}r^{n+1}\\
+        &=(1-r^{N+1})+\sum_{n=1}^{N}r^{n}-\sum_{n=0}^{N-1}r^{n+1}\\
+        &=(1-r^{N+1})+\sum_{n=1}^{N}r^{n}-\sum_{n=1}^{N}r^{n}\\
+        &=1-r^{N+1}
+    \end{align}
+    Dividing both sides by $1-r$ gives us:
+    \begin{equation}
+        S_{N}=\frac{1-r^{N+1}}{1-r}
+    \end{equation}
+    Since $r^{N+1}$ tends to zero as $N$ increases to infinity, we get the
+    final result:
+    \begin{equation}
+        \sum_{n=0}^{\infty}=\frac{1}{1-r}
+    \end{equation}
+    Let's examine the tail end.
+    \begin{align}
+        \sum_{n=N+1}^{\infty}r^{n}
+        &=\sum_{n=0}^{\infty}r^{n}-\sum_{n=0}^{N}r^{n}\\
+        &=\frac{1}{1-r}-\sum_{n=0}^{N}r^{n}\\
+        &=\frac{1}{1-r}-\frac{1-r^{N+1}}{1-r}\\
+        &=\frac{r^{N+1}}{1-r}
+    \end{align}
+    Since $r^{N+1}$ gets smaller as $N$ gets larger we see that the tail
+    end converges to zero (as it must for the series to converge).
+    \par\hfill\par
+    We can prove the partial sum formula using induction as well. The base
+    case $N=0$ says:
+    \begin{equation}
+        \sum_{n=0}^{0}r^{n}=r^{0}=1=\frac{1-r^{0+1}}{1-r}=\frac{1-r}{1-r}
+    \end{equation}
+    which is true. Suppose the formula holds for $N\in\mathbb{N}$. Then:
+    \begin{align}
+        \sum_{n=0}^{N+1}r^{n}
+        &=r^{N+1}+\sum_{n=0}^{N}r^{n}\\
+        &=r^{N+1}+\frac{1-r^{N+1}}{1-r}\\
+        &=\frac{r^{N+1}(1-r)+1-r^{N+1}}{1-r}\\
+        &=\frac{r^{N+1}-r^{N+2}+1-r^{N+1}}{1-r}\\
+        &=\frac{1-r^{N+2}}{1-r}
+    \end{align}
+    and so the formula holds for $N+1$ as well.
+\end{document}
