@@ -100,11 +100,12 @@
         $n+1$ elements. Label them $\mathcal{U}_{0},\,\dots,\,\mathcal{U}_{n}$.
         Then, by induction, the set $\mathcal{V}$ defined by:
         \begin{equation}
-            \mathcal{V}=\bigcup_{k=0}^{n-1}\mathcal{U}_{k}
+            \mathcal{V}=\bigcap_{k=0}^{n-1}\mathcal{U}_{k}
         \end{equation}
-        is open. But then $\bigcap\mathcal{O}=\mathcal{V}\cap\mathcal{U}_{n}$,
-        the intersection of two open sets, which is open. Hence,
-        $\bigcap\mathcal{O}\in\tau$.
+        is in $\tau$. But then
+        $\bigcap\mathcal{O}=\mathcal{V}\cap\mathcal{U}_{n}$,
+        the intersection of two elements of $\tau$, which is
+        an element of $\tau$. Hence, $\bigcap\mathcal{O}\in\tau$.
     \end{proof}
     \begin{definition}[\textbf{Topological Space}]
         A topological space is an ordered pair $(X,\,\tau)$ where $X$ is a set
@@ -140,9 +141,37 @@
     complements of open sets. Since we lack a metric, we take this and use it
     to \textit{define} closed sets in a topological space.
     \begin{definition}[\textbf{Closed Set in a Topological Space}]
-        A closed set in a topological space $(X,\,d)$ is a set
+        A closed set in a topological space $(X,\,\tau)$ is a set
         $\mathcal{C}\subseteq{X}$ such that $X\setminus\mathcal{C}$ is open.
+        That is, a set $\mathcal{C}$ such that
+        $X\setminus\mathcal{C}\in\tau$.
     \end{definition}
+    \begin{theorem}
+        If $(X,\,\tau)$ is a topological space, then
+        $\mathcal{U}$ is open if and only if $X\setminus\mathcal{U}$ is closed.
+    \end{theorem}
+    \begin{proof}
+        Suppose $\mathcal{U}$ is open. Then by definition,
+        $X\setminus\mathcal{U}$ is closed. Now, suppose
+        $X\setminus\mathcal{U}$ is closed. Then by the definition of closed
+        sets, $X\setminus(X\setminus\mathcal{U})$ is open. But by the double
+        complement law, $\mathcal{U}=X\setminus(X\setminus{U})$, and hence
+        $\mathcal{U}$ is open.
+    \end{proof}
+    \begin{example}
+        Do not confuse \textit{open} for \textit{not-closed} and do not confuse
+        \textit{not-open} for \textit{closed}. These are distinct notions.
+        It is possible to be open, closed, both, or neither. Let $X$ be a set
+        and let $\tau=\mathcal{P}(X)$, the discrete topology on $X$. Then
+        \textit{every} subset is open, and by the previous theorem,
+        \textit{every} subset is closed. Now let
+        $\tau=\{\,\emptyset,\,X\,\}$. Then every non-empty proper
+        subset is \textit{not} open, and hence every non-empty proper subset is
+        \textit{not} closed. These two examples show it is possible for
+        $\mathcal{U}\subseteq{X}$ to be both open and closed, and for
+        $\mathcal{V}\subseteq{X}$ to be neither open nor closed. It completely
+        depends on the topology $\tau$. 
+    \end{example}
     Topological spaces are direct generalizations of metric spaces. Every
     metric space is also a topological space.
     \begin{theorem}
@@ -156,6 +185,18 @@
         many open sets. That is, $\tau_{d}$ is a topology on $X$, and
         $(X,\,\tau_{d})$ is a topological space.
     \end{proof}
+    \begin{example}
+        The standard topology on the real line $\mathbb{R}$, the metric topology
+        induced by the metric $d(x,\,y)=|x-y|$, denoted $\tau_{\mathbb{R}}$,
+        is such that every proper non-empty subset
+        $\mathcal{U}\subseteq\mathbb{R}$ is either open, closed, or neither,
+        but \textit{not} both. That is, the only subsets of $\mathbb{R}$ that
+        are both open and closed are $\emptyset$ and $\mathbb{R}$. This isn't
+        too easy to show, it is essentially the statement that the real line
+        is \textit{connected}, but we don't have the vocabulary to prove such
+        a claim yet. Still, it is worth knowing this property when trying to
+        intuitively understand open and closed sets.
+    \end{example}
     A natural question is whether or not all topological spaces arise from
     metrics. This is false. The indiscrete topology on a set $X$ containing
     at least two points can't come from a metric. For suppose $X$ is a set
@@ -173,15 +214,16 @@
     One of the problems with the indiscrete topology is that it lacks the
     \textit{Hausdorff property}. In Felix Hausdorff's original definition of
     topological spaces he required points in the space to be able to be
-    separated by disjoint open sets. That is, given $x,y\in{X}$ Hausdorff
-    required there to be open sets $\mathcal{U}$ and $\mathcal{V}$ such that
-    $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
+    separated by disjoint open sets. That is, given $x,y\in{X}$ with
+    $x\ne{y}$, Hausdorff required there to be open sets $\mathcal{U}$ and
+    $\mathcal{V}$ such that $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
     $\mathcal{U}\cap\mathcal{V}=\emptyset$. We take Hausdorff's property and
     use it to define \textit{Hausdorff topological spaces}
     (also see Fig.~\ref{fig:hausdorff_condition_001}).
     \begin{definition}[\textbf{Hausdorff Topological Space}]
         A Hausdorff topological space is a topological space $(X,\,\tau)$ such
-        that for all $x,y\in{X}$ there exists $\mathcal{U},\mathcal{V}\in\tau$
+        that for all $x,y\in{X}$, $x\ne{y}$, there exists
+        $\mathcal{U},\mathcal{V}\in\tau$
         such that $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
         $\mathcal{U}\cap\mathcal{V}=\emptyset$.
     \end{definition}
@@ -190,7 +232,7 @@
     performed on a topological space (such as glueing points together) that can
     take a Hausdorff space $(X,\,\tau)$ and transform it into a
     non-Hausdroff space (but it'll still be a topological space). Also many
-    non-Hausdorff topological spaces have found there way into the mathematical
+    non-Hausdorff topological spaces have found their way into the mathematical
     world with applications to physics and geometry. In algebraic geometry,
     the \textit{Zariski topology} is non-Hausdorff, and in general relativity,
     the space of light rays in a spacetime can be non-Hausdorff, depending on
@@ -206,18 +248,18 @@
     topology, it is better to speak of \textit{metrizable spaces}. These are
     topological spaces where the topology $\tau$ comes from some metric $d$.
     \begin{definition}[\textbf{Metrizable Topological Space}]
-        A metrizable topological space is a topological space $(X,\,d)$ such
+        A metrizable topological space is a topological space $(X,\,\tau)$ such
         that there exists a metric $d$ on $X$ such that $\tau=\tau_{d}$,
         where $\tau_{d}$ is the metric topology from $d$.
     \end{definition}
     Every metric space we've examined is an example of a metrizable topological
-    space. In particular, the real line, the Cartesian or complex plane,
-    Euclidean space, the Paris plane, the London plane, a discrete metric space,
+    space. In particular, the real line, Cartesian or complex plane,
+    Euclidean space, Paris plane, London plane, discrete metric spaces,
     all of that. We've also found a non-metrizable space, the indiscrete
     topology on a set containing at least two points. Some of the central
     theorems of point-set topology tell us when a topological space is
     metrizable. Hausdorff alone is not enough. We will see plenty of Hausdorff
-    spaces that can not come from a metric. The converse is true. Every
+    spaces that can not come from a metric. The converse is true, however. Every
     metrizable space is Hausdorff.
     \begin{theorem}
         If $(X,\,\tau)$ is a metrizable topological space, then it is
@@ -247,15 +289,60 @@
         $\mathcal{U}\cap\mathcal{V}=\emptyset$. Thus, $(X,\,\tau)$ is
         Hausdorff.
     \end{proof}
+    See Fig.~\ref{fig:metrizable_is_hausdorff} for the idea behind the proof.
+    With this we can rigorously prove that the indiscrete topology on a set
+    $X$ that has at least two distinct points $a,b\in{X}$ cannot possibly
+    come from a metric. This is done by observing that, if
+    $\tau=\{\,\emptyset,\,X\,\}$, then $(X,\,\tau)$ is
+    \textit{non-Hausdorff}, and since it is non-Hausdorff, it can't
+    be metrizable since metrizable topological spaces are Hausdorff. Given
+    $a\in{X}$, the only open set in $\tau$ that contains $a$ is
+    $X$ (since $a\notin\emptyset$). But $b\in{X}$ as well, so
+    there are not two open sets $\mathcal{U}$ and $\mathcal{V}$ with
+    $a\in\mathcal{U}$, $b\in\mathcal{V}$, and
+    $\mathcal{U}\cap\mathcal{V}=\emptyset$. That is, $(X,\,\tau)$ is not
+    Hausdorff, meaning it is not metrizable. Topological spaces are
+    far more general than metric spaces.
+    \begin{figure}
+        \centering
+        \includegraphics{../../images/metrizable_is_hausdorff.pdf}
+        \caption{Metrizable Implies Hausdorff}
+        \label{fig:metrizable_is_hausdorff}
+    \end{figure}
+    \begin{example}
+        Let's intuitively try to imagine what the indiscrete
+        topology on $\mathbb{R}$ \textit{look} like. The indiscrete topology
+        $\tau=\{\,\emptyset,\,\mathbb{R}\,\}$ says the only non-empty open set
+        is the entire real line $\mathbb{R}$. That is, all of the points in the
+        real line are very very close to each other, essentially
+        indistinguishable. That is, topologically it is impossible to tell
+        two points in the line apart. This is hard to imagine, and your brain
+        probably pictures a single point. But the space $(\mathbb{R},\,\tau)$
+        is not the same as a single point, the set $\mathbb{R}$ still has
+        infinitely many points. This is hard to imagine, and fortunately such
+        bizarre topological spaces like $(\mathbb{R},\,\tau)$ rarely find there
+        way into applications. Spaces like this usually serve as counterexamples
+        to claims (such as the claim that every topological space comes from a
+        metric. The topological space $(\mathbb{R},\,\tau)$ is a
+        counterexample).
+    \end{example}
+    \begin{example}
+        Now ponder the discrete topology on $\mathbb{R}$,
+        $\tau=\mathcal{P}(\mathbb{R})$. Here, \textit{every} subset is open,
+        so in particular given $x,y\in\mathbb{R}$, the sets
+        $\{\,x\,\}$ and $\{\,y\,\}$ are open. The way to picture this space is
+        as a bunch of scattered points with empty space between them.
+    \end{example}
     There is a weaker notion than Hausdorff that has found it's way into
     physics and geometry, the notion of a
     \textit{Fr\'{e}chet topological space}.
     \begin{definition}[\textbf{Fr\'{e}chet Topological Space}]
         A Fr\'{e}chet topological space is a topological space $(X,\,\tau)$
-        such that for all $x,y\in{X}$ there exists
+        such that for all $x,y\in{X}$, $x\ne{y}$, there exists
         $\mathcal{U},\mathcal{V}\in\tau$ such that $x\in\mathcal{U}$,
-        $y\in\mathcal{V}$, and $x\notin\mathcal{U}$, $y\notin\mathcal{V}$.
+        $y\in\mathcal{V}$, and $x\notin\mathcal{V}$, $y\notin\mathcal{U}$.
     \end{definition}
+    See Fig.~\ref{fig:metrizable_is_hausdorff} for a visual.
     This modifies the Hausdorff condition. Instead of requiring
     $\mathcal{U}$ and $\mathcal{V}$ to be disjoint (as in the Hausdroff case),
     we only require $\mathcal{U}$ to include $x$ and not $y$, and
@@ -266,8 +353,8 @@
         Fr\'{e}chet topological space.
     \end{theorem}
     \begin{proof}
-        Let $x,y\in{X}$. Since $(X,\,\tau)$ is Hausdorff, there exists open
-        sets $\mathcal{U},\mathcal{V}\in\tau$ such that
+        Let $x,y\in{X}$, $x\ne{y}$. Since $(X,\,\tau)$ is Hausdorff, there
+        exists open sets $\mathcal{U},\mathcal{V}\in\tau$ such that
         $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
         $\mathcal{U}\cap\mathcal{V}=\emptyset$. But since $x\in\mathcal{U}$,
         it must be true that $x\notin\mathcal{V}$ since
@@ -283,7 +370,7 @@
     prolific mathematician. In the study of topological vector spaces one
     studies \textit{Fr\'{e}chet spaces}. In general topology one studies
     \textit{Fr\'{e}chet topological spaces} and
-    \textit{Fr\'{e}chet-Urysohn topological space}. Fr\'{e}chet also invented
+    \textit{Fr\'{e}chet-Urysohn topological spaces}. Fr\'{e}chet also invented
     the idea of metric spaces, but fortunately the mathematical community has
     universally adopted the term \textit{metric space}, rather than name another
     type of space after Fr\'{e}chet. To reduce confusion,
@@ -298,7 +385,7 @@
         \label{fig:frechet_condition_001}
     \end{figure}
     \begin{example}[\textbf{Finite Complement Topology}]
-        Not every Fr\'{e}chet topological space is Hausdorff. The spaces of
+        Not every Fr\'{e}chet topological space is Hausdorff. The space of
         light rays in a spacetime, as alluded to earlier, need not be
         Hausdorff, but light rays always form a Fr\'{e}chet topological
         space. A simpler example is the \textit{finite complement topology}
@@ -342,7 +429,7 @@
         $\mathcal{V}=\mathbb{R}\setminus\{\,x\,\}$.
         Then $x\in\mathcal{U}$ since $x\ne{y}$, but $y\notin\mathcal{U}$.
         Also, $y\in\mathcal{V}$, but $x\notin\mathcal{V}$. But
-        $\mathcal{U}$ and $\mathcal{V}$ are open since there complements contain
+        $\mathcal{U}$ and $\mathcal{V}$ are open since their complements contain
         one point, and are hence finite. This shows $(\mathbb{R},\,\tau)$ is a
         Fr\'{e}chet topological space.
     \end{example}
@@ -350,7 +437,7 @@
         Define $\tau$ on $\mathbb{R}$ to be the set of all
         $\mathcal{U}\subseteq\mathbb{R}$ such that
         $\mathbb{R}\setminus\mathcal{U}$ is countable
-        (that is, finite or countably infinite), and include the
+        (that is, finite or countably infinite), or $\mathcal{U}$ is the
         empty set. This is a topology on $\mathbb{R}$. The empty set and
         $\mathbb{R}$ are elements of $\tau$ since
         $\mathbb{R}\setminus\mathbb{R}=\emptyset$ is countable, and
@@ -358,7 +445,7 @@
         $\mathcal{U},\mathcal{V}\subseteq\mathbb{R}$, the intersection is
         also included since:
         \begin{equation}
-            \mathbb{R}\setminus(\mathcal{U}\cup\mathcal{V})
+            \mathbb{R}\setminus(\mathcal{U}\cap\mathcal{V})
             =(\mathbb{R}\setminus\mathcal{U})\cup
             (\mathbb{R}\setminus\mathcal{V})
         \end{equation}
@@ -379,8 +466,9 @@
     \end{example}
     The construction used in both of these examples relies on the fact that
     $\mathbb{R}\setminus\{\,x\,\}$ is an \textit{open} subset for any real
-    number $x\in\mathbb{R}$. To phrase this differently, it required that
-    $\{\,x\,\}$ be a \textit{closed} set. This is what our intuition tells us.
+    number $x\in\mathbb{R}$ in both the finite and countable complement
+    topologies. To phrase this differently, the proof requires that
+    $\{\,x\,\}$ is a \textit{closed} set. This is what our intuition tells us.
     Singleton sets should always be closed. In a metric space $(X,\,d)$, given
     $x\in{X}$, the set $\{\,x\,\}$ is indeed closed since the only sequence
     $a:\mathbb{N}\rightarrow\{\,x\,\}$ is the constant sequence
@@ -390,7 +478,7 @@
     topology $\tau=\{\,\emptyset,\,\mathbb{R}\,\}$ lacks this feature. The
     \textit{only} closed sets are $\emptyset$ and $\mathbb{R}$, so in
     particular, given $x\in\mathbb{R}$, it is \textit{not} true that
-    $\{\,x\,\}$ is open. Fr\'{e}chet topological spaces (and hence Hausdorff
+    $\{\,x\,\}$ is closed. Fr\'{e}chet topological spaces (and hence Hausdorff
     topological spaces) do not lack this feature.
     \begin{theorem}
         If $(X,\,\tau)$ is a Fr\'{e}chet topological space, and if $x\in{X}$,
@@ -398,8 +486,8 @@
     \end{theorem}
     \begin{proof}
         For all $y\in{X}$, $y\ne{x}$, there is an open set
-        $\mathcal{U}_{y}\in\tau$ such that $x\notin\mathcal{U}_{y}$. Define
-        $\mathcal{O}$ by:
+        $\mathcal{U}_{y}\in\tau$ such that $x\notin\mathcal{U}_{y}$ and
+        $y\in\mathcal{U}_{y}$. Define $\mathcal{O}$ by:
         \begin{equation}
             \mathcal{O}=\{\,\mathcal{U}_{y}\in\tau\;|\;
                 y\in{X}\textrm{ and }y\ne{x}\,\}
@@ -426,7 +514,7 @@
         $\mathcal{U}=X\setminus\{\,y\,\}$ and $\mathcal{V}=X\setminus\{\,x\,\}$.
         Then $x\in\mathcal{U}$ since $x\ne{y}$, and
         $y\in\mathcal{V}$ since $y\ne{x}$. But also
-        $x\notin\mathcal{U}$ and $y\notin\mathcal{V}$. Since
+        $x\notin\mathcal{V}$ and $y\notin\mathcal{U}$. Since
         $\{\,x\,\}$ and $\{\,y\,\}$ are closed, by hypothesis, the sets
         $\mathcal{U}$ and $\mathcal{V}$ are the complements of closed sets
         and are therefore open. Thus, $(X,\,\tau)$ is a Fr\'{e}chet topological
@@ -449,8 +537,8 @@
     $\tau_{\mathbb{R}}$ the standard topology on $\mathbb{R}$. Since a finite
     set is countable, we instantly have that $\tau_{F}\subseteq\tau_{C}$.
     But also, since $(\mathbb{R},\,\tau_{\mathbb{R}})$ is a metrizable,
-    and therefore Hausdorff, and thus a Fr\'{e}chet topological space.
-    So points $\{\,x\,\}$ with $x\in\mathbb{R}$ are closed in
+    and therefore Hausdorff, and thus a Fr\'{e}chet topological space,
+    points $\{\,x\,\}$ with $x\in\mathbb{R}$ are closed in
     $\tau_{\mathbb{R}}$. Since the finite union of closed sets is still closed,
     we see that all finite subsets of $\mathbb{R}$ are closed in
     $\tau_{\mathbb{R}}$, and therefore sets whose complement is finite are
@@ -475,14 +563,15 @@
         Since for all $\tau\in{T}$, $\tau$ is a topology, we have that
         $\emptyset\in\tau$ and $X\in\tau$, and hence
         $\emptyset\in\bigcap{T}$ and $X\in\bigcap{T}$. If
-        $\mathcal{U},\mathcal{V}\in\bigcap{T}$, then for all $\tau\in{T}$,
-        $\mathcal{U},\mathcal{V}\in\tau$. But all $\tau\in{T}$ are topologies,
-        so $\mathcal{U}\cap\mathcal{V}\in\tau$ for all $\tau$, so
+        $\mathcal{U},\mathcal{V}\in\bigcap{T}$, then for all $\tau\in{T}$, it is
+        true that $\mathcal{U},\mathcal{V}\in\tau$. But all $\tau\in{T}$ are
+        topologies, so $\mathcal{U}\cap\mathcal{V}\in\tau$ for all $\tau$, so
         $\mathcal{U}\cap\mathcal{V}\in\bigcap{T}$. If
         $\mathcal{O}\subseteq\bigcap{T}$, then for all
         $\mathcal{U}\in\mathcal{O}$ and for all $\tau\in{T}$, we have
         $\mathcal{O}\subseteq\tau$. But then, since $\tau$ is a topology,
-        $\bigcup\mathcal{O}\in\tau$. Hence, $\bigcap\mathcal{O}\in\bigcap{T}$.
+        $\bigcup\mathcal{O}\in\tau$. Since this is true for all $\tau\in{T}$ we
+        have that $\bigcup\mathcal{O}\in\bigcap{T}$.
         So $\bigcap{T}$ is a topology.
     \end{proof}
     Given a set $X$, we use this theorem to define the topology
