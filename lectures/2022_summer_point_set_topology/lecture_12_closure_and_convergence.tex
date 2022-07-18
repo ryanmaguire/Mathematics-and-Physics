@@ -1,0 +1,250 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 12}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Closure, Interior, and Boundary}
+        In previous lectures we used large collections of topologies to
+        generate a new one. In particular, we took a collection
+        of subsets $\mathcal{B}\subseteq\mathcal{P}(X)$, and looked at the
+        set $T$ of all topologies $\tau$ on $X$ such that
+        $\mathcal{B}\subseteq\tau$. This set $T$ is non-empty since
+        $\mathcal{P}(X)\in{T}$. We then created a new topology via the
+        intersection $\bigcap{T}$. This is the \textit{generated} topology.
+        We now use a similar idea, but instead of collections of topologies,
+        we look at collections of open and closed sets. We've seen some laws
+        about open sets, these are the rules dictated in the definition of a
+        topology. Using the De Morgan law's we get similar statements about
+        closed sets.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then $\emptyset$ is closed.
+        \end{theorem}
+        \begin{proof}
+            Since $X$ is open and $\emptyset=X\setminus{X}$, $\emptyset$ is
+            closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then $X$ is closed.
+        \end{theorem}
+        \begin{proof}
+            Since $\emptyset$ is open and $X=X\setminus\emptyset$, $X$ is
+            closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if
+            $\mathcal{C},\,\mathcal{D}\subseteq{X}$ are closed, then
+            $\mathcal{C}\cup\mathcal{D}$ is closed.
+        \end{theorem}
+        \begin{proof}
+            Since $\mathcal{C}$ and $\mathcal{D}$ are closed,
+            $X\setminus\mathcal{C}$ and $X\setminus\mathcal{D}$ are open.
+            But then:
+            \begin{equation}
+                X\setminus(\mathcal{C}\cup\mathcal{D})
+                =(X\setminus\mathcal{C})\cap(X\setminus\mathcal{D})
+            \end{equation}
+            which is the intersection of two open sets, which is therefore open,
+            so $X\setminus(\mathcal{C}\cup\mathcal{D})$ is open. But then
+            $\mathcal{C}\cup\mathcal{D}$ is closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if
+            $\mathcal{O}\subseteq\mathcal{P}(X)$ is such that for all
+            $\mathcal{C}\in\mathcal{O}$ it is true that $\mathcal{C}$ is closed,
+            then $\bigcap\mathcal{O}$ is closed.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{O}$ is empty, then $\bigcap\mathcal{O}=\emptyset$,
+            which is closed. Otherwise we may write:
+            \begin{equation}
+                \bigcap\mathcal{O}
+                =\bigcap_{\mathcal{C}\in\mathcal{O}}\mathcal{C}
+                =\bigcap_{\mathcal{C}\in\mathcal{O}}\Big(
+                    X\setminus(X\setminus\mathcal{C})
+                \Big)
+                =X\setminus\bigcup_{\mathcal{C}\in\mathcal{O}}(
+                    X\setminus\mathcal{C}
+                )
+            \end{equation}
+            Since all $\mathcal{C}$ are closed, $X\setminus\mathcal{C}$ is open,
+            so this union is open, meaning $\bigcap\mathcal{O}$ is the
+            complement of an open set and is therefore closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if
+            $\mathcal{O}\subseteq\mathcal{P}(X)$ is a finite set such that for
+            all $\mathcal{C}\in\mathcal{O}$ it is true that $\mathcal{C}$ is
+            closed, then $\bigcup\mathcal{O}$ is closed.
+        \end{theorem}
+        \begin{proof}
+            We prove by induction. The base case is true by a previous
+            theorem. Suppose the statement is true for all such $\mathcal{O}$
+            with $n$ elements. Now, let $\mathcal{O}$ be a set of $n+1$ closed
+            sets. That is, we may write
+            $\mathcal{O}=\{\,\mathcal{C}_{0},\,\dots,\,\mathcal{C}_{n}\,\}$.
+            Define $\mathcal{D}$ via:
+            \begin{equation}
+                \mathcal{D}=\bigcup_{k=0}^{n-1}\mathcal{C}_{k}
+            \end{equation}
+            Then $\mathcal{D}$ is the intersection of $n$ closed sets, and by
+            the induction hypothesis it is closed. But then:
+            \begin{equation}
+                \bigcup\mathcal{O}
+                =\bigcup_{k=0}^{n}\mathcal{C}_{k}
+                =\mathcal{D}\cup\mathcal{C}_{n}
+            \end{equation}
+            which is the union of two closed sets, which is closed. Hence,
+            by induction, $\bigcup\mathcal{O}$ is closed for any finite
+            collection of closed sets.
+        \end{proof}
+        We use the intersection property to define \textit{closure}. Given
+        \textit{any} subset $A\subseteq{X}$ in a topological space $(X,\,\tau)$
+        there is at least one closed set containing $A$ since
+        $A\subseteq{X}$ and $X$ is closed. The \textit{closure} of $A$ is the
+        \textit{smallest} closed set containing $A$. We can be very precise
+        about this.
+        \begin{definition}[\textbf{Closure of a Set}]
+            The closure of a subset $A\subseteq{X}$ in a topological space
+            $(X,\,\tau)$ the set $\textrm{Cl}_{\tau}(A)$ defined by:
+            \begin{equation}
+                \textrm{Cl}_{\tau}(A)=\bigcap\{\,\mathcal{C}\subseteq{X}\;|\;
+                    \mathcal{C}\textrm{ is closed and }A\subseteq\mathcal{C}\,\}
+            \end{equation}
+            That is, the \textit{smallest} closed set containing $A$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space and $A\subseteq{X}$, then
+            $A\subseteq\textrm{Cl}_{\tau}(A)$.
+        \end{theorem}
+        \begin{proof}
+            Let $\mathcal{O}$ be the set of all closed sets containing $A$.
+            This set is non-empty since $X\in\mathcal{O}$. Given any element
+            $\mathcal{C}\in\mathcal{O}$ of the $A\subseteq\mathcal{C}$ by
+            definition. Hence, $A\subseteq\bigcap\mathcal{O}$. But
+            $\textrm{Cl}_{\tau}(A)=\bigcap\mathcal{O}$, completing the proof.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if $A\subseteq{X}$,
+            then $\textrm{Cl}_{\tau}(A)$ is closed.
+        \end{theorem}
+        \begin{proof}
+            Since $\textrm{Cl}_{\tau}(A)$ is the intersection of closed sets,
+            it is closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then
+            $\mathcal{C}\subseteq{X}$ is closed if and only if
+            $\textrm{Cl}_{\tau}(\mathcal{C})=\mathcal{C}$.
+        \end{theorem}
+        \begin{proof}
+            If $\mathcal{C}=\textrm{Cl}_{\tau}(\mathcal{C})$, then
+            $\mathcal{C}$ is closed since $\textrm{Cl}_{\tau}(\mathcal{C})$ is
+            closed. In the other direction, if
+            $\mathcal{C}$ is closed, then $\mathcal{C}$ is a closed set that
+            contains $\mathcal{C}$ since $\mathcal{C}\subseteq\mathcal{C}$. But
+            then $\textrm{Cl}_{\tau}(\mathcal{C})\subseteq\mathcal{C}$. But
+            $\mathcal{C}\subseteq\textrm{Cl}_{\tau}(\mathcal{C})$ is also true,
+            so $\mathcal{C}=\textrm{Cl}_{\tau}(\mathcal{C})$.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if $A\subseteq{X}$,
+            then $\textrm{Cl}_{\tau}\big(\textrm{Cl}_{\tau}(A)\big)=\textrm{Cl}_{\tau}(A)$.
+        \end{theorem}
+        \begin{proof}
+            Since $\textrm{Cl}_{\tau}(A)$ is closed, we have that
+            $\textrm{Cl}_{\tau}\big(\textrm{Cl}_{\tau}(A)\big)=\textrm{Cl}_{\tau}(A)$
+            by the previous theorem.
+        \end{proof}
+        \begin{example}
+            Take $\mathbb{R}$ with the standard topology. Let $\mathbb{Q}$
+            be the set of all rational numbers. The closure of
+            $\mathbb{Q}$ is all of $\mathbb{R}$. Every real number can be
+            written as a limit point of $\mathbb{Q}$ since we may approximate
+            any $x\in\mathbb{R}$ with a convergent sequence of rational numbers.
+            Because of this
+            $\textrm{Cl}_{\tau_{\mathbb{R}}}(\mathbb{Q})=\mathbb{R}$.
+        \end{example}
+        \begin{example}
+            The closure of the empty set in any topological space $(X,\,\tau)$
+            is just the empty set. This is a corrolary of the fact that for
+            closed  subsets $\mathcal{C}$ we have that
+            $\textrm{Cl}_{\tau}(\mathcal{C})=\mathcal{C}$. The empty set is,
+            in particular, a closed subset. For similar reasons,
+            $\textrm{Cl}_{\tau}(X)=X$.
+        \end{example}
+        The interior of a set uses similar ideas, but using open sets and
+        unions.
+        \begin{definition}[\textbf{Interior of a Set}]
+            
+        \end{definition}
+\end{document}
