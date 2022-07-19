@@ -1,0 +1,383 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+\newtheorem{notationx}{Notation}[section]
+\newtheorem{axiomx}{Axiom}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 13}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{First Countable}
+        So far we've seen that sequential spaces are the nice ones
+        (and Hausdorff spaces. Sequential \textit{and} Hausdorff is just
+        the bee's knees). We also have no tools for determining if a space is
+        sequential or not. One of the most mild conditions one can impose on a
+        topological space is that it be \textit{first-countable}. Most of the
+        topological spaces studied are first-countable, with some crucial
+        exceptions (the Zariski topology on $\mathbb{R}$ is not
+        first-countable). We now proceed to describe this notion, give examples,
+        prove some theorems, and show how first-countable spaces relate to
+        sequential spaces.
+        \begin{definition}[\textbf{Neighborhood Basis}]
+            A neighborhood basis in a topological space $(X,\,\tau)$ of a
+            point $x\in{X}$ is a subset $\mathcal{B}\subseteq\tau$ such that
+            for all $\mathcal{U}\in\mathcal{B}$ it is true that
+            $x\in\mathcal{U}$, and for all $\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{V}$, there is a $\mathcal{U}\in\mathcal{B}$ such
+            that $\mathcal{U}\subseteq\mathcal{V}$.
+        \end{definition}
+        First-countable spaces are defined in terms of neighborhood bases.
+        \begin{definition}[\textbf{First-Countable Topological Space}]
+            A first-countable topological space is a topological space
+            $(X,\,\tau)$ such that for all $x\in{X}$ there exists a countable
+            subset $\mathcal{B}\subseteq\tau$ such that
+            $\mathcal{B}$ is a neighborhood basis for $x$.
+        \end{definition}
+        \begin{example}
+            The real line with the standard topology is first-countable.
+            Given $x\in\mathbb{R}$, define
+            $\mathcal{U}_{n}=(x-\frac{1}{n+1},\,x+\frac{1}{n+1})$. The set
+            $\mathcal{B}=\{\,\mathcal{U}_{n}\;|\;n\in\mathbb{N}\,\}$ forms a
+            neighborhood basis for $x$. Given any open
+            $\mathcal{V}\subseteq\mathbb{R}$ with $x\in\mathcal{V}$, there is
+            an $\varepsilon>0$ such that for all $y\in\mathbb{R}$ with
+            $|x-y|<\varepsilon$, it is true that $y\in\mathcal{V}$. Choosing
+            $n$ so that $\frac{1}{n+1}<\varepsilon$ shows that
+            $\mathcal{U}_{n}\subseteq\mathcal{V}$.
+        \end{example}
+        \begin{example}
+            All Euclidean spaces are first-countable as well. We can apply a
+            similar trick in $\mathbb{R}^{n}$ by surrounding
+            $\mathbf{x}\in\mathbb{R}^{n}$ with countably many open balls of
+            radius $\frac{1}{n+1}$.
+        \end{example}
+        The ideas behind these two examples only require the existence of
+        open sets that get \textit{smaller}, in a sense. Metric spaces have
+        such a notion, \textit{open balls}.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a metrizable topological space, then
+            it is first-countable.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is metrizable, there is a metric $d$ on $X$ such
+            that $\tau=\tau_{d}$, where $\tau_{d}$ is the metric topology. Let
+            $x\in{X}$ and define:
+            \begin{equation}
+                \mathcal{B}=\{\,B_{\frac{1}{n+1}}^{(X,\,d)}(x)\;|\;
+                    n\in\mathbb{N}\,\}
+            \end{equation}
+            $\mathcal{B}$ is a countable neighborhood basis of $x$. First, since
+            $\frac{1}{n+1}>0$ for all $n\in\mathbb{N}$, these open balls are
+            non-empty and all contain the point $x$. Next, the set is countable
+            since the elements are indexed by the natural numbers. Lastly,
+            given any $\mathcal{U}\in\tau_{d}$, there is an
+            $\varepsilon>0$ such that:
+            \begin{equation}
+                B_{\varepsilon}^{(X,\,d)}(x)\subseteq\mathcal{U}
+            \end{equation} 
+            Choose $n\in\mathbb{N}$ such that $\frac{1}{n+1}<\varepsilon$. Then:
+            \begin{equation}
+                B_{\frac{1}{n+1}}^{(X,\,d)}(x)
+                \subseteq{B}_{\varepsilon}^{(X,\,d)}(x)
+                \subseteq\mathcal{U}
+            \end{equation}
+            hence $\mathcal{B}$ is a countable neighborhood basis of $x$,
+            so $(X,\,\tau)$ is first-countable.
+        \end{proof}
+        First-countable always implies sequential. It is often easier to prove a
+        particular space is first-countable rather than prove it is sequential,
+        so the following theorem has many uses in topology.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a first-countable topological space, then it is
+            sequential.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then there is $\mathcal{U}\subseteq{X}$ that is
+            sequentially open but not open. Since $\mathcal{U}$ is not open,
+            there is an $x\in\mathcal{U}$ such that for all $\mathcal{V}\in\tau$
+            with $x\in\mathcal{V}$, it is not true that
+            $\mathcal{V}\subseteq\mathcal{U}$ (otherwise we could write
+            $\mathcal{U}$ as the union of all such $\mathcal{V}_{x}$, which is
+            the union of open sets, and hence open, but $\mathcal{U}$ is not
+            open). Since $(X,\,\tau)$ is first countable, there is a countable
+            neighborhood basis $\mathcal{B}$ of $x$. Since $\mathcal{B}$ is
+            countable, there is a surjection
+            $\mathcal{V}:\mathbb{N}\rightarrow\mathcal{B}$. That is, we can
+            list the elements of $\mathcal{B}$ as:
+            \begin{equation}
+                \mathcal{B}=
+                \{\,\mathcal{V}_{0},\,\dots,\,\mathcal{V}_{n},\,\dots\,\}
+            \end{equation}
+            Define $\mathcal{W}_{n}$ via:
+            \begin{equation}
+                \mathcal{W}_{n}=\bigcap_{k=0}^{n}\mathcal{V}_{k}
+            \end{equation}
+            For all $n\in\mathbb{N}$ $\mathcal{W}_{n}$ is open since it is
+            the finite intersection of open sets. But $x\in\mathcal{W}_{n}$,
+            meaning there is an $a_{n}\in\mathcal{W}_{n}$ such that
+            $a_{n}\notin\mathcal{U}$ (again, since $\mathcal{U}$ is not open
+            and $x\in\mathcal{U}$ was chosen so that there are no open subsets
+            of $X$ that contain $x$ and fit inside $\mathcal{U}$). We must
+            show $a_{n}\rightarrow{x}$. Let
+            $\mathcal{E}\in\tau$ be an open set with $x\in\mathcal{E}$. Since
+            $\mathcal{B}$ is a neighborhood basis, there is an
+            $N\in\mathbb{N}$ such that $\mathcal{V}_{N}\subseteq\mathcal{E}$.
+            But then for all $n>N$, by the definition of $\mathcal{W}_{n}$,
+            we have that $\mathcal{W}_{n}\subseteq\mathcal{V}_{N}$ and hence
+            $\mathcal{W}_{n}\subseteq\mathcal{E}$. But then for all $n>N$ we
+            have $a_{n}\in\mathcal{E}$. Hence, $a_{n}\rightarrow{x}$. But
+            $\mathcal{U}$ is sequentially open and $x\in\mathcal{U}$, so if
+            $a_{n}\rightarrow{x}$, then there is an $N\in\mathbb{N}$ such that
+            for all $n\in\mathbb{N}$ with $n>N$ we have $a_{n}\in\mathcal{U}$.
+            But by definition of the sequence, for all $n\in\mathbb{N}$,
+            $a_{n}\notin\mathcal{U}$, a contradiction. Hence,
+            $\mathcal{U}$ is open and $(X,\,\tau)$ is sequential.
+        \end{proof}
+    \section{Second Countable}
+        Second-countable is a much stronger notion than first-countable. All of
+        the spaces the human brain can hope to visualize are second-countable.
+        Spaces we can envision are subsets of $\mathbb{R}^{n}$ for
+        some $n\in\mathbb{N}$. In other words, metric subspaces of Euclidean
+        spaces. Any metric subspace of $\mathbb{R}^{n}$ is second-countable,
+        so if you are to try and picture a topological space (without lying to
+        yourself), the space better be second-countable. With that, I give a
+        definition.
+        \begin{definition}[\textbf{Second-Countable Topological Space}]
+            A second-countable topological space is a topological space
+            $(X,\,\tau)$ such that there exists a countable basis
+            $\mathcal{B}$ for the topology $\tau$.
+        \end{definition}
+        Second-countable spaces are \textit{not too big}.
+        \begin{example}
+            The real line, with the standard topology, is second-countable.
+            Let $\mathcal{B}$ be the set of all intervals
+            $(a,\,b)$ with $a,b\in\mathbb{Q}$ and $a<b$. This set has the
+            cardinality of $\mathbb{Q}\times\mathbb{Q}$, which is countable.
+            It is also a basis, essentially because the rationals are dense
+            in $\mathbb{R}$. So $\mathcal{B}$ is a countable basis for the
+            real line, meaning $\mathbb{R}$ is second-countable.
+        \end{example}
+        \begin{example}
+            All Euclidean spaces are second-countable. We can apply a similar
+            trick, take all points $\mathbf{x}\in\mathbb{R}^{n}$ where every
+            coordinate in $\mathbf{x}$ is rational. That is, if
+            $\mathbf{x}=(x_{0},\,\dots,\,x_{n-1})$, require that
+            $x_{k}\in\mathbb{Q}$ for all $k\in\mathbb{Z}_{n}$. About each point
+            collect all open balls with rational radii. This set has cardinality
+            $\mathbb{Q}^{n+1}$, which again is countable
+            (essentially by induction). This also forms a basis, showing that
+            $\mathbb{R}^{n}$ is second-countable.
+        \end{example}
+        \begin{example}
+            Not every metrizable space is second-countable. Equip
+            $\mathbb{R}$ with the discrete topology $\mathcal{P}(\mathbb{R})$.
+            Since all of the singletons $\{\,x\,\}$ are open, any basis
+            $\mathcal{B}$ must include a copy of
+            $\{\,x\,\}$ for each $x\in\mathbb{R}$, meaning $\mathcal{B}$ cannot
+            be countable since $\mathbb{R}$ is uncountable. The space is
+            metrizable, however, since it comes from the discrete metric.
+        \end{example}
+        \begin{theorem}
+            If $(X,\,\tau)$ is second-countable, then it is first-countable.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is second-countable, there is a countable
+            basis $\mathcal{B}$. Given $x\in{X}$, define
+            $\mathcal{B}_{x}$ via:
+            \begin{equation}
+                \mathcal{B}_{x}=\{\,\mathcal{U}\in\mathcal{B}\;|\;
+                    x\in\mathcal{U}\,\}
+            \end{equation}
+            Since $\mathcal{B}_{x}$ is a subset of a countable set, it is
+            countable. It is also a neighborhood basis of $x$. By definition
+            every element of $\mathcal{B}_{x}$ contains $x$. Suppose
+            $\mathcal{V}\in\tau$ is an open set such that
+            $x\in\mathcal{V}$. Since $\mathcal{B}$ is a basis, there is a
+            $\mathcal{U}\in\mathcal{B}$ such that
+            $x\in\mathcal{U}$ and $\mathcal{U}\subseteq\mathcal{V}$. But since
+            $x\in\mathcal{U}$ it is true that $\mathcal{U}\in\mathcal{B}_{x}$.
+            But then $\mathcal{U}$ is an element of $\mathcal{B}_{x}$ such that
+            $\mathcal{U}\subseteq\mathcal{V}$. Hence, $(X,\,\tau)$ is
+            first-countable.
+        \end{proof}
+        The converse does not hold. We've shown that all metrizable spaces are
+        first-countable, but the discrete topology on $\mathbb{R}$ is a
+        metrizable space that is not second-countable. That is,
+        $\big(\mathbb{R},\,\mathcal{P}(\mathbb{R})\big)$ is a first-countable
+        space that is not second-countable.
+    \section{Separable}
+        Separable spaces are important in analysis and geometry.
+        The real line has the property that there is a countable subset
+        $\mathbb{Q}$ that can approximate every point on the line. We take this
+        idea to motivate the term separable.
+        \begin{definition}[\textbf{Separable Topological Space}]
+            A separable topological space is a topological space $(X,\,\tau)$
+            such that there exists a countable dense subset $A\subseteq{X}$.
+            That is, $A$ is countable and $\textrm{Cl}_{\tau}(A)=X$.
+        \end{definition}
+        \begin{example}
+            The real line is separable, taking $A=\mathbb{Q}$ gives us a
+            countable dense subset. $\mathbb{R}^{n}$ is also separable, setting
+            $A=\mathbb{Q}^{n}$ shows there is a countable dense subset of
+            $\mathbb{R}^{n}$.
+        \end{example}
+        The two previous examples of separable spaces are also second-countable.
+        This is not a coincidence, every second-countable space is
+        separable.
+        \begin{theorem}
+            If $(X,\,\tau)$ is second-countable, then it is separable.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is second-countable, there exists a countable
+            basis $\mathcal{B}'$ for $\tau$. Let
+            $\mathcal{B}\subseteq\mathcal{B}'$ be the set
+            of all non-empty elements of $\mathcal{B}'$. Since
+            $\mathcal{B}'$ is a countable basis, so is $\mathcal{B}$
+            (we're only removing the empty set). $\mathcal{B}$ now has the
+            property that for all $\mathcal{V}\in\mathcal{B}$,
+            $\mathcal{V}$ is non-empty. Since $\mathcal{B}$ is countable, there
+            is a surjection $\mathcal{U}:\mathbb{N}\rightarrow\mathcal{B}$. That
+            is, we may list the elements as:
+            \begin{equation}
+                \mathcal{B}=
+                \{\,\mathcal{U}_{0},\,\dots,\,\mathcal{U}_{n},\,\dots\,\}
+            \end{equation}
+            Since $\mathcal{U}_{n}$ is non-empty for all $n\in\mathbb{N}$, by
+            the axiom of countable choice we can find a sequence
+            $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\in\mathcal{U}_{n}$
+            for all $n\in\mathbb{N}$. Let $A$ be defined by:
+            \begin{equation}
+                A=\{\,a_{n}\in{X}\;|\;n\in\mathbb{N}\,\}
+            \end{equation}
+            $A$ is countable since
+            it is index by the natural numbers. It is also dense. For suppose
+            not. A set $B$ is dense if and only if for every non-empty open
+            subset $\mathcal{V}\in\tau$ the intersection $B\cap\mathcal{V}$ is
+            non-empty. Since we are supposing $A$ is not dense, there must be a
+            non-empty open subset $\mathcal{V}$ such that
+            $A\cap\mathcal{V}$ is empty. But since $\mathcal{V}$ is open and
+            $\mathcal{B}$ is a basis, there is a $\mathcal{U}_{n}\in\mathcal{B}$
+            such that $\mathcal{U}_{n}\subseteq\mathcal{V}$. But
+            $a_{n}\in\mathcal{U}_{n}$, so $a_{n}\in\mathcal{V}$. But
+            $a_{n}\in{A}$, which is a contradiction since
+            $A\cap\mathcal{V}=\emptyset$. Hence, $A$ is dense.
+        \end{proof}
+        \begin{example}[\textbf{The Particular Point Topology}]
+            This theorem does not reverse. There are topological spaces that
+            are separable but not second-countable. The easiest example to
+            describe is the \textit{particular point topology} on
+            $\mathbb{R}$. Define $\mathcal{U}\subseteq\mathbb{R}$ to be open in
+            $\tau$ if and only if $\mathcal{U}=\emptyset$ or $0\in\mathcal{O}$.
+            This space is separable since $A=\{\,0\,\}$ is a dense subset and it
+            is certainly countable since it is finite. $A$ is dense since the
+            only closed set containing $\{\,0\,\}$ is $\mathbb{R}$.
+            Given any closed set $\mathcal{C}$, $\mathbb{R}\setminus\mathcal{C}$
+            is open, meaning either $\mathbb{R}\setminus\mathcal{C}$ is either
+            empty, or $0\in\mathbb{R}\setminus\mathcal{C}$. So if
+            $\mathcal{C}$ is a closed set with $0\in\mathcal{C}$, it must be
+            true that $\mathbb{R}\setminus\mathcal{C}=\emptyset$. Hence, the
+            only closed set contain $0$ is $\mathbb{R}$. So,
+            $\textrm{Cl}_{\tau}\big(\{\,0\,\}\big)=\mathbb{R}$. This space is
+            not second-countable. Every set
+            $\{\,0,\,x\,\}$ for all $x\in\mathbb{R}$ is open, so a basis must
+            contain a copy of each of these. The cardinality of such a basis
+            must then be at least as big as $\mathbb{R}\setminus\{\,0\,\}$,
+            which is uncountable, meaning $(\mathbb{R},\,\tau)$ is not
+            second-countable.
+        \end{example}
+        Another example of a separable space that is not second-countable is
+        the \textit{Sorgenfrey line}. It is like the real line, but has a
+        larger topology that produces some unintuitive results. To prove this
+        space is not second-countable requires the following theorem.
+        \begin{theorem}
+            If $X$ is a set, if $(X,\,\tau)$ is a second-countable topological
+            space, and if $\mathcal{B}$ is a basis for $\tau$, then there exists
+            a countable basis $\mathcal{B}'\subseteq\mathcal{B}$.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is second-countable, there is a countable basis
+            $\mathcal{B}''$. That is, there is a surjection
+            $\mathcal{U}'':\mathbb{N}\rightarrow\mathcal{B}''$ so that we may
+            list the elements as:
+            \begin{equation}
+                \mathcal{B}''=
+                \{\mathcal{U}_{0}'',\,\dots,\,\mathcal{U}_{n}'',\,\dots\,\}
+            \end{equation}
+            But since $\mathcal{B}$ is a basis for $\tau$, for
+            each $\mathcal{U}_{n}''\in\mathcal{B}''$ there is a
+            $\mathcal{U}_{n}'\in\mathcal{B}$ such that
+            $\mathcal{U}_{n}'\subseteq\mathcal{U}_{n}''$. Define $\mathcal{B}'$
+            via:
+            \begin{equation}
+                \mathcal{B}'=\{\,\mathcal{U}_{n}'\;|\;n\in\mathbb{N}\,\}
+            \end{equation}
+            $\mathcal{B}'$ is countable since it is indexed by the natural
+            numbers. It is also a basis. It covers $X$ for given
+        \end{proof}
+\end{document}
