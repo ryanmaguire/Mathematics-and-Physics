@@ -1,0 +1,630 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{problem}{Problem}
+
+\title{Point-Set Topology: Homework 1}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\makeatletter
+\newcommand{\thickbar}{\mathpalette\@thickbar}
+\newcommand{\@thickbar}[2]{{#1\mkern1.5mu\vbox{
+    \sbox\z@{$#1\mkern-1.5mu#2\mkern-1.5mu$}%
+    \sbox\tw@{$#1\overline{#2}$}%
+    \dimen@=\dimexpr\ht\tw@-\ht\z@-.8\p@\relax
+    \hrule\@height.6\p@ % adjust for the desired rule thickness
+    \vskip\dimen@
+    \box\z@}\mkern1.5mu}
+}
+\makeatother
+
+
+\begin{document}
+    \maketitle
+    \color{blue}
+    \begin{problem}
+        A few more notes about metric spaces. A \textit{contraction} on a
+        metric space $(X,\,d)$ is a function $f:X\rightarrow{X}$ such that
+        for all $x,y\in{X}$ it is true that
+        $d\big(f(x),\,f(y)\big)\leq{r}\,d(x,\,y)$ for some fixed $0\leq{r}<1$.
+        This means the function $f$ \textit{squeezes} the points together.
+        You will prove one of the most celebrated theorems of the theory of
+        metric spaces, the \textit{Banach Fixed Point Theorem}.
+        If $(X,\,d)$ is a non-empty complete metric space, and if
+        $f:X\rightarrow{X}$ is
+        a contraction, then there is a unique point $x\in{X}$ such that
+        $f(x)=x$. That is, $f$ has a unique \textit{fixed-point}, a point that
+        is not changed by $f$.
+        \begin{itemize}
+            \item (2 Points) Prove that a contraction $f:X\rightarrow{X}$ is
+                continuous.
+            \item (2 Points) Prove that if $f:X\rightarrow{X}$ has a
+                fixed-point $x\in{X}$, then $x$ is the only fixed-point.
+                [Hint: What if $y\in{X}$ is another fixed-point? Anything wrong?]
+            \item (2 Points) Let $a_{0}\in{X}$ be arbitrary, define $a_{n}$
+                inductively via $a_{n+1}=f(a_{n})$. Prove that for all
+                $n\in\mathbb{N}$,
+                $d(a_{n+1},\,a_{n})\leq{r}^{n}d(a_{1},\,a_{0})$, where
+                $0\leq{r}<1$ is a value such that for all
+                $x,y\in{X}$ we have
+                $d\big(f(x),\,f(y)\big)\leq{r}\,d(x,\,y)$.
+            \item (2 Points) Conclude that $a:\mathbb{N}\rightarrow{X}$ is a
+                Cauchy sequence. [Hint: Apply the triangle inequality and use
+                the geometric series from calculus].
+            \item (2 Points) Since $(X,\,d)$ is complete, the sequence
+            converges. Let $x\in{X}$ be such that
+            $a_{n}\rightarrow{x}$. Show that $f(x)=x$.
+            [Hint: Use the continuity of $f$ that you proved in the first part
+            of this problem]
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        A contraction is continuous. Let $a:\mathbb{N}\rightarrow{X}$ be a
+        convergent sequence and let $x\in{X}$ be a limit of $a$. That is:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}d(x,\,a_{n})=0
+        \end{equation}
+        But since $f$ is a contraction there is an $r\in[0,\,1)$ such that for
+        all $a,b\in{X}$ we have $d\big(f(a),\,f(b)\big)\leq{r}\,d(a,\,b)$.
+        But then:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}d\big(f(x),\,f(a_{n})\big)
+            \leq\lim_{n\rightarrow\infty}r\,d(x,\,a_{n})
+            =0
+        \end{equation}
+        so $f(a_{n})\rightarrow{f}(x)$, and therefore $f$ is continuous.
+        \par\hfill\par
+        If $f:X\rightarrow{Y}$ is a contraction, and if $x\in{X}$ is a
+        fixed-point, then it is the only fixed-point. Suppose
+        $y\in{X}$ is a different fixed-point, $x\ne{y}$. Then:
+        \begin{equation}
+            d(x,\,y)
+            =d\big(f(x),\,f(y)\big)
+            \leq{r}\,d(x,\,y)
+            <d(x,\,y)
+        \end{equation}
+        so $d(x,\,y)<d(x,\,y)$, which is a contradiction. So $x$ is the
+        unique fixed-point if it exists.
+        \par\hfill\par
+        We can prove $d(a_{n+1},\,a_{n})\leq{r}^{n}d(a_{1},\,a_{0})$ by
+        induction. The base case is true since $f$ is a contraction. That is:
+        \begin{equation}
+            d(a_{2},\,a_{1})
+            =d\big(f(a_{1}),\,f(a_{0})\big)
+            \leq{r}\,d(a_{1},\,a_{0})
+        \end{equation}
+        Now suppose the claim is true for $n\in\mathbb{N}$. We must prove this
+        implies the claim is true for $n+1$. We have:
+        \begin{equation}
+            d(a_{n+2},\,a_{n+1})
+            =d\big(f(a_{n+1}),\,f(a_{n})\big)
+            \leq{r}\,d(a_{n+1},\,a_{n})
+            \leq{r}^{n+1}d(a_{1},\,a_{0})
+        \end{equation}
+        where this last inequality follows from the induction hypothesis.
+        Therefore, by the principle of induction, the claim is true for
+        all $n\in\mathbb{N}$.
+        \par\hfill\par
+        This inequality can be used to prove that $a:\mathbb{N}\rightarrow{X}$
+        is a Cauchy sequence. Repeatedly using the triangle inequality,
+        if $m,n\in\mathbb{N}$ and $m<n$, we have:
+        \begin{align}
+            d(a_{m},\,a_{n})
+            &\leq{d}(a_{m},\,a_{m+1})+d(a_{m+1},\,a_{n})\\
+            &\leq{d}(a_{m},\,a_{m+1})+d(a_{m+1},\,a_{m+2})+d(a_{m+2},\,a_{n})
+        \end{align}
+        Inductively we obtain:
+        \begin{equation}
+            d(a_{m},\,a_{n})
+            \leq\sum_{k=m}^{n-1}d(a_{k},\,a_{k+1})
+        \end{equation}
+        Invoking the inequality we just proved, we get:
+        \begin{equation}
+            d(a_{m},\,a_{n})
+            \leq\sum_{k=m}^{n-1}d(a_{k},\,a_{k+1})
+            \leq\sum_{k=m}^{n-1}r^{k}\,d(a_{0},\,a_{1})
+        \end{equation}
+        We can simplify this and use the geometric series.
+        \begin{align}
+            d(a_{m},\,a_{n})
+            &\leq\sum_{k=m}^{n-1}r^{k}\,d(a_{0},\,a_{0})\\
+            &=d(a_{0},\,a_{1})\sum_{k=m}^{n-1}r^{k}\\
+            &<d(a_{0},\,a_{1})\sum_{k=m}^{\infty}r^{k}\\
+            &=d(a_{0},\,a_{1})\frac{r^{m}}{1-r}
+        \end{align}
+        But $0\leq{r}<1$, so $r^{m}$ converges to zero. Given
+        $\varepsilon>0$, choose $N$ such that
+        $d(a_{0},\,a_{1})\frac{r^{N}}{1-r}<\varepsilon$. Then, choosing
+        $m,n>N$, we get $d(a_{m},\,a_{n})<\varepsilon$ showing us that
+        $a$ is a Cauchy sequence.
+        \par\hfill\par
+        Since $(X,\,d)$ is complete, there is some $x\in{X}$ such that
+        $a_{n}\rightarrow{x}$. But then, since $f$ is continuous, we have:
+        \begin{align}
+            x&=\lim_{n\rightarrow\infty}a_{n+1}\\
+            &=\lim_{n\rightarrow\infty}f(a_{n})\\
+            &=f\big(\lim_{n\rightarrow\infty}a_{n}\big)\\
+            &=f(x)
+        \end{align}
+        so $x$ is a fixed-point.
+    \end{proof}
+    \clearpage
+    \color{blue}
+    \begin{problem}
+        A dense subset of a topological space $(X,\,\tau)$ is a subset
+        $A\subseteq{X}$ such that $\textrm{Cl}_{\tau}(A)=X$. That is, every
+        point in $X$ is a limit point of $A$. For example, the rationals
+        $\mathbb{Q}$ are a dense subset of the reals $\mathbb{R}$.
+        A Baire topological space is a topological space $(X,\,\tau)$ such that
+        for any non-empty countable set $\mathcal{O}\subseteq\tau$ with the
+        property that $\mathcal{U}\in\mathcal{O}$ implies $\mathcal{U}$ is
+        dense, the intersection $\bigcap\mathcal{U}$ is also dense. Here you
+        will prove the first of Baire's Category Theorems (Note: The Baire
+        category theorem has absolutely nothing to do with category theory.
+        The terminology for this theorem came long before category theory was
+        initiated). If $(X,\,d)$ is a complete metric space, and if
+        $\tau_{d}$ is the metric topology, then $(X,\,\tau_{d})$ is a Baire
+        topological space.
+        \begin{itemize}
+            \item (2 Points) Prove that, for a topological space
+                $(Y,\,\tau_{Y})$, $A\subseteq{Y}$ is dense if and only if
+                for every non-empty open set $\mathcal{U}\subseteq{Y}$, the
+                intersection $\mathcal{U}\cap{A}$ is non-empty.
+            \item (2 Points) It now suffices to prove that if
+                $\mathcal{W}\subseteq{X}$ is open and non-empty, then
+                $\mathcal{W}\cap\bigcap\mathcal{O}$ is non-empty. Show that if
+                $\mathcal{V}$ is an open ball,
+                $\mathcal{V}=B_{r}^{(X,\,d)}(x)$, then there is an
+                $\varepsilon>0$ such that
+                $\textrm{Cl}_{\tau}\big(B_{\varepsilon}^{(X,\,d)}(x)\big)\subseteq\mathcal{V}$.
+                That is, there is always a \textit{closed ball} inside of an
+                open ball.
+            \item (2 Points) Since $\mathcal{O}$ is countable, there is a surjective
+                sequence $\mathcal{U}:\mathbb{N}\rightarrow\mathcal{O}$. That
+                is, we may list the elements of $\mathcal{O}$ as $\mathcal{U}_{0}$,
+                $\mathcal{U}_{1}$, and so on. Since $\mathcal{U}_{0}$ is open
+                and dense, $\mathcal{U}_{0}\cap\mathcal{W}$ is non-empty. Hence
+                there an $a_{0}\in\mathcal{U}_{0}\cap\mathcal{W}$. Since the
+                intersection of open sets is open, there is a positive $r_{0}<1$
+                such that
+                $B_{r_{0}}^{(X,\,d)}(a_{0})\subseteq\mathcal{U}_{0}\cap\mathcal{W}$.
+                By the previous part of the problem, there is a positive
+                $\varepsilon_{0}<r_{0}$ such that
+                $\textrm{Cl}_{\tau_{d}}\big(B_{\varepsilon_{0}}^{(X,\,d)}(a_{0})\big)\subseteq{B}_{r_{0}}^{(X,\,d)}(a_{0})$.
+                Recursively we may define $a_{n}$, $r_{n}$, and
+                $\varepsilon_{n}$ such that $r_{n}<\frac{1}{n+1}$,
+                $\varepsilon_{n}<r_{n}$, and $a_{n}$ is such that:
+                \begin{equation}
+                    \textrm{Cl}_{\tau_{d}}
+                        \big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})\big)
+                    \subseteq{B}_{r_{n}}^{(X,\,d)}(a_{n})
+                    \subseteq\mathcal{W}\cap\bigcap_{k=0}^{n}\mathcal{U}_{n}
+                \end{equation}
+                and such that:
+                \begin{equation}
+                    \textrm{Cl}_{\tau_{d}}
+                        \big(B_{\varepsilon_{n+1}}^{(X,\,d)}(a_{n+1})\big)
+                        \subseteq{B}_{r_{n}}^{(X,\,d)}(a_{n})
+                \end{equation}
+                Show that $a:\mathbb{N}\rightarrow{X}$ is a Cauchy sequence.
+            \item (2 Points) Since $(X,\,d)$ is complete, there is an $x\in{X}$ such that
+                $a_{n}\rightarrow{x}$. Show that, for all $n\in\mathbb{N}$ it
+                is true that $x\in\mathcal{U}_{n}$.
+                [Hint: Since $\textrm{Cl}_{\tau_{d}}\big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})\big)$
+                is closed, it contained all of its limit points. Show that
+                $x$ is a limit point of this for all $n$. Conclude that
+                $x$ is in $\mathcal{U}_{n}$ since
+                $\textrm{Cl}_{\tau_{d}}\big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})\big)\subseteq\mathcal{U}_{n}$.
+            \item (2 Points) Show that $x\in\mathcal{W}$ as well, and therefore
+                $x\in\mathcal{W}\cap\bigcap\mathcal{O}$, proving the intersection
+                is non-empty, and therefore $\bigcap\mathcal{O}$ is dense.
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    Suppose $A\subseteq{Y}$ is dense. Let $\mathcal{U}\in\tau_{Y}$ and
+    suppose $A\cap\mathcal{U}=\emptyset$. Then
+    $Y\setminus\mathcal{U}$ is a closed set that contains $A$. But then
+    $\textrm{Cl}_{\tau}(A)\subseteq{Y}\setminus\mathcal{U}$, which is a
+    contradiction since $A$ is dense, so $\textrm{Cl}_{\tau}(A)=Y$. Hence,
+    $A\cap\mathcal{U}$ is non-empty.
+    \par\hfill\par
+    Now, suppose for every non-empty $\mathcal{U}\in\tau_{Y}$ we have that
+    $A\cap\mathcal{U}\ne\emptyset$. Suppose $y\in{Y}$ is such that
+    $y\notin\textrm{Cl}_{\tau}(A)$. Then, by the definition of closure, there is
+    a closed set $\mathcal{C}\subseteq{Y}$ such that
+    $\textrm{Cl}_{\tau}(A)\subseteq\mathcal{C}$ and $y\notin\mathcal{C}$. But
+    if $\mathcal{C}$ is closed, then $Y\setminus\mathcal{C}$ is open. But
+    since $\textrm{Cl}_{\tau}(A)\subseteq\mathcal{C}$ and
+    $A\subseteq\textrm{Cl}_{\tau}(A)$, we have that
+    $A\cap(Y\setminus\mathcal{C})=\emptyset$. But $Y\setminus\mathcal{C}$ is
+    non-empty since $y\in{Y}\setminus\mathcal{C}$. But all non-empty open
+    subsets of $Y$ have non-empty intersection with $A$, which is a
+    contradiction. So $A$ is dense.
+    \par\hfill\par
+    The closure of an open ball is a closed ball. The closed ball of
+    radius $\varepsilon$ in $(X,\,d)$ centered at $x\in{X}$ is defined by:
+    \begin{equation}
+        \thickbar{B}_{\varepsilon}^{(X,\,d)}(x)=
+        \{\,y\in{X}\;|\;d(x,\,y)\leq\varepsilon\,\}
+    \end{equation}
+    Slight change from the open ball, we've replaced $<$ with $\leq$ in the
+    definition. Firstly, closed balls are closed. Given $\varepsilon>0$,
+    $x\in{X}$, and $y\notin\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)$, choose
+    $r=d(x,\,y)-\varepsilon$. Since $y$ is not in the closed ball centered
+    at $x$ of radius $\varepsilon$ we see that $d(x,\,y)>\varepsilon$,
+    so $d(x,\,y)-\varepsilon$ is positive. Suppose
+    $z\in{B}_{r}^{(X,\,d)}(y)\cap\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)$. Then:
+    \begin{equation}
+        d(x,\,y)\leq{d}(x,\,z)+d(z,\,y)
+        <\varepsilon+d(x,\,y)-\varepsilon
+        =d(x,\,y)
+    \end{equation}
+    so $d(x,\,y)<d(x,\,y)$, which is a contradiction. So
+    ${B}_{r}^{(X,\,d)}(y)\cap\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)=\emptyset$.
+    But then the complement of $\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)$,
+    meaning $\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)$ is closed. Given
+    $\varepsilon>0$, we then have:
+    \begin{equation}
+        B_{\varepsilon}^{(X,\,d)}(x)
+        \subseteq\textrm{Cl}_{\tau}\big(B_{\varepsilon}^{(X,\,d)}(x)\big)
+        \subseteq\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)
+    \end{equation}
+    Choosing $\varepsilon=r/2$ we have:
+    \begin{equation}
+        \textrm{Cl}_{\tau}\big(B_{\varepsilon}^{(X,\,d)}(x)\big)
+        \subseteq\thickbar{B}_{\varepsilon}^{(X,\,d)}(x)
+        \subseteq{B}_{r}^{(X,\,d)}(x)
+    \end{equation}
+    \textbf{NOTE:} This does not reverse, in general. The closure of the
+    open ball does not need to be exactly the closed ball, just a subset of
+    it. Take $X$ to be any set and $d$ the discrete metric. Given $x\in{X}$,
+    the open ball of radius $1$ centered at $x$ is just $\{\,x\,\}$. There
+    are no other points $y$ with $d(x,\,y)<1$. The closure of this is also
+    $\{\,x\,\}$. However, the closed ball of radius 1 is all of $X$. Every
+    point $y\in{X}$ is such that $d(x,\,y)\leq{1}$.
+    \par\hfill\par
+    The sequence $a:\mathbb{N}\rightarrow{X}$ constructed is Cauchy. Given
+    $\varepsilon>0$, choose $N\in\mathbb{N}$ such that $N+1>1/\varepsilon$.
+    Then, for $m,n>N$ with $m<n$ we have, since the open balls are nested,
+    the following:
+    \begin{equation}
+        d(a_{m},\,a_{n})<\frac{1}{m+1}<\frac{1}{N+1}<\varepsilon
+    \end{equation}
+    so the sequence is Cauchy.
+    \par\hfill\par
+    Given $N\in\mathbb{N}$, for $n>N$ the points $a_{n}$ lie entirely
+    in $\textrm{Cl}_{\tau}\big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})$, which
+    is closed. Since it is a Cauchy sequence and $(X,\,d)$ is complete, the
+    sequence converges. But closed sets contain their limit points, so the limit
+    $x$ is contained in
+    $\textrm{Cl}_{\tau}\big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})$. But
+    $\textrm{Cl}_{\tau}\big(B_{\varepsilon_{n}}^{(X,\,d)}(a_{n})\subseteq\mathcal{U}_{n}$,
+    so the limit is contained in $\mathcal{U}_{n}$ as well. Since this is
+    true of all $n\in\mathbb{N}$, we have that
+    $x\in\bigcap_{n=0}^{\infty}\mathcal{U}_{n}=\bigcap\mathcal{O}$.
+    \par\hfill\par
+    The closures of these open balls are also constructed so that they are
+    contained inside of $\mathcal{W}$ for each $n\in\mathbb{N}$, see the
+    recursive definition above. Meaning the limit is also contained in
+    $\mathcal{W}$, and hence
+    $\mathcal{W}\cap\bigcap\mathcal{O}$ is non-empty.
+    \clearpage
+    \color{blue}
+    \begin{problem}
+        From class, a Kolmogorov topology on a set $X$ is a topology
+        $\tau$ on $X$ such that for all $x,y\in{X}$, there is an open set
+        $\mathcal{U}\in\tau$ such that either $x\in\mathcal{U}$ and
+        $y\notin\mathcal{U}$, or $x\notin\mathcal{U}$ and $y\in\mathcal{U}$.
+        That is, a Kolmogorov topology is a topology where it is always possible
+        to tell two points apart using open sets.
+        \begin{itemize}
+            \item (2 Points)
+                There are 8,977,053,873,043 distinct topologies on the set
+                $\mathbb{Z}_{10}$, 6,611,065,248,783 Kolmogorov topologies,
+                and 4,717,687 topologies that are not homeomorphic. Quite a lot.
+                It would be cruel to ask you to find them all. Instead, find all
+                distinct topologies on $\mathbb{Z}_{2}$ (there are 4), all
+                distinct Kolmogorov topologies (there's 3), all non-homeomorphic
+                topologies (3), all non-homeomorphic Kolmogorov topologies
+                (2), and all Hausdorff topologies (1). [Hint: This may seem
+                like a lot, but it really isn't. Find the 4 topologies on
+                $\mathbb{Z}_{2}$. Then examine which are Kolmogorov and which
+                are homeomorphic, etc.]
+            \item (2 Points)
+                On $\mathbb{Z}_{3}$ there are 29 distinct topologies, 19
+                distinct Kolmogorov topologies, 9 non-homeomorphic topologies,
+                and 5 non-homeomorphic Kolmogorov topologies. Find 2
+                non-homeomorphic Kolmogorov topologies.
+                [Hint: Hausdorff implies Kolmogorov. Can you find the
+                Hausdorff topology?]
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        The four topologies on $\mathbb{Z}_{2}$ are given pictorial in
+        Fig.~\ref{fig:all_topologies_on_z2}. They are the indiscrete topology
+        $\tau_{0}=\big\{\,\emptyset,\,\mathbb{Z}_{2}\,\big\}$, the topology
+        $\tau_{1}=\big\{\,\emptyset,\,\{\,0\,\},\,\mathbb{Z}_{2}\,\big\}$,
+        the topology
+        $\tau_{2}=\big\{\,\emptyset,\,\{\,1\,\},\,\mathbb{Z}_{2}\,\big\}$,
+        and the discrete topology
+        $\tau_{3}=\big\{\,\emptyset,\,\{\,0\,\},\,\{\,1\,\},\,\mathbb{Z}_{2}\,\big\}$.
+        All topologies but the indiscrete topology are Kolmogorov since all
+        others can topologically distinguish $0$ and $1$ via open sets. The
+        indiscrete topology is not Kolmogorov, that points $0$ and $1$ are
+        topologically indistringuishable in this topology. The topologies
+        $\tau_{1}$ and $\tau_{2}$ are essentially the same, we've just
+        relabelled $0$ and $1$, and indeed these topologies are homeomorphic
+        on $\mathbb{Z}_{2}$. The discrete topology is the only Hausdorff
+        topology on $\mathbb{Z}_{2}$.
+        \par\hfill\par
+        For $\mathbb{Z}_{3}$, we can use the fact that in a Hausdorff
+        topological space singleton sets $\{\,x\,\}$ are closed. Since the
+        finite union of closed sets is closed, the only Hausdorff topology on
+        a finite set is the discrete topology. So,
+        $\mathcal{P}(\mathbb{Z}_{3})$ is a Hausdorff, and hence Kolmogorov,
+        topology on $\mathbb{Z}_{3}$. We can find another by modifying an
+        idea from class. The topology generated on $\mathbb{N}$ by all sets of
+        the form $\mathbb{Z}_{n}$ with $n\in\mathbb{N}$ can be modified to
+        give a topology on $\mathbb{Z}_{3}$. Declare
+        $\tau=\{\,\mathbb{Z}_{0},\,\mathbb{Z}_{1},\,\mathbb{Z}_{2},\,\mathbb{Z}_{3}\,\}$.
+        This is a topology since the sets are all nested, so the intersection
+        and union properties are satisfied, but also
+        $\emptyset=\mathbb{Z}_{0}\in\tau$ and $\mathbb{Z}_{3}\in\tau$. It is
+        Kolmogorov as well. Given $m,n\in\mathbb{Z}_{3}$ with
+        $m<n$, $m\in\mathbb{Z}_{n}$ but $n\notin\mathbb{Z}_{n}$. 
+    \end{proof}
+    \begin{figure}
+        \centering
+        \includegraphics{../../images/all_topologies_on_z2.pdf}
+        \caption{Topologies on $\mathbb{Z}_{2}$}
+        \label{fig:all_topologies_on_z2}
+    \end{figure}
+    \clearpage
+    \color{blue}
+    \begin{problem}
+        (4 Points) Let $(X,\,\tau)$ be a sequential topological space and $R$ an
+        equivalence relation on $X$. Prove that the quotient space
+        $(X/R,\,\tau_{X/R})$ is sequential as well.
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        Suppose not and let $\tilde{\mathcal{U}}\subseteq{X/R}$ be sequentially
+        open but not open. Let $q:X\rightarrow{X}/R$ be the quotient map,
+        $q(x)=[x]$. Then, by the definition of the quotient topology,
+        $q^{-1}[\tilde{\mathcal{U}}]$ is not open since $\tilde{\mathcal{U}}$
+        is not open. Let $\mathcal{U}=q^{-1}[\tilde{\mathcal{U}}]$. But
+        $(X,\,\tau)$ is sequential, so if $\mathcal{U}$ is not open, then it
+        is not sequentially open. But then there is a convergent sequence
+        $a:\mathbb{N}\rightarrow{X}$ that converges to a point $x\in\mathcal{U}$
+        such that for all $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ with
+        $n>N$ such that $a_{n}\notin\mathcal{U}$. But the quotient map
+        $q$ is continuous, and continuous functions are sequentially continuous,
+        so if $a_{n}\rightarrow{x}$, then $q(a_{n})\rightarrow{q}(x)$. But then
+        $q(a_{n})$ is a convergent sequence in $X/R$ that converges to a
+        point $q(x)\in\tilde{\mathcal{U}}$. But $\tilde{\mathcal{U}}$ is
+        sequentially open, so there is an $N\in\mathbb{N}$ such that for all
+        $n\in\mathbb{N}$ with $n>N$ it is true that
+        $q(a_{n})\in\tilde{\mathcal{U}}$. But then, by the definition of
+        pre-image, we have $a_{n}\in\mathcal{U}$ for all $n>N$, a contradiction.
+        Hence, $\tilde{\mathcal{U}}$ is open and
+        $(X/R,\,\tau_{X/R})$ is sequential.
+    \end{proof}
+    \clearpage
+    \color{blue}
+    \begin{problem}
+        Kazimeirz Kuratowski gave an alternative, but equivalent, definition
+        of topology. To him the notion of \textit{closure} was sufficient to
+        describe topological spaces. A Kuratowski closure operator on a set
+        $X$ is a function $\sigma:\mathcal{P}(X)\rightarrow\mathcal{P}(X)$
+        such that, for all $A,B\subseteq{X}$:
+        \begin{enumerate}
+            \item $\sigma(\emptyset)=\emptyset$
+            \item $A\subseteq{\sigma}(A)$
+            \item $\sigma(A)=\sigma\big(\sigma(A)\big)$
+            \item $\sigma(A\cup{B})=\sigma(A)\cup\sigma(B)$
+        \end{enumerate}
+        A Kuratowski space is an ordered pair $(X,\,\sigma)$ where $X$ is a set
+        and $\sigma$ is a Kuratowski closure operator on $X$. We have seen in
+        class that, if $(X,\,\tau)$ is a topological space, then
+        $\textrm{Cl}_{\tau}$ is a Kuratowski closure operator. Now, let's go
+        the other way.
+        \begin{itemize}
+            \item (2 Points) Show that, given $(X,\,\sigma)$, the set
+                $\tau_{\sigma}$ defined by:
+                \begin{equation}
+                    \tau_{\sigma}=\{\,X\setminus\mathcal{C}\in\mathcal{P}(X)
+                        \;|\;\sigma(\mathcal{C})=\mathcal{C}\,\}
+                \end{equation}
+                is a topology on $X$. (We proved that, in topological spaces,
+                $A\subseteq{X}$ being closed is equivalent to
+                $\textrm{Cl}_{\tau}(A)=A$. We are
+                intuitively defining $\tau_{\sigma}$ as the set of all
+                \textit{complements of closed sets}).
+            \item (6 Points) If $(X,\,\sigma_{X})$ and $(Y,\,\sigma_{Y})$ are
+                Kuratowski spaces, $f:X\rightarrow{Y}$ is continuous if for all
+                $A\subseteq{X}$ it is true that
+                $f[\sigma_{X}(A)]\subseteq\sigma_{Y}(f[A])$. Show this is
+                equivalent to continuity in topology. That is, if
+                $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are topological spaces,
+                then $f:X\rightarrow{Y}$ is continuous if and only if
+                for all $A\subseteq{X}$ it is true that
+                $f[\textrm{Cl}_{\tau_{X}}(A)]\subseteq\textrm{Cl}_{\tau_{Y}}(f[A])$.
+                [Hint: We proved $f:X\rightarrow{Y}$ is continuous if and only
+                if for all closed $\mathcal{D}\subseteq{Y}$, the pre-image
+                $f^{-1}[\mathcal{D}]$ is closed. Use this definition.]
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    As a consequence of $\sigma(A\cup{B})=\sigma(A)\cup\sigma(B)$ we have
+    that if $A\subseteq{B}$, then $\sigma(A)\subseteq\sigma(B)$. This is
+    because, given $A\subseteq{B}$, we obtain:
+    \begin{equation}
+        \sigma(B)=\sigma(A\cup{B})=\sigma(A)\cup\sigma(B)
+    \end{equation}
+    so $\sigma(A)\subseteq\sigma(A)$. The set $\tau_{\sigma}$ is indeed a
+    topology. Firstly, $\emptyset\in\tau_{\sigma}$.
+    Since $X\subseteq\sigma(X)$, and since $\sigma(X)\subseteq{X}$, we have
+    that $\sigma(X)=X$, so $\emptyset=X\setminus{X}$ is an element of
+    $\tau_{\sigma}$. Similarly, $X\in\tau_{\sigma}$ since
+    $\sigma(\emptyset)=\emptyset$, and hence $X=X\setminus\emptyset$ is an
+    element of $\tau_{\sigma}$. Let $\mathcal{U},\mathcal{V}\in\tau_{\sigma}$.
+    Then $\mathcal{U}=X\setminus\mathcal{C}$ and
+    $\mathcal{V}=X\setminus\mathcal{D}$ for sets $\mathcal{C}$ and
+    $\mathcal{D}$ such that $\sigma(\mathcal{C})=\mathcal{C}$ and
+    $\sigma(\mathcal{D})=\mathcal{D}$. But since $\sigma$ is a Kuratowski
+    closure operator:
+    \begin{equation}
+        \sigma(\mathcal{C}\cup\mathcal{D})
+        =\sigma(\mathcal{C})\cup\sigma(\mathcal{D})
+        =\mathcal{C}\cup\mathcal{D}
+    \end{equation}
+    And hence $X\setminus(\mathcal{C}\cup\mathcal{D})$ is an element of
+    $\tau_{\sigma}$. But by the De Morgan law:
+    \begin{equation}
+        X\setminus(\mathcal{C}\cup\mathcal{D})
+        =(X\setminus\mathcal{C})\cap(X\setminus\mathcal{D})
+        =\mathcal{U}\cap\mathcal{V}
+    \end{equation}
+    so $\tau_{\sigma}$ is closed under the intersection of two elements.
+    Lastly, let $\mathcal{O}\subseteq\tau_{\sigma}$. If $\mathcal{O}$ is
+    empty, then $\bigcup\mathcal{O}=\emptyset$, and we've already shown that
+    $\emptyset\in\tau_{\sigma}$. Suppose $\mathcal{O}$ is non-empty. Then
+    for all $\mathcal{U}\in\mathcal{O}$ there is a
+    $\mathcal{C}\subseteq{X}$ such that $\mathcal{C}=\sigma(\mathcal{C})$
+    and $\mathcal{U}=X\setminus\mathcal{C}$. But then:
+    \begin{equation}
+        X\setminus\bigcup_{\mathcal{U}\in\mathcal{O}}\mathcal{U}
+        =\bigcap_{\mathcal{U}\in\mathcal{O}}\big(X\setminus\mathcal{U}\big)
+        =\bigcap_{{\mathcal{C}=X\setminus\mathcal{U}}\atop{\mathcal{U}\in\mathcal{O}}}\mathcal{C}
+    \end{equation}
+    To show that $\bigcup\mathcal{O}\in\tau_{\sigma}$ we must show that:
+    \begin{equation}
+        \sigma\Big(
+        \bigcap_{{\mathcal{C}=X\setminus\mathcal{U}}\atop{\mathcal{U}\in\mathcal{O}}}\mathcal{C}
+        \Big)
+        =\bigcap_{{\mathcal{C}=X\setminus\mathcal{U}}\atop{\mathcal{U}\in\mathcal{O}}}\mathcal{C}
+    \end{equation}
+    For simplicity, let $\Delta$ be the set of all $X\setminus\mathcal{U}$,
+    $\mathcal{U}\in\mathcal{O}$. We have
+    $\bigcap\Delta\subseteq\sigma\big(\bigcap\Delta)$ by the property of
+    $\sigma$. We must show this reverses. Given any $\mathcal{C}\in\Delta$,
+    by the definition of intersection, we have
+    $\bigcap\Delta\subseteq\mathcal{C}$. But then
+    $\sigma\big(\bigcap\Delta\big)\subseteq\sigma(\mathcal{C})$. But
+    $\sigma(\mathcal{C})=\mathcal{C}$ for all $\mathcal{C}\in\Delta$. Hence:
+    \begin{equation}
+        \sigma\Big(\bigcap\Delta\Big)
+        \subseteq\bigcap_{\mathcal{C}\in\Delta}\mathcal{C}
+        =\bigcap\Delta
+    \end{equation}
+    so $\sigma\big(\bigcap\Delta\big)=\bigcap\Delta$. Hence
+    $X\setminus\bigcap\Delta=\bigcup\mathcal{O}$ is an element of
+    $\tau_{\sigma}$. All four criterion are satisfied, so $\tau_{\sigma}$ is
+    a topology.
+    \par\hfill\par
+    Now to prove $f:X\rightarrow{Y}$ is continuous if and only if
+    for all $A\subseteq{X}$ we have
+    $f\big[\textrm{Cl}_{\tau_{X}}(A)\big]\subseteq\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)$.
+    Suppose $f$ is continuous. Since
+    $\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)$ is closed and $f$ is continuous,
+    $f^{-1}\Big[\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)\Big]$ is closed. But
+    $f[A]\subseteq\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)$, so:
+    \begin{equation}
+        A\subseteq{f}^{-1}\big[f[A]\big]
+        \subseteq{f}^{-1}\Big[\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)\Big]
+    \end{equation}
+    Therefore:
+    \begin{equation}
+        \textrm{Cl}_{\tau_{X}}(A)
+        \subseteq\textrm{Cl}_{\tau_{X}}\bigg(
+            f^{-1}\Big[\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)\Big]
+        \bigg)
+        =f^{-1}\Big[\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)\Big]
+    \end{equation}
+    where this last equality comes from the fact that
+    $f^{-1}\Big[\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)\Big]$ is closed, since
+    $f$ is continuous, so it is is own closure. From this, we conclude:
+    \begin{equation}
+        f\big[\textrm{Cl}_{\tau_{X}}(A)\big]
+        \subseteq\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)
+    \end{equation}
+    Now, suppose for all $A\subseteq{X}$ we have that
+    $f\big[\textrm{Cl}_{\tau_{X}}(A)\big]\subseteq\textrm{Cl}_{\tau_{Y}}\big(f[A]\big)$.
+    Let $\mathcal{D}\subseteq{Y}$ be closed. Let
+    $\mathcal{C}=f^{-1}[\mathcal{D}]$. We must prove $\mathcal{C}$ is closed.
+    That is, we must prove $\textrm{Cl}_{\tau_{X}}(\mathcal{C})=\mathcal{C}$.
+    It is automatic that
+    $\mathcal{C}\subseteq\textrm{Cl}_{\tau_{X}}(\mathcal{C})$,
+    so we must prove $\textrm{Cl}_{\tau_{X}}(\mathcal{C})\subseteq\mathcal{C}$.
+    But:
+    \begin{equation}
+        f\big[\textrm{Cl}_{\tau_{X}}(\mathcal{C})\big]
+        \subseteq\textrm{Cl}_{\tau_{Y}}\big(f[\mathcal{C}]\big)
+        =\textrm{Cl}_{\tau_{Y}}\Big(f\big[f^{-1}[\mathcal{D}]\big]\Big)
+        \subseteq\textrm{Cl}_{\tau_{Y}}\big(\mathcal{D}\big)
+        =\mathcal{D}
+    \end{equation}
+    where we've used the fact that $\mathcal{D}$ is closed, and some of the
+    basic laws of images and pre-images. But then:
+    \begin{equation}
+        \textrm{Cl}_{\tau_{X}}(\mathcal{C})
+        \subseteq{f}^{-1}\Big[
+            f\big[
+                \textrm{Cl}_{\tau_{X}}(\mathcal{C})
+            \big]
+        \Big]
+        \subseteq{f}^{-1}[\mathcal{D}]
+        =\mathcal{C}
+    \end{equation}
+    so $\textrm{Cl}_{\tau_{X}}(\mathcal{C})\subseteq\mathcal{C}$, and hence
+    $\mathcal{C}$ is closed. Thus, $f$ is continuous.
+\end{document}
