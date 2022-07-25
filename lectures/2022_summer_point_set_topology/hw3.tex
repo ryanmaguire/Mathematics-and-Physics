@@ -1,0 +1,268 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{problem}{Problem}
+
+\title{Point-Set Topology: Homework 3}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \begin{problem}
+        From class, given a collection of topological spaces
+        $(X_{\alpha},\,\tau_{\alpha})$ (for all $\alpha$ in some indexing set
+        $I$), the product topology and box topology are formed as follows.
+        For the box topology $\tau_{\textrm{Box}}$ we take as a basis:
+        \begin{equation}
+            \mathcal{B}_{\textrm{Box}}
+            =\Big\{\,\prod_{\alpha\in{I}}\mathcal{U}_{\alpha}\;|\;
+                \mathcal{U}_{\alpha}\in\tau_{\alpha}
+                \textrm{ for all }\alpha\in{I}\,\Big\}
+        \end{equation}
+        For the product topology $\tau_{\textrm{Prod}}$, we take as a basis:
+        \begin{equation}
+            \mathcal{B}_{\textrm{Prod}}
+            =\Big\{\,\prod_{\alpha\in{I}}\mathcal{U}_{\alpha}\;|\;
+                \mathcal{U}_{\alpha}\in\tau_{\alpha},\,
+                \mathcal{U}_{\alpha}=X_{\alpha}
+                \textrm{ for all but finitely many }\alpha\in{I}\,\Big\}
+        \end{equation}
+        from this definition it is hopefully clear that
+        $\tau_{\textrm{Prod}}\subseteq\tau_{\textrm{Box}}$. Because of this,
+        given any topological space $(Y,\,\tau_{Y})$, and a function
+        $f:Y\rightarrow\prod_{\alpha\in{I}}X_{\alpha}$, if $f$ is continuous
+        with respect to the box topology, then it is continuous with respect to
+        the product topology. You will prove the converse is \textbf{false}.
+        \begin{itemize}
+            \item (3 Points) Prove that if $(X,\,\tau_{X})$ and
+                $(Y,\,\tau_{Y})$ are topological spaces, then
+                $f:X\rightarrow{Y}$ is continuous if and only if for every
+                $x\in{X}$ and for every $\mathcal{V}\in\tau_{Y}$ such that
+                $f(x)\in\mathcal{V}$, there is a $\mathcal{U}\in\tau_{X}$ such
+                that $x\in\mathcal{U}$ and
+                $f[\mathcal{U}]\subseteq{f}[\mathcal{V}]$. That is, continuity
+                can be described by forward images, as well as by pre-images.
+            \item (2 Points) Let
+                $\mathbb{R}^{\infty}=\prod_{n\in\mathbb{N}}\mathbb{R}$. This is,
+                as a set, the set of all sequences
+                $a:\mathbb{N}\rightarrow\mathbb{R}$ (review what the product set
+                is and convince yourself of this statement). Let
+                $f:\mathbb{R}\rightarrow\mathbb{R}^{\infty}$ be defined by
+                $f(x)=a$, where $a:\mathbb{N}\rightarrow\mathbb{R}$ is the
+                sequence $a_{n}=x$ for all $n\in\mathbb{N}$. Prove $f$ is
+                \textit{not} continuous with the box topology.
+                [Hint: Pick
+                $\mathcal{V}=\prod_{n\in\mathbb{N}}\big(\frac{-1}{n+1},\,\frac{1}{n+1}\big)$.
+                Show there is no open set $\mathcal{U}$ containing $0$ such
+                that $f[\mathcal{U}]\subseteq\mathcal{V}$].
+            \item (3 Points)
+                Given the product set $\prod_{\alpha\in{I}}X_{\alpha}$, the
+                projection function
+                $\pi_{\beta}:\prod_{\alpha\in{I}}X_{\alpha}\rightarrow{X}_{\beta}$
+                is the function $\pi_{\beta}(x)=x_{\beta}\in{X}_{\beta}$,
+                where $x_{\beta}$ is the $\beta$ component of $x$. We proved in
+                class that projections are continuous. You may use this
+                freely. Prove that if $(Y,\,\tau_{Y})$ is a topological
+                space, and if $\prod_{\alpha\in{I}}X_{\alpha}$ is given the
+                product topology, then
+                $g:Y\rightarrow\prod_{\alpha\in{I}}X_{\alpha}$ is continuous
+                if and only if $\pi_{\alpha}\circ{g}$ is continuous for all
+                $\alpha\in{I}$. [Hint: The set of all
+                $\prod_{\alpha\in{X}}\mathcal{U}_{\alpha}$ where
+                $\mathcal{U}_{\alpha}=X_{\alpha}$ for all but at most
+                \textbf{one} $\alpha\in{I}$ is a subbasis for the product
+                topology. It then suffices to show the pre-image under $f$ of
+                such a set is open in $Y$.]
+            \item (2 Points) Using this, prove
+                $f:\mathbb{R}\rightarrow\mathbb{R}^{\infty}$ defined above is
+                continuous with the product topology.
+        \end{itemize}
+    \end{problem}
+    \begin{problem}
+        Let $(X,\,\tau)$ be a topological space.
+        \begin{itemize}
+            \item Fr\'{e}chet means for all $x,y\in{X}$ with $x\ne{y}$, there
+                exists $\mathcal{U},\mathcal{V}\in\tau$ with $x\in\mathcal{U}$,
+                $x\notin\mathcal{V}$, and $y\in\mathcal{V}$,
+                $y\notin\mathcal{U}$.
+            \item Hausdorff means for all $x,y\in{X}$ with $x\ne{y}$ there
+                are $\mathcal{U},\mathcal{V}\in\tau$ such that
+                $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+            \item Regular means for all $x\in{X}$ and all closed
+                $\mathcal{C}\subseteq{X}$ with $x\notin\mathcal{C}$, there
+                exists $\mathcal{U},\mathcal{V}\in\tau$ such that
+                $x\in\mathcal{U}$, $\mathcal{C}\subseteq\mathcal{V}$, and
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+            \item Normal means for all closed
+                $\mathcal{C},\mathcal{D}\subseteq{X}$ with
+                $\mathcal{C}\cap\mathcal{D}=\emptyset$, there exists
+                $\mathcal{U},\mathcal{V}\in\tau$ such that
+                $\mathcal{C}\subseteq\mathcal{U}$,
+                $\mathcal{D}\subseteq\mathcal{V}$, and
+                $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+        \end{itemize}
+        We proved in class (some time ago) that a topological space $(X,\,\tau)$
+        is Fr\'{e}chet if and only if for all $x\in{X}$, the set
+        $\{\,x\,\}$ is closed. You may use this freely. 
+        \begin{itemize}
+            \item (2 Points) Prove that if $(X,\,\tau)$ is Fr\'{e}chet and
+                regular, then it is Hausdorff.
+            \item (2 Points) Prove that if $(X,\,\tau)$ is Fr\'{e}chet and
+                normal, then it is regular.
+        \end{itemize}
+        Authors often assume regular means Hausdorff, and normal means regular.
+        You will now prove that unless you explicity require regular to mean
+        regular and Hausdorff, these three notions are different.
+        \begin{itemize}
+            \item (2 Points) Let $X=\mathbb{R}$ and define the topology
+                $\tau$ to be all sets $\mathcal{U}\subseteq\mathbb{R}$ such
+                that either $\mathcal{U}=\mathbb{R}$ or
+                $0\notin\mathcal{U}$. This is the
+                \textit{excluded point topology}. Prove $(X,\,\tau)$ is
+                normal. [Hint: What do closed sets look like in this space?
+                what do \textit{disjoint} closed sets $\mathcal{C}$ and
+                $\mathcal{D}$ look like?]
+            \item (2 Points) Prove $(X,\,\tau)$ is not regular.
+                [Hint: Let $x=1$ and
+                $\mathcal{C}=\mathbb{R}\setminus\{\,1\,\}$.
+                Is $\mathcal{C}$ closed? Are there any open sets containing
+                $\mathcal{C}$ and not $1$?]
+            \item (2 Points) Let $X=\mathbb{Z}_{2}$ and
+                $\tau=\big\{\,\emptyset,\,\{\,0\,\},\,\mathbb{Z}_{2}\,\big\}$.
+                $(X,\,\tau)$ is the \textit{Sierpinski space}. Show
+                $(X,\,\tau)$ is not Hausdorff, not regular, but it is
+                normal. [Hint: The set has two points, and three open sets
+                total. You can just check all combinations.]
+            \item (2 Points)
+                Let $X=\mathbb{Z}_{2}$, and let $\tau$ be the indiscrete
+                topology, $\tau=\{\,\emptyset,\,\mathbb{Z}_{2}\,\}$. Prove
+                that $(X,\,\tau)$ is not Hausdorff, but it is regular.
+        \end{itemize}
+        The last example is a bit involved (you do not need to solve anything.
+        Just sit back and enjoy the read). The real line has as a basis all
+        open intervals $(a,\,b)$, $a,b\in\mathbb{R}$. The
+        \textit{Sorgenfrey line} has as a basis all half-open intervals
+        $[a,\,b)$. Give $\mathbb{R}^{2}=\mathbb{R}\times\mathbb{R}$ the product
+        topology of the Sorgenfrey line with itself. The anti-diagonal
+        $\Delta=\{\,(x,\,-x)\in\mathbb{R}^{2}\;|\;x\in\mathbb{R}\,\}$ and the
+        complement $\mathbb{R}^{2}\setminus\Delta$ are both closed, but any
+        open sets $\mathcal{U},\mathcal{V}$ with $\Delta\subseteq\mathcal{U}$
+        and $\mathbb{R}^{2}\setminus\Delta\subseteq\mathcal{V}$ must overlap,
+        $\mathcal{U}\cap\mathcal{V}\ne\emptyset$. This shows that the Sorgenfrey
+        plane is \textit{not} normal. It is, however, Hausdorff and regular. 
+    \end{problem}
+    \begin{problem}
+        Let $(X,\,\tau)$ be a metrizable topological space with metric $d$.
+        \begin{itemize}
+            \item (2 Points)
+                Define the distance function as
+                $\textrm{dist}:X\times\mathcal{P}(X)\rightarrow\mathbb{R}$ via:
+                \begin{equation}
+                    \textrm{dist}(x,\,A)=
+                    \textrm{inf}\big\{d(x,\,y)\;|\;y\in{A}\,\big\}
+                \end{equation}
+                where $\textrm{inf}$ means the \textit{infinum}. Prove that if
+                $\mathcal{C}$ is closed and $x\notin\mathcal{C}$, then
+                $\textrm{dist}(x,\,\mathcal{C})>0$. [Hint: $\mathcal{C}$ closed
+                means it has its limit points. If
+                $\textrm{dist}(x,\,\mathcal{C})=0$, can you find a sequence
+                in $\mathcal{C}$ that converges to $x$? Any contradiction?]
+            \item (2 Points) Prove that $(X,\,\tau)$ is regular.
+                [Hint: For all $y\in\mathcal{C}$, let
+                $\mathcal{U}_{y}=B_{d(x,\,y)/2}^{(X,\,d)}(y)$. Can you find
+                an open subset of $X\setminus\mathcal{C}$ that contains
+                $x$ and is disjoint from
+                $\bigcup_{y\in\mathcal{C}}\mathcal{U}_{y}$?] 
+            \item (2 Points)
+                Prove that $(X,\,\tau)$ is normal. [Hint: Given closed and
+                disjoint $\mathcal{C},\mathcal{D}$, use the $\textrm{dist}$
+                function to cover $\mathcal{C}$ and $\mathcal{D}$ with open
+                balls.]
+            \item (2 Points)
+                A completely normal topological space is a topological space
+                $(Y,\,\tau_{Y})$ such that for every subset $A\subseteq{Y}$ with
+                the subspace topology $\tau_{Y_{A}}$, $(A,\,\tau_{Y_{A}})$ is
+                normal. Prove that $(X,\,\tau)$ is completely normal.
+                [Hint: What are the subspaces of a metric space?]
+            \item (2 Points)
+                A perfectly normal topological space is a topological space
+                $(Y,\,\tau_{Y})$ such that for all non-empty disjoint closed
+                sets $\mathcal{C},\mathcal{D}\subseteq{Y}$ there is a continuous
+                function $f:Y\rightarrow[0,\,1]$ (with the subspace topology
+                from $\mathbb{R}$) such $f^{-1}[\{\,0\,\}]=\mathcal{C}$ and
+                $f^{-1}[\{\,1\,\}]=\mathcal{D}$. Prove $(X,\,\tau)$ is
+                perfectly normal. [Hint: Consider
+                $f(x)=\textrm{dist}(x,\,\mathcal{C})/\big(\textrm{dist}(x,\,\mathcal{C})+\textrm{dist}(x,\,\mathcal{D})\big)$
+                Is this well-defined? Is it continuous? Does it do the trick?]
+        \end{itemize}
+    \end{problem}
+    \begin{problem}
+        A compact topological space is a topological space
+        $(X,\,\tau)$ such that for all open covers $\mathcal{O}\subseteq\tau$
+        of $X$, there is a finite subcover $\Delta\subseteq\mathcal{O}$. A
+        locally compact topological space is a topological space
+        $(X,\,\tau)$ such that for all $x\in{X}$ there is an open set
+        $\mathcal{U}\in\tau$ and a subset $K\subseteq{X}$ such that
+        $x\in\mathcal{U}$, $\mathcal{U}\subseteq{K}$, and
+        $(K,\,\tau_{K})$ is a compact subspace with the subspace topology.
+        \begin{itemize}
+            \item (2 Points)
+                Prove that a compact Hausdorff space is regular.
+                [Hint: From class, all closed subsets of a compact space are
+                compact.]
+            \item (2 Points)
+                Prove that a compact Hausdorff space is normal.
+                [Hint: Use the fact that a compact Hausdorff space is regular.]
+            \item (\textbf{Bonus}: 2 Points) Prove that locally compact
+                Hausdorff implies regular.
+        \end{itemize}
+    \end{problem}
+\end{document}
