@@ -18,6 +18,9 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
+import settings;
+settings.outformat = "pdf";
+
 /*  Size of the figure.                                                       */
 size(128);
 

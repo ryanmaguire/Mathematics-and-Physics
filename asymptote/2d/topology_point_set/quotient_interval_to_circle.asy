@@ -1,5 +1,5 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
  *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
@@ -16,30 +16,61 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draws the intersection of a plane with a cube, revealing a hexagon.   *
+ *      This is what you'd get if you dipped a cube into water with one of    *
+ *      vertices of the cube facing down.                                     *
  ******************************************************************************/
 
-/*  PDF is easiest to use in LaTeX, so use that.                              */
+/*  PDF is easiest to use in LaTeX, so output this.                           */
 import settings;
 settings.outformat = "pdf";
 
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
-/*  Size of the arrowhead.                                                    */
-real arsize = 5bp;
+defaultpen(black + linewidth(0.7pt) + fontsize(12pt));
 
-/*  Points for the square.                                                    */
-pair A = (0.0, 0.0);
-pair B = (1.0, 0.0);
-pair C = (1.0, 1.0);
-pair D = (0.0, 1.0);
+pair A0, A1;
+pair B0, B1, B2;
+transform T;
+A0 = (0.0, 0.0);
+A1 = (1.0, 0.0);
 
-/*  Positions for the arrows.                                                 */
-position pos1 = 0.47;
-position pos2 = 0.57;
+dot(A0);
+dot(A1);
+draw(A0 -- A1);
 
-/*  Draw the square.                                                          */
-draw("$a$", A -- B, S, MidArrow(arsize));
-draw("$a$", D -- C, N, MidArrow(arsize));
-draw("$b$", B -- C, E, Arrow(arsize, pos1), Arrow(arsize, pos2));
-draw("$b$", A -- D, W, Arrow(arsize, pos1), Arrow(arsize, pos2));
+T = shift(1.6, -0.2);
+A0 = T*(0.1, 0.4);
+A1 = T*(0.9, 0.4);
+B0 = T*(0.1, 0.3);
+B1 = T*(0.5, 0.0);
+B2 = T*(0.9, 0.3);
+
+dot(A0);
+dot(A1);
+draw(A0 .. B0 .. B1 .. B2 .. A1);
+
+T = shift(0.0, -1.2);
+A0 = T*(0.25, 0.6);
+A1 = T*(0.75, 0.6);
+B0 = T*(0.1, 0.3);
+B1 = T*(0.5, 0.0);
+B2 = T*(0.9, 0.3);
+
+dot(A0);
+dot(A1);
+draw(A0 .. B0 .. B1 .. B2 .. A1);
+
+T = shift(1.6, -1.2);
+A0 = T*(0.5, 0.7);
+A1 = T*(0.5, 0.7);
+B0 = T*(0.15, 0.35);
+B1 = T*(0.5, 0.0);
+B2 = T*(0.85, 0.35);
+
+dot(A0);
+dot(A1);
+draw(A0 .. B0 .. B1 .. B2 .. A1);

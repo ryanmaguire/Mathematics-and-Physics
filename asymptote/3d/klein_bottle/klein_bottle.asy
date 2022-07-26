@@ -1,9 +1,11 @@
 // Boilerplate stuff.
 import graph3;
 import palette;
+import settings;
+settings.outformat = "pdf";
 
 // Size of the created image.
-size(128);
+size(256);
 
 currentprojection=perspective(
     camera = (20, -20,40),

@@ -1,8 +1,11 @@
+import settings;
+settings.outformat = "pdf";
+
 // Seting output format to "pdf".
 import graph;
 
 // Size of the output figure.
-size(128);
+size(256);
 
 // Variable for drawing stuff.
 path p;

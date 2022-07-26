@@ -1,9 +1,9 @@
 // Seting output format to "pdf".
 import settings;
-settings.outformat   = "pdf";
+settings.outformat = "pdf";
 
 // Size of the output figure.
-size(100);
+size(128);
 
 // Size of the arrowhead.
 real arsize = 5bp;

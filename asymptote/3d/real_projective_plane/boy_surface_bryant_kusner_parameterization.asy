@@ -33,7 +33,7 @@ settings.render = 8;
 settings.outformat = "pdf";
 
 /*  Size of the created image.                                                */
-size(1024);
+size(256);
 
 /*  Pen used for mesh lines.                                                  */
 pen meshpen = black+linewidth(0.5pt);

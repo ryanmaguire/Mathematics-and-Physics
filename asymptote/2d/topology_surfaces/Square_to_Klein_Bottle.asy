@@ -1,6 +1,9 @@
 // Seting output format to "pdf".
 import graph;
 
+import settings;
+settings.outformat = "pdf";
+
 // Size of the output figure.
 size(128);
 
