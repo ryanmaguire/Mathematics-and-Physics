@@ -1,0 +1,301 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 16}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Finite Products}
+        Continuing with our trend of building new topological spaces, thus far
+        we have subspaces and quotients. If $(X,\,\tau_{X})$ and
+        $(Y,\,\tau_{Y})$ are topological spaces, it is possible to put a
+        topology on the Cartesian product $X\times{Y}$ in a way that respects
+        the topologies $\tau_{X}$ and $\tau_{Y}$. It is somewhat natural to hope
+        that the set $\tilde{\tau}_{X\times{Y}}$ defined by:
+        \begin{equation}
+            \tilde{\tau}_{X\times{Y}}=
+            \{\,\mathcal{U}\times\mathcal{V}\subseteq{X}\times{Y}\;|\;
+                \mathcal{U}\in\tau_{X}\textrm{ and }\mathcal{V}\in\tau_{Y}\,\}
+        \end{equation}
+        would be a topology on $X\times{Y}$, but it usually is not. Consider the
+        real line $\mathbb{R}$ with the standard topology $\tau_{\mathbb{R}}$.
+        This has a basis $\mathcal{B}$ consisting of open intervals of the
+        form $(a,\,b)$ for all $a,b\in\mathbb{R}$. The product
+        $\mathbb{R}\times\mathbb{R}$ should just be the Euclidean plane
+        $\mathbb{R}^{2}$, but open sets of the form $(a,\,b)\times(c,\,d)$ are
+        just \textit{open rectangles}. The product of more general open subsets
+        $\mathcal{U},\mathcal{V}\subseteq\mathbb{R}$ could not possible form an
+        open disk in the plane, even though we want an open disk to be, well,
+        \textit{open}.
+        \par\hfill\par
+        The set $\tilde{\tau}_{X\times{Y}}$ is
+        nearly a topology. The empty set is contained in it since
+        $\emptyset=\emptyset\times\emptyset$. The entire Cartesian product is
+        an element since $X\in\tau_{X}$ and $Y\in\tau_{Y}$, hence
+        $X\times{Y}\in\tilde{\tau}_{X\times{Y}}$. It is also closed under
+        intersections since:
+        \begin{equation}
+            \big(\mathcal{U}_{0}\times\mathcal{V}_{0}\big)\cap
+            \big(\mathcal{U}_{1}\times\mathcal{V}_{1}\big)
+            =\big(\mathcal{U}_{0}\cap\mathcal{U}_{1}\big)\times
+            \big(\mathcal{V}_{0}\cap\mathcal{V}_{1}\big)
+        \end{equation}
+        and this is an element of $\tilde{\tau}_{X\times{Y}}$. What fails is
+        the union property. Again, think of $\mathbb{R}\times\mathbb{R}$. The
+        union of two rectangles does not need to be a rectangle.
+        \begin{figure}
+            \centering
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../images/open_rectangle_r2.pdf}
+                \caption{An Open Rectangle in $\mathbb{R}^{2}$}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../images/open_not_rectangle_r2.pdf}
+                \caption{The Union of Rectangles in $\mathbb{R}^{2}$}
+                \label{fig:open_not_rectangle_r2}
+            \end{subfigure}
+            \caption{Open Subsets of the Plane}
+            \label{fig:open_subsets_of_plane}
+        \end{figure}
+        Moreover, open
+        subsets of $\mathbb{R}^{2}$ such as the open unit disk can not be
+        written in the form $\mathcal{U}\times\mathcal{V}$ for open subsets
+        $\mathcal{U},\mathcal{V}\subseteq\mathbb{R}$. To ensure the product
+        topology is indeed a topology, we need to take the topology
+        \textit{generated} from $\tilde{\tau}_{X\times{Y}}$.
+        \begin{definition}[\textbf{Product Topology of Two Topologies}]
+            The product topology of two topologies $\tau_{X}$ and $\tau_{Y}$
+            on sets $X$ and $Y$, respectively, is the topology generated by
+            the set $\mathcal{B}$ defined by:
+            \begin{equation}
+                \mathcal{B}=
+                \{\,\mathcal{U}\times\mathcal{V}\subseteq{X}\times{Y}\;|\;
+                    \mathcal{U}\in\tau_{X}\textrm{ and }
+                    \mathcal{V}\in\tau_{Y}\,\}
+            \end{equation}
+            This is denoted $\tau_{X\times{Y}}$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are topological spaces, and
+            if $\tau_{X\times{Y}}$ is the product topology of $\tau_{X}$ and
+            $\tau_{Y}$, then $(X\times{Y},\,\tau_{X\times{Y}})$ is a topological
+            space.
+        \end{theorem}
+        \begin{proof}
+            The product topology $\tau_{X\times{Y}}$ is a generated topology,
+            by definition, which is hence a topology, so
+            $(X\times{Y},\,\tau_{X\times{Y}})$ is a topological space.
+        \end{proof}
+        The product of two topological spaces better give us the right
+        topologies on familiar spaces, otherwise its useless.
+        \begin{theorem}
+            If $\tau_{\mathbb{R}\times\mathbb{R}}$ is the product topology of
+            $\tau_{\mathbb{R}}$ and $\tau_{\mathbb{R}}$, and if
+            $\tau_{\mathbb{R}^{2}}$ is the standard Euclidean topology on
+            $\mathbb{R}^{2}$, then
+            $(\mathbb{R}^{2},\,\tau_{\mathbb{R}^{2}})$ and
+            $(\mathbb{R}\times\mathbb{R},\,\tau_{\mathbb{R}\times\mathbb{R}})$
+            are homeomorphic.
+        \end{theorem}
+        \begin{proof}
+            We simply must prove the topologies $\tau_{\mathbb{R}^{2}}$ and
+            $\tau_{\mathbb{R}\times\mathbb{R}}$ are the same set, meaning the
+            identity function
+            $\textrm{id}:\mathbb{R}^{2}\rightarrow\mathbb{R}\times\mathbb{R}$
+            is a homeomorphism. The standard topology on $\mathbb{R}^{2}$
+            is generated by the Euclidean metric:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=||\mathbf{x}-\mathbf{y}||_{2}
+            \end{equation}
+            The topology of $\mathbb{R}\times\mathbb{R}$ is generated by open
+            rectangles, which in turn can be generated by open squares, and
+            open squares are the open balls in the max metric:
+            \begin{equation}
+                d_{\textrm{max}}(\mathbf{x},\,\mathbf{y})
+                =\textrm{max}(|x_{0}-y_{0}|,\,|x_{1}-y_{1}|)
+            \end{equation}
+            But the Euclidean metric and the max metric are topologically
+            equivalent metrics, meaning they produce the same topologies.
+            So, we're done.
+        \end{proof}
+        \begin{definition}[\textbf{Projection Maps}]
+            The projection map of the Cartesian product $X\times{Y}$ onto
+            $X$ is the function $\textrm{proj}_{X}:X\times{Y}\rightarrow{X}$
+            defined by $\prod_{X}\big((x,\,y)\big)=x$. The projection map of
+            $X\times{Y}$ onto $Y$ is defined by
+            $\textrm{proj}_{Y}:X\times{Y}\rightarrow{Y}$,
+            $\textrm{prof}_{Y}\big((x,\,y)\big)=y$.
+        \end{definition}
+        Projections are continuous.
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are topological spaces,
+            and if $(X\times{Y},\,\tau_{X\times{Y}})$ is the product space,
+            then $\textrm{proj}_{X}:X\times{Y}\rightarrow{X}$ and
+            $\textrm{proj}_{X}:X\times{Y}\rightarrow{Y}$ are continuous.
+        \end{theorem}
+        \begin{proof}
+            The proof is symmetric for $X$ and $Y$, so we'll prove
+            $\textrm{proj}_{X}:X\times{Y}\rightarrow{X}$ is continuous.
+            Let $\mathcal{U}\in\tau_{X}$. Then by the definition of the
+            projection map,
+            $\textrm{proj}^{-1}[\mathcal{U}]=\mathcal{U}\times{Y}$, and
+            $\mathcal{U}\times{Y}\in\tau_{X\times{Y}}$, so
+            $\textrm{proj}_{X}$ is continuous. Similarly,
+            $\textrm{proj}_{Y}$ is continuous.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are topological spaces,
+            and if $(X\times{Y},\,\tau_{X\times{Y}})$ is the product space,
+            then $\textrm{proj}_{X}:X\times{Y}\rightarrow{X}$ and
+            $\textrm{proj}_{X}:X\times{Y}\rightarrow{Y}$ are open maps.
+        \end{theorem}
+        \begin{proof}
+            Let $\mathcal{W}\in\tau_{X\times{Y}}$. Since $\tau_{X\times{Y}}$
+            is generated by the basis $\mathcal{B}$ defined by:
+            \begin{equation}
+                \mathcal{B}=\{\,
+                    \mathcal{U}\times\mathcal{V}\;|\;
+                    \mathcal{U}\in\tau_{X}\textrm{ and }
+                    \mathcal{V}\in\tau_{Y}\,\}
+            \end{equation}
+            there is some collection $\mathcal{O}\subseteq\mathcal{B}$ such
+            that $\mathcal{W}=\bigcup\mathcal{O}$. But for each
+            $\mathcal{U}\times\mathcal{V}\in\mathcal{O}$ we have
+            $\textrm{proj}_{X}[\mathcal{U}\times\mathcal{V}]=\mathcal{U}$ and
+            $\textrm{proj}_{Y}[\mathcal{U}\times\mathcal{V}]=\mathcal{V}$.
+            So then $\textrm{proj}_{X}[\mathcal{W}]$ is the union of open sets
+            in $X$, and $\textrm{proj}_{Y}[\mathcal{W}]$ is the union of open
+            sets in $Y$, so $\textrm{proj}_{X}[\mathcal{W}]\in\tau_{X}$ and
+            $\textrm{proj}_{Y}[\mathcal{W}]\in\tau_{Y}$. That is,
+            $\textrm{proj}_{X}$ and $\textrm{proj}_{Y}$ are open maps.
+        \end{proof}
+        Unlike quotients, which preserve very few properties, products preserve
+        quite a lot of properties.
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are Hausdorff topological
+            spaces, then $(X\times{Y},\,\tau_{X\times{Y}})$ is a Hausdorff
+            topological space.
+        \end{theorem}
+        \begin{proof}
+            Let $(x_{0},\,y_{0}),(x_{1},\,y_{1})\in{X}\times{Y}$ with
+            $(x_{0},\,y_{0})\ne(x_{1},\,y_{1})$. Then either
+            $x_{0}\ne{x}_{1}$ or $y_{0}\ne{y}_{1}$. Suppose
+            $x_{0}\ne{x}_{1}$, the proof is symmetric if
+            $y_{0}\ne{y}_{1}$. But $(X,\,\tau_{X})$ is Hausdorff, so there are
+            opens sets $\mathcal{U},\mathcal{V}\in\tau_{X}$ such that
+            $x_{0}\in\mathcal{U}$, $x_{1}\in\mathcal{V}$, and
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$. But then
+            $\mathcal{U}\times{Y}$ and $\mathcal{V}\times{Y}$ are disjoint open
+            sets such that $(x_{0},\,y_{0})\in\mathcal{U}\times{Y}$ and
+            $(x_{1},\,y_{1})\in\mathcal{V}\times{Y}$. Therefore
+            $(X\times{Y},\,\tau_{X\times{Y}})$ is a Hausdorff topological space.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are second-countable
+            topological spaces, then $(X\times{Y},\,\tau_{X\times{Y}})$ is
+            second-countable.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau_{X})$ is second-countable, there is a countable
+            basis $\mathcal{B}_{X}$ for $\tau_{X}$. Since $(Y,\,\tau_{Y})$ is
+            second-countable, there is a countable basis $\mathcal{B}_{Y}$ for
+            $\tau_{Y}$. Let $\mathcal{B}$ be defined by:
+            \begin{equation}
+                \mathcal{B}=
+                    \{\,\mathcal{U}\times\mathcal{V}\;|\;
+                    \mathcal{U}\in\mathcal{B}_{X}\textrm{ and }
+                    \mathcal{V}\in\mathcal{B}_{Y}\,\}
+            \end{equation}
+            Then $\mathcal{B}$ has the cardinality of
+            $\mathbb{N}\times\mathbb{N}$, which is countable. We now need to
+            prove $\mathcal{B}$ is a countable basis of $\tau_{X\times{Y}}$.
+            $\mathcal{B}$ is an open cover. First, every element is the
+            product of open sets in $X$ and $Y$, which is open in
+            $X\times{Y}$, so $\mathcal{B}\subseteq\tau_{X\times{Y}}$. Second,
+            it covers the space. Given $(x,\,y)\in{X}\times{Y}$, since
+            $x\in{X}$ and $\mathcal{B}_{X}$ is a basis of $\tau_{X}$, there is
+            a $\mathcal{U}\in\mathcal{B}_{X}$ such that $x\in\mathcal{U}$.
+            Since $y\in{Y}$ and $\mathcal{B}_{Y}$ is a basis of $\tau_{Y}$,
+            there is a $\mathcal{V}\in\mathcal{B}_{Y}$ such that
+            $y\in\mathcal{V}$. But then
+            $\mathcal{U}\times\mathcal{V}\in\mathcal{B}$, by definition, and
+            $(x,\,y)\in\mathcal{U}\times\mathcal{V}$. So $\mathcal{B}$ is an
+            open cover of $X\times{Y}$. Now, to show it has the basis property.
+            Let $\mathcal{W}\in\tau_{X\times{Y}}$.
+        \end{proof}
+\end{document}
