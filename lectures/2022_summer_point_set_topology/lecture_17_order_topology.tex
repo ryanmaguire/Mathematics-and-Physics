@@ -1,0 +1,329 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 17}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Order Topology and Orderable Spaces}
+        A total order on a set $X$ is a relation $\leq$ that is reflexive
+        ($a\leq{a}$), anti-symmetric
+        ($a\leq{b}$ and $b\leq{a}$ implies $a=b$), transitive
+        ($a\leq{b}$ and $b\leq{c}$ implies $a\leq{c}$), and total
+        (either $a\leq{b}$ or $b\leq{a}$ for all $a$ and $b$). This induces
+        another relation $<$ on $X$ defined by $a<b$ if and only if $a\leq{b}$
+        and $a\ne{b}$. The primary example is
+        \textit{less than or equal to} on $\mathbb{R}$, and the induced relation
+        is \textit{less than}. Given a total order on a set $X$ it is possible
+        to use this to induce a topology $\tau_{<}$ on $X$ that has some very
+        nice properties. Many topological properties of the real line stem from
+        the fact that the standard topology $\tau_{\mathbb{R}}$ and the
+        order topology $\tau_{<}$ are the same (where $<$ is the usual
+        \textit{less than} relation). First, some notation. Given a totally
+        ordered set $(X,\,<)$, and $a,b\in{X}$, we write:
+        \begin{align}
+            (a,\,b)&=\{\,c\in{X}\;|\;a<c\textrm{ and }c<b\,\}\\
+            [a,\,b)&=\{\,c\in{X}\;|\;a\leq{c}\textrm{ and }c<b\,\}\\
+            (a,\,b]&=\{\,c\in{X}\;|\;a<c\textrm{ and }c\leq{b}\,\}\\
+            (-\infty,\,a)&=\{\,c\in{X}\;|\;c<a\,\}\\
+            (a,\,\infty)&=\{\,c\in{X}\;|\;a<c\,\}\\
+            (-\infty,\,a]&=\{\,c\in{X}\;|\;c\leq{a}\,\}\\
+            [a,\,\infty)&=\{\,c\in{X}\;|\;a\leq{c}\,\}
+        \end{align}
+        Note, we're not saying $\infty$ is a thing, or an element of $X$, this
+        is just notation. Just like how $(0,\,\infty)$ is the set of all
+        positive numbers in $\mathbb{R}$, even though $\infty$ is not a number.
+        We use this to define the order topology.
+        \begin{definition}[\textbf{Order Topology}]
+            The order topology on a totally ordered set $(X,\,<)$ is the
+            topology $\tau_{<}$ generated by the set $\mathcal{B}$ defined by:
+            \begin{equation}
+                \mathcal{B}=\{\,(a,\,b)\;|\;a,b\in{X}\,\}
+                    \cup\{\,(a,\,\infty)\;|\;a\in{X}\,\}
+                    \cup\{\,(-\infty,\,a)\;|\;a\in{X}\,\}
+            \end{equation}
+            That is, the set of all open intervals, open right-rays, and
+            open left-rays.
+        \end{definition}
+        \begin{example}
+            The real line $\mathbb{R}$ with the standard Euclidean topology is
+            also the order topology induced by the \textit{less than} relation.
+            The Euclidean metric on $\mathbb{R}$ yields a basis consisting of
+            open intervals, which is precisely the order topologies basis.
+        \end{example}
+        \begin{definition}[\textit{Linearly Orderable Topological Space}]
+            A linearly orderable topological space is a topological space
+            $(X,\,\tau)$ such that there exists a total order $\leq$ on $X$
+            such that $\tau=\tau_{<}$ where $\tau_{<}$ is the order topology.
+        \end{definition}
+        Like metrizable spaces, linearly orderable spaces are very nice,
+        topologically.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a linearly orderable topological space, then
+            it is Hausdorff.
+        \end{theorem}
+        \begin{proof}
+            Let $a,b\in{X}$, $a\ne{b}$, and let $<$ be the order that induces
+            $\tau$. Since $<$ comes from a total order, either $a<b$ or $b<a$.
+            Suppose $a<b$ (the proof is symmetric). If there are no elements
+            $c\in{X}$ such that $c\in(a,\,b)$, then let
+            $\mathcal{U}=(-\infty,\,b)$ and $\mathcal{V}=(a,\,\infty)$.
+            Then $a\in\mathcal{U}$ and $b\in\mathcal{V}$ since $a<b$. But
+            also $\mathcal{U}$ and $\mathcal{V}$ are open by the definition
+            of the order topology. Moreover,
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$ since there are no elements
+            $c$ such that $a<c$ and $c<b$. If there is an element
+            $c\in(a,\,b)$, let $\mathcal{U}=(-\infty,\,c)$ and
+            $\mathcal{V}=(c,\,\infty)$. Then $a\in\mathcal{U}$,
+            $b\in\mathcal{V}$, and $\mathcal{U}$ and $\mathcal{V}$ are open.
+            Also $\mathcal{U}\cap\mathcal{V}=\emptyset$ since you can't have
+            $x<c$ and $c<x$ simultaneously. Hence, $(X,\,\tau)$ is Hausdorff.
+        \end{proof}
+        \begin{example}[\textbf{Subspace Order}]
+            Given a totally ordered space $(X,\,\leq)$ with the order topology
+            $\tau_{<}$, if we have $A\subseteq{X}$ there are two topologies we
+            can place on $A$. First, the subspace topology from $\tau_{<}$.
+            Second, $\leq$ restricts to a total order on $A$, label this
+            $\leq_{A}$. We get a topology $\tau_{<_{A}}$ via this subspace
+            order. It does \textbf{not} need to be the case that the subspace
+            topology and the suborder topologies are the same. Let
+            $A\subseteq\mathbb{R}$ be defined by:
+            \begin{equation}
+                A=\big\{\,x\in\mathbb{R}\;|\;
+                    x=-1\textrm{ or }x=\frac{1}{n+1}
+                    \textrm{ for some }n\in\mathbb{N}\,\big\}
+            \end{equation}
+            In the subspace topology $-1$ is isolated, the set
+            $\{\,-1\,\}$ is open since:
+            \begin{equation}
+                A\cap\big(-\frac{3}{2},\,-\frac{1}{2}\big)=\{\,-1\,\}
+            \end{equation}
+            However, with the order induced
+            from $\mathbb{R}$, the subspace order does not have
+            $\{\,1\,\}$ as an open set. Any open set containing $-1$ must also
+            contain some $\frac{1}{N}$, and hence also contain every
+            $\frac{1}{n}$ for all $n>N$.
+        \end{example}
+        \begin{example}[\textbf{Lexicographic Plane}]
+            We can define a total order on $\mathbb{R}^{2}$. Given
+            $(x_{0},\,y_{0})$ and $(x_{1},\,y_{1})$, define
+            $(x_{0},\,y_{0})\leq(x_{1},\,y_{1})$ if and only if either
+            $x_{0}\leq{x}_{1}$ or, $x_{0}=x_{1}$ and $y_{0}\leq{y}_{1}$. That
+            is, first examine the $x$ axis and compare these. If they're
+            identical, move on to the $y$ axis. This is also called the
+            \textit{dictionary order} since it mimics how words are ordered in
+            a dictionary. First, you compare the first letter, then the second,
+            and so on. This order does \textbf{not} give the standard topology
+            on $\mathbb{R}^{2}$, but it does give a good example to test ideas
+            on. The lexicographic plane often serves as a counterexample to
+            many plausible conjectures in topology.
+        \end{example}
+    \section{The Long Line}
+        This next example is a bit involved, but I hope you'll stick
+        around for the ride. It is one of my favorite spaces. The axiom of
+        choice tells us that the well-ordering theorem is true. That is,
+        every set $X$ has a well-order $\leq$ which is a total order such
+        that every non-empty subset $A\subseteq{X}$ has a \textit{smallest}
+        element. There is only one well-order that I know of that arises
+        naturally in mathematics, and that is the natural order on
+        $\mathbb{N}$. $\mathbb{Z}$, with the standard order, is not
+        well-ordered since $\mathbb{Z}$ has no least element
+        (there is no \textit{negative infinity} integer). What about
+        $\mathbb{R}^{+}$, all positive numbers? Also no, since there is
+        no smallest positive real number. How about
+        $\mathbb{R}_{\geq{0}}$, all positive numbers and zero? Also no.
+        This set does have a smallest number, it is zero, but
+        $\mathbb{R}^{+}\subseteq\mathbb{R}_{\geq{0}}$ is a non-empty subset
+        that has no smallest element.
+        \par\hfill\par
+        Well-orders are quite special. If $(X,\,\leq)$ is well-ordered and
+        $x\in{X}$, either $x$ is the largest element or there is a
+        \textit{next largest element}. The
+        set $[x,\,\infty)$ is such that $x$ is the smallest element. Removing
+        it, considering $(x,\,\infty)$, since $x$ is not the largest element
+        (well-ordered sets don't need to have a largest element, but it is
+        possible for such an element to exist) this subset is
+        non-empty, so there is a least element. This least element is the
+        next largest element after $x$. So, knowing this, how could one possibly
+        order the real numbers in a way that gives a well-order? Well, there's
+        a reason the well-ordering theorem is equivalent to the axiom of choice,
+        there's no constructive way to do it. But pretend, for a moment, that
+        we accept the axiom of choice and the well-ordering theorem and let
+        $\prec$ be a well-order on $\mathbb{R}$. Consider the sentence
+        $P(x)$ \textit{there are uncountably many elements less than} $x$.
+        The reals are uncountable, so the set of real numbers satisfying this
+        relation is non-empty. So there is a \textit{least} element
+        $\alpha$. This is the \textit{first} number that has uncountably many
+        elements less than it. So every element $x\prec\alpha$ has only
+        countably many elements less than $x$. This is bizarre. As noted,
+        there is always a $+1$ element, a next largest element, in a well-order.
+        $\alpha$ shows there does not need to be a \textit{next smallest}, or a
+        $-1$ before $\alpha$.
+        \par\hfill\par
+        Let $\omega$ be the set of all $x\in\mathbb{R}$
+        such that $x\prec\alpha$. $\omega$ is the
+        \textit{first-uncountable ordinal}. With the order $\prec$ restricted
+        to $\omega$, $\omega$ also becomes well-ordered. Let
+        $X=\omega\times[0,\,1)$, where $[0,\,1)$ is the set of numbers between
+        $0$ and $1$ with the \textbf{standard order}, including $0$ but
+        excluding $1$. We can equip $\omega\times[0,\,1)$ with the
+        lexicographic ordering, saying
+        $(x_{0},\,y_{0})\leq(x_{1},\,y_{1})$ if and only if
+        $x_{0}\preceq{x}_{1}$ or, $x_{0}=x_{1}$ and $y_{0}\leq{y}_{1}$.
+        Equipping $X$ with this order topology gives us the
+        \textit{long ray}. The real ray $\mathbb{R}_{\geq{0}}$ can be thought
+        of as stringing along countably many copies of $[0,\,1)$ in a row.
+        The long ray does this with \textit{uncountably} many copies of
+        $[0,\,1)$. The long ray is extremely long. The long line is obtained by
+        taking two copies of the long ray and gluing the endpoints together.
+        Topologically, the long line is very pleasant and a nightmare. It has
+        many very nice topological properties, but also serves as a great
+        utensil for counterexamples to some very plausible claims.
+    \section{Other Ordered Spaces}
+        There are four more topologies a total order can give us.
+        \begin{definition}[\textbf{Lower Limit Topology}]
+            The lower limit topology on a totally ordered set $(X,\,\leq)$ is
+            the topology $\tau$ generated by:
+            \begin{equation}
+                \mathcal{B}=\{\,[a,\,b)\subseteq{X}\;|\;a,b\in{X}\,\}
+            \end{equation}
+            That is, the topology generated by half-open intervals
+            closed on the left.
+        \end{definition}
+        \begin{definition}[\textbf{Upper Limit Topology}]
+            The upper limit topology on a totally ordered set $(X,\,\leq)$ is
+            the topology $\tau$ generated by:
+            \begin{equation}
+                \mathcal{B}=\{\,(a,\,b]\subseteq{X}\;|\;a,b\in{X}\,\}
+            \end{equation}
+            That is, the topology generated by half-open intervals
+            closed on the right.
+        \end{definition}
+        \begin{definition}[\textbf{Right Ray Topology}]
+            The right ray topology on a totally ordered set $(X,\,\leq)$ is
+            the topology $\tau$ generated by:
+            \begin{equation}
+                \mathcal{B}=\{\,(a,\,\infty)\subseteq{X}\;|\;a\in{X}\,\}
+            \end{equation}
+            That is, the topology generated by rays that go off to the right.
+        \end{definition}
+        \begin{definition}[\textbf{Left Ray Topology}]
+            The left ray topology on a totally ordered set $(X,\,\leq)$ is
+            the topology $\tau$ generated by:
+            \begin{equation}
+                \mathcal{B}=\{\,(-\infty,\,a)\subseteq{X}\;|\;a\in{X}\,\}
+            \end{equation}
+            That is, the topology generated by rays that go off to the left.
+        \end{definition}
+        All of these give us plenty of examples of spaces, but we will be
+        particularly concerned with the lower limit topology on $\mathbb{R}$.
+        This spaces is so frequently discussed in counterexamples that it is
+        given a name (it was the first known example of a normal spaces whose
+        product is not normal. We'll get to this next lecture).
+        \begin{definition}[\textbf{The Sorgenfrey Line}]
+            The Sorgenfrey Line is the topological space
+            $(\mathbb{R},\,\tau_{S})$ where $\tau_{S}$ is the lower limit
+            topology induced by the standard order $\leq$ on $\mathbb{R}$.
+        \end{definition}
+        Recall that two topologies on a set $X$ do not need to be comparable.
+        The Sorgenfrey line, however, is comparable to the Euclidean line.
+        \begin{theorem}
+            If $\tau_{\mathbb{R}}$ is the standard topology on $\mathbb{R}$,
+            and if $\tau_{S}$ is the Sorgenfrey topology, then
+            $\tau_{\mathbb{R}}\subseteq\tau_{S}$.
+        \end{theorem}
+        \begin{proof}
+            It suffices to show that basis elements $(a,\,b)$ in the standard
+            topology are open in the Sorgenfrey line. Let
+            $a<b$ and $r=\frac{b-a}{2}$. Define
+            $\mathcal{U}_{n}$ to be:
+            \begin{equation}
+                \mathcal{U}_{n}=[a+\frac{r}{n+1},\,b)
+            \end{equation}
+            Then $\mathcal{U}_{n}\in\tau_{S}$ since the Sorgenfrey topology is
+            the lower limit topology on $\mathbb{R}$. But
+            $\bigcup_{n}\mathcal{U}_{n}=(a,\,b)$, and the union of open sets
+            is open, so $(a,\,b)\in\tau_{S}$. Hence
+            $\tau_{\mathbb{R}}\subseteq\tau_{S}$.
+        \end{proof}
+        \begin{theorem}
+            The Sorgenfrey line is Hausdorff.
+        \end{theorem}
+        \begin{proof}
+            Since $(\mathbb{R},\,\tau_{\mathbb{R}})$ is Hausdorff and
+            $\tau_{\mathbb{R}}\subseteq\tau_{S}$, we have that
+            $(\mathbb{R},\,\tau_{S})$ is Hausdorff.
+        \end{proof}
+\end{document}
