@@ -19,6 +19,7 @@
 \usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
+\usepackage[table]{xcolor}
 \usepackage{float}
 \usepackage{hyperref}
 \hypersetup{
@@ -57,7 +58,7 @@
     \maketitle
     \color{blue}
     \begin{problem}[\textbf{Logic}]
-        \par\hfill\par\vspace{2em}
+        \par\hfill\par\vspace{1em}
         The truth table for a logical connective (such as $\Rightarrow$) that
         combines two propositions $P$ and $Q$ into a single proposition
         (like $P\Rightarrow{Q}$) is a table that exhausts all possibilities of
@@ -102,8 +103,100 @@
             \item (1 Point) Compare this with implication $P\Rightarrow{Q}$.
         \end{itemize}
     \end{problem}
-    \color{black}
     \clearpage
+    \color{black}
+    \begin{proof}[Solution]
+        \par\hfill\par
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c | c }
+                $P$&$Q$&$P\lor{Q}$\\
+                \hline
+                False&False&False\\
+                False&True&True\\
+                True&False&True\\
+                True&True&True
+            \end{tabular}
+            \caption{Truth Table for Logical Disjunction $(\lor)$}
+            \label{tab:logical_disjunction}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c | c }
+                $P$&$Q$&$P\land{Q}$\\
+                \hline
+                False&False&False\\
+                False&True&False\\
+                True&False&False\\
+                True&True&True
+            \end{tabular}
+            \caption{Truth Table for Logical Conjunction $(\land)$}
+            \label{tab:logical_conjunction}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c | c | c }
+                $P$&$Q$&$P\lor{Q}$&$P\land(P\lor{Q})$\\
+                \hline
+                False&False&False&False\\
+                False&True&True&False\\
+                True&False&True&True\\
+                True&True&True&True
+            \end{tabular}
+            \caption{Truth Table for the First Absorption Law}
+            \label{tab:first_abs_law}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c | c | c }
+                $P$&$Q$&$P\land{Q}$&$P\lor(P\land{Q})$\\
+                \hline
+                False&False&False&False\\
+                False&True&False&False\\
+                True&False&False&True\\
+                True&True&True&True
+            \end{tabular}
+            \caption{Truth Table for the Second Absorption Law}
+            \label{tab:second_abs_law}
+        \end{table}
+        In both Tab.~\ref{tab:first_abs_law} and Tab.~\ref{tab:second_abs_law}
+        the columns for $P$, $P\land(P\lor{Q})$, and $P\lor(P\land{Q})$ are
+        identical, meaning $P$ is true if and only if
+        $P\land(P\lor{Q})$ is true, if and only if $P\lor(P\land{Q})$ is true.
+        This is precisely the absorption laws.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c }
+                $P$&$\neg{P}$\\
+                \hline
+                False&True\\
+                True&False
+            \end{tabular}
+            \caption{Truth Table for Negation}
+            \label{tab:negation}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{ c | c | c | c }
+                $P$&$Q$&$\neg{P}$&$(\neg{P})\lor{Q}$\\
+                \hline
+                False&False&True&True\\
+                False&True&True&True\\
+                True&False&False&False\\
+                True&True&False&True
+            \end{tabular}
+            \caption{Equivalent Representation of Implication}
+            \label{tab:imp_equiv}
+        \end{table}
+        This is the same table as implication. Usually this is done the other
+        way around. In a \textit{Hilbert System} the main primitive notion is
+        implication $(\Rightarrow)$, and there are a few axioms for what it
+        means. Logical or is then defined as
+        $P\lor{Q}\Leftrightarrow(\neg{P})\Rightarrow{Q}$. All of the logical
+        symbols are further defined using implication.
+    \end{proof}
+    \clearpage
+    \color{blue}
     \begin{problem}[\textbf{Set Theory}]
         \par\hfill\par\vspace{1em}
         Here you will construct the real numbers.
@@ -129,7 +222,107 @@
                 and that $+$ is well defined on $\mathbb{R}$.
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        By the axiom of the power set, the set $\mathcal{P}(A\times{B})$ exists.
+        Let $P(f)$ be the sentence $f$ \textit{is a function from} $A$
+        \textit{to} $B$. Let $\mathcal{F}(A,\,B)$ be defined by:
+        \begin{equation}
+            \mathcal{F}(A,\,B)
+            =\{\,f\in\mathcal{P}(A\times{B})\;|\;P(f)\,\}
+        \end{equation}
+        Then $f\in\mathcal{F}(A,\,B)$ if and only if $f$ is a function from $A$
+        to $B$. That is, $\mathcal{F}(A,\,B)$ is the set of all functions
+        $f:A\rightarrow{B}$. We can be very cryptic if we so desire:
+        \begin{equation}
+            \mathcal{F}(A,\,B)
+            =\Big\{\,f\in\mathcal{P}(A\times{B})\;|\;
+                \forall_{a\in{A}}\exists!_{b\in{B}}\big((a,\,b)\in{f}\big)
+                \,\Big\}
+        \end{equation}
+        Where $\exists!$ is an extension of the $\exists$ qualifier.
+        $\exists!$ means there exists a unique element satisfying the
+        following proposition.
+        \par\hfill\par
+        Now, using this idea to construct the real numbers. A Cauchy
+        sequence in $\mathbb{Q}$ is a sequence
+        $a:\mathbb{N}\rightarrow\mathbb{Q}$ such that for all
+        $r>0$, $r\in\mathbb{Q}$, there is an $N\in\mathbb{N}$ such that for
+        all $m,n\in\mathbb{N}$ with $m,n>N$ we have
+        $|a_{m}-a_{n}|<\varepsilon$. We want to say for all
+        $r>0$, $r\in\mathbb{R}$, but we don't have $\mathbb{R}$ yet!
+        Now, using the first part of this problem, since a Cauchy sequence
+        is a particular function $a:\mathbb{N}\rightarrow\mathbb{Q}$, and
+        the set $\mathcal{F}(\mathbb{N},\,\mathbb{Q})$ of all functions
+        from $\mathbb{N}$ to $\mathbb{Q}$ exists, we can apply the sentence
+        $P(a)$, $a$ \textit{is a Cauchy sequence} to the set
+        $\mathcal{F}(\mathbb{N},\,\mathbb{Q})$ and obtain the set $A$ of all
+        Cauchy sequences in $\mathbb{Q}$. The relation $R$ on $A$ defined by
+        $aRb$ if and only if $|a_{n}-b_{n}|\rightarrow{0}$ is an equivalence
+        relation. It is reflexive since $|a_{n}-a_{n}|=0$ for all
+        $n\in\mathbb{N}$, so indeed $|a_{n}-a_{n}|\rightarrow{0}$. It is
+        symmetric. If $aRb$, then:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}|b_{n}-a_{n}|
+            =\lim_{n\rightarrow\infty}|(-1)(a_{n}-b_{n})|
+            =\lim_{n\rightarrow\infty}|a_{n}-b_{n}|
+            =0
+        \end{equation}
+        and hence $bRa$. Lastly, it is transitive. If $aRb$ and $bRc$, then
+        $|a_{n}-b_{n}|\rightarrow{0}$ and $|b_{n}-c_{n}|\rightarrow{0}$.
+        Let $\varepsilon>0$. There exists $N_{0},N_{1}\in\mathbb{N}$ such that
+        $n\in\mathbb{N}$ and $n>N_{0}$ implies
+        $|a_{n}-b_{n}|<\varepsilon/2$, and $n\in\mathbb{N}$ and $n>N_{1}$
+        implies $|b_{n}-c_{n}|<\varepsilon/2$. Let
+        $N=\textrm{max}(N_{0},\,N_{1})$. Then for $n\in\mathbb{N}$ and $n>N$
+        we have:
+        \begin{equation}
+            |a_{n}-c_{n}|
+            =|a_{n}-b_{n}+b_{n}-c_{n}|
+            \leq|a_{n}-b_{n}|+|b_{n}-c_{n}|
+            <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}
+            =\varepsilon
+        \end{equation}
+        and hence $|a_{n}-c_{n}|\rightarrow{0}$. So $R$ is reflexive, symmetric,
+        and transitive, and is therefore an equivalence relation.
+        \par\hfill\par
+        Defining $[a]+[b]=[c]$ where $c:\mathbb{N}\rightarrow\mathbb{Q}$ is the
+        sequence $c_{n}=a_{n}+b_{n}$, first $c$ is indeed a Cauchy sequence.
+        Let $\varepsilon>0$. Since $a$ is a Cauchy sequence there is an
+        $N_{0}\in\mathbb{N}$ such that for all $m,n\in\mathbb{N}$ with
+        $m,n>N_{0}$ we have $|a_{m}-a_{n}|<\varepsilon/2$. But $b$ is a Cauchy
+        sequence, so there is an $N_{1}\in\mathbb{N}$ such that for all
+        $m,n\in\mathbb{N}$ with $m,n>N_{1}$ we have
+        $|b_{m}-b_{n}|<\varepsilon/2$. Let $N=\textrm{max}(N_{0},\,N_{1})$.
+        Then for all $m,n\in\mathbb{N}$ with $m,n>N$ we have:
+        \begin{align}
+            |c_{m}-c_{n}|
+            &=|(a_{m}+b_{m})-(a_{n}+b_{n})|\\
+            &=|a_{m}+b_{m}-a_{n}-b_{n}|\\
+            &=|(a_{m}-a_{n})+(b_{m}-b_{n})|\\
+            &\leq|a_{m}-a_{n}|+|b_{m}-b_{n}|\\
+            &<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}\\
+            &=\varepsilon
+        \end{align}
+        so $c$ is a Cauchy sequence. Addition is well-defined. If
+        $a,b,x,y\in{A}$ are Cauchy sequences, and if
+        $[a]=[x]$ and $[b]=[y]$, then:
+        \begin{align}
+            \lim_{n\rightarrow\infty}|(a_{n}+b_{n})-(x_{n}+y_{n})|
+            &=\lim_{n\rightarrow\infty}|a_{n}+b_{n}-x_{n}-y_{n}|\\
+            &=\lim_{n\rightarrow\infty}|(a_{n}-x_{n})+(b_{n}-y_{n})|\\
+            &\leq\lim_{n\rightarrow\infty}
+                \big(|a_{n}-x_{n}|+|b_{n}-y_{n}|\big)\\
+            &=\lim_{n\rightarrow\infty}|a_{n}-x_{n}|
+                +\lim_{n\rightarrow\infty}|b_{n}-y_{n}|\\
+            &=0+0\\
+            &=0
+        \end{align}
+        And hence $(a+b)R(x+y)$, meaning $[a]+[b]=[x]+[y]$, so addition is
+        well-defined.
+    \end{proof}
     \clearpage
+    \color{blue}
     \begin{problem}[\textbf{Metric Spaces}]
         \par\hfill\par\vspace{1em}
         \begin{itemize}
@@ -148,7 +341,63 @@
                 $f^{-1}[\mathcal{D}]\subseteq{X}$ is closed.
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        A metric space is a set $X$ with a metric function
+        $d:X\times{X}\rightarrow\mathbb{R}$ that satisfies the following:
+        \begin{itemize}
+            \item
+                Positive-Definiteness
+                \par
+                $d(x,\,y)\geq{0}$ for all $x,y\in{X}$ and
+                $d(x,\,y)=0$ if and only if $x=y$.
+            \item
+                Symmetry
+                \par
+                $d(x,\,y)=d(y,\,x)$ for all $x,y\in{X}$.
+            \item
+                Triange Inequality
+                \par
+                $d(x,\,z)\leq{d}(x,\,y)+d(y,\,z)$ for all $x,y,z\in{X}$.
+        \end{itemize}
+        A convergent sequence in a metric space $(X,\,d)$ is a sequence
+        $a:\mathbb{N}\rightarrow{X}$ such that there is an $x\in{X}$ such that
+        for all $\varepsilon>0$ there is an $N\in\mathbb{N}$ such that
+        $n\in\mathbb{N}$ and $n>N$ implies $d(x,\,a_{n})<\varepsilon$.
+        \par\hfill\par
+        A continuous function between metric spaces is a function that maps
+        convergent sequences to convergent sequences. That is, given metric
+        spaces $(X,\,d_{X})$ and $(Y,\,d_{Y})$, a continuous function is a
+        function $f:X\rightarrow{Y}$ such that for all convergent sequences
+        $a:\mathbb{N}\rightarrow{X}$ such that $a_{n}\rightarrow{x}$ for some
+        $x\in{X}$, it is true that $f(a_{n})\rightarrow{f}(x)$.
+        \par\hfill\par
+        Suppose $f:X\rightarrow{Y}$ and $g:Y\rightarrow{Z}$ are continuous.
+        Let $a:\mathbb{N}\rightarrow{X}$ be a convergent sequence with
+        $a_{n}\rightarrow{x}\in{X}$. Since $f$ is continuous,
+        $f(a_{n})\rightarrow{f}(x)$. Since $g$ is continuous and $f(a)$ is a
+        convergent sequence, $g\big(f(a_{n})\big)\rightarrow{g}\big(f(x)\big)$.
+        But $(g\circ{f})(a_{n})=g\big(f(a_{n})\big)$, so
+        $(g\circ{f})(a_{n})\rightarrow(g\circ{f})(x)$. Hence, $g\circ{f}$ is
+        continuous.
+        \par\hfill\par
+        A closed set in a metric space $(X,\,d)$ is a subset
+        $\mathcal{C}\subseteq{X}$ such that for every sequence
+        $a:\mathbb{N}\rightarrow\mathcal{C}$ such that
+        $a_{n}\rightarrow{x}\in{X}$ it is true that $x\in\mathcal{C}$. That
+        is, $\mathcal{C}$ has all of its limit points.
+        \par\hfill\par
+        Let $(X,\,d_{X})$ and $(Y,\,d_{Y})$ be metric spaces and
+        $f:X\rightarrow{Y}$ continuous. Let $\mathcal{D}\subseteq{Y}$ be closed
+        and $\mathcal{C}=f^{-1}[\mathcal{D}]$. Let
+        $a:\mathbb{N}\rightarrow\mathcal{C}$ be a convergent sequence with
+        limit $x\in{X}$. Since $f$ is continuous, $f(a_{n})\rightarrow{f}(x)$.
+        But $\mathcal{D}$ is closed and $f(a_{n})\in\mathcal{D}$, so
+        $f(x)\in\mathcal{D}$. Hence $x\in\mathcal{C}$, so $\mathcal{C}$ is
+        closed.
+    \end{proof}
     \clearpage
+    \color{blue}
     \begin{problem}[\textbf{Compactness}]
         \par\hfil\par\vspace{1em}
         A uniformly continuous function from a metric space
@@ -221,6 +470,59 @@
         $|f(x)|<M$.
     \end{problem}
     \clearpage
+    \color{black}
+    \begin{proof}[Solution]
+        For all $\mathcal{U}\in\mathcal{O}$, $\mathcal{U}$ is an open ball, and
+        hence open. But moreover, for all $x\in{X}$, since $\delta_{x}$ is
+        chosen to be positive, we have that $B_{\delta_{x}}^{(X,\,d)}(x)$ is
+        non-empty since it contains the point $x$. Since this is true of
+        all $x\in{X}$, $\mathcal{O}$ is a collection of open sets that cover
+        $X$, and is therefore an open cover.
+        \par\hfill\par
+        Let $x,x_{0}\in{X}$ be such that $d_{X}(x,\,x_{0})<\delta$. Since
+        $\Delta$ is a cover of $X$ there is a $\mathcal{U}_{n}\in\Delta$ such
+        that $x\in\mathcal{U}_{n}$. But
+        $\mathcal{U}_{n}=B_{\delta_{a_{n}}/2}^{(X,\,d)}(a_{n})$, so
+        $d_{X}(x,\,a_{n})<\delta_{a_{n}}/2$. But then, by the triangle
+        inequality, we have:
+        \begin{equation}
+            d_{X}(x_{0},\,a_{n})
+            \leq{d}_{X}(x_{0},\,x)+d_{X}(x,\,a_{n})
+            <\delta+\frac{\delta_{a_{n}}}{2}
+            \leq\frac{\delta_{a_{n}}}{2}+\frac{\delta_{a_{n}}}{2}
+            =\delta_{a_{n}}
+        \end{equation}
+        by the definition of $\delta$. So
+        $x,x_{0}\in{B}_{\delta_{a_{n}}}^{(X,\,d)}(a_{n})$.
+        \par\hfill\par
+        Let $x,x_{0}\in{X}$ with $d_{X}(x,\,x_{0})<\delta$. Then there is an
+        $a_{n}$ such that $x,x_{0}\in{B}_{\delta_{a_{n}}}^{(X,\,d)}(a_{n})$. But
+        then:
+        \begin{equation}
+            d_{Y}\big(f(x),\,f(x_{0})\big)
+            \leq{d}_{Y}\big(f(x),\,f(a_{n})\big)
+                +d_{Y}\big(f(x_{0}),\,f(a_{n})\big)
+            <\varepsilon+\varepsilon
+            =2\varepsilon
+        \end{equation}
+        Since $2\varepsilon$ can be made arbitrarily small, and since
+        $\delta$ was chosen independent of $x$, $f$ is uniformly continuous.
+        \par\hfill\par
+        For the bonus, suppose $f$ is not bounded. Then for all $M\in\mathbb{R}$
+        there is an $x\in{X}$ such that $|f(x)|\geq{M}$. In particular, for all
+        $n\in\mathbb{N}$ there is an $a_{n}\in{X}$ such that
+        $|f(a_{n})|\geq{n}$. But then $a:\mathbb{N}\rightarrow{X}$ is a
+        sequence in a compact metric space, so there is a convergent
+        subsequence $a_{k}$. Let $x\in{X}$ be the limit,
+        $a_{k_{n}}\rightarrow{x}$. But $f$ is continuous, so if
+        $a_{k_{n}}\rightarrow{x}$, then
+        $f(a_{k_{n}})\rightarrow{f}(x)$. Let $N\in\mathbb{N}$ be such that
+        $N>|f(x)|+1$. But then for all $n\in\mathbb{N}$ with $n>N$ we have
+        $|f(x)-f(a_{k_{n}})|>1$, so $f(a_{k_{n}})$ can't converge to $f(x)$,
+        a contradiction. So $f$ is bounded.
+    \end{proof}
+    \clearpage
+    \color{blue}
     \begin{problem}[\textbf{Topological Spaces}]
         \par\hfill\par\vspace{1em}
         You may freely use the following fact. If
@@ -244,4 +546,85 @@
                 a Hausdorff topological space.
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        A topological space is a set $X$ with a topology $\tau$, which is a
+        subset $\tau\subseteq\mathcal{P}(X)$ satisfying:
+        \begin{itemize}
+            \item $\emptyset\in\tau$
+            \item $X\in\tau$
+            \item If $\mathcal{U},\mathcal{V}\in\tau$, then
+                $\mathcal{U}\cap\mathcal{V}\in\tau$.
+            \item If $\mathcal{O}\subseteq\tau$, then
+                $\bigcup\mathcal{O}\in\tau$.
+        \end{itemize}
+        A Hausdorff topological space is a topological space $(X,\,\tau)$ such
+        that for all $x,y\in{X}$ with $x\ne{y}$ there are open sets
+        $\mathcal{U},\mathcal{V}\in\tau$ such that $x\in\mathcal{U}$,
+        $y\in\mathcal{V}$, and $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+        \par\hfill\par
+        A metrizable space is Hausdorff. Let $(X,\,\tau)$ be metrizable, with
+        metric $d$ inducing the topology $\tau$. Let $x,y\in{X}$ be distinct,
+        $x\ne{y}$. Since $d$ is a metric, $d(x,\,y)>0$. Let
+        $\varepsilon=\frac{1}{2}d(x,\,y)$. Let
+        $\mathcal{U}=B_{\varepsilon}^{(X,\,d)}(x)$ and
+        $\mathcal{V}=B_{\varepsilon}^{(X,\,d)}(y)$. Then, since open balls are
+        open, $\mathcal{U}$ and $\mathcal{V}$ are elements of $\tau$.
+        Suppose $z\in\mathcal{U}\cap\mathcal{V}$. Then:
+        \begin{equation}
+            d(x,\,y)\leq{d}(x,\,z)+d(z,\,y)
+                <\varepsilon+\varepsilon
+                =d(x,\,y)
+        \end{equation}
+        so $d(x,\,y)<d(x,\,y)$, a contradiction, and therefore
+        $\mathcal{U}\cap\mathcal{V}=\emptyset$. That is, $(X,\,\tau)$ is
+        Hausdorff.
+        \par\hfill\par
+        The Zariski topology is a topology. The entire set is in it since
+        $f(x)=1$ is a polynomial and $f(x)=0$ if and only if $x\in\emptyset$.
+        So $\mathbb{R}=\mathbb{R}\setminus\emptyset$ is an element of
+        $\tau_{Z}$. Similarly, $f(x)=0$ is a polynomial and $f(x)=0$ for all
+        $x\in\mathbb{R}$, hence $\emptyset=\mathbb{R}\setminus\mathbb{R}$ is
+        in $\tau_{Z}$. Let $\mathcal{U},\mathcal{V}\in\tau_{Z}$ be open sets.
+        Then there are polynomials $f$ and $g$ corresponding to $\mathcal{U}$
+        and $\mathcal{V}$, respectively. But the product of polynomials is a
+        polynomial, so $h=fg$ is a polynomial. But then $h(x)=0$ if and only if
+        $f(x)g(x)=0$. But $f(x)g(x)=0$ if and only if $f(x)=0$ or $g(x)=0$
+        (Euclid's theorem). But then $h(x)=0$ if and only if
+        $x\in\mathbb{R}\setminus\mathcal{U}$ or
+        $x\in\mathbb{R}\setminus\mathcal{V}$. Thus $h(x)=0$ if and only if
+        $x\in\mathbb{R}\setminus(\mathcal{U}\cap\mathcal{V})$, so
+        $\mathcal{U}\cap\mathcal{V}$ is open. Lastly, let
+        $\mathcal{O}\subseteq\tau_{Z}$. If $\mathcal{O}$ is empty, the union
+        is empty, and the empty set is an element of $\tau_{Z}$. If
+        $\mathbb{R}\in\mathcal{O}$, then $\bigcup\mathcal{O}=\mathbb{R}$, and
+        $\mathbb{R}\in\tau_{Z}$. So suppose $\mathcal{O}$ is non-empty and 
+        $\mathbb{R}\notin\mathcal{O}$. But then every
+        $\mathcal{U}\in\mathcal{O}$ corresponds to a polynomial $f$ where
+        $f(x)=0$ for at least some $x\in\mathbb{R}$. Let
+        $\mathcal{U}\in\mathcal{O}$ and let $f$ be the corresponding polynomial.
+        But then $\mathbb{R}\setminus\mathcal{U}$ is finite since a non-zero
+        polynomial has only finitely many zeros. But then:
+        \begin{equation}
+            \mathbb{R}\setminus\bigcup\mathcal{O}
+            \subseteq\mathbb{R}\setminus\mathcal{U}
+        \end{equation}
+        So $\mathbb{R}\setminus\bigcup\mathcal{O}$ is finite. Let the elements
+        be $x_{0},\dots,x_{n}$. Let $h(x)$ be defined by:
+        \begin{equation}
+            h(x)=\prod_{k=0}^{n}(x-x_{k})
+            =(x-x_{0})(x-x_{1})\cdots(x-x_{n})
+        \end{equation}
+        Then $h(x)=0$ if and only if
+        $x\in\mathbb{R}\setminus\bigcup\mathcal{O}$. Hence
+        $\bigcup\mathcal{O}$ is open.
+        \par\hfill\par
+        $(\mathbb{R},\,\tau_{Z})$ is not Hausdorff. Let
+        $\mathcal{U},\mathcal{V}$ be non-empty proper open subsets. Then,
+        since non-zero polynomials have only finitely many zeros,
+        $\mathbb{R}\setminus\mathcal{U}$ and $\mathbb{R}\setminus\mathcal{V}$
+        are finite. But then $\mathcal{U}\cap\mathcal{V}$ must be infinite
+        since $\mathbb{R}$ is infinite, and hence $(X,\,\tau_{Z})$ can not be
+        Hausdorff.
+    \end{proof}
 \end{document}
