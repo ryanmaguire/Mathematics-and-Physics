@@ -1,0 +1,239 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 20}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Connectedness}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/disconnected_space_001.pdf}
+            \caption{A Disconnected Topological Space}
+            \label{fig:disconnected_space_001}
+        \end{figure}
+        Connectedness is one of the fundamental notions in topology. Intuitively
+        a connected space is one that is in \textit{one piece}. It can be hard
+        to make precise what one means by this, but it can be easier to describe
+        what \textit{disconnected} is. For intuition we use the plane. Two
+        isolated discs in the plane should not be considered as a connected
+        subspace since it is definitely not one piece
+        (Fig.~\ref{fig:disconnected_space_001}). We use this to motivate
+        disconnected spaces.
+        \begin{definition}[\textbf{Disconnected Topological Space}]
+            A disconnected topological space is a topological space $(X,\,\tau)$
+            such that there are non-empty open subsets
+            $\mathcal{U},\mathcal{V}\in\tau$ such that
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$ and
+            $\mathcal{U}\cup\mathcal{V}=X$.
+        \end{definition}
+        \begin{example}
+            The discrete topology on $\mathbb{Z}_{2}$ is disconnected. This
+            space is two isolated points. To be precise, the set
+            $\mathcal{U}=\{\,0\,\}$ is open and non-empty, the set
+            $\mathcal{V}=\{\,1\,\}$ is open and non-empty, and these two sets
+            satisfy $\mathcal{U}\cap\mathcal{V}=\emptyset$ and
+            $\mathcal{U}\cup\mathcal{V}=\mathbb{Z}_{2}$.
+        \end{example}
+        \begin{example}
+            If $X$ is any set containing at least two points, and if $\tau$ is
+            the discrete topology, then $(X,\,\tau)$ is disconnected. Let
+            $x\in{X}$ be one point and define $\mathcal{U}=\{\,x\,\}$. Since
+            $\tau$ is the discrete topology $\mathcal{U}$ is open and non-empty.
+            Let $\mathcal{V}=X\setminus\mathcal{U}$. Again, since $\tau$ is the
+            discrete topology, $\mathcal{V}$ is open and since $X$ has at least
+            two points it is also non-empty. But then $\mathcal{U}$ and
+            $\mathcal{V}$ are non-empty open subsets such that
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$ and
+            $\mathcal{U}\cup\mathcal{V}=X$, showing that $(X,\,\tau)$ is
+            disconnected.
+        \end{example}
+        Connected is just \textit{not disconnected}.
+        \begin{definition}[\textbf{Connected Topological Space}]
+            A connected topological space is a topological space $(X,\,\tau)$
+            that is not disconnected.
+        \end{definition}
+        Some familiar spaces like $\mathbb{R}$ and $\mathbb{R}^{2}$ are
+        connected, but it takes a bit of work to show this. The spaces that are
+        easy to show are connected straight from the definition have
+        less-than-useful topologies.
+        \begin{example}
+            If $X$ is any set and $\tau$ is the indiscrete topology, then
+            $(X,\,\tau)$ is connected. There are no two disjoint open sets
+            $\mathcal{U},\mathcal{V}$ that are non-empty and cover $X$ since
+            the only open sets are $\emptyset$ and $X$. So $(X,\,\tau)$ is
+            connected.
+        \end{example}
+        \begin{example}
+            The particular point topology on $\mathbb{R}$ defines a set
+            $\mathcal{U}$ to be open if and only if $0\in\mathcal{U}$ or
+            $\mathcal{U}=\emptyset$. Hence any two non-empty open sets that
+            cover $\mathbb{R}$ must have $0$ in common, meaning we cannot
+            separate the space into two disjoint non-empty open sets, so the
+            particular point space is connected. Intuitively, every point is
+            \textit{connected} to zero. 
+        \end{example}
+        \begin{example}
+            The excluded point topology on $\mathbb{R}$ defines a set
+            $\mathcal{U}$ to be open if and only if $0\notin\mathcal{U}$ or
+            $\mathcal{U}=\mathbb{R}$. Because of this if $\mathcal{U}$ and
+            $\mathcal{V}$ are open sets that cover $\mathbb{R}$, one of these
+            sets must be $\mathbb{R}$. Because of this it is impossible to
+            separate the space using disjoint non-empty open sets.
+        \end{example}
+        \begin{example}
+            The finite complement topology on $\mathbb{R}$ is open. Given any
+            non-empty open subsets $\mathcal{U},\mathcal{V}$, the intersection
+            can not be empty since $\mathbb{R}\setminus\mathcal{U}$ and
+            $\mathbb{R}\setminus\mathcal{V}$ are both finite, meaning
+            $\mathcal{U}\cap\mathcal{V}$ is infinite (since $\mathbb{R}$ is
+            infinite). So the finite complement topology on $\mathbb{R}$ is
+            connected.
+        \end{example}
+        \begin{example}
+            For similar reasons, the countable complement topology on
+            $\mathbb{R}$ yields a connected space. Any two non-empty open
+            subsets must have non-empty intersection since $\mathbb{R}$ is
+            uncountable and the complements of two non-empty open subsets is
+            countable (and hence so is the union of their complements).
+        \end{example}
+        \begin{example}
+            The rationals $\mathbb{Q}$ with the subspace topology from
+            $\mathbb{R}$ are disconnected. Let $\mathcal{U}$ be all positive
+            rational numbers $x$ such that $x^{2}>2$. Let $\mathcal{V}$ be
+            all rational numbers $x$ such that either $x<0$ or $x^{2}<2$. There
+            is no rational number whose square is 2, so $\mathcal{U}$ and
+            $\mathcal{V}$ are non-empty disjoint open subsets whose union is
+            the entirety of $\mathbb{Q}$. So the rationals are disconnected. 
+        \end{example}
+        \begin{example}
+            Let $X\subseteq\mathbb{R}$ be defined by
+            $X=(-\infty,\,0)\cup(0,\,\infty)$. This is the real line with the
+            origin removed. Equipping this with the subspace topology yields a
+            disconnected space. Setting $\mathcal{U}=(-\infty,\,0)$ and
+            $\mathcal{V}=(0,\,\infty)$ shows why.
+        \end{example}
+        When first discussing open and closed sets many students have trouble
+        realizing that \textit{open} does not mean \textit{not closed}, and
+        \textit{closed} does not mean \textit{not open}. It is possible for a
+        subset to be open and not closed, closed and not open, neither open nor
+        closed, and both open and closed. This last part is particular hard to
+        grasp since $\mathbb{R}$ has no subsets $\mathcal{U}\subseteq\mathbb{R}$
+        that are both open and closed with the exception of
+        $\mathcal{U}=\mathbb{R}$ and $\mathcal{U}=\emptyset$. This is because
+        the real line is \textit{connected} and connected subsets have no
+        proper non-empty subsets that are both open and closed. Let's prove
+        this.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is disconnected
+            if and only if there is a non-empty open proper subset
+            $\mathcal{U}\subsetneq{X}$ that is also closed.
+        \end{theorem}
+        \begin{proof}
+            If $(X,\,\tau)$ is disconnected there exists non-empty disjoint
+            open sets $\mathcal{U}$ and $\mathcal{V}$ whose union is $X$. But
+            then $X\setminus\mathcal{U}=\mathcal{V}$, and $\mathcal{V}$ is
+            open, so $\mathcal{U}$ is closed. But $\mathcal{U}$ is also open,
+            so $\mathcal{U}$ is a non-empty proper subset of $X$ that is also
+            closed. Now suppose there is a subset $\mathcal{U}\subsetneq{X}$
+            that is non-empty and both open and closed. Since $\mathcal{U}$ is
+            closed, $\mathcal{V}=X\setminus\mathcal{U}$ is open. But since
+            $\mathcal{U}$ is proper, $\mathcal{V}$ is non-empty. But then
+            $\mathcal{U}$ and $\mathcal{V}$ are disjoint non-empty open subsets
+            whose union is $X$, so $(X,\,\tau)$ is disconnected.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is disconnected if
+            and only if there are non-empty disjoint closed subsets
+            $\mathcal{C},\mathcal{D}\subseteq{X}$ such that
+            $\mathcal{C}\cup\mathcal{D}=\emptyset$.
+        \end{theorem}
+        \begin{proof}
+            If $(X,\,\tau)$ is disconnected there are non-empty disjoint open
+            subsets $\mathcal{U},\mathcal{V}$ such that
+            $\mathcal{U}\cup\mathcal{V}=X$. But then
+            $\mathcal{V}=X\setminus\mathcal{U}$ and
+            $\mathcal{U}=X\setminus\mathcal{V}$ are closed non-empty disjoint
+            subsets whose union is $X$. Now, suppose there are non-empty
+            disjoint closed subsets $\mathcal{C},\mathcal{D}\subseteq{X}$ such
+            that $\mathcal{C}\cup\mathcal{D}=X$. But then
+            $\mathcal{U}=X\setminus\mathcal{C}$ and
+            $\mathcal{V}=X\setminus\mathcal{D}$ are open non-empty disjoint
+            sets whose union is $X$, so $(X,\,\tau)$ is disconnected.
+        \end{proof}
+    \section{The Connected Subsets of the Real Line}
+    \section{Path-Connectedness}
+\end{document}
