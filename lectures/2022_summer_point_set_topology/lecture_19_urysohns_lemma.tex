@@ -1,0 +1,309 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 20}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Urysohn's Lemma and Metrization Theorem}
+        We now come to one of the major theorems of point-set topology, the
+        so-called \textit{Urysohn Lemma}. The theorem deals with normal spaces
+        and is used in the proof of one of the first metrization theorems.
+        \begin{theorem}[\textbf{Urysohn's Lemma}]
+            If $(X,\,\tau)$ is a normal topological space, and if
+            $\mathcal{C},\mathcal{D}\subseteq{X}$ are disjoint closed subsets,
+            then there is a continuous function
+            $f:X\rightarrow[0,\,1]$, where $[0,\,1]$ has the subspace topology,
+            such that $f[\mathcal{C}]=\{\,0\,\}$ and
+            $f[\mathcal{D}]=\{\,1\,\}$. That is,
+            $\mathcal{C}\subseteq{f}^{-1}[\{\,0\,\}]$ and
+            $\mathcal{D}\subseteq{f}^{-1}[\{\,1\,\}]$.
+        \end{theorem}
+        \begin{proof}
+            Let $A=\mathbb{Q}\cap[0,\,1]$, the set of all rational numbers
+            between $0$ and $1$, inclusive. Since $\mathbb{Q}$ is countable,
+            $A$ is countable as well. Moreover, $A$ is countably infinite since
+            it is not finite. Let $a:\mathbb{N}\rightarrow{A}$ be a bijection
+            such that $a_{0}=0$ and $a_{1}=1$. We will now define open sets
+            $\mathcal{U}_{a_{n}}$ such that whenever $a_{m}<a_{n}$ is true
+            we have:
+            \begin{equation}
+                \textrm{Cl}_{\tau}(\mathcal{U}_{a_{m}})
+                \subseteq\mathcal{U}_{a_{n}}
+            \end{equation}
+            To start, define:
+            \begin{equation}
+                \mathcal{U}_{1}=X\setminus\mathcal{D}
+            \end{equation}
+            Since $(X,\,\tau)$ is normal and
+            $\mathcal{C}\subseteq\mathcal{U}_{1}$ there is an open
+            set $\mathcal{U}_{0}$ such that
+            $\mathcal{C}\subseteq\mathcal{U}_{0}$ and
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{0})\subseteq\mathcal{U}_{1}$.
+            Define $\mathcal{A}_{N}$ via:
+            \begin{equation}
+                \mathcal{A}_{N}=\{\,a_{n}\in{A}\;|\;n\in\mathbb{Z}_{N}\,\}
+            \end{equation}
+            That is, the first $N$ rational numbers given by the bijection
+            $a:\mathbb{N}\rightarrow{A}$. We define $\mathcal{U}_{a_{n}}$
+            recursively. Suppose $\mathcal{U}_{a_{n}}\in\tau$ has been defined
+            for all $n\in\mathbb{Z}_{N}$ such that $a_{m}<a_{n}$ implies
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{a_{m}})\subseteq\mathcal{U}_{a_{n}}$.
+            Since $\mathcal{A}_{N+1}$ is a subset of $\mathbb{Q}$, which is
+            totally ordered, it is ordered as well. But it is also finite, and
+            since $a_{N}\ne{0}$ and $a_{N}\ne{1}$, there are
+            $a_{m},a_{n}\in\mathcal{A}_{N+1}$ such that
+            $a_{m}<a_{N}$ and $a_{N}<a_{n}$ where $a_{m}$ is the largest
+            such value and $a_{n}$ is the smallest such value. But by the
+            recursive definition
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{a_{m}})\subseteq\mathcal{U}_{a_{n}}$.
+            But $\textrm{Cl}_{\tau}(\mathcal{U}_{a_{m}})$ is closed and
+            $\mathcal{U}_{a_{n}}$ is open, so since $(X,\,\tau)$ is normal there
+            is $\mathcal{U}_{a_{N}}\in\tau$ such that
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{a_{m}})\subseteq\mathcal{U}_{a_{N}}$
+            and $\mathcal{U}_{a_{N}}\subseteq\mathcal{U}_{a_{n}}$. By the
+            principle of induction, such a set exists for all $a_{n}$. That is,
+            we now have for all rational numbers $p,q\in{A}$ with $p<q$, the
+            following:
+            \begin{equation}
+                \textrm{Cl}_{\tau}(\mathcal{U}_{p})\subseteq\mathcal{U}_{q}
+            \end{equation}
+            We extend this to all rationals as follows. Given
+            $p\in\mathbb{Q}$, $p\not\in{A}$, define:
+            \begin{equation}
+                \mathcal{U}_{p}=
+                \begin{cases}
+                    X&p>1\\
+                    \emptyset&p<0
+                \end{cases}
+            \end{equation}
+            Define $F:X\rightarrow\mathcal{P}(\mathbb{Q})$ via:
+            \begin{equation}
+                F(x)=\{\,p\in\mathbb{Q}\;|\;x\in\mathcal{U}_{p}\,\}
+            \end{equation}
+            Define $f:X\rightarrow[0,\,1]$ via:
+            \begin{equation}
+                f(x)=\textrm{inf}\big(F(x)\big)
+            \end{equation}
+            First, since $A$ is bounded below by $0$, $f(x)$ is well-defined
+            for all $x\in{X}$. We now need to show that $f$ is continuous,
+            $f[\mathcal{C}]=\{\,0\,\}$, and $f[\mathcal{D}]=\{\,1\,\}$.
+            First, $f[\mathcal{C}]=\{\,0\,\}$. If $x\in\mathcal{C}$, then
+            $f(x)\in\mathcal{U}_{0}$ by definition of $\mathcal{U}_{0}$ (see
+            above). Hence $0$ is the smallest value $p\in\mathbb{Q}$ such that
+            $f(x)\in\mathcal{U}_{p}$, and hence $f(x)=0$. Next,
+            $f[\mathcal{D}]=\{\,1\,\}$. By definition, for all $p\in\mathbb{Q}$
+            with $p\leq{1}$, $f(x)\notin\mathcal{U}_{p}$. Hence
+            $f(x)=\textrm{inf}\big((1,\,\infty)\big)=1$, so
+            $f[\mathcal{D}]=\{\,1\,\}$. Lastly, we must prove $f$ is continuous.
+            This follows from the fact that $A$ is a dense subset of $[0,\,1]$.
+            First, if $p\in\mathbb{Q}$ and
+            $x\in\textrm{Cl}_{\tau}(\mathcal{U}_{p})$, then $f(x)\leq{p}$.
+            This is true since for all $q\in\mathbb{Q}$ with $p<q$ we have
+            $\mathcal{U}_{p}\subseteq\mathcal{U}_{q}$, and hence:
+            \begin{equation}
+                f(x)
+                =\textrm{inf}\big\{\,r\in\mathbb{Q}\;|\;
+                    f(x)\in\mathcal{U}_{r}\,\big\}
+                \leq{p}
+            \end{equation} 
+            so $f(x)\leq{p}$. Next, if $x\notin\mathcal{U}_{p}$, then
+            $f(x)\geq{p}$. Since $x\notin\mathcal{U}_{p}$, the only values
+            $q\in\mathbb{Q}$ with $x\in\mathcal{U}_{q}$ must be greater than
+            $p$, and hence $f(x)\geq{p}$. To conclude, a function
+            is continuous if and only if for all $x\in{X}$ and all open
+            $\mathcal{V}$ with $f(x)\in\mathcal{V}$ there is an open
+            $\mathcal{U}\subseteq{X}$ such that $x\in\mathcal{U}$ and
+            $f[\mathcal{U}]\subseteq\mathcal{V}$. Let $x\in{X}$ and
+            $\mathcal{V}\subseteq\mathbb{R}$ be an open set such that
+            $f(x)\in\mathcal{V}$. But $\mathcal{V}$ is open so there is an
+            $\epsilon>0$ such that $|y-f(x)|<\varepsilon$ implies
+            $y\in\mathcal{V}$. Let $c=f(x)-\varepsilon/2$ and
+            $d=f(x)+\varepsilon/2$. Let $p$ and $q$ be rational numbers such
+            that $c<p<f(x)<q<d$. Define $\mathcal{U}$ via:
+            \begin{equation}
+                \mathcal{U}=\mathcal{U}_{q}
+                    \setminus\textrm{Cl}_{\tau}(\mathcal{U}_{p})
+            \end{equation}
+            Then $\mathcal{U}$ is the difference of a closed set from an open
+            set, and is hence open. By the above observation, for all
+            $x_{0}\in\mathcal{U}$ we have $p\leq{f}(x)\leq{f}(q_{0})$, and hence
+            $f[\mathcal{U}]\subseteq\mathcal{V}$. But also
+            $x\in\mathcal{U}$ since $p<f(x)<q$. So $f$ is continuous.
+        \end{proof}
+        We get some use out of this immediately via Urysohn's metrization
+        theorem.
+        \begin{theorem}[\textbf{Urysohn's Metrization Theorem}]
+            If $(X,\,\tau)$ is a regular second countable Hausdorff topological
+            space, then it is metrizable.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is regular and second countable, it is normal.
+            But also since $(X,\,\tau)$ is second countable there is a countable
+            basis $\mathcal{B}$ for $\tau$. Let
+            $\mathcal{U}:\mathbb{N}\rightarrow\mathcal{B}$ be a surjection so
+            that we may list the elements as:
+            \begin{equation}
+                \mathcal{B}=
+                \{\,\mathcal{U}_{0},\,\dots,\,\mathcal{U}_{n},\,\dots\,\}
+            \end{equation}
+            For all $m,n\in\mathbb{N}$ with
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{m})\subseteq\mathcal{U}_{n}$,
+            by Urysohn's lemma there is a continuous function
+            $g_{m,n}:X\rightarrow[0,\,1]$ such that:
+            \begin{equation}
+                g_{m,n}[\textrm{Cl}_{\tau}(\mathcal{U}_{m})]=\{\,1\,\}
+                \textrm{ and }
+                g_{m,n}[X\setminus\mathcal{U}_{n}]=\{\,0\,\}
+            \end{equation}
+            The set of all such $\mathcal{U}_{m}$ cover $X$ since $\mathcal{B}$
+            is a basis and the set of all such functions is countable since
+            the elements are indexed by $\mathbb{N}\times\mathbb{N}$. Relabel
+            these functions as $f_{n}:X\rightarrow[0,\,1]$ for all
+            $n\in\mathbb{N}$. Define the function
+            $F:X\rightarrow\mathbb{R}^{\infty}$ via:
+            \begin{equation}
+                F(x)=\big(f_{0}(x),\,\dots,\,f_{n}(x),\,\dots)
+            \end{equation}
+            Since $\mathbb{R}^{\infty}$ has the product topology, and since each
+            component function $f_{n}$ is continuous, $F$ is continuous. $F$
+            is injective since given $x,y\in{X}$ with $x\ne{y}$ one can find
+            a basis element $\mathcal{U}_{n}$ such that $x\in\mathcal{U}_{n}$
+            and $y\notin\mathcal{U}_{n}$, since $(X,\,\tau)$ is Hausdorff, but
+            then there is a function $f_{n}$ such that $f_{n}(x)=1$ and
+            $f_{n}(y)=0$, hence $F(x)\ne{F}(y)$ since one of the components
+            is different. Lastly, we must show $F$ is a homeomorphism between
+            $(X,\,\tau)$ and $(F[X],\,\tau_{\mathbb{R}^{\infty}_{F[X]}})$.
+            Since $F:X\rightarrow\mathbb{R}^{\infty}$ is injective,
+            $F:X\rightarrow{F}[X]$ is bijective. To show
+            $F:X\rightarrow{F}[X]$ is a homeomorphism, since $F$ is continuous,
+            all that's left to show is that $F$ is an open mapping.
+            Let $\mathcal{U}\subseteq{X}$ be open, and given
+            $y\in{f}[\mathcal{U}]$, let $x\in\mathcal{U}$ be such that
+            $F(x)=y$. Since $x\in{X}$ there is an $n\in\mathbb{N}$ such that
+            $f_{n}(x)>0$ and $f_{n}[X\setminus\mathcal{U}]=\{\,0\,\}$.
+            Let $\mathcal{V}=\textrm{proj}_{n}^{-1}\big[(0,\,\infty)\big]$.
+            Then, since projections are continuous and $(0,\,\infty)$ is open,
+            $\mathcal{V}\subseteq\mathbb{R}^{\infty}$ is open. But then
+            $f[X]\cap\mathcal{V}$ is open in $f[X]$ by definition of the
+            subspace topology. But then $y\in{f}[X]\cap\mathcal{V}$, since:
+            \begin{equation}
+                \textrm{proj}_{n}(y)
+                =\textrm{proj}_{n}\big(f(x)\big)
+                =f_{n}(x)
+            \end{equation}
+            and $f_{n}(x)>0$, so $y\in\mathcal{V}$ by definition of
+            $\mathcal{V}$. Lastly,
+            $f[X]\cap\mathcal{V}\subseteq{f}[\mathcal{U}]$. For given
+            $y\in{f}[X]\cap\mathcal{V}$, since $y\in{f}[X]$, there is some
+            $x\in{X}$ such that $f(x)=y$. But if
+            $y\in\mathcal{V}$, then $\textrm{proj}_{n}(y)>0$. But
+            $f_{n}$ is the zero function outside of $\mathcal{U}$, and hence
+            $y\in{f}[\mathcal{U}]$. Since $f[\mathcal{U}]$ can be written as
+            the union of all such $\mathcal{V}$, $f[\mathcal{U}]$ is open.
+            That is, $f$ is an open mapping with respect to the subspace
+            topology on $f[X]$. Therefore $f:X\rightarrow\mathbb{R}^{\infty}$
+            is a topological embedding, meaning $(X,\,\tau)$ is homeomorphic
+            to a subspace of a metrizable space, and is therefore metrizable.
+        \end{proof}
+        The last theorem to show is the Tietze extension theorem. It is
+        logically equivalent to Urysohn's lemma.
+        \begin{theorem}[\textbf{Tietze Extension Theorem}]
+            If $(X,\,\tau)$ is a normal topological space, if
+            $\mathcal{C}\subseteq{X}$ is closed, and if
+            $f:\mathcal{C}\rightarrow\mathbb{R}$ is continuous, then there is
+            a continuous function $\tilde{f}:X\rightarrow\mathbb{R}$ such that
+            $\tilde{f}|_{A}=f$, and if $f$ is bounded, then $\tilde{f}$ is
+            bounded as well with the same bounds.
+        \end{theorem}
+        The proof is a bit lengthy, but I'd like to point out what this theorem
+        does \textit{not} say. It does not say
+        $f:\mathcal{C}\rightarrow{Y}$ can be extended to all of $X$ where
+        $(Y,\,\tau_{Y})$ is any topological space. This is false. One need look
+        no further than the Euclidean plane.
+        $\mathbb{S}^{1}$ is a closed subset of the Euclidean plane
+        $\mathbb{R}^{2}$. The identity function
+        $f:\mathbb{S}^{1}\rightarrow\mathbb{S}^{1}$ is continuous. However,
+        there is \textbf{no} extension of this function to all of
+        $\mathbb{R}^{2}$. To map $\mathbb{R}^{2}$ to $\mathbb{S}^{1}$ while
+        keeping $\mathbb{S}^{1}$ fixed means, intuitively, we'd need to tear the
+        plane at some point. This is not continuous. Imagine you had a lump of
+        dough in the shape of a disk. How would you push the inside
+        of the lump of dough to the outside to make a circle? You'd need to
+        press your fingers through the dough and make a hole.
+        The Tietze extension theorem is only applicable when the co-domain is
+        $\mathbb{R}$.
+\end{document}
