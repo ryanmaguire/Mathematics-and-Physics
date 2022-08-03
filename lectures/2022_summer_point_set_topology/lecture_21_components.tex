@@ -1,0 +1,425 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 21}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Connected and Path Connected Components}
+        A topological space $(X,\,\tau)$ does not need to be connected, but it
+        can always be divided into connected parts. These parts are called the
+        \textit{connected components} of the space.
+        \begin{definition}[\textbf{Connected Component}]
+            The connected component of a point $x\in{X}$ in a topological space
+            $(X,\,\tau)$ is the set $C\subseteq{X}$ defined by:
+            \begin{equation}
+                C=\bigcup\{\,A\subseteq{X}\;|\;
+                    x\in{A}\textrm{ and }A\textrm{ is connected}\,\}
+            \end{equation}
+            That is, the \textit{largest} connected subset of $X$ containing
+            $x$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if $x\in{X}$, and if
+            $C\subseteq{X}$ is the connected component of $x$, then
+            $(C,\,\tau_{C})$ is a connected topological space where
+            $\tau_{C}$ is the subspace topology.
+        \end{theorem}
+        \begin{proof}
+            For if not then there are disjoint non-empty open subsets
+            $\mathcal{U},\mathcal{V}$ such that $C=\mathcal{U}\cup\mathcal{V}$.
+            But since $x\in{C}$ either $x\in\mathcal{U}$ or $x\in\mathcal{V}$.
+            Suppose $x\in\mathcal{U}$. Let $\mathcal{O}$ be defined by:
+            \begin{equation}
+                \mathcal{O}=\{\,A\subseteq{X}\;|\;
+                    x\in{A}\textrm{ and }A\textrm{ is connected}\,\}
+            \end{equation}
+            Then by definition of connected components $C=\bigcup\mathcal{O}$.
+            Suppose there is some $A\in\mathcal{O}$ such that
+            $\mathcal{V}\cap{A}\ne\emptyset$. But then
+            $A\cap\mathcal{V}$ and $A\cap\mathcal{U}$ are non-empty open
+            subsets of $A$ with respect to the subspace topology $\tau_{A}$.
+            But $A\cap\mathcal{V}$ and $A\cap\mathcal{U}$ are disjoint since
+            $\mathcal{U}$ and $\mathcal{V}$ are, and hence $(A,\,\tau_{A})$ can
+            be separated by open sets, which is a contradiction since
+            $A\in\mathcal{O}$ and hence $(A,\,\tau_{A})$ is connected.
+            So $(C,\,\tau_{C})$ is connected.
+        \end{proof}
+        There is no analogous theorem for intersections. The intersection
+        of two connected sets does not need to be connected. See
+        Fig.~\ref{fig:intersection_of_connected_can_be_disconnected_001}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/intersection_of_connected_can_be_disconnected_001.pdf}
+            \caption{The Intersection of Connected Sets}
+            \label{fig:intersection_of_connected_can_be_disconnected_001}
+        \end{figure}
+        Even if we are given infinitely many connected sets
+        $\mathcal{U}_{n}$ that are all nested,
+        $\mathcal{U}_{n+1}\subseteq\mathcal{U}_{n}$, the intersection
+        $\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$ need not be connected.
+        Take $\mathcal{U}_{n}$ to be all points $(x,\,y)$ such that
+        $y=0$, $y=1$, or $0<y<1$ and $x\geq{n}$. Each $\mathcal{U}_{n}$ is
+        connected, and $\mathcal{U}_{n+1}\subseteq\mathcal{U}_{n}$, but
+        $\bigcap_{n}\mathcal{U}_{n}$ is two separated lines, the lines
+        $y=0$ and $y=1$, which is not connected.
+        \par\hfill\par
+        Connected components are closed. To show this we'll need to following
+        theorem about subspaces.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if $\mathcal{C}\subseteq{X}$
+            is closed, and if $A\subseteq\mathcal{C}$ is closed with respect
+            to the subspace topology $\tau_{\mathcal{C}}$, then $A$ is closed
+            with respect to $\tau$.
+        \end{theorem}
+        \begin{proof}
+            Since $A\subseteq\mathcal{C}$ is closed with respect to
+            $\tau_{\mathcal{C}}$, $\mathcal{C}\setminus{A}$ is open. But
+            if $\mathcal{C}\setminus{A}$ is open, then by the definition of the
+            subspace topology there is an open set $\mathcal{U}\in\tau$ such
+            that $\mathcal{C}\setminus{A}=\mathcal{C}\cap\mathcal{U}$.
+            But then:
+            \begin{equation}
+                A=\mathcal{C}\setminus(\mathcal{C}\cap\mathcal{U})
+                    =(\mathcal{C}\setminus\mathcal{C})
+                        \cup(\mathcal{C}\setminus\mathcal{U})
+                    =\emptyset\cup(\mathcal{C}\setminus\mathcal{U})
+                    =\mathcal{C}\setminus\mathcal{U}
+            \end{equation}
+            But $\mathcal{C}\subseteq{X}$ is closed, so
+            $\mathcal{C}\setminus\mathcal{U}$ is the difference of an open set
+            from a closed set which is therefore closed. Therefore $A$ is
+            closed with respect to $\tau$.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if $A\subseteq{X}$, if
+            $\tau_{A}$ is the subspace topology, and if $(A,\,\tau_{A})$ is
+            connected, then
+            $(\textrm{Cl}_{\tau}(A),\,\tau_{\textrm{Cl}_{\tau}(A)})$ is
+            connected.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then there are disjoint closed subsets
+            $\mathcal{C},\mathcal{D}\subseteq\textrm{Cl}_{\tau}(C)$ such that
+            $\mathcal{C}\cup\mathcal{D}=\textrm{Cl}_{\tau}(C)$. But
+            $\textrm{Cl}_{\tau}(C)$ is closed so $\mathcal{C}$ and $\mathcal{D}$
+            are closed with respect to $\tau$. But then
+            $\mathcal{U}=X\setminus\mathcal{C}$ and
+            $\mathcal{V}=X\setminus\mathcal{D}$ are disjoint open sets in
+            $\tau$. But then $\mathcal{U}\cap{C}$ and
+            $\mathcal{V}\cap{C}$ are disjoint non-empty open subsets with
+            respect to $\tau_{C}$ that separate $C$, a contradiction since
+            $(C,\,\tau_{C})$ is connected. Hence,
+            $(\textrm{Cl}_{\tau}(C),\,\tau_{\textrm{Cl}_{\tau}(C)})$ is
+            connected.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if $C\subseteq{X}$ is
+            the connected component of $x\in{X}$, then it is closed. 
+        \end{theorem}
+        \begin{proof}
+            We have that $C\subseteq\textrm{Cl}_{\tau}(C)$ by the definition of
+            closure. But since connected components are connected we have that
+            $\textrm{Cl}_{\tau}(C)$ is connected. But
+            $x\in\textrm{Cl}_{\tau}(C)$ so, by the definition of connected
+            components, $\textrm{Cl}_{\tau}(C)\subseteq{C}$. Hence
+            $C=\textrm{Cl}_{\tau}(C)$ meaning $C$ is closed.
+        \end{proof}
+        The idea of connected components allows us to define totally
+        disconnected spaces.
+        \begin{definition}[\textbf{Totally Disconnected Topological Space}]
+            A totally disconnected topological space is a topological space
+            $(X,\,\tau)$ such that for all $x\in{X}$ the connected component of
+            $x$ is the set $C=\{\,x\,\}$. That is, the connected components of
+            the space are singleton sets.
+        \end{definition}
+        \begin{theorem}
+            If $\tau_{\mathbb{Q}}$ is the subspace topology of $\mathbb{Q}$
+            with respect to the standard Euclidean topology $\tau_{\mathbb{R}}$,
+            then $(\mathbb{Q},\,\tau_{\mathbb{Q}})$ is totally disconnected.
+        \end{theorem}
+        \begin{proof}
+            For let $x\in\mathbb{Q}$ and let $C$ be the connected component of
+            $x$. Suppose $y\in\mathbb{Q}$ is such that $y\in{C}$ with $y\ne{x}$.
+            Suppose $x<y$ (the idea is symmetric either way).
+            Since $x,y\in\mathbb{Q}$, and since $\mathbb{Q}\subseteq\mathbb{R}$,
+            it is true that $x,y\in\mathbb{R}$. Let
+            $z\in\mathbb{R}\setminus\mathbb{Q}$ be such that $x<z$ and $z<y$.
+            This is possible since $x$ and $y$ are real numbers and the
+            irrational numbers are dense in $\mathbb{R}$. Let
+            $\mathcal{U}=\mathbb{Q}\cap(-\infty,\,z)$ and
+            $\mathcal{V}=\mathbb{Q}\cap(z,\,\infty)$. Then $\mathcal{U}$ and
+            $\mathcal{V}$ are open in the subspace topology. But moreover
+            $\mathcal{U}$ and $\mathcal{V}$ separate $x$ and $y$, meaning
+            $y\notin{C}$. Hence $C$ is just a singleton set.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a totally disconnected topological space, then
+            it is a Fr\'{e}chet topological space.
+        \end{theorem}
+        \begin{proof}
+            For all $x\in{X}$, since $(X,\,\tau)$ is totally disconnected, the
+            connected component of $x$ is $C=\{\,x\,\}$. But connected
+            components are closed, hence $\{\,x\,\}$ is closed. But this is true
+            for all $x\in{X}$, hence $(X,\,\tau)$ is a Fr\"{e}chet topological
+            space.
+        \end{proof}
+        \begin{example}[\textbf{The Rational Bug-Eyed Line}]
+            Let $X=\mathbb{Q}\times\{\,0,\,1\,\}$, and give this the product
+            topology $\tau$ where $\mathbb{Q}$ has the subspace topology from
+            $\mathbb{R}$ and $\mathbb{Z}_{2}$ has the discrete topology. Define
+            the equivalence relation $R$ on $X$ to be the equivalence relation
+            induced by $(x,\,0)R(x,\,1)$ for all $x\in\mathbb{Q}$ except for
+            $x=0$. The quotient space $(X/R,\,\tau_{X/R})$ is like the
+            bug-eyed line, but has only rational points (and the two origins).
+            This space is totally disconnected, but not Hausdorff.
+        \end{example}
+        Path connected components can be similarly defined.
+        \begin{definition}[\textbf{Path Connected Component}]
+            The path connected component of a point $x\in{X}$ in a topological
+            space $(X,\,\tau)$ is the set $C\subseteq{X}$ defined by:
+            \begin{equation}
+                C=\big\{\,y\in{X}\;|\;\exists_{f:[0,\,1]\rightarrow{X}}
+                    \big(f\textrm{ continuous and }f(0)=x,\,f(1)=y\,\big\}
+            \end{equation}
+            That is, the set of all points that can be connected by a path
+            to $x$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if $x\in{X}$, and if
+            $C$ is the path-connected component of $x$, then
+            $(C,\,\tau_{C})$ is connected.
+        \end{theorem}
+        \begin{proof}
+            By definition of path connected component, $(C,\,\tau_{C})$ forms
+            a path connected space, and path connected spaces are connected.
+        \end{proof}
+    \section{Locally Connected and Locally Path Connected}
+        The weird connected examples that are not path connected fail to be
+        \textit{locally connected} and \textit{locally path connected}. These
+        two properties have some very useful results associated with them, so
+        we take the time to study these ideas.
+        \begin{definition}[\textbf{Locally Connected Topological Space}]
+            A locally connected topological space is a topological space
+            $(X,\,\tau)$ such that there is a basis $\mathcal{B}$ for $\tau$
+            such that for all $\mathcal{U}\in\mathcal{B}$ the subspace
+            $(\mathcal{U},\,\tau_{\mathcal{U}})$ is connected.
+        \end{definition}
+        \begin{example}
+            Neither the infinite broom nor the topologist's sine curve are
+            locally connected, though both are connected. For the topologist's
+            sine curve, any sufficiently small (small makes sense, this is a
+            metric space since its a subset of $\mathbb{R}^{2}$) open set
+            containing $(0,\,0)$ must contain disconnected pieces of the graph
+            of $f(x)=\sin(1/x)$ as well, meaning there can be no basis of
+            connected subsets. A similar argument holds for the infinite broom.
+        \end{example}
+        In any space connected components are closed. In locally connected
+        spaces they are also open.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a locally connected topological space, if
+            $x\in{X}$, and if $C$ is the connected component of $x$, then
+            $C\in\tau$.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is locally connected there is a basis of
+            connected subsets $\mathcal{B}$. Given $y\in{C}$, since
+            $\mathcal{B}$ is a basis it is an open cover, so there is a
+            $\mathcal{U}_{y}\in\mathcal{B}$ such that $y\in\mathcal{U}_{y}$.
+            But then $C$ and $\mathcal{U}_{y}$ are connected subsets that both
+            contain $y$, so $C\cup\mathcal{U}_{y}$ is connected. But $C$ is
+            the connected component of $x$, so since $C\cup\mathcal{U}_{y}$ is
+            connected and $x\in{C}\cup\mathcal{U}_{y}$ it must be true that
+            $C\cup\mathcal{U}_{y}\subseteq{C}$. But
+            $C\subseteq{C}\cup\mathcal{U}_{y}$ by definition of unions, so
+            $C=C\cup\mathcal{U}_{y}$ and therefore
+            $\mathcal{U}_{y}\subseteq{C}$. But $C$ can be written as the
+            union of all such $\mathcal{U}_{y}$ for all $y\in{C}$, meaning
+            $C$ is the union of open sets, which is therefore open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a totally disconnected and locally connected
+            topological space, then $\tau=\mathcal{P}(X)$.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is totally disconnected, connected components
+            are singleton sets. But since $(X,\,\tau)$ is locally connected,
+            connected components are open. Hence for all $x\in{X}$ the set
+            $\{\,x\,\}$ is open, meaning all subsets of $X$ are open. That is,
+            $\tau=\mathcal{P}(X)$.
+        \end{proof}
+        There is a path connected analogue to locally connected spaces.
+        \begin{definition}[\textbf{Locally Path Connected Topological Space}]
+            A locally path connected topological space is a topological space
+            $(X,\,\tau)$ such that there is a basis $\mathcal{B}$ for $\tau$
+            such that for all $\mathcal{U}$ the subspace
+            $(\mathcal{U},\,\tau_{\mathcal{U}})$ is path connected.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is locally path connected, if $x\in{X}$, and if
+            $C\subseteq{X}$ is the path connected component of $x$, then $C$
+            is open.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is locally path connected there is a basis
+            $\mathcal{B}$ of open path connected subspaces. But since
+            $\mathcal{B}$ is a basis it is an open cover, so given $y\in{C}$
+            there is a $\mathcal{U}_{y}\in\mathcal{B}$ such that
+            $y\in\mathcal{U}_{y}$. But $C$ and $\mathcal{U}_{y}$ are path
+            connected and $y\in\mathcal{U}_{y}\cap{C}$, so
+            $\mathcal{U}_{y}\cup{C}$ is path connected. Since $C$ is the path
+            connected component of $x$, $\mathcal{U}_{y}\cup{C}\subseteq{C}$,
+            and hence $\mathcal{U}_{y}\subseteq{C}$. But then $C$ can be written
+            as the union of all such $\mathcal{U}_{y}$ for all $y\in{C}$,
+            meaning $C$ is the union of open sets, and is therefore open.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is locally path connected, if $x\in{X}$, and if
+            $C\subseteq{X}$ is the path connected component of $x$, then $C$
+            is closed.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then $C\ne\textrm{Cl}_{\tau}(C)$. Let
+            $y\in\textrm{Cl}_{\tau}(C)\setminus{C}$. Since $(X,\,\tau)$ is
+            locally path connected there is a basis $\mathcal{B}$ of open path
+            connected subspaces. But if $\mathcal{B}$ is a basis, since
+            $y\in{X}$ there is a $\mathcal{U}\in\mathcal{B}$ such that
+            $y\in\mathcal{U}$. But if $y\in\textrm{Cl}_{\tau}(X)$ and
+            $y\in\mathcal{U}$, then $\mathcal{U}\cap{C}$ is non-empty
+            (from the definition of closure). But $U$ and $C$ are path
+            connected subspaces with non-empty intersection, so
+            $U\cup{C}$ is path connected. But $C$ is the path connected
+            component of $x$, so $\mathcal{U}\cup{C}\subseteq{C}$, and hence
+            $\mathcal{U}\subseteq{C}$. But then $y\in{C}$, a contradiction.
+            Hence, $C$ is closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is connected and locally path connected, then it is
+            path connected.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then there are $x,y\in{X}$ such that there is no
+            continuous function $f:[0,\,1]\rightarrow{X}$ such that
+            $f(0)=x$ and $f(1)=y$. Let $C$ be the path connected component of
+            $x$. Then $y\notin{C}$, and hence $C$ is a proper subset of $X$.
+            But $x\in{C}$, so $C$ is non-empty. But since $C$ is the path
+            connected component of $x$, and since $(X,\,\tau)$ is locally path
+            connected, $C$ is both open and closed. But then $C$ is a non-empty
+            proper subset of $X$ that is both open and closed, and therefore
+            $(X,\,\tau)$ is disconnected, which is a contradiction since
+            $(X,\,\tau)$ is connected. Hence, $(X,\,\tau)$ is path connected.
+        \end{proof}
+    \section{Arc Connected}
+        Arc connected is a slightly stronger notion that many might think is
+        the same thing as path connected. In Hausdorff spaces, the notions are
+        the same. First, a definition.
+        \begin{definition}[\textbf{Arc Connected Topological Space}]
+            An arc connected topological space is a topological space
+            $(X,\,\tau)$ such that for all $x,y\in{X}$ there is an injective
+            continuous function $f:[0,\,1]\rightarrow{X}$ such that $f(0)=x$
+            and $f(1)=y$.
+        \end{definition}
+        The only difference between path connected and arc connected is the
+        introduction of the word \textit{injective}. The following theorem takes
+        a lot of effort, and we don't have time for it, but I still want to
+        present it. The proof is omitted.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a Hausdorff path connected topological space,
+            then it is arc connected.
+        \end{theorem}
+        \begin{example}
+            Without the Hausdorff condition you can have path connected spaces
+            that are not arc connected. The bug-eyed line is an example.
+            There is a path from the first zero $0_{0}$ to the second zero
+            $0_{1}$, namely:
+            \begin{equation}
+                f(x)=
+                \begin{cases}
+                    0_{0}&t=0\\
+                    t-t^{2}&0<t<1\\
+                    0_{1}&t=1
+                \end{cases}
+            \end{equation}
+            That is, you start at the first zero, walk out a bit to some
+            positive real number, and then walk back to the second zero.
+            This is not injective, you crossed over a bunch of real numbers
+            twice. It's impossible to do this injectively. You can't just
+            jump from $0_{0}$ to $0_{1}$, that is not continuous. There is
+            no \textit{next} positive real number you can go to either.
+            Any path from $0_{0}$ to $0_{1}$ is not injective. This space
+            is not Hausdorff, so there is no violation of the previous theorem.
+        \end{example}
+\end{document}
