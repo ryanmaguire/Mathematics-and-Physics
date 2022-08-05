@@ -21,6 +21,7 @@
 \usepackage{amsthm}                             % For the theorem environment.
 \usepackage{float}
 \usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
 \usepackage[font=scriptsize,
             labelformat=simple,
             labelsep=colon]{subcaption} % Subfigure captions.
@@ -68,7 +69,7 @@
     \popQED\enddefinitionx%
 }
 
-\title{Point-Set Topology: Lecture 21}
+\title{Point-Set Topology: Lecture 22}
 \author{Ryan Maguire}
 \date{Summer 2022}
 
@@ -84,10 +85,10 @@
         the basis properties (first and second countable), creating new spaces
         (products, subspaces, quotients), the separation ideas
         (regular and normal), connectedness, and compactness, then you have an
-        absolutely solid understanding of topology. We've covered all of these
-        ideas except compactness, which we've only discussed in the context of
-        metric spaces (or \textit{metrizable} spaces). We now take the time to
-        study compactness in the general topological setting.
+        absolutely solid understanding of general topology. We've covered all
+        of these ideas except compactness, which we've only discussed in the
+        context of metric spaces (or \textit{metrizable} spaces). We now take
+        the time to study compactness in the general topological setting.
         \par\hfill\par
         In a metric space we proved several theorems about compactness,
         primarily the Bolzano-Weierstrass, Heine-Borel, generalized
@@ -131,10 +132,19 @@
             closed and bounded.
         \end{theorem}
         \begin{proof}
-            The standard Euclidean topology on $\mathbb{R}$,
+            The Euclidean topology on $\mathbb{R}$,
             $\tau_{\mathbb{R}}$, is induced by the Euclidean metric
             $d(x,\,y)=|x-y|$. The result then follows from the Heine-Borel
             theorem.
+        \end{proof}
+        \begin{theorem}
+            If $(\mathbb{R}^{n},\,\tau_{\mathbb{R}^{n}})$ is Euclidean space,
+            and if $A\subseteq\mathbb{R}^{n}$, then
+            $(A,\,\tau_{\mathbb{R}^{n}_{A}})$ is compact if and only if $A$ is
+            closed and bounded.
+        \end{theorem}
+        \begin{proof}
+            This too follows from the Heine-Borel theorem.
         \end{proof}
         This now gives us plenty of familiar spaces that are compact.
         Lacking a metrizable space, there are still plenty of pleasing
@@ -146,23 +156,103 @@
             the subspace topology.
         \end{theorem}
         \begin{proof}
-            Let $\mathcal{O}$ be an open cover of
-            $(\mathcal{C},\,\tau_{\mathcal{C}})$. Then, since
-            $\mathcal{C}$ is closed, $X\setminus\mathcal{C}$ is open, and
-            hence $\mathcal{O}\cup\{\,X\setminus\mathcal{C}\,\}$ is an open
-            cover of $(X,\,\tau)$. But $(X,\,\tau)$ is compact so there is a
-            finite subset $\Delta\subseteq\mathcal{O}$ that is an open cover
-            of $X$. But then $\Delta\setminus\{\,X\setminus\mathcal{C}\,\}$ is
-            a finite open cover of $(\mathcal{C},\,\tau_{\mathcal{C}})$, so
-            $(\mathcal{C},\,\tau_{\mathcal{C}})$ is compact.
+            For if not then there is an open cover $\mathcal{O}_{\mathcal{C}}$
+            of $(\mathcal{C},\,\tau_{\mathcal{C}})$ with no finite subcover.
+            But by the definition of the subspace topology, for all
+            $\mathcal{U}\in\mathcal{O}_{\mathcal{C}}$
+            there is an open set $\tilde{\mathcal{U}}\in\tau$ such that
+            $\mathcal{U}=\mathcal{C}\cap\tilde{\mathcal{U}}$. Let
+            $\mathcal{O}_{X}\subseteq\tau$ be defined by:
+            \begin{equation}
+                \mathcal{O}_{X}
+                =\{\,\tilde{\mathcal{U}}\in\tau\;|\;
+                    \mathcal{U}\in\mathcal{O}_{\mathcal{C}}\,\}
+            \end{equation}
+            $\mathcal{O}_{X}$ covers $\mathcal{C}$ with elements of $\tau$, but
+            it need not cover all of $X$. However, since $\mathcal{C}$ is
+            closed, $X\setminus\mathcal{C}$ is open. Let
+            $\mathcal{O}\subseteq\tau$ be defined by:
+            \begin{equation}
+                \mathcal{O}=\mathcal{O}_{X}\cup\{\,X\setminus\mathcal{C}\,\}
+            \end{equation}
+            Then $\mathcal{O}\subseteq\tau$ is an open cover of $X$, and since
+            $(X,\,\tau)$ is compact there is a finite subcover $\Delta$.
+            Define $\Delta_{X}=\Delta\setminus\{\,X\setminus\mathcal{C}\,\}$.
+            Then, by definition of $\mathcal{O}$ and $\mathcal{O}_{X}$,
+            $\Delta_{X}\subseteq\mathcal{O}_{X}$. But also $\Delta_{X}$ is
+            finite. But since $\Delta$ covers $X$ and $X\setminus\mathcal{C}$
+            is disjoint from $\mathcal{C}$, $\Delta_{X}$ must cover
+            $\mathcal{C}$ as well. Define $\Delta_{\mathcal{C}}$ via:
+            \begin{equation}
+                \Delta_{\mathcal{C}}=
+                \{\,\mathcal{U}\cap\mathcal{C}\;|\;\mathcal{U}\in\Delta_{X}\,\}
+            \end{equation}
+            By definition of $\mathcal{O}_{X}$ and $\Delta_{X}$ we have that
+            $\Delta_{\mathcal{C}}\subseteq\mathcal{O}_{\mathcal{C}}$. But since
+            $\Delta_{X}$ covers $\mathcal{C}$, so does $\Delta_{\mathcal{C}}$.
+            But then $\Delta_{\mathcal{C}}\subseteq\mathcal{O}_{\mathcal{C}}$
+            is a finite subset that still covers $\mathcal{C}$, a contradiction.
+            Hence, $(\mathcal{C},\,\tau_{\mathcal{C}})$ is compact.
         \end{proof}
-        This theorem does not need to reverse, in general. Give
+        This theorem does not need to reverse, in general. That is, compact
+        subsets don't need to be closed (but in metric spaces they are). Give
         $\mathbb{R}$ the indiscrete topology
         $\tau=\{\,\emptyset,\,\mathbb{R}\,\}$. Then every subset
         $A\subseteq\mathbb{R}$ is compact since the only open covers possible
         are finite (they have at most two subsets). However only
         $\emptyset$ and $\mathbb{R}$ are closed. If we add the Hausdorff
         condition, then compact subspaces are closed.
+        \par\hfill\par
+        Before proving this, it was quite annoying dealing with the subspace
+        topology in the previous theorem. It feels unnecessary. With compact
+        subspaces, if we can cover the subspace with sets that are open in the
+        \textit{ambient space}, then there is a finite subcover of this as
+        well. Let's prove this.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if $A\subseteq{X}$, and
+            if $(A,\,\tau_{A})$ is compact, where $\tau_{A}$ is the subspace
+            topology, then for all $\mathcal{O}\subseteq\tau$ such that
+            $A\subseteq\bigcup\mathcal{O}$, there is a finite subset
+            $\Delta\subseteq\mathcal{O}$ such that $A\subseteq\bigcup\Delta$.
+        \end{theorem}
+        \begin{proof}
+            If not, then there is a subset $\mathcal{O}\subseteq\tau$ such
+            that $A\subseteq\bigcup\mathcal{O}$ but with no finite subset that
+            still covers $A$. Let $\tilde{\mathcal{O}}$ be defined by:
+            \begin{equation}
+                \tilde{\mathcal{O}}
+                =\{\,\mathcal{U}\cap{A}\;|\;A\in\mathcal{O}\,\}
+            \end{equation}
+            By definition of the subspace topology,
+            $\tilde{\mathcal{O}}\subseteq\tau_{A}$. But
+            since $A\subseteq\bigcup\mathcal{O}$, we have
+            $A=\bigcup\tilde{\mathcal{O}}$. But $(A,\,\tau_{A})$ is compact,
+            so there is a finite subcover
+            $\tilde{\Delta}\subseteq\tilde{\mathcal{O}}$. Since it is finite we
+            may label it:
+            \begin{equation}
+                \tilde{\Delta}=
+                \{\,\mathcal{U}_{0}\cap{A},\,\dots,\,\mathcal{U}_{n}\cap{A}\,\}
+            \end{equation}
+            Define $\Delta\subseteq\mathcal{O}$ via:
+            \begin{equation}
+                \Delta=
+                \{\,\mathcal{U}_{0},\,\dots,\,\mathcal{U}_{n}\,\}
+            \end{equation}
+            Then we have:
+            \begin{equation}
+                A=\bigcup_{k=0}^{n}\big(\mathcal{U}_{k}\cap{A}\big)
+                =\Big(\bigcup_{k=0}^{n}\mathcal{U}_{n}\Big)\cap{A}
+                \subseteq\bigcup_{k=0}^{n}\mathcal{U}_{n}
+            \end{equation}
+            So $\Delta\subseteq\mathcal{O}$ is a finite subset of $\mathcal{O}$
+            that covers $A$, which is a contradiction. Hence, for any
+            $\mathcal{O}\subseteq\tau$ such that $A\subseteq\bigcup\mathcal{O}$,
+            there is a finite subset $\Delta\subseteq\mathcal{O}$ such that
+            $A\subseteq\bigcup\Delta$.
+        \end{proof}
+        Now when dealing with compact subspaces we can restrict our attention
+        to open sets in the ambient space, which is often easier.
         \begin{theorem}
             If $(X,\,\tau)$ is a Hausdorff topological space, if
             $A\subseteq{X}$, and if $(A,\,\tau_{A})$ is compact, where
@@ -170,12 +260,19 @@
         \end{theorem}
         \begin{proof}
             If $A=\emptyset$, then there is nothing to prove since $\emptyset$
-            is closed. Suppose $A\ne\emptyset$. Let $x\in{X}\setminus{A}$.
-            Then for all $y\in{A}$, since $(X,\,\tau)$ is Hausdorff, there
-            exists open sets $\mathcal{U}_{y},\mathcal{V}_{y}$ such that
+            is closed. Suppose $A\ne\emptyset$. If $A$ is not closed, then
+            $X\setminus{A}$ is not open, and hence there is an
+            $x\in{X}\setminus{A}$ such that for all $\mathcal{U}\in\tau$ with
+            $x\in\mathcal{U}$ it is not true that
+            $\mathcal{U}\subseteq{X}\setminus{A}$ (otherwise we could write
+            $X\setminus{A}$ as the union of all such $\mathcal{U}$ for all
+            $x\in{X}\setminus{A}$, showing that $X\setminus{A}$ is the union of
+            open sets, which is therefore open). But then for all $y\in{A}$,
+            since $(X,\,\tau)$ is Hausdorff, there
+            exist open sets $\mathcal{U}_{y},\mathcal{V}_{y}$ such that
             $x\in\mathcal{U}_{y}$, $y\in\mathcal{V}_{y}$, and
             $\mathcal{U}_{y}\cap\mathcal{V}_{y}=\emptyset$. But the collection
-            of all such $\mathcal{U}_{y}$ cover $A$, and since
+            of all such $\mathcal{V}_{y}$ cover $A$, and since
             $(A,\,\tau_{A})$ is compact, there is a finite subcover. Label the
             elements of the finite subcover as
             $\mathcal{V}_{0},\,\dots,\,\mathcal{V}_{n}$. Label the corresponding
@@ -184,11 +281,23 @@
             \begin{equation}
                 \tilde{\mathcal{U}}=\bigcap_{k=0}^{n}\mathcal{U}_{k}
             \end{equation}
-            Then $\tilde{\mathcal{U}}$ is open, being the intersection of open
-            sets, and $x\in\tilde{\mathcal{U}}$ since $x\in\mathcal{U}_{k}$
+            Then $\tilde{\mathcal{U}}$ is open, being the intersection of
+            finitely many open sets, and
+            $x\in\tilde{\mathcal{U}}$ since $x\in\mathcal{U}_{k}$
             for all $k$. But $\tilde{\mathcal{U}}$ is disjoint from
-            $A$, and hence there is an open subset of $X\setminus{A}$ containing
-            $x$, so $X\setminus{A}$ is open. Therefore $A$ is closed.
+            $A$. For if $y\in{A}$ and $y\in\tilde{\mathcal{U}}$, since
+            $\mathcal{V}_{0},\,\dots,\,\mathcal{V}_{n}$ cover $A$ there is some
+            $0\leq{k}\leq{n}$ such that $y\in\mathcal{V}_{k}$. But then:
+            \begin{equation}
+                \tilde{\mathcal{U}}\cap\mathcal{V}_{k}
+                \subseteq\mathcal{U}_{k}\cap\mathcal{V}_{k}
+                =\emptyset
+            \end{equation}
+            a contradiction, so $\tilde{\mathcal{U}}$ and $A$ are disjoint.
+            But then $\tilde{\mathcal{U}}$ is an open set such that
+            $x\in\tilde{\mathcal{U}}$ and
+            $\tilde{\mathcal{U}}\subseteq{X}\setminus{A}$, which is a
+            contradiction. Hence, $A$ is closed.
         \end{proof}
         \begin{theorem}
             If $(X,\,\tau_{X})$ is a compact topological space, if
@@ -197,4 +306,82 @@
             $(f[X],\,\tau_{Y_{f[X]}})$ is compact where
             $\tau_{Y_{f[X]}}$ is the subspace topology.
         \end{theorem}
+        \begin{proof}
+            Suppose not and let $\mathcal{O}$ be an open cover of $f[X]$ with
+            no finite subcover. Then for all
+            $\mathcal{V}\in\mathcal{O}$, by the definition of the subspace
+            topology, there is an open $\tilde{\mathcal{V}}\in\tau_{Y}$ such
+            that $\mathcal{V}=\tilde{\mathcal{V}}\cap{f}[X]$.
+            Define $\tilde{\mathcal{O}}$ via:
+            \begin{equation}
+                \tilde{\mathcal{O}}
+                =\{\,\tilde{\mathcal{V}}\;|\;\mathcal{V}\in\mathcal{O}\,\}
+            \end{equation}
+            Then $\tilde{\mathcal{O}}$ is a collection of open sets in $Y$ that
+            cover $f[X]$. Since $f$ is continuous, for all
+            $\tilde{\mathcal{V}}\in\tilde{\mathcal{O}}$ the set
+            $f^{-1}[\tilde{\mathcal{V}}]$ is open in $X$. But
+            $\tilde{\mathcal{O}}$ covers $f[X]$, and hence the set:
+            \begin{equation}
+                \mathscr{O}
+                =\{\,f^{-1}[\tilde{\mathcal{V}}]\;|\;
+                    \tilde{\mathcal{V}}\in\tilde{\mathcal{O}}\,\}
+            \end{equation}
+            is an open cover of $(X,\,\tau_{X})$. But $(X,\,\tau_{X})$ is
+            compact, so there is a finite subcover
+            $\mathscr{D}\subseteq\mathscr{O}$. Form the set
+            $\tilde{\Delta}\subseteq\tilde{\mathcal{O}}$ by choosing a single
+            element $\tilde{\mathcal{V}}\in\tilde{\mathcal{O}}$ for each
+            $\mathcal{U}\in\mathscr{D}$ such that
+            $\mathcal{U}=f^{-1}[\tilde{\mathcal{V}}]$. Then
+            $\tilde{\Delta}\subseteq\tilde{\mathcal{O}}$ is a finite subset that
+            covers $f[X]$. But then the set $\Delta$ of sets of the form
+            $\tilde{\mathcal{V}}\cap{f}[X]$ for all
+            $\tilde{\mathcal{V}}\in\tilde{\Delta}$ is a finite subset of
+            $\mathcal{O}$ that covers $f[X]$, a contradiction.
+            Hence, $(f[X],\,\tau_{Y_{f[X]}})$ is compact.
+        \end{proof}
+        \begin{theorem}
+            if $(X,\,\tau_{X})$ is a compact topological space, if
+            $(Y,\,\tau_{Y})$ is a Hausdorff topological space, and if
+            $f:X\rightarrow{Y}$ is continuous and bijective, then $f$ is a
+            homeomorphism.
+        \end{theorem}
+        \begin{proof}
+            It suffices to show that $f$ is a closed mapping since $f$ is a
+            homeomorphism if and only if it is bijective, continuous, and a
+            closed mapping. Since $f$ is bijective and continuous by
+            hypothesis, we need only show it is also a closed mapping.
+            Let $\mathcal{C}\subseteq{X}$ be closed. But $(X,\,\tau_{X})$ is
+            compact and $\mathcal{C}$ is closed, so
+            $(\mathcal{C},\,\tau_{X_{\mathcal{C}}})$ is compact. But then, since
+            $f$ is continuous, $f[\mathcal{C}]\subseteq{Y}$ is a compact
+            subspace. But $(Y,\,\tau_{Y})$ is Hausdorff, so $f[\mathcal{C}]$ is
+            closed. Hence, $f$ is a closed mapping, so it is a homeomorphism.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a compact Hausdorff space, then it is regular.
+        \end{theorem}
+        \begin{proof}
+            Homework.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a compact Hausdorff space, then it is normal.
+        \end{theorem}
+        \begin{proof}
+            Also homework.
+        \end{proof}
+        \begin{definition}[\textbf{Sequentially Compact Topological Space}]
+            A sequentially compact topological space is a topological space
+            $(X,\,\tau)$ such that for every sequence
+            $a:\mathbb{N}\rightarrow{X}$ there is a convergent subsequence
+            $a_{k}$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is metrizable, then it is compact if and only if
+            it is sequentially compact.
+        \end{theorem}
+        \begin{proof}
+            This follows from the equivalence of compactness theorem.
+        \end{proof}
 \end{document}
