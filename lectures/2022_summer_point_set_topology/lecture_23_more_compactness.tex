@@ -1,0 +1,316 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 23}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Other Ideas for Compactness}
+        Compact and sequentially compact are the two most commonly used
+        properties in analysis, geometry, and topology. There are several
+        weaker notions that have found there way into several branches of
+        mathematics, so now we'll take that time to discuss these ideas.
+        \begin{definition}[\textbf{Limit Point Compact Topogical Space}]
+            A limit point compact topological space is a topological space
+            $(X,\,\tau)$ such that for all infinite subsets $A\subseteq{X}$
+            there exists a point $x\in{X}$ such that for all
+            $\mathcal{U}\in\tau$ with $x\in\mathcal{U}$, there is a
+            $y\in{A}$ such that $y\ne{x}$ and $y\in\mathcal{U}$
+        \end{definition}
+        Limit point compact was the original defining property of compactness
+        when mathematicians were first thinking about the topology of the
+        real line. Unlike compactness and sequential compactness, where one
+        can't really say one idea is \textit{stronger} than the other, limit
+        point compactness is a weaker notion.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a sequentially compact topological space, then
+            it is limit point compact.
+        \end{theorem}
+        \begin{proof}
+            For if not, then there is an infinite set $A\subseteq{X}$ such that
+            for all $x\in{X}$ there is a $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ and for $y\in{A}$ either $y=x$ or
+            $y\notin\mathcal{U}$. But if $A$ is infinite, there is a countably
+            infinite subset $B\subseteq{A}$. Let $a:\mathbb{N}\rightarrow{B}$
+            be a bijection. But $(X,\,\tau)$ is sequentially compact, so there
+            is a convergent subsequence $a_{k}$. Let $x\in{X}$. Then there
+            is a $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and for
+            all $y\in{A}$ either $y=x$ or $y\notin\mathcal{U}$. But
+            $a_{k_{n}}\rightarrow{x}$ and $x\in\mathcal{U}$, so there is an
+            $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$ with $n>N$ we
+            have $a_{k_{n}}\in\mathcal{U}$. But $a:\mathbb{N}\rightarrow{B}$
+            is bijective and $k:\mathbb{N}\rightarrow\mathbb{N}$ is strictly
+            increasing, so $a_{k}$ is injective, meaning for all
+            $n>N$, $a_{k_{n}}$ are distinct elements of $B$, and hence $A$,
+            that are contained in $\mathcal{U}$, which is a contradiction.
+            So $(X,\,\tau)$ is limit point compact.
+        \end{proof}
+        Compact also implies limit point compact, but a weaker notion than
+        compact also implies limit point compact. This weaker notion is
+        occasionally useful.
+        \begin{definition}[\textbf{Countably Compact Topological Space}]
+            A countably compact topological space is a topological space
+            $(X,\,\tau)$ such that for all countable open covers
+            $\mathcal{O}\subseteq\tau$ there is a finite subset
+            $\Delta\subseteq\mathcal{O}$ such that $\Delta$ is an open cover.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is compact, then it is countably compact.
+        \end{theorem}
+        \begin{proof}
+            Any countable open cover is indeed an open cover, and since
+            $(X,\,\tau)$ is compact, there must be a finite subcover.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is countably compact, then it is limit point
+            compact.
+        \end{theorem}
+        \begin{proof}
+            If not, there is an infinite subsets $A\subseteq{X}$ such that for
+            all $x\in{X}$ there is a $\mathcal{U}\in\tau$ such that for all
+            $y\in{A}$ either $y=x$ or $y\notin\mathcal{U}$. But since
+            $A$ is infinite, there is a countably infinite subset
+            $B\subseteq{A}$. But then for all $x\in{X}$ there is a
+            $\mathcal{U}\in\tau$ such that for all $y\in{B}$ either
+            $y=x$ or $y\notin\mathcal{U}$. But then
+            $\textrm{Cl}_{\tau}(B)=B$, so $B$ is closed. For all
+            $n\in\mathbb{N}$ let $\mathcal{U}_{n+1}\in\tau$ be such that
+            $\mathcal{U}_{n+1}\cap{B}=\{\,a_{n+1}\,\}$. Let
+            $\mathcal{U}_{0}=X\setminus\{\,B\,\}$. Then:
+            \begin{equation}
+                \mathcal{O}=
+                \{\,\mathcal{U}_{n}\;|\;n\in\mathbb{N}\,\}
+            \end{equation}
+            is a countable open cover of $(X,\,\tau)$. But since $(X,\,\tau)$
+            is countably compact, there is a finite subcover $\Delta$. But
+            then there is a $\mathcal{U}_{n}$ such that infinitely many
+            element of $B$ are contained inside $\mathcal{U}_{n}$, which is
+            a contradiction. So $(X,\,\tau)$ is limit point compact.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is compact, then it is limit point compact.
+        \end{theorem}
+        \begin{proof}
+            Compact implies countably compact which implies limit point compact.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ if a limit point compact Fr\"{e}chet topological
+            space, then it is countably compact.
+        \end{theorem}
+        Sequentially compact is a nice property, and it is quite a shame
+        compactness does not imply it in general. It is also a shame
+        sequential compactness does not imply compact. If we add
+        \textit{sequential} to our hypothesis, we can get one direction to
+        work.
+        \begin{theorem}
+            If $(X,\,\tau)$ is countably compact, and if
+            $\mathcal{C}\subseteq{X}$ is closed, then
+            $(\mathcal{C},\,\tau_{\mathcal{C}})$ is countably compact.
+        \end{theorem}
+        \begin{proof}
+            The proof is a mimicry of the idea for compact spaces. Given
+            a countable open cover of $\mathcal{C}$, by adding
+            $X\setminus\mathcal{C}$ we obtain a countable open cover of $X$
+            since $\mathcal{C}$ is closed, so $X\setminus\mathcal{C}$ is open,
+            and adding one more set to a countable collection is still
+            countable. But since $(X,\,\tau)$ is countably compact there is a
+            finite subcover. Restricting this finite subcover to $\mathcal{C}$
+            shows that $(\mathcal{C},\,\tau_{\mathcal{C}})$ is countably
+            compact. 
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a sequential countably compact topological space,
+            then it is sequentially compact.
+        \end{theorem}
+        \begin{proof}
+            For if not, then there is a sequence $a:\mathbb{N}\rightarrow{X}$
+            with no convergent subsequence. Let $A\subseteq{X}$ be defined by:
+            \begin{equation}
+                A=\bigcup_{n\in\mathbb{N}}
+                    \textrm{Cl}_{\tau}\big(\{\,a_{n}\,\}\big)
+            \end{equation}
+            Then $A$ is sequentially closed. For if
+            $b:\mathbb{N}\rightarrow{A}$ is a sequence that converges to
+            $y\in{X}$, either there is an $m\in\mathbb{N}$ such that
+            $y\in\textrm{Cl}_{\tau}(\{\,a_{m}\,\})$ or not. If there is
+            such an $m$, then $y\in{A}$. If not, then by choosing
+            $a_{k}$ and $b_{\ell}$ to be increasing and such that
+            $b_{\ell_{n}}\in\textrm{Cl}_{\tau}(\{\,a_{k_{n}}\,\})$, we have
+            found a convergent subsequence $a_{k_{n}}\rightarrow{y}$, which is
+            a contradiction. Hence $A$ is sequentially closed. But
+            $(X,\,\tau)$ is sequential, so $A$ is closed. But then
+            $(A,\,\tau_{A})$ is countably compact, where $\tau_{A}$ is the
+            subspace topology. But countably compact implies limit point
+            compact, so there is a point $x\in{A}$ such that for all
+            $\mathcal{U}\in\tau_{A}$ with $x\in\mathcal{U}$, there is a
+            $y\in{A}$ such that $y\ne{x}$ and $y\in\mathcal{U}$. But
+            $x$ must be in only finitely many sets of the form
+            $\textrm{Cl}_{\tau}\big(\{\,a_{n}\,\}\big)$, otherwise
+            $a$ would have a convergent subsequence converging to $x$.
+            But then there is an $N\in\mathbb{N}$ such that for all
+            $n>N$ we have $x\notin\textrm{Cl}_{\tau}\big(\{\,a_{n}\,\}\big)$.
+            But then, defining:
+            \begin{equation}
+                B=\bigcup_{n=N+1}^{\infty}
+                    \textrm{Cl}_{\tau}\big(\{\,a_{n}\,\}\big)
+            \end{equation}
+            we see that $B$ is closed, by the previous argument, but $B$
+            does not contain the point $x$, which is a contradiction since
+            $x$ is still a limit point of $B$. So $(X,\,\tau)$ is
+            sequentially compact.
+        \end{proof}
+        A short corollary of this is often used when sequential compactness is
+        desired.
+        \begin{theorem}
+            If $(X,\,\tau)$ is compact and first countable, then it is
+            sequentially compact.
+        \end{theorem}
+        \begin{proof}
+            Compact implies countably compact, and first countable implies
+            sequential. So $(X,\,\tau)$ is countably compact and sequential,
+            so it is therefore sequentially compact.
+        \end{proof}
+        While sequentially compact does not imply compact, there is a partial
+        result. Sequentially compact always implies countably compact, and
+        often enough countably compact is sufficient.
+        \begin{theorem}
+            If $(X,\,\tau)$ is sequentially compact, then it is
+            countable compact.
+        \end{theorem}
+        \begin{proof}
+            If not there is a countably infinite open cover
+            $\mathcal{O}\subseteq\tau$ with no finite subcover. But then,
+            since $\mathcal{O}$ is countably infinite, there is a bijection
+            $\mathcal{U}:\mathbb{N}\rightarrow\mathcal{O}$ so that we may
+            list the elements as:
+            \begin{equation}
+                \mathcal{O}=
+                \{\,\mathcal{U}_{0},\,\dots,\,\mathcal{U}_{n},\,\dots\,\}
+            \end{equation}
+            But $\mathcal{U}_{n}\ne{X}$ for all $n\in\mathbb{N}$, otherwise
+            $\Delta=\{\,\mathcal{U}_{n}\,\}$ is a finite subcover. So
+            $X\setminus\mathcal{U}_{n}\ne\emptyset$ for all $n\in\mathbb{N}$.
+            Moreover, the set $\mathcal{V}_{n}$ defined by:
+            \begin{equation}
+                \mathcal{V}_{n}=\bigcup_{k=0}^{n}\mathcal{U}_{n}
+            \end{equation}
+            is such that $\mathcal{V}_{n}\ne{X}$, otherwise $\mathcal{O}$ has a
+            finite subcover. Define $a:\mathbb{N}\rightarrow{X}$ via
+            $a_{n}\in{X}\setminus\mathcal{V}_{n}$ for all $n\in\mathbb{N}$.
+            But $(X,\,\tau)$ is sequentially compact, so there is a
+            convergent subsequence $a_{k}$ with limit $x\in{X}$. But since
+            $\mathcal{O}$ covers $X$, there is a $\mathcal{U}_{N}$ such
+            that $x\in\mathcal{U}_{N}$. But then for all
+            $n>N$ we have $a_{k_{n}}\not\in\mathcal{U}_{n}$, which is a
+            contradiction since $a_{k_{n}}\rightarrow{x}$. So
+            $(X,\,\tau)$ is countably compact.
+        \end{proof}
+        One way to weaken compactness is by lessening open covers to
+        countable open covers. The other way is by lessening finite subcover
+        to countable subcover. This idea has proven quite useful in many
+        applications in analysis.
+        \begin{definition}[\textbf{Lindel\"{o}f Topological Space}]
+            A Lindel\"{o}f topological space is a topological space
+            $(X,\,\tau)$ such that for every open cover
+            $\mathcal{O}\subseteq\tau$ there is a countable subcover
+            $\Delta\subseteq\mathcal{O}$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is countably
+            compact and Lindel\"{o}f if and only if it is compact.
+        \end{theorem}
+        \begin{theorem}
+            If $(X,\,\tau)$ is second countable, then it is Lindel\"{o}f.
+        \end{theorem}
+        \begin{theorem}
+            If $(X,\,\tau)$ is second countable and sequentially compact,
+            then it is compact.
+        \end{theorem}
+        \begin{theorem}[\textbf{Extreme Value Theorem}]
+        \end{theorem}
+        \begin{definition}[\textbf{Pseudocompact Topological Space}]
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is normal and pseudocompact, then it is
+            limit point compact.
+        \end{theorem}
+        \begin{definition}[\textbf{$\sigma$ Compact Topological Space}]
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is $\sigma$ compact, then it is Lindel\"{o}f.
+        \end{theorem}
+\end{document}
