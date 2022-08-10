@@ -1,0 +1,361 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 23}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Paracompact Spaces}
+        Paracompactness is an idea that is perhaps so strange and seemingly weak
+        that one may wonder why on Earth it deserves study, let alone a name.
+        One of the motivations is the Urysohn metrization theorem. This theorem
+        goes one way, a second countable regular Hausdorff space is metrizable.
+        It does not reverse. The discrete topology $\mathbb{R}$ is metrizable
+        but not second countable. It would be nice to have a theorem that gives
+        necessary and sufficient conditions for a space to metrizable. The
+        Nagata-Smirnov and Smirnov metrization theorems do this. At the heart
+        of both theorems is the idea of local finiteness. The Nagata-Smirnov
+        theorem requires $\sigma$ locally finite bases, the Smirnov theorem
+        uses paracompactness. We take the time to develop these and similar
+        ideas. At the end of this lecture we'll prove the
+        \textit{Stone paracompactness theorem}, which states that every
+        metrizable space is paracompact.
+        \begin{definition}[\textbf{Locally Finite Collection}]
+            A locally finite collection in a topological space $(X,\,\tau)$
+            is a subset $\mathcal{A}\subseteq\mathcal{P}(X)$ such that for all
+            $x\in{X}$ there is a $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ and only finitely many $A\in\mathcal{A}$ are
+            such that $A\cap\mathcal{U}\ne\emptyset$.
+        \end{definition}
+        Note there is no requirement that $\mathcal{A}$ consist of open sets or
+        closed sets. There is no requirement that $\mathcal{A}$ covers the
+        space either. All that is required is local finiteness.
+        \begin{definition}[\textbf{Refinement of a Collection}]
+            A refinement of a collection $\mathcal{A}\subseteq\mathcal{P}(X)$
+            in a topological space $(X,\,\tau)$ is a set
+            $\tilde{\mathcal{A}}\subseteq\mathcal{P}(X)$ such that for all
+            $\tilde{A}\in\tilde{\mathcal{A}}$ there is an $A\in\mathcal{A}$
+            such that $\tilde{A}\subseteq{A}$.
+        \end{definition}
+        Again, in general, there is no requirement that $\mathcal{A}$ or
+        $\tilde{\mathcal{A}}$ consist of open or closed sets.
+        \textit{Open refinements} are refinements consisting of open sets, and
+        \textit{closed refinements} consist of closed sets. This idea is used
+        to define paracompactnes.
+        \begin{definition}[\textbf{Paracompact Topological Space}]
+            A paracompact topological space is a topological space $(X,\,\tau)$
+            such that for all open covers $\mathcal{O}\subseteq\tau$ of $X$
+            there exists a locally finite open refinement $\Delta\subseteq\tau$
+            that is still an open cover of $(X,\,\tau)$.
+        \end{definition}
+        This is a very weak notion, many familiar spaces are paracompact, and
+        yet it has enormous use in manifold theory and the study of metric
+        spaces. In particular because every manifold and every metrizable space
+        is paracompact.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a compact topological space, then it is
+            paracompact.
+        \end{theorem}
+        \begin{proof}
+            In a compact space every open cover has a finite subcover, which is
+            certainly a locally finite open refinement of the cover.
+        \end{proof}
+        Far weaker than compactness, $\sigma$ compact plus locally compact
+        Hausdorff implies paracompact. We've discussed local compactness in
+        metric spaces, and the definition has very little difference in
+        topological spaces.
+        \begin{definition}[\textbf{Locally Compact Topological Space}]
+            A locally compact topological space is a topological space
+            $(X,\,\tau)$ such that for all $x\in{X}$ there is an open set
+            $\mathcal{U}\in\tau$ and a compact set $K\subseteq{X}$ such that
+            $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$.
+        \end{definition}
+        Before proving locally compact $\sigma$ compact spaces are paracompact,
+        we'll need a little lemma.
+        \begin{theorem}
+            If $(X,\,\tau)$ is locally compact and Hausdorff and if $x\in{X}$,
+            then there is a $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$
+            and $\textrm{Cl}_{\tau}(\mathcal{U})$ is compact.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is locally compact there is a
+            $\mathcal{U}\in\tau$ and a compact $K\subseteq{X}$ such that
+            $x\in\mathcal{U}$ and $\mathcal{U}\subseteq{K}$. But $(X,\,\tau)$
+            is Hausdorff, so $K$ is closed. But then
+            $\textrm{Cl}_{\tau}(\mathcal{U})\subseteq{K}$. But then
+            $\textrm{Cl}_{\tau}(\mathcal{U})$ is a closed subset of a compact
+            space, which is therefore compact.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is $\sigma$ compact, locally compact, and Hausdorff,
+            then it is compactly exhaustible.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is $\sigma$ compact there are countably many
+            sets $\mathcal{C}_{n}$, $n\in\mathbb{N}$, each of which is compact
+            and such that they cover the space. For all $n\in\mathbb{N}$ and
+            for all $x\in\mathcal{C}_{n}$, since $(X,\,\tau)$ is locally compact
+            and Hausdorff, there is a $\mathcal{V}_{x,n}\in\tau$ such that
+            $x\in\mathcal{V}_{x,n}$ and $\textrm{Cl}_{\tau}(\mathcal{V}_{x,n})$
+            is compact. But these sets cover $\mathcal{C}_{n}$, which is
+            compact, so we can do it with finitely many,
+            $\mathcal{V}_{0,n},\,\dots,\,\mathcal{V}_{N,n}$. Since this is
+            a finite collection we have:
+            \begin{equation}
+                \textrm{Cl}_{\tau}\Big(\bigcup_{k=0}^{N}\mathcal{V}_{k,n}\Big)
+                =\bigcup_{k=0}^{N}\textrm{Cl}_{\tau}(\mathcal{V}_{k,n})
+            \end{equation}
+            Define $\mathcal{U}_{n}$ via:
+            \begin{equation}
+                \mathcal{U}_{n}=\bigcup_{k=0}^{N}\mathcal{V}_{k,n}
+            \end{equation}
+            Then $\mathcal{U}_{n}$ is open and by the previous equation
+            $\textrm{Cl}_{n}(\mathcal{U}_{n})$ is the finite union of compact
+            sets, which is therefore compact. Recursively define
+            $\mathcal{W}_{n}$ as follows. Set $\mathcal{W}_{0}=\mathcal{U}_{0}$.
+            Let $\mathcal{W}_{n}\in\tau$ be such that
+            $\bigcup_{k=0}^{n}\mathcal{U}_{k}\subseteq\mathcal{W}_{n}$ and
+            such that $\textrm{Cl}_{\tau}(\mathcal{W}_{n})$ is compact.
+            Define $\mathcal{W}_{n+1}$ as follows. Since
+            $\textrm{Cl}_{\tau}(\mathcal{W}_{n})$ and
+            $\textrm{Cl}_{\tau}(\mathcal{U}_{n+1})$ are compact, so is the
+            union. Thus, by the previous argument, we can cover it in finitely
+            many open sets $\mathcal{V}_{0},\,\dots,\,\mathcal{V}_{N}$, each
+            of which has compact closure. Define:
+            \begin{equation}
+                \mathcal{W}_{n+1}=\bigcup_{k=0}^{N}\mathcal{V}_{k}
+            \end{equation}
+            Then $\mathcal{W}_{n+1}$ is open and:
+            \begin{equation}
+                \textrm{Cl}_{\tau}(\mathcal{W}_{n+1})
+                =\textrm{Cl}_{\tau}\Big(\bigcup_{k=0}^{N}\mathcal{V}_{k}\Big)
+                =\bigcup_{k=0}^{N}\textrm{Cl}_{\tau}(\mathcal{V}_{k})
+            \end{equation}
+            which is the finite union of compact sets, so it is compact.
+            But moreover, from the construction, since the $\mathcal{V}_{k}$
+            cover $\mathcal{W}_{n}$, we have
+            $\textrm{Cl}_{\tau}(\mathcal{W}_{n})\subseteq\mathcal{W}_{n+1}$.
+            Define:
+            \begin{equation}
+                K_{n}=\textrm{Cl}_{\tau}(\mathcal{W}_{n})
+            \end{equation}
+            Then $K_{n}$ is compact and
+            $K_{n}\subseteq\textrm{Int}_{\tau}(K_{n+1})$ since
+            $\textrm{Int}_{\tau}(K_{n+1})=\mathcal{W}_{n+1}$. Morever
+            $\bigcup_{n\in\mathbb{N}}=X$ since
+            $\mathcal{C}_{n}\subseteq\mathcal{U}_{n}$,
+            $\mathcal{U}_{n}\subseteq\mathcal{W}_{n}$, and
+            $\mathcal{W}_{n}\subseteq{K}_{n}$. Since the $\mathcal{C}_{n}$
+            cover $X$, so do the $K_{n}$. Hence, $(X,\,\tau)$ is
+            compactly exhaustible.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is compactly exhaustible and Hausdorff,
+            then it is paracompact.
+        \end{theorem}
+        \begin{proof}
+            Let $K:\mathbb{N}\rightarrow\mathcal{P}(X)$ be such that
+            for all $n\in\mathbb{N}$ $K_{n}$ is compact,
+            $K_{n}\subseteq\textrm{Int}_{\tau}(K_{n+1})$, and
+            $\bigcup_{n\in\mathbb{N}}K_{n}=X$. Note that, since
+            $\textrm{Int}_{\tau}(K_{n})\subseteq{K}_{n+1}$ is open, and
+            $K_{n+1}$ is compact, $K_{n+1}\setminus\textrm{Int}_{\tau}(K_{n})$
+            is compact. Let $\mathcal{O}$ be an open cover. We must find a
+            locally finite open refinement $\mathcal{X}$ of $\mathcal{O}$.
+            But $\mathcal{O}$ covers $X$, so it covers
+            $K_{n+1}\setminus\textrm{Int}_{\tau}(K_{n})$. By compactness there
+            are finitely many $\mathcal{V}_{0},\,\dots,\,\mathcal{V}_{n_{N}}$
+            that cover $K_{n+1}\setminus\textrm{Int}_{\tau}(K_{n})$.
+            Define $\Delta_{n}$ via:
+            \begin{equation}
+                \Delta_{n}=
+                \Big\{\,\mathcal{V}_{k}\cap\big(\textrm{Int}_{\tau}(K_{n+2})
+                    \setminus{K}_{n-1}\big)\;|\;0\leq{k}\leq{N}_{n}\Big\}
+            \end{equation}
+            But $(X,\,\tau)$ is Hausdorff, so each $K_{n}$ is closed, hence
+            $\textrm{Int}_{\tau}(K_{n+1})\setminus{K}_{n-1}$ is open, meaning
+            all elements of $\Delta$ are open. The set
+            $\mathcal{X}=\bigcup_{n\in\mathbb{N}}\Delta_{n}$ is a locally finite
+            open refinement. It is an open refinement, the elements are open
+            and are contained as subsets of the elements of $\mathcal{O}$ by
+            construction. It is also an open cover since it covers each
+            $K_{n}$, and the $K_{n}$ cover $X$. Lastly, it is locally finite.
+            Every element of $X$ is contained in some
+            $\textrm{Int}_{\tau}(K_{n+1})\setminus{K}_{n-1}$ for some $n$,
+            and $\mathcal{X}$ has only finitely many elements with non-empty
+            intersection with this sets, the elements of $\Delta_{n}$. So
+            $\mathcal{X}$ is a locally finite open refinement of $\mathcal{O}$
+            that covers $X$, so $(X,\,\tau)$ is paracompact.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is paracompact, and if $\mathcal{C}\subseteq{X}$ is
+            closed, then $(\mathcal{C},\,\tau_{\mathcal{C}})$ is paracompact
+            where $\tau_{\mathcal{C}}$ is the subspace topology.
+        \end{theorem}
+        \begin{proof}
+            The proof is a mimicry of the idea for compact spaces. Given an
+            open cover $\mathcal{O}$ of $\mathcal{C}$, we extend it to an open
+            cover $\tilde{\mathcal{O}}$ of $X$ via
+            $\tilde{\mathcal{O}}=\mathcal{O}\cup\{\,X\setminus\mathcal{C}\,\}$.
+            Using paracompact of $(X,\,\tau)$ we get a locally finite open
+            refinement $\tilde{\mathcal{X}}$ that covers $X$. We restrict these
+            sets to $\mathcal{C}$ to obtain a locally finite open refinite
+            $\mathcal{X}$ of $\mathcal{O}$ that cover $\mathcal{C}$.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if
+            $\mathcal{A}\subseteq\mathcal{P}(X)$ is locally finite, then the
+            set:
+            \begin{equation}
+                \mathcal{A}'=\{\,\textrm{Cl}_{\tau}(A)\;|\;A\in\mathcal{A}\,\}
+            \end{equation}
+            is locally finite as well
+        \end{theorem}
+        \begin{proof}
+            Homework.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if
+            $\mathcal{A}\subseteq\mathcal{P}(X)$ is locally finite, then:
+            \begin{equation}
+                \textrm{Cl}_{\tau}\Big(\bigcup_{A\in\mathcal{A}}A\big)
+                =\bigcup_{A\in\mathcal{A}}\textrm{Cl}_{\tau}(A)
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            Also homework.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is paracompact and Hausdorff, then it is regular.
+        \end{theorem}
+        \begin{proof}
+            For let $x\in{X}$, $\mathcal{C}\subseteq{X}$ be closed, and
+            $x\notin\mathcal{C}$. Since $(X,\,\tau)$ is Hausdorff, for all
+            $y\in\mathcal{C}$ there are $\mathcal{U}_{y},\mathcal{V}_{y}\in\tau$
+            such that $x\in\mathcal{U}_{y}$, $y\in\mathcal{V}_{y}$, and
+            $\mathcal{U}_{y}\cap\mathcal{V}_{y}=\emptyset$. But then:
+            \begin{equation}
+                \mathcal{O}=\{\,\mathcal{V}_{y}\;|\;y\in\mathcal{C}\,\}
+                \cup\{\,X\setminus\mathcal{C}\,\}
+            \end{equation}
+            is an open cover of $X$. But $(X,\,\tau)$ is paracompact, so there
+            is a locally finite open refinement $\mathcal{X}$ that covers $X$.
+            Let $\Delta\subseteq\mathcal{X}$ be the set of all elements with
+            non-empty intersection with $\mathcal{C}$. Since $\mathcal{X}$
+            covers $X$, $\Delta$ covers $\mathcal{C}$. But by the definition
+            of $\mathcal{O}$, since $\mathcal{X}$ is a refinement of
+            $\mathcal{O}$, for all $\mathcal{W}\in\mathcal{X}$ there is a
+            $\mathcal{V}_{y}\in\mathcal{O}$ such that
+            $\mathcal{W}\subseteq\mathcal{V}_{y}$, or
+            $\mathcal{W}\subseteq{X}\setminus\mathcal{C}$. Hence all elements
+            of $\Delta$ are subsets of $\mathcal{V}_{y}$ for some
+            $y\in\mathcal{C}$. But then, since $x\in\mathcal{U}_{y}$ and
+            $\mathcal{U}_{y}\cap\mathcal{V}_{y}=\emptyset$, we have
+            $x\notin\textrm{Cl}_{\tau}(\mathcal{V}_{y})$. But
+            $\Delta$ is locally finite, being a subset of $\mathcal{X}$, hence:
+            \begin{equation}
+                \textrm{Cl}_{\tau}\Big(\bigcup_{A\in\Delta}A\Big)
+                =\bigcup_{A\in\Delta}\textrm{Cl}_{\tau}(A)
+            \end{equation} 
+            And hence $x\notin\textrm{Cl}_{\tau}\big(\bigcup_{A\in\Delta}A\big)$.
+            Let $\mathcal{U}=X\setminus\textrm{Cl}_{\tau}\Big(\bigcup_{A\in\Delta}A\Big)$
+            and $\mathcal{V}=\bigcup\Delta$. Then $\mathcal{U}$ and $\mathcal{V}$
+            are open and disjoint, $x\in\mathcal{U}$, and
+            $\mathcal{C}\subseteq\mathcal{V}$. Hence, $(X,\,\tau)$ is regular.
+        \end{proof}
+        \begin{theorem}[\textbf{Dieudonne's Theorem}]
+            If $(X,\,\tau)$ is paracompact and Hausdorff, then it is normal.
+        \end{theorem}
+        \begin{proof}
+            We apply the same idea as before. Since $(X,\,\tau)$ is paracompact
+            and Hausdorff, it is regular. Given two closed disjoint sets
+            $\mathcal{C},\mathcal{D}\subseteq{X}$ for all
+            $x\in\mathcal{C}$ we find $\mathcal{U}_{x},\mathcal{V}_{x}\in\tau$
+            such that $x\in\mathcal{U}_{x}$,
+            $\mathcal{D}\subseteq\mathcal{V}_{x}$, and
+            $\mathcal{U}_{x}\cap\mathcal{V}_{x}=\emptyset$. We use
+            paracompactness and apply a similar argument to the previous theorem
+            to prove normality.
+        \end{proof}
+        There's a partial reverse for paracompactness and regularity. If we
+        add Lindel\"{o}f, we get the following theorem.
+        \begin{theorem}
+            If $(X,\,\tau)$ is regular and Lindel\"{o}f, then it is paracompact.
+        \end{theorem}
+        The proof is a tad too long, and it would be better to get to the
+        metrization theorems.
+\end{document}
