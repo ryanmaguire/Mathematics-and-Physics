@@ -1,0 +1,226 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 25}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Partitions of Unity}
+        We're a stone's throw away (no pun intended A. H. Stone) from the
+        metrization theorems. It would seem historically that paracompactness
+        and local finiteness ideas grew out of the study of metrization
+        theorems, but these notions have found enormous use elsewhere. Indeed,
+        the use of paracompactness outside of general topology is probably more
+        well known than the metrization theorems. In manifold theory and
+        geometry paracompactness is important because of its relation to
+        \textit{partitions of unity}. Some of the key theorems of differential
+        topology (like the Whitney embedding theorem) and Riemannian geometry
+        (every smooth manifold is a Riemannian manifold) rely on the fact that
+        topological manifolds have partitions of unity. This is a corollary of
+        the fact that topological manifolds are paracompact and Hausdorff. In
+        this section we introduce the idea and prove some basic theorems.
+        \par\hfill\par
+        First, some notation. Given two sets $A$ and $B$ we can prove there
+        exists a set $\mathcal{F}(A,\,B)$ that is the
+        \textit{set of all functions} from $A$ to $B$. Hence if we have two
+        topological spaces $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ we can collect
+        all \textit{continuous} function from $X$ to $Y$. This is denoted
+        $C^{0}(X,\,Y)$, or sometimes just $C(X,\,Y)$. The reason for the
+        $0$ is that in some cases (i.e. smooth manifolds and topological vector
+        spaces) it is possible to say a function from one topological space to
+        another is \textit{differentiable} or \textit{twice differentiable} or
+        even \textit{smooth}. We would then use the notations
+        $C^{1}(X,\,Y)$,  $C^{2}(X,\,Y)$, and $C^{\infty}(X,\,Y)$, respectively.
+        For general topological spaces, however, there is no possible notion
+        of derivative, so writing $C(X,\,Y)$ is fine.
+        \par\hfill\par
+        A word of warning. Some authors use $C(X)$ to denote continuous
+        functions from $(X,\,\tau)$ to $\mathbb{R}$, where $\mathbb{R}$ has the
+        standard Euclidean topology. Some authors use $C(X)$ to denote
+        continuous functions from $(X,\,\tau)$ to $\mathbb{C}$, where
+        $\mathbb{C}=\mathbb{R}^{2}$ has the standard topology of the Euclidean
+        plane. These notions are not equivalent, and it becomes the
+        responsibility of the reader to remember which notation the author is
+        using. I won't be doing this. When I want to speak of continuous
+        function into $\mathbb{R}$, I'll write $C(X,\,\mathbb{R})$. If I want to
+        consider continuous functions into the complex plane, it'll be denoted
+        $C(X,\,\mathbb{C})$.
+        \begin{definition}[\textbf{Support of a Function}]
+            The support of a function $f:X\rightarrow\mathbb{R}$ from a
+            topological space $(X,\,\tau)$ to the real line is the set
+            $\textrm{supp}_{\tau}(f)\subseteq{X}$ defined by:
+            \begin{equation}
+                \textrm{supp}_{\tau}(f)
+                =\textrm{Cl}_{\tau}\Big(
+                    f^{-1}\big[\mathbb{R}\setminus\{\,0\,\}\big]
+                \Big)
+            \end{equation}
+            That is, the closure of the set of all points in $X$ that don't
+            map to zero.
+        \end{definition}
+        We can replace $\mathbb{R}$ with any ring
+        (or, more commonly, any field), for those who have studied
+        algebra. In analysis one often uses $\mathbb{C}$ instead.
+        \begin{definition}[\textbf{Partition of Unity}]
+            A partition of unity in a topological space $(X,\,\tau)$ is a
+            subset $\mathcal{R}\subseteq{C}(X,\,\mathbb{R})$ of continuous
+            functions from $X$ to $\mathbb{R}$ such that:
+            \begin{enumerate}
+                \item For all $f\in{X}$ and for all $x\in{X}$ it is true that
+                    $f(x)\geq{0}$.
+                \item The set $\mathcal{O}\subseteq\mathcal{P}(X)$ defined by:
+                    \begin{equation}
+                        \mathcal{O}=
+                        \{\,\textrm{supp}_{\tau}(f)\;|\;f\in\mathcal{R}\,\}
+                    \end{equation}
+                    is locally finite.
+                \item For all $x\in{X}$ we have:
+                    \begin{equation}
+                        \sum_{f\in\mathcal{R}}f(x)=1
+                    \end{equation}
+            \end{enumerate}
+        \end{definition}
+        This last part may be confusing since $\mathcal{R}$ can be uncountably
+        big and we've no notion of summing over sets that big
+        (It is possible to do this, however. For those who have studied measure
+        theory you may recall that if the sum of uncountably many positive
+        real numbers converges, then all but countably many are zero). There
+        is no issue of convergence because of the second property. Since the
+        supports are locally finite, given any $x\in{X}$ there are only finitely
+        many $f\in\mathcal{R}$ such that $f(x)\ne{0}$. So the sum in part 3 is
+        a finite some for each point.
+        \par\hfill\par
+        It is useful to attach partitions of unity to open covers. In almost
+        all applications we consider partitions of unity that are
+        \textit{subordinate} to the cover.
+        \begin{definition}[\textbf{Partition of Unity Subordinate to an Open Cover}]
+            A partition of unity that is subordinate to an open cover
+            $\mathcal{O}$ in a topological space $(X,\,\tau)$ is a partition of
+            unity $\mathcal{R}$ such that for all $f\in\mathcal{R}$ there is a
+            $\mathcal{U}\in\mathcal{O}$ such that
+            $\textrm{supp}_{\tau}(f)\subseteq\mathcal{U}$.
+        \end{definition}
+        Every paracompact Hausdorff space has a subordinate partition of unity
+        for every open cover. Conversely, every Hausdorff space that always
+        admits subordinate partitions of unity is paracompact. We will prove
+        these two facts in todays notes. The \textit{shrinking lemma} is
+        required, which says that paracompact Hausdorff spaces are
+        precisely paracompact.
+        \begin{definition}[\textbf{Precise Refinement}]
+            A precise refinement of a set $\mathcal{A}\subseteq\mathcal{P}(X)$
+            in a topological space $(X,\,\tau)$ is a set
+            $\mathcal{A}'\subseteq\mathcal{P}(X)$ such that for all
+            $A'\in\mathcal{A}'$ there is an $A\in\mathcal{A}$ such that
+            $\textrm{Cl}_{\tau}(A')\subseteq{A}$.
+        \end{definition}
+        With refinements we only required $A'\subseteq{A}$. This allows for the
+        possibility that $A=A'$. With precise refinements, unless your sets
+        under consideration happen to be closed, to make
+        $\textrm{Cl}_{\tau}(A')\subseteq{A}$ work requires
+        \textit{shrinking} $A$ a little.
+        \begin{definition}[\textbf{Precisely Paracompact Topological Space}]
+            A precisely paracompact topological space is a topological space
+            $(X,\,\tau)$ such that for all open covers
+            $\mathcal{O}\subseteq\tau$ of $X$ there exists a precise locally
+            finite open refinement $\mathcal{X}$ of $\mathcal{O}$ that covers
+            $X$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is paracompact and Hausdorff, then it is
+            precisely paracompact.
+        \end{theorem}
+        \begin{proof}
+            For if not then there is an open cover $\mathcal{O}\subseteq\tau$
+            with no precise locally finite open refinement. But $(X,\,\tau)$
+            is paracompact so there is a locally finite open refinement
+            $\mathcal{X}$ of $\mathcal{O}$. But $(X,\,\tau)$ is Hausdorff and
+            paracompact, so it is regular. Hence for all $x\in{X}$ and for all
+            $\mathcal{U}\in\tau$ with $x\in\mathcal{U}$ there is a
+            $\mathcal{V}\in\tau$ such that $x\in\mathcal{V}$ and
+            $\textrm{Cl}_{\tau}(\mathcal{V})\subseteq\mathcal{U}$. Using this,
+            since $\mathcal{X}$ is an open cover of $X$, for all $x\in{X}$ there
+            is a $\mathcal{U}_{x}\in\mathcal{X}$ such that
+            $x\in\mathcal{U}_{x}$. Let $\mathcal{V}_{x}\in\tau$ be such that
+            $x\in\mathcal{V}_{x}$ and
+            $\textrm{Cl}_{\tau}(\mathcal{V}_{x})\subseteq\mathcal{U}_{x}$.
+            Define $\tilde{\mathcal{O}}$ via:
+            \begin{equation}
+                \tilde{\mathcal{O}}=
+                \{\,\mathcal{V}_{x}\;|\;x\in{X}\,\}
+            \end{equation}
+        \end{proof}
+\end{document}
