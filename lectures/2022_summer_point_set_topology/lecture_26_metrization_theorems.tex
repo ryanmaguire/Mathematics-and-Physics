@@ -1,0 +1,295 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 26}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Metrization Theorems}
+        So far the only metrization theorem we have is Urysohn's. It makes use
+        of normality. We know from homework that metrizable spaces are
+        perfectly normal. In improving Urysohn's metrization theorem to one
+        that contains necessary and sufficient conditions we need to upgrade
+        to perfect normality. From a few weeks ago, a perfectly normal
+        topological space is some space $(X,\,\tau)$ such that for all
+        disjoint closed subsets $\mathcal{C},\mathcal{D}\subseteq{X}$ there is
+        a continuous function $f:X\rightarrow[0,\,1]$ such that
+        $\mathcal{C}=f^{-1}[\{\,0\,\}]$ and $\mathcal{D}=f^{-1}[\{\,1\,\}]$.
+        Perfectly normal implies normal (we proved this) and it also implies
+        completely normal (every subspace is also normal, we haven't proven
+        this). The reformulation we want is in terms of $G_{\delta}$ sets.
+        \begin{definition}[\textbf{$G_{\delta}$ Set}]
+            A $G_{\delta}$ set in a topological space $(X,\,\tau)$ is a set
+            $A\subseteq{X}$ such that there is a countable set
+            $\mathcal{O}\subseteq\tau$ such that $A=\bigcap\mathcal{O}$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, and if $\mathcal{U}\in\tau$,
+            then $\mathcal{U}$ is a $G_{\delta}$ set.
+        \end{theorem}
+        \begin{proof}
+            Let $\mathcal{O}=\{\,\mathcal{U}\,\}$. Then $\mathcal{O}$ is
+            countable since it is finite, but also
+            $\mathcal{U}=\bigcap\mathcal{O}$. So $\mathcal{U}$ is a
+            $G_{\delta}$ set.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is metrizable, and if $\mathcal{C}\subseteq{X}$ is
+            closed, then it is a $G_{\delta}$ set.
+        \end{theorem}
+        \begin{proof}
+            Since $(X,\,\tau)$ is metrizable, there is a metric $d$ that induces
+            $\tau$. For all $n\in\mathbb{N}$ define $\mathcal{U}_{n}$ via:
+            \begin{equation}
+                \mathcal{U}_{n}
+                =\bigcup_{x\in\mathcal{C}}B_{\frac{1}{n+1}}^{(X,\,d)}(x)
+            \end{equation}
+            Then $\mathcal{U}_{n}$ is open, being the union of open sets.
+            Also $\mathcal{U}_{n+1}\subseteq\mathcal{U}_{n}$ and
+            $\mathcal{C}\subseteq\mathcal{U}_{n}$ for all $n\in\mathbb{N}$.
+            Suppose $x\in\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$. Then for
+            all $n\in\mathbb{N}$ there is an $a_{n}\in\mathcal{C}$ such that
+            $d(x,\,a_{n})<\frac{1}{n+1}$. But then $a_{n}\rightarrow{x}$. But
+            $(X,\,\tau)$ is metrizable, and hence sequential, so since
+            $\mathcal{C}$ is closed, if $a:\mathbb{N}\rightarrow\mathcal{C}$ is
+            a convergent sequence with limit $x\in{X}$, then
+            $x\in\mathcal{C}$. Hence
+            $\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}=\mathcal{C}$ so
+            $\mathcal{C}$ is a $G_{\delta}$ set.
+        \end{proof}
+        This is part of the idea we wish to capture. We want closed sets to be
+        $G_{\delta}$ sets. Topological spaces with this property are given a
+        name.
+        \begin{definition}[\textbf{$G_{\delta}$ Topological Space}]
+            A $G_{\delta}$ topological space is a topological space $(X,\,\tau)$
+            such that every closed subset $\mathcal{C}\subseteq{X}$ is a
+            $G_{\delta}$ set.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$ are topological spaces,
+            if $f:X\rightarrow{Y}$ is continuous, and if $A\subseteq{Y}$ is a
+            $G_{\delta}$ set, then $f^{-1}[A]$ is a $G_{\delta}$ set.
+        \end{theorem}
+        \begin{proof}
+            Since $A$ is a $G_{\delta}$ set there is a sequence
+            $\mathcal{V}:\mathbb{N}\rightarrow\tau_{Y}$ such that
+            $A=\bigcap_{n\in\mathbb{N}}\mathcal{V}_{n}$. But then:
+            \begin{equation}
+                f^{-1}[A]
+                =f^{-1}\Big[\bigcap_{n\in\mathbb{N}}\mathcal{V}_{n}\Big]
+                =\bigcap_{n\in\mathbb{N}}f^{-1}[\mathcal{V}_{n}]
+            \end{equation}
+            But since $f$ is continuous and $\mathcal{V}_{n}\in\tau_{Y}$, we
+            have that $f^{-1}[\mathcal{V}_{n}]\in\tau_{X}$, and hence
+            $f^{-1}[A]$ is a $G_{\delta}$ set.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is perfectly normal
+            if and only if for all closed $\mathcal{C}\subseteq{X}$ there is a
+            continuous function $f:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$.
+        \end{theorem}
+        \begin{proof}
+            If $(X,\,\tau)$ is perfectly normal, let $\mathcal{D}=\emptyset$.
+            Then $\mathcal{C}$ and $\mathcal{D}$ are disjoint closed sets so
+            there is a continuous function $f:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$ and
+            $\mathcal{D}=f^{-1}[\{\,1\,\}]$. So in particular,
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$. Now suppose $(X,\,\tau)$ is such
+            that for all closed $\mathcal{C}$ there is a continuous function
+            $f:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$. Given $\mathcal{C},\mathcal{D}$
+            closed and disjoint, let $f$ be the corresponding function for
+            $\mathcal{C}$ and $g$ the function for $\mathcal{D}$. Define:
+            \begin{equation}
+                h(x)
+                =\frac{f(x)}{f(x)+g(x)}
+            \end{equation}
+            This is well-defined since $\mathcal{C}\cap\mathcal{D}=\emptyset$.
+            For if $x\in\mathcal{C}$, then $f(x)=0$ so
+            the denominator is $g(x)$ and $g(x)>0$ for all $x\notin\mathcal{D}$.
+            If $x\in\mathcal{D}$ then $g(x)=0$, so the denominator is
+            $f(x)$ and $f(x)>0$ for all $x\notin\mathcal{C}$. If
+            $x\not\mathcal{C}$ and $x\notin\mathcal{D}$ then $f(x)+g(x)>0$.
+            It is continuous since it is the quotient of continuous functions.
+            Lastly, $h^{-1}[\{\,0\,\}]=\mathcal{C}$ and
+            $h^{-1}[\{\,1\,\}]=\mathcal{D}$. For $h(x)=0$ if and only if
+            $f(x)=0$ and hence $x\in\mathcal{C}$. Also $h(x)=1$ if and only if
+            $f(x)=f(x)+g(x)$ which is true if and only if $g(x)=0$, meaning
+            $x\in\mathcal{D}$. So $(X,\,\tau)$ is perfectly normal.
+        \end{proof}
+        Perfect normality is equivalent to normal plus $G_{\delta}$. To prove
+        this requires the topological version of one of the foundational
+        theorems of real analysis.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, if
+            $F:\mathbb{N}\rightarrow{C}(X,\,\mathbb{R})$ is a sequence of
+            continuous functions, if $f:X\rightarrow\mathbb{R}$ is
+            such that for all $x\in{X}$ it is true that
+            $F_{n}(x)\rightarrow{f}(x)$, and if:
+            \begin{equation}
+                \lim_{n\rightarrow\infty}\sup_{x\in{X}}|F_{n}(x)-f(x)|=0
+            \end{equation}
+            then $f$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            We use the equivalent definition of continuity that for all
+            $x\in{X}$ and for all $\mathcal{V}\in\tau_{\mathbb{R}}$ such that
+            $f(x)\in\mathcal{V}$ there is a $\mathcal{U}\in\tau$ such that
+            $x\in\mathcal{U}$ and $f[\mathcal{U}]\subseteq\mathcal{V}$.
+            Let $x\in{X}$ and $\mathcal{V}\in\tau_{\mathbb{R}}$ be such that
+            $f(x)\in\mathcal{V}$. Since $\mathcal{V}$ is open in $\mathbb{R}$
+            there is an $\varepsilon>0$ such that
+            $(f(x)-\varepsilon,\,f(x)+\varepsilon)\subseteq\mathcal{V}$. But
+            then, since $\textrm{sup}|F_{n}(x)-f(x)|\rightarrow{0}$, there is an
+            $N\in\mathbb{N}$ such that for all $n\in\mathbb{N}$ with $n\geq{N}$
+            and for all $x\in{X}$ we have:
+            \begin{equation}
+                |F_{n}(x)-f(x)|<\frac{\varepsilon}{3}
+            \end{equation}
+            But $F_{N}:X\rightarrow[0,\,1]$ is continuous, so there is an open
+            set $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $f[\mathcal{U}]\subseteq(f(x)-\varepsilon/3,\,f(x)+\varepsilon/3)$.
+            But then, for all $x,y\in\mathcal{U}$, we have:
+            \begin{align}
+                |f(x)-f(y)|
+                &=|f(x)-F_{N}(x)+F_{N}(x)-F_{N}(y)+f_{N}(y)-f(y)|\\
+                &\leq|f(x)-f_{N}(x)|+|F_{N}(x)-F_{N}(y)|+|F_{N}(y)-f(y)|\\
+                &<\frac{\varepsilon}{3}+\frac{\varepsilon}{3}
+                    +\frac{\varepsilon}{3}\\
+                &=\varepsilon
+            \end{align}
+            and hence for all $y\in\mathcal{U}$ we have
+            $f(y)\in(f(x)-\varepsilon,\,f(x)+\varepsilon)$, so
+            $f[\mathcal{U}]\subseteq(f(x)-\varepsilon,\,f(x)+\varepsilon)$, and
+            hence $f[\mathcal{U}]\subseteq\mathcal{V}$. Thus, $f$ is continuous.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is perfectly normal
+            if and only if it is normal and a $G_{\delta}$ space.
+        \end{theorem}
+        \begin{proof}
+            Perfectly normal implies normal, we need only prove it implies
+            $G_{\delta}$ as well. Let $\mathcal{C}\subseteq{X}$ be closed.
+            Since $(X,\,\tau)$ is perfectly normal, there is a continuous
+            function $f:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$. For all $n\in\mathbb{N}$ define:
+            \begin{equation}
+                \mathcal{U}_{n}=f^{-1}\big[[0,\,\frac{1}{n+1})\big]
+            \end{equation}
+            Since $f$ is continuous, and since $[0,\,\frac{1}{n+1})$ is open in
+            the subspace topology for $[0,\,1]$, $\mathcal{U}_{n}$ is open.
+            Also $\mathcal{C}\subseteq\mathcal{U}_{n}$ for all $n\in\mathbb{N}$.
+            Suppose $x\in\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$.
+            Then for all $n\in\mathbb{N}$, $f(x)\in[0,\,\frac{1}{n+1})$, and
+            hence $f(x)=0$. But then $x\in\mathcal{C}$. Thus,
+            $\mathcal{C}=\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$ so
+            $\mathcal{C}$ is a $G_{\delta}$ set. That is, if $(X,\,\tau)$ is
+            perfectly normal, then it is a normal $G_{\delta}$ space. In the
+            other direction, suppose $(X,\,\tau)$ is a normal $G_{\delta}$
+            space. By a previous theorem to prove normality it suffices to
+            show that for all closed $\mathcal{C}\subseteq{X}$ there is a
+            continuous function $f:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$. Since $(X,\,\tau)$ is a
+            $G_{\delta}$ space and $\mathcal{C}$ is closed, there is a sequence
+            $\mathcal{U}:\mathbb{N}\rightarrow\tau$ such that
+            $\mathcal{C}=\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$. But then
+            for all $n\in\mathbb{N}$ we have
+            $\mathcal{C}\subseteq\mathcal{U}_{n}$ and hence
+            $\mathcal{C}\cap(X\setminus\mathcal{U}_{n})=\emptyset$. But
+            $\mathcal{U}_{n}$ is open, so $X\setminus\mathcal{U}_{n}$ is closed.
+            By Urysohn's lemma there is a continuous function
+            $F_{n}:X\rightarrow[0,\,1]$ such that
+            $\mathcal{C}\subseteq{F}_{n}^{-1}[\{\,0\,\}]$ and
+            $X\setminus\mathcal{U}_{n}\subseteq{F}_{n}^{-1}[\{\,1\,\}]$. Define:
+            \begin{equation}
+                f(x)=\sum_{n=0}^{\infty}\frac{F_{n}(x)}{2^{n}}
+            \end{equation}
+            Then since $0\leq{F}_{n}(x)\leq{1}$ for all $n\in\mathbb{N}$ and all
+            $x\in{X}$ the $n^{\textrm{th}}$ term of this sum is bounded by
+            $1/2^{n}$, which converges to zero. By the previous theorem
+            $f$ is continuous. Since $F_{n}(x)=0$ for all
+            $x\in\mathcal{C}$ and all $n\in\mathbb{N}$, we have that
+            $f(x)=0$ for all $x\in\mathcal{C}$. Suppose $x\notin\mathcal{C}$.
+            Then there is a $\mathcal{U}_{n}$ such that
+            $x\notin\mathcal{U}_{n}$, since
+            $\mathcal{C}=\bigcap_{n\in\mathbb{N}}\mathcal{U}_{n}$. But then
+            $F_{n}(x)>0$, and hence $f(x)>0$. So
+            $x\notin{f}^{-1}[\{\,0\,\}]$. That is,
+            $\mathcal{C}=f^{-1}[\{\,0\,\}]$, so $(X,\,\tau)$ is perfectly normal.
+        \end{proof}
+\end{document}
