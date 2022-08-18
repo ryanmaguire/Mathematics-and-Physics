@@ -1,0 +1,194 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 27}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Compactifications}
+        Compact topological spaces are nice. Unlike the Hausdorff and
+        first countable conditions, which most of your every day spaces possess,
+        compact is not as common. Compact spaces are just too convenient.
+        For example $\mathbb{R}^{n}$ is not compact for all $n>0$ by the
+        Heine-Borel theorem. A \textit{compactification} of a topological space
+        $(X,\,\tau)$ is a compact space $(\tilde{X},\,\tilde{\tau})$ that
+        contains $(X,\,\tau)$ is an embedded subspace. There are two common
+        compactifications that are used in topology and analysis, the
+        one point compactification, and the Stone-\v{C}ech compactification.
+        \par\hfill\par
+        The one point compactification, also called the Alexandroff extension
+        or the Alexandroff compactification, takes $(X,\,\tau)$ and adds one
+        point in a way that makes it compact. This new point is often
+        denoted $\infty$, but what if $X$ already had $\infty$ as an element?
+        Is there a way to guarantee we are adding a new element to $X$ that is
+        not already contained in it? The axioms of set theory tell us if $A$ is
+        a set, then $A\notin{A}$, so we can form our new set
+        $\tilde{A}$ via $A\cup\{\,A\,\}$.
+        \begin{definition}[\textbf{One Point Compactification}]
+            The one point compactification of a topological space $(X,\,\tau)$
+            is the ordered pair $(\tilde{X},\,\tilde{\tau})$ where
+            $\tilde{X}=X\cup\{\,X\,\}$ and $\tilde{\tau}$ is defined by:
+            \begin{equation}
+                \tilde{\tau}=
+                \big\{\,\mathcal{U}\subseteq\tilde{X}\;|\;
+                    \mathcal{U}\in\tau\textrm{ or }
+                    \mathcal{U}=(X\setminus\mathcal{C})\cup\{\,X\,\},\,
+                    \mathcal{C}\textrm{ compact and closed.}\,\big\}
+            \end{equation}
+            The new element $\{\,X\,\}$ that is added is often denoted
+            $\infty$ (if we know the symbol $\infty$ does not already belong to
+            $X$). The set $\tilde{\tau}$ is thus the set of all open sets in
+            $\tau$ plus all complements of closed compact sets together with
+            infinity.
+        \end{definition}
+        There are several theorems related to the one point compactification
+        that we lack the time to go over, so I'll just present them.
+        \begin{itemize}
+            \item The one point compactification of a topological space is a
+                topological space (that is, $\tilde{\tau}$ is a topology on
+                $\tilde{X}$).
+            \item $(X,\,\tau)$ is a subspace of $(\tilde{X},\,\tilde{\tau})$ and
+                the inclusion map $\iota:X\rightarrow\tilde{X}$ is an
+                embedding.
+            \item The one point compactification of a topological space is
+                compact.
+            \item If $(X,\,\tau)$ is a non-compact topological space, then it
+                is a dense subspace of its one point compactification.
+            \item The one point compactification of a topological space
+                $(X,\,\tau)$ is Hausdorff if and only if $(X,\,\tau)$ is
+                locally compact and Hausdorff. The one point compactification
+                of $\mathbb{Q}$ is an example of a non-Hausdorff
+                compactification, even though $\mathbb{Q}$ is Hausdorff
+                (it is not locally compact, however).
+            \item The one point compactification of a topological space
+                $(X,\,\tau)$ is Fr\'{e}chet if and only if
+                $(X,\,\tau)$ is Fr\'{e}chet.
+        \end{itemize}
+        The one point compactification makes the following theorem a lot easier.
+        \begin{theorem}
+            If $(X,\,\tau)$ is locally compact and Hausdorff, then it is
+            regular.
+        \end{theorem}
+        \begin{proof}
+            Let $(\tilde{X},\,\tilde{\tau})$ be the one point compactification
+            of $(X,\,\tau)$. Since $(X,\,\tau)$ is locally compact and
+            Hausdorff, $(\tilde{X},\,\tilde{\tau})$ is compact and Hausdorff.
+            But then $(\tilde{X},\,\tilde{\tau})$ is regular. But
+            $(X,\,\tau)$ is a subspace of $(\tilde{X},\,\tilde{\tau})$, and
+            a subspace of a regular space is regular. Hence,
+            $(X,\,\tau)$ is regular.
+        \end{proof}
+        The Stone-C\v{e}ch compactification is another common tool used in
+        analysis and topology, but its description is a lot harder to convey.
+        The simplest definition is the \textit{spectrum} of the set
+        $C_{b}(X,\,\mathbb{C})$ of bounded continuous functions from a
+        topological space $(X,\,\tau)$ into the complex numbers $\mathbb{C}$,
+        which is equipped with the standard Euclidean topology of
+        $\mathbb{R}^{2}$. A discussion of this idea would require an
+        excursion into analysis that we don't have the time for, unfortunately.
+        I will mention that the Stone-\v{C}ech compactification allows one to
+        describe \textit{completely metrizable} spaces.
+        \begin{definition}[\textbf{Completely Metrizable Topological Space}]
+            A completely metrizable topological space is a topological space
+            $(X,\,\tau)$ such that there is a complete metric $d$ on $X$ that
+            induces $\tau$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a metrizable topological space, then it is
+            completely metrizable if and only if it is a $G_{\delta}$ subspace
+            of its Stone-\v{C}ech compactification.
+        \end{theorem}
+        Lastly, Stone spaces are compact totally disconnected Hausdorff
+        topological spaces. They arise in the study of the Stone-\v{C}ech
+        compactification, but their use is far broader. Every Boolean algebra
+        $(B,\,\land,\,\lor)$ is represented by a Stone space, and conversely
+        every Stone space represents a Boolean algebra. Boolean algebras
+        capture the algebraic structure of logic. Think of propositions
+        together with \textit{and} and \textit{or}. Boolean algebras satisfy,
+        for all $P,Q,R\in{B}$, the following:
+        \begin{align}
+            P\land{Q}&=Q\land{P}
+                &P\lor{Q}&=Q\lor{P}\\
+            P\land(Q\land{R})&=(P\land{Q})\land{R}
+                &P\lor(Q\lor{R})&=(P\lor{Q})\lor{R}\\
+            P\land(Q\lor{R})&=(P\land{Q})\lor(P\land{R})
+                &P\lor(Q\land{R})&=(P\lor{Q})\land(P\lor{R})\\
+            P\lor\textrm{False}&=P&P\land\textrm{True}&=P\\
+            P\lor\neg{P}&=\textrm{True}&P\land\neg{P}&=\textrm{False}
+        \end{align}
+        So amazingly topology and logic become the same study.
+\end{document}
