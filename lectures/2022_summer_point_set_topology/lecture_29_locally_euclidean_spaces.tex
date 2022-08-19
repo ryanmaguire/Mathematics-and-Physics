@@ -1,0 +1,199 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 27}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Locally Euclidean Topological Spaces}
+        We now reach the final topic of the course, \textit{manifolds}. More
+        general than manifolds, we start with locally Euclidean spaces.
+        \begin{definition}[\textbf{Locally Euclidean Topological Space}]
+            A locally Euclidean topological space is a topological space
+            $(X,\,\tau)$ such that for all $x\in{X}$ there is a
+            $\mathcal{U}\in\tau$ an $n\in\mathbb{N}$, and an injective
+            continuous open mapping
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ such that
+            $x\in\mathcal{U}$.
+        \end{definition}
+        \begin{example}
+            For all $n\in\mathbb{N}$ the Euclidean space $\mathbb{R}^{n}$ with
+            the Euclidean topology is locally Euclidean. For all
+            $\mathbf{x}\in\mathbb{R}^{n}$ choose
+            $\mathcal{U}=\mathbb{R}^{n}$ and
+            $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n}$ to be the identity
+            mapping $f(\mathbf{x})=\textrm{id}_{\mathbb{R}^{n}}(\mathbf{x})=\mathbf{x}$.
+        \end{example}
+        \begin{example}
+            If $\mathcal{U}\subseteq\mathbb{R}^{n}$ is an open subset with
+            respect to the Euclidean topology, then
+            $(\mathcal{U},\,\tau_{\mathbb{R}^{n}_{\mathcal{U}}})$ is locally
+            Euclidean. Given $x\in\mathcal{U}$ define
+            $f:\mathcal{U}\rightarrow\mathbb{R}^{n}$ via
+            $f=\textrm{id}_{\mathbb{R}^{n}}|_{\mathcal{U}}$. Then
+            $f$ is injective and continuous, and since $\mathcal{U}$ is open,
+            $f$ is also an open mapping.
+        \end{example}
+        \begin{example}
+            The solution to $y^{2}-x^{2}=0$ in the plane is not locally
+            Euclidean. This forms an \textbf{X}, $y=\pm|x|$. Every point except
+            the origin is locally Euclidean, locally it looks like
+            $\mathbb{R}$. The origin is where this goes wrong. No matter how
+            much you zoom in it still locally looks like an \textbf{X}. This is
+            certainly not locally like $\mathbb{R}$, but it's also not 2
+            dimensional. Similarly, it's not $n$ dimensional for any
+            $n\in\mathbb{N}$. This this subspace of $\mathbb{R}^{2}$ is not
+            locally Euclidean.
+        \end{example}
+        This example tells us that closed subspaces of locally Euclidean spaces
+        do not need to be locally Euclidean.
+        \begin{example}
+            The bug-eyed line is locally Euclidean, second countable, but not
+            Hausdorff. Every point other than the two origins is locally like
+            $\mathbb{R}$. The two origins are also locally like $\mathbb{R}$.
+            See Fig.~\ref{fig:bug_eyed_line}.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/bug_eyed_line_003.pdf}
+            \caption{The Bug-Eyed Line}
+            \label{fig:bug_eyed_line}
+        \end{figure}
+        \begin{example}
+            The branching line is another example of a non-Hausdorff space that
+            is locally Euclidean. The construction is similar to the bug-eyed
+            line. Take $X\subseteq\mathbb{R}^{2}$ to be the set of all points
+            of the form $(x,\,y)\in\mathbb{R}^{2}$ such that $x\in\mathbb{R}$
+            and $y=\pm{1}$. Define $(x_{0},\,y_{0})R(x_{1},\,y_{1})$ if and
+            only if $x_{0}=x_{1}$ and $x_{0}<0$. Let $\tilde{R}$ be the
+            equivalence relation induced by $R$. The branching line is the
+            quotient $X/\tilde{R}$ with the quotient topology
+            (See Fig.~\ref{fig:branching_line_001}). Like the bug-eyed line,
+            it too is locally Euclidean, see Fig.~\ref{fig:branching_line_002}.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/branching_line_001.pdf}
+            \caption{The Branching Line Construction}
+            \label{fig:branching_line_001}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/branching_line_002.pdf}
+            \caption{The Branching Line is Locally Euclidean}
+            \label{fig:branching_line_002}
+        \end{figure}
+        \begin{example}
+            The long line is locally Euclidean and Hausdorff, but not
+            second countable. It is also not paracompact.
+        \end{example}
+        \begin{example}
+            As far as set theory is concerned, a function
+            $f:A\rightarrow{B}$ from a set $A$ to a set $B$ is a subset of
+            $A\times{B}$ satisfying certain properties. We can use this to
+            define locally Euclidean topological spaces by looking at
+            continuous functions from $\mathbb{R}^{m}$ to $\mathbb{R}^{n}$ for
+            some $m,n\in\mathbb{N}$. Given
+            $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$, continuous,
+            $f\subseteq\mathbb{R}^{m}\times\mathbb{R}^{n}$ can be given the
+            subspace topology. This makes it a closed subset since $f$ is
+            continuous. It is also a locally Euclidean subspace. For given
+            $\big(\mathbf{x},\,f(\mathbf{x})\big)\in{f}$, let
+            $\mathcal{U}=f$ and define $F:f\rightarrow\mathbb{R}^{m}$ via:
+            \begin{equation}
+                F\big((\mathbf{x},\,f(\mathbf{x})\big)=\mathbf{x}
+            \end{equation}
+            This is just the projection of the elements of
+            $f\subseteq\mathbb{R}^{m}\times\mathbb{R}^{n}$ onto
+            $\mathbb{R}^{m}$. Since projections are continuous open mappings,
+            we need only show $F$ is injective. But $f$ is a function, so given:
+            \begin{equation}
+                \big(\mathbf{x}_{0},\,f(\mathbf{x}_{0})\big)
+                \ne\big(\mathbf{x}_{1},\,f(\mathbf{x}_{1})\big)
+            \end{equation}
+            we must have $\mathbf{x}_{0}\ne\mathbf{x}_{1}$ (since if
+            $\mathbf{x}_{0}=\mathbf{x}_{1}$, then
+            $f(\mathbf{x}_{0})=f(\mathbf{x}_{1})$ by definition of a function).
+            So then:
+            \begin{equation}
+                F\big((\mathbf{x}_{0},\,f(\mathbf{x}_{0})\big)
+                \ne{F}\big((\mathbf{x}_{1},\,f(\mathbf{x}_{1})\big)
+            \end{equation}
+            meaning $F$ is injective. Hence, $f$ is a locally Euclidean subspace
+            of $\mathbb{R}^{m}\times\mathbb{R}^{n}$.
+        \end{example}
+\end{document}
