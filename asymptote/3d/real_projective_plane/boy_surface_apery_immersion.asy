@@ -33,7 +33,7 @@ settings.render = 8;
 settings.outformat = "pdf";
 
 /*  Size of the created image.                                                */
-size(512);
+size(256);
 
 /*  Setup the camera.                                                         */
 currentprojection = orthographic(

@@ -1,0 +1,389 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+\usepackage{tabularx, booktabs}
+\usepackage{mathrsfs}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 30}
+\author{Ryan Maguire}
+\date{Summer 2022}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{Manifolds}
+        So far we've seen several examples of locally Euclidean spaces.
+        \begin{itemize}
+            \item $\mathbb{R}^{n}$ for all $n\in\mathbb{N}$.
+            \item Open subspaces of $\mathbb{R}^{n}$.
+            \item The $n$ sphere $\mathbb{S}^{n}$
+            \item The graphs of continuous functions
+                $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$ with the subspace
+                topology in $\mathbb{R}^{m}\times\mathbb{R}^{n}$.
+            \item The bug-eyed line.
+            \item The branching line.
+            \item The long line.
+        \end{itemize}
+        The first four are subspaces of Euclidean space, the last three are not.
+        We know these last three spaces cannot be embedded into $\mathbb{R}^{n}$
+        since the bug-eyed and branching lines are not Hausdorff and all
+        subspaces of Hausdorff spaces are Hausdorff, and the long line is not
+        second countable. Topological manifolds add the Hausdorff property and
+        second countability to ensure nothing too weird can happen with the
+        space.
+        \begin{definition}[\textbf{Topological Manifold}]
+            A topological manifold is a topological space $(X,\,\tau)$ that is
+            Hausdorff, second countable, and locally Euclidean. That is, for
+            all distinct $x,y\in{X}$ there are open sets
+            $\mathcal{U},\mathcal{V}\in\tau$ such that $x\in\mathcal{U}$,
+            $y\in\mathcal{V}$, and $\mathcal{U}\cap\mathcal{V}=\emptyset$. There
+            is also a countable basis $\mathcal{B}$ for the topology $\tau$. And
+            for all $x\in{X}$ there is a topological chart
+            $(\mathcal{U},\,\varphi)$ in $(X,\,\tau)$ such that
+            $x\in\mathcal{U}$.
+        \end{definition}
+        The word \textit{topological} is added to manifold since there are
+        several types of manifolds. In many cases the adjective is dropped and
+        context is required to know which type of manifold is being talked
+        about. A few of the other types of manifold are listed below.
+        \begin{itemize}
+            \item Topological manifold: A type of topological space.
+            \item Smooth manifold: A topological manifold with extra structure
+                so that it is possible to ask if functions are differentiable
+                and to speak of things like tangent vectors and vector fields.
+            \item Riemannian manifold: A smooth manifold that is equipped with
+                a method of assigning angles between tangent vectors, measuring
+                lengths of curves, and the area and volume of subspaces.
+            \item Lorentz Manifold: A smooth manifold with, loosely speaking,
+                a method of differentiating between time and space. Lorentz
+                manifolds fall into the study of spacetime and general
+                relativity.
+            \item Semi-Riemannian manifold: A generalization of Lorentz and
+                Riemannian manifolds. In particular, all Lorentz and all
+                Riemannian manifolds are also semi-Riemannian manifolds.
+        \end{itemize}
+        We will talk about smooth manifolds briefly, since we actually have all
+        of the terminology to discuss them. We won't dive too deep into the
+        field however since smooth manifolds belong to differential topology.
+        Riemannian and Lorentz manifolds belong to geometry, and we won't have
+        anything to say about those (we also lack the algebraic terminology
+        required to define them).
+        \begin{example}
+            Euclidean space $\mathbb{R}^{n}$ is a topological manifold. It is
+            locally Euclidean from the previous lecture, and it is also
+            Hausdorff and second countable.
+        \end{example}
+        \begin{example}
+            Any open subset $\mathcal{U}\subseteq\mathbb{R}^{n}$ with the
+            subspace topology is a topological manifold. It is locally Euclidean
+            from the previous lecture, and since subspaces of second countable
+            Hausdorff spaces are still second countable and Hausdorff,
+            $\mathcal{U}$ is a topological manifold.
+        \end{example}
+        \begin{example}
+            The $n$ dimensional sphere $\mathbb{S}^{n}$ is a topological
+            manifold. We used orthographic, stereographic, near-sided, and
+            far-sided projections last lecture to show $\mathbb{S}^{n}$ is
+            locally Euclidean in several different ways. Since the $n$ sphere
+            is a subspace of $\mathbb{R}^{n+1}$, it is second countable and
+            Hausdorff.
+        \end{example}
+        \begin{example}
+            The long line is not a topological manifold since it is not
+            second countable. It is locally Euclidean and Hausdorff, however.
+        \end{example}
+        \begin{example}
+            The bug-eyed line is not a topological manifold. It is second
+            countable and locally Euclidean, but it is not Hausdorff.
+        \end{example}
+        \begin{example}
+            Similarly, the branching line is not a topological manifold since it
+            is not Hausdorff.
+        \end{example}
+        I would like to think the real reason for the Hausdorff and second
+        countability requirements is so that we can perhaps hope that
+        topological manifolds are really just particular subspaces of
+        $\mathbb{R}^{n}$. From the definition there is no such requirement and
+        topological manifolds can be considered as abstract objects that do not
+        live in any ambient Euclidean space. This can be quite useful. The
+        spacetime of general relativity is a four dimensional topological
+        manifold (it's actually a Lorentz manifold, but let's not dive into
+        that). Whether or not it is possible to embed spacetime into some
+        higher dimensional Euclidean space or not seems irrelevant to any
+        physical problem one might study. For the curious, it is indeed
+        possible to embed a four dimensional spacetime into $\mathbb{R}^{8}$.
+        What purpose eight dimensional Euclidean space may serve for any
+        physics problems is beyond me.
+        \par\hfill\par
+        We now arrive at our first set of spaces that are not obviously some
+        subspace of $\mathbb{R}^{n}$. These are the
+        \textit{real projective spaces} and are denoted $\mathbb{RP}^{n}$.
+        \begin{example}[\textbf{Real Projective Space}]
+            Let $X=\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$. Define the
+            equivalence relation $R$ on $X$ via $\mathbf{x}R\mathbf{y}$ if and
+            only if $\mathbf{y}=\lambda\mathbf{x}$ for some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$. $\mathbb{RP}^{n}$ is the
+            set $X/R$ and the topology $\tau_{\mathbb{RP}^{n}}$ is the
+            quotient topology induced by $R$. As as set this is the set of all
+            lines in $\mathbb{R}^{n+1}$ that pass through the origin. That is,
+            a point $[\mathbf{x}]\in\mathbb{RP}^{n}$ is the entire line through
+            the origin that passes through the point $\mathbf{x}$. Let's start
+            with $\mathbb{RP}^{1}$. Any line can be described by an angle
+            $0\leq\theta<\pi$. If you vary the line your are on slightly, you
+            are just varying this angle. Hopefully it becomes intuitive that
+            $\mathbb{RP}^{1}$ is in fact a one dimensional locally Euclidean
+            space (it may not be intuitive as to why it is Hausdorff or
+            second countable, but we'll get there). A similar thinking applies
+            to $\mathbb{RP}^{n}$. Let's be precise. Let
+            $\mathcal{U}_{k}\subseteq{X}$ be defined by:
+            \begin{equation}
+                \mathcal{U}_{k}
+                =\{\,\mathbf{x}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}\;
+                    |\;\mathbf{x}_{k}\ne{0}\,\}
+            \end{equation}
+            This is the complement of the $k^{\textrm{th}}$ axis, which is open
+            since the $k^{\textrm{th}}$ axis is closed. It is also saturated
+            with respect to the canonical quotient map
+            $q:X\rightarrow\mathbb{RP}^{n}$ defined by
+            $q(\mathbf{x})=[\mathbf{x}]$. That is,
+            $q^{-1}\big[q[\mathcal{U}_{k}]\big]=\mathcal{U}_{k}$. It is always
+            the case that
+            $\mathcal{U}_{k}\subseteq{q}^{-1}\big[q[\mathcal{U}_{k}]\big]$,
+            let's show this reverses for our particular set $\mathcal{U}_{k}$.
+            Let $\mathbf{x}\in{q}^{-1}\big[q[\mathcal{U}_{k}]\big]$. Then
+            $[\mathbf{x}]\in{q}\big[\mathcal{U}_{k}\big]$ so there is some
+            $\mathbf{y}\in\mathcal{U}_{k}$ such that
+            $[\mathbf{x}]=[\mathbf{y}]$. But then
+            $\mathbf{y}_{k}\ne{0}$ and $\mathbf{x}=\lambda\mathbf{y}$ for some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$. But then
+            $\mathbf{x}_{k}\ne{0}$, and hence $\mathbf{x}\in\mathcal{U}_{k}$.
+            So $\mathcal{U}_{k}$ is saturated. But since $q$ is a quotient map,
+            if $\mathcal{U}_{k}$ is open and saturated, the set
+            $\tilde{\mathcal{U}}_{k}=q[\mathcal{U}_{k}]$ is open. Define
+            $\varphi_{k}:\tilde{\mathcal{U}}_{k}\rightarrow\mathbb{R}^{n}$ via:
+            \begin{equation}
+                \varphi_{k}\big([\mathbf{x}]\big)
+                =\Big(\frac{\mathbf{x}_{0}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{k-1}}{\mathbf{x}_{k}},\,
+                    \frac{\mathbf{x}_{k+1}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{n}}{\mathbf{x}_{k}}\Big)
+            \end{equation}
+            We have to prove this is well-defined in two regards. First, there
+            is no division by zero since $\mathbf{x}\in\mathcal{U}_{k}$ implies
+            $\mathbf{x}_{k}\ne{0}$. Second, this is well defined as a function.
+            By that I mean if $[\mathbf{x}]=[\mathbf{y}]$, then there is some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$ such that
+            $\mathbf{y}=\lambda\mathbf{x}$. But then:
+            \begin{align}
+                \varphi_{k}\big([\mathbf{y}]\big)
+                &=\Big(\frac{\mathbf{y}_{0}}{\mathbf{y}_{k}},\,\dots,\,
+                    \frac{\mathbf{y}_{k-1}}{\mathbf{y}_{k}},\,
+                    \frac{\mathbf{y}_{k+1}}{\mathbf{y}_{k}},\,\dots,\,
+                    \frac{\mathbf{y}_{n}}{\mathbf{y}_{k}}\Big)\\
+                &=\Big(\frac{\lambda\mathbf{x}_{0}}{\lambda\mathbf{x}_{k}},\,
+                    \dots,\,
+                    \frac{\lambda\mathbf{x}_{k-1}}{\lambda\mathbf{x}_{k}},\,
+                    \frac{\lambda\mathbf{x}_{k+1}}{\lambda\mathbf{x}_{k}},\,
+                    \dots,\,
+                    \frac{\lambda\mathbf{x}_{n}}{\lambda\mathbf{x}_{k}}\Big)\\
+                &=\Big(\frac{\mathbf{x}_{0}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{k-1}}{\mathbf{x}_{k}},\,
+                    \frac{\mathbf{x}_{k+1}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{n}}{\mathbf{x}_{k}}\Big)\\
+                &=\varphi_{k}\big([\mathbf{x}]\big)
+            \end{align}
+            So it is well-defined. It is also continuous. This is one of the
+            characteristics of the quotient map. Given a topological space
+            $(Y,\,\tau_{Y})$ and a function $f:X/R\rightarrow{Y}$, $f$ is
+            continuous if and only if $f\circ{q}:X\rightarrow{Y}$ is
+            continuous where $q:X\rightarrow{X}/R$ is the canonical quotient
+            map. The composition $\varphi_{k}\circ{q}$ is a rational function,
+            which is continuous, so $\varphi_{k}$ is continuous. The inverse
+            function is given by:
+            \begin{equation}
+                \varphi_{k}^{-1}(\mathbf{x})
+                =\big[
+                    (\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,1,\,
+                    \mathbf{x}_{k},\,\dots,\,\mathbf{x}_{n-1})
+                \big]
+            \end{equation}
+            which is continuous since the function
+            $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$
+            defined by:
+            \begin{equation}
+                f(\mathbf{x})=
+                (\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,1,\,
+                    \mathbf{x}_{k},\,\dots,\,\mathbf{x}_{n-1})
+            \end{equation}
+            is continuous, so $\varphi_{k}^{-1}$ is the composition of
+            continuous functions. Since the sets
+            $\mathcal{U}_{k}$ cover
+            $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$, the set
+            $\tilde{\mathbf{U}}_{k}$ also cover $\mathbb{RP}^{n}$. Because of
+            this $\mathbb{RP}^{n}$ is locally Euclidean. It is also second
+            countable since it can be covered with finitely many open sets
+            each of which is homeomorphic to an open subset of $\mathbb{R}^{n}$,
+            which is hence second countable. Since $\mathbb{RP}^{n}$ is the
+            finite union of second countable open subspaces, it is second
+            countable itself. It is also Hausdorff. Given
+            $[\mathbf{x}]\ne[\mathbf{y}]$ we have that $\mathbf{y}$ is not
+            of the form $\lambda\mathbf{x}$ for any real number, meaning
+            $\mathbf{x}$ and $\mathbf{y}$ lie on different lines through the
+            origin. Let $\theta$ be defined by:
+            \begin{equation}
+                \theta=
+                \frac{1}{4}\arccos\Big(
+                    \frac{\mathbf{x}\cdot\mathbf{y}}
+                        {||\mathbf{x}||_{2}\,||\mathbf{y}||_{2}}
+                \Big)
+            \end{equation}
+            That is, $\theta$ is half the angle made between the lines through
+            the origin spanned by $\mathbf{x}$ and $\mathbf{y}$. Let
+            $\mathcal{U}$ and $\mathcal{V}$ be defined by:
+            \begin{align}
+                \mathcal{U}
+                &=\big\{\,
+                    \mathbf{z}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}
+                        \;|\;\measuredangle(\mathbf{x},\,\mathbf{z})<\theta\,
+                    \big\}\\
+                \mathcal{V}
+                &=\big\{\,
+                    \mathbf{z}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}
+                        \;|\;\measuredangle(\mathbf{y},\,\mathbf{z})<\theta\,
+                    \big\}
+            \end{align}
+            Where $\measuredangle(\mathbf{p},\,\mathbf{q})$ is the angle
+            between the non-zero vectors $\mathbf{p}$ and $\mathbf{q}$. These
+            sets are open cones in
+            $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$
+            (Fig.~\ref{fig:rpn_is_hausdorff_001}) which are also
+            saturated with respect to $q$, and by the choice of $\theta$ they
+            are disjoint. But then $\tilde{\mathcal{U}}=q[\mathcal{U}]$ and
+            $\tilde{\mathcal{V}}=q[\mathcal{V}]$ are disjoint open subsets of
+            $\mathbb{RP}^{n}$ such that
+            $[\mathbf{x}]\in\tilde{\mathcal{U}}$ and
+            $[\mathbf{y}]\in\tilde{\mathcal{V}}$. Hence $\mathbb{RP}^{n}$ is
+            Hausdorff. The real projective space is therefore a topological
+            manifold.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/rpn_is_hausdorff_001.pdf}
+            \caption{$\mathbb{RP}^{n}$ is Hausdorff}
+            \label{fig:rpn_is_hausdorff_001}
+        \end{figure}
+        The elements of $\mathbb{RP}^{n}$ are equivalence classes of
+        $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$. A
+        \textit{point} in $\mathbb{RP}^{n}$ is a \textit{line} in
+        $\mathbb{R}^{n+1}$ through the origin. It is not immediately clear that
+        $\mathbb{RP}^{n}$ can be embedded as a subspace of $\mathbb{R}^{N}$ for
+        some $N\in\mathbb{N}$. It indeed can, in fact
+        $\mathbb{RP}^{n}$ can be embedded into $\mathbb{R}^{2n}$ for all $n>0$,
+        but this is by no means obvious. The case $n=1$ is slightly obvious if
+        you really think about what $\mathbb{RP}^{1}$ is
+        (it's just a circle $\mathbb{S}^{1}$). The case $\mathbb{RP}^{2}$ is
+        less obvious ($\mathbb{RP}^{2}$ is \textbf{not} a sphere). We can not
+        embed the real projective plane into $\mathbb{R}^{3}$, unlike the
+        sphere. If we try we'll end up with a surface that must intersect
+        itself. This is shown in
+        Fig.~\ref{fig:real_proj_plane_cross_cap_001}. This representation is
+        known as the \textit{cross cap}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/real_proj_plane_cross_cap_001.pdf}
+            \caption{The Real Projective Plane}
+            \label{fig:real_proj_plane_cross_cap_001}
+        \end{figure}
+        We can do better than this. The cross cap has a crease in it, and this
+        can be removed. David Hilbert, one of the pioneering mathematicians of
+        the early $20^{\textrm{th}}$ century, though it impossible to draw the
+        real projective plane in $\mathbb{R}^{3}$ in such a way that it has
+        no crease. He asked his student Werney Boy to try and prove this.
+        Instead Boy discovered a method of drawing the real projective plane
+        in $\mathbb{R}^{3}$ that has no crease (it is still self intersecting).
+        This is called the \textit{Boy surface}. It is shown in
+        Fig.~\ref{fig:boy_surface_apery_immersion}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/boy_surface_apery_immersion.pdf}
+            \caption{The Boy Surface}
+            \label{fig:boy_surface_apery_immersion}
+        \end{figure}
+        Bryant and Kusner discovered a way to do this using somewhat simpler
+        functions involving complex variables. The Bryant-Kusner parameteriation
+        is shown in Fig.~\ref{fig:boy_surface_bryant_kusner_parameterization}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../images/boy_surface_bryant_kusner_parameterization.pdf}
+            \caption{The Bryant-Kusner Parameterization of the Boy Surface}
+            \label{fig:boy_surface_bryant_kusner_parameterization}
+        \end{figure}
+\end{document}
