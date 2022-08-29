@@ -32,7 +32,7 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Size of the output figure.                                                */
-size(64);
+size(128);
 
 /*  Default pen used for labels.                                              */
 defaultpen(fontsize(9pt));
