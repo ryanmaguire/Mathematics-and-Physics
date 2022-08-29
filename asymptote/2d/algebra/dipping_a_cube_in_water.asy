@@ -97,19 +97,24 @@ draw(O -- x, dashp);
 draw(O -- y, dashp);
 draw(O -- z, dashp);
 
-/*  Dashed lines inside of the cube.                                          */
+/*  Thin lines that make crosses on each of the outer faces.                  */
 draw(a1 -- a2, thinp);
 draw(a3 -- a4, thinp);
-draw(b1 -- b2, thindashp);
-draw(b3 -- b4, thindashp);
 draw(c1 -- c2, thinp);
 draw(c3 -- c4, thinp);
 draw(d1 -- d2, thinp);
 draw(d3 -- d4, thinp);
+
+/*  Dashed lines that makes crosses on each of the inner faces.               */
+draw(b1 -- b2, thindashp);
+draw(b3 -- b4, thindashp);
 draw(e1 -- e2, thindashp);
 draw(e3 -- e4, thindashp);
 draw(f1 -- f2, thindashp);
 draw(f3 -- f4, thindashp);
+
+/*  Dashed lines on the inside of the cube connecting the centers of the      *
+ *  faces to the center of the cube.                                          */
 draw(A -- MID, thindashp);
 draw(B -- MID, thindashp);
 draw(C -- MID, thindashp);
