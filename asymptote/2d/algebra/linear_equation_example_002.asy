@@ -47,7 +47,7 @@ int grid_end = 3;
 pair top, bottom, left, right;
 
 /*  Length of the grid lines.                                                 */
-real length = 3.9;
+real gridlength = 3.9;
 
 /*  Length of the axes.                                                       */
 real axeslength = 4.2;
@@ -88,10 +88,10 @@ for (n = grid_start; n <= grid_end; ++n)
 {
     /*  The grid consists of straight lines left-to-right and top-to-bottom.  *
      *  Compute the current set of lines to be drawn and draw them.           */
-    bottom = (n, -length);
-    top = (n, length);
-    left = (-length, n);
-    right = (length, n);
+    bottom = (n, -gridlength);
+    top = (n, gridlength);
+    left = (-gridlength, n);
+    right = (gridlength, n);
 
     draw(bottom -- top, thingreyp);
     draw(left -- right, thingreyp);
