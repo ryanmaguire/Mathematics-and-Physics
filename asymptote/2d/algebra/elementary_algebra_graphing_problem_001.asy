@@ -203,7 +203,7 @@ g = PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
 draw(g, brown, SharpArrow(arsize));
 
 /*  Label all of the functions.                                               */
-label("$|x-3|$", (8.0, 3.7), blue + labelp);
+label("$y=|x-3|$", (8.4, 3.7), blue + labelp);
 label("$x=-3$", (-4.1, 4.5), green + labelp);
 label("$y=2$", (8.0, 2.5), purple + labelp);
 label("$y=-\frac{2}{3}x+5$", (3.0, 4.5), cyan + labelp);
