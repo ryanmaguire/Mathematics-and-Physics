@@ -29,4 +29,4 @@ filldraw(G[0] -- G[1] -- G[2] -- G[3] -- cycle, black, black);
 filldraw(H[0] -- H[1] -- H[2] -- H[3] -- cycle, black, black);
 filldraw(I[0] -- I[1] -- I[2] -- I[3] -- cycle, black, black);
 filldraw(J[0] -- J[1] -- J[2] -- J[3] -- cycle, black, black);
-filldraw(K[0] -- K[1] -- K[2] -- K[3] -- cycle, black, black);
+//filldraw(K[0] -- K[1] -- K[2] -- K[3] -- cycle, black, black);
