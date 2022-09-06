@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
     /*  Array for storing the command later.                                  */
-    char arg1[80], arg2[80], arg3[80];
+    char arg1[256], arg2[256], arg3[256];
     int val;
 
     /*  Check for bad inputs.                                                 */
