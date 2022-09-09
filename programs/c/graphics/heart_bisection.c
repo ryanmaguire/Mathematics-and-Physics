@@ -1,33 +1,33 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
- *  This file is part of libtmpl.                                             *
+ *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
- *  libtmpl is free software: you can redistribute it and/or modify           *
- *  it under the terms of the GNU General Public License as published by      *
- *  the Free Software Foundation, either version 3 of the License, or         *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
  *  (at your option) any later version.                                       *
  *                                                                            *
- *  libtmpl is distributed in the hope that it will be useful,                *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License         *
- *  along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
- *  I forget where I found this, but once upon a time while roaming the web   *
- *  I came across this code. I've made several modifications, but the output  *
- *  is more or less the same. This file was lying dormant in some folder on   *
- *  my computer, so I thought I'd touch this up and share.                    *
+ *  Purpose:                                                                  *
+ *      Modified version of "heart.c" in this folder. It uses the bisection   *
+ *      method to find a zero of the heart function.                          *
  ******************************************************************************
- *  Author:     Ryan Maguire, Dartmouth College                               *
- *  Date:       July 28, 2021                                                 *
+ *  Author: Ryan Maguire                                                      *
+ *  Date:   2021/07/28                                                        *
  ******************************************************************************/
 
 /*  Microsoft's MSVC "deprecated" many of the standard library functions      *
  *  found in stdio.h. To avoid warnings, declare this macro.                  */
-#ifdef _MSC_VER
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER)
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
@@ -38,7 +38,7 @@
 #include <math.h>
 
 /*  Value needed for the intensity factor for the red in the picture.         */
-static const double two_by_sqrt_3 = 2.0 / 1.7320508075688772;
+static const double rcpr_half_sqrt_3 = 1.1547005383792517;
 
 /*  Function where f(x, 0, y) has a heart as the zero set for (x, z).         */
 static double heart_func(double x, double y, double z)
@@ -100,30 +100,41 @@ static unsigned char red_intensity(double x, double y, double z)
     const double dy = 13.5*y*a2 - 0.225*y*z3;
     const double dz = z*(6.0*a2 - 3.0*x2*z - 0.3375*y2*z);
 
-    double ds = two_by_sqrt_3 / sqrt(dx*dx + dy*dy + dz*dz);
+    const double ds = rcpr_half_sqrt_3 / sqrt(dx*dx + dy*dy + dz*dz);
     double red = (dx + dy + dz) * ds + 0.5;
     return (unsigned char)(red * 255.0);
 }
+/*  End of red_intensity.                                                     */
 
 /*  Function for drawing a shiny heart.                                       */
 int main(void)
 {
     /*  Width and height of the image.                                        */
-    unsigned int width = 1024U;
-    unsigned int height = 1024U;
+    const unsigned int width = 1024U;
+    const unsigned int height = 1024U;
 
     /*  Variables for indexing.                                               */
     unsigned int m, n;
     unsigned char r;
-
     double x, y, z, v;
 
     const double y_factor = 3.0 / (double)height;
     const double x_factor = 3.0 / (double)width;
 
+    /*  Open the file and give it write permissions.                          */
     FILE* fp = fopen("heart_bisection.ppm", "w");
+
+    /*  fopen returns NULL on failure. Check for this.                        */
+    if (!fp)
+    {
+        puts("fopen failed and returned NULL. Aborting.");
+        return -1;
+    }
+
+    /*  The preamble to the PPM file.                                         */
     fprintf(fp, "P6\n%u %u\n255\n", width, height);
 
+    /*  Loop over the PPM file, pixel by pixel.                               */
     for (m = 0U; m < height; ++m)
     {
         z = 1.5 - (double)m*y_factor;
@@ -140,11 +151,14 @@ int main(void)
             else
                 r = 0x00U;
 
+            /*  Write the color to the PPM file.                              */
             fputc(r, fp);
             fputc(0x00U, fp);
             fputc(0x00U, fp);
         }
     }
+
+    /*  Close the file and return.                                            */
     fclose(fp);
     return 0;
 }

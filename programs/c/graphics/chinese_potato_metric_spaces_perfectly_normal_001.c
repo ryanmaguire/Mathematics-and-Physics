@@ -26,6 +26,12 @@
  *  Date:   2022/08/30                                                        *
  ******************************************************************************/
 
+/*  Microsoft's MSVC "deprecated" many of the standard library functions      *
+ *  found in stdio.h. To avoid warnings, declare this macro.                  */
+#if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 /*  Set to 1 to ensure all colors have magnitude 255. Set to zero to allow    *
  *  variable color magnitudes (max of sqrt(2)*255, min of 255).               */
 #ifndef NORMALIZE_COLOR

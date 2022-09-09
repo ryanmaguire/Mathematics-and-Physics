@@ -1,39 +1,34 @@
 /******************************************************************************
- *                                 LICENSE                                    *
+ *                                  LICENSE                                   *
  ******************************************************************************
- *  This file is part of libtmpl.                                             *
+ *  This file is part of Mathematics-and-Physics.                             *
  *                                                                            *
- *  libtmpl is free software: you can redistribute it and/or modify it        *
- *  under the terms of the GNU General Public License as published by         *
- *  the Free Software Foundation, either version 3 of the License, or         *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
  *  (at your option) any later version.                                       *
  *                                                                            *
- *  libtmpl is distributed in the hope that it will be useful,                *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License         *
- *  along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
  *      Example use of working with PPM files. This creates a circular        *
  *      gradient to imitate a three dimensional sphere.                       *
- *  Notes:                                                                    *
- *      This file is an "extra" and is not compiled as part of libtmpl.       *
  ******************************************************************************
- *  Author:     Ryan Maguire, Dartmouth College                               *
+ *  Author:     Ryan Maguire                                                  *
  *  Date:       May 22, 2021                                                  *
  ******************************************************************************/
 
-/*  Microsoft "deprecated" the fopen function in favor of the fopen_s         *
- *  function. The actual working group for the C language has not deprecated  *
- *  fopen, and fopen_s was only introduced in the C11 standard, so I will     *
- *  still use fopen. To avoid a "deprecated" warning on Microsoft's MSVC,     *
- *  first check that the user is running windows, then define this macro.     *
- *  Unix-based (GNU, Linux, macOS, FreeBSD, etc) platforms yield no warnings. */
+/*  Microsoft's MSVC "deprecated" many of the standard library functions      *
+ *  found in stdio.h. To avoid warnings, declare this macro.                  */
 #if defined(_WIN32) || defined(_WIN64) || defined(_MSC_VER)
-#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 /*  fprintf and the FILE data type are here.                                  */
@@ -89,7 +84,7 @@ static double dist_squared(struct pair p, struct pair q)
 int main(void)
 {
     /*  Pixel size of the image to be created.                                */
-    const unsigned int size = 2048U;
+    const unsigned int size = 1024U;
 
     /*  Divide by two before hand to save on division computations.           */
     const double size_by_two = (double)size * 0.5;
@@ -133,7 +128,7 @@ int main(void)
     double distsq;
 
     /*  Open the PPM file.                                                    */
-    FILE *fp = fopen("tmpl_rasterized_sphere_gradient.ppm", "w");
+    FILE *fp = fopen("rasterized_sphere_gradient.ppm", "w");
 
     /*  If fopen fails it returns NULL. Check for this.                       */
     if (!fp)
