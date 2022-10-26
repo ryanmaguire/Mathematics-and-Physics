@@ -1,0 +1,394 @@
+\documentclass{beamer}
+\usepackage{amsmath}
+
+\title{Curvature and the Einstein Field Equations}
+\author{Ryan Maguire}
+\date{October 2022}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}
+        Many of the notions of curvature require only a semi-Riemannian metric
+        and a choice of affine connection.
+        \par\hfill\par
+        It is almost universal amongst physicists and mathematicians to work
+        with the unique Levi-Civita connection that a given semi-Riemannian
+        metric induces.
+        \par\hfill\par
+        We'll discuss several types of curvatures, and their uses in
+        describing the Einstein field equations.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        A manifold is a topological space $(M,\,\tau)$ that is:
+        \begin{itemize}
+            \item Hausdorff
+            \item Second Countable
+            \item Locally Euclidean
+        \end{itemize}
+        Some authors replace second countability with a plethora of other
+        not-necessarily-equivalent notions. Paracompactness is a common one,
+        others like the notion of $\sigma\textrm{-compactness}$. If the space
+        is required to be \textit{connected}, all of these ideas are the same%
+        \footnote{I believe there are 50+ alternatives to second countability
+                  one can use if the space is connected, but I've forgotten the
+                  reference. So don't quote me.}
+        \par\hfill\par
+        Most authors omit the topology $\tau$ altogether. Out of force of habit
+        I won't, but it's good to get familiar with the notation.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        A chart in a manifold $(M,\,\tau)$ is an ordered pair
+        $(\mathcal{U},\,\varphi)$ where $\mathcal{U}\in\tau$ is an open subset
+        and $\mathcal:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is a continuous
+        injective open mapping for some $n\in\mathbb{N}$. The \textit{dimension}
+        of the chart is this value $n$.
+        \begin{theorem}[Brauer's Invariance of Domain]
+            If $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is a continuous
+            injective mapping, and if $\mathcal{U}\subseteq\mathbb{R}^{n}$ is
+            open, then $f[\mathcal{U}]$ is open.
+        \end{theorem}
+        This would make $f$ a continuous injective open mapping, meaning it is
+        a homeomorphism onto the image. This has two corollaries.
+        \begin{theorem}
+            $\mathbb{R}^{n}$ is homeomorphic to $\mathbb{R}^{m}$ if and only if
+            $n=m$.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        \begin{theorem}
+            If $(M,\,\tau)$ is locally Euclidean, if $x\in{M}$, and if
+            $(\mathcal{U},\,\varphi)$ and $(\mathcal{V},\,\psi)$ are charts in
+            $M$ with $x\in\mathcal{U}$ and $x\in\mathcal{V}$, then the charts
+            have the same dimension.
+        \end{theorem}
+        The proof is performed by examining the map $\varphi\circ\psi^{-1}$ and
+        noting it induces a homeomorphism from an open subset of
+        $\mathbb{R}^{n}$ to an open subset of $\mathbb{R}^{m}$, meaning $n=m$.
+        \par\hfill\par
+        This says that dimension is \textit{locally} constant. If the manifold
+        is connected, dimension is a constant. The only way to have a manifold
+        with a 1 dimensional component and a 2 dimension component is via
+        disjoint unions, like the disjoint union of a line and a sphere.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        Examining this composition map allows us to define differentiability.
+        With very few exceptions (topological vector spaces where the
+        Fr\'{e}chet derivative is definable) functions between topological
+        spaces have no notion of differentiability. Manifolds have the ability
+        to define such things.
+        \par\hfill\par
+        Given two charts $(\mathcal{U},\,\varphi)$ and $(\mathcal{V},\,\psi)$
+        where $\mathcal{U}\cap\mathcal{V}\ne\emptyset$, the function
+        $\varphi\circ\psi^{-1}$ is a continuous function from an open subset of
+        $\mathbb{R}^{n}$ to another open subset of $\mathbb{R}^{n}$. It is then
+        perfectly valid to ask if this function has partial derivatives, or
+        second partial derivatives, and so on. One can even ask if the function
+        is \textit{smooth}, having all partial derivatives of all orders.
+        \par\hfill\par
+        If $\varphi\circ\psi^{-1}$ and $\psi\circ\varphi^{-1}$ are smooth, we
+        say the charts $(\mathcal{U},\,\varphi)$ and $(\mathcal{V},\,\psi)$ are
+        smoothly compatible. We'll say this is vauously true if
+        $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        An atlas on a manifold $(M,\,\tau)$ is a collection of charts
+        $(\mathcal{U}_{\alpha},\,\varphi_{\alpha})$ such that
+        $\bigcup\mathcal{U}_{\alpha}=M$.
+        \par\hfill\par
+        A smooth atlas is an atlas where all charts are smoothly compatible.
+        A maximal smooth atlas is a smooth atlas with, intuitively, as many
+        smoothly compatible charts possible. A smooth manifold is a topological
+        manifold with a maximal smooth atlas.
+        \par\hfill\par
+        Given two smooth manifolds $M$ and $N$, a smooth function is a function
+        $F:M\rightarrow{N}$ such that for every $x\in{M}$ there is a chart
+        $(\mathcal{U},\,\varphi)$ in $M$ and a chart $(\mathcal{V},\,\psi)$ in
+        $N$ such that $x\in\mathcal{U}$, $F[\mathcal{U}]\subseteq\mathcal{V}$,
+        and the function $\psi\circ{F}\circ\varphi^{-1}$ is smooth.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        A side-note, the
+        the $F[\mathcal{U}]\subseteq\mathcal{V}$ criterion is important.
+        Without it the function $F:\mathbb{R}\rightarrow\mathbb{R}$
+        defined by
+        \begin{equation}
+            F(x)=
+            \begin{cases}
+                0&x\leq{0}\\
+                1&x>0
+            \end{cases}
+        \end{equation}
+        would be considered smooth, but it's not even continuous!
+        \par\hfill\par
+        A diffeomorphism is a function $F:M\rightarrow{N}$ that is bijective,
+        smooth, and such that $F^{-1}$ is smooth.
+        For dimensions 0, 1, 2, and 3, every topological manifold has a
+        maximal smooth atlas that is unique up to diffeomorphism. Things get
+        weird in dimension 4 and higher where it is possible for the same
+        manifold to have different smooth structures and for some manifolds to
+        have \textbf{zero} smooth structures. Some compact manifolds need not
+        be \textit{smoothable}.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        Smooth manifolds have a notion of tangent spaces. Given a smooth
+        manifold $M$ and a point $x\in{M}$ the tangent space at $x$ is
+        denoted $T_{x}M$. This can be described via derivations, which are
+        function $D:C^{\infty}(M,\,\mathbb{R})\rightarrow\mathbb{R}$, that take
+        in smooth functions an output real numbers such that:
+        \begin{align}
+            D(af+bg)&=aD(f)+bD(g)\\
+            D(fg)&=f(x)D(g)+D(f)g(x)
+        \end{align}
+        That is, $D$ is linear and Liebnizean. If $M$ is an $n$ dimensional
+        manifold, the set of all derivations at $x\in{M}$ forms an $M$
+        dimensional real vector space.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        If $(\mathcal{U},\,\varphi)$ is a chart containing $x\in{M}$ then the
+        partial derivative operators $\partial\varphi_{k}$, $k=0,\dots,n-1$,
+        form a basis for $T_{x}M$:
+        \begin{equation}
+            \partial\varphi_{k}(f)
+            =\frac{\partial}{\partial{x}_{k}}\Big(f\circ\varphi^{-1}\Big)
+        \end{equation}
+        Note, since $f\in{C}^{\infty}(M,\,\mathbb{R})$, it is smooth, and
+        $f\circ\varphi^{-1}$ is a smooth function from an open subset of
+        $\mathbb{R}^{n}$ to $\mathbb{R}$ so it is valid to take the partial
+        derivative in the $k^{th}$ component.
+    \end{frame}
+    \begin{frame}{Preliminaries}
+        A Riemannian metric is a function $g$ that assigned to every
+        $x\in{M}$ a function $g_{x}:T_{x}M\times{T}_{x}M\rightarrow\mathbb{R}$
+        that mimics the dot product in Euclidean space.
+    \end{frame}
+    \begin{frame}
+        The tangent bundle of a manifold is formed by taking all $T_{x}M$ for
+        each $x\in{M}$ and gluing them together in a natural way. For
+        $M=\mathbb{R}$ the tangent bundle is $\mathbb{R}^{2}$, and for
+        $M=\mathbb{S}^{1}$ the tangent bundle is
+        $\mathbb{S}^{1}\times\mathbb{R}$. These are called \textit{trivial}
+        tangent bundles. Most tangent bundles are not of the form
+        $\mathbb{R}^{n}\times{M}$, the easiest example is $\mathbb{S}^{2}$.
+        \par\hfill\par
+        The tangent bundle is denoted $TM$ and is a smooth manifold of dimension
+        $2n$. A vector field on a manifold is a smooth function
+        $V:M\rightarrow{T}M$ such thatfor all $x\in{M}$ the element
+        $V(x)$ is of the form $V(x)=(x,\,v)$. That is, $V$ assigned to every
+        element $x\in{M}$ a tangent vector $v\in{T}_{x}M$ that starts at the
+        point $x$.
+    \end{frame}
+    \begin{frame}
+        In physics it is common to work in a coordinate chart
+        $(\mathcal{U},\varphi)$ and express all physical quantities in terms of
+        this chart. The semi-Riemannian metric $g$ becomes a matrix
+        $g_{\mu\nu}$ with entries
+        $g_{\mu\nu}=g(\partial\varphi_{\mu},\partial\varphi_{\nu})$, which is
+        called the \textit{metric tensor} in general relativity. Other tensors
+        and tensor fields will be described similarly.
+    \end{frame}
+    \begin{frame}
+        The first tensor to describe is the stress-energy tensor $T_{\mu\nu}$.
+        It is the gravitational analogue of the stress tensor from Newtonian
+        mechanics and describes the density and flux of energy in the
+        manifold $(M,g)$, which is always chosen to be Lorentzian.
+        \par\hfill\par
+        The Einstein field equations relate the stress-energy tensor and the
+        metric tensor to Ricci curvature and scalar curvature.
+    \end{frame}
+    \begin{frame}
+        The Ricci curvature is described in terms of the Riemann curvature
+        tensor field (It's a tensor field, not a tensor). Given the affine
+        connection $\nabla$ on the semi-Riemannian manifold, the Riemann
+        curvature tensor field is defined in one of two equivalent ways.
+        It is a function $R:\mathfrak{X}(M)^{3}\rightarrow\mathfrak{X}(M)$
+        \begin{equation}
+            R(X,Y)Z=
+                \nabla_{X}\nabla_{Y}Z-\nabla_{Y}\nabla_{X}Z-\nabla_{[X,Y]}Z
+        \end{equation}
+        Where $[X,Y]$ is the Lie bracket. We can also write this as:
+        \begin{equation}
+            R(X,Y)=[\nabla_{X},\nabla_{Y}]-\nabla_{[X,Y]}
+        \end{equation}
+        again using the Lie bracket. With this we see that the Riemann
+        curvature tensor field measures the failure of the second derivative to
+        commute.
+    \end{frame}
+    \begin{frame}
+        If $\nabla$ is a Levi-Civita connection (torsion free and compatible
+        with the metric), then there are several identities the Riemann
+        curvature tensor field enjoys. These identities can be combined with
+        the Einstein field equations to prove the local conservation of
+        energy and momentum, classical laws of Newtonian mechanics which still
+        hold in general relativity.
+        \begin{itemize}
+            \item $R$ is trilinear over $C^{\infty}(M,\mathbb{R})$.
+            \item the Bianchi identity holds:
+                \begin{equation}
+                    R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=0
+                \end{equation}
+        \end{itemize}
+        The Bianchi identity cyclicly permutes the vector fields. It is the
+        Bianchi identity that helps one prove conservation of momentum and
+        energy.
+    \end{frame}
+    \begin{frame}
+        The quadruple product relates the Riemann curvature tensor field to the
+        semi-Riemannian metric. It is defined as:
+        \begin{equation}
+            (X,Y,Z,T)=g\big(R(X,Y)Z,T\big)
+        \end{equation}
+        There are several identities for this operation, which are again useful
+        for the proof of various theorems in the framework of general
+        relativity.
+        \begin{align}
+            (X,Y,Z,T)&=-(Y,X,Z,T)\\
+            (X,Y,Z,T)&=-(X,Y,T,Z)\\
+            (X,Y,Z,T)&=(Z,T,X,Y)
+        \end{align}
+        Lastly, an analogue of the Bianchi identity:
+        \begin{equation}
+            (X,Y,Z,T)+(Y,Z,X,T)+(Z,X,Y,T)=0
+        \end{equation}
+    \end{frame}
+    \begin{frame}
+        These identities combine to give the following theorem.
+        \begin{theorem}
+            If $(\mathcal{U},\varphi)$ is a chart in a spacetime $(M,g)$,
+            if $\nabla$ is the unique Levi-Civita connection on $M$, and if
+            $T$ is the stress-energy tensor, then:
+            \begin{equation}
+                \sum_{n=0}^{N-1}\nabla_{\partial\varphi_{n}}T_{n,m}=0
+            \end{equation}
+        \end{theorem}
+        This is the analogue of the conservation of momentum and energy laws
+        that occur in Newtonian mechanics. The proof is about a page and simply
+        uses the identities of the Riemannian curvature tensor field, the
+        quadruple product, and the Einstein field equations which will be
+        stated soon.
+    \end{frame}
+    \begin{frame}
+        The Einstein field equations relate the stress-energy tensor to the
+        Ricci and scalar curvatures. The Ricci curvature is defined in terms of
+        the Riemann curvature tensor field. There are two ways of doing this.
+        \par\hfill\par
+        In the Riemann setting ($g$ is positive-definite), fix $p\in{M}$ and
+        $x=z_{n}\in{T}_{p}M$ to be unit length. Since $T_{p}M$ is an $n$
+        dimensional real inner product space, we may extend $z_{n}$ via the
+        Gram-Schmidt procedure to an orthonormal basis. Label these other
+        elements $z_{1},\dots,z_{n-1}$. The Ricci curvature about $p$ is defined
+        as:
+        \begin{equation}
+            \textrm{Ric}_{p}(x)=\frac{1}{n-1}\sum_{k=1}^{n}g_{p}
+                \Big(R(x,z_{k})x,z_{k}\Big)
+        \end{equation}
+        It is a theorem that this result is independent of the choice of
+        basis.
+    \end{frame}
+    \begin{frame}
+        In the semi-Riemannian setting $T_{p}M$ is not an inner product space
+        since $g$ can, in general, fail to be positive definite. Such is the
+        case in spacetimes with signature $(+,+,+,-)$. Fix two vector fields
+        $Y$ and $Z$. Given a vector field $X$, the mapping
+        $X\mapsto{R}(X,Y)Z$ is linear at each tangent space. Because of this
+        one may define the \textit{trace} of this mapping. This is the Ricci
+        curvature tensor.
+        \begin{equation}
+            \textrm{Ric}_{p}(Y,Z)=\textrm{tr}
+                \big(X_{p}\mapsto{R}_{p}(X_{p},Y_{p})Z_{p}\big)
+        \end{equation}
+        In local coordinates $(\mathcal{U},\varphi)$ it can be given by a
+        matrix $R_{\mu\nu}$.
+    \end{frame}
+    \begin{frame}
+        The Ricci curvature can be completely described by the sectional
+        curvature, which is one of the older notions of curvature dating back
+        to a time when differential geometry dealt solely with regular surfaces
+        and curves. The sectional curvature of a 2-dimensional subspace
+        $\delta$ of the tangent space $T_{p}M$ is given by:
+        \begin{equation}
+            K_{\delta}=\frac{(v,w,v,w)}{A(v,w)}
+                =\frac{g_{p}\big(R(v,w)v,w\big)}{\sqrt{||v||^{2}\,||w||^{2}-g_{p}(v,w)^{2}}}
+        \end{equation}
+        where $v$ and $w$ are two tangent vectors that span $\delta$, and
+        $A(v,w)$ is the area of the parallelogram with sides $v$ and $w$.
+        $K_{\delta}$ is independent of choice of basis since a chage of basis
+        can be made by a combination of moves
+        $(x,y)\mapsto(y,x)$, $(x,y)\mapsto(\lambda{x},y)$, $\lambda\ne{0}$, and
+        $(x,y)\mapsto(x+\lambda{y},y)$. These operations are reflection,
+        scaling, and shearing, respectively. All of these are invariant under
+        formula above showing $K_{\delta}$ is independent of basis.
+    \end{frame}
+    \begin{frame}
+        For constant curvature manifolds the Ricci curvature is given by a
+        simple formula:
+        \begin{equation}
+            R_{\mu\nu}=(n-1)Kg_{\mu\nu}
+        \end{equation}
+        where $K$ is the constant curvature of the manifold.
+        It is probably not the case that the spacetime we live in is constant
+        curvature.
+    \end{frame}
+    \begin{frame}
+        The scalar curvature is defined directly by the Ricci curvature. Given
+        the Riemannian definition, $\textrm{Ric}_{p}(x)$, given a basis
+        $\{z_{1},\dots,z_{n}\}$ of $T_{p}M$, the scalar curvature is defined by:
+        \begin{equation}
+            K(p)=\frac{1}{n}\sum_{k=1}^{n}\textrm{Ric}_{p}(z_{k})
+        \end{equation}
+        It is independent of choice of basis. With respect to the second
+        definition, we can define:
+        \begin{equation}
+            K(p)=\textrm{tr}(R_{\mu\nu})
+        \end{equation}
+    \end{frame}
+    \begin{frame}
+        The Einstein tensor is defined in terms of the Ricci and scalar tensors.
+        We have:
+        \begin{equation}
+            G_{\mu\nu}=R_{\mu\nu}-\frac{1}{2}Kg_{\mu\nu}
+        \end{equation}
+        Where $R_{\mu\nu}$ is the Ricci tensor, $K$ is the scalar curvature,
+        and $g_{\mu\nu}$ is the metric tensor. The Einstein field equations are:
+        \begin{equation}
+            G_{\mu\nu}+\Lambda{g}_{\mu\nu}=\kappa{T}_{\mu\nu}
+        \end{equation}
+        Where $T_{\mu\nu}$ is the stress-energy tensor. $\Lambda$ is the
+        cosmological constant, and $\kappa$ is the Einstein gravitational
+        constant.
+    \end{frame}
+    \begin{frame}
+        In practice, one measures the stress-energy tensor and the Einstein
+        tensor and wishes to solve for the metric in the Einstein field
+        equation. A common simplification is to suppose the spacetime you are
+        working in is a vacuum containing no mass-energy. The Einstein field
+        equations simplify to:
+        \begin{equation}
+            G_{\mu\nu}+\Lambda{g}_{\mu\nu}=0
+        \end{equation}
+        Expending the Einstein tensor in terms of the Ricci and scalar
+        curvature, we get:
+        \begin{equation}
+            R_{\mu\nu}-\frac{1}{2}Kg_{\mu\nu}+\Lambda{g}_{\mu\nu}=0
+        \end{equation}
+    \end{frame}
+    \begin{frame}
+        This is a purely geometrical problem. Depending on the value of
+        $\Lambda$ there are several known spacetimes with metrics that satisfy
+        the Einstein field equations.
+        \begin{itemize}
+            \item Minkowski spacetime $\mathbb{M}^{3,1}$
+            \item Milne spacetime
+            \item Schwarzschild vacuum spacetime
+            \item Kerr vacuum
+        \end{itemize}
+        The value of $\Lambda$ was originally thought to be zero, and Einstein
+        retracted it from the equation. In the late 1990's it was discovered
+        the inflation of the universe is accelerating, indicating the constant
+        may be positive. One possible value involves the Hubble constant, given
+        by:
+        \begin{equation}
+            \Lambda=1.1056\times{10}^{-52}\,\textrm{m}^{-2}
+        \end{equation}
+    \end{frame}
+\end{document}
