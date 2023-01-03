@@ -23,6 +23,9 @@
 #define _CRT_SECURE_NO_DEPRECATE
 #endif
 
+/*  malloc and free found here.                                               */
+#include <cstdlib>
+
 /*  FILE, fprintf, and fputc found here.                                      */
 #include <cstdio>
 
@@ -157,7 +160,7 @@ static color get_color(complex_number z)
 
     /*  To allow for a large range of intensities, compress the real line     *
      *  to the interval [-1, 1] using the arctan function.                    */
-    const double t = TWO_BY_PI * std::atan(5.0*z.abs());
+    const double t = TWO_BY_PI * atan(5.0*z.abs());
 
     /*  Transform the argument from [-pi, pi] to [0, 1023].                   */
     double val = (z.arg() + PI)*GRADIENT_FACTOR;
@@ -212,8 +215,9 @@ static color get_color(complex_number z)
 int main(void)
 {
     /*  Width and height, in pixels, of the output PPM.                       */
-    const unsigned int width = 1024U;
-    const unsigned int height = 1024U;
+    const unsigned int width = 4096U;
+    const unsigned int height = 4096U;
+    const unsigned int n_pixels = width*height;
 
     /*  The Cartesian coordinates of the drawing. The rectangle               *
      *  [xmin, xmax] x [ymin, ymax] will be drawn.                            */
@@ -223,25 +227,32 @@ int main(void)
     const double ymax =  2.0;
 
     /*  Factors for transforming from Cartesian coordinates to pixels.        */
-    const double xfactor = (xmax - xmin) / static_cast<double>(width - 1U);
-    const double yfactor = (ymax - ymin) / static_cast<double>(height - 1U);
+    const double xfact = (xmax - xmin) / static_cast<double>(width - 1U);
+    const double yfact = (ymax - ymin) / static_cast<double>(height - 1U);
 
-    /*  Indices for looping over the pixels.                                  */
-    unsigned int x, y;
-
-    /*  The complex value corresponding to the pixel (x, y).                  */
-    complex_number z;
+    /*  Index for looping over the pixels.                                    */
+    unsigned int n;
 
     /*  The color represented by f(z).                                        */
-    color c;
+    color *c = static_cast<color *>(std::malloc(sizeof(*c) * n_pixels));
+
+    /*  Check if malloc failed.                                               */
+    if (!c)
+    {
+        std::puts("malloc failed and returned NULL. Aborting.");
+        return -1;
+    }
 
     /*  Open the PPM file and give it write permissions.                      */
-    std::FILE *fp = std::fopen("z3_minus_1_over_3z2_cpp.ppm", "w");
+    std::FILE *fp = std::fopen("z3_minus_1_over_3z2_cpp_parallel.ppm", "w");
 
     /*  Check if fopen failed. Abort if it did.                               */
     if (!fp)
     {
         std::puts("fopen failed and returned NULL. Aborting.");
+
+        /*  malloc was successful, so free the memory before aborting.        */
+        std::free(c);
         return -1;
     }
 
@@ -252,35 +263,28 @@ int main(void)
     std::fprintf(fp, "P6\n%u %u\n255\n", width, height);
 #endif
 
-    /*  The y component, or imaginary axis, starts at the top and works down. */
-    z.imag = ymax;
-
-    /*  Loop over the y coordinates.                                          */
-    for (y = 0U; y < height; ++y)
+    /*  Loop over the pixels.                                                 */
+#ifdef _OPENMP
+    /*  With high resolutions and multicore CPU, we can get a big speed       *
+     *  boost by using OpenMP and parallelizing the loop.                     */
+#pragma omp parallel for
+#endif
+    for (n = 0U; n < n_pixels; ++n)
     {
-        /*  Compute the current imaginary part of z.                          */
-        z.imag -= yfactor;
+        const unsigned int x = n % width;
+        const unsigned int y = n / height;
+        const complex_number z = complex_number(xmin + x*xfact, ymax - y*yfact);
 
-        /*  The real part works left to right.                                */
-        z.real = xmin;
-
-        /*  Loop over the x coordinates.                                      */
-        for (x = 0U; x < width; ++x)
-        {
-            /*  Calculate the color corresponding to f(z).                    */
-            c = get_color(f(z));
-
-            /*  Write the color to the file.                                  */
-            c.write(fp);
-
-            /*  Compute the next pixel in the real axis.                      */
-            z.real += xfactor;
-        }
-        /*  End of for-loop for x.                                            */
+        /*  Calculate the color corresponding to f(z).                        */
+        c[n] = get_color(f(z));
     }
-    /*  End of for-loop for y.                                                */
 
-    /*  Close the file and return.                                            */
+    /*  Write all of the color data to the PPM file.                          */
+    for (n = 0; n < n_pixels; ++n)
+        c[n].write(fp);
+
+    /*  Close the file, free the allocated memory, and return.                */
+    std::free(c);
     std::fclose(fp);
     return 0;
 }
