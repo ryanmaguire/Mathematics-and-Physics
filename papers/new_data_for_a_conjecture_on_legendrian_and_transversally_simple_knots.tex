@@ -46,6 +46,7 @@
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
 \newtheorem{conjecture}{Conjecture}
+\newtheorem{question}{Question}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -54,37 +55,64 @@
 % Title page information.
 \title{New Data for a Conjecture on Legendrian and Transversally Simple Knots}
 \author{Vladimir Chernov\hspace{2em}Ryan Maguire}
-\date{July 2022}
+\date{February 2023}
 
 \begin{document}
     \maketitle
     \tableofcontents
     \begin{abstract}
         \noindent
-        In [PREVIOUS PAPER] we conjectured that Khovanov homology is able to
-        distinguish legendrian and transversally simple knots. Numerical data
-        was provided using twist and torus knots, comparing the Khovanov
-        homologies of these families with all knots up to 17 crossings. This
-        experiment has been expanded to 19 crossings.
+        In \cite{ChernovMaguireLegendrianConjecture} we conjectured that
+        Khovanov homology is able to distinguish legendrian and transversally
+        simple knots. Numerical data was provided using twist and torus knots,
+        comparing the Khovanov homologies of these families with all knots up
+        to 17 crossings. This experiment has been expanded to 19 crossings.
         \par\hfill\par
         \textit{AMS Classification: Primary 57K18, Secondary 53D12, 53D10}
     \end{abstract}
-    \section{Conjectures on Khovanov Homology}
-        In [PREVIOUS PAPER] we proposed the following conjecture.
+    \section{The Conjecture and Computations}
+        In \cite{ChernovMaguireLegendrianConjecture} we proposed the following
+        conjecture.
         \begin{conjecture}
-            If a link type $L$ is Legendrian simple, then the Khovanov homology
-            of $L$ distinguish it. That is, if $\tilde{L}$
-            is another link with the same Khovanov homology, then $\tilde{L}$ is
-            equivalent to $L$.
+            If a link type $L$ is Legendrian simple or transversally simple,
+            then the Khovanov homology of $L$ distinguishes it. That is,
+            if $\tilde{L}$ is another link with the same Khovanov homology,
+            then $\tilde{L}$ is equivalent to $L$.
         \end{conjecture}
         Numerical evidence was tallied using the torus and twist knots to gather
         numerical evidence for this claim. The torus knots are known to be
         Legendrian simple, and Etnyre \textit{et al.} classifies when twist
-        knots are transversally simple, giving us two infinite families to use.
+        knots are transversally simple
+        \cite{EtnyreEtAlLegendrianAndTransverseTwistKnots},
+        giving us two infinite families to use.
         Knots having the same Jones polynomial as a torus or twist knot were
         saved for later examination since the Jones polynomial is
         computationally more efficient than Khovanov homology. For torus knots
-        we were left with four matching knots.
+        we were left with four matching knots
+        (See Tab.~\ref{table:matching_torus_knots}). These are the same four
+        knots that appear in our previous paper and nothing new occurs with
+        18 and 19 crossings. For twist knots we have found new knots that have
+        the same Jones polynomial (See Tab.~\ref{table:matching_twist_knots}).
+        \par\hfill\par
+        Computations for the Jones polynomial were performed using the
+        \texttt{regina} library \cite{regina}. The Jones polynomial of a knot
+        $K$ has an explicit formula given as follows:
+        \begin{equation}
+            J(K)=\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
+        \end{equation}
+        where $N$ is the number of crossings in $K$, $w(n)$ is the Hamming
+        weight of $n$, and $c(n)$ is the number of cycles corresponding to
+        the $n^{\textrm{th}}$ resolution of the crossings of $K$. $w(n)$ is
+        bounded by $N$ and $c(n)$ is bounded by $2N$, meaning the degree of
+        $J(K)$ is bounded above by $3N$ and below by $-N$. We collect all
+        torus and twist knots having a Jones polynomial satisfying these bounds
+        for $N=19$ and then pre-compute the Jones polynomials using known
+        formulas (see \cite{ChernovMaguireLegendrianConjecture},
+        Eqns. 4 and 5). Through brute force calculations, we find that there
+        are four torus knots and eight twist knots that have the same Jones
+        polynomial as another knot, but in all cases the Khovanov polynomials
+        (and hence Khovanov homologies) differed. The polynomials are given
+        explicitly in the next section.
         \begin{table}
             \centering
             \resizebox{\textwidth}{!}{%
@@ -113,25 +141,108 @@
                 \end{tabular}%
             }
             \caption{Knots whose Jones polynomial matches that of a Torus Knot}
+            \label{table:matching_torus_knots}
         \end{table}
-
-        The computations were carried out using the \texttt{regina} and
-        \texttt{JavaKh-v2} libraries.
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| c | c | c |}
+                    \hline
+                        Twist Knot&
+                        Non-Twist Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $m_{2}$&
+                        $10,\,18,\,22,\,-14,\,4,\,-16,\,-20,\,-6,\,2,\,-12,\,8$&
+                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{3}$&
+                        $8,\,14,\,18,\,22,\,-12,\,-16,\,2,\,-10,\,20,\,4,\,6$&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        $14,\,12,\,-20,\,-22,\,-16,\,24,\,2,\,-18,\,-10,\,-4,\,-6,\,-8$&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        $16,\,-14,\,-20,\,2,\,-26,\,24,\,-6,\,8,\,-10,\,-22,\,-4,\,12,\,-18$&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{5}$&
+                        $4,\,16,\,-8,\,-14,\,18,\,20,\,-6,\,22,\,2,\,10,\,12$&
+                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{6}$&
+                        $6,\,10,\,12,\,-18,\,14,\,4,\,2,\,20,\,22,\,-8,\,16$&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        $12,\,10,\,26,\,-18,\,4,\,2,\,-20,\,-22,\,-24,\,-6,\,-14,\,-16,\,8$&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        $20,\,32,\,-18,\,-12,\,-28,\,-26,\,36,\,-6,\,24,\,34,\,-30,\,16,\,22,\,-10,\,-8,\,2,\,4,\,14$&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{7}$&
+                        $6,\,14,\,20,\,-12,\,-16,\,-18,\,2,\,-8,\,-10,\,22,\,4$&
+                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{8}$&
+                        $22,\,28,\,-18,\,-16,\,30,\,-4,\,20,\,-6,\,-8,\,-34,\,36,\,-26,\,-32,\,2,\,10,\,-24,\,14,\,-12$&
+                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{9}$&
+                        $20,\,30,\,32,\,-18,\,-12,\,-26,\,36,\,-8,\,24,\,34,\,-28,\,16,\,22,\,-10,\,2,\,4,\,6,\,14$&
+                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
+            \label{table:matching_twist_knots}
+        \end{table}
     \section{Numerical Results}
-        In our search we found that four torus knots had the same Jones
-        polynomial as a non-torus knot. The $T(2,5)$ knot, which is the
-        cinquefoil, matches $10_{132}$. This result has already been known,
-        and it has also been known for some time that Khovanov homology
-        distinguishes these two (See \cite{KatlasKhoHo}). The resulting
-        Khovanov polynomials are given in the following tables. The coefficient
-        of $q^{\ell}t^{r}$ is given by the $(r,\ell)$ slot in the tables. Empty
-        represents a zero coefficient. The DT code of $10_{132}$ is
-        4, 8, $-12$, 2, $-16$, $-6$, $-20$, $-18$, $-10$, $-14$.
+        A note on notation. The above tables identify knots using their DT
+        codes. The \texttt{regina} library uses a clever trick to efficiently
+        express a knots DT code for all knots of up to 26 crossings, and we'll
+        adopt this notation for the remainder of the paper. The DT code of an
+        $n$ crossing knot is a string of length $n$ of signed even integers up
+        to $2n$. Since all entries are even, we can divide by two and obtain
+        a string of length $n$ of signed integers up to $n$. So long as $n$ is
+        not larger than 26 we can replace integers with letters. We then use
+        lower case letters for positive integers, and upper case for negative.
+        For example, the trefoil $T(2,\,3)$ becomes:
+        \begin{equation}
+            4,\,6,\,2
+            \Rightarrow
+            2,\,3,\,1
+            \Rightarrow
+            \texttt{bca}
+        \end{equation}
+        The knot $10_{132}$, which is the 10 crossing knot in
+        Tab.~\ref{table:matching_twist_knots} with the same Jones polynomial
+        as $T(2,\,5)$, becomes:
+        \begin{equation}
+            8,\,6,\,18,\,2,\,-12,\,-16,\,20,\,-10,\,4,\,14
+            \Rightarrow
+            4,\,3,\,9,\,1,\,-6,\,-8,\,10,\,-5,\,2,\,7
+            \Rightarrow
+            \texttt{dciaFHjEbg}
+        \end{equation}
+        In the above tables we have found four non-torus knots with the same
+        Jones polynomial as some torus knot. In all four cases the Khovanov
+        polynomials differ. The tables for these polynomials are given below.
+        The coefficient of $q^{\ell}t^{r}$ is given by the corresponding entry.
+        \par\hfill\par
+        The cinquefoil $T(2,\,5)$ has the same Jones polynomial as two
+        non-torus knots. As shown below in
+        Tabs.~\ref{table:t_2_5_kho}-\ref{table:iNHlPJqCoKFmdABgE_kho}, the
+        Khovanov polynomials differ.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c |}
                 \hline
-                $q/t$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
+                $q\symbol{92}t$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
                 \hline
                 $-15$&1&&&&&\\
                 \hline
@@ -149,12 +260,13 @@
                 \hline
             \end{tabular}
             \caption{Khovanov Polynomial for $T(5,2)$}
+            \label{table:t_2_5_kho}
         \end{table}
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
                 \hline
-                $q/t$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
+                $q\symbol{92}t$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
                 \hline
                 $-15$&1&&&&&&&\\
                 \hline
@@ -173,18 +285,14 @@
                 $-1$&&&&&&&1&1\\
                 \hline
             \end{tabular}
-            \caption{Khovanov Polynomial for $10_{132}$}
+            \caption{Khovanov Polynomial for \texttt{dciaFHjEbg}}
+            \label{table:dciaFHjEbg_kho}
         \end{table}
-        The cinquefoil also has the same Jones polynomial as a 17 crossing knot,
-        but once again the Khovanov homologies were able to distringuish
-        between them. The DT code of this 17 crossing knot is
-        18, $-28$, $-16$, 24, $-32$, $-20$, 34, $-6$, 30, $-22$, $-12$, 26,
-        8, $-2$, $-4$, 14, $-10$.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
                 \hline
-                $q/t$&$-9$&$-8$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
+                $q\symbol{92}t$&$-9$&$-8$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
                 \hline
                 $-15$&1&&&&&&&&&\\
                 \hline
@@ -205,17 +313,18 @@
                 $1$&&&&&&&&&1&1\\
                 \hline
             \end{tabular}
-            \caption{Khovanov Polynomial for the 17 Crossing Knot}
+            \caption{Khovanov Polynomial for \texttt{iNHlPJqCoKFmdABgE}}
+            \label{table:iNHlPJqCoKFmdABgE_kho}
         \end{table}
         The $T(7,2)$ knot, also the $7_{1}$ knot, and occasionally called the
-        septafoil, has the same Jones polynomial as a 12 crossing knot. The
-        Khovanov polynomials are distinct. The DT of this 12 crossing knot is
-        given by 6, 10, 14, $-18$, 2, $-20$, 4, 22, 24, $-8$, $-12$, 16.
+        septafoil, has the same Jones polynomial as \texttt{fJGkHlICEABd}. The
+        Khovanov polynomials are distinct
+        (Tabs.~\ref{table:t_7_2_kho}-\ref{table:fJGkHlICEABd_kho}).
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
                 \hline
-                $q/t$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
+                $q\symbol{92}t$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
                 \hline
                 $-21$&1&&&&&&&\\
                 \hline
@@ -237,12 +346,13 @@
                 \hline
             \end{tabular}
             \caption{Khovanov Polynomial for $T(7,2)$}
+            \label{table:t_7_2_kho}
         \end{table}
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
                 \hline
-                $q/t$&$-9$&$-8$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
+                $q\symbol{92}t$&$-9$&$-8$&$-7$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$\\
                 \hline
                 $-21$&1&&&&&&&&&\\
                 \hline
@@ -265,52 +375,678 @@
                 $-3$&&&&&&&&&1&1\\
                 \hline
             \end{tabular}
-            \caption{Khovanov Polynomial for the 12 Crossing Knot}
+            \caption{Khovanov Polynomial for \texttt{fJGkHlICEABd}}
+            \label{table:fJGkHlICEABd_kho}
         \end{table}
-        Lastly, the $T(11,2)$ torus knot has the same Jones polynomial as a
-        14 crossing knot. The table for the Khovanov polynomial of this knot
-        is quite large and has been omitted. Nevertheless, it differs from the
-        Khovanov polynomial of $T(11,2)$. The DT code of this knot is
-        8, $-12$, $-16$, $-20$, 22, $-2$, 24, $-4$, 26, $-6$, 28, 10, 14, 18.
-        \par\hfill\par
-        For twist knots there were 8 matches for the Jones polynomial. In all
-        cases the Khovanov homologies were distinct. The following table shows
-        the DT code of the matching knots.
+        Lastly, the $T(11,2)$ torus knot has the same Jones polynomial as the
+        14 crossing knot \texttt{gHlImJnKBDFAce}. Once again the Khovanov
+        polynomials differ.
         \begin{table}[H]
             \centering
-            \begin{tabular}{| c | c |}
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
                 \hline
-                Twist Knot&Non-Twist Knot\\
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$&$9$&$10$&$11$\\
                 \hline
-                $m_{2}$&\texttt{4 8 10 -16 2 -18 -20 -22 -6 -12 -14}\\
+                $9$&1&&&&&&&&&&&\\
                 \hline
-                $m_{3}$&\texttt{4 8 -14 2 -16 -18 -20 -6 -10 -22 -12}\\
+                $11$&1&&&&&&&&&&&\\
                 \hline
-                $m_{3}$&\texttt{4 10 -16 -18 2 20 22 24 -8 -6 12 14}\\
+                $13$&&&1&&&&&&&&&\\
                 \hline
-                $m_{3}$&\texttt{4 12 16 -22 14 -20 2 8 24 26 -10 -6 18}\\
+                $15$&&&&&&&&&&&&\\
                 \hline
-                $m_{5}$&\texttt{4 10 12 16 18 2 -20 6 8 -22 -14}\\
+                $17$&&&&1&1&&&&&&&\\
                 \hline
-                $m_{6}$&\texttt{4 8 -14 2 -18 -20 -6 -22 -12 -10 -16}\\
+                $19$&&&&&&&&&&&&\\
                 \hline
-                $m_{6}$&\texttt{4 10 -16 -24 -18 2 -20 -22 -26 -12 -14 -8 -6}\\
+                $21$&&&&&&1&1&&&&&\\
                 \hline
-                $m_{7}$&\texttt{4 8 10 16 2 -18 -20 6 -22 -12 -14}\\
+                $23$&&&&&&&&&&&&\\
+                \hline
+                $25$&&&&&&&&1&1&&&\\
+                \hline
+                $27$&&&&&&&&&&&&\\
+                \hline
+                $29$&&&&&&&&&&1&1&\\
+                \hline
+                $31$&&&&&&&&&&&&\\
+                \hline
+                $33$&&&&&&&&&&&&1\\
                 \hline
             \end{tabular}
-            \caption{Non-Twist Knots with the Same Jones Polynomial as a Twist Knot}
+            \caption{Khovanov Polynomial for $T(11,\,2)$}
+            \label{table:t_2_11_kho}
         \end{table}
-        The $m_{2}$ twist knot is the figure eight knot. The matching 11
-        crossing knot is the K11n19 knot from the
-        Hoste-Thistlewaite table of 11 crossing knots. That the Jones polynomial
-        of these knots match has been known, and this can be found on the
-        knot atlas (See \cite{KatlasFigureEight} and \cite{KatlasK11n19}). Also
-        found on the knot atlas is that Khovanov homology does indeed
-        distinguish these knots.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$&$9$&$10$&$11$&$12$&$13$\\
+                \hline
+                $9$&1&&&&&&&&&&&&&\\
+                \hline
+                $11$&1&&&&&&&&&&&&&\\
+                \hline
+                $13$&&&1&&&&&&&&&&&\\
+                \hline
+                $15$&&&&&1&1&&&&&&&&\\
+                \hline
+                $17$&&&&1&1&&&&&&&&&\\
+                \hline
+                $19$&&&&&&1&2&1&&&&&&\\
+                \hline
+                $21$&&&&&&&&&1&&&&&\\
+                \hline
+                $23$&&&&&&&&1&2&1&&&&\\
+                \hline
+                $25$&&&&&&&&&&1&1&&&\\
+                \hline
+                $27$&&&&&&&&&&1&1&&&\\
+                \hline
+                $29$&&&&&&&&&&&&1&1&\\
+                \hline
+                $31$&&&&&&&&&&&&&&\\
+                \hline
+                $33$&&&&&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{gHlImJnKBDFAce}}
+            \label{table:t_gHlImJnKBDFAce_kho}
+        \end{table}
         \par\hfill\par
-        To conclude, for up to 17 crossings, Khovanov homologies
-        have thus far been able to distinguish the Legendrian twist knots.
+        Unlike torus knots, with twist knots we found a few new matches after
+        expanding our search to 19 crossings
+        (Tab.~\ref{table:matching_twist_knots}). The first match is the
+        figure-eight knot, $m_{2}$, which has the same Jones polynomial as
+        K11n19 from the Hoste-Thistlewaite table. The Khovanov polynomials are
+        given in Tabs.~\ref{table:m_2_kho}-\ref{table:eikGbHJCaFd_kho}.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$\\
+                \hline
+                $-5$&1&&&&\\
+                \hline
+                $-3$&&&&&\\
+                \hline
+                $-1$&&1&1&&\\
+                \hline
+                $1$&&&1&1&\\
+                \hline
+                $3$&&&&&\\
+                \hline
+                $5$&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for the Figure-Eight Knot}
+            \label{table:m_2_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-4$&$-3$&$-2$&$-1$&$0$&$1$&$2$&$3$\\
+                \hline
+                $-5$&1&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&\\
+                \hline
+                $-1$&&1&1&&&&&\\
+                \hline
+                $1$&&&&1&1&&&\\
+                \hline
+                $3$&&&&1&1&&&\\
+                \hline
+                $5$&&&&&1&1&1&\\
+                \hline
+                $7$&&&&&&&&\\
+                \hline
+                $9$&&&&&&&1&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{eikGbHJCaFd}}
+            \label{table:eikGbHJCaFd_kho}
+        \end{table}
+        The $m_{3}$ twist knot, which is $5_{2}$ on the Rolfsen table,
+        has the same Jones polynomial as (at least) three other knots. In each
+        case the Khovanov polynomial distinguishes it
+        (Tabs.~\ref{table:m_3_kho}-\ref{table:hGJaMlCdEKBfI_kho}).
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$\\
+                \hline
+                $1$&1&&&&&\\
+                \hline
+                $3$&1&1&&&&\\
+                \hline
+                $5$&&&1&&&\\
+                \hline
+                $7$&&&1&&&\\
+                \hline
+                $9$&&&&1&1&\\
+                \hline
+                $11$&&&&&&\\
+                \hline
+                $13$&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for the $5_{2}$ Knot}
+            \label{table:m_3_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$\\
+                \hline
+                $1$&1&&&&&&&&\\
+                \hline
+                $3$&&&&&&&&&\\
+                \hline
+                $5$&&1&2&&&&&&\\
+                \hline
+                $7$&&&1&1&1&&&&\\
+                \hline
+                $9$&&&&1&1&&&&\\
+                \hline
+                $11$&&&&&1&2&1&&\\
+                \hline
+                $13$&&&&&&1&1&1&\\
+                \hline
+                $15$&&&&&&&1&1&\\
+                \hline
+                $17$&&&&&&&&1&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{dgikFHaEjbc}}
+            \label{table:dgikFHaEjbc_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$\\
+                \hline
+                $-1$&1&1&&&&&&\\
+                \hline
+                $1$&1&&&&&&&\\
+                \hline
+                $3$&&&1&1&&&&\\
+                \hline
+                $5$&&&&&1&&&\\
+                \hline
+                $7$&&&&&1&&&\\
+                \hline
+                $9$&&&&&&1&1&\\
+                \hline
+                $11$&&&&&&&&\\
+                \hline
+                $13$&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{gfJKHlaIEBCD}}
+            \label{table:gfJKHlaIEBCD_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$\\
+                \hline
+                $1$&1&&&&&&&&&&\\
+                \hline
+                $3$&&&&&&&&&&&\\
+                \hline
+                $5$&&1&2&&&&&&&&\\
+                \hline
+                $7$&&&1&1&1&&&&&&\\
+                \hline
+                $9$&&&&1&1&&&&&&\\
+                \hline
+                $11$&&&&&1&2&1&&&&\\
+                \hline
+                $13$&&&&&&1&1&1&&&\\
+                \hline
+                $15$&&&&&&&1&1&&&\\
+                \hline
+                $17$&&&&&&&&1&2&1&\\
+                \hline
+                $19$&&&&&&&&&&&\\
+                \hline
+                $21$&&&&&&&&&&1&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{hGJaMlCdEKBfI}}
+            \label{table:hGJaMlCdEKBfI_kho}
+        \end{table}
+        The $m_{5}$ twist knot, which is $7_{2}$ on the Rolfsen table, has the
+        same Jones polynomial as \texttt{bhDGijCkaef}. The Khovanov polynomials
+        are given in Tabs.~\ref{table:m_5_kho} and \ref{table:bhDGijCkaef_kho}.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$\\
+                \hline
+                $1$&1&&&&&&&\\
+                \hline
+                $3$&1&1&&&&&&\\
+                \hline
+                $5$&&&1&&&&&\\
+                \hline
+                $7$&&&1&1&&&&\\
+                \hline
+                $9$&&&&1&1&&&\\
+                \hline
+                $11$&&&&&1&&&\\
+                \hline
+                $13$&&&&&&1&1&\\
+                \hline
+                $15$&&&&&&&&\\
+                \hline
+                $17$&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for the $7_{2}$ Knot}
+            \label{table:m_5_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$\\
+                \hline
+                $1$&1&&&&&&&\\
+                \hline
+                $3$&&&&&&&&\\
+                \hline
+                $5$&&1&2&&&&&\\
+                \hline
+                $7$&&&1&&&&&\\
+                \hline
+                $9$&&&&1&1&&&\\
+                \hline
+                $11$&&&&&1&1&1&\\
+                \hline
+                $13$&&&&&&1&1&\\
+                \hline
+                $15$&&&&&&&1&1\\
+                \hline
+                $17$&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{bhDGijCkaef}}
+            \label{table:bhDGijCkaef_kho}
+        \end{table}
+        Our first new result comes with $m_{6}$. An 18 crossing knot was found
+        that has the same Jones polynomial, but the Khovanov polynomials
+        differ. This is shown below
+        (Tabs.~\ref{table:m_6_kho} and \ref{table:jpIFNMrClqOhkEDabg_kho}.).
+        $m_{6}$ also shares its Jones polynomial with an 11 and a 13 crossing
+        knot. The Khovanov polynomials are given in
+        Tabs.~\ref{table:cefIgbajkDh_kho} and
+        \ref{table:femIbaJKLCGHd_kho}.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$\\
+                \hline
+                $-5$&1&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&\\
+                \hline
+                $1$&&&1&1&&&&&\\
+                \hline
+                $3$&&&&1&1&&&&\\
+                \hline
+                $5$&&&&&1&1&&&\\
+                \hline
+                $7$&&&&&&1&&&\\
+                \hline
+                $9$&&&&&&&1&1&\\
+                \hline
+                $11$&&&&&&&&&\\
+                \hline
+                $13$&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for the $8_{1}$ Knot}
+            \label{table:m_6_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-4$&$-3$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$\\
+                \hline
+                $-5$&1&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&\\
+                \hline
+                $1$&&&&1&1&&&&\\
+                \hline
+                $3$&&&&2&2&&&&\\
+                \hline
+                $5$&&&&&1&2&1&&\\
+                \hline
+                $7$&&&&&&1&&&\\
+                \hline
+                $9$&&&&&&&2&2&\\
+                \hline
+                $11$&&&&&&&&&\\
+                \hline
+                $13$&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{cefIgbajkDh}}
+            \label{table:cefIgbajkDh_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-4$&$-3$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$\\
+                \hline
+                $-5$&1&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&\\
+                \hline
+                $1$&&&&1&1&&&&\\
+                \hline
+                $3$&&&&2&2&&&&\\
+                \hline
+                $5$&&&&&1&2&1&&\\
+                \hline
+                $7$&&&&&&1&&&\\
+                \hline
+                $9$&&&&&&&2&2&\\
+                \hline
+                $11$&&&&&&&&&\\
+                \hline
+                $13$&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{femIbaJKLCGHd}}
+            \label{table:femIbaJKLCGHd_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-4$&$-3$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$\\
+                \hline
+                $-5$&1&&&&&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&&&&&\\
+                \hline
+                $1$&&&&1&1&&&&&&&&\\
+                \hline
+                $3$&&&&2&2&&&&&&&&\\
+                \hline
+                $5$&&&&&2&4&2&&&&&&\\
+                \hline
+                $7$&&&&&&1&1&1&&&&&\\
+                \hline
+                $9$&&&&&&&3&4&1&&&&\\
+                \hline
+                $11$&&&&&&&&1&3&2&&&\\
+                \hline
+                $13$&&&&&&&&&2&1&&&\\
+                \hline
+                $15$&&&&&&&&&&2&3&1&\\
+                \hline
+                $17$&&&&&&&&&&&&&\\
+                \hline
+                $19$&&&&&&&&&&&&1&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{jpIFNMrClqOhkEDabg}}
+            \label{table:jpIFNMrClqOhkEDabg_kho}
+        \end{table}
+        Note the Khovanov polynomials of \texttt{cefIgbajkDh} and
+        \texttt{femIbaJKLCGHd} are identical, showing this is not a perfect
+        invariant.
+        \par\hfill\par
+        The knots $m_{7}$, $m_{8}$, and $m_{9}$ have the same Jones polynomial
+        of at least one other knot. The Khovanov polynomials are given below.
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$&$9$\\
+                \hline
+                $1$&1&&&&&&&&&\\
+                \hline
+                $3$&1&1&&&&&&&&\\
+                \hline
+                $5$&&&1&&&&&&&\\
+                \hline
+                $7$&&&1&1&&&&&&\\
+                \hline
+                $9$&&&&1&1&&&&&\\
+                \hline
+                $11$&&&&&1&1&&&&\\
+                \hline
+                $13$&&&&&&1&1&&&\\
+                \hline
+                $15$&&&&&&&1&&&\\
+                \hline
+                $17$&&&&&&&&1&1&\\
+                \hline
+                $19$&&&&&&&&&&\\
+                \hline
+                $21$&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for $m_{7}$}
+            \label{table:m_7_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$\\
+                \hline
+                $1$&1&&&&&&&&&\\
+                \hline
+                $3$&&&&&&&&&&\\
+                \hline
+                $5$&&1&2&&&&&&&\\
+                \hline
+                $7$&&&1&1&&&&&&\\
+                \hline
+                $9$&&&&1&1&&&&&\\
+                \hline
+                $11$&&&&&1&1&&&&\\
+                \hline
+                $13$&&&&&&1&1&&&\\
+                \hline
+                $15$&&&&&&&1&&&\\
+                \hline
+                $17$&&&&&&&&1&1&\\
+                \hline
+                $19$&&&&&&&&&&\\
+                \hline
+                $21$&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{cgjFHIaDEkb}}
+            \label{table:cgjFHIaDEkb_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$\\
+                \hline
+                $-5$&1&&&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&&&\\
+                \hline
+                $1$&&&1&1&&&&&&&\\
+                \hline
+                $3$&&&&1&1&&&&&&\\
+                \hline
+                $5$&&&&&1&1&&&&&\\
+                \hline
+                $7$&&&&&&1&1&&&&\\
+                \hline
+                $9$&&&&&&&1&1&&&\\
+                \hline
+                $11$&&&&&&&&1&&&\\
+                \hline
+                $13$&&&&&&&&&1&1&\\
+                \hline
+                $15$&&&&&&&&&&&\\
+                \hline
+                $17$&&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for $m_{8}$}
+            \label{table:m_8_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-6$&$-5$&$-4$&$-3$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$\\
+                \hline
+                $-5$&1&&&&&&&&&&&&\\
+                \hline
+                $-3$&&&&&&&&&&&&&\\
+                \hline
+                $-1$&&1&2&&&&&&&&&&\\
+                \hline
+                $1$&&&&1&1&&&&&&&&\\
+                \hline
+                $3$&&&&2&1&&1&&&&&&\\
+                \hline
+                $5$&&&&&1&3&2&&&&&&\\
+                \hline
+                $7$&&&&&&1&&1&2&&&&\\
+                \hline
+                $9$&&&&&&&2&2&&&&&\\
+                \hline
+                $11$&&&&&&&&&1&3&1&&\\
+                \hline
+                $13$&&&&&&&&&1&&&1&\\
+                \hline
+                $15$&&&&&&&&&&&1&1&\\
+                \hline
+                $17$&&&&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{knIHoBjCDQrMPaeLgF}}
+            \label{table:knIHoBjCDQrMPaeLgF_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$&$9$&$10$&$11$\\
+                \hline
+                $1$&1&&&&&&&&&&&\\
+                \hline
+                $3$&1&1&&&&&&&&&&\\
+                \hline
+                $5$&&&1&&&&&&&&&\\
+                \hline
+                $7$&&&1&1&&&&&&&&\\
+                \hline
+                $9$&&&&1&1&&&&&&&\\
+                \hline
+                $11$&&&&&1&1&&&&&&\\
+                \hline
+                $13$&&&&&&1&1&&&&&\\
+                \hline
+                $15$&&&&&&&1&1&&&&\\
+                \hline
+                $17$&&&&&&&&1&1&&&\\
+                \hline
+                $19$&&&&&&&&&1&&&\\
+                \hline
+                $21$&&&&&&&&&&1&1&\\
+                \hline
+                $23$&&&&&&&&&&&&\\
+                \hline
+                $25$&&&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for $m_{9}$}
+            \label{table:m_9_kho}
+        \end{table}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+                \hline
+                $q\symbol{92}t$&$-2$&$-1$&$0$&$1$&$2$&$3$&$4$&$5$&$6$&$7$&$8$&$9$\\
+                \hline
+                $1$&1&&&&&&&&&&&\\
+                \hline
+                $3$&&&&&&&&&&&&\\
+                \hline
+                $5$&&1&2&&&&&&&&&\\
+                \hline
+                $7$&&&1&2&1&&&&&&&\\
+                \hline
+                $9$&&&&1&1&&&&&&&\\
+                \hline
+                $11$&&&&&2&3&1&&&&&\\
+                \hline
+                $13$&&&&&&1&2&1&&&&\\
+                \hline
+                $15$&&&&&&&2&2&&&&\\
+                \hline
+                $17$&&&&&&&&2&3&1&&\\
+                \hline
+                $19$&&&&&&&&&1&&&\\
+                \hline
+                $21$&&&&&&&&&&2&2&\\
+                \hline
+                $23$&&&&&&&&&&&&\\
+                \hline
+                $25$&&&&&&&&&&&&1\\
+                \hline
+            \end{tabular}
+            \caption{Khovanov Polynomial for \texttt{jopIFMrDlqNhkEabcg}}
+            \label{table:jopIFMrDlqNhkEabcg_kho}
+        \end{table}
+    \section{Remarks}
+        Given a knot $K$ and a torus or twist knot $T$, the Jones polynomials
+        of $K$, $T$, and the \textit{mirrors} of $K$ and $T$ were computed and
+        compared. This is obtained quickly by
+        substituting $q\mapsto{q}^{-1}$. The Khovanov polynomial has a similar
+        reflection formula, $(q,\,t)\mapsto(q^{-1},\,t^{-1})$. DT code is
+        mirror agnostic, and the tables in the previous section give the
+        Khovanov polynomials for the matching knot (whether that be the knot
+        given by the corresponding DT code or its mirror).
+        \par\hfill\par
+        An interesting thing to note is that not all twist knots are
+        transversally, or Legendrian, simple, yet there are no knots up to
+        19 crossings with the same Khovanov polynomial as a twist knot. This
+        leads to the following question.
+        \begin{question}
+            Does Khovanov homology distinguish all twist knots?
+        \end{question}
+    \section{Future Work}
+        The Legendrian knot atlas \cite{LegendrianKnotAtlas} has a list of
+        Legendrian knots that are neither torus nor twist knots. We will be
+        expanding our search to include these knots, comparing them against
+        all knots up to 19 crossings as well.
     \section{Acknowledgements}
         We thank Shadi Ali Ahmad, Ilya Kryukov and Jacob Swenberg for their
         observation and remarks in the early stage of this work. The numerical
