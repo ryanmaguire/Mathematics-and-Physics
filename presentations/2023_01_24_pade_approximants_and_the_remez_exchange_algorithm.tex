@@ -3,7 +3,7 @@
 
 \title{Pade Approximants and the Remez Exchange Algorithm}
 \author{Ryan Maguire}
-\date{January 2023}
+\date{January 24, 2023}
 \usenavigationsymbolstemplate{}
 \setbeamertemplate{footline}[frame number]
 \begin{document}
@@ -14,7 +14,6 @@
             \item Chebyshev Polynomials
             \item The Remez Exchange Algorithm
             \item Pade Approximants
-            \item Fraser-Hart Variant
         \end{itemize}
     \end{frame}
     \begin{frame}{Polynomial Approximations}
@@ -43,7 +42,7 @@
         It is rather easy
         to understand and implement, and does a good job approximating a
         function near the point $x_{0}$. There are several theorems, like the
-        alternating series test, that also give bounded on the error.
+        alternating series test, that also give bounds on the error.
         \par\hfill\par
         Least-squares methods give the answer to $2.)$, and statisticians,
         applied mathematicians, and physics make frequent use of this.
@@ -71,8 +70,8 @@
         \begin{equation}
             (1-x^{2})\ddot{y}-x\dot{y}+n^{2}y=0
         \end{equation}
-        On the interval $[-1,1]$ these have a weight of
-        $w(x)=(1-x^{2})^{\frac{1}{2}}$ meaning we can approximate smooth
+        On the interval $[-1,1]$ the weight is
+        $w(x)=(1-x^{2})^{-\frac{1}{2}}$ meaning we can approximate smooth
         functions on $[-1,1]$ via:
         \begin{equation}
             f(x)
@@ -99,16 +98,16 @@
         Now we want to find the best polynomial approximation of a smooth
         function $f$ on some interval $[a,b]$. We can linearly translate this
         back to $[-1,1]$, the domain of the Chebyshev polynomials, and then
-        translate back at the end, so for ease we support $a=-1$ and $b=1$.
+        translate back at the end, so for ease we suppose $a=-1$ and $b=1$.
         We start with $N+2$ samples $x_{0},\dots,x_{N+1}$, where $N$ is the
         desired degree of the polynomial. These are taken to be the extrema of
-        $T_{N+1}(x)$. We then set up the following $(N+2)x(N+2)$ system of
+        $T_{N+1}(x)$. We then set up the following $(N+2)\times(N+2)$ system of
         linear equations:
         \begin{equation}
             \Big(\sum_{n=0}^{N}b_{k}x_{k}^{n}\Big)+(-1)^{k}\varepsilon=f(x_{k})
         \end{equation}
         for each $0\leq{k}\leq{N+1}$. The variable $\varepsilon$ is the error in
-        approximate supremum error for the polyniam $p(x)$ defined by:
+        approximate supremum error for the polynomial $p(x)$ defined by:
         \begin{equation}
             p(x)=\sum_{k=0}^{N}b_{k}x^{k}
         \end{equation}
@@ -129,6 +128,12 @@
         to some constant. Once this happens we are done, and we have found the
         minimax polynomial. The error in this approximation is given by
         $\varepsilon$.
+        \par\hfill\par
+        To be precise, we are done when the local extrema of $f(x)-p_{n}(x)$
+        are all of the same magnitude and oscillate. It is a well-known theorem
+        that the minimax polynomial of $f$ on $[a,\,b]$ of degree $N$ is the
+        unique polynomial that achieves this property. This is the
+        equioscillation theorem.
     \end{frame}
     \begin{frame}{The Remez Exchange Algorithm}
         As an example, the coefficients for $\arctan(x^2)$ on a small interval.
@@ -150,8 +155,8 @@
     \end{frame}
     \begin{frame}{Pade Approximants}
         Now, for some history. In the $7^{th}$ century, Indian mathematician
-        Bhaskara I. He writes:
-        \begin{center}
+        Bhaskara I. writes:
+        \begin{quote}
             I briefly state the rule (for finding the bhujaphala
             and the kotiphala, etc.) without making use of the
             Rsine-differences 225, etc. Subtract the degrees of a bhuja
@@ -163,28 +168,28 @@
             'anthyaphala (that is, the epicyclic radius). Thus is obtained
             the entire bahuphala (or, kotiphala) for the sun, moon or the
             star-planets. So also are obtained the direct and inverse Rsines.
-        \end{center}
+        \end{quote}
     \end{frame}
     \begin{frame}{Pade Approximants}
         Let's be thankful for modern notation, and write:
         \begin{equation}
-            \sin(x)\approx\frac{4x(180-x)}{40500-x*180-x)}
+            \sin(x)\approx\frac{4x(180-x)}{40500-x(180-x)}
         \end{equation}
-        where $x$ is in degree. This approximation beats the Taylor polynomial
+        where $x$ is in degrees. This approximation beats the Taylor polynomial
         of similar degree by a good margin. Bhaskara did not write where this
         formula came from, but it is possible to reverse engineer it.
     \end{frame}
     \begin{frame}{Pade Approximants}
         The Taylor polynomial of degree $N$ can be described as the unique
-        polynomial $p$ the satisfies:
+        polynomial $p$ that satisfies:
         \begin{equation}
             \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}p(x_{0})=
             \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}f(x_{0})
         \end{equation}
         for $0\leq{n}\leq{N}$. The $(N,M)$ Pade approximant is computed via:
         \begin{equation}
-            R(x)=\frac{\sum_{n=0}^{N}a_{k}(x-x_{0})^{k}}
-                {1+\sum_{m=1}^{M}(x-x_{0})^{m}}
+            R(x)=\frac{\sum_{n=0}^{N}a_{n}(x-x_{0})^{n}}
+                {1+\sum_{m=1}^{M}b_{m}(x-x_{0})^{m}}
         \end{equation}
         and requiring that:
         \begin{equation}
@@ -192,5 +197,17 @@
             \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}f(x_{0})
         \end{equation}
         for $0\leq{n}\leq{N+M}$.
+    \end{frame}
+    \begin{frame}{Pade Approximants}
+        This requirement leads to an $(N+M+1)\times(N+M+1)$ system of equations
+        (with the $N+1$ unknowns $a_{0},\,\dots,\,a_{N}$ and
+        the $M$ unknowns $b_{1},\,\dots,\,b_{M}$). Solving this gives us the
+        coefficients of the Pade approximant, which can be efficiently
+        evaluated using Horner's method twice and one division.
+        \par\hfill\par
+        The Pade approximant is often more accurate than the Taylor polynomial
+        of similar degree. The method is used frequent in software libraries
+        when quadruple precision ($2^{-112}\approx{10}^{-34}$ relative error)
+        is required.
     \end{frame}
 \end{document}
