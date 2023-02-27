@@ -1,0 +1,196 @@
+\documentclass{beamer}
+\usepackage{amsmath}
+
+\title{Pade Approximants and the Remez Exchange Algorithm}
+\author{Ryan Maguire}
+\date{January 2023}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item Taylor / Maclaurin Series
+            \item Chebyshev Polynomials
+            \item The Remez Exchange Algorithm
+            \item Pade Approximants
+            \item Fraser-Hart Variant
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Polynomial Approximations}
+        If you have an analytic real-valued function you could, in principle,
+        compute the function to arbitrary precision using the Taylor series.
+        \begin{equation}
+            f(x)=\sum_{n=0}^{\infty}\frac{f^{(n)}(x_{0})}{n!}(x-x_{0})^{n}
+        \end{equation}
+        where $f^{(n)}$ denotes the $n^{th}$ derivative of $f$, and
+        $f^{(0)}(x_{0})$ is simply $f(x_{0})$. This is likely familiar to any
+        student of Calculus.
+    \end{frame}
+    \begin{frame}{Polynomial Approximations}
+        Given a fixed $N\in\mathbb{N}$ one might ask what is the
+        \textit{best} polynomial approximation of degree $N$ of a function $f$
+        on some interval $[a,b]$? There are a few ways to phrase what
+        \textit{best} should mean.
+        \begin{itemize}
+            \item Is easy to understand and implement.
+            \item Minimizes the root-mean-square error.
+            \item Minimizes the sup norm of $f$ on $[a,b]$.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Polynomial Approximations}
+        The anwer to $1.)$ is probably the Taylor / Maclaurin series.
+        It is rather easy
+        to understand and implement, and does a good job approximating a
+        function near the point $x_{0}$. There are several theorems, like the
+        alternating series test, that also give bounded on the error.
+        \par\hfill\par
+        Least-squares methods give the answer to $2.)$, and statisticians,
+        applied mathematicians, and physics make frequent use of this.
+        \par\hfill\par
+        We want to deal with the third problem. The issue with only caring
+        about the RMS error is that there may be parts of $[a,b]$ where
+        the approximation is horrible. Minimizing the sup norm means your
+        approximation is good for all numbers under consideration.
+    \end{frame}
+    \begin{frame}{Chebyshev Polynomials}
+        To solve this we use the Remez exchange algorithm. This involves
+        Chebyshev polynomials, so it'd be useful to discuss these briefly.
+        The defining charactesting is:
+        \begin{equation}
+            T_{n}\big(\cos(\theta)\big)=\cos(n\theta)
+        \end{equation}
+        but it is easier to work with their recurrence relation:
+        \begin{equation}
+            T_{n+2}(x)=2xT_{n+1}(x)-T_{n}(x)
+        \end{equation}
+        where $T_{0}(x)=1$ and $T_{1}(x)=x$.
+    \end{frame}
+    \begin{frame}{Chebyshev Polynomials}
+        These polynomials come from a Sturm-Liouville system:
+        \begin{equation}
+            (1-x^{2})\ddot{y}-x\dot{y}+n^{2}y=0
+        \end{equation}
+        On the interval $[-1,1]$ these have a weight of
+        $w(x)=(1-x^{2})^{\frac{1}{2}}$ meaning we can approximate smooth
+        functions on $[-1,1]$ via:
+        \begin{equation}
+            f(x)
+            =\sum_{n=0}^{\infty}a_{n}T_{n}(x)
+            =\sum_{n=0}^{\infty}T_{n}(x)\int_{-1}^{1}
+                \frac{f(x)T_{n}(x)}{\sqrt{1-x^2}}\,\textrm{d}x
+        \end{equation}
+        and stopping this sum at some appropriate integer $N\in\mathbb{N}$.
+    \end{frame}
+    \begin{frame}{Chebyshev Polynomials}
+        Chebyshev polynomials have been well-studied and their use is
+        widespread. Evaluation of special functions, like Bessel functions and
+        Fresnel integrals, often involves Chebyshev expansions at some point.
+        \par\hfill\par
+        The Remez algorithm that we'll be discussing uses the extrema of these
+        polynomials. From $T_{n}(\cos(\theta))=\cos(n\theta)$ we can see that
+        the $|T_{n}(x)|$ attains it's maximums at:
+        \begin{equation}
+            x_{k}=\cos\Big(\frac{k\pi}{n}\Big)
+        \end{equation}
+        for $0\leq{k}\leq{n}$.
+    \end{frame}
+    \begin{frame}{The Remez Exchange Algorithm}
+        Now we want to find the best polynomial approximation of a smooth
+        function $f$ on some interval $[a,b]$. We can linearly translate this
+        back to $[-1,1]$, the domain of the Chebyshev polynomials, and then
+        translate back at the end, so for ease we support $a=-1$ and $b=1$.
+        We start with $N+2$ samples $x_{0},\dots,x_{N+1}$, where $N$ is the
+        desired degree of the polynomial. These are taken to be the extrema of
+        $T_{N+1}(x)$. We then set up the following $(N+2)x(N+2)$ system of
+        linear equations:
+        \begin{equation}
+            \Big(\sum_{n=0}^{N}b_{k}x_{k}^{n}\Big)+(-1)^{k}\varepsilon=f(x_{k})
+        \end{equation}
+        for each $0\leq{k}\leq{N+1}$. The variable $\varepsilon$ is the error in
+        approximate supremum error for the polyniam $p(x)$ defined by:
+        \begin{equation}
+            p(x)=\sum_{k=0}^{N}b_{k}x^{k}
+        \end{equation}
+    \end{frame}
+    \begin{frame}{The Remez Exchange Algorithm}
+        Solving this system of equations gives us a guess $p_{0}(x)=p(x)$ to
+        the minimax polynomial, the polynomial which minimizes the sup norm.
+        We compute $p_{1}$ as follows.
+        \par\hfill\par
+        Compute $|f(x)-p_{0}(x)|$ and find approximations to the local
+        extrema. This is done by applying Newton's method to the samples
+        $x_{k}$. These new values are our new samples $y_{k}$. We replace the
+        $x_{k}$ with these $y_{k}$ and repeat the process from the previous
+        slide.
+    \end{frame}
+    \begin{frame}{The Remez Exchange Algorithm}
+        As we apply more iterations, the value $\varepsilon$ starts to stabilize
+        to some constant. Once this happens we are done, and we have found the
+        minimax polynomial. The error in this approximation is given by
+        $\varepsilon$.
+    \end{frame}
+    \begin{frame}{The Remez Exchange Algorithm}
+        As an example, the coefficients for $\arctan(x^2)$ on a small interval.
+        \begin{align}
+            1.000000000000000000000\\
+            0.333333333333329318027\\
+            -0.199999999998764832476\\
+            0.142857142725034663711\\
+            -0.111111104054623557880\\
+            0.090908871334365065619\\
+            -0.076918762050448299949\\
+            0.066610731373875312066\\
+            -0.058335701337905734864\\
+            0.049768779946159323601\\
+            -0.036531572744216915527\\
+            0.062858201153657823623
+        \end{align}
+        Note these approximate the Taylor coefficients very well.
+    \end{frame}
+    \begin{frame}{Pade Approximants}
+        Now, for some history. In the $7^{th}$ century, Indian mathematician
+        Bhaskara I. He writes:
+        \begin{center}
+            I briefly state the rule (for finding the bhujaphala
+            and the kotiphala, etc.) without making use of the
+            Rsine-differences 225, etc. Subtract the degrees of a bhuja
+            (or koti) from the degrees of a half circle (that is, 180 degrees).
+            Then multiply the remainder by the degrees of the bhuja or koti
+            and put down the result at two places. At one place subtract the
+            result from 40500. By one-fourth of the remainder (thus obtained),
+            divide the result at the other place as multiplied by the
+            'anthyaphala (that is, the epicyclic radius). Thus is obtained
+            the entire bahuphala (or, kotiphala) for the sun, moon or the
+            star-planets. So also are obtained the direct and inverse Rsines.
+        \end{center}
+    \end{frame}
+    \begin{frame}{Pade Approximants}
+        Let's be thankful for modern notation, and write:
+        \begin{equation}
+            \sin(x)\approx\frac{4x(180-x)}{40500-x*180-x)}
+        \end{equation}
+        where $x$ is in degree. This approximation beats the Taylor polynomial
+        of similar degree by a good margin. Bhaskara did not write where this
+        formula came from, but it is possible to reverse engineer it.
+    \end{frame}
+    \begin{frame}{Pade Approximants}
+        The Taylor polynomial of degree $N$ can be described as the unique
+        polynomial $p$ the satisfies:
+        \begin{equation}
+            \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}p(x_{0})=
+            \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}f(x_{0})
+        \end{equation}
+        for $0\leq{n}\leq{N}$. The $(N,M)$ Pade approximant is computed via:
+        \begin{equation}
+            R(x)=\frac{\sum_{n=0}^{N}a_{k}(x-x_{0})^{k}}
+                {1+\sum_{m=1}^{M}(x-x_{0})^{m}}
+        \end{equation}
+        and requiring that:
+        \begin{equation}
+            \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}R(x_{0})=
+            \frac{\textrm{d}^{n}}{\textrm{d}\,x^n}f(x_{0})
+        \end{equation}
+        for $0\leq{n}\leq{N+M}$.
+    \end{frame}
+\end{document}
