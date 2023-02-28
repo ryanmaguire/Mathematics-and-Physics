@@ -37,6 +37,8 @@
 /*  Square root function found here.                                          */
 #include <cmath>
 
+#include "nbh_vector.hpp"
+
 /*  Position of the detector and the square of this value.                    */
 static const double z_detector = -10.0;
 static const double z_detector_sq = z_detector*z_detector;
@@ -51,64 +53,9 @@ static const double black_hole_radius_sq = black_hole_radius*black_hole_radius;
 /*  Maximum number of iterations in Euler's method.                           */
 static const unsigned int max_iters = 100000U;
 
-/*  A simple structure for dealing with vectors. Vectors are treated as rays  *
- *  of light moving under the influence of the gravity of a black hole.       */
-struct tmpl_simple_vector {
-
-    /*  A vector will be defined by it's Euclidean components, x, y, z.       */
-    double x, y, z;
-
-    /*  Empty constructor. Simply return.                                     */
-    tmpl_simple_vector(void)
-    {
-        return;
-    }
-
-    /*  Simple method for creating a vector. Simply set the x, y, and z parts *
-     *  to the values a, b, and c, respectively.                              */
-    tmpl_simple_vector(double a, double b, double c)
-    {
-        x = a;
-        y = b;
-        z = c;
-    }
-
-    /*  This operator represents vector addition.                             */
-    tmpl_simple_vector operator + (tmpl_simple_vector r)
-    {
-        return tmpl_simple_vector(x + r.x, y + r.y, z + r.z);
-    }
-
-    /*  And here we have scalar multiplication.                               */
-    tmpl_simple_vector operator * (double r)
-    {
-        return tmpl_simple_vector(x*r, y*r, z*r);
-    }
-
-    /*  This operator will denote the Euclidean dot product of two vectors.   */
-    double operator % (tmpl_simple_vector r)
-    {
-        return x*r.x + y*r.y + z*r.z;
-    }
-
-    /*  A method for computing the Euclidean norm of a vector.                */
-    double norm(void)
-    {
-        return std::sqrt(*this % *this);
-    }
-
-    /*  A method for computing the square of the Euclidean norm of a vector.  *
-     *  This is computationally useful since it avoids redundant square roots.*/
-    double normsq(void)
-    {
-        return *this % *this;
-    }
-};
-/*  End of definition of tmpl_simple_vector.                                  */
-
 /*  The acceleration under the force of gravity is given by Newton's          *
  *  universal law of gravitation. This is the inverse square law.             */
-static tmpl_simple_vector acc(tmpl_simple_vector p)
+static nbh::vec3 acc(nbh::vec3 p)
 {
     /*  Given a vector p, Newton's universal law of gravitation says the      *
      *  acceleration is proportional to p/||p||^3 = p_hat/||p||^2, where p_hat*
@@ -119,14 +66,13 @@ static tmpl_simple_vector acc(tmpl_simple_vector p)
     /*  The acceleration is the minus of p times this factor. The reason it   *
      *  is minus p is because gravity pulls inward, so the acceleration is    *
      *  towards the blacks hole.                                              */
-    return tmpl_simple_vector(-p.x*factor, -p.y*factor, -p.z*factor);
+    return nbh::vec3(-p.x*factor, -p.y*factor, -p.z*factor);
 }
 /*  End of acc function.                                                      */
 
 /*  Function for computing the path of a light ray under the influence of     *
  *  the gravity of a black hole using Euler's method.                         */
-static tmpl_simple_vector
-Path(tmpl_simple_vector p, tmpl_simple_vector v, double dt)
+static nbh::vec3 Path(nbh::vec3 p, nbh::vec3 v, double dt)
 {
     /*  This function makes a very naive assumption. Newton's Second Law      *
      *  states the F = ma, where a is the acceleration. So, for gravity, we   *
@@ -178,7 +124,7 @@ Path(tmpl_simple_vector p, tmpl_simple_vector v, double dt)
 /*  End of Path function.                                                     */
 
 /*  Function for coloring a pixel red.                                        */
-static void color_red(FILE *fp, tmpl_simple_vector p)
+static void color_red(FILE *fp, nbh::vec3 p)
 {
     /*  The amount of light entering a small area goes inversally with the    *
      *  square of the distance between this area and the light source. We     *
@@ -197,7 +143,7 @@ static void color_red(FILE *fp, tmpl_simple_vector p)
 /*  End of color_red.                                                         */
 
 /*  Same idea of coloring, but with a gray-to-white gradient.                 */
-static void color_white(FILE *fp, tmpl_simple_vector p)
+static void color_white(FILE *fp, nbh::vec3 p)
 {
     double x = 255.0*z_detector_sq/p.normsq();
     std::fputc(int(x), fp);
@@ -224,10 +170,10 @@ int main(void)
      *  to be 1 for simplicity. Adjusting this value would be equivalent to   *
      *  adjusting the strength of gravity. Smaller values mean stronger       *
      *  gravity, and larger values mean weaker gravity.                       */
-    tmpl_simple_vector v = tmpl_simple_vector(0.0, 0.0, -1.0);
+    nbh::vec3 v = nbh::vec3(0.0, 0.0, -1.0);
 
     /*  The position vector of a particle of light.                           */
-    tmpl_simple_vector p;
+    nbh::vec3 p;
 
     /*  Variables for looping over the x and y coordinates of the detector.   */
     unsigned int x, y;
@@ -240,7 +186,7 @@ int main(void)
     const double dt = 0.01;
 
     /*  Set the number of pixels in the detector.                             */
-    const unsigned int size = 1024U;
+    const unsigned int size = 512U;
 
     /*  Factor used for printing a progress report.                           */
     const double prog_factor = 100.0 / static_cast<double>(size);
@@ -275,7 +221,7 @@ int main(void)
         for (x = 0U; x < size; ++x)
         {
             /*  We're incrementing p across our detector.                     */
-            p = tmpl_simple_vector(start + factor*x, start + factor*y, z_src);
+            p = nbh::vec3(start + factor*x, start + factor*y, z_src);
 
             /*  Raytrace where the photon that hit p came from.               */
             p = Path(p, v, dt);
