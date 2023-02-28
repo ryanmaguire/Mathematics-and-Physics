@@ -55,7 +55,7 @@ int main(void)
     double color_factor;
 
     /*  Open the file "black_hole.ppm" and give it write permissions.         */
-    nbh::ppm PPM = nbh::ppm("newtonian_black_hole.ppm");
+    nbh::ppm PPM = nbh::ppm("newtonian_black_hole_point_source.ppm");
 
     /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
     if (!PPM.fp)
@@ -63,6 +63,9 @@ int main(void)
 
     /*  Otherwise initialize the ppm with default values in "setup".          */
     PPM.init();
+
+    /*  Set the radius to be really small to mimic a point source.            */
+    nbh::setup::reset_radius(0.05);
 
     /*  We can NOT do parallel processing with the creation of our PPM file   *
      *  since the order the values are computed is essential. If we wanted to *
@@ -80,7 +83,7 @@ int main(void)
             p = nbh::euler::path(p, v, nbh::gravity, nbh::stop);
 
             /*  Scale factor for darkening based on distance to center.       */
-            color_factor = nbh::setup::z_detector_sq / p.normsq();
+            color_factor = 0.5 * (1.0 + nbh::setup::z_detector_sq / p.normsq());
 
             /*  If the photon never made it to the detector, assume it was    *
              *  captured by the black hole and color the pixel black.         */

@@ -18,7 +18,8 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Basic test of the nbh routines. Generates a single black hole.        *
+ *      Basic test of the nbh routines. Generates a single black hole and     *
+ *      highlights the center of the detector with a blue color.              *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/02/28                                                        *
@@ -55,7 +56,7 @@ int main(void)
     double color_factor;
 
     /*  Open the file "black_hole.ppm" and give it write permissions.         */
-    nbh::ppm PPM = nbh::ppm("newtonian_black_hole.ppm");
+    nbh::ppm PPM = nbh::ppm("newtonian_black_hole_center_highlight.ppm");
 
     /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
     if (!PPM.fp)
@@ -86,6 +87,10 @@ int main(void)
              *  captured by the black hole and color the pixel black.         */
             if (p.z > nbh::setup::z_detector)
                 c = nbh::colors::black();
+
+            /*  If the center of the plane was hit, color blue.               */
+            else if (p.rhosq() < nbh::setup::highlight_threshold)
+                c = nbh::colors::blue();
 
             /*  Otherwise, color the detector with a checker board pattern.   */
             else
