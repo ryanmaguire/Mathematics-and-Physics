@@ -218,7 +218,7 @@ int main(void)
     end = 10.0;
 
     /*  Set the number of pixels in the detector.                             */
-    size = 4U*1024U;
+    size = 1024U;
     
     /*  The step-size we're incrementing in time.                             */
     dt = 0.01;

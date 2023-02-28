@@ -234,7 +234,7 @@ int main(void)
     dt = 0.01;
 
     /*  Threshold radius for considering a point as the center of the plane.  */
-    threshold = 0.01;
+    threshold = 0.05;
 
     /*  And compute the factor that allows us to convert between a pixel      *
      *  and the corresponding point on the detector.                          */
