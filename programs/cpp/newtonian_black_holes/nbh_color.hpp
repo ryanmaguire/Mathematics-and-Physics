@@ -31,7 +31,10 @@
 /*  File data type found here.                                                */
 #include <cstdio>
 
+/*  3D vector struct given here.                                              */
 #include "nbh_vector.hpp"
+
+/*  Struct for working with PPM files found here.                             */
 #include "nbh_ppm.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
@@ -133,16 +136,126 @@ namespace nbh {
         {
             return color(0x00U, 0x00U, 0xFFU);
         }
+
+        inline color yellow(void)
+        {
+            return color(0xFFU, 0xFFU, 0x00U);
+        }
     }
     /*  End of namespace "colors".                                            */
 
     /*  Function for creating a checker board pattern on the detector.        */
-    inline color checker_board_color(const nbh::vec3 &v)
+    inline color checker_board(const nbh::vec3 &v)
     {
-        if (static_cast<unsigned>(std::ceil(v.x) + std::ceil(v.y)) & 1)
-            return colors::white();
+        /*  Factor for darkening the checker board.                           */
+        const double cfact = nbh::setup::z_detector_sq/v.normsq();
+
+        /*  If the photon didn't make it, color the pixel black.              */
+        if (v.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
+        /*  Otherwise use a bit-wise trick to color the plane.                */
+        else if (static_cast<unsigned>(std::ceil(v.x) + std::ceil(v.y)) & 1U)
+            return colors::white() * cfact;
         else
-            return colors::red();
+            return colors::red() * cfact;
+    }
+
+    /*  Brighter version of the previous checker board.                       */
+    inline color bright_checker_board(const nbh::vec3 &v)
+    {
+        /*  Factor for darkening the checker board.                           */
+        const double cfact = 0.5*(nbh::setup::z_detector_sq/v.normsq() + 1.0);
+
+        /*  If the photon didn't make it, color the pixel black.              */
+        if (v.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
+        /*  Otherwise use a bit-wise trick to color the plane.                */
+        else if (static_cast<unsigned>(std::ceil(v.x) + std::ceil(v.y)) & 1U)
+            return colors::white() * cfact;
+        else
+            return colors::red() * cfact;
+    }
+
+    /*  Function for creating a checker board pattern on the detector.        */
+    inline color checker_board_four(const nbh::vec3 &v)
+    {
+        /*  Factor for darkening the checker board.                           */
+        const double cfact = nbh::setup::z_detector_sq/v.normsq();
+
+        /*  Integers that determines the color.                               */
+        const unsigned int nx = static_cast<unsigned int>(std::ceil(v.x)) & 1U;
+        const unsigned int ny = static_cast<unsigned int>(std::ceil(v.y)) & 1U;
+        const unsigned int n = nx + (ny << 1U);
+
+        /*  If the photon didn't make it, color the pixel black.              */
+        if (v.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
+        /*  Otherwise use a bit-wise trick to color the plane.                */
+        switch (n)
+        {
+            case 0:
+                return colors::white() * cfact;
+            case 1:
+                return colors::yellow() * cfact;
+            case 2:
+                return colors::green() * cfact;
+            default:
+                return colors::red() * cfact;
+        }
+    }
+
+    /*  Function for creating a checker board pattern on the detector.        */
+    inline color checker_board_four_highlight(const nbh::vec3 &v)
+    {
+        /*  Factor for darkening the checker board.                           */
+        const double cfact = nbh::setup::z_detector_sq/v.normsq();
+
+        /*  Integers that determines the color.                               */
+        const unsigned int nx = static_cast<unsigned int>(std::ceil(v.x)) & 1U;
+        const unsigned int ny = static_cast<unsigned int>(std::ceil(v.y)) & 1U;
+        const unsigned int n = nx + (ny << 1U);
+
+        /*  If the photon didn't make it, color the pixel black.              */
+        if (v.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
+        /*  If the center of the plane was hit, color blue.               */
+        else if (v.rhosq() < nbh::setup::highlight_threshold)
+            return nbh::colors::blue();
+
+        /*  Otherwise use a bit-wise trick to color the plane.                */
+        switch (n)
+        {
+            case 0:
+                return colors::white() * cfact;
+            case 1:
+                return colors::yellow() * cfact;
+            case 2:
+                return colors::green() * cfact;
+            default:
+                return colors::red() * cfact;
+        }
+    }
+
+    /*  Function for creating a checker board pattern on the detector.        */
+    inline color checker_board_highlight(const nbh::vec3 &v)
+    {
+        const double color_factor = nbh::setup::z_detector_sq / v.normsq();
+        if (v.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
+        /*  If the center of the plane was hit, color blue.               */
+        else if (v.rhosq() < nbh::setup::highlight_threshold)
+            return nbh::colors::blue();
+
+        else if (static_cast<unsigned>(std::ceil(v.x) + std::ceil(v.y)) & 1U)
+            return colors::white() * color_factor;
+
+        else
+            return colors::red() * color_factor;
     }
 }
 /*  End of "nbh" namespace.                                                   */

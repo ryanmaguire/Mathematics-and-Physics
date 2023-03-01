@@ -31,6 +31,7 @@
 /*  File data type found here.                                                */
 #include <cstdio>
 
+/*  Basic constants for the setup of the experiments given here.              */
 #include "nbh_setup.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
@@ -46,10 +47,10 @@ namespace nbh {
         ppm(const char *name);
 
         /*  Method for initializing the PPM using arbitrary values.           */
-        inline void init(void);
+        inline void init(unsigned int x, unsigned int y, int type);
 
         /*  Method for initializing the PPM using the values in "setup".      */
-        inline void init(unsigned int x, unsigned int y, int type);
+        inline void init(void);
 
         /*  Method for closing the file pointer for the PPM.                  */
         inline void close(void);

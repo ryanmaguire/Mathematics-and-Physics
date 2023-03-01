@@ -28,8 +28,7 @@
 #ifndef NBH_EULER_HPP
 #define NBH_EULER_HPP
 
-#include <cstddef>
-
+/*  Basic 3D vector struct given here.                                        */
 #include "nbh_vector.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
@@ -41,8 +40,13 @@ namespace nbh {
         /*  Time step used in Euler's method. The user may change this.       */
         static double time_increment = 0.01;
 
-        /*  The max number of iterations in Euler's method.                   */
-        static size_t max_iters = static_cast<size_t>(100000U);
+        /*  The max number of iterations in Euler's method. Unsigned int is   *
+         *  required (in C, at least) to be at least 16 bits. It is usually   *
+         *  32. Regardless, it is wide enough to store 65535U safely.         */
+        static unsigned int max_iters = 65535U;
+
+        /*  Function for reseting the max number of iterations allowed.       */
+        inline void reset_max_iters(unsigned int n);
 
         /*  Function for performing Euler's method, provided below.           */
         inline nbh::vec3 path(nbh::vec3 p,
@@ -51,6 +55,13 @@ namespace nbh {
                               bool (*stop)(const nbh::vec3 &));
     }
     /*  End of euler namespace.                                               */
+
+
+    /*  Function for reseting the max number of iterations allowed.           */
+    inline void euler::reset_max_iters(unsigned int n)
+    {
+        euler::max_iters = n;
+    }
 
     /*  Given a vector-valued acceleration a = acc(r), a starting position p, *
      *  an initial velocity v, and a stopping condition stop, perform Euler's *
@@ -88,10 +99,10 @@ namespace nbh {
          *  given by the time_increment value, and the stopping condition     *
          *  (hitting the detector, or being absorbed by a black hole) is      *
          *  determined by the "stop" function.                                */
-        size_t n = static_cast<size_t>(0U);
+        unsigned int n = 0U;
 
         /*  Keep performing Euler's method until we hit the detector, or      *
-         *  perform to many iterations.                                       */
+         *  perform too many iterations.                                      */
         while (!stop(p) && n < euler::max_iters)
         {
             /*  We numerically solve d^2/dt^2 p = F(p) in two steps. First,   *

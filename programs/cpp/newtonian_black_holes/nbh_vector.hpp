@@ -50,6 +50,9 @@ namespace nbh {
         /*  Operator for vector addition.                                     */
         inline void operator += (const vec3 &v);
 
+        /*  Operator for vector subtraction.                                  */
+        inline void operator -= (const vec3 &v);
+
         /*  Operator for scalar multiplication.                               */
         inline void operator *= (double r);
 
@@ -105,6 +108,20 @@ namespace nbh {
         x += v.x;
         y += v.y;
         z += v.z;
+    }
+
+    /*  Vector subtraction, performed component-wise.                         */
+    inline vec3 operator - (const vec3 &v, const vec3 &u)
+    {
+        return vec3(v.x - u.x, v.y - u.y, v.z - u.z);
+    }
+
+    /*  Vector subtraction where the result is stored in the first variable.  */
+    inline void vec3::operator -= (const vec3 &v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
     }
 
     /*  Scalar multiplication on the left.                                    */

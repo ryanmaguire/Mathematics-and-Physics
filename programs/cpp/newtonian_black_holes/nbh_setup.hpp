@@ -40,7 +40,7 @@ namespace nbh {
         static const double z_src = 10.0;
 
         /*  The start and end parameters for the "source". The source is the  *
-         *  square [start, start] x [end, end] at height z_src.               */
+         *  square [start, end] x [start, end] at height z_src.               */
         static const double start = -10.0;
         static const double end = 10.0;
 
@@ -69,6 +69,10 @@ namespace nbh {
 
         /*  Function for changing the radius of the blackhole.                */
         inline void reset_radius(double r);
+
+        /*  For two black holes, the centers lie on the x axis.               */
+        static const double bhx1 = -3.0;
+        static const double bhx2 = +3.0;
     }
     /*  End of "setup" namespace.                                             */
 
@@ -96,6 +100,30 @@ namespace nbh {
             return false;
     }
 
+    /*  Function for testing if a photon still exists with two black holes.   */
+    inline bool stop2(const nbh::vec3 &p)
+    {
+        /*  The black holes lie on the x axis. Compute the displaments to p.  */
+        nbh::vec3 r1 = nbh::vec3(p.x - setup::bhx1, p.y, p.z);
+        nbh::vec3 r2 = nbh::vec3(p.x - setup::bhx2, p.y, p.z);
+
+        /*  Case 1: The photon has reached the detector.                      */
+        if (p.z < setup::z_detector)
+            return true;
+
+        /*  Case 2: The first black hole swallowed the photon.                */
+        else if (r1.normsq() < setup::black_hole_radius_sq)
+            return true;
+
+        /*  Case 3: The second black hole swallowed the photon.               */
+        else if (r2.normsq() < setup::black_hole_radius_sq)
+            return true;
+
+        /*  Otherwise, the photon is still moving. Don't stop.                */
+        else
+            return false;
+    }
+
     /*  The acceleration under the force of gravity is given by Newton's      *
      *  universal law of gravitation. This is the inverse square law.         */
     inline nbh::vec3 gravity(const nbh::vec3 &p)
@@ -110,6 +138,28 @@ namespace nbh {
          *  it is minus p is because gravity pulls inward, so the             *
          *  acceleration is towards the blacks hole.                          */
         return nbh::vec3(-p.x*factor, -p.y*factor, -p.z*factor);
+    }
+
+    /*  The acceleration under the force of gravity is given by Newton's      *
+     *  universal law of gravitation. This is the inverse square law. We use  *
+     *  the principle of superposition to add a second black hole.            */
+    inline nbh::vec3 gravity2(const nbh::vec3 &p)
+    {
+        /*  The force from one black hole is -R / ||R||^3, where R is the     *
+         *  relative position vector from the point p to the center of the    *
+         *  black hole. Compute this expression for both black holes.         */
+        nbh::vec3 r1 = nbh::vec3(setup::bhx1 - p.x, -p.y, -p.z);
+        nbh::vec3 r2 = nbh::vec3(setup::bhx2 - p.x, -p.y, -p.z);
+
+        /*  We'll use the principle of superposition for the two black holes. */
+        const double factor1 = 1.0 / (r1.normsq() * r1.norm());
+        const double factor2 = 1.0 / (r2.normsq() * r2.norm());
+        nbh::vec3 f1 = r1 * factor1;
+        nbh::vec3 f2 = r2 * factor2;
+
+        /*  The net force is computed by the principle of superposition.      *
+         *  Add the two individual forces and return.                         */
+        return f1 + f2;
     }
 
     /*  Function for changing the radius of the blackhole.                    */
