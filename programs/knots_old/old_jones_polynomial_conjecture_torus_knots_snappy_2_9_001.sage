@@ -1,31 +1,32 @@
 """
 ################################################################################
-#                                  LICENSE                                     #
+#                                   LICENSE                                    #
 ################################################################################
-#   This file is part of libtmpl.                                              #
+#   This file is part of Mathematics-and-Physics.                              #
 #                                                                              #
-#   libtmpl is free software: you can redistribute it and/or modify it         #
-#   under the terms of the GNU General Public License as published by          #
-#   the Free Software Foundation, either version 3 of the License, or          #
+#   Mathematics-and-Physics is free software: you can redistribute it and/or   #
+#   modify it under the terms of the GNU General Public License as published   #
+#   by the Free Software Foundation, either version 3 of the License, or       #
 #   (at your option) any later version.                                        #
 #                                                                              #
-#   libtmpl is distributed in the hope that it will be useful,                 #
+#   Mathematics-and-Physics is distributed in the hope that it will be useful, #
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of             #
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
 #   GNU General Public License for more details.                               #
 #                                                                              #
 #   You should have received a copy of the GNU General Public License          #
-#   along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.          #
+#   along with Mathematics-and-Physics.  If not, see                           #
+#   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Test a conjecture about Khovanov homology and the Jones' polynomial.   #
+#       Test a conjecture about Khovanov homology and the Jones polynomial.    #
 #       The idea is that Khovanov homology can distinguish a Torus knot from   #
-#       a non-torus knot. First, see if this is true of the Jones' polynomial. #
+#       a non-torus knot. First, see if this is true of the Jones polynomial.  #
 #       If we find a match, compute (currently by hand or lookup table) the    #
 #       Khovanov homologies of the matching pair to see if they're the same.   #
 #                                                                              #
 #       DO NOT USE THIS. The second rendition of this code is significantly    #
-#       faster: jones_polynomial_conjecture_snappy_2_9_002.sage.               #
+#       faster: old_jones_polynomial_conjecture_snappy_2_9_002.sage.           #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
 #   Date:       June 12, 2021.                                                 #
@@ -40,7 +41,8 @@ import numpy
 
 # A torus knot is of the form T(p,q) where p and q are coprime. We'll loop over
 # the lattice [Torus_Start, Torus_End]^2 and check these Jones' polynomials.
-Torus_Start = 2
+#   Note: If you don't start at a negative value, you may miss mirrors.
+Torus_Start = -11
 Torus_End = 11
 
 # Threshold value for n*m for the Torus knot T(n,m). If n*m is large, the
@@ -54,7 +56,7 @@ threshold = 25
 # The syntax for manipulating strings in Sage comes from Python, which is
 # borrowed from the syntax used in C. We use %d to indicate a placeholder for
 # and integer, and then pass an integer to that placeholder via % n, where n is
-# and actual integer. We surround the string with quotation marks.
+# an actual integer. We surround the string with quotation marks.
 
 # These are all of the alternating Hoste-Thistlethwaite knots available:
 #       The Rolfsen table contains these, so skipping.
@@ -130,21 +132,22 @@ for n in range(Torus_Start, Torus_End):
     # The knot T(n,m) and T(m,n) are the same. The link T(m,m) is a collection
     # of m trivial knots. To avoid these we may start the second loop at
     # m = n+1.
-    for m in range (n+1, Torus_End):
+    for m in range(abs(n)+1, Torus_End):
 
         # Similar to the outer loop, if m is -1, 0, or 1, skip.
         if ((m == -1) or (m == 1) or (m == 0)):
             continue
 
-        # If m*n is large, the computation can take a very very long time.
-        if (n*m > threshold):
+        # If |m*n| is large, the computation can take a very very long time.
+        if (abs(n*m) > threshold):
             break
 
         # We only have a new torus knot if GCD(n,m) = 1. Check this.
         if (numpy.gcd(n, m) == 1):
 
             # Print an update.
-            print("Current: (%d, %d)  Total: %d" % (n, m, Torus_End))
+            #   Not needed, there aren't many knots to check.
+            #   print("Current: (%d, %d)  Total: %d" % (n, m, Torus_End))
 
             # Increment our counter that checks if is_isometric_to works.
             #       This doesn't work. Commenting out this line.
