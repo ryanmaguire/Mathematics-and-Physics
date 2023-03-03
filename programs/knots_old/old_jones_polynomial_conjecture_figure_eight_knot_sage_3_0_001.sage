@@ -1,24 +1,27 @@
 """
 ################################################################################
-#                                  LICENSE                                     #
+#                                   LICENSE                                    #
 ################################################################################
-#   This file is part of libtmpl.                                              #
+#   This file is part of Mathematics-and-Physics.                              #
 #                                                                              #
-#   libtmpl is free software: you can redistribute it and/or modify it         #
-#   under the terms of the GNU General Public License as published by          #
-#   the Free Software Foundation, either version 3 of the License, or          #
+#   Mathematics-and-Physics is free software: you can redistribute it and/or   #
+#   modify it under the terms of the GNU General Public License as published   #
+#   by the Free Software Foundation, either version 3 of the License, or       #
 #   (at your option) any later version.                                        #
 #                                                                              #
-#   libtmpl is distributed in the hope that it will be useful,                 #
+#   Mathematics-and-Physics is distributed in the hope that it will be useful, #
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of             #
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
 #   GNU General Public License for more details.                               #
 #                                                                              #
 #   You should have received a copy of the GNU General Public License          #
-#   along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.          #
+#   along with Mathematics-and-Physics.  If not, see                           #
+#   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Compare Jones' polynomial of the figure eight to other knots.          #
+#       Compare Jones polynomial of the figure eight to other knots.           #
+#                                                                              #
+#       Corrected for use with snappy 3.0 and later.                           #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
 #   Date:       February 14, 2021.                                             #
@@ -28,7 +31,7 @@
 # The SnapPy module will be used for most of the computations with knots.
 import snappy
 
-# Generate the ring of Laurent polynomials in variable over Q (rationals).
+# Generate the ring of Laurent polynomials in variable q over Q (rationals).
 R.<q> = LaurentPolynomialRing(QQ)
 
 # Get the figure 8 knot's Jones polynomial.
@@ -43,8 +46,6 @@ for n in range(1, 368):
 
     if (f == figure_8_poly):
         print("\tMatch: %s" % knot_string)
-    else:
-        pass
 
 # And these are the non-alternating ones.
 print("\nProcessing Hoste-Thistlethwaite Non-Alternating Table:")
@@ -55,8 +56,6 @@ for n in range(1, 186):
 
     if (f == figure_8_poly):
         print("\tMatch: %s" % knot_string)
-    else:
-        pass
 
 # SnapPy has the Rolfsen table for many knots, the highest being 11 crossings.
 # Loop between 3 (Trefoil) and 11.
@@ -78,8 +77,6 @@ for k in range(3, 12):
 
             if (f == figure_8_poly):
                 print("\tMatch: %s" % knot_string)
-            else:
-                pass
 
             # Increment m.
             m += 1
