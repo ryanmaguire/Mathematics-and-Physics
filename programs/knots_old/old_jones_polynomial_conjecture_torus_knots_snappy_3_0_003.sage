@@ -1,24 +1,25 @@
 """
 ################################################################################
-#                                  LICENSE                                     #
+#                                   LICENSE                                    #
 ################################################################################
-#   This file is part of libtmpl.                                              #
+#   This file is part of Mathematics-and-Physics.                              #
 #                                                                              #
-#   libtmpl is free software: you can redistribute it and/or modify it         #
-#   under the terms of the GNU General Public License as published by          #
-#   the Free Software Foundation, either version 3 of the License, or          #
+#   Mathematics-and-Physics is free software: you can redistribute it and/or   #
+#   modify it under the terms of the GNU General Public License as published   #
+#   by the Free Software Foundation, either version 3 of the License, or       #
 #   (at your option) any later version.                                        #
 #                                                                              #
-#   libtmpl is distributed in the hope that it will be useful,                 #
+#   Mathematics-and-Physics is distributed in the hope that it will be useful, #
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of             #
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
 #   GNU General Public License for more details.                               #
 #                                                                              #
 #   You should have received a copy of the GNU General Public License          #
-#   along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.          #
+#   along with Mathematics-and-Physics.  If not, see                           #
+#   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Test a conjecture about Khovanov homology and the Jones' polynomial.   #
+#       Test a conjecture about Khovanov homology and the Jones polynomial.    #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
 #   Date:       June 12, 2021.                                                 #
@@ -46,7 +47,7 @@ threshold = 50
 # Generate the ring of Laurent polynomials in variable q over Q (rationals).
 R.<q> = LaurentPolynomialRing(QQ)
 
-# Create two empty lists for storing the knots and their Jones' polynomials.
+# Create two empty lists for storing the knots and their Jones polynomials.
 KnotList = []
 MirrorList = []
 
@@ -56,7 +57,7 @@ TorusStringList = []
 # Open the file containing the PD data.
 fp = open("pd_code.txt")
 
-# Loop over and compute the Jones' Polynomial of torus knots.
+# Loop over and compute the Jones Polynomial of torus knots.
 for m in range(torus_start, torus_end):
 
     # There are no torus knots with m or n equal to 0. The torus knots with
@@ -83,7 +84,7 @@ for m in range(torus_start, torus_end):
         if (numpy.gcd(m, n) != 1):
             continue
 
-        # Torus knots have a closed form Jones' polynomial. Use this.
+        # Torus knots have a closed form Jones polynomial. Use this.
         f = q**((m-1)*(n-1)//2)*(1-q**(m+1)-q**(n+1)+q**(m+n)) / (1-q**2)
         g = q**((1-m)*(n-1)//2)*(1-q**(-m-1)-q**(-n-1)+q**(-m-n)) / (1-q**(-2))
 
@@ -103,5 +104,5 @@ for pd in fp:
         if KnotList[n] == f or MirrorList[n] == f:
             print("Match: %s" % TorusStringList[n],
                   "Crossing Number: %d" % len(x),
-                  "PD Code %s" % pd)
+                  "PD Code %s" % pd, end = "")
 
