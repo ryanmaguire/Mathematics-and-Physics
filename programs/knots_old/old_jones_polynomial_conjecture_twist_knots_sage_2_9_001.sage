@@ -1,27 +1,28 @@
 """
 ################################################################################
-#                                  LICENSE                                     #
+#                                   LICENSE                                    #
 ################################################################################
-#   This file is part of libtmpl.                                              #
+#   This file is part of Mathematics-and-Physics.                              #
 #                                                                              #
-#   libtmpl is free software: you can redistribute it and/or modify it         #
-#   under the terms of the GNU General Public License as published by          #
-#   the Free Software Foundation, either version 3 of the License, or          #
+#   Mathematics-and-Physics is free software: you can redistribute it and/or   #
+#   modify it under the terms of the GNU General Public License as published   #
+#   by the Free Software Foundation, either version 3 of the License, or       #
 #   (at your option) any later version.                                        #
 #                                                                              #
-#   libtmpl is distributed in the hope that it will be useful,                 #
+#   Mathematics-and-Physics is distributed in the hope that it will be useful, #
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of             #
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
 #   GNU General Public License for more details.                               #
 #                                                                              #
 #   You should have received a copy of the GNU General Public License          #
-#   along with libtmpl.  If not, see <https://www.gnu.org/licenses/>.          #
+#   along with Mathematics-and-Physics.  If not, see                           #
+#   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
 #       Compare Jones polynomial of twist knots with other knots.              #
 #                                                                              #
 #       This code works with SnapPy versions less than 3.0. Snappy 3.0 and     #
-#       higher changed how the Jones' polynomial function works.               #
+#       higher changed how the Jones polynomial function works.                #
 ################################################################################
 #   Author: Ryan Maguire                                                       #
 #   Date:   June 12, 2021.                                                     #
@@ -40,12 +41,12 @@ twist_count = twist_end - twist_end + 1
 # Generate the ring of Laurent polynomials in variable q over Q (rationals).
 R.<q> = LaurentPolynomialRing(QQ)
 
-# Create two empty lists for storing the knots and their Jones' polynomials.
+# Create two empty lists for storing the knots and their Jones polynomials.
 KnotList = []
 MirrorList = []
 TwistInd = []
 
-# Loop over and compute the Jones' Polynomial of twist knots.
+# Loop over and compute the Jones Polynomial of twist knots.
 for m in range(twist_start, twist_end):
 
     # The Jones polynomial for twist knots has a known formula that only
@@ -87,8 +88,6 @@ for k in range(3, 12):
 
                     print("\t%s matches a torus knot mirror: %s"
                           % (knot_string, TorusStringList[m]))
-                else:
-                    pass
 
             # Increment n.
             n += 1
