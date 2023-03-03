@@ -19,7 +19,7 @@
 #   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Compare Alexander' polynomial of the figure eight to other knots.      #
+#       Compare Alexander polynomial of the figure eight to other knots.       #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
 #   Date:       February 14, 2021.                                             #
