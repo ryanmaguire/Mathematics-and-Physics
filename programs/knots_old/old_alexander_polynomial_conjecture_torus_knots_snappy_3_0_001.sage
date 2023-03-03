@@ -105,4 +105,4 @@ for pd in fp:
             if L.knot_floer_homology() == KnotList[n].knot_floer_homology():
                 print("Match: %s" % TorusStringList[n],
                       "Crossing Number: %d" % len(x),
-                      "PD Code %s" % pd)
+                      "PD Code %s" % pd, end = "")
