@@ -19,9 +19,6 @@
 %------------------------------------------------------------------------------%
 \documentclass{article}
 
-\usepackage{geometry}
-\geometry{margin=0.75in}
-
 % Needed for mathbb font style.
 \usepackage{amssymb}
 
@@ -53,157 +50,137 @@
 \setlength{\parskip}{0em}
 
 % Title page information.
-\title{New Data for a Conjecture on Legendrian and Transversally Simple Knots}
+\title{Conjectures on the Khovanov Homology of Legendrian and Transversely Simple Knots}
 \author{Vladimir Chernov\hspace{2em}Ryan Maguire}
-\date{February 2023}
+\date{March 2023}
 
 \begin{document}
     \maketitle
     \tableofcontents
     \begin{abstract}
         \noindent
-        In \cite{ChernovMaguireLegendrianConjecture} we conjectured that
-        Khovanov homology is able to distinguish legendrian and transversally
-        simple knots. Numerical data was provided using twist and torus knots,
-        comparing the Khovanov homologies of these families with all knots up
-        to 17 crossings. This experiment has been expanded to 19 crossings.
+        A theorem of Kronheimer and Mrowka states that Khovanov homology is
+        able to detect the unknot \cite{kronheimermrowka2010}.
+        That is, if a knot has the Khovanov homology of the unknot, then it is
+        equivalent to it. Similar results hold for the trefoils
+        \cite{BaldwinSivekKhovanovTrefoils} and the figure-eight knot
+        \cite{BaldwinDowlinKhovanovFigureEight}. These are the
+        simplest of the Legendrian simple knots. It is conjectured that
+        Khovanov homology is able to distinguish Legendrian and Transversely simple
+        knots. Using the torus and twist knots, numerical evidence is provided
+        for all knots up to 19 crossings.
         \par\hfill\par
         \textit{AMS Classification: Primary 57K18, Secondary 53D12, 53D10}
     \end{abstract}
-    \section{The Conjecture and Computations}
-        In \cite{ChernovMaguireLegendrianConjecture} we proposed the following
-        conjecture.
-        \begin{conjecture}
-            If a link type $L$ is Legendrian simple or transversally simple,
-            then the Khovanov homology of $L$ distinguishes it. That is,
-            if $\tilde{L}$ is another link with the same Khovanov homology,
-            then $\tilde{L}$ is equivalent to $L$.
-        \end{conjecture}
-        Numerical evidence was tallied using the torus and twist knots to gather
-        numerical evidence for this claim. The torus knots are known to be
-        Legendrian simple, and Etnyre \textit{et al.} classifies when twist
-        knots are transversally simple
-        \cite{EtnyreEtAlLegendrianAndTransverseTwistKnots},
-        giving us two infinite families to use.
-        Knots having the same Jones polynomial as a torus or twist knot were
-        saved for later examination since the Jones polynomial is
-        computationally more efficient than Khovanov homology. For torus knots
-        we were left with four matching knots
-        (See Tab.~\ref{table:matching_torus_knots}). These are the same four
-        knots that appear in our previous paper and nothing new occurs with
-        18 and 19 crossings. For twist knots we have found new knots that have
-        the same Jones polynomial (See Tab.~\ref{table:matching_twist_knots}).
+    \section{Legendrian and Transverse Knots and Links}
+        A knot is a smooth embedding of the circle $\mathbb{S}^{1}$ into
+        $\mathbb{R}^{3}$. A link is a smooth embedding of $N\in\mathbb{N}$
+        disjoint circles in $\mathbb{R}^{3}$. We may impose
+        extra structure by considering the standard \textit{contact structure}
+        of $\mathbb{R}^{3}$. This is an assignment
+        of a plane to every point in $\mathbb{R}^{3}$ such that there is no
+        surface $M\subset\mathbb{R}^{3}$ where for every $p\in{M}$ the tangent
+        plane $T_{p}M$ is given by the plane of the contact structure. In
+        $\mathbb{R}^{3}$ this is described by the one-form
+        $\textrm{d}z-y\,\textrm{d}x$, the plane at $(x,y,z)$ being spanned by
+        the vectors $\partial_{x}+y\partial_{z}$ and $\partial_{y}$. The
+        hyperplane distribution is shown in Fig.~\ref{fig:darboux_form_001}.
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{../images/darboux_form_001.pdf}
+            }
+            \caption{Hyperplane Distribution for $\textrm{d}z-y\,\textrm{d}x$}
+            \label{fig:darboux_form_001}
+        \end{figure}
+        While there are no everywhere tangent surfaces, it is possible for a
+        curve to be everywhere tangent to this distribution of planes.
+        A \textit{Legendrian link} is a link that is everywhere tangent to
+        the contact structure. A gentle introduction to the subject can be found
+        in \cite{JoshuaMSabloffWhatIsLegendrianKnot}.
         \par\hfill\par
-        Computations for the Jones polynomial were performed using the
-        \texttt{regina} library \cite{regina}. The Jones polynomial of a knot
-        $K$ has an explicit formula given as follows:
+        Two Legendrian links are considered to be Legendrian equivalent if
+        there is an isotopy $H:L\times[0,1]\rightarrow\mathbb{R}^{3}$ between
+        them, $L=\sqcup_{k=0}^{N-1}\mathbb{S}^{1}$, such that for all
+        $t\in[0,1]$ the link $H_{t}$ is Legendrian. It is possible for two links
+        to be topologically equivalent but not Legendrian equivalent. In the other
+        direction, any link can be made Legendrian by an appropriate isotopy
+        (See the introduction of \cite{VeraVertessiTransNonSimpleKnots}). The
+        two classical invariants of Legendrian links are the Thurston-Bennequin
+        and rotation numbers.
+        A link type is said to be \textit{Legendrian simple} if
+        any two Legendrian embeddings of it with the same Thurston-Bennequin
+        and rotation numbers are Legendrian equivalent. That is, the classical
+        invariants uniquely classify all Legendrian representations of the knot.
+        Certain knot types are known to be Legendrian simple such as the unknot
+        \cite{EliashbergFraserClassificationTopTrivialLegKnots}, torus knots,
+        and the figure eight knot \cite{EtnyreHondaContactTopologyI}.
+        Not every knot is Legendrian simple, the $m_{3}$ twist knot (also
+        known as the $5_{2}$ knot) being an example discovered by Chekanov
+        \cite{ChekanovDifAlgOfLegLinks}. More examples can be found in the
+        Legendrian knot atlas \cite{LegendrianKnotAtlas}.
+        \par\hfill\par
+        Transverse links are links that are everywhere transverse to the
+        contact structure. That is, at every point $p$ on the link the velocity
+        vector and the contact hyperplane at $p$ span $\mathbb{R}^{3}$. Any Legendrian
+        link can be made transverse by a small perturbation in the direction
+        normal to the given plane in the contact structure.
+        Two transverse links are transversely equivalent if there is an
+        isotopy $H:L\times[0,1]\rightarrow\mathbb{R}^{3}$ such that $H_{t}$ is a
+        transverse link for all $t\in[0,1]$. The Bennequin number of a
+        transverse knot is defined by the \textit{algebraic crossing number}
+        $e(K)$ and the \textit{braid index} $n(K)$. It is:
         \begin{equation}
-            J(K)=\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
+            \beta(K)=e(K)-n(K)
         \end{equation}
-        where $N$ is the number of crossings in $K$, $w(n)$ is the Hamming
-        weight of $n$, and $c(n)$ is the number of cycles corresponding to
-        the $n^{\textrm{th}}$ resolution of the crossings of $K$. $w(n)$ is
-        bounded by $N$ and $c(n)$ is bounded by $2N$, meaning the degree of
-        $J(K)$ is bounded above by $3N$ and below by $-N$. We collect all
-        torus and twist knots having a Jones polynomial satisfying these bounds
-        for $N=19$ and then pre-compute the Jones polynomials using known
-        formulas (see \cite{ChernovMaguireLegendrianConjecture},
-        Eqns. 4 and 5). Through brute force calculations, we find that there
-        are four torus knots and eight twist knots that have the same Jones
-        polynomial as another knot, but in all cases the Khovanov polynomials
-        (and hence Khovanov homologies) differed. The polynomials are given
-        explicitly in the next section.
-        \begin{table}
-            \centering
-            \resizebox{\textwidth}{!}{%
-                \begin{tabular}{| c | c | c |}
-                    \hline
-                        Torus Knot&
-                        Non-Torus Knot&
-                        Jones Polynomial\\
-                    \hline
-                        $(2,\,5)$&
-                        $8,\,6,\,18,\,2,\,-12,\,-16,\,20,\,-10,\,4,\,14$&
-                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
-                    \hline
-                        $(2,\,7)$&
-                        $12,\,-20,\,-14,\,22,\,-16,\,24,\,-18,\,-6,\,-10,\,-2,\,-4,\,8$&
-                        $-q^{20}+q^{18}-q^{16}+q^{14}-q^{12}+q^{10}+q^{6}$\\
-                    \hline
-                        $(2,\,11)$&
-                        $14,\,-16,\,24,\,-18,\,26,\,-20,\,28,\,-22,\,-4,\,-8,\,-12,\,-2,\,6,\,10$&
-                        $-q^{32}+q^{30}-q^{28}+q^{26}-q^{24}+q^{22}-q^{20}+q^{18}-q^{16}+q^{14}+q^{10}$\\
-                    \hline
-                        $(2,\,5)$&
-                        $18,\,-28,\,-16,\,24,\,-32,\,-20,\,34,\,-6,\,30,\,-22,\,-12,\,26,\,8,\,-2,\,-4,\,14,\,-10$&
-                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
-                    \hline
-                \end{tabular}%
-            }
-            \caption{Knots whose Jones polynomial matches that of a Torus Knot}
-            \label{table:matching_torus_knots}
-        \end{table}
-        \begin{table}
-            \centering
-            \resizebox{\textwidth}{!}{%
-                \begin{tabular}{| c | c | c |}
-                    \hline
-                        Twist Knot&
-                        Non-Twist Knot&
-                        Jones Polynomial\\
-                    \hline
-                        $m_{2}$&
-                        $10,\,18,\,22,\,-14,\,4,\,-16,\,-20,\,-6,\,2,\,-12,\,8$&
-                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{3}$&
-                        $8,\,14,\,18,\,22,\,-12,\,-16,\,2,\,-10,\,20,\,4,\,6$&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{3}$&
-                        $14,\,12,\,-20,\,-22,\,-16,\,24,\,2,\,-18,\,-10,\,-4,\,-6,\,-8$&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{3}$&
-                        $16,\,-14,\,-20,\,2,\,-26,\,24,\,-6,\,8,\,-10,\,-22,\,-4,\,12,\,-18$&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{5}$&
-                        $4,\,16,\,-8,\,-14,\,18,\,20,\,-6,\,22,\,2,\,10,\,12$&
-                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{6}$&
-                        $6,\,10,\,12,\,-18,\,14,\,4,\,2,\,20,\,22,\,-8,\,16$&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{6}$&
-                        $12,\,10,\,26,\,-18,\,4,\,2,\,-20,\,-22,\,-24,\,-6,\,-14,\,-16,\,8$&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{6}$&
-                        $20,\,32,\,-18,\,-12,\,-28,\,-26,\,36,\,-6,\,24,\,34,\,-30,\,16,\,22,\,-10,\,-8,\,2,\,4,\,14$&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{7}$&
-                        $6,\,14,\,20,\,-12,\,-16,\,-18,\,2,\,-8,\,-10,\,22,\,4$&
-                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{8}$&
-                        $22,\,28,\,-18,\,-16,\,30,\,-4,\,20,\,-6,\,-8,\,-34,\,36,\,-26,\,-32,\,2,\,10,\,-24,\,14,\,-12$&
-                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{9}$&
-                        $20,\,30,\,32,\,-18,\,-12,\,-26,\,36,\,-8,\,24,\,34,\,-28,\,16,\,22,\,-10,\,2,\,4,\,6,\,14$&
-                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                \end{tabular}%
-            }
-            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
-            \label{table:matching_twist_knots}
-        \end{table}
-    \section{Numerical Results}
-        A note on notation. The above tables identify knots using their DT
-        codes. The \texttt{regina} library uses a clever trick to efficiently
+        It is not an invariant of topological knots, but is an invariant under
+        transverse equivalence. This is essentially the self-linking number of
+        the corresponding topological knot with respect to the natural framing
+        coming from the trivialization of the contact structure.
+        Similar to Legendrian simple, we define a knot
+        (or link) type to be transversely simply if all of it's transverse
+        representations are uniquely determined by their Bennequin number
+        (See \cite{BirmanWrinkleTransversallySimpleKnots}) and by whether its
+        velocity vectors point into the half space where the contact structure
+        is positive or not. A paper by Etynre, Ng, and Vertesi
+        \cite{EtnyreEtAlLegendrianAndTransverseTwistKnots}
+        classifies when twist knots are transversely simple. In
+        particular, infinitely many such knots are transversely simple giving
+        us a family of knots to test conjectures with. It is also true that
+        infinite families of non-Legendrian simple (and hence
+        non-transversally simple) knots exist,
+        see \cite{vfoldvari2019legnonsimple}.
+        \par\hfill\par
+        There are several common ways of representing topological knots, the
+        three used in our computations are extended Gauss code, planar diagram
+        code (PD code), and Dowker-Thistlewaite code (DT code). Given a knot
+        diagram with $N$ crossings, the (unsigned) Gauss code is a string with $2N$
+        characters (extended Gauss code is $3N$),
+        PD code is a string that is $4N$ long, and DT code is $N$
+        characters long. Each has its benefits. Extended Gauss code
+        can distinguish mirrors, DT code cannot. PD code is the easiest to
+        reconstruct the knot diagram, and DT code is the shortest. Because of
+        this we will present our examples in DT code. To obtain the DT code of
+        a knot diagram, place your finger on the knot and \textit{walk} along
+        the diagram, labelling the crossings. When you get back to your starting
+        point each crossing will have two numbers associated with it. It is
+        not difficult to see that each crossing will have exactly one odd number
+        and one even number. For each even number, if that number was associated
+        with an \textit{over} crossing (that is, your finger ran over the
+        crossing as you were labelling it), place a minus sign in front. Write
+        out the pairs of integers as $(1,a_{1})$, $(3,a_{2})$, $\dots$,
+        $(2n-1,a_{n})$. The DT code is the list $a_{1},a_{2},\dots,a_{n}$.
+        See \cite{KatlasDTCode} for several examples.
+        \par\hfill\par
+        It is possible to go from DT code to unsigned
+        Gauss code (i.e. the usual Gauss code, and not the extended Gauss code)
+        and back. For certain computations, like the Alexander polynomial which
+        is mirror insensitive, DT code is easiest since it is the shortest.
+        For things like the Jones polynomial and Khovanov homology, invariants
+        that distinguish mirrors, extended Gauss code is a must.
+        \par\hfill\par
+        A note on notation. The tables on the following pages identify knots using their DT
+        codes. The \texttt{regina} library \cite{regina} uses a clever trick to efficiently
         express a knots DT code for all knots of up to 26 crossings, and we'll
         adopt this notation for the remainder of the paper. The DT code of an
         $n$ crossing knot is a string of length $n$ of signed even integers up
@@ -222,22 +199,231 @@
         The knot $10_{132}$, which is the 10 crossing knot in
         Tab.~\ref{table:matching_twist_knots} with the same Jones polynomial
         as $T(2,\,5)$, becomes:
-        \begin{equation}
+        \begin{align}
             8,\,6,\,18,\,2,\,-12,\,-16,\,20,\,-10,\,4,\,14
-            \Rightarrow
-            4,\,3,\,9,\,1,\,-6,\,-8,\,10,\,-5,\,2,\,7
-            \Rightarrow
+            &\Rightarrow
+            4,\,3,\,9,\,1,\,-6,\,-8,\,10,\,-5,\,2,\,7\\
+            &\Rightarrow
             \texttt{dciaFHjEbg}
+        \end{align}
+    \section{Khovanov Homology}
+        The Khovanov homology of a link is a powerful, if computationally
+        expensive%
+        \footnote{%
+            The na\"{i}ve algorithm is exponential in the number of
+            crossings. Improvements by Bar-Natan \cite{BarNatanFastKhoHo}
+            have sped up computations but no polynomial-time algorithm is
+            known at the time of this writing.
+        },
+        invariant first introduced by Mikhail Khovanov
+        \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
+        for an excellent introduction). It is closely related to the Jones
+        polynomial, but able to distinguish many more knots and links. The
+        homology groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum
+        of homogeneous components $KH_{\ell}^{r}(L)$ and the
+        \textit{Khovanov Polynomial} (See \cite{KatlasKhoHo}) is given by:
+        \begin{equation}
+            Kh(L)(q,t)=
+            \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
         \end{equation}
-        In the above tables we have found four non-torus knots with the same
+        The Jones polynomial of $L$ is recovered via:
+        \begin{equation}
+            J(L)(q)=Kh(L)(q,-1)
+        \end{equation}
+        Khovanov homology is not a perfect invariant
+        \cite{Watson2007KnotsWI}. That is, there are
+        distinct knots with the same Khovanov homology, but it is a powerful
+        invariant and is capable of detecting certain knot types.
+        \begin{theorem}[Kronheimer and Mrowka, 2001]
+            If a knot $K$ has the same Khovanov homology as the unknot, then $K$
+            is equivalent to the unknot.
+        \end{theorem}
+        The unknotting problem asks one to determine if a given knot diagram is
+        equivalent to the unknot. Khovanov homology is a powerful enough tool
+        to accomplish this task. The Khovanov polynomial is a generalization of
+        the Jones polynomial and it has been conjectured that if a
+        knot has the same Jones polynomial as the unknot, then that knot is
+        equivalent to the unknot. At the time of this writing it has not been
+        proven, but there is evidence for and against the claim.
+        Thistlewaite found links with the same Jones polynomial as the unlink
+        \cite{Thistlethwaite2001LINKSWT}, and there is a 3-crossing virtual
+        knot that has the same Jones polynomial as the unknot. For the claim,
+        all knots of up to 24 crossings are either the unknot, or have a
+        Jones polynomial different from the unknot
+        \cite{VerificationUnknotJonesConjUpTo24}.
+        \begin{theorem}[Baldwin and Sivek, 2022]
+            If a knot $K$ has the same Khovanov homology as either of the
+            trefoils, then $K$ is equivalent to one of them.
+        \end{theorem}
+        \begin{theorem}[Baldwin, Dowlin, Levine, Lidman, and Sazdanovic, 2021]
+            If a knot $K$ has the same Khovanov homology as the figure-eight
+            knot, then $K$ is equivalent to it.
+        \end{theorem}
+        See \cite{BaldwinSivekKhovanovTrefoils} and
+        \cite{BaldwinDowlinKhovanovFigureEight}, respectively.
+    \section{Conjectures on Khovanov Homology}
+        Khovanov homology is capable of detecting the
+        unknot, trefoils, and figure-eight knot. The Khovanov homology with
+        coefficients in $\mathbb{Z}/2\mathbb{Z}$ is also capable of detecting
+        the cinquefoil knot \cite{BaldwinYingSivekCinquefoilKhovanov},
+        which is the $T(5,2)$ torus knot. The Jones
+        polynomial, on the other hand, is not capable of detecting the
+        $T(5,2)$ torus knot since the $10_{132}$ knot yields the same
+        polynomial. These are the easiest of the Legendrian simple knots
+        leading us to the following.
+        \begin{conjecture}
+            If a link type $L$ is Legendrian simple, then the Khovanov homology
+            of $L$ distinguish it. That is, if $\tilde{L}$
+            is another link with the same Khovanov homology, then $\tilde{L}$ is
+            equivalent to $L$.
+        \end{conjecture}
+        Numerical evidence has been tallied for torus knots
+        against all knots of up to 19 crossings. There are many
+        torus knots that have the same Jones polynomial as a non-torus knot
+        ($T(2,5)$ matches 10 and 17 crossing knots, $T(2,7)$
+        matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
+        so we cannot generalize the Jones unknot conjecture. Nevertheless, in
+        all cases the Khovanov homologies were different
+        (see Numerical Results section).
+        \par\hfill\par
+        The computations were done as follows. There are libraries in Python,
+        Sage, and C++ for working with knot polynomials. In particular, we used
+        Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
+        \cite{sage}, and our own ever-growing C library.
+        \par\hfill\par
+        We first gather the torus knots that could potentially have the same
+        Jones polynomial as some other knot based on the bounds of the degree.
+        The Jones polynomials of torus knots were computed using the formula
+        \cite{jonesfordummyvjones}:
+        \begin{equation}
+            \label{eqn:jones_poly_torus}%
+            J(T(m,n))(q)=q^{(m-1)(n-1)/2}
+                \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
+        \end{equation}
+        The Kauffman bracket, of which the Jones polynomial is a simple
+        normalization \cite{barnatan2002khovanov},
+        of a knot $K$ with $N$ crossings has the following formula:
+        \begin{equation}
+            \langle{K}\rangle=\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
+        \end{equation}
+        where $w(n)$ is the Hamming weight of $n$, the number of 1's in the
+        binary representation, and $c(n)$ is the number of disjoint cycles
+        that result in the complete smoothing of $K$ corresponding to
+        $0\leq{n}\leq{2}^{N}-1$. With this the degree of the bracket polynomial
+        is bounded by $3n$ ($w(n)$ is bounded by $n$, and $c(n)$ is bounded
+        by $2n$).
+        \par\hfill\par
+        Since we are looking at knots up to $19$ crossings, we collect the
+        co-prime pairs $(m,\,n)$ with $1<m<n$ such that the degree
+        is less than $3\cdot{19}+1=58$. Since the Jones polynomial of a mirror
+        can be computed by substituting $q\mapsto{q}^{-1}$, we need not look at
+        negative values. The Khovanov polynomial makes a similar change,
+        $(q,\,t)\mapsto(q^{-1},\,t^{-1})$.
+        \par\hfill\par
+        Using any of the aforementioned libraries, the Jones polynomial of all
+        knots up to 19 crossings were computed and compared against this table
+        of torus knot Jones polynomials (Eqn.~\ref{eqn:jones_poly_torus}).
+        If a match was found the regina library was used to determine if the
+        knots were actually identical. That is, if the knot whose Jones
+        polynomial was being compared against the torus knots was indeed a
+        torus knot itself. If the knots were distinct, this knot was saved in a
+        text file for later examination. At the end of the computation 4
+        non-torus knots had the same Jones polynomial as a torus knot
+        (See Tab.~\ref{table:matching_torus_knots}).
+        Since the Khovanov polynomial contains the Jones polynomial in it
+        (recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
+        the same Khovanov homology as a torus knot were these 4.
+        \par\hfill\par
+        Using the Java library JavaKh\footnote{%
+            Thanks must be paid to Nikolay Pultsin who made edits to
+            JavaKh-v2 so that it may run on a GNU/Linux machine using
+            OpenJDK 17.
+        }
+        we found that these four knots with the same Jones polynomials as some
+        torus knot all had different Khovanov homologies. Thus, we have the
+        following claim:
+        \begin{theorem}
+            If a knot $K$ has less than or equal to 19 crossings and has the
+            Khovanov homology of a torus knot $T$,
+            then $K$ is equivalent to $T$.
+        \end{theorem}
+        A similar search through the twist knots yielded more results.
+        The Jones polynomials of the twist knots are known, with the formula:
+        \begin{equation}
+            J(m_{n})(q)=
+            \begin{cases}
+                (1+q^{-2}+q^{-n}+q^{-n-3})/(1+q),&n\textrm{ odd}\\
+                (1+q-q^{3-n}+q^{-n})/(1+q),&n\textrm{ even}
+            \end{cases}
+        \end{equation}
+        A search through all knots up to 19 crossings against twist knots
+        provided many matches for the Jones polynomial
+        (See Tab.~\ref{table:matching_twist_knots}), but
+        none for Khovanov homology. Infinitely many of the twists knots are
+        transversally simple, making them a good candidate to test the following
+        conjecture on.
+        \begin{conjecture}
+            If a link type $L$ is transversally simple, then the Khovanov
+            homology of $L$ distinguish it. That is, if $\tilde{L}$
+            is another link with the same Khovanov homology, then $\tilde{L}$ is
+            equivalent to $L$.
+        \end{conjecture}
+        A similar search for Knot Floer Homology (KFH), a homology theory
+        first introduced by Peter Ozsv\'{a}th and Zolt\'{a}n Szab\'{o}
+        \cite{ozsvathszabo2004}, using the Alexander polynomial
+        was performed, but a bug was found that caused knots with identical
+        Alexander polynomials to give false negatives. This has been corrected,
+        and when performing a new search there are several distinct knots
+        with the same Knot Floer Homology as a Legendrian simple knot. Steven
+        Sivek pointed
+        out that the pretzel knots $P(-3,3,2n+1)$ all have the same KFH, meaning
+        the $6_{1}$ twist knot matches the KFH of the $9_{46}$ knot in the
+        Rolfsen table. This is what first hinted at a bug in our KFH code.
+        Matt Hedden also informed us that the $T(4,3)$ knot and the
+        $(2,3)$ cable of the trefoil also have matching KFH.
+    \section{Numerical Results: Torus Knots}
+        \begin{table}[H]
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                        Torus Knot&
+                        Non-Torus Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $T(2,\,5)$&
+                        \texttt{dciaFHjEbg}&
+                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
+                    \hline
+                        $T(2,\,7)$&
+                        \texttt{fJGkHlICEABd}&
+                        $-q^{20}+q^{18}-q^{16}+q^{14}-q^{12}+q^{10}+q^{6}$\\
+                    \hline
+                        $T(2,\,11)$&
+                        \texttt{gHlImJnKBDFAce}&
+                        $-q^{32}+q^{30}-q^{28}+q^{26}-q^{24}+q^{22}-q^{20}+q^{18}-q^{16}+q^{14}+q^{10}$\\
+                    \hline
+                        $T(2,\,5)$&
+                        \texttt{iNHlPJqCoKFmdABgE}&
+                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Torus Knot}
+            \label{table:matching_torus_knots}
+        \end{table}
+        In Tab.~\ref{table:matching_torus_knots}
+        we have found four non-torus knots with the same
         Jones polynomial as some torus knot. In all four cases the Khovanov
         polynomials differ. The tables for these polynomials are given below.
         The coefficient of $q^{\ell}t^{r}$ is given by the corresponding entry.
+        Empty equates to zero.
         \par\hfill\par
         The cinquefoil $T(2,\,5)$ has the same Jones polynomial as two
         non-torus knots. As shown below in
         Tabs.~\ref{table:t_2_5_kho}-\ref{table:iNHlPJqCoKFmdABgE_kho}, the
-        Khovanov polynomials differ.
+        Khovanov polynomials differ
+        (This had already been known, see \cite{KatlasKhoHo}).
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c |}
@@ -453,12 +639,73 @@
             \caption{Khovanov Polynomial for \texttt{gHlImJnKBDFAce}}
             \label{table:t_gHlImJnKBDFAce_kho}
         \end{table}
-        \par\hfill\par
-        Unlike torus knots, with twist knots we found a few new matches after
-        expanding our search to 19 crossings
+    \section{Numerical Results: Twist Knots}
+        \begin{table}[H]
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                        Twist Knot&
+                        Non-Twist Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $m_{2}$&
+                        \texttt{eikGbHJCaFd}&
+                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{dgikFHaEjbc}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{gfJKHlaIEBCD}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{hGJaMlCdEKBfI}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{5}$&
+                        \texttt{bhDGijCkaef}&
+                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{cefIgbajkDh}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{femIbaJKLCGHd}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{jpIFNMrClqOhkEDabg}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{7}$&
+                        \texttt{cgjFHIaDEkb}&
+                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{8}$&
+                        \texttt{knIHoBjCDQrMPaeLgF}&
+                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{9}$&
+                        jopIFMrDlqNhkEabcg&
+                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
+            \label{table:matching_twist_knots}
+        \end{table}
+        The twist knots have a few more matching non-twists knots for the
+        Jones polynomial
         (Tab.~\ref{table:matching_twist_knots}). The first match is the
         figure-eight knot, $m_{2}$, which has the same Jones polynomial as
-        K11n19 from the Hoste-Thistlewaite table. The Khovanov polynomials are
+        K11n19 from the Hoste-Thistlewaite table.
+        Again, this had already been known
+        (See \cite{KatlasFigureEight} and \cite{KatlasK11n19}).
+        The Khovanov polynomials are
         given in Tabs.~\ref{table:m_2_kho}-\ref{table:eikGbHJCaFd_kho}.
         \begin{table}[H]
             \centering
@@ -681,7 +928,9 @@
             \caption{Khovanov Polynomial for \texttt{bhDGijCkaef}}
             \label{table:bhDGijCkaef_kho}
         \end{table}
-        Our first new result comes with $m_{6}$. An 18 crossing knot was found
+        Expanding our experiment from 17 crossings to 19 added a few new
+        results, the first of which comes with
+        $m_{6}$. An 18 crossing knot was found
         that has the same Jones polynomial, but the Khovanov polynomials
         differ. This is shown below
         (Tabs.~\ref{table:m_6_kho} and \ref{table:jpIFNMrClqOhkEDabg_kho}.).
@@ -1025,28 +1274,19 @@
             \caption{Khovanov Polynomial for \texttt{jopIFMrDlqNhkEabcg}}
             \label{table:jopIFMrDlqNhkEabcg_kho}
         \end{table}
-    \section{Remarks}
-        Given a knot $K$ and a torus or twist knot $T$, the Jones polynomials
-        of $K$, $T$, and the \textit{mirrors} of $K$ and $T$ were computed and
-        compared. This is obtained quickly by
-        substituting $q\mapsto{q}^{-1}$. The Khovanov polynomial has a similar
-        reflection formula, $(q,\,t)\mapsto(q^{-1},\,t^{-1})$. DT code is
-        mirror agnostic, and the tables in the previous section give the
-        Khovanov polynomials for the matching knot (whether that be the knot
-        given by the corresponding DT code or its mirror).
-        \par\hfill\par
+        We may now make the following claim.
+        \begin{theorem}
+            If a knot $K$ has less than or equal to 19 crossings and has the
+            Khovanov homology of a twist knot $T$,
+            then $K$ is equivalent to $T$.
+        \end{theorem}
         An interesting thing to note is that not all twist knots are
         transversally, or Legendrian, simple, yet there are no knots up to
-        19 crossings with the same Khovanov polynomial as a twist knot. This
-        leads to the following question.
+        19 crossings with the same Khovanov polynomial as a twist knot. We
+        ask the following.
         \begin{question}
             Does Khovanov homology distinguish all twist knots?
         \end{question}
-    \section{Future Work}
-        The Legendrian knot atlas \cite{LegendrianKnotAtlas} has a list of
-        Legendrian knots that are neither torus nor twist knots. We will be
-        expanding our search to include these knots, comparing them against
-        all knots up to 19 crossings as well.
     \section{Acknowledgements}
         We thank Shadi Ali Ahmad, Ilya Kryukov and Jacob Swenberg for their
         observation and remarks in the early stage of this work. The numerical
