@@ -1,0 +1,1011 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{imakeidx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=Cerulean,
+    citecolor=SkyBlue
+}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Planar Topology: Lecture 1 - Point-Set Topology}
+\author{Ryan Maguire}
+\date{Spring 2023}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\makeindex[intoc]
+\begin{document}
+    \maketitle
+    \tableofcontents
+    \listoffigures
+    \section{Basic Definitions}
+        Topological spaces form the study of \textit{generalized geometry}
+        where things may be stretched and squeezed and still thought of as the
+        \textit{same} object. The definition comes from the study of metric
+        spaces.
+        \begin{definition}[Metric Spaces]
+            A metric space is an ordered pair $(X,\,d)$ where $X$ is a set and
+            $d:X\times{X}\rightarrow\mathbb{R}$ is a function such that for all
+            $x,\,y,\,z\in{X}$:
+            \begin{align}
+                d(x,\,y)&\geq{0}\tag{Positivity}\\
+                d(x,\,x)&=0\tag{Definiteness}\\
+                d(x,\,y)&=d(y,\,x)\tag{Symmetry}\\
+                d(x,\,z)&\leq{d}(x,\,y)+d(y,\,z)\tag{Triangle Inequality}
+            \end{align}
+            The function $d$ is called a \textit{metric} on $X$. The elements of
+            $X$ are usually referred to as \textit{points}.%
+            \index{Metric Space}
+        \end{definition}
+        \begin{example}
+            The quintessential example is the standard metric on the real line.
+            Equip $\mathbb{R}$ with the function
+            $d:\mathbb{R}\times\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+            \begin{equation}
+                d(x,\,y)=|x-y|
+            \end{equation}
+            That is, $d$ is defined by the absolute value function. From real
+            analysis we know the absolute value function satisfies the triangle
+            inequality (the proof is not hard, either). Positive-definiteness
+            and symmetry are almost immediate from the definition as well.
+            This is the \textit{distance} between two real numbers on the
+            real line.
+        \end{example}
+        \begin{example}
+            The Pythagoras theorem gives us a \textit{distance} formula on
+            $\mathbb{R}^{N}$. Given two points
+            $\mathbf{x},\,\mathbf{y}\in\mathbb{R}^{N}$ we may define:
+            \begin{equation}
+                d(\mathbf{x},\mathbf{y})
+                =\sqrt{\sum_{n=0}^{N-1}(x_{n}-y_{n})^{2}}
+            \end{equation}
+            where $x_{n}$ and $y_{n}$ are the $n^{th}$ components of
+            $\mathbf{x}$ and $\mathbf{y}$, respectively. This is the
+            \textit{Euclidean} metric on $\mathbb{R}^{N}$, also called the
+            \textit{standard} metric.
+        \end{example}
+        \begin{example}
+            You can place different metrics on the same set. The
+            \textit{Manhattan} metric on $\mathbb{R}^{N}$ is defined by:
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})
+                =\sum_{n=0}^{N-1}|x_{n}-y_{n}|
+            \end{equation}
+            That this is a metric can be proved by induction. The base case
+            $N=1$ is the standard metric on $\mathbb{R}$.
+        \end{example}
+        \begin{example}
+            A \textit{norm} on a (real or complex) vector space $V$ is a
+            function $||\cdot||:V\rightarrow\mathbb{R}$ such that for all
+            $\mathbf{x},\,\mathbf{y}\in{V}$ and (either real or complex)
+            scalars $a$:
+            \begin{align}
+                ||\mathbf{x}||&\geq{0}
+                    \tag{Positivity}\\
+                ||\mathbf{x}||&=0\Leftrightarrow\mathbf{x}=\mathbf{0}
+                    \tag{Definiteness}\\
+                ||a\mathbf{x}||&=|a|\cdot||\mathbf{x}||
+                    \tag{Factoring Scalars}\\
+                ||\mathbf{x}+\mathbf{y}||&\leq||\mathbf{x}||+||\mathbf{y}||
+                    \tag{Triangle Inequality}
+            \end{align}
+            Norms define metrics (the \textit{induced} metric):
+            \begin{equation}
+                d(\mathbf{x},\,\mathbf{y})=||\mathbf{x}-\mathbf{y}||
+            \end{equation}
+            The Euclidean metric on $\mathbb{R}^{N}$ comes from the Euclidean
+            norm on $\mathbb{R}^{N}$, which is the usual Pythagorean length
+            of vectors in $N$-space.%
+            \index{Norm}
+        \end{example}
+        \begin{example}
+            An inner product on a (real) vector space $V$ is a function
+            $\langle{\cdot|\cdot}\rangle:V\times{V}\rightarrow\mathbb{R}$
+            such that for all $\mathbf{x},\,\mathbf{y},\,\mathbf{z}\in{V}$ and
+            $a,b\in\mathbb{R}$:
+            \begin{align}
+                \langle{\mathbf{x}|\mathbf{y}}\rangle
+                    &=\langle{\mathbf{y}|\mathbf{x}}\rangle
+                        \tag{Symmetry}\\
+                \langle{a\mathbf{x}+b\mathbf{y}|\mathbf{z}}\rangle
+                    &=a\langle{\mathbf{x}|\mathbf{z}}\rangle
+                        +b\langle{\mathbf{y}|\mathbf{z}}\rangle
+                            \tag{Linearity}\\
+                \mathbf{x}\ne\mathbf{0}\Rightarrow
+                    \langle{\mathbf{x}|\mathbf{x}}\rangle&>0
+                        \tag{Positive-Definiteness}
+            \end{align}
+            Inner-products define norms (the \textit{induced} norm):
+            \begin{equation}
+                ||\mathbf{x}||=\sqrt{\langle{\mathbf{x}|\mathbf{x}}\rangle}
+            \end{equation}
+            The Euclidean norm on $\mathbb{R}^{N}$ is the norm induced by the
+            Euclidean dot product:
+            \begin{equation}
+                \langle{\mathbf{x}|\mathbf{y}}\rangle
+                =\mathbf{x}\cdot\mathbf{y}
+                =\sum_{n=0}^{N-1}x_{n}y_{n}
+            \end{equation}
+            The metric induced by the induced norm is the metric
+            \textit{induced} by the inner product.%
+            \index{Inner Product}
+        \end{example}
+        Topological spaces generalize metric spaces by axiomatizing the
+        properties of \textit{open} subsets. In a metric space this is very
+        pictorial.
+        \begin{definition}[Open Subsets (Metric Space)]
+            An open subset in a metric $(X,\,d)$ is a subset
+            $\mathcal{U}\subseteq{X}$ such that for all $x\in\mathcal{U}$ the
+            is an $\varepsilon>0$ such that for all $y\in\mathcal{U}$ with
+            $d(x,\,y)<\varepsilon$ it is true that $y\in\mathcal{U}$. That is,
+            the \textit{open ball} of radius $\varepsilon$ centered about $x$
+            fits entirely inside $\mathcal{U}$
+            (Fig.~\ref{fig:open_set_in_a_metric_space_001}).%
+            \index{Open Subset}\index{Open Subset!in a Metric Space}
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/open_set_in_a_metric_space_001.pdf}
+            \caption{Open Subset in a Metric Space}
+            \label{fig:open_set_in_a_metric_space_001}
+        \end{figure}
+        \begin{theorem}
+            The collection $\tau$ of all open subsets in a metric space
+            $(X,\,d)$ satisfies the following:
+            \begin{align}
+                &\emptyset\in\tau\tag{The Empty Set is Open}\\
+                &X\in\tau\tag{The Entire Space is Open}\\
+                &\mathcal{O}\subseteq\tau\Rightarrow\bigcup\mathcal{O}\in\tau
+                    \tag{The Union of Open Sets is Open}\\
+                &\mathcal{U},\mathcal{V}\in\tau\Rightarrow
+                    \mathcal{U}\cap\mathcal{V}\in\tau
+                        \tag{The Intersection of Two Open Sets is Open}
+            \end{align}
+        \end{theorem}
+        The definition of a topological space is a mimicry of this theorem.
+        \begin{definition}[Topological Space]
+            A topological space is an ordered pair $(X,\,\tau)$ such that
+            $X$ is a set and $\tau\subseteq\mathcal{P}(X)$
+            (the power set of $X$) is such that:
+            \begin{align}
+                &\emptyset\in\tau\tag{The Empty Set is Open}\\
+                &X\in\tau\tag{The Entire Space is Open}\\
+                &\mathcal{O}\subseteq\tau\Rightarrow\bigcup\mathcal{O}\in\tau
+                    \tag{The Union of Open Sets is Open}\\
+                &\mathcal{U},\mathcal{V}\in\tau\Rightarrow
+                    \mathcal{U}\cap\mathcal{V}\in\tau
+                        \tag{The Intersection of Two Open Sets is Open}
+            \end{align}
+            The sets $\mathcal{U}\in\tau$ are called \textit{open} and
+            $\tau$ is called a \textit{topology} on $X$.%
+            \index{Topological Space}\index{Topological Space!Definition}%
+            \index{Open Subset!in a Topological Space}
+        \end{definition}
+        \begin{example}
+            If $X$ is any set then $\{\,\emptyset,\,X\,\}$ is a topology on $X$.
+            This is the \textit{chaotic} or \textit{indiscrete} topology, also
+            called the \textit{trivial} topology. It states that the only open
+            subsets of $X$ are the empty set and the whole space.%
+            \index{Indiscrete Topology}
+        \end{example}
+        \begin{example}
+            If $X$ is any set, then $\mathcal{P}(X)$ is a topology on $X$.
+            This is the \textit{discrete} topology. It states that
+            \textit{every} subset is open.\index{Discrete Topology}
+        \end{example}
+        \textit{Metrizable}%
+        \index{Metrizable Space}\index{Topological Space!Metrizable}
+        spaces are those where the topology is induced by a
+        metric. Not every topological space is induced by a metric. The trivial
+        topology on a set with at least two distinct points is an example of a
+        non-metrizable topological space. We can prove this by noting there is a
+        topological property that this space lacks that all metric spaces have.
+        The easiest such property is the \textit{Hausdorff} one.
+        \begin{definition}[Hausdorff Topological Space]
+            A Hausdorff topological space is a topological space
+            $(X,\,\tau)$ such that for all distinct $x,y\in{X}$ there are open
+            sets $\mathcal{U},\,\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$
+            (Fig.~\ref{fig:hausdorff_condition_001}).%
+            \index{Hausdorff Topological Space}%
+            \index{Topological Space!Hausdorff Property}
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/hausdorff_condition_001.pdf}
+            \caption{The Hausdorff Property}
+            \label{fig:hausdorff_condition_001}
+        \end{figure}
+        \begin{theorem}
+            Metrizable spaces are Hausdorff.
+        \end{theorem}
+        \begin{proof}
+            Given a metric space $(X,\,d)$ with distinct
+            $x,\,y\in{X}$, we have $d(x,\,y)>0$.
+            Let $\varepsilon=\frac{d(x,\,y)}{2}$, and
+            $\mathcal{U}$ and $\mathcal{V}$ be the $\varepsilon$ balls about
+            $x$ and $y$, respectively. Then $x\in\mathcal{U}$,
+            $y\in\mathcal{V}$, and from the triangle inequality we get
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$.
+        \end{proof}
+        Given the trivial topology on a set with at least two distinct points
+        $x,y\in{X}$, we see that this space is not Hausdorff since these points
+        can not be separated by open sets. Hence this space is not induced by
+        a metric.
+        \subsection{Subspaces}
+            Given a topological space $(X,\,\tau)$ and a subset $A\subseteq{X}$
+            we can get a new space by considering the
+            \textit{subspace topology}.
+            \begin{definition}[Subspace Topology]
+                The subspace topology of a subset $A\subseteq{X}$ with respect
+                to a topological space $(X,\,\tau)$ is the set
+                $\tau_{A}$ defined by:
+                \begin{equation}
+                    \tau_{A}=\{\,A\cap\mathcal{U}\;|\;\mathcal{U}\in\tau\,\}
+                \end{equation}
+                That is, the set of all intersections of $A$
+                with the open subsets of $X$.%
+                \index{Subspace Topology}%
+                \index{Topological Space!Subspaces}
+            \end{definition}
+            \begin{theorem}
+                The subspace topology is indeed a topology.%
+                \index{Theorem!of Subspace Topologies}
+            \end{theorem}
+            \begin{proof}
+                Given a topological space $(X,\,\tau)$ and $A\subseteq{X}$,
+                we have $A=A\cap{X}$, and since $X\in\tau$, it is true that
+                $A\in\tau_{A}$. Similarly since $\emptyset\in\tau$ and
+                $\emptyset=A\cap\emptyset$, we obtain $\emptyset\in\tau_{A}$.
+                For unions we invoke the distributive law. A collection of open
+                subsets of $\tau_{A}$ are of the form $\mathcal{U}\cap{A}$.
+                Taking their union we get:
+                \begin{equation}
+                    =\bigcup_{\mathcal{U}}(\mathcal{U}\cap{A})
+                    =\Big(\bigcup_{\mathcal{U}}\mathcal{U}\Big)\cap{A}
+                \end{equation}
+                since $\tau$ is a topology, $\bigcup_{\mathcal{U}}\mathcal{U}$
+                is open in $\tau$, and hence this final set is open
+                in $\tau_{A}$. Lastly, given $\mathcal{U}\cap{A}$ and
+                $\mathcal{V}\cap{A}$, we have:
+                \begin{equation}
+                    \big(\mathcal{U}\cap{A}\big)\cap\big(\mathcal{V}\cap{A}\big)
+                    =\big(\mathcal{U}\cap\mathcal{V}\big)\cap{A}
+                \end{equation}
+                Since $\tau$ is a topology, $\mathcal{U}\cap\mathcal{V}$ is
+                open in $\tau$, and hence
+                $\big(\mathcal{U}\cap\mathcal{V}\big)\cap{A}$ is open in
+                $\tau_{A}$. So $\tau_{A}$ is a topology on $A$.
+            \end{proof}
+            \begin{example}
+                The unit $N$-sphere $\mathbb{S}^{N}$ is the subset of
+                $\mathbb{R}^{N+1}$ defined by:
+                \begin{equation}
+                    \mathbb{S}^{N}
+                    =\{\,\mathbf{x}\in\mathbb{R}^{N+1}\;|\;||\mathbf{x}||=1\,\}
+                \end{equation}
+                That is, the set of all points of unit length. The standard
+                topology is the subspace topology induced by the standard
+                topology on $\mathbb{R}^{N+1}$, which is induced by the
+                Euclidean metric.
+            \end{example}
+    \section{Continuity}
+        From calculus we know how to describe continuity.
+        Minor perturbations in the domain result in small changes in the range.
+        To be precise, given a function $f:\mathbb{R}\rightarrow\mathbb{R}$ and
+        a point $x_{0}\in\mathbb{R}$, we'll claim that $f$ is continuous
+        here if for all $\varepsilon>0$ there is a $\delta>0$ such that for all
+        $|x-x_{0}|<\delta$ we have $|f(x)-f(x_{0})|<\varepsilon$.
+        \par\hfill\par
+        This definition is adapted to metric spaces immediately.
+        \begin{definition}[Continuous Function (Metric Space)]
+            A continuous function from a metric space $(X,\,d_{X})$ to a
+            metric space $(Y,\,d_{Y})$ is a function
+            $f:X\rightarrow{Y}$ such that for all $x_{0}\in{X}$ and for all
+            $\varepsilon>0$ there is a $\delta>0$ such that for all
+            $x\in{X}$ with $d_{X}(x,\,x_{0})<\delta$ we have
+            $d_{Y}\big(f(x),\,f(x_{0})\big)<\varepsilon$.%
+            \index{Continuity}\index{Continuity!in a Metric Space}
+        \end{definition}
+        This makes use of real numbers and metrics, neither of which are
+        available in the general topological setting. We instead use open sets
+        to define continuity. This is motivated by the following.
+        \begin{theorem}
+            If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
+            $f:X\rightarrow{Y}$ is a function, then $f$ is continuous if and
+            only if for all open $\mathcal{V}\subseteq{Y}$, the pre-image
+            $f^{-1}[\mathcal{V}]\subseteq{X}$ is open.
+        \end{theorem}
+        \begin{proof}
+            Suppose $\mathcal{V}\subseteq{Y}$ is open and $f$ is continuous.
+            If $f^{-1}[\mathcal{V}]=\emptyset$ we are done since the empty set
+            is open. If not, let $x\in{f}^{-1}[\mathcal{V}]$. Since
+            $\mathcal{V}$ is open, there is an $\varepsilon>0$ such that the
+            $\varepsilon$ ball about $y=f(x)$ is contained inside $\mathcal{V}$.
+            But $f$ is continuous, so there is a $\delta>0$ such that for all
+            $x_{0}\in{X}$ with $d_{X}(x,\,x_{0})<\delta$ we have
+            $d_{Y}\big(f(x),\,f(x_{0})\big)<\varepsilon$. But this implies
+            $x_{0}\in{f}^{-1}[\mathcal{V}]$. That is, the $\delta$ ball about
+            $x$ is a subset of $f^{-1}[\mathcal{V}]$, and hence this set is
+            open.
+            \par\hfill\par
+            In the other direction, let $x\in{X}$ and $\varepsilon>0$ be given.
+            Let $\mathcal{V}$ be the $\epsilon$ ball about
+            $y=f(x)$. Since this is open, $f^{-1}[\mathcal{V}]$ is open. But
+            then there is a $\delta>0$ such that the $\delta$ ball about
+            $x$ is contained within $f^{-1}[\mathcal{V}]$. But then for all
+            $x_{0}\in{X}$ such that $d_{X}(x,\,x_{0})<\delta$, we have
+            $d_{Y}\big(f(x),\,f(x_{0})\big)<\varepsilon$.
+            Hence $f$ is continuous.
+        \end{proof}
+        Topological spaces do have a notion of open sets, meaning we can take
+        this theorem and turn it into a definition.
+        \begin{definition}[Continuous Function (Topological Space)]
+            A continuous function from a topological space $(X,\,\tau_{X})$ to
+            a topological space $(Y,\,\tau_{Y})$ is a function
+            $f:X\rightarrow{Y}$ such that for all $\mathcal{V}\in\tau_{Y}$ it
+            is true that $f^{-1}[\mathcal{V}]\in\tau_{X}$.%
+            \index{Continuity!in a Topological Space}
+        \end{definition}
+        \begin{example}
+            If $(X,\,\tau)$ is any topological space, if
+            $(Y,\,\tau_{Y})$ is the indiscrete topological space on $Y$
+            $(\tau_{Y}=\{\,\emptyset,\,Y\,\})$, and if $f:X\rightarrow{Y}$ is
+            \textit{any} function, then $f$ is continuous. The only open sets
+            to check are $\emptyset$ and $Y$. But $f^{-1}[\emptyset]=\emptyset$,
+            which is open, and $f^{-1}[Y]=X$, which is also open. So $f$ is
+            continuous.\index{Indiscrete Topology}
+        \end{example}
+        \begin{example}
+            If $(Y,\,\tau)$ is any topological space, if
+            $(X,\,\mathcal{P}(X))$ is the discrete topological space on $X$,
+            and if $f:X\rightarrow{Y}$ is \textit{any} function, then $f$ is
+            continuous. Regardless of the open sets $\mathcal{V}\in\tau$, we
+            have $f^{-1}[\mathcal{V}]\subseteq{X}\in\mathcal{P}(X)$, which is
+            open, so $f$ is continuous.\index{Discrete Topology}
+        \end{example}
+        \subsection{Category Theory}
+            A small rant, I'm not a fan of category theory. Any subject
+            that requires \textit{proper classes} is, to me, a fiction.
+            Nevertheless the language can at times be helpful, pedagogically.
+            The discrete and indiscrete topologies are such examples where
+            this language can be useful. A category $\mathbf{C}$ is a
+            \textit{thing} (almost never a set, maybe not even class,
+            pending on who you ask) consisting of:%
+            \index{Category}\index{Category!Definition}
+            \begin{itemize}
+                \item A class $\textrm{obj}(\mathbf{C})$
+                    (perhaps proper) of \textit{objects}.
+                \item A class $\textrm{hom}(\mathbf{C})$
+                    (again, perhaps proper)
+                    of \textit{arrows} between objects.
+                \item A class function
+                    $\textrm{dom}:\textrm{hom}(\mathbf{C})\rightarrow\textrm{obj}(\mathbf{C})$
+                    called the \textit{domain}.
+                \item A class function
+                    $\textrm{cod}:\textrm{hom}(\mathbf{C})\rightarrow\textrm{obj}(\mathbf{C})$
+                    called the \textit{codomain}.
+                \item A \textit{composition operator}
+                    $\textrm{hom}(A,\,B)\times\textrm{hom}(B,\,C)\rightarrow\textrm{hom}(A,\,C)$
+                    for all three objects $A,\,B,\,C$. Here
+                    $\textrm{hom}(A,\,B)$ denotes the subclass of
+                    $\textrm{hom}(\mathbf{C})$ of arrows $f$ such that
+                    $\textrm{dom}(f)=A$ and $\textrm{cod}(f)=B$.
+                \item Associativity holds:
+                    $(f\circ{g})\circ{h}=f\circ(g\circ{h})$
+                    where $\circ$ is the composition operator.
+                \item For all objects $X$ there is an identity arrow
+                    $\textrm{id}_{X}:X\rightarrow{X}$ such that for every arrow
+                    $f$ with $\textrm{dom}(f)=X$ we have
+                    $f\circ\textrm{id}_{X}=f$ and for every arrow
+                    $g$ with $\textrm{cod}(f)=X$ we have
+                    $\textrm{id}_{X}\circ{g}=g$.
+            \end{itemize}
+            Given two categories $\mathbf{C}$ and $\mathbf{D}$ a
+            \textit{functor} $F$ is a \textit{thing} (often called a mapping,
+            but not in the sense of set theory) such that:%
+            \index{Functor}\index{Functor!Definition}
+            \begin{itemize}
+                \item For every object $X$ in $\textrm{obj}(\mathbf{C})$
+                    there is an object $F(X)$ in $\textrm{obj}(\mathbf{D})$.
+                \item For every arrow $f$ in $\textrm{hom}(\mathbf{C})$ there
+                    is an arrow $F(f)$ in $\textrm{hom}(\mathbf{D})$ such that
+                    $\textrm{dom}(F(f))=F(\textrm{dom}(f))$ and
+                    $\textrm{cod}(F(f))=F(\textrm{cod}(f))$.
+                \item For every object $X$ in $\textrm{obj}(\mathbf{C})$ the
+                    identity arrow is preserved,
+                    $F(\textrm{id}_{X})=\textrm{id}_{F(X)}$.
+                \item For all arrows $f$ and $g$ in $\textrm{hom}(\mathbf{C})$,
+                    composition is preserved, $F(f\circ{g})=F(f)\circ{F}(g)$.
+            \end{itemize}
+            A \textit{small} category%
+            \index{Category!Small}\index{Small Category}
+            is a category $\mathbf{C}$ where
+            $\textrm{obj}(\mathbf{C})$ and $\textrm{hom}(\mathbf{C})$ are sets
+            (not a proper class). The study of small categories can be done in
+            ZFC entirely without proper classes. Groupoids, which appear in
+            topology, geometry, and analysis, are small categories in which all
+            arrows are invertible (have reverse arrows).
+            \textit{Locally small} categories are categories $\mathbf{C}$ where
+            for all objects $A,\,B$ in $\textrm{obj}(\mathbf{C})$ the
+            subclass $\textrm{hom}(A,\,B)$ is a set.%
+            \begin{example}
+                The category \textbf{Set} has as objects the (proper class) of
+                all sets.\footnote{%
+                    See Russell's paradox for why this is not a set.%
+                }
+                The \textit{arrows} are just functions. Every set $X$ has an
+                identity function $\textrm{id}_{X}:X\rightarrow{X}$, and the
+                composition of functions is associative. \textbf{Set} is
+                locally small. Given two sets $A,\,B$, the set of all functions
+                $\mathcal{F}(A,\,B)$ from $A$ to $B$ is provably a set within
+                the framework of ZFC.\footnote{%
+                    Using the ordered pair definition of function,
+                    $\mathcal{F}(A,\,B)$ is a
+                    subset of $\mathcal{P}\big(\mathcal{P}(A\times{B})\big)$.
+                }
+            \end{example}
+            \begin{example}
+                The category \textbf{Top} has as objects the (proper class)%
+                \footnote{%
+                    Every set has a corresponding topological space, the
+                    discrete topology. Intuitively there are as many sets as there
+                    are topological spaces, so the collection of all topological
+                    spaces is not a set.%
+                }
+                of all topological spaces. The arrows are continuous functions.
+                This category is also locally small, given $(X,\,\tau_{X})$ and
+                $(Y,\,\tau_{Y})$, the collection
+                $C\big((X,\,\tau_{X}),\,(Y,\,\tau_{Y})\big)$ of all continuous
+                functions $f:X\rightarrow{Y}$ is a set, being a subset of the set
+                $\mathcal{F}(X,\,Y)$ of all functions $f:X\rightarrow{Y}$.
+            \end{example}
+            \begin{example}
+                The category \textbf{Grp} has as objects the (proper class)%
+                \footnote{%
+                    For every set, there is a group. This is equivalent to axiom
+                    of choice.%
+                }
+                of all groups. The arrows are group homomorphisms. \textbf{Grp} is
+                locally small since the collection of all group homomorphisms
+                $\varphi:G\rightarrow{H}$ is a subset of $\mathcal{F}(G,\,H)$.
+            \end{example}
+            I know of no examples of categories that are not locally small.
+            After some digging I found the category of \textit{spans}, but I
+            don't know what these are. Some claim there is a category
+            \textbf{Cat} of all categories, but that just sounds like Russell's
+            paradox waiting to happen.
+            \par\hfill\par
+            In a locally small category, the subclasses $\textrm{hom}(A,\,B)$
+            are sets, so we call them \textit{homsets}.\index{Homsets}
+            Given two locally small
+            categories $\mathbf{C}$ and $\mathbf{D}$, two objects
+            $X,\,Y$ in $\textrm{obj}(\mathbf{C})$, and a functor
+            $F:\mathbf{C}\rightarrow\mathbf{D}$, we get a function
+            (an actual function from set theory)
+            $F_{X,\,Y}:\textrm{hom}(X,\,Y)\rightarrow\textrm{hom}\big(F(X),\,F(X)\big)$.
+            $F$ is called \textit{faithful}%
+            \index{Faithful Functor}\index{Functor!Faithful}
+            if $F_{X,\,Y}$ is injective for all
+            objects $X$ and $Y$. It is called \textit{full}%
+            \index{Full Functor}\index{Functor!Full}
+            if $F_{X,\,Y}$ is surjective for all objects $X$ and $Y$.
+            \begin{example}
+                The functor $F:\mathbf{Top}\rightarrow\mathbf{Set}$ defined by
+                $F\big((X,\,\tau)\big)=X$ for objects and $F(f)=f$ for arrows
+                (a continuous function is a function, after all) is faithful.
+                Given two topological spaces $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$
+                the function
+                $F_{X,\,Y}:C\big((X,\,\tau_{X}),\,(Y,\,\tau_{Y})\big)\rightarrow\mathcal{F}(X,\,Y)$,
+                which is $F_{X,\,Y}(f)=f$, is injective, but in general it is not
+                surjective. It is not surjective since there may be functions
+                $f:X\rightarrow{Y}$ that are not continuous. $F$ is called the
+                \textit{forgetful} functor.%
+                \index{Forgetful Functor}\index{Functor!Forgetful}
+                It can be similarly defined for \textbf{Grp}.
+            \end{example}
+            A concrete category%
+            \index{Concrete Category}\index{Category!Concrete}
+            is a locally small category $\mathbf{C}$ with a faithful
+            functor $U:\mathbf{C}\rightarrow\mathbf{Set}$. \textbf{Top} and
+            \textbf{Grp} with the forgetful functor form concrete categories.
+            A \textit{free object}\index{Free Object}
+            from a set $X$ in a concrete category
+            $(\mathbf{C},\,U)$ is an object $F(X)$ in $\textrm{obj}(\mathbf{C})$
+            with an injective function $\alpha:X\rightarrow{U}\big(F(X)\big)$
+            with the following property. Given any object $Y$ in
+            $\textrm{obj}(\mathbf{C})$ and any function $f:X\rightarrow{U}(Y)$
+            there is a unique arrow $\tilde{f}:F(X)\rightarrow{Y}$ such that
+            $\tilde{f}=U(f)\circ\alpha$. In other words, the diagram
+            in Fig.~\ref{fig:commutative_diagram_free_object_in_topology} is
+            commutative.
+            \par\hfill\par
+            Let's rephrase this in the language of topology. We have a set $X$
+            and we want a topological space $F(X)$ with an injective
+            function $\alpha:X\rightarrow{U}\big(F(X)\big)$ such that for
+            \textit{any} topological space $(Y,\,\tau_{Y})$ and \textit{any}
+            function $f:X\rightarrow{Y}$ there is a unique continuous function
+            $\tilde{f}:F(X)\rightarrow(Y,\,\tau_{Y})$ such that
+            $f=U(\tilde{f})\circ\alpha$.
+            \par\hfill\par
+            We've seen this already. Define $U\big((X,\,\tau)\big)=X$
+            (the forgetful functor),
+            $F(X)=\big(X,\,\mathcal{P}(X)\big)$ (the discrete topology),
+            and let $\alpha:X\rightarrow{X}$ be the identity
+            $\alpha=\textrm{id}_{X}$. Given any topological space
+            $(Y,\,\tau_{Y})$ and any function $f:X\rightarrow{Y}$, the
+            unique continuous function is $\tilde{f}=f$.
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/commutative_diagram_free_object_in_topology.pdf}
+                \caption{Free Object in Topology}
+                \label{fig:commutative_diagram_free_object_in_topology}
+            \end{figure}
+            \par\hfill\par
+            To summarize, the discrete topology%
+            \index{Discrete Topology}
+            is the \textit{free object}\index{Free Object}
+            in the category \textbf{Top}. Thus the discrete topology is
+            analogous to the free group in algebra. The underlying set $X$
+            acts as a \textit{basis} for the topological space, just like
+            generators act as a basis for free group. This is also similar to
+            bases which are used to generate vector spaces.
+            \par\hfill\par
+            The \textit{cofree} object\index{Cofree Object}
+            flips all the arrows. Given a set
+            $X$ we want a topological space $C(X)$ and an injective function
+            $\alpha:X\rightarrow{U}\big(C(X)\big)$ such that for any space
+            $(Y,\,\tau_{Y})$ and any function $f:Y\rightarrow{X}$, there is a
+            unique continuous function
+            $\tilde{f}:(Y,\,\tau_{Y})\rightarrow{C}(X)$ such that
+            $f=\alpha\circ{U}(\tilde{f})$.
+            \par\hfill\par
+            We've seen this too. Let $U$ be the forgetful functor,
+            and define $C(X)=(X,\,\{\,\emptyset,\,X\,\})$.%
+            \index{Indiscrete Topology}
+            The injective
+            function $\alpha:X\rightarrow{X}$ is once again the identity,
+            $\alpha=\textrm{id}_{X}$. Then given any topological space
+            $(Y,\,\tau_{Y})$ and any function $f:Y\rightarrow{X}$, the
+            unique continuous function that does the trick is
+            $\tilde{f}=f$ (See
+            Fig.~\ref{fig:commutative_diagram_cofree_object_in_topology}).
+            That is, the cofree object in \textbf{Top} is the indiscrete
+            topology.\index{Cofree Object}
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/commutative_diagram_cofree_object_in_topology.pdf}
+                \caption{Cofree Object in Topology}
+                \label{fig:commutative_diagram_cofree_object_in_topology}
+            \end{figure}
+        \subsection{Homeomorphisms}
+            The arrows in category theory are called \textit{morphisms}.%
+            \index{Morphisms}
+            Given a category $\mathbf{C}$, two objects
+            $A,\,B$ in $\textrm{obj}(\mathbf{C})$, and an arrow
+            $f:A\rightarrow{B}$, an inverse is an arrow
+            $g:B\rightarrow{A}$ such that the composition operations
+            $f\circ{g}$ and $g\circ{f}$ yield the identity morphism.
+            \textit{Isomorphisms}\index{Isomorphisms}
+            are morphisms that have inverses.
+            \begin{example}
+                In \textbf{Set} the morphisms are just functions. The
+                invertible functions are precisely those that are bijective.
+                That is, the isomorphisms in \textbf{Set} are bijections.
+            \end{example}
+            \begin{example}
+                In \textbf{Grp} the morphisms are group homomorphisms. A
+                bijective group homorphism automatically yields a group
+                homomorphism for the inverse. The isomorphisms in
+                \textbf{Grp} are bijective group homomorphisms, also called
+                group isomorphisms.
+            \end{example}
+            \begin{example}
+                In $\mathbf{Vec}_{\mathbb{R}}$, the category of real vector
+                spaces, the morphisms are linear transformations. Bijective
+                linear transformations have linear inverses, so the
+                isomorphisms in $\mathbf{Vec}_{\mathbb{R}}$ are just bijective
+                linear transformations.
+            \end{example}
+            In topology the morphisms are continuous functions. Unlike the
+            aforementioned algebraic structures, bijective continuous functions
+            need not yield continuous inverses.
+            \begin{example}
+                Consider the circle $\mathbb{S}^{1}$ and half-open interval
+                $[0,\,1)$, both with their standard subspace topologies.
+                The function $\varphi:[0,\,1)\rightarrow\mathbb{S}^{1}$ defined
+                by:
+                \begin{equation}
+                    \varphi(t)=\big(\cos(2\pi{t}),\,\sin(2\pi{t})\big)
+                \end{equation}
+                is continuous (since it is continuous in both components) and
+                bijective, but the inverse is not continuous. The inverse
+                function creates a \textit{rip} at the point
+                $(1,\,0)$ (you can prove this using a $\varepsilon-\delta$
+                argument since these are metric spaces).%
+                \index{Continuity}
+            \end{example}
+            The isomorphisms in topology%
+            \index{Isomorphisms!in Topology}
+            are continuous bijective functions
+            with continuous inverses. These are given a name.
+            \begin{definition}[Homeomorphism]
+                A homeomorphism from a topological space $(X,\,\tau_{X})$ to a
+                topological space $(Y,\,\tau_{Y})$ is a continuous bijective
+                function $f:X\rightarrow{Y}$ such that
+                $f^{-1}:Y\rightarrow{X}$ is continuous.%
+                \index{Homeomorphism!Definition}\index{Homeomorphism}
+            \end{definition}
+            \begin{example}
+                Equip $\mathbb{R}$ with the Euclidean topology. The function
+                $f(x)=x^{3}$ is continuous and bijective, and the inverse
+                $f^{-1}(x)=x^{1/3}$ is continuous as well, meaning $f$ is a
+                homeomorphism. A homeomorphism from a space to itself is
+                sometimes called an \textit{autohomeomorphism}.%
+                \index{Homeomorphism!Autohomeomorphism}
+            \end{example}
+        \subsection{Product Spaces}
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/commutative_diagram_product_object_in_topology.pdf}
+                \caption{Categorical Diagram for Products in Topology}
+                \label{fig:commutative_diagram_product_object_in_topology}
+            \end{figure}
+            We need to discuss product spaces in order to talk about homotopy.
+            Products in topology are defined in one of two ways. The, perhaps
+            more natural way, is by \textit{generating} the topology. Given
+            two spaces $(X,\,\tau_{X})$ and $(Y,\,\tau_{Y})$, we form the
+            product space $(X\times{Y},\,\tau_{X\times{Y}})$ by looking at
+            the products of open sets in $\tau_{X}$ and $\tau_{Y}$. The
+            collection of all such sets is not usually a topology, so we define
+            $\tau_{X\times{Y}}$ to be the \textit{smallest} topology such that
+            $\mathcal{U}\times\mathcal{V}\in\tau_{X\times{Y}}$ for all
+            $\mathcal{U}\in\tau_{X}$ and $\mathcal{V}\in\tau_{Y}$.%
+            \index{Product Topology}\index{Topological Space!Product}
+            \begin{definition}[Product Topological Space]
+                The product of two topological spaces $(X,\,\tau_{X})$ and
+                $(Y,\,\tau_{Y})$ is the space $(X\times{Y},\,\tau_{X\times{Y}})$
+                where $\tau_{X\times{Y}}$ is the smallest topology that
+                contains the set:
+                \begin{equation}
+                    \tilde{\tau}_{X\times{Y}}
+                    =\{\,\mathcal{U}\times\mathcal{V}\;|\;
+                        \mathcal{U}\in\tau_{X}\textrm{ and }
+                        \mathcal{V}\in\tau_{Y}\,\}
+                \end{equation}
+                That is, the topology \textit{generated} by the product of
+                open sets.\index{Product Topology!Definition}
+            \end{definition}
+            This, to me, is the more intuitive definition. It generalizes to
+            finite products by induction. Infinite products have the issue of
+            choosing the \textit{product} or the \textit{box} topologies,%
+            \index{Box Topology}\index{Product Topology!Box}
+            see my notes for Math 54. We'll be mostly concerned with finite
+            products in this course.
+            \par\hfill\par
+            The alternate definition is categorical. The use is that it has the
+            same definition for the product of groups, vector spaces, sets,
+            etc. For the product of sets we have the canonical projections
+            $\pi_{1}:X_{1}\times{X}_{2}\rightarrow{X}_{1}$ defined by
+            $\pi_{1}(x_{1},\,x_{2})=x_{1}$, and similarly for $\pi_{2}$. The
+            product topological space is defined by the object in
+            \textbf{Top} with the following property. Given \textit{any}
+            topological space $(Y,\,\tau_{Y})$, and any two continuous functions
+            $f_{1}:Y\rightarrow{X}_{1}$ and $f_{2}:Y\rightarrow{X}_{2}$, there
+            is a unique continuous function $f:Y\rightarrow{X}_{1}\times{X}_{2}$
+            that makes
+            Fig.~\ref{fig:commutative_diagram_product_object_in_topology}
+            commute.
+            \par\hfill\par
+            This says that to check the continuity of
+            $f:Y\rightarrow{X}_{1}\times{X}_{2}$ it is sufficient to check that
+            the components of $f$ are continuous.
+            \begin{example}
+                The function $f:\mathbb{R}\rightarrow\mathbb{R}^{3}$ defined
+                by $f(t)=(t,\,t^{2}\exp(t),\,\cos(t^{2}))$ is
+                continuous. Why? We will not be looking at the pre-image of
+                open sets, and even $\varepsilon-\delta$ proofs look tedious
+                here. But each of the components are continuous, so we
+                automatically know that function itself is continuous.
+            \end{example}
+            One way of thinking of product spaces is by taking a copy of
+            $X_{1}$ and attaching it to every point of $X_{2}$ (or vice-versa).
+            This is most easily visualized with the torus,
+            $\mathbb{T}=\mathbb{S}^{1}\times\mathbb{S}^{1}$ (See
+            Fig.~\ref{fig:../../../images/torus_skeleton_product_space.pdf}).
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/torus_skeleton_product_space.pdf}
+                \caption{Torus as a Product of Circles}
+                \label{fig:../../../images/torus_skeleton_product_space.pdf}
+            \end{figure}
+        \subsection{Homotopy and Homotopy Equivalence}
+            A notion weaker than homeomorphism, but equally useful, is
+            homotopy equivalence.\index{Homotopy Equivalence}
+            It is defined in terms of homotopy\index{Homotopy}, which is
+            the idea of stretching continuous functions in a topological space.
+            \begin{definition}[Homotopy]
+                A homotopy between continuous function
+                $f,g:X\rightarrow{Y}$ from a topological space $(X,\,\tau_{X})$
+                to a topological space $(Y,\,\tau_{Y})$ is a continuous
+                function $H:X\times[0,\,1]:\rightarrow{Y}$
+                (with respect to the subspace topology on $[0,\,1]$ and the
+                product topology on $X\times[0,\,1]$) such that
+                $H(x,\,0)=f(x)$ and $H(x,\,1)=g(x)$ for all $x\in{X}$.
+            \end{definition}
+            This is shown pictorially in Fig.~\ref{fig:homotopy_basic_example}.
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/homotopy_basic_example.pdf}
+                \caption{Pictorial Representation of Homotopy}
+                \label{fig:homotopy_basic_example}
+            \end{figure}
+            \begin{example}
+                Given any two continuous functions
+                $f,g:\mathbb{R}^{M}\rightarrow\mathbb{R}^{N}$, the
+                \textit{straight-line homotopy}%
+                \index{Homotopy!Straight-Line}\index{Straight-Line Homotopy}
+                is the function
+                $H:\mathbb{R}^{M}\times[0,\,1]\rightarrow\mathbb{R}^{N}$
+                defined by:
+                \begin{equation}
+                    H(\mathbf{x},\,t)=
+                    (1-t)\,f(\mathbf{x})+t\,g(\mathbf{x})
+                \end{equation}
+                This is continuous, being the sum of continuous functions.
+                Plugging in $t=0$ we get $H(\mathbf{x},\,0)=f(\mathbf{x})$,
+                and $t=1$ yields $H(\mathbf{x},\,1)=g(\mathbf{x})$. So
+                $f$ and $g$ are homotopic, and $H$ is such a homotopy.
+            \end{example}
+            \begin{figure}
+                \centering
+                \includegraphics{../../../images/homotopy_on_unit_interval.pdf}
+                \caption{Straight-Line Homotopy}
+                \label{fig:homotopy_on_unit_interval}
+            \end{figure}
+            The straight line homotopy is shown in
+            Fig.~\ref{fig:homotopy_on_unit_interval} for two curves in a
+            subspace $Y\subseteq\mathbb{R}^{2}$.
+            \par\hfill\par
+            Homotopy is used to define \textit{homotopy equivalence}%
+            \index{Homotopy Equivalence}\index{Homotopy!Equivalence}
+            which is a weaker form of equivalence for topological spaces.
+            It is defined using \textit{homotopy inverses}.%
+            \index{Homotopy Inverse}\index{Homotopy!Inverse}
+            \begin{definition}[Homotopy Inverse]
+                A homotopy inverse of a continuous function
+                $f:X\rightarrow{Y}$ from a topological space $(X,\,\tau_{X})$
+                to a space $(Y,\,\tau_{Y})$ is a continuous function
+                $g:Y\rightarrow{X}$ such that $g\circ{f}$ is homotopy to
+                $\textrm{id}_{X}$ and $f\circ{g}$ is homotopic to
+                $\textrm{id}_{X}$.\index{Homotopy Inverse!Definition}
+            \end{definition}
+            \begin{definition}[Homotopy Equivalence]
+                A homotopy equivalence from a topological space
+                $(X,\,\tau_{X})$ to a topological space $(Y,\,\tau_{Y})$ is a
+                continuous function $f:X\rightarrow{Y}$ such that there exists
+                a homotopy inverse $g:Y\rightarrow{X}$ of $f$.%
+                \index{Homotopy Equivalence!Definition}
+            \end{definition}
+            \begin{theorem}
+                A homeomorphism is a homotopy equivalence.
+            \end{theorem}
+            \begin{proof}
+                A homeomorphism $f:X\rightarrow{Y}$ has the property that
+                $f^{-1}$ is continuous and hence
+                $f\circ{f}^{-1}$ is \textit{equal} to $\textrm{id}_{X}$, not
+                just homotopy equivalent. Similarly,
+                $f^{-1}\circ{f}=\textrm{id}_{Y}$.
+                So $f$ is a homotopy equivalence.
+            \end{proof}
+            This theorem does not reverse.
+            \begin{example}
+                $\mathbb{R}^{N}$ is homotopy equivalent to a one-point
+                space $\{\,0\,\}$ (There is only one topology on a one-point
+                space, $\tau=\big\{\,\emptyset,\,\{\,0\,\}\,\big\}$). The
+                homotopy equivalence $f:\mathbb{R}^{N}\rightarrow\{\,0\,\}$
+                is the only function that exists, $f(\mathbf{x})=0$.
+                The homotopy inverse $g:\{\,0\,\}\rightarrow\mathbb{R}^{N}$
+                can be any function you like, but let's pick
+                $g(0)=\mathbf{0}$ to make things simple. The composition
+                $f\circ{g}$ is the identity on $\{\,0\,\}$, so it is certainly
+                homotopic to the identity. Going the other way,
+                $g\circ{f}$ is homotopic to the identity on
+                $\mathbb{R}^{N}$. Define $H$ by:
+                \begin{equation}
+                    H(\mathbf{x},\,t)=t\mathbf{x}
+                \end{equation}
+                $H(\mathbf{x},\,0)$ is the function $g\circ{f}$, and
+                $H(\mathbf{x},\,1)$ is the identity. This is the
+                \textit{straight-line} homotopy we've seen before.%
+                \index{Straight-Line Homotopy}\index{Homotopy!Straight-Line}
+            \end{example}
+            $\mathbb{R}^{N}$ is an example of a \textit{contractible} space.%
+            \index{Contractible Topological Space}
+            \begin{definition}[Contractible Topological Space]
+                A contractible topological space is a topological space
+                $(X,\,\tau)$ that is homotopy equivalent to a one-point space.
+            \end{definition}
+            We saw that every continuous function from $\mathbb{R}^{M}$ to
+            $\mathbb{R}^{N}$ is homotopy equivalent via the straight-line
+            homotopy. The real culprit behind this fact is contractibility.
+            \begin{theorem}
+                If $(X,\,\tau_{X})$ is a topological space, if $(Y,\,\tau_{Y})$
+                is contractible, and if $f,g:X\rightarrow{Y}$ are continuous,
+                then they are homotopy equivalent.
+            \end{theorem}
+            \begin{proof}
+                We can exclude the case of $X$ or $Y$ being empty as trivial.
+                Let $y\in{Y}$. There is only one one-point space, so
+                $\{\,y\,\}$ with the subspace topology is a one point space.
+                Since $(Y,\,\tau_{Y})$ is contractible, there is a homotopy
+                equivalence $\alpha:Y\rightarrow\{\,y\,\}$ and a homotopy
+                inverse $\beta:\{\,y\,\}\rightarrow{Y}$. Let
+                $H$ be a homotopy between
+                $\beta\circ\alpha$ and $\textrm{id}_{Y}$. Then
+                $G:X\times[0,\,1]\rightarrow{Y}$ defined by:
+                \begin{equation}
+                    G(x,\,t)=
+                    \begin{cases}
+                        H\big(f(x),\,2t\big),&0\leq{t}\leq\frac{1}{2}\\
+                        H\big(g(x),\,2-2t\big),&\frac{1}{2}\leq{t}\leq{1}
+                    \end{cases}
+                \end{equation}
+                is continuous by the pasting-lemma since
+                $H\big(f(x),\,1\big)=H\big(g(x),\,1\big)=\beta(y)$.
+                $G$ is thus a homotopy between $f$ and $g$.
+            \end{proof}
+            You can get a different category out of topology. The objects are
+            still topological spaces, but the arrows are
+            \textit{equivalent classes} of continuous functions under the
+            equivalence relation of homotopic. Isomorphisms are then
+            equivalence classes of homotopy equivalences. Two topological
+            spaces are then considered the \textit{same} if they are
+            homotopy equivalent. This allows a lot more squooshing of the
+            space ($\mathbb{R}^{N}$ is homotopy equivalent to a single point
+            but certainly not homeomorphic).
+    \section{Compactness and Connectedness}
+        I think that was more than enough category theory for a while. Let's
+        return to simpler point-set language and review some more topological
+        ideas.
+        \begin{definition}[Compact Topological Space]
+            A compact topological space is a topological space $(X,\,\tau)$
+            such that for every open over (a set $\mathcal{O}\subseteq\tau$
+            such that $\bigcup\mathcal{O}=X$) there is a finite subset
+            $\Delta\subseteq\mathcal{O}$ that covers $X$.
+        \end{definition}
+        \begin{theorem}[Heine-Borel Theorem]
+            A subset $\mathcal{C}\subseteq\mathbb{R}^{N}$ is compact if and only
+            if $\mathcal{C}$ is closed and bounded (with respect to the
+            Euclidean metric).%
+            \index{Theorem!Heine-Borel}
+        \end{theorem}
+        \begin{theorem}[Generalized Heine-Borel Theorem]
+            A subset $\mathcal{C}\subseteq{X}$ of a metric space is compact
+            if and only if it is closed and totally-bounded.%
+            \index{Theorem!Generalized Heine-Borel}
+        \end{theorem}
+        Both of these theorems were proved in detail in Math 54. We'll make
+        frequent use of them.
+        \par\hfill\par
+        There are several notions of a space being \textit{connected}, and in
+        a course on planar topology it is essential to note the differences.
+        The simplest notion of connectedness uses open sets and describes how
+        to \textit{disconnect} a space.\index{Topological Space!Disconnected}%
+        \index{Disconnected Topological Space}
+        \begin{definition}[Disconnected Topological Space]
+            A disconnected topological space is a topological space
+            $(X,\,\tau)$ such that there exist two disjoint non-empty open
+            subsets $\mathcal{U},\mathcal{V}\subseteq\tau$ such that
+            $\mathcal{U}\cup\mathcal{V}=X$.%
+            \index{Topological Space!Disconnected}%
+            \index{Disconnected Topological Space!Definition}
+        \end{definition}
+        \begin{definition}[Connected Topological Space]
+            A connected topological space is a topological space that is
+            not disconnected.\index{Connected Topological Space!Definition}%
+            \index{Topological Space!Connected}
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/disconnected_space_001.pdf}
+            \caption{A Disconnected Topological Space}
+            \label{fig:disconnected_space_001}
+        \end{figure}
+        Stronger than connectedness is the notion of \textit{path} connected.%
+        \index{Path Connected Space}%
+        \index{Topological Space!Path Connected}
+        \begin{definition}[Path Connected Topological Space]
+            A path connected topological space is a topological space
+            $(X,\,\tau)$ such that for all $x,y\in{X}$ there is a continuous
+            path $\gamma:[0,\,1]\rightarrow{X}$ such that
+            $\gamma(0)=x$ and $\gamma(1)=y$.
+        \end{definition}
+        \begin{theorem}
+            If $(X,\,\tau)$ is a path connected topological space, then it is
+            connected.
+        \end{theorem}
+        \begin{proof}
+            Suppose not. Then there are two non-empty disjoint open subsets
+            $\mathcal{U},\mathcal{V}\subseteq{X}$ such that
+            $\mathcal{U}\cup\mathcal{V}=X$. Since they are non-empty, there
+            are points $x\in\mathcal{U}$ and $y\in\mathcal{V}$. But
+            $(X,\,\tau)$ is path connected, so there is a continuous path
+            $\gamma:[0,\,1]\rightarrow{X}$ such that $\gamma(0)=x$
+            and $\gamma(1)=y$. Since $\gamma$ is continuous, and since
+            $\mathcal{U}$ and $\mathcal{V}$ are open,
+            $\gamma^{-1}[\mathcal{U}]$ and $\gamma^{-1}[\mathcal{V}]$ are open.
+            But these subsets are also disjoint and non-empty, meaning
+            $[0,\,1]$ is disconnected, but it is not, a contradiction. So
+            $(X,\,\tau)$ is connected.
+        \end{proof}
+        One more stronger notion.
+        \begin{definition}[Arc Connected Topological Space]
+            An arc connected topological space is a topological space
+            $(X,\,\tau)$ such that for all $x,y\in{X}$ there is an injective
+            continuous path $\gamma:[0,\,1]\rightarrow{X}$ such that
+            $\gamma(0)=x$ and $\gamma(1)=y$.
+            \index{Arc Connected Topological Space}%
+            \index{Topological Space!Arc Connected}
+        \end{definition}
+        Every path connected Hausdorff space is arc connected. We'll be talking
+        a lot about arc connected spaces when we discuss space filling curves.
+    \section{Countability Properties}
+    \printindex
+\end{document}
