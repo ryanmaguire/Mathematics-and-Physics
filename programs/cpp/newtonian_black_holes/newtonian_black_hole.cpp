@@ -37,7 +37,11 @@ int main(void)
     const char *name = "newtonian_black_hole.ppm";
 
     /*  Use the template function to render the image.                        */
+#ifdef _OPENMP
+    nbh::parallel_euler_run(nbh::gravity, nbh::stop, nbh::checker_board, name);
+#else
     nbh::euler_run(nbh::gravity, nbh::stop, nbh::checker_board, name);
+#endif
     return 0;
 }
 /*  End of main.                                                              */

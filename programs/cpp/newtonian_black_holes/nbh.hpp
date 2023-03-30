@@ -132,5 +132,85 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
 }
 /*  End of nbh::euler_run.                                                    */
 
+/*  Template for running the programs with parallel processing.               */
+template <typename Tacc, typename Tstop, typename Tcolor>
+inline void
+nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
+{
+    /*  The vector v represents the initial velocity vector of a particle of  *
+     *  light. Since our light rays are being directed downwards, this vector *
+     *  should be (0, 0, -c), where c is the speed of light. We can take this *
+     *  to be 1 for simplicity. Adjusting this value would be equivalent to   *
+     *  adjusting the strength of gravity. Smaller values mean stronger       *
+     *  gravity, and larger values mean weaker gravity.                       */
+    const nbh::vec3 v = nbh::vec3(0.0, 0.0, -1.0);
+
+    /*  Total number of pixels.                                               */
+    const unsigned int size = nbh::setup::xsize * nbh::setup::ysize;
+
+    /*  Variable for looping over the image.                                  */
+    unsigned int n;
+
+    /*  Variable for the color.                                               */
+    nbh::color * const c =
+        static_cast<nbh::color * const>(std::malloc(sizeof(*c)*size));
+
+    /*  Open the file and give it write permissions.                          */
+    nbh::ppm PPM = nbh::ppm(name);
+
+    /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
+    if (!PPM.fp)
+    {
+        /*  If malloc also failed, we can just return. Nothing to free.       */
+        if (!c)
+            return;
+
+        /*  Otherwise free the color pointer and abort.                       */
+        std::free(c);
+        return;
+    }
+
+    /*  If malloc failed for the color pointer abort the computation.         */
+    else if (!c)
+    {
+        /*  Close the PPM file before exiting.                                */
+        PPM.close();
+        return;
+    }
+
+    /*  Otherwise initialize the ppm with default values in "setup".          */
+    PPM.init();
+
+    /*  We have malloc'd an array for the colors so we can parallelize this.  */
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (n = 0U; n < size; ++n)
+    {
+        /*  Variables for looping over the x and y coordinates.               */
+        const unsigned int x = n % nbh::setup::xsize;
+        const unsigned int y = n / nbh::setup::ysize;
+
+        /*  The position vector of a particle of light.                       */
+        nbh::vec3 p = nbh::pixel_to_point(x, y);
+
+        /*  Raytrace where the photon that hit p came from.                   */
+        p = nbh::euler::path(p, v, acc, stop);
+
+        /*  Get the color for the current pixel.                              */
+        c[n] = color(p);
+    }
+
+    /*  Loop over the PPM file and write the colors in order.                 */
+    for (n = 0U; n < size; ++n)
+        c[n].write(PPM.fp);
+
+    /*  Close the file, free the data, and return.                            */
+    PPM.close();
+    std::free(c);
+    return;
+}
+/*  End of nbh::parallel_euler_run.                                           */
+
 #endif
 /*  End of include guard.                                                     */
