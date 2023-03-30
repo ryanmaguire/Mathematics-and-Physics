@@ -38,7 +38,13 @@ int main(void)
     const char *name = "newtonian_black_hole_center_highligh.ppm";
 
     /*  Use the template function to render the image.                        */
-    nbh::euler_run(nbh::gravity, nbh::stop, nbh::checker_board_highlight, name);
+#ifdef _OPENMP
+    nbh::parallel_euler_run(nbh::gravity, nbh::stop,
+                            nbh::checker_board_highlight, name);
+#else
+    nbh::euler_run(nbh::gravity, nbh::stop,
+                   nbh::checker_board_highlight, name);
+#endif
     return 0;
 }
 /*  End of main.                                                              */
