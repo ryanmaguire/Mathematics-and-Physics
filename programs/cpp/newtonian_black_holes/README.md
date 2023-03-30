@@ -11,21 +11,15 @@ $$R=\frac{2GM}{c^{2}}$$
 where $M$ is the mass of the object, $c$ is the speed of light,
 and $G$ is the universal gravitational constant. Next we abuse Newtonian
 mechanics slightly. Newton's second law says
-$$
-\mathbf{F}(t)=m\mathbf{a}=\ddot{\mathbf{r}}(t)
-$$
+$$\mathbf{F}(t)=m\mathbf{a}=\ddot{\mathbf{r}}(t)$$
 where $\mathbf{F}$ is the force on an object of mass $m$, $\mathbf{a}$ is
 the acceleration vector, $\mathbf{r}$ is the position vector, and double-dots
 denote the second derivative with respect to time. For gravity we have
-$$
-m\ddot{\mathbf{r}}(t)=\frac{GMm}{||\mathbf{r}(t)||^{3}}\mathbf{r}(t)
-$$
+$$m\ddot{\mathbf{r}}(t)=\frac{GMm}{||\mathbf{r}(t)||^{3}}\mathbf{r}(t)$$
 where $||\mathbf{r}(t)||$ denotes the *norm* or Euclidean length of the
 vector $\mathbf{r}(t)$ and $M$ is the mass of the gravitating object.
 Dividing by $m$ we obtain the following equation of motion:
-$$
-\ddot{\mathbf{r}}(t)=\frac{GM}{||\mathbf{r}(t)||^{3}}\mathbf{r}(t)
-$$
+$$\ddot{\mathbf{r}}(t)=\frac{GM}{||\mathbf{r}(t)||^{3}}\mathbf{r}(t)$$
 This is all fine and dandy so long as $m\ne{0}$, otherwise we have an
 illegal division. Let us suppose that this final equation is true even for
 massless particles (like light). Or pretend that light has a mass $m$ that
