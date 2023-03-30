@@ -28,10 +28,22 @@
 #ifndef NBH_HPP
 #define NBH_HPP
 
+/*  malloc found here.                                                        */
+#include <cstdlib>
+
+/*  Color struct for dealing with RGB colors.                                 */
 #include "nbh_color.hpp"
+
+/*  Euler's method for numerically solving ODEs.                              */
 #include "nbh_euler.hpp"
+
+/*  PPM struct for creating and writing to PPM files.                         */
 #include "nbh_ppm.hpp"
+
+/*  The default parameters of the black hole are found here.                  */
 #include "nbh_setup.hpp"
+
+/*  Basic vector struct for points in 3-dimensional space.                    */
 #include "nbh_vector.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
@@ -40,9 +52,13 @@ namespace nbh {
     /*  Template for running the programs.                                    */
     template <typename Tacc, typename Tstop, typename Tcolor>
     inline void euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name);
+
+    /*  Template for running the programs with parallel processing.           */
+    template <typename Tacc, typename Tstop, typename Tcolor>
+    inline void
+    parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name);
 }
 /*  End of "nbh" namespace.                                                   */
-
 
 /*  Template for running the programs.                                        */
 template <typename Tacc, typename Tstop, typename Tcolor>
@@ -68,7 +84,7 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
     /*  Variable for the color.                                               */
     nbh::color c;
 
-    /*  Open the file "black_hole.ppm" and give it write permissions.         */
+    /*  Open the file and give it write permissions.                          */
     nbh::ppm PPM = nbh::ppm(name);
 
     /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
@@ -114,6 +130,7 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
     PPM.close();
     return;
 }
+/*  End of nbh::euler_run.                                                    */
 
 #endif
 /*  End of include guard.                                                     */
