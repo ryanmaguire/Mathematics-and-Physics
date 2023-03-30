@@ -1,4 +1,10 @@
-# Newtonian Black Holes
+# Table of Contents
+1. [Newtonian Black Holes](#nbh)
+2. [Compiling](#compiling)
+4. [License](#license)
+
+
+# Newtonian Black Holes <a name="nbh"></a>
 This is a very small project to experiment with ray tracing and
 black holes using (and slightly abusing) Newtonian mechanics.
 
@@ -33,3 +39,40 @@ directory contains files to do exactly this.
 **This is not physically realistic**, obviously, but the resulting images
 do look like what one might expect a black hole to be.
 ![Newtonian Black Hole](newtonian_black_hole.png "Newtonian Black Hole")
+
+# Compiling
+The files are written in plain C++ without any dependences (other than the
+standard library). You can compile with or without OpenMP support using
+`clang++` or `g++`. For example:
+```
+clang++ -fopenmp -O3 -flto newtonian_black_hole.cpp -o test.out
+```
+To compile without OpenMP just remove the `-fopenmp` option. Parallelization is
+recommended. On an old potato-of-a-computer (2011 Mac Mini, 4-core, 8 threads,
+2.7 GHz, running Debian GNU/Linux 11 Bullseye) the computation takes 10 seconds
+with OpenMP and 73 without.
+
+Neither `clang++` nor `g++` give any warnings, even with all enabled. Both
+```
+g++ -Wall -Wextra -Wpedantic -fopenmp -O3 -flto newtonian_black_hole.cpp -o test.out
+```
+and
+```
+clang++ -Weverything -fopenmp -O3 -flto newtonian_black_hole.cpp -o test.out
+```
+pass without any messages printed to the screen, so hopefully this project is
+portable (but I haven't tested it on macOS or Windows).
+
+# License
+    Mathematics-and-Physics is free software: you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Mathematics-and-Physics is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.

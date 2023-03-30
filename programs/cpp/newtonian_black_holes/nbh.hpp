@@ -153,7 +153,7 @@ nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
 
     /*  Variable for the color.                                               */
     nbh::color * const c =
-        static_cast<nbh::color * const>(std::malloc(sizeof(*c)*size));
+        static_cast<nbh::color *>(std::malloc(sizeof(*c)*size));
 
     /*  Open the file and give it write permissions.                          */
     nbh::ppm PPM = nbh::ppm(name);
