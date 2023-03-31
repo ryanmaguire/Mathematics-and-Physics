@@ -20,6 +20,7 @@
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
 \usepackage{imakeidx}
+\usepackage{minted}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -75,7 +76,7 @@
     \listoffigures
     \section{Motivation}
         Georg Cantor (C.E. 1845 - 1918)\index{Cantor, Georg}
-        demonstrated that every topological
+        demonstrated that every connected topological
         manifold (Hausdorff, second countable, and locally Euclidean, think of
         surfaces in $\mathbb{R}^{3}$) of positive dimension (i.e. excluding
         the empty manifold and zero dimensional singleton sets) can be put in
@@ -90,14 +91,14 @@
         square $[0,\,1]^{2}$. The result is a
         \textit{space-filling curve}\index{Space-Filling Curve}, a curve
         that fills a higher dimensional region. Because of Peano's works,
-        space-filling curves that curve a two-dimensional region are called
+        space-filling curves that fill a two-dimensional region are called
         \textit{Peano Curves}\index{Peano Curve}.
         \par\hfill\par
         These results naturally lead to the following question.
         \begin{equation}
             \textrm{Which spaces are the continuous image of the unit interval?}
         \end{equation}
-        The answer is unbelievable surprising. \textit{Most} reasonable spaces
+        The answer is surprising. \textit{Most} reasonable spaces
         are just the continuous image of $[0,\,1]$. This is the
         \textit{Hahn-Mazurkiewicz Theorem}.\index{Theorem!Hahn-Mazurkiewicz}
         \begin{theorem}[Hahn-Mazurkiewicz]
@@ -113,9 +114,117 @@
         reverse direction is so unbelievable one may question if it is true.
         We will spend a fair amount of time working to prove this result and
         many of its corollaries, including that Hausdorff path connected spaces
-        are arc connected. Another freebie is that the continuous image of
-        $[0,\,1]$ is metrizable (Hausdorff and compact implies regular,
-        and second countable regular Hausdorff spaces are metrizable by
-        Urysohn's Metrization Theorem\index{Theorem!Urysohn's}).
+        are arc connected.
+    \section{Peano's Curve}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/peano_curve_001.pdf}
+            \caption{Three Iterations of the Peano Curve}
+            \label{fig:peano_curve_001}
+        \end{figure}
+        The Peano curve is described as the limit for a sequence of continuous
+        function $P_{n}:[0,\,1]\rightarrow[0,\,1]^{2}$. The curves
+        $P_{n}$ are actually piecewise linear (polygonal). We start with the
+        square $S_{0}=[0,\,1]^{2}$ and the center of this square $C_{0}$.
+        If $S_{n}$ has been given, for each square $s$ in $S_{n}$ divide
+        $s$ into nine other equally sized squares. Replace the center $c$ of $s$
+        with a sequence of the centers of the nine newly created squares.
+        This is obtained by grouping the smaller squares into three columns
+        and ordering the centers contiguously within each column (that is,
+        no jumping over squares in this ordering). We then
+        order the columns from one side of the square so that the
+        distance between consecutive pairs of points is given by the side
+        length of the smaller squares. In total there are four ways to do this.
+        \begin{enumerate}
+            \item Order everything bottom-to-top. That is, the left three
+                centers are bottom-to-top, as are the middle centers, and the
+                right centers.
+            \item Zig-zag starting with bottom-to-top. That is, the left three
+                centers are bottom-to-top, the middle three centers are
+                top-to-bottom, and the right centers are again bottom-to-top.
+            \item Zig-zag starting top-to-bottom. This is the mirror of the
+                previous one, the left three centers are ordered top-to-bottom,
+                the middle three are bottom-to-top, and the right centers are
+                top-to-bottom.
+            \item Order everything top-to-bottom. This is the mirror of the
+                first idea. The left three centers go top-to-bottom, as do the
+                middle and right columns.
+        \end{enumerate}
+        The ordering chosen for the next iteration $S_{n+1}$ is
+        taken to be the one such that the distance between the first point of
+        the ordering and the previous iteration in $P_{n}$ equals the side
+        length of the small squares. We create $P_{n+1}$ be connecting the
+        dots in the order given for all of the squares. The number of line
+        segments in $P_{n}$ is hence given by $9^{n}$, which grows very fast.
+        The Peano curve is the limit $P=\lim_{n\rightarrow\infty}P_{n}$.
+        \par\hfill\par
+        The classical description of the Peano curve, given above, is often
+        easier to grasp using recursion. This is done efficiently using the
+        standard Python module \texttt{turtle}, which helps one draw simple
+        shapes and patterns. This is done below.
+        \begin{minted}[gobble=10]{python}
+            import turtle
+
+            def peano(level, length):
+                if level == 0:
+                    turtle.forward(length)
+
+                else:
+                    angle = 90
+                    peano(level-1, length/3)
+                    turtle.right(angle)
+                    peano(level-1, length/3)
+
+                    for _ in range(2):
+                        for _ in range(3):
+                            turtle.left(angle)
+                            peano(level-1, length/3)
+
+                        angle = -angle
+
+                    turtle.left(angle)
+                    peano(level-1, length/3)
+        \end{minted}
+        I adapted this to the asymptote vector graphics language to create
+        Fig.~\ref{fig:peano_curve_001}. The rainbow gradient is given so one
+        can understand how the curve progresses. The starting point is purple
+        and the end of the curve is red. Note the function is \textit{not}
+        injective, and it can't be. Since $[0,\,1]$ is compact, and
+        since $[0,\,1]^{2}$ is Hausdorff (it's a metric space), any
+        continuous bijection $f:[0,\,1]\rightarrow[0,\,1]^{2}$ would
+        automatically be a homeomorphism, but these are not homeomorphic
+        spaces.
+        \par\hfill\par
+        Many modifications of Peano's construction have been made since, and
+        perhaps most popular is the one presented by
+        David Hilbert (C.E. 1862 - 1943) in 1891. The
+        \textit{Hilbert curve}\index{Hilbert Curve}\index{Hilbert, David}
+        is similar to the Peano curve, but the $n^{th}$ iteration is injective
+        for all $n\in\mathbb{N}$ (the limit is still not surjective). Again,
+        it is perhaps easiest to describe using recursion.
+        \begin{minted}[gobble=10]{python}
+            import turtle
+
+            def hilbert(level, angle, length):
+                if level == 0:
+                    return
+
+                else:
+                    turtle.right(angle)
+                    hilbert(level-1, -angle, length)
+             
+                    turtle.forward(length)
+                    turtle.left(angle)
+                    hilbert(level-1, angle, length)
+             
+                    turtle.forward(length)
+                    hilbert(level-1, angle, length)
+
+                    turtle.left(angle)
+                    turtle.forward(length)
+                    hilbert(level-1, -angle, length)
+
+                    turtle.right(angle)
+        \end{minted}
     \printindex
 \end{document}
