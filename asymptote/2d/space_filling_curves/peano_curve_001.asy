@@ -48,7 +48,7 @@ pair A = (0.0, 0.0);
 int depth = 3;
 
 /*  Counter for the number of line segments created in the Peano curve.       */
-int pen_counter = 9^depth;
+int pen_counter = 0;
 
 /*  Path for the Peano curve, which starts at A.                              */
 path g = A;
@@ -61,6 +61,9 @@ void forward(real stride)
 
     /*  Add this new point to the path.                                       */
     g = g -- A;
+
+    /*  We've added another line segment, so increment the counter.           */
+    pen_counter += 1;
 }
 /*  End of forward.                                                           */
 
