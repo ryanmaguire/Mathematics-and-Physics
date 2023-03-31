@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     }
 
     /*  Create the commands.                                                  */
-	sprintf(command1, "pdflatex %s", argv[1]);
+	sprintf(command1, "pdflatex -shell-escape %s", argv[1]);
 	sprintf(command2, "bibtex %s", argv[1]);
 
     /*  First command, pdflatex, builds doc with bibliography and hyperlinks. */
