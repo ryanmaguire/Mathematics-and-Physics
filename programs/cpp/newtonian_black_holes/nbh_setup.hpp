@@ -103,7 +103,7 @@ namespace nbh {
     /*  Function for testing if a photon still exists with two black holes.   */
     inline bool stop2(const nbh::vec3 &p)
     {
-        /*  The black holes lie on the x axis. Compute the displaments to p.  */
+        /*  The black holes lie on the x axis. Compute the displacements to p.*/
         nbh::vec3 r1 = nbh::vec3(p.x - setup::bhx1, p.y, p.z);
         nbh::vec3 r2 = nbh::vec3(p.x - setup::bhx2, p.y, p.z);
 
