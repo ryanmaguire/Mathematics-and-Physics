@@ -34,7 +34,7 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole.ppm";
+    const char *name = "newtonian_black_hole_point_source.ppm";
 
     /*  Reset the number of maximum iterations to something much higher.      */
     nbh::euler::reset_max_iters(1000000U);
@@ -43,7 +43,12 @@ int main(void)
     nbh::setup::reset_radius(0.01);
 
     /*  Use the template function to render the image.                        */
+#ifdef _OPENMP
+    nbh::parallel_euler_run(nbh::gravity, nbh::stop,
+                            nbh::bright_checker_board, name);
+#else
     nbh::euler_run(nbh::gravity, nbh::stop, nbh::bright_checker_board, name);
+#endif
     return 0;
 }
 /*  End of main.                                                              */
