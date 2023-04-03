@@ -37,7 +37,12 @@ int main(void)
     const char *name = "newtonian_black_hole_four_colors.ppm";
 
     /*  Use the template function to render the image.                        */
+#ifdef _OPENMP
+    nbh::parallel_euler_run(nbh::gravity, nbh::stop,
+                            nbh::checker_board_four, name);
+#else
     nbh::euler_run(nbh::gravity, nbh::stop, nbh::checker_board_four, name);
+#endif
     return 0;
 }
 /*  End of main.                                                              */
