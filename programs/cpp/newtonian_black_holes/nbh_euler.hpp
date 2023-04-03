@@ -65,7 +65,7 @@ namespace nbh {
 
     /*  Given a vector-valued acceleration a = acc(r), a starting position p, *
      *  an initial velocity v, and a stopping condition stop, perform Euler's *
-     *  method to numerical solve the system of position.                     */
+     *  method to numerically solve the system of motion.                     */
     inline nbh::vec3 euler::path(nbh::vec3 p,
                                  nbh::vec3 v,
                                  nbh::vec3 (*acc)(const nbh::vec3 &),
