@@ -35,7 +35,7 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_center_highligh.ppm";
+    const char *name = "newtonian_black_hole_center_highlight.ppm";
 
     /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
