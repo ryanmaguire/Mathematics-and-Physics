@@ -25,9 +25,6 @@
  *  Date:   2023/02/28                                                        *
  ******************************************************************************/
 
-/*  Needed for the FILE data type and fprintf function.                       */
-#include <cstdio>
-
 /*  All header files for nbh are including here.                              */
 #include "nbh.hpp"
 
