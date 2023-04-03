@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Basic test of the nbh routines. Generates a two black holes.          *
+ *      Basic test of the nbh routines. Generates two black holes.            *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/02/28                                                        *
@@ -37,7 +37,12 @@ int main(void)
     const char *name = "newtonian_black_hole_two.ppm";
 
     /*  Use the template function to render the image.                        */
+#ifdef _OPENMP
+    nbh::parallel_euler_run(nbh::gravity2, nbh::stop2,
+                            nbh::checker_board, name);
+#else
     nbh::euler_run(nbh::gravity2, nbh::stop2, nbh::checker_board, name);
+#endif
     return 0;
 }
 /*  End of main.                                                              */
