@@ -17,7 +17,7 @@ $$R=\frac{2GM}{c^{2}}$$
 where $M$ is the mass of the object, $c$ is the speed of light,
 and $G$ is the universal gravitational constant. Next we abuse Newtonian
 mechanics slightly. Newton's second law says
-$$\mathbf{F}(t)=m\mathbf{a}(t)=\ddot{\mathbf{r}}(t)$$
+$$\mathbf{F}(t)=m\mathbf{a}(t)=m\ddot{\mathbf{r}}(t)$$
 where $\mathbf{F}$ is the force on an object of mass $m$, $\mathbf{a}$ is
 the acceleration vector, $\mathbf{r}$ is the position vector, and double-dots
 denote the second derivative with respect to time. For gravity we have
