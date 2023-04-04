@@ -44,7 +44,10 @@
 #include "nbh_setup.hpp"
 
 /*  Basic vector struct for points in 3-dimensional space.                    */
-#include "nbh_vector.hpp"
+#include "nbh_vec3.hpp"
+
+/*  Basic vector struct for points in 6-dimensional space.                    */
+#include "nbh_vec6.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
@@ -70,10 +73,10 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
      *  to be 1 for simplicity. Adjusting this value would be equivalent to   *
      *  adjusting the strength of gravity. Smaller values mean stronger       *
      *  gravity, and larger values mean weaker gravity.                       */
-    const nbh::vec3 v = nbh::vec3(0.0, 0.0, -1.0);
+    const nbh::vec3 v_start = nbh::vec3(0.0, 0.0, -1.0);
 
-    /*  The position vector of a particle of light.                           */
-    nbh::vec3 p;
+    /*  The initial conditions of a particle of light.                        */
+    nbh::vec6 u;
 
     /*  Variables for looping over the x and y coordinates of the detector.   */
     unsigned int x, y;
@@ -104,13 +107,16 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
         for (x = 0U; x < nbh::setup::xsize; ++x)
         {
             /*  We're incrementing p across our detector.                     */
-            p = nbh::pixel_to_point(x, y);
+            u.p = nbh::pixel_to_point(x, y);
+
+            /*  Set the starting velocity.                                    */
+            u.v = v_start;
 
             /*  Raytrace where the photon that hit p came from.               */
-            p = nbh::euler::path(p, v, acc, stop);
+            nbh::euler::path(u, acc, stop);
 
             /*  Get the color for the current pixel.                          */
-            c = color(p);
+            c = color(u);
 
             /*  Write the color to the PPM file.                              */
             c.write(PPM.fp);
@@ -143,7 +149,7 @@ nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
      *  to be 1 for simplicity. Adjusting this value would be equivalent to   *
      *  adjusting the strength of gravity. Smaller values mean stronger       *
      *  gravity, and larger values mean weaker gravity.                       */
-    const nbh::vec3 v = nbh::vec3(0.0, 0.0, -1.0);
+    const nbh::vec3 v_start = nbh::vec3(0.0, 0.0, -1.0);
 
     /*  Total number of pixels.                                               */
     const unsigned int size = nbh::setup::xsize * nbh::setup::ysize;
@@ -191,14 +197,14 @@ nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
         const unsigned int x = n % nbh::setup::xsize;
         const unsigned int y = n / nbh::setup::ysize;
 
-        /*  The position vector of a particle of light.                       */
-        nbh::vec3 p = nbh::pixel_to_point(x, y);
+        /*  The initial conditions of a particle of light.                    */
+        nbh::vec6 u = nbh::vec6(nbh::pixel_to_point(x, y), v_start);
 
         /*  Raytrace where the photon that hit p came from.                   */
-        p = nbh::euler::path(p, v, acc, stop);
+        nbh::euler::path(u, acc, stop);
 
         /*  Get the color for the current pixel.                              */
-        c[n] = color(p);
+        c[n] = color(u);
     }
 
     /*  Loop over the PPM file and write the colors in order.                 */
