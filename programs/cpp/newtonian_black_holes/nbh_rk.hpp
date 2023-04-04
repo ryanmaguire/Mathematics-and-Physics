@@ -70,14 +70,13 @@ namespace nbh {
         unsigned int n = 0U;
 
         /*  Factor for Runge-Kutta method.                                    */
-        nbh::vec6 k1, k2, k3, k4;
         const double dt = rk::time_increment;
         const double h0 = 0.5 * dt;
         const double h1 = dt * 0.1666666666666667;
-        k1 = nbh::vec6(u.v, acc(u.p));
-        k2 = nbh::vec6(u.v + k1.v * h0, acc(u.p + k1.p * h0));
-        k3 = nbh::vec6(u.v + k2.v * h0, acc(u.p + k2.p * h0));
-        k4 = nbh::vec6(u.v + k2.v * dt, acc(u.p + k2.p * dt));
+        nbh::vec6 k1 = nbh::vec6(u.v, acc(u.p));
+        nbh::vec6 k2 = nbh::vec6(u.v + k1.v * h0, acc(u.p + k1.p * h0));
+        nbh::vec6 k3 = nbh::vec6(u.v + k2.v * h0, acc(u.p + k2.p * h0));
+        nbh::vec6 k4 = nbh::vec6(u.v + k2.v * dt, acc(u.p + k2.p * dt));
 
         while (!stop(u.p) && n < rk::max_iters)
         {
