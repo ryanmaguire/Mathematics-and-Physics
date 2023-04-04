@@ -28,7 +28,8 @@
 #ifndef NBH_SETUP_HPP
 #define NBH_SETUP_HPP
 
-#include "nbh_vector.hpp"
+/*  Simple 3D vectors found here.                                             */
+#include "nbh_vec3.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
