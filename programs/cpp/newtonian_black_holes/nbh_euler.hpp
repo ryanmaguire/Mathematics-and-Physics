@@ -29,7 +29,10 @@
 #define NBH_EULER_HPP
 
 /*  Basic 3D vector struct given here.                                        */
-#include "nbh_vector.hpp"
+#include "nbh_vec3.hpp"
+
+/*  Basic 6D vector struct given here.                                        */
+#include "nbh_vec6.hpp"
 
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
@@ -49,10 +52,9 @@ namespace nbh {
         inline void reset_max_iters(unsigned int n);
 
         /*  Function for performing Euler's method, provided below.           */
-        inline nbh::vec3 path(nbh::vec3 p,
-                              nbh::vec3 v,
-                              nbh::vec3 (*acc)(const nbh::vec3 &),
-                              bool (*stop)(const nbh::vec3 &));
+        inline void path(nbh::vec6 &u,
+                         nbh::vec3 (*acc)(const nbh::vec3 &),
+                         bool (*stop)(const nbh::vec3 &));
     }
     /*  End of euler namespace.                                               */
 
@@ -65,11 +67,11 @@ namespace nbh {
 
     /*  Given a vector-valued acceleration a = acc(r), a starting position p, *
      *  an initial velocity v, and a stopping condition stop, perform Euler's *
-     *  method to numerically solve the system of motion.                     */
-    inline nbh::vec3 euler::path(nbh::vec3 p,
-                                 nbh::vec3 v,
-                                 nbh::vec3 (*acc)(const nbh::vec3 &),
-                                 bool (*stop)(const nbh::vec3 &))
+     *  method to numerically solve the system of motion. The initial         *
+     *  conditions (p, v) are given as the 6D vector u.                       */
+    inline void euler::path(nbh::vec6 &u,
+                            nbh::vec3 (*acc)(const nbh::vec3 &),
+                            bool (*stop)(const nbh::vec3 &))
     {
         /*  Use of this function with nbh makes a very naive assumption.      *
          *  Newton's Second Law states that F = ma, where a is the            *
@@ -103,7 +105,7 @@ namespace nbh {
 
         /*  Keep performing Euler's method until we hit the detector, or      *
          *  perform too many iterations.                                      */
-        while (!stop(p) && n < euler::max_iters)
+        while (!stop(u.p) && n < euler::max_iters)
         {
             /*  We numerically solve d^2/dt^2 p = F(p) in two steps. First,   *
              *  we compute the velocity dp/dt, meaning we need to solve       *
@@ -111,16 +113,14 @@ namespace nbh {
              *  we use this v to compute p via dp/dt = v, again solving       *
              *  numerically with Euler's method. So long as dt is small,      *
              *  the error should be small as well.                            */
-            p += v * euler::time_increment;
-            v += acc(p) * euler::time_increment;
+            u.p += u.v * euler::time_increment;
+            u.v += acc(u.p) * euler::time_increment;
 
             /*  It is possible that a photon was captured into orbit, but not *
              *  absorbed into the black hole. To avoid an infinite loop,      *
              *  abort the computation once n gets too large.                  */
             ++n;
         }
-
-        return p;
     }
     /*  End of euler function.                                                */
 }
