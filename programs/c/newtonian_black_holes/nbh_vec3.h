@@ -25,8 +25,8 @@
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef NBH_VECTOR_H
-#define NBH_VECTOR_H
+#ifndef NBH_VEC3_H
+#define NBH_VEC3_H
 
 /*  NBH_INLINE macro found here.                                              */
 #include "nbh_inline.h"
@@ -125,7 +125,8 @@ nbh_vec3_add(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *  Method:                                                                   *
  *      Perform vector addition component-wise and store the result in v.     *
  ******************************************************************************/
-NBH_INLINE void nbh_vec3_addto(struct nbh_vec3 *v, const struct nbh_vec3 *w)
+NBH_INLINE void
+nbh_vec3_addto(struct nbh_vec3 *v, const struct nbh_vec3 *w)
 {
     /*  Vector addition is done component-wise. Store sum in the first vector.*/
     v->x += w->x;
