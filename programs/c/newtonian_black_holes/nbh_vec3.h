@@ -267,6 +267,33 @@ nbh_vec3_scaleby(double a, struct nbh_vec3 *v)
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      nbh_vec3_scaled_addto                                                 *
+ *  Purpose:                                                                  *
+ *      Performs scalar multiplication and vector addition, v += a*w          *
+ *  Arguments:                                                                *
+ *      v (struct nbh_vec3 *):                                                *
+ *          A pointer to a vector.                                            *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      w (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector.                                            *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Perform the operation component-wise.                                 *
+ ******************************************************************************/
+NBH_INLINE void
+nbh_vec3_scaled_addto(struct nbh_vec3 *v, double a, const struct nbh_vec3 *w)
+{
+    /*  Perform the operation component-wise.                                 */
+    v->x += a*w->x;
+    v->y += a*w->y;
+    v->z += a*w->z;
+}
+/*  End of nbh_vec3_scale.                                                    */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      nbh_vec3_dot_product                                                  *
  *  Purpose:                                                                  *
  *      Performs the Euclidean dot product in R^3.                            *
