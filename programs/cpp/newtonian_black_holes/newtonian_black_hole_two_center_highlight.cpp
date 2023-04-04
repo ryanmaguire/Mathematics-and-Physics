@@ -32,15 +32,15 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_two.ppm";
+    const char *name = "newtonian_black_hole_two_center_highlight.ppm";
 
     /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh::parallel_euler_run(nbh::gravity2, nbh::stop2,
-                            nbh::checker_board_highlight, name);
+    nbh::prun(nbh::gravity2, nbh::stop2, nbh::checker_board_highlight,
+              nbh::euler::path, name);
 #else
-    nbh::euler_run(nbh::gravity2, nbh::stop2,
-                   nbh::checker_board_highlight, name);
+    nbh::run(nbh::gravity2, nbh::stop2, nbh::checker_board_highlight,
+             nbh::euler::path, name);
 #endif
     return 0;
 }

@@ -40,6 +40,9 @@
 /*  PPM struct for creating and writing to PPM files.                         */
 #include "nbh_ppm.hpp"
 
+/*  Runge-Kutta routines here.                                                */
+#include "nbh_rk.hpp"
+
 /*  The default parameters of the black hole are found here.                  */
 #include "nbh_setup.hpp"
 
@@ -53,19 +56,22 @@
 namespace nbh {
 
     /*  Template for running the programs.                                    */
-    template <typename Tacc, typename Tstop, typename Tcolor>
-    inline void euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name);
+    template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
+    inline void run(Tacc acc, Tstop stop, Tcolor color,
+                    Tpath path, const char *name);
 
     /*  Template for running the programs with parallel processing.           */
-    template <typename Tacc, typename Tstop, typename Tcolor>
-    inline void
-    parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name);
+    template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
+    inline void prun(Tacc acc, Tstop stop, Tcolor color,
+                     Tpath path, const char *name);
+
 }
 /*  End of "nbh" namespace.                                                   */
 
 /*  Template for running the programs.                                        */
-template <typename Tacc, typename Tstop, typename Tcolor>
-inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
+template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
+inline void
+nbh::run(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
 {
     /*  The vector v represents the initial velocity vector of a particle of  *
      *  light. Since our light rays are being directed downwards, this vector *
@@ -113,7 +119,7 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
             u.v = v_start;
 
             /*  Raytrace where the photon that hit p came from.               */
-            nbh::euler::path(u, acc, stop);
+            path(u, acc, stop);
 
             /*  Get the color for the current pixel.                          */
             c = color(u);
@@ -139,9 +145,9 @@ inline void nbh::euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
 /*  End of nbh::euler_run.                                                    */
 
 /*  Template for running the programs with parallel processing.               */
-template <typename Tacc, typename Tstop, typename Tcolor>
+template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
 inline void
-nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
+nbh::prun(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
 {
     /*  The vector v represents the initial velocity vector of a particle of  *
      *  light. Since our light rays are being directed downwards, this vector *
@@ -201,7 +207,7 @@ nbh::parallel_euler_run(Tacc acc, Tstop stop, Tcolor color, const char *name)
         nbh::vec6 u = nbh::vec6(nbh::pixel_to_point(x, y), v_start);
 
         /*  Raytrace where the photon that hit p came from.                   */
-        nbh::euler::path(u, acc, stop);
+        path(u, acc, stop);
 
         /*  Get the color for the current pixel.                              */
         c[n] = color(u);

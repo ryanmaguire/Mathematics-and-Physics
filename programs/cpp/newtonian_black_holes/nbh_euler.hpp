@@ -58,7 +58,6 @@ namespace nbh {
     }
     /*  End of euler namespace.                                               */
 
-
     /*  Function for reseting the max number of iterations allowed.           */
     inline void euler::reset_max_iters(unsigned int n)
     {

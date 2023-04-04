@@ -35,10 +35,11 @@ int main(void)
 
     /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh::parallel_euler_run(nbh::gravity2, nbh::stop2,
-                            nbh::checker_board, name);
+    nbh::prun(nbh::gravity2, nbh::stop2, nbh::checker_board,
+              nbh::euler::path, name);
 #else
-    nbh::euler_run(nbh::gravity2, nbh::stop2, nbh::checker_board, name);
+    nbh::run(nbh::gravity2, nbh::stop2, nbh::checker_board,
+             nbh::euler::path, name);
 #endif
     return 0;
 }
