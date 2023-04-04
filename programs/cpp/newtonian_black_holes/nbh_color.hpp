@@ -358,6 +358,10 @@ namespace nbh {
      *  velocity vector makes with the detector with a checkerboard pattern.  */
     inline color color_gradient_checkerboard(const nbh::vec6 &u)
     {
+        /*  If the photon didn't make it, color the pixel black.              */
+        if (u.p.z > nbh::setup::z_detector)
+            return nbh::colors::black();
+
         /*  Take the average of the checkerboard and the raindbow gradient.   */
         return bright_checker_board(u) + angle_gradient(u);
     }
