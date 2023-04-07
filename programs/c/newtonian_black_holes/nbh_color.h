@@ -40,8 +40,10 @@
 /*  Struct for working with PPM files found here.                             */
 #include "nbh_ppm.h"
 
+/*  Constants used throughout the project defined here.                       */
 #include "nbh_setup.h"
 
+/*  ceil and atan function provided here.                                     */
 #include <math.h>
 
 /*  Simple struct for working with colors in a PPM file.                      */
@@ -51,6 +53,7 @@ struct nbh_color {
     unsigned char red, green, blue;
 };
 
+/*  Constant colors that are frequently used.                                 */
 static const struct nbh_color nbh_white = {0xFFU, 0xFFU, 0xFFU};
 static const struct nbh_color nbh_black = {0x00U, 0x00U, 0x00U};
 static const struct nbh_color nbh_red = {0xFFU, 0x00U, 0x00U};

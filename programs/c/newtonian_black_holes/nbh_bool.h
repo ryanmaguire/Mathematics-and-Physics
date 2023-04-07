@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides a basic typedefs for Booleans without C99 features.          *
+ *      Provides a basic typedef for Booleans without C99 features.           *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/03                                                        *
