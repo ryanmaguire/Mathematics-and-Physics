@@ -46,6 +46,9 @@
 /*  The default parameters of the black hole are found here.                  */
 #include "nbh_setup.h"
 
+/*  Runge-Kutta solvers found here.                                           */
+#include "nbh_rk.h"
+
 /*  Basic vector struct for points in 3-dimensional space.                    */
 #include "nbh_vec3.h"
 

@@ -267,6 +267,39 @@ nbh_vec3_scaleby(double a, struct nbh_vec3 *v)
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      nbh_vec3_scaled_add                                                   *
+ *  Purpose:                                                                  *
+ *      Performs scalar multiplication and vector addition, u = v + a*w       *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector.                                            *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      w (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector.                                            *
+ *  Outputs:                                                                  *
+ *      scaled_sum (struct nbh_vec3):                                         *
+ *          The sum v + a*w.                                                  *
+ *  Method:                                                                   *
+ *      Perform the operation component-wise.                                 *
+ ******************************************************************************/
+NBH_INLINE struct nbh_vec3
+nbh_vec3_scaled_add(const struct nbh_vec3 *v, double a,
+                    const struct nbh_vec3 *w)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nbh_vec3 out;
+
+    /*  Perform the operation component-wise.                                 */
+    out.x = v->x + a*w->x;
+    out.y = v->y + a*w->y;
+    out.z = v->z + a*w->z;
+    return out;
+}
+/*  End of nbh_vec3_scaled_add.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      nbh_vec3_scaled_addto                                                 *
  *  Purpose:                                                                  *
  *      Performs scalar multiplication and vector addition, v += a*w          *
