@@ -75,15 +75,43 @@ static const double nbh_setup_highlight_threshold = 0.02;
 static const double nbh_setup_bhx1 = -3.0;
 static const double nbh_setup_bhx2 = +3.0;
 
-/*  Function for changing the radius of the blackhole.                        */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_setup_reset_radius                                                *
+ *  Purpose:                                                                  *
+ *      Resets the radius of the black hole.                                  *
+ *  Arguments:                                                                *
+ *      r (double):                                                           *
+ *          The new radius.                                                   *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_setup_reset_radius(double r)
 {
     nbh_setup_black_hole_radius = r;
     nbh_setup_black_hole_radius_sq = r*r;
 }
+/*  End of nbh_setup_reset_radius.                                            */
 
-/*  Function for converting from pixel on src to point in space.              */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_pixel_to_point.                                                   *
+ *  Purpose:                                                                  *
+ *      Converts a pixel (x, y) on the PPM to a point in space.               *
+ *  Arguments:                                                                *
+ *      x (unsigned int):                                                     *
+ *          The x coordinate of the pixel.                                    *
+ *      y (unsigned int):                                                     *
+ *          The y coordinate of the pixel.                                    *
+ *  Outputs:                                                                  *
+ *      p (struct nbh_vec3):                                                  *
+ *          The corresponding point in space to the given pixel.              *
+ *  Method:                                                                   *
+ *      The point on the detector lies on the z = nbh_setup_z_src plane. Use  *
+ *      this and convert the (x, y) components of the pixel to the (x, y)     *
+ *      component on the detector.                                            *
+ ******************************************************************************/
 NBH_INLINE struct nbh_vec3
 nbh_pixel_to_point(unsigned int x, unsigned int y)
 {
@@ -91,8 +119,20 @@ nbh_pixel_to_point(unsigned int x, unsigned int y)
     const double ypt = nbh_setup_start + nbh_setup_pyfact*(double)y;
     return nbh_vec3_rect(xpt, ypt, nbh_setup_z_src);
 }
+/*  End of nbh_pixel_to_point.                                                */
 
-/*  Function for determining if a photon still exists.                        */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_stop                                                              *
+ *  Purpose:                                                                  *
+ *      Determines if a photon is still in motion for one black hole.         *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          The vector corresponding to the given photon.                     *
+ *  Outputs:                                                                  *
+ *      stop (nbh_bool):                                                      *
+ *          Boolean for if the photon is still moving.                        *
+ ******************************************************************************/
 NBH_INLINE nbh_bool
 nbh_stop(const struct nbh_vec3 *v)
 {
@@ -108,9 +148,20 @@ nbh_stop(const struct nbh_vec3 *v)
     else
         return nbh_false;
 }
-/*  End of stop.                                                              */
+/*  End of nbh_stop.                                                          */
 
-/*  Function for testing if a photon still exists with two black holes.       */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_stop2                                                             *
+ *  Purpose:                                                                  *
+ *      Determines if a photon is still in motion for two black holes.        *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          The vector corresponding to the given photon.                     *
+ *  Outputs:                                                                  *
+ *      stop (nbh_bool):                                                      *
+ *          Boolean for if the photon is still moving.                        *
+ ******************************************************************************/
 NBH_INLINE nbh_bool
 nbh_stop2(const struct nbh_vec3 *p)
 {
@@ -134,10 +185,21 @@ nbh_stop2(const struct nbh_vec3 *p)
     else
         return nbh_false;
 }
-/*  End of stop2.                                                             */
+/*  End of nbh_stop2.                                                         */
 
-/*  The acceleration under the force of gravity is given by Newton's          *
- *  universal law of gravitation. This is the inverse square law.             */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_gravity                                                           *
+ *  Purpose:                                                                  *
+ *      Computes the acceleration given by the inverse square law from        *
+ *      Newton's universal law of gravitation.                                *
+ *  Arguments:                                                                *
+ *      p (const struct nbh_vec3 *):                                          *
+ *          The position vector of the particle.                              *
+ *  Outputs:                                                                  *
+ *      a (struct nbh_vec3):                                                  *
+ *          The acceleration of the particle.                                 *
+ ******************************************************************************/
 NBH_INLINE struct nbh_vec3
 nbh_gravity(const struct nbh_vec3 *p)
 {
@@ -152,11 +214,22 @@ nbh_gravity(const struct nbh_vec3 *p)
      *  towards the black hole.                                               */
     return nbh_vec3_rect(-p->x*factor, -p->y*factor, -p->z*factor);
 }
-/*  End of gravity.                                                           */
+/*  End of nbh_gravity.                                                       */
 
-/*  The acceleration under the force of gravity is given by Newton's          *
- *  universal law of gravitation. This is the inverse square law. We use      *
- *  the principle of superposition to add a second black hole.                */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_gravity2                                                          *
+ *  Purpose:                                                                  *
+ *      Computes the acceleration given by the inverse square law from        *
+ *      Newton's universal law of gravitation for two gravitating objects.    *
+ *      This is done using the principle of superposition.                    *
+ *  Arguments:                                                                *
+ *      p (const struct nbh_vec3 *):                                          *
+ *          The position vector of the particle.                              *
+ *  Outputs:                                                                  *
+ *      a (struct nbh_vec3):                                                  *
+ *          The acceleration of the particle.                                 *
+ ******************************************************************************/
 NBH_INLINE struct nbh_vec3
 nbh_gravity2(const struct nbh_vec3 *p)
 {
@@ -177,7 +250,7 @@ nbh_gravity2(const struct nbh_vec3 *p)
     nbh_vec3_addto(&f1, &f2);
     return f1;
 }
-/*  End of gravity2.                                                          */
+/*  End of nbh_gravity2.                                                      */
 
 #endif
 /*  End of include guard.                                                     */
