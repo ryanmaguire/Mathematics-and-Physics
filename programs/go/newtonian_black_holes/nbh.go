@@ -972,11 +972,11 @@ func (ppm *PPM) InitFromVals(x, y uint32, ptype int) {
 
     /*  For integers between 1 and 5 we can pass the value to the preamble.   */
     if (0 < ptype && ptype < 6) {
-        fmt.Fprintf(ppm.Fp, "P%d\n%u %u\n255\n", ptype, x, y)
+        fmt.Fprintf(ppm.Fp, "P%d\n%d %d\n255\n", ptype, x, y)
 
     /*  The only other legal value is 6. All illegal values default to 6.     */
     } else {
-        fmt.Fprintf(ppm.Fp, "P6\n%u %u\n255\n", x, y)
+        fmt.Fprintf(ppm.Fp, "P6\n%d %d\n255\n", x, y)
     }
 }
 /*  End of PPM.InitFromVals.                                                  */
@@ -1033,9 +1033,8 @@ func (ppm *PPM) Close() {
  *      None.                                                                 *
  ******************************************************************************/
 func (c *Color) WriteToFile(fp *os.File) {
-    fmt.Fprint(fp, c.Red)
-    fmt.Fprint(fp, c.Green)
-    fmt.Fprint(fp, c.Blue)
+    rgb := []byte{c.Red, c.Green, c.Blue}
+    fp.Write(rgb)
 }
 /*  End of Color.WriteToFile.                                                 */
 
@@ -1096,3 +1095,299 @@ func ColorScaleBy(c *Color, t float64) {
     c.Blue = uint8(t * float64(c.Blue))
 }
 /*  End of ColorScaleBy.                                                      */
+
+/*  Common colors.                                                            */
+func Black() Color {
+    return Color{0x00, 0x00, 0x00}
+}
+
+func Red(t float64) Color {
+    var val uint8 = uint8(t * 255.0)
+    return Color{val, 0x00, 0x00}
+}
+
+func White(t float64) Color {
+    var val uint8 = uint8(t * 255.0)
+    return Color{val, val, val}
+}
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ColorAdd                                                              *
+ *  Purpose:                                                                  *
+ *      Adds two colors by averaging over their components.                   *
+ *  Arguments:                                                                *
+ *      c0 (*Color):                                                          *
+ *          A pointer to the first color.                                     *
+ *      c1 (*Color):                                                          *
+ *          A pointer to the second color.                                    *
+ *  Outputs:                                                                  *
+ *      sum (Color):                                                          *
+ *          The sum of the two colors.                                        *
+ *  Method:                                                                   *
+ *      Convert the components to float64 and take their average.             *
+ ******************************************************************************/
+func ColorAdd(c0, c1 *Color) Color {
+
+    /*  Declare a variable for the output.                                    */
+    var sum Color
+
+    /*  Avoid overflow by converting to doubles and then taking the average.  */
+    var r float64 = 0.5*(float64(c0.Red) + float64(c1.Red))
+    var g float64 = 0.5*(float64(c0.Green) + float64(c1.Green))
+    var b float64 = 0.5*(float64(c0.Blue) + float64(c1.Blue))
+
+    /*  Convert back to unsigned char's and store these in the color.         */
+    sum.Red = uint8(r)
+    sum.Green = uint8(g)
+    sum.Blue = uint8(b)
+    return sum
+}
+/*  End of ColorAdd.                                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ColorAddTo                                                            *
+ *  Purpose:                                                                  *
+ *      Adds two colors by averaging over their components.                   *
+ *  Arguments:                                                                *
+ *      c0 (*Color):                                                          *
+ *          A pointer to the first color.                                     *
+ *      c1 (*Color):                                                          *
+ *          A pointer to the second color.                                    *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ *  Method:                                                                   *
+ *      Convert the components to float64 and take their average.             *
+ ******************************************************************************/
+func ColorAddTo(c0, c1 *Color) {
+
+    /*  Avoid overflow by converting to doubles and then taking the average.  */
+    var r float64 = 0.5*(float64(c0.Red) + float64(c1.Red))
+    var g float64 = 0.5*(float64(c0.Green) + float64(c1.Green))
+    var b float64 = 0.5*(float64(c0.Blue) + float64(c1.Blue))
+
+    /*  Convert back to unsigned char's and store these in the color.         */
+    c0.Red = uint8(r)
+    c0.Green = uint8(g)
+    c0.Blue = uint8(b)
+}
+/*  End of ColorAddTo.                                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      CheckerBoard                                                          *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector.                      *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func CheckerBoard(u *Vec6) Color {
+
+    /*  Factor for darkening the checker board.                               */
+    var cfact float64 = Z_Detector_Sq / u.P.NormSq()
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    } else if (uint32(math.Ceil(u.P.X) + math.Ceil(u.P.Y)) & 1 == 1) {
+        return White(cfact)
+    } else {
+        return Red(cfact)
+    }
+}
+/*  End of CheckerBoard.                                                      */
+
+/*  Time step used in Euler's method. The user may change this.               */
+var Euler_Time_Increment float64 = 0.01
+
+/*  The max number of iterations in Euler's method.                           */
+var Euler_Max_Iters uint32 = 65535
+
+/*  Function for reseting the max number of iterations allowed.               */
+func EulerResetMaxIters(n uint32) {
+    Euler_Max_Iters = n
+}
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      EulerPath                                                             *
+ *  Purpose:                                                                  *
+ *      Given a vector-valued acceleration a = acc(r), a starting position p, *
+ *      an initial velocity v, and a stopping condition stop, perform Euler's *
+ *      method method to numerically solve the system of motion. The initial  *
+ *      conditions (p, v) are given as the 6D vector u.                       *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          A pointer to a 6D vector that represents the initial position and *
+ *          velocity vectors of the particle.                                 *
+ *      acc (acceleration):                                                   *
+ *          A function that describes the equation of motion for the particle.*
+ *      stop (stopper):                                                       *
+ *          A stopper function that determines when to stop Euler's method.   *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Apply Euler's method. Given initial conditions (p0, v0) and time      *
+ *      increment dt, we iteratively compute:                                 *
+ *                                                                            *
+ *          v_{n+1} = dt*acc(p_{n+1}) + v_{n}                                 *
+ *          p_{n+1} = dt*v_{n+1} + p_{n}                                      *
+ *                                                                            *
+ *      Do this until the stopper function tells you to stop, or until you've *
+ *      done to many iterations.                                              *
+ ******************************************************************************/
+func EulerPath(u *Vec6, acc Acceleration, stop Stopper) {
+
+    /*  Use of this function with nbh makes a very naive assumption. Newton's *
+     *  Second Law states that F = ma, where a is the acceleration. For       *
+     *  gravity we obtain the vector-valued differential equation:            *
+     *      -GMm p / ||p||^3 = m d^2/dt^2 p                                   *
+     *  Where G is the universal gravitational constant, and M is the mass of *
+     *  the black hole (m being the mass of the object under consideration).  *
+     *  We can take G*M to be 1 for simplicity, since we never specified the  *
+     *  units we're in. Now, if m is any non-zero value we can cancel to get: *
+     *      p / ||p||^3 = d^2/dt^2 p                                          *
+     *  Solving this vector-valued differential equation results in the       *
+     *  trajectory of the object. The only problem is it is generally         *
+     *  believed that photons, which are particles of light, have zero mass.  *
+     *  So let's pretend they have a mass that is so stupidly small it would  *
+     *  be impossible to measure, but not zero. Given this we could apply     *
+     *  Newtonian mechanics to get a rough sketch of a black hole.            */
+    var a Vec3
+
+    /*  In the main use of this function the black hole is of radius r at     *
+     *  the origin and our detector is the plane z = z0. Our source of light  *
+     *  is some plane z = z1. So the light is coming down and heading towards *
+     *  our detector. We'll increment time using a small value dt, and we'll  *
+     *  keep incrementing until the light either hits the detector or is      *
+     *  absorbed by the black hole. dt is given by the time_increment value,  *
+     *  and the stopping condition (hitting the detector, or being absorbed   *
+     *  by a black hole) is determined by the "stop" function.                */
+    var n uint32
+
+    /*  It is possible that a photon was captured into orbit, but not         *
+     *  absorbed into the black hole. To avoid an infinite loop abort the     *
+     *  computation once n gets too large.                                    */
+    for n = 0; n < Euler_Max_Iters; n += 1 {
+
+        /*  We numerically solve d^2/dt^2 p = F(p) in two steps. First we     *
+         *  compute the velocity dp/dt, meaning we need to solve dv/dt = F(p).*
+         *  We solve numerically with Euler's method. Then we use this v to   *
+         *  compute p via dp/dt = v, again solving numerically with Euler's   *
+         *  method. So long as dt is small, the error should be small as well.*/
+        a = acc(&u.P)
+        Vec3ScaledAddTo(&u.P, Euler_Time_Increment, &u.V)
+        Vec3ScaledAddTo(&u.V, Euler_Time_Increment, &a)
+
+        /*  Check if we can stop.                                             */
+        if (stop(&u.P)) {
+            break
+        }
+    }
+}
+/*  End of EulerPath.                                                         */
+
+/******************************************************************************
+ *                            Raytracing Routines                             *
+ ******************************************************************************/
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Run                                                                   *
+ *  Purpose:                                                                  *
+ *      Runs the raytracing routines without parallelizing the computation.   *
+ *  Arguments:                                                                *
+ *      acc (Acceleration):                                                   *
+ *          Function describing the equation of motion.                       *
+ *      stop (Stopper):                                                       *
+ *          Stopper function for determining when the photon stops moving.    *
+ *      color (Colorer):                                                      *
+ *          Color function for coloring the detector.                         *
+ *      path (Raytracer):                                                     *
+ *          The method of numerical raytracing. Options are Euler's method    *
+ *          and fourth order Runge-Kutta.                                     *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file.                                  *
+ ******************************************************************************/
+func Run(acc Acceleration, stop Stopper,
+         color Colorer, path Raytracer, name string) {
+
+    /*  The vector v represents the initial velocity vector of a particle of  *
+     *  light. Since our light rays are being directed downwards, this vector *
+     *  should be (0, 0, -c), where c is the speed of light. We can take this *
+     *  to be 1 for simplicity. Adjusting this value would be equivalent to   *
+     *  adjusting the strength of gravity. Smaller values mean stronger       *
+     *  gravity, and larger values mean weaker gravity.                       */
+    var v_start Vec3 = Vec3{0.0, 0.0, -1.0}
+
+    /*  The initial conditions of a particle of light.                        */
+    var u Vec6
+
+    /*  Variables for looping over the x and y coordinates of the detector.   */
+    var x, y uint32
+
+    /*  Factor used for printing a progress report.                           */
+    var prog_factor float64 = 100.0 / float64(Y_Size)
+
+    /*  Variable for the color.                                               */
+    var c Color
+
+    /*  Open the file and give it write permissions.                          */
+    var ppm PPM
+
+    ppm.Create(name)
+
+    /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
+    if (ppm.Fp == nil) {
+        return
+    }
+
+    /*  Otherwise initialize the ppm with default values in "setup".          */
+    ppm.Init()
+
+    /*  We can NOT do parallel processing with the creation of our PPM file   *
+     *  since the order the values are computed is essential. If we wanted to *
+     *  introduce parallel processing, we would need to store the colors in   *
+     *  an array, and then create the PPM from that array. For the simplicity *
+     *  of the code, this is not done.                                        */
+    for y = 0; y < Y_Size; y += 1 {
+        for x = 0; x < X_Size; x += 1 {
+
+            /*  We're incrementing p across our detector.                     */
+            u.P = PixelToPoint(x, y)
+
+            /*  Set the starting velocity.                                    */
+            u.V = v_start
+
+            /*  Raytrace where the photon that hit p came from.               */
+            path(&u, acc, stop)
+
+            /*  Get the color for the current pixel.                          */
+            c = color(&u)
+
+            /*  Write the color to the PPM file.                              */
+            c.WriteToPPM(&ppm)
+        }
+        /*  End of x for-loop.                                                */
+
+        /*  Print a status update.                                            */
+        if ((y % 20) == 0) {
+            fmt.Printf("Progress: %.4f%%  \r", prog_factor*float64(y))
+        }
+    }
+    /*  End of y for-loop.                                                    */
+
+    /*  Print a final progress report.                                        */
+    fmt.Printf("Progress: 100.0000%%\nDone\n")
+
+    /*  Close the file and return.                                            */
+    ppm.Close()
+}
+/*  End of Run.                                                               */
