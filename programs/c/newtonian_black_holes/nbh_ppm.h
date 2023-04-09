@@ -102,26 +102,13 @@ nbh_ppm_create(const char *name)
 NBH_INLINE void
 nbh_init_ppm_from_vals(struct nbh_ppm *PPM, unsigned x, unsigned y, int type)
 {
-    switch (type)
-    {
-        case 1:
-            fprintf(PPM->fp, "P1\n%u %u\n255\n", x, y);
-            return;
-        case 2:
-            fprintf(PPM->fp, "P2\n%u %u\n255\n", x, y);
-            return;
-        case 3:
-            fprintf(PPM->fp, "P3\n%u %u\n255\n", x, y);
-            return;
-        case 4:
-            fprintf(PPM->fp, "P4\n%u %u\n255\n", x, y);
-            return;
-        case 5:
-            fprintf(PPM->fp, "P5\n%u %u\n255\n", x, y);
-            return;
-        default:
-            fprintf(PPM->fp, "P6\n%u %u\n255\n", x, y);
-    }
+    /*  For integers between 1 and 5 we can pass the value to the preamble.   */
+    if (0 < type && type < 5)
+        fprintf(PPM->fp, "P%d\n%u %u\n255\n", type, x, y);
+
+    /*  The only other legal value is 6. All illegal values default to 6.     */
+    else
+        fprintf(PPM->fp, "P6\n%u %u\n255\n", x, y);
 }
 /*  End of nbh_init_ppm_from_vals.                                            */
 
