@@ -47,10 +47,7 @@ standard library). You can compile with or without OpenMP support using
 ```
 gcc -fopenmp -O3 -flto newtonian_black_hole.c -o test.out
 ```
-To compile without OpenMP just remove the `-fopenmp` option. Parallelization is
-recommended. On an old potato-of-a-computer (2011 Mac Mini, 4-core, 8 threads,
-2.7 GHz, running Debian GNU/Linux 11 Bullseye) the computation takes 10 seconds
-with OpenMP and 73 without.
+To compile without OpenMP just remove the `-fopenmp` option.
 
 Neither `clang` nor `gcc` give any warnings, even with all enabled. Both
 ```
