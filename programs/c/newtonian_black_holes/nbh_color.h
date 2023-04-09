@@ -246,7 +246,18 @@ nbh_color_addto(struct nbh_color *c0, const struct nbh_color *c1)
 }
 /*  End of nbh_color_addto.                                                   */
 
-/*  Function for creating a checker board pattern on the detector.            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_checker_board                                                     *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector.                      *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_checker_board(const struct nbh_vec6 *u)
 {
@@ -263,8 +274,20 @@ nbh_checker_board(const struct nbh_vec6 *u)
     else
         return nbh_color_scale(&nbh_red, cfact);
 }
+/*  End of nbh_checker_board.                                                 */
 
-/*  Brighter version of the previous checker board.                           */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_bright_checker_board                                              *
+ *  Purpose:                                                                  *
+ *      Creates a brighter checker-board pattern on the detector.             *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_bright_checker_board(const struct nbh_vec6 *u)
 {
@@ -282,8 +305,20 @@ nbh_bright_checker_board(const struct nbh_vec6 *u)
     else
         return nbh_color_scale(&nbh_red, cfact);
 }
+/*  End of nbh_bright_checker_board.                                          */
 
-/*  Function for creating a checker board pattern on the detector.            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_checker_board_four                                                *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector with four colors.     *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_checker_board_four(const struct nbh_vec6 *u)
 {
@@ -312,8 +347,21 @@ nbh_checker_board_four(const struct nbh_vec6 *u)
             return nbh_color_scale(&nbh_red, cfact);
     }
 }
+/*  End of nbh_checker_board_four.                                            */
 
-/*  Function for creating a checker board pattern on the detector.            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_checker_board_four_highlight                                      *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector with four colors and  *
+ *      highlights the origin blue.                                           *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_checker_board_four_highlight(const struct nbh_vec6 *u)
 {
@@ -346,8 +394,21 @@ nbh_checker_board_four_highlight(const struct nbh_vec6 *u)
             return nbh_color_scale(&nbh_red, cfact);
     }
 }
+/*  End of nbh_checker_board_four_highlight.                                  */
 
-/*  Function for creating a checker board pattern on the detector.            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_checker_board                                                     *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector and highlights the    *
+ *      origin blue.                                                          *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_checker_board_highlight(const struct nbh_vec6 *u)
 {
@@ -368,9 +429,21 @@ nbh_checker_board_highlight(const struct nbh_vec6 *u)
     else
         return nbh_color_scale(&nbh_red, cfact);
 }
+/*  End of nbh_checker_board_highlight.                                       */
 
-/*  Function for creating a rainbow-gradient based on the angle the           *
- *  velocity vector makes with the detector.                                  */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_angle_gradient                                                    *
+ *  Purpose:                                                                  *
+ *      Creates a rainbow gradient of color based on the angle the velocity   *
+ *      vector of the particle makes with the detector on impact.             *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_angle_gradient(const struct nbh_vec6 *u)
 {
@@ -420,11 +493,23 @@ nbh_angle_gradient(const struct nbh_vec6 *u)
 
     return nbh_color_create(red, green, blue);
 }
+/*  End of nbh_angle_gradient.                                                */
 
-/*  Function for creating a rainbow-gradient based on the angle the           *
- *  velocity vector makes with the detector with a checkerboard pattern.      */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_gradient_checkerboard                                       *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector and adds the rainbow  *
+ *      gradient defined in nbh_angle_gradient.                               *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
-color_gradient_checkerboard(const struct nbh_vec6 *u)
+nbh_color_gradient_checkerboard(const struct nbh_vec6 *u)
 {
     /*  Declare necessary variables. C89 requires this at the top.            */
     struct nbh_color rainbow, checker_board;
@@ -438,6 +523,7 @@ color_gradient_checkerboard(const struct nbh_vec6 *u)
     checker_board = nbh_bright_checker_board(u);
     return nbh_color_add(&checker_board, &rainbow);
 }
+/*  End of nbh_color_gradient_checkerboard.                                   */
 
 #endif
 /*  End of include guard.                                                     */
