@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides a struct for using colors.                                   *
+ *      Provides a struct for working with PPM files.                         *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/04                                                        *
@@ -28,7 +28,7 @@
 #ifndef NBH_PPM_H
 #define NBH_PPM_H
 
-/*  File data type found here.                                                */
+/*  FILE data type found here.                                                */
 #include <stdio.h>
 
 /*  NBH_INLINE macro found here.                                              */
@@ -44,7 +44,23 @@ struct nbh_ppm {
     FILE *fp;
 };
 
-/*  Constructor from a name.                                                  */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_ppm_create                                                        *
+ *  Purpose:                                                                  *
+ *      Creates a PPM file with a given file name.                            *
+ *  Arguments:                                                                *
+ *      name (const char *):                                                  *
+ *          The file name of the output PPM (ex. "black_hole.ppm").           *
+ *  Outputs:                                                                  *
+ *      PPM (struct nbh_ppm):                                                 *
+ *          A PPM struct whose FILE pointer points to a ppm file that has     *
+ *          been given write permissions.                                     *
+ *  Notes:                                                                    *
+ *      fopen returns NULL on failure. This function will print a warning if  *
+ *      fopen fails. It is the callers responsibility to inspect the FILE     *
+ *      pointer before trying to use it.                                      *
+ ******************************************************************************/
 NBH_INLINE struct nbh_ppm
 nbh_ppm_create(const char *name)
 {
@@ -54,7 +70,7 @@ nbh_ppm_create(const char *name)
     /*  Open the file and give it write permissions.                          */
     PPM.fp = fopen(name, "w");
 
-    /*  Warn the caller is fopen failed.                                      */
+    /*  Warn the caller if fopen failed.                                      */
     if (!PPM.fp)
         puts("ERROR: fopen failed and returned NULL.");
 
@@ -62,10 +78,27 @@ nbh_ppm_create(const char *name)
 }
 /*  End of nbh_ppm_create.                                                    */
 
-/*  Print the preamble to the PPM file. A PPM file wants Pn followed by       *
- *  three numbers. P6 means we're encoding an RGB image in binary format.     *
- *  The first two numbers are the number of pixels in the x and y axes.       *
- *  The last number is the size of our color spectrum, which is 255.          */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_init_ppm_from_vals                                                *
+ *  Purpose:                                                                  *
+ *      Print the preamble to the PPM file. A PPM file wants Pn followed by   *
+ *      three numbers. P6 means we're encoding an RGB image in binary format. *
+ *      The first two numbers are the number of pixels in the x and y axes.   *
+ *      The last number is the size of our color spectrum, which is 255.      *
+ *  Arguments:                                                                *
+ *      PPM (struct nbh_ppm *):                                               *
+ *          A pointer to a PPM struct. This pointers FILE pointer will be     *
+ *          edited with the preamble for the PPM.                             *
+ *      x (unsigned int):                                                     *
+ *          The number of pixels in the x axis.                               *
+ *      y (unsigned int):                                                     *
+ *          The number of pixels in the y axis.                               *
+ *      type (int):                                                           *
+ *          The type of the PPM, options are 1 through 6.                     *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_init_ppm_from_vals(struct nbh_ppm *PPM, unsigned x, unsigned y, int type)
 {
@@ -92,7 +125,19 @@ nbh_init_ppm_from_vals(struct nbh_ppm *PPM, unsigned x, unsigned y, int type)
 }
 /*  End of nbh_init_ppm_from_vals.                                            */
 
-/*  Initialize using the values in "setup".                                   */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_init_ppm_from_vals                                                *
+ *  Purpose:                                                                  *
+ *      Initialize a PPM using the values in "setup".                         *
+ *  Arguments:                                                                *
+ *      PPM (struct nbh_ppm *):                                               *
+ *          A pointer to the PPM that is to be initialized.                   *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Pass the default parameters in nbh_setup.h to nbh_init_ppm_from_vals. *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_ppm_init(struct nbh_ppm *PPM)
 {
@@ -100,7 +145,17 @@ nbh_ppm_init(struct nbh_ppm *PPM)
 }
 /*  End of nbh_ppm_init.                                                      */
 
-/*  Method for closing the file pointer for the PPM.                          */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_ppm_close                                                         *
+ *  Purpose:                                                                  *
+ *      Closes the file pointer in a PPM struct.                              *
+ *  Arguments:                                                                *
+ *      PPM (struct nbh_ppm *):                                               *
+ *          A pointer to the PPM struct that is to be closed.                 *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_ppm_close(struct nbh_ppm *PPM)
 {
