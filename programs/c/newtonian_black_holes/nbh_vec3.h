@@ -290,7 +290,7 @@ nbh_vec3_scaled_addto(struct nbh_vec3 *v, double a, const struct nbh_vec3 *w)
     v->y += a*w->y;
     v->z += a*w->z;
 }
-/*  End of nbh_vec3_scale.                                                    */
+/*  End of nbh_vec3_scaled_addto.                                             */
 
 /******************************************************************************
  *  Function:                                                                 *

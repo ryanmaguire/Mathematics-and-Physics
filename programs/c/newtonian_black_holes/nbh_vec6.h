@@ -165,7 +165,7 @@ nbh_vec6_add(const struct nbh_vec6 *u0, const struct nbh_vec6 *u1)
  *      u1 (const struct nbh_vec6 *):                                         *
  *          Another pointer to a vector.                                      *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform vector addition component-wise and store the result in u0.    *
  ******************************************************************************/
@@ -228,7 +228,7 @@ nbh_vec6_subtract(const struct nbh_vec6 *u0, const struct nbh_vec6 *u1)
  *      u1 (const struct nbh_vec6 *):                                         *
  *          Another pointer to a vector.                                      *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform vector subtraction component-wise and store the result in u0. *
  *  Notes:                                                                    *
@@ -291,7 +291,7 @@ nbh_vec6_scale(double a, const struct nbh_vec6 *u)
  *      v (struct nbh_vec6 *):                                                *
  *          A pointer to a vector. The product is stored here.                *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform scalar multiplication component-wise, storing the result in v.*
  ******************************************************************************/
@@ -302,7 +302,7 @@ nbh_vec6_scaleby(double a, struct nbh_vec6 *u)
     nbh_vec3_scaleby(a, &u->p);
     nbh_vec3_scaleby(a, &u->v);
 }
-/*  End of nbh_vec6_scale.                                                    */
+/*  End of nbh_vec6_scaleby.                                                  */
 
 /******************************************************************************
  *  Function:                                                                 *
