@@ -786,11 +786,11 @@ func ResetRadius(r float64) {
  *      on the detector.                                                      *
  ******************************************************************************/
 func PixelToPoint(x, y uint32) Vec3 {
-    var xpt float64 = Start + PX_Factor*float64(x);
-    var ypt float64 = Start + PY_Factor*float64(y);
+    var xpt float64 = Start + PX_Factor*float64(x)
+    var ypt float64 = Start + PY_Factor*float64(y)
     return Vec3{xpt, ypt, Z_Src}
 }
-/*  End of nbh_pixel_to_point.                                                */
+/*  End of PixelToPoint.                                                      */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -808,15 +808,15 @@ func Stop(v *Vec3) bool {
 
     /*  Case 1: The photon has reached the detector.                          */
     if (v.Z < Z_Detector) {
-        return true;
+        return true
 
     /*  Case 2: The black hole swallowed the photon.                          */
     } else if (v.NormSq() < Black_Hole_Radius_Sq) {
-        return true;
+        return true
 
     /*  Otherwise, the photon is still moving. Don't stop.                    */
     } else {
-        return false;
+        return false
     }
 }
 /*  End of Stop.                                                              */
@@ -841,19 +841,19 @@ func Stop2(p *Vec3) bool {
 
     /*  Case 1: The photon has reached the detector.                          */
     if (p.Z < Z_Detector) {
-        return true;
+        return true
 
     /*  Case 2: The first black hole swallowed the photon.                    */
     } else if (r1.NormSq() < Black_Hole_Radius_Sq) {
-        return true;
+        return true
 
     /*  Case 3: The second black hole swallowed the photon.                   */
     } else if (r2.NormSq() < Black_Hole_Radius_Sq) {
-        return true;
+        return true
 
     /*  Otherwise, the photon is still moving. Don't stop.                    */
     } else {
-        return false;
+        return false
     }
 }
 /*  End of Stop2.                                                             */
@@ -877,12 +877,12 @@ func Gravity(p *Vec3) Vec3 {
      *  acceleration is proportional to p/||p||^3 = p_hat/||p||^2, where      *
      *  p_hat is the unit vector for p. We can compute p/||p||^3 in terms     *
      *  of the norm of p and the square of the norm of p. We have:            */
-    var factor float64 = 1.0 / (p.Norm() * p.NormSq());
+    var factor float64 = 1.0 / (p.Norm() * p.NormSq())
 
     /*  The acceleration is the minus of p times this factor. The reason it   *
      *  is minus p is because gravity pulls inward, so the acceleration is    *
      *  towards the black hole.                                               */
-    return Vec3{-p.X*factor, -p.Y*factor, -p.Z*factor};
+    return Vec3{-p.X*factor, -p.Y*factor, -p.Z*factor}
 }
 /*  End of Gravity.                                                           */
 
@@ -909,15 +909,15 @@ func Gravity2(p *Vec3) Vec3 {
     var f2 Vec3 = Vec3{BHX2 - p.X, -p.Y, -p.Z}
 
     /*  We'll use the principle of superposition for the two black holes. */
-    var factor1 float64 = 1.0 / (f1.Norm() * f1.NormSq());
-    var factor2 float64 = 1.0 / (f2.Norm() * f2.NormSq());
-    Vec3ScaleBy(factor1, &f1);
-    Vec3ScaleBy(factor2, &f2);
+    var factor1 float64 = 1.0 / (f1.Norm() * f1.NormSq())
+    var factor2 float64 = 1.0 / (f2.Norm() * f2.NormSq())
+    Vec3ScaleBy(factor1, &f1)
+    Vec3ScaleBy(factor2, &f2)
 
     /*  The net force is computed by the principle of superposition.          *
      *  Add the two individual forces and return.                             */
-    Vec3AddTo(&f1, &f2);
-    return f1;
+    Vec3AddTo(&f1, &f2)
+    return f1
 }
 /*  End of Gravity2.                                                          */
 
@@ -952,24 +952,21 @@ func (ppm *PPM) Create(name string) {
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nbh_init_ppm_from_vals                                                *
+ *      PPM.InitFromVals                                                      *
  *  Purpose:                                                                  *
  *      Print the preamble to the PPM file. A PPM file wants Pn followed by   *
  *      three numbers. P6 means we're encoding an RGB image in binary format. *
  *      The first two numbers are the number of pixels in the x and y axes.   *
  *      The last number is the size of our color spectrum, which is 255.      *
  *  Arguments:                                                                *
- *      PPM (struct nbh_ppm *):                                               *
- *          A pointer to a PPM struct. This pointers FILE pointer will be     *
- *          edited with the preamble for the PPM.                             *
- *      x (unsigned int):                                                     *
+ *      x (uint32):                                                           *
  *          The number of pixels in the x axis.                               *
- *      y (unsigned int):                                                     *
+ *      y (uint32):                                                           *
  *          The number of pixels in the y axis.                               *
  *      type (int):                                                           *
  *          The type of the PPM, options are 1 through 6.                     *
  *  Outputs:                                                                  *
- *      None (void).                                                          *
+ *      None.                                                                 *
  ******************************************************************************/
 func (ppm *PPM) InitFromVals(x, y uint32, ptype int) {
 
@@ -997,7 +994,7 @@ func (ppm *PPM) InitFromVals(x, y uint32, ptype int) {
  *      Pass the default parameters to PPM.InitFromVals.                      *
  ******************************************************************************/
 func (ppm *PPM) Init() {
-    ppm.InitFromVals(X_Size, Y_Size, 6);
+    ppm.InitFromVals(X_Size, Y_Size, 6)
 }
 /*  End of PPM.Init.                                                          */
 
@@ -1019,3 +1016,83 @@ func (ppm *PPM) Close() {
     }
 }
 /*  End of PPM.Close.                                                         */
+
+/******************************************************************************
+ *                        Color Functions and Methods                         *
+ ******************************************************************************/
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Color.WriteToFile                                                     *
+ *  Purpose:                                                                  *
+ *      Writes a color to a File pointer.                                     *
+ *  Arguments:                                                                *
+ *      fp (*os.File):                                                        *
+ *          A pointer to the file the color is being written to.              *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (c *Color) WriteToFile(fp *os.File) {
+    fmt.Fprint(fp, c.Red)
+    fmt.Fprint(fp, c.Green)
+    fmt.Fprint(fp, c.Blue)
+}
+/*  End of Color.WriteToFile.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Color.WriteToPPM                                                      *
+ *  Purpose:                                                                  *
+ *      Writes a color to a PPM.                                              *
+ *  Arguments:                                                                *
+ *      fp (*os.File):                                                        *
+ *          A pointer to the file the color is being written to.              *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (c *Color) WriteToPPM(ppm *PPM) {
+    c.WriteToFile(ppm.Fp)
+}
+/*  End of Color.WriteToPPM.                                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ColorScale                                                            *
+ *  Purpose:                                                                  *
+ *      Scales a color by a real number. Used for darkening a color.          *
+ *  Arguments:                                                                *
+ *      c (*Color):                                                           *
+ *          A pointer to a color.                                             *
+ *      t (float64):                                                          *
+ *          The scale factor, usually between 0 and 1.                        *
+ *  Outputs:                                                                  *
+ *      scaled_c (Color):                                                     *
+ *          The input color c with RGB components scaled by t.                *
+ ******************************************************************************/
+func ColorScale(c *Color, t float64) Color {
+    var r uint8 = uint8(t * float64(c.Red))
+    var g uint8 = uint8(t * float64(c.Green))
+    var b uint8 = uint8(t * float64(c.Blue))
+    return Color{r, g, b}
+}
+/*  End of ColorScale.                                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ColorScaleBy                                                          *
+ *  Purpose:                                                                  *
+ *      Scales a color by a real number. Used for darkening a color.          *
+ *  Arguments:                                                                *
+ *      c (*Color):                                                           *
+ *          A pointer to a color.                                             *
+ *      t (float64):                                                          *
+ *          The scale factor, usually between 0 and 1.                        *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func ColorScaleBy(c *Color, t float64) {
+    c.Red = uint8(t * float64(c.Red))
+    c.Green = uint8(t * float64(c.Green))
+    c.Blue = uint8(t * float64(c.Blue))
+}
+/*  End of ColorScaleBy.                                                      */
