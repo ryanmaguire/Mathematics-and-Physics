@@ -121,7 +121,7 @@ nbh_vec3_add(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *      w (const struct nbh_vec3 *):                                          *
  *          Another pointer to a vector.                                      *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform vector addition component-wise and store the result in v.     *
  ******************************************************************************/
@@ -186,7 +186,7 @@ nbh_vec3_subtract(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *      w (const struct nbh_vec3 *):                                          *
  *          Another pointer to a vector.                                      *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform vector subtraction component-wise and store the result in v.  *
  *  Notes:                                                                    *
@@ -251,7 +251,7 @@ nbh_vec3_scale(double a, const struct nbh_vec3 *v)
  *      v (struct nbh_vec3 *):                                                *
  *          A pointer to a vector. The product is stored here.                *
  *  Outputs:                                                                  *
- *      None (void):                                                          *
+ *      None (void).                                                          *
  *  Method:                                                                   *
  *      Perform scalar multiplication component-wise, storing the result in v.*
  ******************************************************************************/
@@ -366,7 +366,7 @@ nbh_vec3_cross_product(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *  Function:                                                                 *
  *      nbh_vec3_crosswith                                                    *
  *  Purpose:                                                                  *
- *      Computes the cross product of two vector in-place.                    *
+ *      Computes the cross product of two vectors in-place.                   *
  *  Arguments:                                                                *
  *      v (struct nbh_vec3 *):                                                *
  *          A pointer to a vector. The cross product is stored here.          *
