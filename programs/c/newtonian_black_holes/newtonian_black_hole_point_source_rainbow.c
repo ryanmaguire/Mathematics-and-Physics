@@ -18,10 +18,12 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Basic test of the nbh routines. Generates a single black hole.        *
+ *      Basic test of the nbh routines. Generates a black hole and draws      *
+ *      the checkerboard pattern with a rainbow gradient to indicate the      *
+ *      at which the photon hit the plane.                                    *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/09                                                        *
+ *  Date:   2024/04/09                                                        *
  ******************************************************************************/
 
 /*  All header files for nbh are including here.                              */
@@ -31,13 +33,21 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_rk.ppm";
+    const char *name = "newtonian_black_hole_point_source_rainbow.ppm";
 
-    /*  Use the template functions to render the image.                       */
+    /*  Reset the number of maximum iterations to something much higher.      */
+    nbh_euler_reset_max_iters(1000000U);
+
+    /*  Reset the radius of the black hole to be a point.                     */
+    nbh_setup_reset_radius(0.01);
+
+    /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh_prun(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_prun(nbh_gravity, nbh_stop, nbh_color_gradient_checkerboard,
+             nbh_euler_path, name);
 #else
-    nbh_run(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_run(nbh_gravity, nbh_stop, nbh_color_gradient_checkerboard,
+            nbh_euler_path, name);
 #endif
     return 0;
 }

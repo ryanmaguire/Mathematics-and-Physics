@@ -31,13 +31,15 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_rk.ppm";
+    const char *name = "newtonian_black_hole_four_colors.ppm";
 
-    /*  Use the template functions to render the image.                       */
+    /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh_prun(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_prun(nbh_gravity, nbh_stop, nbh_checker_board_four,
+             nbh_euler_path, name);
 #else
-    nbh_run(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_run(nbh_gravity, nbh_stop, nbh_checker_board_four,
+            nbh_euler_path, name);
 #endif
     return 0;
 }

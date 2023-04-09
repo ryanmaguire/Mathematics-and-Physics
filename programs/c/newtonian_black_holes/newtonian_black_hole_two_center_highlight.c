@@ -18,10 +18,11 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Basic test of the nbh routines. Generates a single black hole.        *
+ *      Basic test of the nbh routines. Generates two black holes and         *
+ *      highlights the origin in blue.                                        *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/09                                                        *
+ *  Date:   2023/04/03                                                        *
  ******************************************************************************/
 
 /*  All header files for nbh are including here.                              */
@@ -31,13 +32,15 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_rk.ppm";
+    const char *name = "newtonian_black_hole_two_center_highlight.ppm";
 
-    /*  Use the template functions to render the image.                       */
+    /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh_prun(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_prun(nbh_gravity2, nbh_stop2, nbh_checker_board_highlight,
+             nbh_euler_path, name);
 #else
-    nbh_run(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_run(nbh_gravity2, nbh_stop2, nbh_checker_board_highlight,
+            nbh_euler_path, name);
 #endif
     return 0;
 }

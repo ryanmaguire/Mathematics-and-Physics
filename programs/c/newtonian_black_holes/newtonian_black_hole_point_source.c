@@ -31,13 +31,21 @@
 int main(void)
 {
     /*  Name of the output ppm file.                                          */
-    const char *name = "newtonian_black_hole_rk.ppm";
+    const char *name = "newtonian_black_hole_point_source.ppm";
 
-    /*  Use the template functions to render the image.                       */
+    /*  Reset the number of maximum iterations to something much higher.      */
+    nbh_euler_reset_max_iters(1000000U);
+
+    /*  Reset the radius of the black hole to be a point.                     */
+    nbh_setup_reset_radius(0.01);
+
+    /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh_prun(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_prun(nbh_gravity, nbh_stop, nbh_bright_checker_board,
+             nbh_euler_path, name);
 #else
-    nbh_run(nbh_gravity, nbh_stop, nbh_checker_board, nbh_rk_path, name);
+    nbh_run(nbh_gravity, nbh_stop, nbh_bright_checker_board,
+            nbh_euler_path, name);
 #endif
     return 0;
 }
