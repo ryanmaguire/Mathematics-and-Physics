@@ -24,11 +24,11 @@
  *  Date:   2023/04/04                                                        *
  ******************************************************************************/
 
-/* Include guard to prevent including this file twice.                        */
+/*  Include guard to prevent including this file twice.                       */
 #ifndef NBH_COLOR_H
 #define NBH_COLOR_H
 
-/*  File data type found here.                                                */
+/*  FILE data type found here.                                                */
 #include <stdio.h>
 
 /*  NBH_INLINE macro found here.                                              */
@@ -43,7 +43,7 @@
 /*  Constants used throughout the project defined here.                       */
 #include "nbh_setup.h"
 
-/*  ceil and atan function provided here.                                     */
+/*  ceil and atan functions provided here.                                    */
 #include <math.h>
 
 /*  Simple struct for working with colors in a PPM file.                      */

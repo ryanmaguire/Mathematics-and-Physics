@@ -24,7 +24,7 @@
  *  Date:   2023/04/04                                                        *
  ******************************************************************************/
 
-/* Include guard to prevent including this file twice.                        */
+/*  Include guard to prevent including this file twice.                       */
 #ifndef NBH_PPM_H
 #define NBH_PPM_H
 
