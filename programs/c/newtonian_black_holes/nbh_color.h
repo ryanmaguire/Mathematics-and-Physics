@@ -63,16 +63,49 @@ static const struct nbh_color nbh_yellow = {0xFFU, 0xFFU, 0x00U};
 static const struct nbh_color nbh_cyan = {0x00U, 0xFFU, 0xFFU};
 static const struct nbh_color nbh_magenta = {0xFFU, 0x00U, 0xFFU};
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_create                                                      *
+ *  Purpose:                                                                  *
+ *      Creates a color struct from three unsigned values.                    *
+ *  Arguments:                                                                *
+ *      r (unsigned char):                                                    *
+ *          The red component of the color.                                   *
+ *      g (unsigned char):                                                    *
+ *          The green component of the color.                                 *
+ *      b (unsigned char):                                                    *
+ *          The blue component of the color.                                  *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color (r, g, b) in 8-bit RGB color space.                     *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_color_create(unsigned char r, unsigned char g, unsigned char b)
 {
+    /*  Declare a variable for the output color.                              */
     struct nbh_color c;
+
+    /*  Set the individual components and return.                             */
     c.red = r;
     c.green = g;
     c.blue = b;
     return c;
 }
+/*  End of nbh_color_create.                                                  */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_write_to_file                                               *
+ *  Purpose:                                                                  *
+ *      Writes a color to a FILE pointer.                                     *
+ *  Arguments:                                                                *
+ *      c (const struct nbh_color *):                                         *
+ *          A pointer to a color.                                             *
+ *      fp (FILE *):                                                          *
+ *          A pointer to the file the color is being written to.              *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_color_write_to_file(const struct nbh_color *c, FILE *fp)
 {
@@ -80,13 +113,42 @@ nbh_color_write_to_file(const struct nbh_color *c, FILE *fp)
     fputc(c->green, fp);
     fputc(c->blue, fp);
 }
+/*  End of nbh_color_write_to_file.                                           */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_write_to_ppm                                                *
+ *  Purpose:                                                                  *
+ *      Writes a color to a ppm pointer.                                      *
+ *  Arguments:                                                                *
+ *      c (const struct nbh_color *):                                         *
+ *          A pointer to a color.                                             *
+ *      fp (struct nbh_ppm *):                                                *
+ *          A pointer to the ppm the color is being written to.               *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_color_write_to_ppm(const struct nbh_color *c, struct nbh_ppm *PPM)
 {
     nbh_color_write_to_file(c, PPM->fp);
 }
+/*  End of nbh_color_write_to_ppm.                                            */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_scale                                                       *
+ *  Purpose:                                                                  *
+ *      Scales a color by a real number. Used for darkening a color.          *
+ *  Arguments:                                                                *
+ *      c (const struct nbh_color *):                                         *
+ *          A pointer to a color.                                             *
+ *      t (double):                                                           *
+ *          The scale factor, usually between 0 and 1.                        *
+ *  Outputs:                                                                  *
+ *      scaled_c (struct nbh_color):                                          *
+ *          The input color c with RGB components scaled by t.                *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_color_scale(const struct nbh_color *c, double t)
 {
@@ -95,7 +157,21 @@ nbh_color_scale(const struct nbh_color *c, double t)
     const unsigned char b = (unsigned char)(t * c->blue);
     return nbh_color_create(r, g, b);
 }
+/*  End of nbh_color_scale.                                                   */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_scaleby                                                     *
+ *  Purpose:                                                                  *
+ *      Scales a color by a real number and stores the result in the input.   *
+ *  Arguments:                                                                *
+ *      c (struct nbh_color *):                                               *
+ *          A pointer to a color.                                             *
+ *      t (double):                                                           *
+ *          The scale factor, usually between 0 and 1.                        *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_color_scaleby(struct nbh_color *c, double t)
 {
@@ -103,6 +179,7 @@ nbh_color_scaleby(struct nbh_color *c, double t)
     c->green = (unsigned char)(t * c->green);
     c->blue = (unsigned char)(t * c->blue);
 }
+/*  End of nbh_color_scaleby.                                                 */
 
 NBH_INLINE struct nbh_color
 nbh_color_add(const struct nbh_color *c0, const struct nbh_color *c1)
