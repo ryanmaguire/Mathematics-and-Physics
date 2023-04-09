@@ -28,8 +28,10 @@ package main
 
 /*  Only standard library packages are required.                              */
 import (
-    "math"  /*  Sqrt given here. */
-    "os"    /*  File data type.  */
+    "fmt"   /*  Fprintf found here. */
+    "math"  /*  Sqrt given here.    */
+    "os"    /*  File data type.     */
+    "log"   /*  log.Fatal function. */
 )
 
 /******************************************************************************
@@ -918,3 +920,102 @@ func Gravity2(p *Vec3) Vec3 {
     return f1;
 }
 /*  End of Gravity2.                                                          */
+
+/******************************************************************************
+ *                         PPM Functions and Methods                          *
+ ******************************************************************************/
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Create                                                            *
+ *  Purpose:                                                                  *
+ *      Creates a PPM file with a given file name.                            *
+ *  Arguments:                                                                *
+ *      name (const char *):                                                  *
+ *          The file name of the output PPM (ex. "black_hole.ppm").           *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (ppm *PPM) Create(name string) {
+
+    /*  Variable for the error message if os.Create fails.                    */
+    var err error
+
+    /*  Open the file and give it write permissions.                          */
+    ppm.Fp, err = os.Create(name)
+
+    if (err != nil) {
+        log.Fatal(err)
+    }
+}
+/*  End of PPM.Create.                                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_init_ppm_from_vals                                                *
+ *  Purpose:                                                                  *
+ *      Print the preamble to the PPM file. A PPM file wants Pn followed by   *
+ *      three numbers. P6 means we're encoding an RGB image in binary format. *
+ *      The first two numbers are the number of pixels in the x and y axes.   *
+ *      The last number is the size of our color spectrum, which is 255.      *
+ *  Arguments:                                                                *
+ *      PPM (struct nbh_ppm *):                                               *
+ *          A pointer to a PPM struct. This pointers FILE pointer will be     *
+ *          edited with the preamble for the PPM.                             *
+ *      x (unsigned int):                                                     *
+ *          The number of pixels in the x axis.                               *
+ *      y (unsigned int):                                                     *
+ *          The number of pixels in the y axis.                               *
+ *      type (int):                                                           *
+ *          The type of the PPM, options are 1 through 6.                     *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
+func (ppm *PPM) InitFromVals(x, y uint32, ptype int) {
+
+    /*  For integers between 1 and 5 we can pass the value to the preamble.   */
+    if (0 < ptype && ptype < 6) {
+        fmt.Fprintf(ppm.Fp, "P%d\n%u %u\n255\n", ptype, x, y)
+
+    /*  The only other legal value is 6. All illegal values default to 6.     */
+    } else {
+        fmt.Fprintf(ppm.Fp, "P6\n%u %u\n255\n", x, y)
+    }
+}
+/*  End of PPM.InitFromVals.                                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Init                                                              *
+ *  Purpose:                                                                  *
+ *      Initialize a PPM using the default values.                            *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ *  Method:                                                                   *
+ *      Pass the default parameters to PPM.InitFromVals.                      *
+ ******************************************************************************/
+func (ppm *PPM) Init() {
+    ppm.InitFromVals(X_Size, Y_Size, 6);
+}
+/*  End of PPM.Init.                                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Close                                                             *
+ *  Purpose:                                                                  *
+ *      Closes the file pointer in a PPM struct.                              *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (ppm *PPM) Close() {
+
+    /*  Ensure the pointer is not nil before trying to close it.              */
+    if (ppm.Fp != nil) {
+        ppm.Fp.Close()
+    }
+}
+/*  End of PPM.Close.                                                         */
