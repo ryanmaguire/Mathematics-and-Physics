@@ -181,31 +181,70 @@ nbh_color_scaleby(struct nbh_color *c, double t)
 }
 /*  End of nbh_color_scaleby.                                                 */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_add                                                         *
+ *  Purpose:                                                                  *
+ *      Adds two colors by averaging over their components.                   *
+ *  Arguments:                                                                *
+ *      c0 (const struct nbh_color *):                                        *
+ *          A pointer to the first color.                                     *
+ *      c1 (const struct nbh_color *):                                        *
+ *          A pointer to the second color.                                    *
+ *  Outputs:                                                                  *
+ *      sum (struct nbh_color):                                               *
+ *          The sum of the two colors.                                        *
+ *  Method:                                                                   *
+ *      Convert the components to doubles and take their average.             *
+ ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_color_add(const struct nbh_color *c0, const struct nbh_color *c1)
 {
+    /*  Declare a variable for the output.                                    */
     struct nbh_color sum;
+
+    /*  Avoid overflow by converting to doubles and then taking the average.  */
     const double r = 0.5*((double)c0->red + (double)c1->red);
     const double g = 0.5*((double)c0->green + (double)c1->green);
     const double b = 0.5*((double)c0->blue + (double)c1->blue);
 
+    /*  Convert back to unsigned char's and store these in the color.         */
     sum.red = (unsigned char)r;
     sum.green = (unsigned char)g;
     sum.blue = (unsigned char)b;
     return sum;
 }
+/*  End of nbh_color_add.                                                     */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_color_addto                                                       *
+ *  Purpose:                                                                  *
+ *      Adds two colors by averaging over their components.                   *
+ *  Arguments:                                                                *
+ *      c0 (struct nbh_color *):                                              *
+ *          A pointer to the first color.                                     *
+ *      c1 (const struct nbh_color *):                                        *
+ *          A pointer to the second color.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Convert the components to doubles and take their average.             *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_color_addto(struct nbh_color *c0, const struct nbh_color *c1)
 {
+    /*  Avoid overflow by converting to doubles and then averaging.           */
     const double r = 0.5*((double)c0->red + (double)c1->red);
     const double g = 0.5*((double)c0->green + (double)c1->green);
     const double b = 0.5*((double)c0->blue + (double)c1->blue);
 
+    /*  Convert back to unsigned char and store the result in the first color.*/
     c0->red = (unsigned char)r;
     c0->green = (unsigned char)g;
     c0->blue = (unsigned char)b;
 }
+/*  End of nbh_color_addto.                                                   */
 
 /*  Function for creating a checker board pattern on the detector.            */
 NBH_INLINE struct nbh_color
