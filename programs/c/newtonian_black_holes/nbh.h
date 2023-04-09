@@ -1,3 +1,29 @@
+/******************************************************************************
+ *                                  LICENSE                                   *
+ ******************************************************************************
+ *  This file is part of Mathematics-and-Physics.                             *
+ *                                                                            *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Provides raytracing routines to render black holes.                   *
+ ******************************************************************************
+ *  Author: Ryan Maguire                                                      *
+ *  Date:   2023/04/03                                                        *
+ ******************************************************************************/
+
 /*  Include guard to prevent including this file twice.                       */
 #ifndef NBH_H
 #define NBH_H
@@ -26,6 +52,24 @@
 /*  Basic vector struct for points in 6-dimensional space.                    */
 #include "nbh_vec6.h"
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_run                                                               *
+ *  Purpose:                                                                  *
+ *      Runs the raytracing routines without parallelizing the computation.   *
+ *  Arguments:                                                                *
+ *      acc (acceleration):                                                   *
+ *          Function describing the equation of motion.                       *
+ *      stop (stopper):                                                       *
+ *          Stopper function for determining when the photon stops moving.    *
+ *      color (colorer):                                                      *
+ *          Color function for coloring the detector.                         *
+ *      path (raytracer):                                                     *
+ *          The method of numerical raytracing. Options are Euler's method    *
+ *          and fourth order Runge-Kutta.                                     *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file.                                  *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_run(acceleration acc, stopper stop, colorer color,
         raytracer path, const char *name)
@@ -99,13 +143,29 @@ nbh_run(acceleration acc, stopper stop, colorer color,
     nbh_ppm_close(&PPM);
     return;
 }
-/*  End of nbh::euler_run.                                                    */
+/*  End of nbh_run.                                                           */
 
-
-/*  Template for running the programs with parallel processing.               */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_run                                                               *
+ *  Purpose:                                                                  *
+ *      Runs the raytracing routines with parallelization.                    *
+ *  Arguments:                                                                *
+ *      acc (acceleration):                                                   *
+ *          Function describing the equation of motion.                       *
+ *      stop (stopper):                                                       *
+ *          Stopper function for determining when the photon stops moving.    *
+ *      color (colorer):                                                      *
+ *          Color function for coloring the detector.                         *
+ *      path (raytracer):                                                     *
+ *          The method of numerical raytracing. Options are Euler's method    *
+ *          and fourth order Runge-Kutta.                                     *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file.                                  *
+ ******************************************************************************/
 NBH_INLINE void
 nbh_prun(acceleration acc, stopper stop, colorer color,
-        raytracer path, const char *name)
+         raytracer path, const char *name)
 {
     /*  The vector v represents the initial velocity vector of a particle of  *
      *  light. Since our light rays are being directed downwards, this vector *
@@ -180,6 +240,7 @@ nbh_prun(acceleration acc, stopper stop, colorer color,
     free(c);
     return;
 }
-/*  End of nbh::parallel_euler_run.                                           */
+/*  End of nbh_prun.                                                          */
 
 #endif
+/*  End of include guard.                                                     */
