@@ -107,8 +107,8 @@ class Vec3:
         if not isinstance(other, Vec3):
             raise TypeError(
                 "\nError: nbh.Vec3\n"
-                "    Trying to sum a Vec3 instance with an object that is\n"
-                "    not of type nbh.Vec3."
+                "    Trying to sum an nbh.Vec3 instance with\n"
+                "    an object that is not of type nbh.Vec3."
             )
 
         # Vector addition is performed component-wise.
@@ -137,9 +137,9 @@ class Vec3:
         # It is only valid to add another Vec3 class to the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "Error: nbh.Vec3\n"
-                "    Trying to sum a Vec3 instance with an object that\n"
-                "    is not of type nbh.Vec3."
+                "\nError: nbh.Vec3\n"
+                "    Trying to sum an nbh.Vec3 instance with\n"
+                "    an object that is not of type nbh.Vec3."
             )
 
         # Vector addition is performed component-wise.
@@ -206,9 +206,9 @@ class Vec3:
         # It is only valid to add another Vec3 class to the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "Error: nbh.Vec3\n"
-                "    Trying to sum a Vec3 instance with an object that"
-                "    is not of type nbh.Vec3."
+                "\nError: nbh.Vec3\n"
+                "    Trying to compute the difference of an nbh.Vec3\n"
+                "    with an object that is not of type nbh.Vec3."
             )
 
         # Vector subtraction is performed component-wise.
@@ -288,6 +288,28 @@ class Vec3:
         self.y_val *= val
         self.z_val *= val
         return self
+
+    # Negation operator.
+    def __neg__(self):
+        """
+            Operator:
+                Negation (-):
+            Purpose:
+                Negates a vector.
+            Arguments:
+                None.
+            Outputs:
+                neg_self (nbh.Vec3):
+                    The negation of self.
+            Method:
+                Negate each component and return.
+        """
+
+        # Negate all components and return.
+        x_val = -self.x_val
+        y_val = -self.y_val
+        z_val = -self.z_val
+        return Vec3(x_val, y_val, z_val)
 
     # Euclidean dot product.
     def dot(self, other):
@@ -445,11 +467,32 @@ class Vec3:
         """
         return self.norm()
 
+    # String representation of a vector.
     def __str__(self):
         """
             Function:
                 __str__
             Purpose:
                 Represents the vector as a string.
+            Arguments:
+                None.
+            Outputs:
+                self_str (str):
+                    The vector self represented as a string.
         """
         return "(%f, %f, %f)" % (self.x_val, self.y_val, self.z_val)
+
+    # How a vector is represented if called at the terminal.
+    def __repr__(self):
+        """
+            Function:
+                __repr__
+            Purpose:
+                Represents the vector as a string.
+            Arguments:
+                None.
+            Outputs:
+                self_str (str):
+                    The vector self represented as a string.
+        """
+        return self.__str__()
