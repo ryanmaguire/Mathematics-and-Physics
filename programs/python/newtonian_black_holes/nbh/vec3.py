@@ -236,7 +236,7 @@ class Vec3:
 
                     prod = a*v
                          = a*(x, y, z)
-                         = (ax, ay, az)
+                         = (a*x, a*y, a*z)
 
                 Where a is the input scalar.
         """
@@ -255,6 +255,46 @@ class Vec3:
         x_prod = val*self.x_val
         y_prod = val*self.y_val
         z_prod = val*self.z_val
+        return Vec3(x_prod, y_prod, z_prod)
+
+    # * operator for scalar multiplication.
+    def __rmul__(self, scalar):
+        """
+            Operator:
+                Multiplication (*).
+            Purpose:
+                Performs scalar multiplication of a vector with a float.
+            Arguments:
+                scalar (float):
+                    A real number.
+            Outputs:
+                scaled_vector (nbh.Vec3):
+                    The vector 'self' scaled by the input scalar.
+            Method:
+                Scalar multiplication is computed component-wise. If self is
+                represented by the vector v = (x, y, z), then:
+
+                    prod = a*v
+                         = a*(x, y, z)
+                         = (a*x, a*y, a*z)
+
+                Where a is the input scalar.
+        """
+
+        # The input needs to be representable as a float. Try to convert.
+        try:
+            val = float(scalar)
+        except (TypeError, ValueError) as err:
+            raise TypeError(
+                "\nError: nbh.Vec3\n"
+                "    Trying to multiply an nbh.Vec3 instance with an\n"
+                "    object that can not be converted to float."
+            ) from err
+
+        # Compute scalar multiplication component-wise.
+        x_prod = self.x_val*val
+        y_prod = self.y_val*val
+        z_prod = self.z_val*val
         return Vec3(x_prod, y_prod, z_prod)
 
     # *= operator for scalar multiplication.
@@ -496,3 +536,91 @@ class Vec3:
                     The vector self represented as a string.
         """
         return self.__str__()
+
+    # Returns a component of a vector in list style.
+    def __getitem__(self, key):
+        """
+            Function:
+                __getitem__
+            Purpose:
+                Treats a Vec3 class as a list and returns the corresponding
+                entry. 0 -> x_val, 1 -> y_val, 2 -> z_val.
+            Arguments:
+                key (int):
+                    The key requested. (x, y, z) corresponds to (0, 1, 2).
+            Outputs:
+                val (float):
+                    The value of the given key.
+        """
+
+        # The key must be an integer.
+        if not isinstance(key, int):
+            raise TypeError(
+                "\nError nbh.Vec3:\n"
+                "    Key is not an integer."
+            )
+
+        # Valid keys are 0, 1, and 2.
+        if 0 > key or 2 < key:
+            raise IndexError(
+                "\nError nbh.Vec3:\n"
+                "    key should be 0, 1, or 2."
+            )
+
+        # Dictionary of the keys for the vector.
+        keys = {
+            0 : self.x_val,
+            1 : self.y_val,
+            2 : self.z_val
+        }
+
+        # Return the value of the requested key.
+        return keys[key]
+
+    # Sets the value of a vector in list style.
+    def __setitem__(self, key, value):
+        """
+            Function:
+                __setitem__
+            Purpose:
+                Treats a Vec3 class as a list and alters the corresponding
+                entry. 0 -> x_val, 1 -> y_val, 2 -> z_val.
+            Arguments:
+                key (int):
+                    The key to change. (x, y, z) corresponds to (0, 1, 2).
+                value (float):
+                    The value the key will be set to.
+            Outputs:
+                None.
+        """
+
+        # The key must be an integer.
+        if not isinstance(key, int):
+            raise TypeError(
+                "\nError nbh.Vec3:\n"
+                "    Key is not an integer."
+            )
+
+        # The key should 0, 1, or 2.
+        if 0 > key or 2 < key:
+            raise IndexError(
+                "\nError nbh.Vec3:\n"
+                "    key should be 0, 1, or 2."
+            )
+
+        # The value must be able to be converted to a float.
+        try:
+            val = float(value)
+        except (TypeError, ValueError) as err:
+            raise TypeError(
+                "\nError: nbh.Vec3\n"
+                "    Can't convert value to float."
+            )
+
+        # Set the corresponding key to the new value.
+        if key == 0:
+            self.x_val = val
+        elif key == 1:
+            self.y_val = val
+        else:
+            self.z_val = val
