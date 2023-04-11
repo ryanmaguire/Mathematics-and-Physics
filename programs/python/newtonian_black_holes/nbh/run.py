@@ -26,11 +26,19 @@
 ################################################################################
 """
 
+# 3D vectors found here.
 from . import vec3
+
+# 6D "phase-space" vectors given here.
 from . import vec6
+
+# Default parameters for the experiment.
 from . import setup
+
+# Class for working with ppm files.
 from . import ppm
 
+# Runs the raytracing scheme with the given inputs.
 def run(acc, stop, color, path, name):
     """
         Function:
