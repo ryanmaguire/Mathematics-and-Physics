@@ -29,6 +29,9 @@
 # sqrt function provided here.
 import math
 
+# pseudo-random number generator.
+import random
+
 # Basic Python class for dealing with vectors in R^3.
 class Vec3:
     """
@@ -440,6 +443,35 @@ class Vec3:
         """
         return math.sqrt(self.norm_sq())
 
+    # Creates a unit vector for non-zero vector.
+    def normalize(self):
+        """
+            Function:
+                normalize
+            Purpose:
+                Normalizes a vector so that it has unit magnitude.
+            Arguments:
+                None.
+            Outputs:
+                None.
+            Method:
+                Compute the norm of self and divide by this if it is non-zero.
+        """
+
+        # Compute the square of the norm of self.
+        mag_sq = self.norm_sq()
+
+        # If this is non-zero we may normalize.
+        if mag_sq != 0:
+
+            # The scale factor is the reciprocal of the square root of this.
+            rcpr = math.sqrt(1.0 / mag_sq)
+
+            # Scale each factor to normalize self.
+            self.x_val *= rcpr
+            self.y_val *= rcpr
+            self.z_val *= rcpr
+
     # Computes the square of the length of the azimuthal part of the vector.
     def rho_sq(self):
         """
@@ -624,3 +656,25 @@ class Vec3:
             self.y_val = val
         else:
             self.z_val = val
+
+# Returns a random vector in R^3.
+def randvec():
+    """
+        Function:
+            random
+        Purpose:
+            Returns a random vector in R^3.
+        Arguments:
+            None.
+        Outputs:
+            rand_vec (nbh.Vec3):
+                A vector with x, y, and z set to random values.
+        Method:
+            Call random.random() three times and return.
+    """
+
+    # Get three random numbers and return.
+    x_val = random.random()
+    y_val = random.random()
+    z_val = random.random()
+    return Vec3(x_val, y_val, z_val)
