@@ -70,10 +70,10 @@ class Color:
 
         # The inputs should be representable as integers. Try to convert.
         try:
-            # Colors are 8-bit integers. Reduce mod 2^8 = 256.
-            self.red = abs(int(red)) % 256
-            self.green = abs(int(green)) % 256
-            self.blue = abs(int(blue)) % 256
+            # Colors are 8-bit integers. Reduce mod 2^8 = 256 (0xFF = 255).
+            self.red = abs(int(red)) & 0xFF
+            self.green = abs(int(green)) & 0xFF
+            self.blue = abs(int(blue)) & 0xFF
 
         except (TypeError, ValueError) as err:
             raise TypeError(
@@ -125,10 +125,41 @@ class Color:
                 "    object that cannot be converted to float."
             ) from err
 
-        # Colors are 8-bit integers. Reduce mod 2^8 = 256.
-        red = int(abs(scale_factor * self.red)) % 256
-        green = int(abs(scale_factor * self.green)) % 256
-        blue = int(abs(scale_factor * self.blue)) % 256
+        # Scale the colors and convert to ints.
+        red = int(abs(scale_factor * self.red))
+        green = int(abs(scale_factor * self.green))
+        blue = int(abs(scale_factor * self.blue))
+        return Color(red, green, blue)
+
+    # Scales a color by a real number. Used for darkening.
+    def __rmul__(self, scale):
+        """
+            Operator:
+                Multiplication (*).
+            Purpose:
+                Scales the intensity of a Color by a positive real number.
+            Arguments:
+                scale (float):
+                    The scale factor for the intensity, usually between 0 and 1.
+            Outputs:
+                scaled_color (Color):
+                    self scaled by the scale factor.
+        """
+
+        # Input must be representable as a float.
+        try:
+            scale_factor = float(scale)
+        except (TypeError, ValueError) as err:
+            raise TypeError(
+                "\nError: Color\n"
+                "    Trying to multiply a Color instance with an\n"
+                "    object that cannot be converted to float."
+            ) from err
+
+        # Scale the colors and convert to ints.
+        red = int(abs(scale_factor * self.red))
+        green = int(abs(scale_factor * self.green))
+        blue = int(abs(scale_factor * self.blue))
         return Color(red, green, blue)
 
     # Scales a color by a real number. Used for darkening.
@@ -155,10 +186,10 @@ class Color:
                 "    object that cannot be converted to float."
             ) from err
 
-        # Colors are 8-bit integers. Reduce mod 2^8 = 256.
-        self.red = int(abs(scale_factor * self.red)) % 256
-        self.green = int(abs(scale_factor * self.green)) % 256
-        self.blue = int(abs(scale_factor * self.blue)) % 256
+        # Scale the colors and convert to ints.
+        self.red = int(abs(scale_factor * self.red))
+        self.green = int(abs(scale_factor * self.green))
+        self.blue = int(abs(scale_factor * self.blue))
         return self
 
     # Add two colors by averaging over the components.
@@ -230,7 +261,7 @@ def checker_board(vec):
         Function:
             checker_board
         Purpose:
-            Creates a checkerboard pattern from a vector.
+            Creates a checker board pattern from a vector.
         Arguments:
             vec (Vec3 or Vec6):
                 A 6D vector representing position and velocity or a
@@ -247,18 +278,20 @@ def checker_board(vec):
             "    Input must be a 3D or 6D vector."
         )
 
+    # If the photon didn't make it, color the pixel black.
+    if vec.pos.z_val > setup.Z_DETECTOR:
+        return BLACK
+
+    # Standard bit trick to get a red-white checker board pattern.
     if isinstance(vec, vec6.Vec6):
         checker = int(math.ceil(vec.pos.x_val) + math.ceil(vec.pos.y_val))
     else:
         checker = int(math.ceil(vec.x_val) + math.ceil(vec.y_val))
 
-    # If the photon didn't make it, color the pixel black.
-    if vec.pos.z_val > setup.Z_DETECTOR:
-        return BLACK
-
     # Factor for darkening the checker board.
     cfact = setup.Z_DETECTOR_SQ/vec.pos.norm_sq()
 
+    # Use the bit-trick to color the board.
     if checker & 1:
         return RED*cfact
     return WHITE*cfact
