@@ -163,7 +163,7 @@ def stop2(vec):
     black_hole_dist_sq = disp1.norm_sq()
 
     # If this distance is less than the radius, the photon was absorbed.
-    if disp1.norm_sq() < BLACK_HOLE_RADIUS_SQ:
+    if black_hole_dist_sq < BLACK_HOLE_RADIUS_SQ:
         return True
 
     # Case 3: The second black hole swallowed the photon.
@@ -176,7 +176,7 @@ def stop2(vec):
     # Otherwise, the photon is still moving. Don't stop.
     return False
 
-
+# Gravitational field for a single point mass at the origin.
 def gravity(vec):
     """
         Function:
