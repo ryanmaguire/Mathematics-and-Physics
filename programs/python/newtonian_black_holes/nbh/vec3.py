@@ -36,7 +36,7 @@ import random
 class Vec3:
     """
         Class:
-            nbh.Vec3
+            Vec3
         Purpose:
             Three dimensional Euclidean vector class with vector arithmetic and
             basic geometrical properties included.
@@ -67,7 +67,7 @@ class Vec3:
                 z_val (float / int):
                     The z-coordinate of the vector.
             Outputs:
-                vec (nbh.Vec3):
+                vec (Vec3):
                     The vector with Cartesian coordinates (x_val, y_val, z_val).
         """
 
@@ -78,7 +78,7 @@ class Vec3:
             self.z_val = float(z_val)
         except (TypeError, ValueError) as err:
             raise TypeError(
-                "\nError: nbh.Vec3\n"
+                "\nError: Vec3\n"
                 "    Inputs could not be converted to floats."
             ) from err
 
@@ -90,10 +90,10 @@ class Vec3:
             Purpose:
                 Performs vector addition in R^3.
             Arguments:
-                other (nbh.Vec3):
+                other (Vec3):
                     The vector being added to self.
             Outputs:
-                sum (nbh.Vec3):
+                sum (Vec3):
                     The vector sum of self and other.
             Method:
                 Add the vectors component-wise. If self and other are
@@ -109,9 +109,9 @@ class Vec3:
         # It is only valid to add another Vec3 class to the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to sum an nbh.Vec3 instance with\n"
-                "    an object that is not of type nbh.Vec3."
+                "\nError: Vec3\n"
+                "    Trying to sum a Vec3 instance with\n"
+                "    an object that is not of type Vec3."
             )
 
         # Vector addition is performed component-wise.
@@ -128,7 +128,7 @@ class Vec3:
             Purpose:
                 Performs vector addition in-place.
             Arguments:
-                other (nbh.Vec3):
+                other (Vec3):
                     The vector being added to self.
             Outputs:
                 self
@@ -140,9 +140,9 @@ class Vec3:
         # It is only valid to add another Vec3 class to the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to sum an nbh.Vec3 instance with\n"
-                "    an object that is not of type nbh.Vec3."
+                "\nError: Vec3\n"
+                "    Trying to sum a Vec3 instance with\n"
+                "    an object that is not of type Vec3."
             )
 
         # Vector addition is performed component-wise.
@@ -159,10 +159,10 @@ class Vec3:
             Purpose:
                 Performs vector subtraction in R^3.
             Arguments:
-                other (nbh.Vec3):
+                other (Vec3):
                     The vector being subtracted from self.
             Outputs:
-                diff (nbh.Vec3):
+                diff (Vec3):
                     The vector difference of self and other.
             Method:
                 Subtract the vectors component-wise. If self and other are
@@ -178,9 +178,9 @@ class Vec3:
         # It is only valid to subtract another Vec3 class from the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to compute the difference of an nbh.Vec3\n"
-                "    with an object that is not of type nbh.Vec3."
+                "\nError: Vec3\n"
+                "    Trying to compute the difference of a Vec3\n"
+                "    with an object that is not of type Vec3."
             )
 
         # Vector subtraction is performed component-wise.
@@ -197,7 +197,7 @@ class Vec3:
             Purpose:
                 Performs vector subtraction in-place.
             Arguments:
-                other (nbh.Vec3):
+                other (Vec3):
                     The vector being subtracted from self.
             Outputs:
                 self
@@ -209,9 +209,9 @@ class Vec3:
         # It is only valid to add another Vec3 class to the vector.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to compute the difference of an nbh.Vec3\n"
-                "    with an object that is not of type nbh.Vec3."
+                "\nError: Vec3\n"
+                "    Trying to compute the difference of a Vec3\n"
+                "    with an object that is not of type Vec3."
             )
 
         # Vector subtraction is performed component-wise.
@@ -231,7 +231,7 @@ class Vec3:
                 scalar (float):
                     A real number.
             Outputs:
-                scaled_vector (nbh.Vec3):
+                scaled_vector (Vec3):
                     The vector 'self' scaled by the input scalar.
             Method:
                 Scalar multiplication is computed component-wise. If self is
@@ -249,8 +249,8 @@ class Vec3:
             val = float(scalar)
         except (TypeError, ValueError) as err:
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to multiply an nbh.Vec3 instance with an\n"
+                "\nError: Vec3\n"
+                "    Trying to multiply a Vec3 instance with an\n"
                 "    object that can not be converted to float."
             ) from err
 
@@ -271,7 +271,7 @@ class Vec3:
                 scalar (float):
                     A real number.
             Outputs:
-                scaled_vector (nbh.Vec3):
+                scaled_vector (Vec3):
                     The vector 'self' scaled by the input scalar.
             Method:
                 Scalar multiplication is computed component-wise. If self is
@@ -289,8 +289,8 @@ class Vec3:
             val = float(scalar)
         except (TypeError, ValueError) as err:
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to multiply an nbh.Vec3 instance with an\n"
+                "\nError: Vec3\n"
+                "    Trying to multiply a Vec3 instance with an\n"
                 "    object that can not be converted to float."
             ) from err
 
@@ -321,8 +321,8 @@ class Vec3:
             val = float(scalar)
         except (TypeError, ValueError) as err:
             raise TypeError(
-                "\nError: nbh.Vec3\n"
-                "    Trying to multiply an nbh.Vec3 instance with an\n"
+                "\nError: Vec3\n"
+                "    Trying to multiply a Vec3 instance with an\n"
                 "    object that can not be converted to float."
             ) from err
 
@@ -342,7 +342,7 @@ class Vec3:
             Arguments:
                 None.
             Outputs:
-                neg_self (nbh.Vec3):
+                neg_self (Vec3):
                     The negation of self.
             Method:
                 Negate each component and return.
@@ -362,7 +362,7 @@ class Vec3:
             Purpose:
                 Computes the Euclidean dot product of self with other.
             Arguments:
-                other (nbh.Vec3):
+                other (Vec3):
                     Another vector.
             Outputs:
                 dot_prod (float):
@@ -381,9 +381,9 @@ class Vec3:
         # Dot products only make sense between vectors of the same type.
         if not isinstance(other, Vec3):
             raise TypeError(
-                "\nError: nbh.Vec3\n"
+                "\nError: Vec3\n"
                 "    Trying to compute the dot product with an\n"
-                "    object that is not of type nbh.Vec3."
+                "    object that is not of type Vec3."
             )
 
         # Compute the sum of the products and return.
@@ -588,14 +588,14 @@ class Vec3:
         # The key must be an integer.
         if not isinstance(key, int):
             raise TypeError(
-                "\nError nbh.Vec3:\n"
+                "\nError Vec3:\n"
                 "    Key is not an integer."
             )
 
         # Valid keys are 0, 1, and 2.
-        if 0 > key or 2 < key:
+        if key < 0 or key > 2:
             raise IndexError(
-                "\nError nbh.Vec3:\n"
+                "\nError Vec3:\n"
                 "    key should be 0, 1, or 2."
             )
 
@@ -629,14 +629,14 @@ class Vec3:
         # The key must be an integer.
         if not isinstance(key, int):
             raise TypeError(
-                "\nError nbh.Vec3:\n"
+                "\nError Vec3:\n"
                 "    Key is not an integer."
             )
 
         # The key should 0, 1, or 2.
-        if 0 > key or 2 < key:
+        if key < 0 or key > 2:
             raise IndexError(
-                "\nError nbh.Vec3:\n"
+                "\nError Vec3:\n"
                 "    key should be 0, 1, or 2."
             )
 
@@ -645,9 +645,9 @@ class Vec3:
             val = float(value)
         except (TypeError, ValueError) as err:
             raise TypeError(
-                "\nError: nbh.Vec3\n"
+                "\nError: Vec3\n"
                 "    Can't convert value to float."
-            )
+            ) from err
 
         # Set the corresponding key to the new value.
         if key == 0:
@@ -667,7 +667,7 @@ def randvec():
         Arguments:
             None.
         Outputs:
-            rand_vec (nbh.Vec3):
+            rand_vec (Vec3):
                 A vector with x, y, and z set to random values.
         Method:
             Call random.random() three times and return.
