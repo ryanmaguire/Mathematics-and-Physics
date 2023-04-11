@@ -27,3 +27,4 @@
 """
 
 from .vec3 import Vec3
+from .vec6 import Vec6
