@@ -29,3 +29,7 @@
 from . import vec3
 from . import vec6
 from . import setup
+from . import color
+from . import ppm
+from . import euler
+from . import run
