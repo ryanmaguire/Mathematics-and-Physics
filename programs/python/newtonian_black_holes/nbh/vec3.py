@@ -354,6 +354,111 @@ class Vec3:
         z_val = -self.z_val
         return Vec3(x_val, y_val, z_val)
 
+    # Euclidean cross product.
+    def cross(self, other):
+        """
+            Function:
+                cross
+            Purpose:
+                Computes the Euclidean cross product of self with other.
+            Arguments:
+                other (Vec3):
+                    A three dimensional vector.
+            Outputs:
+                cross_prod (Vec3):
+                    The cross product of self with other.
+            Method:
+                The cross product is the unique vector orthogonal to the two
+                inputs with orientation given by the right hand rule and whose
+                magnitude is given by ||v|| ||w|| sin(theta) where theta is the
+                angle between v and w.
+        """
+
+        # The cross product is only defined with other three-vectors.
+        if not isinstance(other, Vec3):
+            raise TypeError(
+                "\nError: Vec3\n"
+                "    Trying to compute the cross product with\n"
+                "    an object that is not a Vec3 instance."
+            )
+
+        # Compute the individual components of the cross product and return.
+        x_val = self.y_val*other.z_val - self.z_val*other.y_val
+        y_val = self.z_val*other.x_val - self.x_val*other.z_val
+        z_val = self.x_val*other.y_val - self.y_val*other.x_val
+        return Vec3(x_val, y_val, z_val)
+
+    # Euclidean cross product in-place.
+    def cross_with(self, other):
+        """
+            Function:
+                cross_with
+            Purpose:
+                Computes the cross product of self with other in-place.
+            Arguments:
+                other (Vec3):
+                    A three dimensional vector.
+            Outputs:
+                None.
+            Method:
+                Compute the cross product and store the result in self.
+        """
+
+        # The cross product is only defined with other three-vectors.
+        if not isinstance(other, Vec3):
+            raise TypeError(
+                "\nError: Vec3\n"
+                "    Trying to compute the cross product with\n"
+                "    an object that is not a Vec3 instance."
+            )
+
+        # Save the x and y components of self to avoid overwrites.
+        x_val = self.x_val
+        y_val = self.y_val
+
+        # Compute the individual components of the cross product and return.
+        self.x_val = y_val*other.z_val - self.z_val*other.y_val
+        self.y_val = self.z_val*other.x_val - x_val*other.z_val
+        self.z_val = x_val*other.y_val - y_val*other.x_val
+
+    # Euclidean cross product represented as a wedge product.
+    def __xor__(self, other):
+        """
+            Operator:
+                Wedge (^)
+            Purpose:
+                Computes the Euclidean cross product of self with other.
+            Arguments:
+                other (Vec3):
+                    A three dimensional vector.
+            Outputs:
+                cross_prod (Vec3):
+                    The cross product of self with other.
+            Method:
+                Pass the argument to the cross method. Since the wedge product
+                ^ is a generalization of the cross product, it is fitting to
+                use this symbol.
+        """
+        return self.cross(other)
+
+    # Euclidean cross product represented as a wedge product, in-place.
+    def __ixor__(self, other):
+        """
+            Operator:
+                Wedge (^=)
+            Purpose:
+                Computes the Euclidean cross product of self with other.
+            Arguments:
+                other (Vec3):
+                    A three dimensional vector.
+            Outputs:
+                None.
+            Method:
+                Pass the argument to the cross_width method.
+        """
+        self.cross_with(other)
+        return self
+
     # Euclidean dot product.
     def dot(self, other):
         """
@@ -677,4 +782,43 @@ def randvec():
     x_val = random.random()
     y_val = random.random()
     z_val = random.random()
+    return Vec3(x_val, y_val, z_val)
+
+# Function for normalizing a vector without invoking the normalize method.
+def normalize(vec):
+    """
+        Function:
+            normalize
+        Purpose:
+            Normalizes a vector so that it has unit magnitude.
+        Arguments:
+            vec (Vec3):
+                The vector to be normalized.
+        Outputs:
+            vec_hat (Vec3):
+                The unit normal vector in the direction of the input.
+        Method:
+            Compute the norm of vec and divide by this if it is non-zero.
+    """
+
+    # Compute the square of the norm of vec.
+    mag_sq = vec.norm_sq()
+
+    # If this is non-zero we may normalize.
+    if mag_sq != 0:
+
+        # The scale factor is the reciprocal of the square root of this.
+        rcpr = math.sqrt(1.0 / mag_sq)
+
+        # Scale each factor to normalize self.
+        x_val = rcpr*vec.x_val
+        y_val = rcpr*vec.y_val
+        z_val = rcpr*vec.z_val
+
+    # Otherwise return the zero vector.
+    else:
+        x_val = 0.0
+        y_val = 0.0
+        z_val = 0.0
+
     return Vec3(x_val, y_val, z_val)
