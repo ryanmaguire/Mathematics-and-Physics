@@ -19,13 +19,48 @@
 #   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Provides routines for generating Newtonian Black Holes in Python.      #
+#       Provides a class for working with colors in RGB format.                #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
-#   Date:       April 10, 2023.                                                #
+#   Date:       April 11, 2023.                                                #
 ################################################################################
 """
 
-from . import vec3
-from . import vec6
-from . import setup
+# Class for working with colors.
+class Color:
+    """
+        Class:
+            Color
+        Purpose:
+            Basic color class for working with colors in RGB format.
+    """
+
+    # Constructor from the red, green, and blue components.
+    def __init__(self, red, green, blue):
+        """
+            Function:
+                __init__
+            Purpose:
+                Creates a Color class from RGB values.
+            Arguments:
+                red (int):
+                    The red component of the color.
+                green (int):
+                    The green component of the color.
+                blue (int):
+                    The blue component of the color.
+            Outputs:
+                The color with RGB components given by the inputs.
+        """
+
+        # The inputs should be representable as integers. Try to convert.
+        try:
+            self.red = abs(int(red)) % 255
+            self.green = abs(int(green)) % 255
+            self.blue = abs(int(blue)) % 255
+
+        except (TypeError, ValueError) as err:
+            raise TypeError(
+                "\nError: Color\n"
+                "    Cannot convert inputs to ints."
+            ) from err
