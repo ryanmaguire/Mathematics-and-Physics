@@ -38,7 +38,7 @@ class PPM:
             Provides routines for creating and working with PPM files.
     """
 
-    # Constructore from a string, the name of the file.
+    # Constructor from a string, the name of the file.
     def __init__(self, name):
         """
             Function:

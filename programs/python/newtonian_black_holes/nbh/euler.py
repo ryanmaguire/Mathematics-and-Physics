@@ -61,8 +61,8 @@ def path(vec, acc, stop):
                 v_{n+1} = dt*acc(p_{n+1}) + v_{n}
                 p_{n+1} = dt*v_{n+1} + p_{n}
 
-            Do this until the stopper function tells you to stop, or until you've
-            done to many iterations.
+            Do this until the stopper function tells you to stop, or until
+            you've done to many iterations.
     """
 
     # The first variable must be a 6D vector.
@@ -87,14 +87,14 @@ def path(vec, acc, stop):
     # believed that photons, which are particles of light, have zero mass.
     # So let's pretend they have a mass that is so stupidly small it would
     # be impossible to measure, but not zero. Given this we could apply
-    #  Newtonian mechanics to get a rough sketch of a black hole.
+    # Newtonian mechanics to get a rough sketch of a black hole.
 
     # In the main use of this function the black hole is of radius r at
     # the origin and our detector is the plane z = z0. Our source of light
     # is some plane z = z1. So the light is coming down and heading towards
     # our detector. We'll increment time using a small value dt, and we'll
     # keep incrementing until the light either hits the detector or is
-    # absorbed by the black hole. dt is given by the time_increment value,
+    # absorbed by the black hole. dt is given by the TIME_INCREMENT value,
     # and the stopping condition (hitting the detector, or being absorbed
     # by a black hole) is determined by the "stop" function.
     iters = 0
