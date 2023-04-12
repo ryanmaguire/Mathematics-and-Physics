@@ -71,4 +71,4 @@ I was very surprised by this.
   4. `CPython` takes over 90 minutes! Ouch!
 
 All implementations render the same figure.
-![Newtonian Black Hole](../../images/newtonian_black_hole.png "Newtonian Black Hole")
+![Newtonian Black Hole](https://github.com/ryanmaguire/Mathematics-and-Physics/blob/master/images/newtonian_black_hole.png "Newtonian Black Hole")
