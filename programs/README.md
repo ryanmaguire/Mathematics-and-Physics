@@ -64,8 +64,7 @@ I was very surprised by this.
   1. No surprise that C is at the top, nor that C/C++ with
      OpenMP is lightning fast.
   2. Go beats C++? `golang` ran slightly faster than `gccgo`? Shocking!
-     The `gccgo` and `g++` times are basically identical. Perhaps `gccgo`
-     transpiles the code to C++?
+     The `gccgo` and `g++` times are basically identical.
   3. Pypy?!? Wow! I looked into this and it seems `Pypy` uses `gcc` to
      *compile* Python code using a JIT (Just-In-Time) compiler. The speeds are
      still extraordinary!
