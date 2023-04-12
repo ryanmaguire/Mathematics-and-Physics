@@ -38,7 +38,7 @@ directory contains files to do exactly this.
 
 **This is not physically realistic**, obviously, but the resulting images
 do look like what one might expect a black hole to be.
-![Newtonian Black Hole](../../../images/newtonian_black_hole.png "Newtonian Black Hole")
+![Newtonian Black Hole](https://github.com/ryanmaguire/Mathematics-and-Physics/blob/master/images/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Compiling
 The files are written in plain C++ without any dependences (other than the

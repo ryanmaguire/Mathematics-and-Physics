@@ -41,24 +41,15 @@ do look like what one might expect a black hole to be.
 ![Newtonian Black Hole](https://github.com/ryanmaguire/Mathematics-and-Physics/blob/master/images/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Compiling
-The files are written in plain C without any dependences (other than the
-standard library). You can compile with or without OpenMP support using
-`clang` or `gcc`. For example:
+The files are written in go without any dependences (other than the
+standard library). You can build with `go` or `gccgo`. For example:
 ```
-gcc -fopenmp -O3 -flto newtonian_black_hole.c -o test.out
+gccgo -O3 nbh.go newtonian_black_hole.go -o test.out
 ```
-To compile without OpenMP just remove the `-fopenmp` option.
-
-Neither `clang` nor `gcc` give any warnings, even with all enabled. Both
+Similarly:
 ```
-gcc -Wall -Wextra -Wpedantic -fopenmp -O3 -flto newtonian_black_hole.c -o test.out -lm
+go build nbh.go newtonian_black_hole.go
 ```
-and
-```
-clang -Weverything -fopenmp -O3 -flto newtonian_black_hole.c -o test.out -lm
-```
-pass without any messages printed to the screen, so hopefully this project is
-portable (but I haven't tested it on macOS or Windows).
 
 # License
     Mathematics-and-Physics is free software: you can redistribute it and/or
