@@ -23,7 +23,7 @@
  *      Builder's terminal, essentially giving the same functionality for     *
  *      LaTeX docs as VS Code.                                                *
  ******************************************************************************
- *  Author:     Ryan Maguire, Dartmouth College                               *
+ *  Author:     Ryan Maguire                                                  *
  *  Date:       November 12, 2021                                             *
  ******************************************************************************/
 
@@ -38,34 +38,39 @@
 int main(int argc, char *argv[])
 {
     /*  Two commands for building the doc: One with pdflatex, one with bibtex.*/
-	char command1[512];
-	char command2[512];
+    char command1[512];
+    char command2[512];
 
     /*  Check for invalid inputs.                                             */
-    if (argc != 2)
+    if (argc != 2 && argc != 3)
     {
         puts("Input must be a LaTeX file");
         puts("Example: makemypdf /path/to/file");
-		puts("\tDo not include .tex in the filename.");
+        puts("\tDo not include .tex in the filename.");
+        puts("\tUse -s to enable shell escape with pdflatex.");
         return -1;
     }
 
     /*  Create the commands.                                                  */
-	sprintf(command1, "pdflatex -shell-escape %s", argv[1]);
-	sprintf(command2, "bibtex %s", argv[1]);
+    if (argc == 2)
+        sprintf(command1, "pdflatex %s", argv[1]);
+    else
+        sprintf(command1, "pdflatex -shell-escape %s", argv[1]);
+
+    sprintf(command2, "bibtex %s", argv[1]);
 
     /*  First command, pdflatex, builds doc with bibliography and hyperlinks. */
-	system(command1);
+    system(command1);
 
     /*  Second command, bibtex, creates the bibliography file.                */
-	system(command2);
+    system(command2);
 
     /*  Third command, pdflatex again. Adds the bibliography to the pdf.      */
-	system(command1);
+    system(command1);
 
     /*  Fourth command, pdflatex. Creates hyperlinks correctly.               */
-	system(command1);
-	return 0;
+    system(command1);
+    return 0;
 }
 /*  End of main.                                                              */
 
