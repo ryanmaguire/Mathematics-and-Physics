@@ -43,22 +43,22 @@ Prediction (and reasoning):
       naive guess was that it'd be slower than the default `CPython`.
 
 The benchmarks.
-| Language       | Implementation | Time (s) | Flags              |
-| -------------- | -------------- | -------- | ------------------ |
-| C (w/OpenMP)   | gcc            |    1.322 | -O3 -flto -fopenmp |
-| C (w/OpenMP)   | clang          |    1.704 | -O3 -flto -fopenmp |
-| C++ (w/OpenMP) | clang++        |    1.995 | -O3 -flto -fopenmp |
-| C++ (w/OpenMP) | g++            |    2.234 | -O3 -flto -fopenmp |
-| C              | gcc            |   15.067 | -O3 -flto          |
-| C              | clang          |   16.440 | -O3 -flto          |
-| Python         | Pypy           |   18.324 |                    |
-| Go             | golang         |   23.883 |                    |
-| Go             | gccgo          |   27.201 | -O3 -flto          |
-| C++            | g++            |   27.566 | -O3 -flto          |
-| C++            | clang++        |   29.547 | -O3 -flto          |
-| C              | pcc            |   52.616 | -O2                |
-| C              | tcc            |   80.480 |                    |
-| Python         | CPython        | 5552.407 |                    |
+| Language       | Implementation | Time (s) | Flags              | Version                                  |
+| -------------- | -------------- | -------- | ------------------ | ---------------------------------------- |
+| C (w/OpenMP)   | gcc            |    1.322 | -O3 -flto -fopenmp | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C (w/OpenMP)   | clang          |    1.704 | -O3 -flto -fopenmp | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP) | clang++        |    1.995 | -O3 -flto -fopenmp | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP) | g++            |    2.234 | -O3 -flto -fopenmp | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| C              | gcc            |   15.067 | -O3 -flto          | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C              | clang          |   16.440 | -O3 -flto          | Debian clang version 11.0.1-2            |
+| Python         | Pypy           |   18.324 |                    | PyPy 7.3.5 with GCC 10.2.1 20210110      |
+| Go             | golang         |   23.883 |                    | go 1.15.15                               |
+| Go             | gccgo          |   27.201 | -O3 -flto          | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+| C++            | g++            |   27.566 | -O3 -flto          | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| C++            | clang++        |   29.547 | -O3 -flto          | Debian clang version 11.0.1-2            |
+| C              | pcc            |   52.616 | -O2                | Portable C Compiler 1.2.0.DEVEL 20200630 |
+| C              | tcc            |   80.480 |                    | tcc version 0.9.27                       |
+| Python         | CPython        | 5552.407 |                    | Python 3.9.2                             |
 
 I was very surprised by this.
   1. No surprise that C is at the top, nor that C/C++ with
