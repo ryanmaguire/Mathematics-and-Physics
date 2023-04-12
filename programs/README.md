@@ -16,9 +16,7 @@ This directory has a few uses.
 
 ## Benchmarks
 
-### Newtonian Black Holes
-
-Prediction (and reasoning):
+For each mini-project I had more-or-less than same predictions.
   1. `C (gcc)`: The GNU compiler collections C compiler is extremely
      optimized. In almost any scenario I would imagine this creates the fastest
      code.
@@ -40,9 +38,12 @@ Prediction (and reasoning):
      computations, Python will most likely be slower than the
      other languages.
   10. `Python (Pypy)`: I'd never used this implementation before, but my
-      naive guess was that it'd be slower than the default `CPython`.
+      naive guess was that it'd be slower than the default `CPython`. 
 
-The benchmarks.
+I was pleasantly surprised to learn this is *not* always the case.
+
+### Newtonian Black Holes
+
 | Language       | Implementation | Time (s) | Flags              | Version                                  |
 | -------------- | -------------- | -------- | ------------------ | ---------------------------------------- |
 | C (w/OpenMP)   | gcc            |    1.322 | -O3 -flto -fopenmp | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
@@ -60,14 +61,11 @@ The benchmarks.
 | C              | tcc            |   80.480 |                    | tcc version 0.9.27                       |
 | Python         | CPython        | 5552.407 |                    | Python 3.9.2                             |
 
-I was very surprised by this.
   1. No surprise that C is at the top, nor that C/C++ with
      OpenMP is lightning fast.
-  2. Go beats C++? `golang` ran slightly faster than `gccgo`? Shocking!
-     The `gccgo` and `g++` times are basically identical.
-  3. Pypy?!? Wow! I looked into this and it seems `Pypy` uses `gcc` to
-     *compile* Python code using a JIT (Just-In-Time) compiler. The speeds are
-     still extraordinary!
+  2. Go beat C++? `golang` ran slightly faster than `gccgo`? Shocking!
+     Note that `gccgo` and `g++` times are basically identical.
+  3. Pypy?!? Wow!
   4. `CPython` takes over 90 minutes! Ouch!
 
 All implementations render the same figure.
