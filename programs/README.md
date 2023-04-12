@@ -35,13 +35,14 @@ Prediction (and reasoning):
   7. `C (pcc)`: The portable C compiler usually creates binaries that are an
      order of magnitude slower than `gcc`.
   8. `C (tcc)`: The same can be said for the Tiny C compiler.
-  9. `Python (CPython)`: Python is a great language, but it notoriously slow.
+  9. `Python (CPython)`: Python is a great language, but is notoriously slow.
      Unless your code uses `C/C++` extensions to do the bulk of your
      computations, Python will most likely be slower than the
      other languages.
   10. `Python (Pypy)`: I'd never used this implementation before, but my
       naive guess was that it'd be slower than the default `CPython`.
 
+The benchmarks.
 | Language       | Implementation | Time (s) | Flags              |
 | -------------- | -------------- | -------- | ------------------ |
 | C (w/OpenMP)   | gcc            |    1.322 | -O3 -flto -fopenmp |
