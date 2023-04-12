@@ -123,6 +123,35 @@ func ColorScaleBy(c *Color, t float64) {
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      Color.Normalize                                                       *
+ *  Purpose:                                                                  *
+ *      Normalizes a color to unit intensity.                                 *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ *  Method:                                                                   *
+ *      Treat the color c = (r, g, b) as a vector and normalize.              *
+ ******************************************************************************/
+func (c *Color) Normalize() {
+
+    /*  Treat the RGB components as a vector (r, g, b).                       */
+    var r float64 = float64(c.Red)
+    var g float64 = float64(c.Green)
+    var b float64 = float64(c.Blue)
+
+    /*  Compute the norm of the vector (r, g, b) using Pythagoras.            */
+    var norm float64 = math.Sqrt(r*r + g*g + b*b)
+
+    /*  For non-zero norm (i.e. colors other than black) normalize intensity. */
+    if norm != 0.0 {
+        ColorScaleBy(c, 255.0 / norm)
+    }
+}
+/*  End of Color.Normalize.                                                   */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      ColorFromComplex                                                      *
  *  Purpose:                                                                  *
  *      Creates an RGB color from a complex number. The intensity is given by *
@@ -295,10 +324,10 @@ func ColorWheelFromComplex(z complex128) Color {
         /*  Shift val back to the range (0, 256).                             */
         val -= 1280.0
 
-        /*  Transition from red to magenta.                                   */
+        /*  Transition from magenta to blue.                                  */
         out.Red = uint8(256.0 - val)
         out.Green = uint8(0)
-        out.Blue = uint8(val)
+        out.Blue = uint8(255)
     }
 
     /*  Scale the color by the atan factor and return.                        */
@@ -358,11 +387,3 @@ func ComplexPlot(cfunc ComplexFunc, color Colerer, name string) {
     }
 }
 /*  End of ComplexPlot.                                                       */
-
-func f(z complex128) complex128 {
-    return z*z*z - 1.0
-}
-
-func main() {
-    ComplexPlot(f, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
-}
