@@ -31,6 +31,9 @@
 /*  NF_INLINE macro is defined here.                                          */
 #include "nf_inline.h"
 
+/*  sqrt and atan2 functions found here.                                      */
+#include <math.h>
+
 /*  Basic struct for working with complex numbers.                            */
 struct nf_complex {
 
@@ -64,6 +67,54 @@ nf_complex_create(double real, double imag)
     return z;
 }
 /*  End of nf_complex_create.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_conjugate                                                  *
+ *  Purpose:                                                                  *
+ *      Computes the complex conjugate of the input.                          *
+ *  Arguments:                                                                *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      z_bar (struct nf_complex):                                            *
+ *          The complex conjugate of z.                                       *
+ *  Method:                                                                   *
+ *      Copy the real part and negate the imaginary part.                     *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_conjugate(const struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex z_bar;
+
+    /*  The conjugate simply negates the imaginary part.                      */
+    z_bar.real = z->real;
+    z_bar.imag = z->imag;
+    return z_bar;
+}
+/*  End of nf_complex_conjugate.                                              */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_conjugateself                                              *
+ *  Purpose:                                                                  *
+ *      Computes the conjugate of z and stores it in the input.               *
+ *  Arguments:                                                                *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Negate the imaginary component.                                       *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_conjugateself(struct nf_complex *z)
+{
+    /*  The complex conjugate is computed by negating the imaginary part.     */
+    z->imag = -z->imag;
+}
+/*  End of nf_complex_conjugateself.                                          */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -266,6 +317,153 @@ nf_complex_multiplyby(struct nf_complex *z0, const struct nf_complex *z1)
     z0->imag = real*z1->imag + imag*z1->real;
 }
 /*  End of nf_complex_multiplyby.                                             */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_divide                                                     *
+ *  Purpose:                                                                  *
+ *      Divides two complex numbers.                                          *
+ *  Arguments:                                                                *
+ *      z0 (const struct nf_complex *):                                       *
+ *          A pointer to a complex number.                                    *
+ *      z1 (const struct nf_complex *):                                       *
+ *          Another pointer to a complex number.                              *
+ *  Outputs:                                                                  *
+ *      quot (struct nf_complex):                                             *
+ *          The quotient of z0 and z1.                                        *
+ *  Method:                                                                   *
+ *      The inverse of z can be written using the complex conjugate z_bar.    *
+ *                                                                            *
+ *          z^-1 = z_bar / |z|^2                                              *
+ *                                                                            *
+ *      To compute z0 / z1 we compute z0 * z1^-1.                             *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_divide(const struct nf_complex *z0, const struct nf_complex *z1)
+{
+    /*  Declare a variable for the quotient.                                  */
+    struct nf_complex quot;
+
+    /*  The quotient z/w can be written as z * (1/w). Use this.               */
+    double denom = 1.0 / (z1->real*z1->real + z1->imag*z1->imag);
+
+    quot.real = (z0->real*z1->real + z0->imag*z1->imag)*denom;
+    quot.imag = (z0->imag*z1->real - z0->real*z1->imag)*denom;
+    return quot;
+}
+/*  End of nf_complex_divide.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_square                                                     *
+ *  Purpose:                                                                  *
+ *      Computes the square of a complex number.                              *
+ *  Arguments:                                                                *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      square (struct nf_complex):                                           *
+ *          The square of z.                                                  *
+ *  Method:                                                                   *
+ *      Use the multiplication formula with z0 = z1.                          *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_square(const struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex square;
+
+    /*  Compute z*z using i^2 = -1.                                           */
+    square.real = z->real*z->real - z->imag*z->imag;
+    square.imag = 2.0*z->real*z->imag;
+    return square;
+}
+/*  End of nf_complex_square.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_squareself                                                 *
+ *  Purpose:                                                                  *
+ *      Computes the square of a complex number and stores it in the input.   *
+ *  Arguments:                                                                *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Use the multiplication formula with z0 = z1.                          *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_squareself(struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    const double real = z->real;
+    const double imag = z->imag;
+
+    /*  Compute z*z using i^2 = -1.                                           */
+    z->real = real*real - imag*imag;
+    z->imag = 2.0*real*imag;
+}
+/*  End of nf_complex_squareself.                                             */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_abs                                                        *
+ *  Purpose:                                                                  *
+ *      Computes the absolute value of a complex number.                      *
+ *  Arguments:                                                                *
+ *      z (const struct nf_complex *):                                        *
+ *          A complex number.                                                 *
+ *  Outputs:                                                                  *
+ *      abs_z (double):                                                       *
+ *          The modulus, or absolute value, of z.                             *
+ *  Method:                                                                   *
+ *      Invoke the Pythagoras theorem. If z = x + i*y = (x, y) we have:       *
+ *                                                                            *
+ *            |z| = sqrt(x^2 + y^2)                                           *
+ *                                                                            *
+ *      This is computed and returned.                                        *
+ *  Notes:                                                                    *
+ *      This is the "unsage" way of computing the absolute value. If x or y   *
+ *      are larger than 10^154 there square overflows to infinity. This       *
+ *      almost never occurs with numbers used in practice, so this method of  *
+ *      computing |z| is fine.                                                *
+ ******************************************************************************/
+NF_INLINE double
+nf_complex_abs(const struct nf_complex *z)
+{
+    /*  Use the Pythagorean formula and return.                               */
+    return sqrt(z->real*z->real + z->imag*z->imag);
+}
+/*  End of nf_complex_abs.                                                    */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_dist                                                       *
+ *  Purpose:                                                                  *
+ *      Computes the distance between two points in the complex plane.        *
+ *  Arguments:                                                                *
+ *      z0 (const struct nf_complex *):                                       *
+ *          A pointer to a complex number.                                    *
+ *      z1 (const struct nf_complex *):                                       *
+ *          Another pointer to a complex number.                              *
+ *  Outputs:                                                                  *
+ *      distance (double):                                                    *
+ *          The Euclidean distance between z0 and z1.                         *
+ *  Method:                                                                   *
+ *      Compute |z0 - z1| and return.                                         *
+ ******************************************************************************/
+NF_INLINE double
+nf_complex_dist(const struct nf_complex *z0, const struct nf_complex *z1)
+{
+    /*  Compute the displacements in the real and imaginary axes.             */
+    const double dx = z0->real - z1->real;
+    const double dy = z0->imag - z1->imag;
+
+    /*  Invoke Pythagoras to compute the distance.                            */
+    return sqrt(dx*dx + dy*dy);
+}
+/*  End of nf_complex_dist.                                                   */
 
 #endif
 /*  End of include guard.                                                     */
