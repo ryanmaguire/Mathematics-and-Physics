@@ -355,6 +355,40 @@ nf_complex_divide(const struct nf_complex *z0, const struct nf_complex *z1)
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      nf_complex_divideby                                                   *
+ *  Purpose:                                                                  *
+ *      Divides two complex numbers and stores the result in the first input. *
+ *  Arguments:                                                                *
+ *      z0 (struct nf_complex *):                                             *
+ *          A pointer to a complex number.                                    *
+ *      z1 (const struct nf_complex *):                                       *
+ *          Another pointer to a complex number.                              *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      The inverse of z can be written using the complex conjugate z_bar.    *
+ *                                                                            *
+ *          z^-1 = z_bar / |z|^2                                              *
+ *                                                                            *
+ *      To compute z0 / z1 we compute z0 * z1^-1.                             *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_divideby(struct nf_complex *z0, const struct nf_complex *z1)
+{
+    /*  Avoid overwriting the data by copying it to two local variables.      */
+    const double real = z0->real;
+    const double imag = z0->imag;
+
+    /*  The quotient z/w can be written as z * (1/w). Use this.               */
+    double denom = 1.0 / (z1->real*z1->real + z1->imag*z1->imag);
+
+    z0->real = (real*z1->real + imag*z1->imag)*denom;
+    z0->imag = (imag*z1->real - real*z1->imag)*denom;
+}
+/*  End of nf_complex_divideby.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      nf_complex_square                                                     *
  *  Purpose:                                                                  *
  *      Computes the square of a complex number.                              *
