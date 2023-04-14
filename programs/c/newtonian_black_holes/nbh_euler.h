@@ -46,7 +46,7 @@ static double nbh_euler_time_increment = 0.01;
 /*  The max number of iterations in Euler's method.                           */
 static unsigned int nbh_euler_max_iters = 65535U;
 
-/*  Function for reseting the max number of iterations allowed.               */
+/*  Function for resetting the max number of iterations allowed.              */
 NBH_INLINE void
 nbh_euler_reset_max_iters(unsigned int n)
 {
