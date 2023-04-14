@@ -150,7 +150,7 @@ nbh_run(acceleration acc, stopper stop, colorer color,
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nbh_run                                                               *
+ *      nbh_prun                                                              *
  *  Purpose:                                                                  *
  *      Runs the raytracing routines with parallelization.                    *
  *  Arguments:                                                                *
