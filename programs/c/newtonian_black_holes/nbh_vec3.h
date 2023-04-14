@@ -377,7 +377,7 @@ nbh_vec3_dot_product(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *                                                                            *
  *          cross = v x w                                                     *
  *                = (vx, vy, vz) x (wx, wy, wz)                               *
- *                = (vy*wz - wz*vy, vz*wx - vx*wz, vx*wy - vy*wx)             *
+ *                = (vy*wz - vz*wy, vz*wx - vx*wz, vx*wy - vy*wx)             *
  *                                                                            *
  *      These components are computed and the cross product is returned.      *
  ******************************************************************************/
@@ -408,7 +408,7 @@ nbh_vec3_cross_product(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
  *  Outputs:                                                                  *
  *      None (void).                                                          *
  *  Method:                                                                   *
- *      Compute the cross product component-wise and store the resut in v.    *
+ *      Compute the cross product component-wise and store the result in v.   *
  ******************************************************************************/
 NBH_INLINE void
 nbh_vec3_crosswith(struct nbh_vec3 *v, const struct nbh_vec3 *w)
