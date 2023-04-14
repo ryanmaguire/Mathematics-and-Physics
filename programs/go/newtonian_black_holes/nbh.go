@@ -1190,7 +1190,7 @@ func Blue(t float64) Color {
  *  Method:                                                                   *
  *      Set the red and green components to t, and the blue component to zero.*
  ******************************************************************************/
-func Blue(t float64) Color {
+func Yellow(t float64) Color {
 
     /*  8-bit colors have a max intensity of 255. Scale this by t.            */
     var val uint8 = uint8(t * 255.0)
