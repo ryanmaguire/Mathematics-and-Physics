@@ -718,7 +718,7 @@ const Z_Src float64 = 10.0
 /*  The start and end parameters for the "source". The source is the          *
  *  square [start, end] x [start, end] at height z_src.                       */
 const Start float64 = -10.0
-const End  float64= 10.0
+const End float64 = 10.0
 
 /*  The height of the detector plane.                                         */
 const Z_Detector float64 = -10.0
