@@ -1309,6 +1309,10 @@ func CheckerBoard(u *Vec6) Color {
 }
 /*  End of CheckerBoard.                                                      */
 
+/******************************************************************************
+ *                  Euler's Method Functions and Constants.                   *
+ ******************************************************************************/
+
 /*  Time step used in Euler's method. The user may change this.               */
 var Euler_Time_Increment float64 = 0.01
 
