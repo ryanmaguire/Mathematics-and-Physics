@@ -325,7 +325,7 @@ func (v *Vec3) Dot(w *Vec3) float64 {
  *                                                                            *
  *          cross = v x w                                                     *
  *                = (vx, vy, vz) x (wx, wy, wz)                               *
- *                = (vy*wz - wz*vy, vz*wx - vx*wz, vx*wy - vy*wx)             *
+ *                = (vy*wz - vz*wy, vz*wx - vx*wz, vx*wy - vy*wx)             *
  *                                                                            *
  *      These components are computed and the cross product is returned.      *
  ******************************************************************************/
