@@ -77,7 +77,7 @@ static const struct nbh_color nbh_magenta = {0xFFU, 0x00U, 0xFFU};
  *          The blue component of the color.                                  *
  *  Outputs:                                                                  *
  *      c (struct nbh_color):                                                 *
- *          The color (r, g, b) in 8-bit RGB color space.                     *
+ *          The color (r, g, b) in 24-bit RGB color space.                    *
  ******************************************************************************/
 NBH_INLINE struct nbh_color
 nbh_color_create(unsigned char r, unsigned char g, unsigned char b)
@@ -398,7 +398,7 @@ nbh_checker_board_four_highlight(const struct nbh_vec6 *u)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nbh_checker_board                                                     *
+ *      nbh_checker_board_highlight                                           *
  *  Purpose:                                                                  *
  *      Creates a checker-board pattern on the detector and highlights the    *
  *      origin blue.                                                          *
@@ -459,36 +459,44 @@ nbh_angle_gradient(const struct nbh_vec6 *u)
 
     /*  Use an RGB rainbow gradient to color the current pixel. We'll set     *
      *  blue to correspond to the least value and red for the greatest,       *
-     *  with a continuous gradient in between.                                */
+     *  with a continuous gradient in between. First blue to cyan.            */
     if (scaled < 64.0)
     {
-        red   = 0x00U;
+        red = 0x00U;
         green = (unsigned char)(4.0*scaled);
-        blue  = 0xFFU;
+        blue = 0xFFU;
     }
+
+    /*  Next, cyan to green.                                                  */
     else if (scaled < 128.0)
     {
-        red   = 0x00U;
+        red = 0x00U;
         green = 0xFFU;
-        blue  = (unsigned char)(255.0 - 4.0*(scaled - 64.0));
+        blue = (unsigned char)(255.0 - 4.0*(scaled - 64.0));
     }
+
+    /*  Green to yellow.                                                      */
     else if (scaled < 192.0)
     {
-        red   = (unsigned char)(4.0*(scaled - 128.0));
+        red = (unsigned char)(4.0*(scaled - 128.0));
         green = 0xFFU;
-        blue  = 0x00U;
+        blue = 0x00U;
     }
+
+    /*  Yellow to red.                                                        */
     else if (scaled < 255.0)
     {
-        red   = 0xFFU;
+        red = 0xFFU;
         green = (unsigned char)(255.0 - 4.0*(scaled - 192.0));
-        blue  = 0x00U;
+        blue = 0x00U;
     }
+
+    /*  And lastly, red.                                                      */
     else
     {
-        red   = 0xFFU;
+        red = 0xFFU;
         green = 0x00U;
-        blue  = 0x00U;
+        blue = 0x00U;
     }
 
     return nbh_color_create(red, green, blue);
