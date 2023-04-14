@@ -1096,16 +1096,121 @@ func ColorScaleBy(c *Color, t float64) {
 }
 /*  End of ColorScaleBy.                                                      */
 
-/*  Common colors.                                                            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Black                                                                 *
+ *  Purpose:                                                                  *
+ *      Returns the color black in RGB format.                                *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      black (Color):                                                        *
+ *          The color black in RGB.                                           *
+ *  Method:                                                                   *
+ *      Set each of the RGB components to zero and return.                    *
+ ******************************************************************************/
 func Black() Color {
     return Color{0x00, 0x00, 0x00}
 }
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Red                                                                   *
+ *  Purpose:                                                                  *
+ *      Returns the color red in RGB format.                                  *
+ *  Arguments:                                                                *
+ *      t (float64):                                                          *
+ *          The intensity of the color, should be between 0 and 1.            *
+ *  Outputs:                                                                  *
+ *      red (Color):                                                          *
+ *          The color red in RGB.                                             *
+ *  Method:                                                                   *
+ *      Set the green and blue components to zero, and the red component to t.*
+ ******************************************************************************/
 func Red(t float64) Color {
+
+    /*  8-bit colors have a max intensity of 255. Scale this by t.            */
     var val uint8 = uint8(t * 255.0)
     return Color{val, 0x00, 0x00}
 }
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Green                                                                 *
+ *  Purpose:                                                                  *
+ *      Returns the color green in RGB format.                                *
+ *  Arguments:                                                                *
+ *      t (float64):                                                          *
+ *          The intensity of the color, should be between 0 and 1.            *
+ *  Outputs:                                                                  *
+ *      green (Color):                                                        *
+ *          The color green in RGB.                                           *
+ *  Method:                                                                   *
+ *      Set the red and blue components to zero, and the green component to t.*
+ ******************************************************************************/
+func Green(t float64) Color {
+
+    /*  8-bit colors have a max intensity of 255. Scale this by t.            */
+    var val uint8 = uint8(t * 255.0)
+    return Color{0x00, val, 0x00}
+}
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Blue                                                                  *
+ *  Purpose:                                                                  *
+ *      Returns the color blue in RGB format.                                 *
+ *  Arguments:                                                                *
+ *      t (float64):                                                          *
+ *          The intensity of the color, should be between 0 and 1.            *
+ *  Outputs:                                                                  *
+ *      blue (Color):                                                         *
+ *          The color blue in RGB.                                            *
+ *  Method:                                                                   *
+ *      Set the red and green components to zero, and the blue component to t.*
+ ******************************************************************************/
+func Blue(t float64) Color {
+
+    /*  8-bit colors have a max intensity of 255. Scale this by t.            */
+    var val uint8 = uint8(t * 255.0)
+    return Color{0x00, 0x00, val}
+}
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Yellow                                                                *
+ *  Purpose:                                                                  *
+ *      Returns the color yellow in RGB format.                               *
+ *  Arguments:                                                                *
+ *      t (float64):                                                          *
+ *          The intensity of the color, should be between 0 and 1.            *
+ *  Outputs:                                                                  *
+ *      yellow (Color):                                                       *
+ *          The color yellow in RGB.                                          *
+ *  Method:                                                                   *
+ *      Set the red and green components to t, and the blue component to zero.*
+ ******************************************************************************/
+func Blue(t float64) Color {
+
+    /*  8-bit colors have a max intensity of 255. Scale this by t.            */
+    var val uint8 = uint8(t * 255.0)
+    return Color{val, val, 0x00}
+}
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      White                                                                 *
+ *  Purpose:                                                                  *
+ *      Returns the color white in RGB format.                                *
+ *  Arguments:                                                                *
+ *      t (float64):                                                          *
+ *          The intensity of the color, should be between 0 and 1.            *
+ *  Outputs:                                                                  *
+ *      white (Color):                                                        *
+ *          The color white in RGB.                                           *
+ *  Method:                                                                   *
+ *      Set the red, green, and blue components to t.                         *
+ ******************************************************************************/
 func White(t float64) Color {
     var val uint8 = uint8(t * 255.0)
     return Color{val, val, val}
