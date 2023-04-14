@@ -132,7 +132,7 @@ func Vec3Rect(x, y, z float64) Vec3 {
  *      This is computed and the sum is returned.                             *
  ******************************************************************************/
 func Vec3Add(v, w *Vec3) Vec3 {
-    return Vec3Rect(v.X + w.X, v.Y + w.Y, v.Z + w.Z)
+    return Vec3{v.X + w.X, v.Y + w.Y, v.Z + w.Z}
 }
 
 /******************************************************************************
@@ -183,7 +183,7 @@ func Vec3AddTo(v, w *Vec3) {
  *      computes the difference v - w (and not w - v).                        *
  ******************************************************************************/
 func Vec3Subtract(v, w *Vec3) Vec3 {
-    return Vec3Rect(v.X - w.X, v.Y - w.Y, v.Z - w.Z)
+    return Vec3{v.X - w.X, v.Y - w.Y, v.Z - w.Z}
 }
 
 /******************************************************************************
