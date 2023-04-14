@@ -633,12 +633,12 @@ func Vec6Scale(a float64, u *Vec6) Vec6 {
  *  Arguments:                                                                *
  *      a (float64):                                                          *
  *          A real number.                                                    *
- *      v (*Vec6):                                                            *
+ *      u (*Vec6):                                                            *
  *          A pointer to a vector. The product is stored here.                *
  *  Outputs:                                                                  *
  *      None.                                                                 *
  *  Method:                                                                   *
- *      Perform scalar multiplication component-wise, storing the result in v.*
+ *      Perform scalar multiplication component-wise, storing the result in u.*
  ******************************************************************************/
 func Vec6ScaleBy(a float64, u *Vec6) {
     Vec3ScaleBy(a, &u.P)
