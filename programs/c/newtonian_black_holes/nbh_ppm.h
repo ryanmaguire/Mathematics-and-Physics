@@ -114,7 +114,7 @@ nbh_init_ppm_from_vals(struct nbh_ppm *PPM, unsigned x, unsigned y, int type)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nbh_init_ppm_from_vals                                                *
+ *      nbh_ppm_init                                                          *
  *  Purpose:                                                                  *
  *      Initialize a PPM using the values in "setup".                         *
  *  Arguments:                                                                *
