@@ -46,7 +46,7 @@ static double nbh_rk_time_increment = 0.1;
 /*  The max number of iterations in the RK4 method.                           */
 static unsigned int nbh_rk_max_iters = 65535U;
 
-/*  Function for reseting the max number of iterations allowed.               */
+/*  Function for resetting the max number of iterations allowed.              */
 NBH_INLINE void
 nbh_rk_reset_max_iters(unsigned int n)
 {
