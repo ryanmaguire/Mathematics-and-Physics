@@ -64,11 +64,26 @@ namespace nbh {
     template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
     inline void prun(Tacc acc, Tstop stop, Tcolor color,
                      Tpath path, const char *name);
-
 }
 /*  End of "nbh" namespace.                                                   */
 
-/*  Template for running the programs.                                        */
+/******************************************************************************
+ *  Template:                                                                 *
+ *      nbh::run                                                              *
+ *  Purpose:                                                                  *
+ *      Raytracing routine for black holes without parallelizing.             *
+ *  Arguments:                                                                *
+ *      acc (Tacc):                                                           *
+ *          A function that represents the equation of motion.                *
+ *      stop (Tstop):                                                         *
+ *          A function the determines when a photon stops moving.             *
+ *      path (Tpath):                                                         *
+ *          The numerical method chosen for numerical raytracing.             *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file, ex. "black_hole.ppm".            *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
 inline void
 nbh::run(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
@@ -142,9 +157,25 @@ nbh::run(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
     PPM.close();
     return;
 }
-/*  End of nbh::euler_run.                                                    */
+/*  End of nbh::run.                                                          */
 
-/*  Template for running the programs with parallel processing.               */
+/******************************************************************************
+ *  Template:                                                                 *
+ *      nbh::prun                                                             *
+ *  Purpose:                                                                  *
+ *      Raytracing routine for black holes with parallelization.              *
+ *  Arguments:                                                                *
+ *      acc (Tacc):                                                           *
+ *          A function that represents the equation of motion.                *
+ *      stop (Tstop):                                                         *
+ *          A function the determines when a photon stops moving.             *
+ *      path (Tpath):                                                         *
+ *          The numerical method chosen for numerical raytracing.             *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file, ex. "black_hole.ppm".            *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
 template <typename Tacc, typename Tstop, typename Tcolor, typename Tpath>
 inline void
 nbh::prun(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
@@ -222,7 +253,7 @@ nbh::prun(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
     std::free(c);
     return;
 }
-/*  End of nbh::parallel_euler_run.                                           */
+/*  End of nbh::prun.                                                         */
 
 #endif
 /*  End of include guard.                                                     */
