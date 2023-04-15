@@ -1584,7 +1584,7 @@ var Euler_Time_Increment float64 = 0.01
 /*  The max number of iterations in Euler's method.                           */
 var Euler_Max_Iters uint32 = 65535
 
-/*  Function for reseting the max number of iterations allowed.               */
+/*  Function for resetting the max number of iterations allowed.              */
 func EulerResetMaxIters(n uint32) {
     Euler_Max_Iters = n
 }
@@ -1678,7 +1678,7 @@ var RK_Time_Increment float64 = 0.1
 /*  The max number of iterations in the RK4 method.                           */
 var RK_Max_Iters uint32 = 65535
 
-/*  Function for reseting the max number of iterations allowed.               */
+/*  Function for resetting the max number of iterations allowed.              */
 func RKResetMaxIters(n uint32) {
     RK_Max_Iters = n
 }
