@@ -325,7 +325,7 @@ nbh_checker_board_four(const struct nbh_vec6 *u)
     /*  Factor for darkening the checker board.                               */
     const double cfact = nbh_setup_z_detector_sq / nbh_vec3_normsq(&u->p);
 
-    /*  Integers that determines the color.                                   */
+    /*  Integers that determine the color.                                    */
     const unsigned int nx = (unsigned)(ceil(u->p.x)) & 1U;
     const unsigned int ny = (unsigned)(ceil(u->p.y)) & 1U;
     const unsigned int n = nx + (ny << 1U);
@@ -368,7 +368,7 @@ nbh_checker_board_four_highlight(const struct nbh_vec6 *u)
     /*  Factor for darkening the checker board.                               */
     const double cfact = nbh_setup_z_detector_sq / nbh_vec3_normsq(&u->p);
 
-    /*  Integers that determines the color.                                   */
+    /*  Integers that determine the color.                                    */
     const unsigned int nx = (unsigned)(ceil(u->p.x)) & 1U;
     const unsigned int ny = (unsigned)(ceil(u->p.y)) & 1U;
     const unsigned int n = nx + (ny << 1U);
