@@ -81,13 +81,13 @@ namespace nbh {
         inline double rhosq(void) const;
     };
 
-    /*    Empty constructor. Do nothing, just return.                         */
+    /*  Empty constructor. Do nothing, just return.                           */
     vec3::vec3(void)
     {
         return;
     }
 
-    /*    Constructor from the Euclidean components.                          */
+    /*  Constructor from the Euclidean components.                            */
     vec3::vec3(double a, double b, double c)
     {
         /*  Set each of the components and return.                            */
