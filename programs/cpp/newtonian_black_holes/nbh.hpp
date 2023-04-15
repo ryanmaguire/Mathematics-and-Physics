@@ -246,7 +246,7 @@ nbh::prun(Tacc acc, Tstop stop, Tcolor color, Tpath path, const char *name)
 
     /*  Loop over the PPM file and write the colors in order.                 */
     for (n = 0U; n < size; ++n)
-        c[n].write(PPM.fp);
+        c[n].write(PPM);
 
     /*  Close the file, free the data, and return.                            */
     PPM.close();
