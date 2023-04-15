@@ -145,7 +145,7 @@ nbh_rk_path(struct nbh_vec6 *u, acceleration acc, stopper stop)
     const double h0 = 0.5 * dt;
     const double h1 = dt * 0.1666666666666667;
 
-    /*  Current acceleration vector giving by the starting position.          */
+    /*  Current acceleration vector given by the starting position.           */
     struct nbh_vec3 a = acc(&u->p);
 
     /*  Compute the initial Runge-Kutta factors.                              */
@@ -171,20 +171,20 @@ nbh_rk_path(struct nbh_vec6 *u, acceleration acc, stopper stop)
         u->v.y += h1 * (k1.v.y + 2.0*k2.v.y + 2.0*k3.v.y + k4.v.y);
         u->v.z += h1 * (k1.v.z + 2.0*k2.v.z + 2.0*k3.v.z + k4.v.z);
 
-        /*  Update the Runge-Kutta factors.                               */
+        /*  Update the Runge-Kutta factors.                                   */
         a = acc(&u->p);
         k1 = nbh_vec6_from_vectors(&u->v, &a);
         k2 = nbh_rk4_factor(u, h0, &k1, acc);
         k3 = nbh_rk4_factor(u, h0, &k2, acc);
         k4 = nbh_rk4_factor(u, dt, &k2, acc);
 
-        /*  It is possible that a photon was captured into orbit, but not *
-         *  absorbed into the black hole. To avoid an infinite loop,      *
-         *  abort the computation once N gets to large.                   */
+        /*  It is possible that a photon was captured into orbit, but not     *
+         *  absorbed into the black hole. To avoid an infinite loop,          *
+         *  abort the computation once N gets to large.                       */
         ++n;
     }
 }
-/*  End of path function.                                                 */
+/*  End of nbh_rk_path function.                                              */
 
 #endif
 /*  End of include guard.                                                     */
