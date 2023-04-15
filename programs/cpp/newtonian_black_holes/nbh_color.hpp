@@ -65,10 +65,10 @@ namespace nbh {
         inline void operator *= (double t);
 
         /*  Operator for adding colors. We average the components.            */
-        inline color operator + (nbh::color c);
+        inline color operator + (const nbh::color &c) const;
 
         /*  Operator for adding colors.                                       */
-        inline void operator += (nbh::color c);
+        inline void operator += (const nbh::color &c);
     };
 
     /*  Empty constructor, just return.                                       */
@@ -117,7 +117,7 @@ namespace nbh {
     }
 
     /*  Operator for adding colors. We take the average of the components.    */
-    inline color color::operator + (color c)
+    inline color color::operator + (const nbh::color &c) const
     {
         /*  Cast the values to doubles and take the average, component-wise.  */
         const double x =
@@ -137,7 +137,7 @@ namespace nbh {
     }
 
     /*  Operator for adding colors. We take the average of the components.    */
-    inline void color::operator += (color c)
+    inline void color::operator += (const nbh::color &c)
     {
         /*  Cast the values to doubles and take the average, component-wise.  */
         const double x =
@@ -298,7 +298,6 @@ namespace nbh {
 
         else if (static_cast<unsigned>(std::ceil(u.p.x)+std::ceil(u.p.y)) & 1U)
             return colors::white() * color_factor;
-
         else
             return colors::red() * color_factor;
     }
@@ -319,36 +318,44 @@ namespace nbh {
 
         /*  Use an RGB rainbow gradient to color the current pixel. We'll set *
          *  blue to correspond to the least value and red for the greatest,   *
-         *  with a continuous gradient in between.                            */
+         *  with a continuous gradient in between. First blue to cyan.        */
         if (scaled < 64.0)
         {
-            red   = 0x00U;
+            red = 0x00U;
             green = static_cast<unsigned char>(4.0*scaled);
-            blue  = 0xFFU;
+            blue = 0xFFU;
         }
+
+        /*  Cyan to green.                                                    */
         else if (scaled < 128.0)
         {
-            red   = 0x00U;
+            red = 0x00U;
             green = 0xFFU;
-            blue  = static_cast<unsigned char>(255.0 - 4.0*(scaled - 64.0));
+            blue = static_cast<unsigned char>(255.0 - 4.0*(scaled - 64.0));
         }
+
+        /*  Green to yellow.                                                  */
         else if (scaled < 192.0)
         {
-            red   = static_cast<unsigned char>(4.0*(scaled - 128.0));
+            red = static_cast<unsigned char>(4.0*(scaled - 128.0));
             green = 0xFFU;
-            blue  = 0x00U;
+            blue = 0x00U;
         }
+
+        /*  Yellow to red.                                                    */
         else if (scaled < 255.0)
         {
-            red   = 0xFFU;
+            red = 0xFFU;
             green = static_cast<unsigned char>(255.0 - 4.0*(scaled - 192.0));
-            blue  = 0x00U;
+            blue = 0x00U;
         }
+
+        /*  And, lastly, red.                                                 */
         else
         {
-            red   = 0xFFU;
+            red = 0xFFU;
             green = 0x00U;
-            blue  = 0x00U;
+            blue = 0x00U;
         }
 
         return color(red, green, blue);
