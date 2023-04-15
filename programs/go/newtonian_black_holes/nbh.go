@@ -1460,6 +1460,98 @@ func CheckerBoardFourHighlight(u *Vec6) Color {
 /*  End of CheckerBoardFourHighlight.                                         */
 
 /******************************************************************************
+ *  Function:                                                                 *
+ *      AngleGradientColor                                                    *
+ *  Purpose:                                                                  *
+ *      Creates a rainbow gradient of color based on the angle the velocity   *
+ *      vector of the particle makes with the detector on impact.             *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func AngleGradientColor(u *Vec6) Color {
+
+    /*  Declare unsigned char's for computing the output color.               */
+    var red, green, blue uint8
+
+    /*  We want the zenith angle of the velocity vector. This can be          *
+     *  computed using the cylindrical coordinates of the vector.             */
+    var angle float64 = math.Atan2(math.Abs(u.V.Z), u.V.RhoSq())
+
+    /*  Scale the angle so that it falls between 0 and 255.                   */
+    var scaled float64 = 255.0 * angle / (0.5*math.Pi)
+
+    /*  Use an RGB rainbow gradient to color the current pixel. We'll set     *
+     *  blue to correspond to the least value and red for the greatest,       *
+     *  with a continuous gradient in between. First blue to cyan.            */
+    if (scaled < 64.0) {
+        red = 0x00
+        green = uint8(4.0*scaled)
+        blue = 0xFF
+
+    /*  Next, cyan to green.                                                  */
+    } else if (scaled < 128.0) {
+        red = 0x00
+        green = 0xFF
+        blue = uint8(255.0 - 4.0*(scaled - 64.0))
+
+    /*  Green to yellow.                                                      */
+    } else if (scaled < 192.0) {
+        red = uint8(4.0*(scaled - 128.0))
+        green = 0xFF
+        blue = 0x00
+
+    /*  Yellow to red.                                                        */
+    } else if (scaled < 255.0) {
+        red = 0xFF
+        green = uint8(255.0 - 4.0*(scaled - 192.0))
+        blue = 0x00
+
+    /*  And lastly, red.                                                      */
+    } else {
+        red = 0xFF
+        green = 0x00
+        blue = 0x00
+    }
+
+    return Color{red, green, blue}
+}
+/*  End of AngleGradientColor.                                                */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ColorGradientCheckerBoard                                             *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector and adds the rainbow  *
+ *      gradient defined in AngleGradientColor.                               *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func ColorGradientCheckerBoard(u *Vec6) Color {
+
+    /*  Declare necessary variables.                                          */
+    var rainbow, checker_board Color
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+    }
+
+    /*  Take the average of the checkerboard and the raindbow gradient.       */
+    rainbow = AngleGradientColor(u)
+    checker_board = BrightCheckerBoard(u)
+    return ColorAdd(&checker_board, &rainbow)
+}
+/*  End of ColorGradientCheckerBoard.                                         */
+
+/******************************************************************************
  *                  Euler's Method Functions and Constants.                   *
  ******************************************************************************/
 
