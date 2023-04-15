@@ -1310,6 +1310,156 @@ func CheckerBoard(u *Vec6) Color {
 /*  End of CheckerBoard.                                                      */
 
 /******************************************************************************
+ *  Function:                                                                 *
+ *      CheckerBoardHighlight                                                 *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern and highlights the origin.            *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func CheckerBoardHighlight(u *Vec6) Color {
+
+    /*  Factor for darkening the checker board.                               */
+    var cfact float64 = Z_Detector_Sq / u.P.NormSq()
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+
+    /*  If the point is close to the origin, highlight it blue.               */
+    } else if (u.P.RhoSq() < Highlight_Threshold) {
+        return Blue(1.0)
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    } else if (uint32(math.Ceil(u.P.X) + math.Ceil(u.P.Y)) & 1 == 1) {
+        return White(cfact)
+    } else {
+        return Red(cfact)
+    }
+}
+/*  End of CheckerBoardHighlight.                                             */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      BrightCheckerBoard                                                    *
+ *  Purpose:                                                                  *
+ *      Creates a brighter checker-board pattern on the detector.             *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func BrightCheckerBoard(u *Vec6) Color {
+
+    /*  Factor for darkening the checker board.                               */
+    var cfact float64 = 0.5*(Z_Detector_Sq / u.P.NormSq() + 1.0)
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    } else if (uint32(math.Ceil(u.P.X) + math.Ceil(u.P.Y)) & 1 == 1) {
+        return White(cfact)
+    } else {
+        return Red(cfact)
+    }
+}
+/*  End of BrightCheckerBoard.                                                */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      CheckerBoardFour                                                      *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector with four colors.     *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func CheckerBoardFour(u *Vec6) Color {
+
+    /*  Factor for darkening the checker board.                               */
+    var cfact float64 = Z_Detector_Sq / u.P.NormSq()
+
+    /*  Integers that determine the color.                                    */
+    var nx uint32 = uint32(math.Ceil(u.P.X)) & 1
+    var ny uint32 = uint32(math.Ceil(u.P.Y)) & 1
+    var n uint32 = nx + (ny << 1)
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+    }
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    switch (n) {
+        case 0:
+            return White(cfact)
+        case 1:
+            return Yellow(cfact)
+        case 2:
+            return Green(cfact)
+        default:
+            return Red(cfact)
+    }
+}
+/*  End of CheckerBoardFour.                                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      CheckerBoardFourHighlight                                             *
+ *  Purpose:                                                                  *
+ *      Creates a four-colored checker-board and highlights the origin.       *
+ *  Arguments:                                                                *
+ *      u (*Vec6):                                                            *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (Color):                                                            *
+ *          The color given on the detector.                                  *
+ ******************************************************************************/
+func CheckerBoardFourHighlight(u *Vec6) Color {
+
+    /*  Factor for darkening the checker board.                               */
+    var cfact float64 = Z_Detector_Sq / u.P.NormSq()
+
+    /*  Integers that determine the color.                                    */
+    var nx uint32 = uint32(math.Ceil(u.P.X)) & 1
+    var ny uint32 = uint32(math.Ceil(u.P.Y)) & 1
+    var n uint32 = nx + (ny << 1)
+
+    /*  If the photon didn't make it, color the pixel black.                  */
+    if (u.P.Z > Z_Detector) {
+        return Black()
+
+    /*  If the point is close to the origin, highlight it blue.               */
+    } else if (u.P.RhoSq() < Highlight_Threshold) {
+        return Blue(1.0)
+    }
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    switch (n) {
+        case 0:
+            return White(cfact)
+        case 1:
+            return Yellow(cfact)
+        case 2:
+            return Green(cfact)
+        default:
+            return Red(cfact)
+    }
+}
+/*  End of CheckerBoardFourHighlight.                                         */
+
+/******************************************************************************
  *                  Euler's Method Functions and Constants.                   *
  ******************************************************************************/
 
