@@ -49,7 +49,7 @@ namespace nbh {
         /*  The max number of iterations in the method.                       */
         static unsigned int max_iters = 65535U;
 
-        /*  Function for reseting the max number of iterations allowed.       */
+        /*  Function for resetting the max number of iterations allowed.      */
         inline void reset_max_iters(unsigned int n);
 
         /*  Function for performing the Runge-Kutta method, provided below.   */

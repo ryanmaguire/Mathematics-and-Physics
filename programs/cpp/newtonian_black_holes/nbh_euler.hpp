@@ -48,7 +48,7 @@ namespace nbh {
          *  32. Regardless, it is wide enough to store 65535U safely.         */
         static unsigned int max_iters = 65535U;
 
-        /*  Function for reseting the max number of iterations allowed.       */
+        /*  Function for resetting the max number of iterations allowed.      */
         inline void reset_max_iters(unsigned int n);
 
         /*  Function for performing Euler's method, provided below.           */
@@ -58,7 +58,7 @@ namespace nbh {
     }
     /*  End of euler namespace.                                               */
 
-    /*  Function for reseting the max number of iterations allowed.           */
+    /*  Function for resetting the max number of iterations allowed.          */
     inline void euler::reset_max_iters(unsigned int n)
     {
         euler::max_iters = n;
