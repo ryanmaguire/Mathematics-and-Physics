@@ -32,6 +32,7 @@ import (
     "math"  /*  Sqrt given here.    */
     "os"    /*  File data type.     */
     "log"   /*  log.Fatal function. */
+    "sync"  /*  Parallel for-loop.  */
 )
 
 /******************************************************************************
@@ -1909,3 +1910,93 @@ func Run(acc Acceleration, stop Stopper,
     ppm.Close()
 }
 /*  End of Run.                                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PRun                                                                  *
+ *  Purpose:                                                                  *
+ *      Runs the raytracing routines and parallelizes the computation.        *
+ *  Arguments:                                                                *
+ *      acc (Acceleration):                                                   *
+ *          Function describing the equation of motion.                       *
+ *      stop (Stopper):                                                       *
+ *          Stopper function for determining when the photon stops moving.    *
+ *      color (Colorer):                                                      *
+ *          Color function for coloring the detector.                         *
+ *      path (Raytracer):                                                     *
+ *          The method of numerical raytracing. Options are Euler's method    *
+ *          and fourth order Runge-Kutta.                                     *
+ *      name (const char *):                                                  *
+ *          The name of the output ppm file.                                  *
+ ******************************************************************************/
+func PRun(acc Acceleration, stop Stopper,
+          color Colorer, path Raytracer, name string) {
+
+    /*  Total number of pixels in the drawing.                                */
+    var size uint32 = X_Size * Y_Size
+
+    /*  Variables for looping over the pixels.                                */
+    var n uint32
+
+    /*  Array for the colors.                                                 */
+    var c []Color = make([]Color, size)
+
+    /*  WaitGroup from the sync package for concurrency / parallelization.    */
+    var wg sync.WaitGroup
+
+    /*  Add the number of colors being written to the WaitGroup.              */
+    wg.Add(int(size))
+
+    /*  Open the file and give it write permissions.                          */
+    var ppm PPM
+
+    ppm.Create(name)
+
+    /*  If the constructor fails the FILE pointer will be NULL. Check this.   */
+    if (ppm.Fp == nil) {
+        return
+    }
+
+    /*  Otherwise initialize the ppm with default values in "setup".          */
+    ppm.Init()
+
+    /*  Loop over each pixel of the ppm.                                      */
+    for n = 0; n < size; n += 1 {
+
+        /*  Go routine to parallelize the loop. This routine does not write   *
+         *  to the ppm just yet since the order matters. Instead it stores    *
+         *  the resulting colors in the color array "c".                      */
+        go func(n uint32) {
+
+            defer wg.Done()
+
+            /*  Get the x and y components of the current pixel.              */
+            var x uint32 = n % X_Size
+            var y uint32 = n / Y_Size
+
+            /*  The initial conditions of a particle of light.                */
+            var u Vec6
+
+            /*  We're incrementing p across our detector.                     */
+            u.P = PixelToPoint(x, y)
+
+            /*  Set the starting velocity.                                    */
+            u.V =  Vec3{0.0, 0.0, -1.0}
+
+            /*  Raytrace where the photon that hit p came from.               */
+            path(&u, acc, stop)
+
+            /*  Get the color for the current pixel.                          */
+            c[n] = color(&u)
+        }(n)
+    }
+
+    /*  Loop through each pixel and write the colors to the ppm in order.     */
+    for n = 0; n < size; n += 1 {
+        c[n].WriteToPPM(&ppm)
+    }
+
+    /*  Close the file and return.                                            */
+    ppm.Close()
+}
+/*  End of PRun.                                                              */
