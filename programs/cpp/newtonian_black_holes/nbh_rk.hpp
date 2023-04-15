@@ -67,24 +67,26 @@ namespace nbh {
                          nbh::vec3 (*acc)(const nbh::vec3 &),
                          bool (*stop)(const nbh::vec3 &))
     {
+        /*  Variable for keeping track of the number of iterations.           */
         unsigned int n = 0U;
 
-        /*  Factor for Runge-Kutta method.                                    */
+        /*  Multiples of the time increment used in the computation.          */
         const double dt = rk::time_increment;
         const double h0 = 0.5 * dt;
         const double h1 = dt * 0.1666666666666667;
+
+        /*  Factor for Runge-Kutta method.                                    */
         nbh::vec6 k1 = nbh::vec6(u.v, acc(u.p));
         nbh::vec6 k2 = nbh::vec6(u.v + k1.v * h0, acc(u.p + k1.p * h0));
         nbh::vec6 k3 = nbh::vec6(u.v + k2.v * h0, acc(u.p + k2.p * h0));
         nbh::vec6 k4 = nbh::vec6(u.v + k2.v * dt, acc(u.p + k2.p * dt));
 
+        /*  Iteratively perform the RK4 method.                               */
         while (!stop(u.p) && n < rk::max_iters)
         {
-            /*  We numerically solve d^2/dt^2 p = F(p) in two steps. First we *
-             *  compute the velocity dp/dt, meaning we solve dv/dt = F(p).    *
-             *  We solve numerically with the Runge-Kutta method. We use this *
-             *  v to compute p via dp/dt = v, solving numerically again.      *
-             *  So long as dt is small, the error should be small as well.    */
+            /*  We numerically solve d^2/dt^2 p = F(p) by solving dp/dt = v   *
+             *  and dv/dt = F(p). Using 6D "phase-space" vectors we can get   *
+             *  the next iteration in the RK4 method in one line.             */
             u += (k1 + 2.0*k2 + 2.0*k3 + k4) * h1;
 
             /*  Update the Runge-Kutta factors.                               */
