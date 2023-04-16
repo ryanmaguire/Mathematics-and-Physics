@@ -34,7 +34,7 @@ func f(z complex128) complex128 {
 
     var w complex128 = g(z)
     for n := 0; n < 3; n += 1 {
-        w = g(w);
+        w = g(w)
     }
 
     return w
