@@ -530,3 +530,165 @@ func ComplexPlot(cfunc ComplexFunc, color Colerer, name string) {
     ppm.Close()
 }
 /*  End of ComplexPlot.                                                       */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      IterPlot                                                              *
+ *  Purpose:                                                                  *
+ *      Plots F_{n}(z) = f(f(...f(z)...)) where there are n iterations. This  *
+ *      can be used to visualize Newton fractals, which is the "F_{infinity}" *
+ *      iteration of particular functions.                                    *
+ *  Arguments:                                                                *
+ *      cfunc (ComplexFunc):                                                  *
+ *          A complex-valued function of a complex argument.                  *
+ *      iters (uint32):                                                       *
+ *          The number of iterations to perform for cfunc.                    *
+ *      color (Colorer):                                                      *
+ *          The color scheme for the plane.                                   *
+ *      name (string):                                                        *
+ *          The name of the ppm file.                                         *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func IterPlot(cfunc ComplexFunc, iters uint32, color Colerer, name string) {
+
+    /*  Variables for the x and y coordinates of a given pixel.               */
+    var x, y uint32
+
+    /*  Variable for iteratively computing the function.                      */
+    var n uint32
+
+    /*  Variables for the real and imaginary parts of a given complex number. */
+    var z_re, z_im float64
+
+    /*  Variable for the complex number z_re + i*z_im.                        */
+    var z complex128
+
+    /*  Color for the pixel corresponding to z.                               */
+    var c Color
+
+    /*  Variable for the ppm file.                                            */
+    var ppm PPM
+
+    /*  Create the ppm file.                                                  */
+    ppm.Create(name)
+
+    /*  Initialize the ppm file to the default values.                        */
+    ppm.Init()
+
+    /*  Loop over the y coordinates of the ppm file.                          */
+    for y = 0; y < HEIGHT; y++ {
+
+        /*  Compute the y coordinate in the plane corresponding to the pixel. */
+        z_im = YMAX - YFACTOR * float64(y)
+
+        /*  Loop over the x coordinates of the ppm file.                      */
+        for x = 0; x < WIDTH; x++ {
+
+            /*  Compute the corresponding x coordinate.                       */
+            z_re = XMIN + XFACTOR * float64(x)
+
+            /*  Treat the ordered pair (z_re, z_im) as a complex number.      */
+            z = complex(z_re, z_im)
+
+            /*  Iteratively compute the function.                             */
+            for n = 0; n < iters; n += 1 {
+                z = cfunc(z)
+            }
+
+            /*  Get the color corresponding to this pixel.                    */
+            c = color(z)
+
+            /*  Write the color to the ppm file.                              */
+            c.WriteToPPM(&ppm)
+        }
+    }
+
+    /*  Close the ppm file.                                                   */
+    ppm.Close()
+}
+/*  End of IterPlot.                                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      MandelPlot                                                            *
+ *  Purpose:                                                                  *
+ *      Given a complex function f, computes w_{0} = z, w_{1} = f(w_{0}) + z, *
+ *      w_{2} = f(w_{1}) + z, and so on, a specified number of times. This    *
+ *      can be used to visualize the Mandelbrot set and similar structures.   *
+ *  Arguments:                                                                *
+ *      cfunc (ComplexFunc):                                                  *
+ *          A complex-valued function of a complex argument.                  *
+ *      iters (uint32):                                                       *
+ *          The number of iterations to perform for cfunc.                    *
+ *      color (Colorer):                                                      *
+ *          The color scheme for the plane.                                   *
+ *      name (string):                                                        *
+ *          The name of the ppm file.                                         *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func MandelPlot(cfunc ComplexFunc, iters uint32, color Colerer, name string) {
+
+    /*  Variables for the x and y coordinates of a given pixel.               */
+    var x, y uint32
+
+    /*  Variable for iteratively computing the function.                      */
+    var n uint32
+
+    /*  Variables for the real and imaginary parts of a given complex number. */
+    var z_re, z_im float64
+
+    /*  Variable for the complex number z_re + i*z_im.                        */
+    var z complex128
+
+    /*  Variable for computing the Mandelbrot iterations.                     */
+    var w complex128
+
+    /*  Color for the pixel corresponding to z.                               */
+    var c Color
+
+    /*  Variable for the ppm file.                                            */
+    var ppm PPM
+
+    /*  Create the ppm file.                                                  */
+    ppm.Create(name)
+
+    /*  Initialize the ppm file to the default values.                        */
+    ppm.Init()
+
+    /*  Loop over the y coordinates of the ppm file.                          */
+    for y = 0; y < HEIGHT; y++ {
+
+        /*  Compute the y coordinate in the plane corresponding to the pixel. */
+        z_im = YMAX - YFACTOR * float64(y)
+
+        /*  Loop over the x coordinates of the ppm file.                      */
+        for x = 0; x < WIDTH; x++ {
+
+            /*  Compute the corresponding x coordinate.                       */
+            z_re = XMIN + XFACTOR * float64(x)
+
+            /*  Treat the ordered pair (z_re, z_im) as a complex number.      */
+            z = complex(z_re, z_im)
+
+            /*  The first iteration is w = z.                                 */
+            w = z
+
+            /*  Iteratively compute the function.                             */
+            for n = 0; n < iters; n += 1 {
+                w = cfunc(w) + z
+            }
+
+            /*  Get the color corresponding to this pixel.                    */
+            c = color(w)
+
+            /*  Write the color to the ppm file.                              */
+            c.WriteToPPM(&ppm)
+        }
+    }
+
+    /*  Close the ppm file.                                                   */
+    ppm.Close()
+}
+/*  End of MandelPlot.                                                        */

@@ -27,9 +27,9 @@
 package main
 
 func f(z complex128) complex128 {
-    return z - (z*z*z - 1.0)/(3.0*z*z)
+    return z*z
 }
 
 func main() {
-    IterPlot(f, 3, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
+    MandelPlot(f, 100, ColorWheelFromComplex, "mandelbrot.ppm")
 }
