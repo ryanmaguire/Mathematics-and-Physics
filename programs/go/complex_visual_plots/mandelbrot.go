@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Creates a complex plot for the Newton iteration of z^3 - 1.           *
+ *      Plots the first 5 iterations of the Mandelbrot function.              *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/15                                                        *
@@ -26,10 +26,12 @@
 
 package main
 
-func f(z complex128) complex128 {
+/*  The Mandebrot set is defined by F_{c}(z) = z^2 + c. Set f(z) = z^2.       */
+func mandel(z complex128) complex128 {
     return z*z
 }
 
+/*  Plot five iterations of the function.                                     */
 func main() {
-    MandelPlot(f, 100, ColorWheelFromComplex, "mandelbrot.ppm")
+    MandelPlot(mandel, 5, ColorWheelFromComplex, "mandelbrot.ppm")
 }

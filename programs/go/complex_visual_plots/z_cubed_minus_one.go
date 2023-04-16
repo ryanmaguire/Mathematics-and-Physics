@@ -26,10 +26,12 @@
 
 package main
 
+/*  Function to be plotted, z^3 - 1.                                          */
 func f(z complex128) complex128 {
     return z*z*z - 1.0
 }
 
+/*  Plot the function into a PPM file.                                        */
 func main() {
     ComplexPlot(f, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
 }
