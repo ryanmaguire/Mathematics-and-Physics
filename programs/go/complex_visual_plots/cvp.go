@@ -30,7 +30,7 @@ package main
 import (
     "os"            /*  os.File type is here.          */
     "log"           /*  log.Fatal function given here. */
-    "math/cmplx"    /*  Basic complex math function.   */
+    "math/cmplx"    /*  Basic complex math functions.  */
     "math"          /*  Real-valued math routines.     */
     "fmt"           /*  Printing functions.            */
 )
@@ -40,8 +40,12 @@ const XMIN float64 = -2.0
 const XMAX float64 = +2.0
 const YMIN float64 = -2.0
 const YMAX float64 = +2.0
+
+/*  The number of pixels in the x and y axes.                                 */
 const WIDTH uint32 = 1024
 const HEIGHT uint32 = 1024
+
+/*  Scale factors for converting between pixels and points in the plane.      */
 const XFACTOR float64 = 3.91006842619745845213e-03
 const YFACTOR float64 = 3.91006842619745845213e-03
 
@@ -69,7 +73,7 @@ type PPM struct {
 type ComplexFunc func(complex128) complex128
 
 /*  Functions that convert complex numbers into colors.                       */
-type Colerer func(complex128) Color
+type Colorer func(complex128) Color
 
 /******************************************************************************
  *                         PPM Functions and Methods                          *
@@ -473,14 +477,14 @@ func ColorWheelFromComplex(z complex128) Color {
  *  Arguments:                                                                *
  *      cfunc (ComplexFunc):                                                  *
  *          A complex-valued function of a complex variable.                  *
- *      color (Colerer):                                                      *
+ *      color (Colorer):                                                      *
  *          Coloring function for converting complex numbers into colors.     *
  *      name (string):                                                        *
  *          The name of the output PPM file.                                  *
  *  Outputs:                                                                  *
  *      None.                                                                 *
  ******************************************************************************/
-func ComplexPlot(cfunc ComplexFunc, color Colerer, name string) {
+func ComplexPlot(cfunc ComplexFunc, color Colorer, name string) {
 
     /*  Variables for the x and y coordinates of a given pixel.               */
     var x, y uint32
@@ -550,7 +554,7 @@ func ComplexPlot(cfunc ComplexFunc, color Colerer, name string) {
  *  Outputs:                                                                  *
  *      None.                                                                 *
  ******************************************************************************/
-func IterPlot(cfunc ComplexFunc, iters uint32, color Colerer, name string) {
+func IterPlot(cfunc ComplexFunc, iters uint32, color Colorer, name string) {
 
     /*  Variables for the x and y coordinates of a given pixel.               */
     var x, y uint32
@@ -628,7 +632,7 @@ func IterPlot(cfunc ComplexFunc, iters uint32, color Colerer, name string) {
  *  Outputs:                                                                  *
  *      None.                                                                 *
  ******************************************************************************/
-func MandelPlot(cfunc ComplexFunc, iters uint32, color Colerer, name string) {
+func MandelPlot(cfunc ComplexFunc, iters uint32, color Colorer, name string) {
 
     /*  Variables for the x and y coordinates of a given pixel.               */
     var x, y uint32
