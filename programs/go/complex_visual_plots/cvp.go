@@ -26,20 +26,14 @@
 
 package main
 
-/*  os.File type is here.                                                     */
-import "os"
-
-/*  log.Fatal function given here.                                            */
-import "log"
-
-/*  Basic complex math function.                                              */
-import "math/cmplx"
-
-/*  Real-valued math routines.                                                */
-import "math"
-
-/*  Printing functions.                                                       */
-import "fmt"
+/*  All packages needed for complex plots.                                    */
+import (
+    "os"            /*  os.File type is here.          */
+    "log"           /*  log.Fatal function given here. */
+    "math/cmplx"    /*  Basic complex math function.   */
+    "math"          /*  Real-valued math routines.     */
+    "fmt"           /*  Printing functions.            */
+)
 
 /*  Parameters for the plots.                                                 */
 const XMIN float64 = -2.0
@@ -51,16 +45,131 @@ const HEIGHT uint32 = 1024
 const XFACTOR float64 = 3.91006842619745845213e-03
 const YFACTOR float64 = 3.91006842619745845213e-03
 
+/******************************************************************************
+ *                              Types of Structs                              *
+ ******************************************************************************/
+
 /*  Simple struct for working with colors in RGB format.                      */
 type Color struct {
     Red, Green, Blue uint8
 }
+
+/*  Struct for creating and writing to ppm files.                             */
+type PPM struct {
+
+    /*  The data in a PPM struct is the File pointer it represents.           */
+    Fp *os.File
+}
+
+/******************************************************************************
+ *                               Function Types                               *
+ ******************************************************************************/
 
 /*  Complex-valued functions.                                                 */
 type ComplexFunc func(complex128) complex128
 
 /*  Functions that convert complex numbers into colors.                       */
 type Colerer func(complex128) Color
+
+/******************************************************************************
+ *                         PPM Functions and Methods                          *
+ ******************************************************************************/
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Create                                                            *
+ *  Purpose:                                                                  *
+ *      Creates a PPM file with a given file name.                            *
+ *  Arguments:                                                                *
+ *      name (const char *):                                                  *
+ *          The file name of the output PPM (ex. "z_cubed_minus_one.ppm").    *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (ppm *PPM) Create(name string) {
+
+    /*  Variable for the error message if os.Create fails.                    */
+    var err error
+
+    /*  Open the file and give it write permissions.                          */
+    ppm.Fp, err = os.Create(name)
+
+    if (err != nil) {
+        log.Fatal(err)
+    }
+}
+/*  End of PPM.Create.                                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.InitFromVals                                                      *
+ *  Purpose:                                                                  *
+ *      Print the preamble to the PPM file. A PPM file wants Pn followed by   *
+ *      three numbers. P6 means we're encoding an RGB image in binary format. *
+ *      The first two numbers are the number of pixels in the x and y axes.   *
+ *      The last number is the size of our color spectrum, which is 255.      *
+ *  Arguments:                                                                *
+ *      x (uint32):                                                           *
+ *          The number of pixels in the x axis.                               *
+ *      y (uint32):                                                           *
+ *          The number of pixels in the y axis.                               *
+ *      type (int):                                                           *
+ *          The type of the PPM, options are 1 through 6.                     *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (ppm *PPM) InitFromVals(x, y uint32, ptype int) {
+
+    /*  For integers between 1 and 5 we can pass the value to the preamble.   */
+    if (0 < ptype && ptype < 6) {
+        fmt.Fprintf(ppm.Fp, "P%d\n%d %d\n255\n", ptype, x, y)
+
+    /*  The only other legal value is 6. All illegal values default to 6.     */
+    } else {
+        fmt.Fprintf(ppm.Fp, "P6\n%d %d\n255\n", x, y)
+    }
+}
+/*  End of PPM.InitFromVals.                                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Init                                                              *
+ *  Purpose:                                                                  *
+ *      Initialize a PPM using the default values.                            *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ *  Method:                                                                   *
+ *      Pass the default parameters to PPM.InitFromVals.                      *
+ ******************************************************************************/
+func (ppm *PPM) Init() {
+    ppm.InitFromVals(WIDTH, HEIGHT, 6)
+}
+/*  End of PPM.Init.                                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PPM.Close                                                             *
+ *  Purpose:                                                                  *
+ *      Closes the file pointer in a PPM struct.                              *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (ppm *PPM) Close() {
+
+    /*  Ensure the pointer is not nil before trying to close it.              */
+    if (ppm.Fp != nil) {
+        ppm.Fp.Close()
+    }
+}
+/*  End of PPM.Close.                                                         */
+
+/******************************************************************************
+ *                        Color Functions and Methods                         *
+ ******************************************************************************/
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -78,6 +187,22 @@ func (c *Color) WriteToFile(fp *os.File) {
     fp.Write(rgb)
 }
 /*  End of Color.WriteToFile.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Color.WriteToPPM                                                      *
+ *  Purpose:                                                                  *
+ *      Writes a color to a PPM file.                                         *
+ *  Arguments:                                                                *
+ *      ppm (*PPM):                                                           *
+ *          A pointer to a PPM struct.                                        *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+func (c *Color) WriteToPPM(ppm *PPM) {
+    c.WriteToFile(ppm.Fp)
+}
+/*  End of Color.WriteToPPM.                                                  */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -151,6 +276,10 @@ func (c *Color) Normalize() {
 /*  End of Color.Normalize.                                                   */
 
 /******************************************************************************
+ *                              Complex Colorers                              *
+ ******************************************************************************/
+
+/******************************************************************************
  *  Function:                                                                 *
  *      ColorFromComplex                                                      *
  *  Purpose:                                                                  *
@@ -168,7 +297,7 @@ func (c *Color) Normalize() {
  ******************************************************************************/
 func ColorFromComplex(z complex128) Color {
 
-    /*  There are 1535 possible colors given by the gradient. This scale      *
+    /*  There are 1024 possible colors given by the gradient. This scale      *
      *  factor helps normalize the argument.                                  */
     const gradient_factor float64 = 1023.0 / (2.0 * math.Pi)
 
@@ -258,7 +387,7 @@ func ColorWheelFromComplex(z complex128) Color {
     var arg_z float64 = cmplx.Phase(z)
     var abs_z float64 = cmplx.Abs(z)
 
-    /*  Scale the argument from (-pi, pi) to (0, 1023).                       */
+    /*  Scale the argument from (-pi, pi) to (0, 1535).                       */
     var val float64 = (arg_z + math.Pi) * gradient_factor
 
     /*  The atan function compresses the intensity to prohibit arbitrarily    *
@@ -318,7 +447,7 @@ func ColorWheelFromComplex(z complex128) Color {
         out.Green = uint8(0)
         out.Blue = uint8(val)
 
-    /*  For 1280 <= val < 1526 transition from magent back to blue.           */
+    /*  For 1280 <= val < 1526 transition from magenta back to blue.          */
     } else {
 
         /*  Shift val back to the range (0, 256).                             */
@@ -334,7 +463,7 @@ func ColorWheelFromComplex(z complex128) Color {
     ColorScaleBy(&out, t)
     return out
 }
-/*  End of ColorFromComplex.                                                  */
+/*  End of ColorWheelFromComplex.                                             */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -353,37 +482,51 @@ func ColorWheelFromComplex(z complex128) Color {
  ******************************************************************************/
 func ComplexPlot(cfunc ComplexFunc, color Colerer, name string) {
 
+    /*  Variables for the x and y coordinates of a given pixel.               */
     var x, y uint32
+
+    /*  Variables for the real and imaginary parts of a given complex number. */
     var z_re, z_im float64
+
+    /*  Variable for the complex number z_re + i*z_im.                        */
     var z complex128
+
+    /*  Color for the pixel corresponding to z.                               */
     var c Color
 
-    var err error
-    var fp *os.File
+    /*  Variable for the ppm file.                                            */
+    var ppm PPM
 
-    fp, err = os.Create(name)
+    /*  Create the ppm file.                                                  */
+    ppm.Create(name)
 
-    if (err != nil) {
-        log.Fatal(err)
-    }
+    /*  Initialize the ppm file to the default values.                        */
+    ppm.Init()
 
-    fp.WriteString(fmt.Sprintf("P6\n%d %d\n255\n", WIDTH, HEIGHT))
-
+    /*  Loop over the y coordinates of the ppm file.                          */
     for y = 0; y < HEIGHT; y++ {
+
+        /*  Compute the y coordinate in the plane corresponding to the pixel. */
         z_im = YMAX - YFACTOR * float64(y)
 
+        /*  Loop over the x coordinates of the ppm file.                      */
         for x = 0; x < WIDTH; x++ {
+
+            /*  Compute the corresponding x coordinate.                       */
             z_re = XMIN + XFACTOR * float64(x)
+
+            /*  Treat the ordered pair (z_re, z_im) as a complex number.      */
             z = complex(z_re, z_im)
+
+            /*  Get the color corresponding to this pixel.                    */
             c = color(cfunc(z))
-            c.WriteToFile(fp)
+
+            /*  Write the color to the ppm file.                              */
+            c.WriteToPPM(&ppm)
         }
     }
 
-    err = fp.Close()
-
-    if err != nil {
-        log.Fatal(err)
-    }
+    /*  Close the ppm file.                                                   */
+    ppm.Close()
 }
 /*  End of ComplexPlot.                                                       */
