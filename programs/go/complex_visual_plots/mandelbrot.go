@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Plots the first 5 iterations of the Mandelbrot function.              *
+ *      Plots the first 6 iterations of the Mandelbrot function.              *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/15                                                        *
@@ -31,7 +31,15 @@ func mandel(z complex128) complex128 {
     return z*z
 }
 
-/*  Plot five iterations of the function.                                     */
+/*  Plot six iterations of the function.                                      */
 func main() {
-    MandelPlot(mandel, 5, ColorWheelFromComplex, "mandelbrot.ppm")
+
+    /*  Name of the output PPM file.                                          */
+    var name string = "mandelbrot_six_iters.ppm"
+
+    /*  The number of iterations to perform.                                  */
+    var iters uint32 = 6
+
+    /*  Plot the results.                                                     */
+    MandelPlot(mandel, iters, ColorWheelFromComplex, name)
 }

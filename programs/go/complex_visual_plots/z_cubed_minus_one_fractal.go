@@ -33,5 +33,13 @@ func newton(z complex128) complex128 {
 
 /*  Create a plot of the first 3 iterations of Newton's method.               */
 func main() {
-    IterPlot(newton, 3, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
+
+    /*  Name of the output PPM file.                                          */
+    var name string = "z_cubed_minus_one_three_iters.ppm"
+
+    /*  The number of iterations to perform.                                  */
+    var iters uint32 = 3
+
+    /*  Plot the results.                                                     */
+    IterPlot(newton, iters, ColorWheelFromComplex, name)
 }
