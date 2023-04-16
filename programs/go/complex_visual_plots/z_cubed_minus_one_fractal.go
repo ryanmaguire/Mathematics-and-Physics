@@ -26,10 +26,12 @@
 
 package main
 
-func f(z complex128) complex128 {
+/*  The Newton iteration is z - f(z)/f'(z). Compute this for f(z) = z^3 - 1.  */
+func newton(z complex128) complex128 {
     return z - (z*z*z - 1.0)/(3.0*z*z)
 }
 
+/*  Create a plot of the first 3 iterations of Newton's method.               */
 func main() {
-    IterPlot(f, 3, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
+    IterPlot(newton, 3, ColorWheelFromComplex, "z_cubed_minus_one.ppm")
 }
