@@ -5,26 +5,22 @@
 #include "nf_color.h"
 #include "nf_newton.h"
 #include "nf_complex_poly.h"
+#include "nf_real_poly.h"
+#include "nf_complex_roots.h"
 #include <stdio.h>
 
-static struct nf_complex coeffs[4] = {
-    {-1.0, 0.0},
-    {0.0, 0.0},
-    {0.0, 0.0},
-    {1.0, 0.0}
-};
-
+static double coeffs[4] = {-1.0, 0.0, 0.0, 1.0};
 static const unsigned int degree = sizeof(coeffs)/sizeof(coeffs[0]) - 1U;
 
 int main(void)
 {
-    const struct nf_complex_poly poly = {coeffs, degree};
+    const struct nf_real_poly poly = {coeffs, degree};
     unsigned int x, y;
     unsigned int iters;
     double scale;
     struct nf_complex z;
     struct nf_color c;
-    struct nf_ppm ppm = nf_ppm_create("newton_fractal.ppm");
+    struct nf_ppm ppm = nf_ppm_create("newton_fractal3.ppm");
     nf_ppm_init(&ppm);
 
     for (y = 0U; y < nf_setup_ysize; ++y)
@@ -36,7 +32,7 @@ int main(void)
             z.real = nf_setup_xmin + nf_setup_px_factor*(double)x;
             z.imag = imag;
 
-            iters = nf_newton_complex_poly(&poly, &z);
+            iters = nf_newton_real_poly(&poly, &z);
 
             if (z.real > 0.0)
                 c = nf_blue;
