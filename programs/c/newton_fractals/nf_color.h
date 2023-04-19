@@ -74,7 +74,7 @@ static const struct nf_color nf_magenta = {0xFFU, 0x00U, 0xFFU};
  *          The blue component of the color.                                  *
  *  Outputs:                                                                  *
  *      c (struct nf_color):                                                  *
- *          The color (r, g, b) in 8-bit RGB color space.                     *
+ *          The color (r, g, b) in 24-bit RGB color space.                    *
  ******************************************************************************/
 NF_INLINE struct nf_color
 nf_color_create(unsigned char r, unsigned char g, unsigned char b)
@@ -120,7 +120,7 @@ nf_color_write_to_file(const struct nf_color *c, FILE *fp)
  *  Arguments:                                                                *
  *      c (const struct nf_color *):                                          *
  *          A pointer to a color.                                             *
- *      fp (struct nf_ppm *):                                                 *
+ *      PPM (struct nf_ppm *):                                                *
  *          A pointer to the ppm the color is being written to.               *
  *  Outputs:                                                                  *
  *      None (void).                                                          *
