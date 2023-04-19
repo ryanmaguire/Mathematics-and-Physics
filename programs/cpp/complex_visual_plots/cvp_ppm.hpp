@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides a struct for using colors.                                   *
+ *      Provides a class for working with PPM files.                          *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/16                                                        *
@@ -28,32 +28,32 @@
 #ifndef CVP_PPM_HPP
 #define CVP_PPM_HPP
 
-/*  File data type found here.                                                */
+/*  FILE data type found here.                                                */
 #include <cstdio>
 
 /*  Basic constants for the setup of the experiments given here.              */
 #include "cvp_setup.hpp"
 
-/*  Namespace for the mini-project. "Newtonian Black Holes."                  */
+/*  Namespace for the mini-project. "Complex Visual Plots."                   */
 namespace cvp {
 
     /*  Struct for working with PPM files.                                    */
-    struct ppm {
+    class ppm {
+        public:
+            /*  The "data" of the PPM is just a FILE pointer.                 */
+            FILE *fp;
 
-        /*  The "data" of the PPM is just a FILE pointer.                     */
-        FILE *fp;
+            /*  Constructor from a name, the name of the file.                */
+            ppm(const char *name);
 
-        /*  Constructor from a name, the name of the file.                    */
-        ppm(const char *name);
+            /*  Method for initializing the PPM using arbitrary values.       */
+            inline void init(unsigned int x, unsigned int y, int type);
 
-        /*  Method for initializing the PPM using arbitrary values.           */
-        inline void init(unsigned int x, unsigned int y, int type);
+            /*  Method for initializing the PPM using the values in "setup".  */
+            inline void init(void);
 
-        /*  Method for initializing the PPM using the values in "setup".      */
-        inline void init(void);
-
-        /*  Method for closing the file pointer for the PPM.                  */
-        inline void close(void);
+            /*  Method for closing the file pointer for the PPM.              */
+            inline void close(void);
     };
 
     /*  Constructor from a name.                                              */
@@ -72,26 +72,13 @@ namespace cvp {
      *  The last number is the size of our color spectrum, which is 255.      */
     inline void ppm::init(unsigned int x, unsigned int y, int type)
     {
-        switch (type)
-        {
-            case 1:
-                std::fprintf(fp, "P1\n%u %u\n255\n", x, y);
-                return;
-            case 2:
-                std::fprintf(fp, "P2\n%u %u\n255\n", x, y);
-                return;
-            case 3:
-                std::fprintf(fp, "P3\n%u %u\n255\n", x, y);
-                return;
-            case 4:
-                std::fprintf(fp, "P4\n%u %u\n255\n", x, y);
-                return;
-            case 5:
-                std::fprintf(fp, "P5\n%u %u\n255\n", x, y);
-                return;
-            default:
-                std::fprintf(fp, "P6\n%u %u\n255\n", x, y);
-        }
+        /*  For values 1 to 5, print normally.                                */
+        if (0 < type && type < 6)
+            std::fprintf(fp, "P%d\n%u %u\n255\n", x, y, type);
+
+        /*  The only other legal value is 6. All illegal values default to 6. */
+        else
+            std::fprintf(fp, "P6\n%u %u\n255\n", x, y);
     }
 
     /*  Initialize using the values in "setup".                               */
