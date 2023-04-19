@@ -44,6 +44,7 @@ static const double nf_setup_py_factor = 3.906250E-03;
 
 /*  The epsilon, or desired precision, in Newton's method.                    */
 static const double nf_setup_eps = 1.0E-8;
+static const double nf_setup_eps_sq = 1.0E-16;
 
 /*  The maximum number of iterations allowed in Newton's method.              */
 static const unsigned int nf_setup_max_iters = 32U;
