@@ -1,13 +1,43 @@
+/******************************************************************************
+ *                                  LICENSE                                   *
+ ******************************************************************************
+ *  This file is part of Mathematics-and-Physics.                             *
+ *                                                                            *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Provides routines for coloring complex functions.                     *
+ ******************************************************************************
+ *  Author: Ryan Maguire                                                      *
+ *  Date:   2023/04/18                                                        *
+ ******************************************************************************/
 
-
+/*  Include guard to prevent including this file twice.                       */
 #ifndef CVP_COLORERS_HPP
 #define CVP_COLORERS_HPP
 
-#include <cstdio>
+/*  atan function provided here.                                              */
 #include <cmath>
+
+/*  Complex class defined here.                                               */
 #include "cvp_complex.hpp"
+
+/*  Class for working with colors in RGB format.                              */
 #include "cvp_color.hpp"
 
+/*  Namespace for this mini-project. "Complex Visual Plots."                  */
 namespace cvp {
     inline cvp::color color_from_complex(cvp::complex z);
     inline cvp::color color_wheel_from_complex(cvp::complex z);
@@ -208,3 +238,4 @@ inline cvp::color cvp::color_wheel_from_complex(cvp::complex z)
 /*  End of color_wheel_from_complex.                                          */
 
 #endif
+/*  End of include guard.                                                     */
