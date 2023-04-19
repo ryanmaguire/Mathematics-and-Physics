@@ -80,8 +80,8 @@ nf_complex_horner_update(const struct nf_complex *z0,
  *  Function:                                                                 *
  *      nf_complex_horner_deriv                                               *
  *  Purpose:                                                                  *
- *      Performs a = z0 + deg*a*z1. This is used in Horner's method since the *
- *      iterative term is out = coeff[n] + deg*out*z.                         *
+ *      Performs a = deg*z0 + a*z1. This is used in Horner's method since the *
+ *      iterative term is out = deg*coeff[n] + out*z.                         *
  *  Arguments:                                                                *
  *      z0 (const struct nf_complex *):                                       *
  *          A pointer to a complex number.                                    *
@@ -98,9 +98,9 @@ nf_complex_horner_update(const struct nf_complex *z0,
  ******************************************************************************/
 NF_INLINE void
 nf_complex_horner_deriv(const struct nf_complex *z0,
-                         struct nf_complex *a,
-                         const struct nf_complex *z1,
-                         unsigned int deg)
+                        struct nf_complex *a,
+                        const struct nf_complex *z1,
+                        unsigned int deg)
 {
     /*  Avoid overwriting the data by saving the real part of a.              */
     const double real = a->real;
