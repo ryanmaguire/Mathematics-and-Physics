@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Plots the function z^3 - 1.                                           *
+ *      Plots 6 iterations of the Mandelbrot set for f_{c}(z) = z^2 + c.      *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/18                                                        *
@@ -30,17 +30,17 @@
 /*  The function to be plotted.                                               */
 static inline cvp::complex f(cvp::complex z)
 {
-    return z*z*z - 1.0;
+    return z*z;
 }
 
-/*  Routine for plotting the function f(z) = z^3 - 1.                         */
+/*  Routine for plotting six iterations of the Mandelbrot set.                */
 int main(void)
 {
     /*  Name of the output PPM file.                                          */
-    const char *name = "z_cubed_minus_one.ppm";
+    const char *name = "mandelbrot_six_iters.ppm";
 
     /*  Create the plots.                                                     */
-    cvp::complex_plot(f, cvp::color_wheel_from_complex, name);
+    cvp::mandelbrot_plot(f, 6, cvp::color_wheel_from_complex, name);
     return 0;
 }
 /*  End of main.                                                              */
