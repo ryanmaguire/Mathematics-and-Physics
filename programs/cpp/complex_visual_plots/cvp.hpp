@@ -1,14 +1,54 @@
+/******************************************************************************
+ *                                  LICENSE                                   *
+ ******************************************************************************
+ *  This file is part of Mathematics-and-Physics.                             *
+ *                                                                            *
+ *  Mathematics-and-Physics is free software: you can redistribute it and/or  *
+ *  modify it under the terms of the GNU General Public License as published  *
+ *  by the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  Mathematics-and-Physics is distributed in the hope that it will be useful *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with Mathematics-and-Physics.  If not, see                          *
+ *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Provides routines for plotting complex functions.                     *
+ ******************************************************************************
+ *  Author: Ryan Maguire                                                      *
+ *  Date:   2023/04/18                                                        *
+ ******************************************************************************/
+
+/*  Include guard to prevent including this file twice.                       */
 #ifndef CVP_HPP
 #define CVP_HPP
 
+/*  malloc and free are given here.                                           */
 #include <cstdlib>
+
+/*  Complex class provided here.                                              */
 #include "cvp_complex.hpp"
+
+/*  Class for working with colors in RGB format.                              */
 #include "cvp_color.hpp"
+
+/*  Class for creating and writing to PPM files.                              */
 #include "cvp_ppm.hpp"
+
+/*  Basic setup parameters for plotting functions provided here.              */
 #include "cvp_setup.hpp"
+
+/*  Functions for converting complex numbers into colors given here.          */
 #include "cvp_colorers.hpp"
 
+/*  Namespace for this mini-project. "Complex Visual Plots."                  */
 namespace cvp {
+
     /*  Template for creating complex plots.                                  */
     template <typename Tfunc, typename Tcolor>
     inline void
@@ -19,6 +59,7 @@ namespace cvp {
     inline void
     pcomplex_plot(Tfunc cfunc, Tcolor color, const char *name);
 }
+/*  End of namespace "cvp".                                                   */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -88,14 +129,34 @@ inline void cvp::complex_plot(Tfunc cfunc, Tcolor color, const char *name)
 }
 /*  End of cvp::complex_plot.                                                 */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp::pcomplex_plot                                                    *
+ *  Purpose:                                                                  *
+ *      Creates a plot of a complex function using parallel computing.        *
+ *  Arguments:                                                                *
+ *      cfunc (Tfunc):                                                        *
+ *          A complex-valued function of a complex variable.                  *
+ *      color (Tcolor):                                                       *
+ *          Coloring function for converting complex numbers into colors.     *
+ *      name (const char *):                                                  *
+ *          The name of the output PPM file.                                  *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ *  Notes:                                                                    *
+ *      Unless you're rendering at a very high resolution image, this         *
+ *      function is actually slower than the default.                         *
+ ******************************************************************************/
 template <typename Tfunc, typename Tcolor>
 inline void cvp::pcomplex_plot(Tfunc cfunc, Tcolor color, const char *name)
 {
-    /*  Variables for the x and y coordinates of a given pixel.               */
+    /*  Total number of pixels in the PPM file.                               */
     const unsigned int size = cvp::setup::xsize * cvp::setup::ysize;
+
+    /*  Index for looping over the pixels of the file.                        */
     unsigned int n;
 
-    /*  Color for the pixel corresponding to z.                               */
+    /*  Color array for the color of each pixel in the PPM.                   */
     cvp::color *c = static_cast<cvp::color *>(std::malloc(sizeof(*c)*size));
 
     /*  Variable for the ppm file.                                            */
@@ -104,15 +165,19 @@ inline void cvp::pcomplex_plot(Tfunc cfunc, Tcolor color, const char *name)
     /*  Check if the constructor failed.                                      */
     if (!PPM.fp)
     {
+        /*  If malloc failed there is nothing to free. Return to caller.      */
         if (!c)
             return;
 
+        /*  Otherwise free the data before returning.                         */
         std::free(c);
         return;
     }
 
+    /*  Similarly check if malloc failed.                                     */
     if (!c)
     {
+        /*  If it did close the PPM file and return.                          */
         PPM.close();
         return;
     }
@@ -141,6 +206,6 @@ inline void cvp::pcomplex_plot(Tfunc cfunc, Tcolor color, const char *name)
     /*  Close the ppm file.                                                   */
     PPM.close();
 }
-/*  End of cvp::complex_plot.                                                 */
+/*  End of cvp::pcomplex_plot.                                                */
 
 #endif
