@@ -16,6 +16,18 @@ This directory has a few uses.
 
 ## Benchmarks
 
+### Complex Visual Plots
+
+| Language               | Implementation | Time (s) | Flags              | Version                                  |
+| ---------------------- | -------------- | -------- | ------------------ | ---------------------------------------- |
+| C++                    | g++            |    0.087 | -O3 -flto          | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| C++                    | clang++        |    0.105 | -O3 -flto          | Debian clang version 11.0.1-2            |
+| Go                     | golang         |    1.364 |                    | go 1.15.15                               |
+| Go                     | gccgo          |    1.645 | -O3 -flto          | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+
+All implementations render the same figure.
+![Z Cubed Minus One Three Iters](https://github.com/ryanmaguire/Mathematics-and-Physics/blob/master/images/z_cubed_minus_one_three_iters.png "Z Cubed Minus One Three Iters")
+
 ### Newtonian Black Holes
 
 | Language               | Implementation | Time (s) | Flags              | Version                                  |
