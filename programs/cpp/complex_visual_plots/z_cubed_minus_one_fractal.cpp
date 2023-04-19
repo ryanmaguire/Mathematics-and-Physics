@@ -37,10 +37,13 @@ static inline cvp::complex f(cvp::complex z)
 int main(void)
 {
     /*  Name of the output PPM file.                                          */
-    const char *name = "z_cubed_minus_one_fractal.ppm";
+    const char *name = "z_cubed_minus_one_three_iters.ppm";
+
+    /*  The number of iterations to perform.                                  */
+    const unsigned int iters = 3U;
 
     /*  Create the plots.                                                     */
-    cvp::iters_plot(f, 3, cvp::color_wheel_from_complex, name);
+    cvp::iters_plot(f, iters, cvp::color_wheel_from_complex, name);
     return 0;
 }
 /*  End of main.                                                              */

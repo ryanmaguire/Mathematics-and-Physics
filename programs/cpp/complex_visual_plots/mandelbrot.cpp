@@ -39,8 +39,11 @@ int main(void)
     /*  Name of the output PPM file.                                          */
     const char *name = "mandelbrot_six_iters.ppm";
 
+    /*  The number of iterations to perform.                                  */
+    const unsigned int iters = 6U;
+
     /*  Create the plots.                                                     */
-    cvp::mandelbrot_plot(f, 6, cvp::color_wheel_from_complex, name);
+    cvp::mandelbrot_plot(f, iters, cvp::color_wheel_from_complex, name);
     return 0;
 }
 /*  End of main.                                                              */
