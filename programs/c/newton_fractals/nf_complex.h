@@ -341,15 +341,15 @@ nf_complex_subtract_real(double a, const struct nf_complex *z)
  *  Purpose:                                                                  *
  *      Subtracts a complex number from a real one.                           *
  *  Arguments:                                                                *
- *      z (struct nf_complex *):                                              *
- *          A pointer to a complex number.                                    *
  *      a (double):                                                           *
  *          A real number.                                                    *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
  *  Output:                                                                   *
  *      None (void).                                                          *
  ******************************************************************************/
 NF_INLINE void
-nf_complex_subtractfrom_real(double a,  struct nf_complex *z)
+nf_complex_subtractfrom_real(double a, struct nf_complex *z)
 {
     /*  Subtract the real part of z from a and negate the imaginary part.     */
     z->real = a - z->real;
@@ -548,6 +548,73 @@ nf_complex_divideby(struct nf_complex *z0, const struct nf_complex *z1)
     z0->imag = (imag*z1->real - real*z1->imag)*denom;
 }
 /*  End of nf_complex_divideby.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_divide_real                                                *
+ *  Purpose:                                                                  *
+ *      Divides a real number by a complex one.                               *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      quot (struct nf_complex):                                             *
+ *          The quotient of a and z.                                          *
+ *  Method:                                                                   *
+ *      The inverse of z can be written using the complex conjugate z_bar.    *
+ *                                                                            *
+ *          z^-1 = z_bar / |z|^2                                              *
+ *                                                                            *
+ *      To compute a / z we compute a * z^-1.                                 *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_divide_real(double a, const struct nf_complex *z)
+{
+    /*  Declare a variable for the quotient.                                  */
+    struct nf_complex quot;
+
+    /*  The quotient a / z can be written as a * (1/z). Use this.             */
+    const double denom = 1.0 / (z->real*z->real + z->imag*z->imag);
+
+    /*  Compute a * z_bar / |z|^2.                                            */
+    quot.real = a*z->real*denom;
+    quot.imag = -a*z->imag*denom;
+    return quot;
+}
+/*  End of nf_complex_divide_real.                                            */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_divideby_real                                              *
+ *  Purpose:                                                                  *
+ *      Divides a real number by a complex one.                               *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      The inverse of z can be written using the complex conjugate z_bar.    *
+ *                                                                            *
+ *          z^-1 = z_bar / |z|^2                                              *
+ *                                                                            *
+ *      To compute a / z we compute a * z^-1.                                 *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_divideby_real(double a, struct nf_complex *z)
+{
+    /*  The quotient a / z can be written as a * (1/z). Use this.             */
+    const double denom = 1.0 / (z->real*z->real + z->imag*z->imag);
+
+    /*  Compute a * z_bar / |z|^2.                                            */
+    z->real = a*z->real*denom;
+    z->imag = -a*z->imag*denom;
+}
+/*  End of nf_complex_divideby_real.                                          */
 
 /******************************************************************************
  *  Function:                                                                 *
