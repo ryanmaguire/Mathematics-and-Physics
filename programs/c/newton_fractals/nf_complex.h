@@ -90,7 +90,7 @@ nf_complex_conjugate(const struct nf_complex *z)
 
     /*  The conjugate simply negates the imaginary part.                      */
     z_bar.real = z->real;
-    z_bar.imag = z->imag;
+    z_bar.imag = -z->imag;
     return z_bar;
 }
 /*  End of nf_complex_conjugate.                                              */
