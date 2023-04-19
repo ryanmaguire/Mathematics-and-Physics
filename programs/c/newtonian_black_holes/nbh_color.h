@@ -123,7 +123,7 @@ nbh_color_write_to_file(const struct nbh_color *c, FILE *fp)
  *  Arguments:                                                                *
  *      c (const struct nbh_color *):                                         *
  *          A pointer to a color.                                             *
- *      fp (struct nbh_ppm *):                                                *
+ *      PPM (struct nbh_ppm *):                                               *
  *          A pointer to the ppm the color is being written to.               *
  *  Outputs:                                                                  *
  *      None (void).                                                          *
