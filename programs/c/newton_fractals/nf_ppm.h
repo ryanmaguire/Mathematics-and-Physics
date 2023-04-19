@@ -80,7 +80,7 @@ nf_ppm_create(const char *name)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nf_init_ppm_from_vals                                                 *
+ *      nf_ppm_init_from_vals                                                 *
  *  Purpose:                                                                  *
  *      Print the preamble to the PPM file. A PPM file wants Pn followed by   *
  *      three numbers. P6 means we're encoding an RGB image in binary format. *
@@ -100,7 +100,7 @@ nf_ppm_create(const char *name)
  *      None (void).                                                          *
  ******************************************************************************/
 NF_INLINE void
-nf_init_ppm_from_vals(struct nf_ppm *PPM, unsigned x, unsigned y, int type)
+nf_ppm_init_from_vals(struct nf_ppm *PPM, unsigned x, unsigned y, int type)
 {
     /*  For integers between 1 and 5 we can pass the value to the preamble.   */
     if (0 < type && type < 5)
@@ -110,7 +110,7 @@ nf_init_ppm_from_vals(struct nf_ppm *PPM, unsigned x, unsigned y, int type)
     else
         fprintf(PPM->fp, "P6\n%u %u\n255\n", x, y);
 }
-/*  End of nf_init_ppm_from_vals.                                             */
+/*  End of nf_ppm_init_from_vals.                                             */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -123,12 +123,12 @@ nf_init_ppm_from_vals(struct nf_ppm *PPM, unsigned x, unsigned y, int type)
  *  Outputs:                                                                  *
  *      None (void).                                                          *
  *  Method:                                                                   *
- *      Pass the default parameters in nf_setup.h to nf_init_ppm_from_vals.   *
+ *      Pass the default parameters in nf_setup.h to nf_ppm_init_from_vals.   *
  ******************************************************************************/
 NF_INLINE void
 nf_ppm_init(struct nf_ppm *PPM)
 {
-    nf_init_ppm_from_vals(PPM, nf_setup_xsize, nf_setup_ysize, 6);
+    nf_ppm_init_from_vals(PPM, nf_setup_xsize, nf_setup_ysize, 6);
 }
 /*  End of nf_ppm_init.                                                       */
 
