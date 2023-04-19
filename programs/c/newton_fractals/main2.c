@@ -7,26 +7,18 @@
 #include "nf_complex_poly.h"
 #include <stdio.h>
 
-NF_INLINE struct nf_complex
-f(const struct nf_complex *z)
-{
-    struct nf_complex out = nf_complex_square(z);
-    nf_complex_multiplyby(&out, z);
-    out.real -= 1.0;
-    return out;
-}
+static struct nf_complex coeffs[4] = {
+    {-1.0, 0.0},
+    {0.0, 0.0},
+    {0.0, 0.0},
+    {1.0, 0.0}
+};
 
-NF_INLINE struct nf_complex
-fp(const struct nf_complex *z)
-{
-    struct nf_complex out = nf_complex_square(z);
-    out.real *= 3.0;
-    out.imag *= 3.0;
-    return out;
-}
+static const unsigned int degree = sizeof(coeffs)/sizeof(coeffs[0]) - 1U;
 
 int main(void)
 {
+    const struct nf_complex_poly poly = {coeffs, degree};
     unsigned int x, y;
     unsigned int iters;
     double scale;
@@ -44,7 +36,7 @@ int main(void)
             z.real = nf_setup_xmin + nf_setup_px_factor*(double)x;
             z.imag = imag;
 
-            iters = nf_newton(f, fp, &z);
+            iters = nf_newton_poly(&poly, &z);
 
             if (z.real > 0.0)
                 c = nf_blue;

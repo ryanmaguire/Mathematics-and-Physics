@@ -41,6 +41,12 @@ struct nf_complex {
     double real, imag;
 };
 
+/*  Useful constants that are commonly used.                                  */
+static const struct nf_complex nf_complex_zero = {0.0, 0.0};
+static const struct nf_complex nf_complex_one = {1.0, 0.0};
+static const struct nf_complex nf_complex_minus_one = {-1.0, 0.0};
+static const struct nf_complex nf_complex_i = {0.0, 1.0};
+
 /******************************************************************************
  *  Function:                                                                 *
  *      nf_complex_create                                                     *
@@ -548,6 +554,67 @@ nf_complex_arg(const struct nf_complex *z)
     return atan2(z->imag, z->real);
 }
 /*  End of nf_complex_arg.                                                    */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_affine_transform                                           *
+ *  Purpose:                                                                  *
+ *      Performs z = z0 + a*z2.                                               *
+ *  Arguments:                                                                *
+ *      z0 (const struct nf_complex *):                                       *
+ *          A pointer to a complex number.                                    *
+ *      a (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *      z1 (const struct nf_complex *):                                       *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      out (struct nf_complex):                                              *
+ *          The transformation out = z0 + a*z2;                               *
+ *  Method:                                                                   *
+ *      Use the product and sum rules as before.                              *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_affine_transform(const struct nf_complex *z0,
+                            const struct nf_complex *a,
+                            const struct nf_complex *z1)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex out;
+
+    /*  Perform the product using the rule i^2 = -1.                          */
+    out.real = z0->real + (a->real*z1->real - a->imag*z1->imag);
+    out.imag = z0->imag + (a->real*z1->imag + a->imag*z1->real);
+    return out;
+}
+/*  End of nf_complex_affine_transform.                                       */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_affine_transformself                                       *
+ *  Purpose:                                                                  *
+ *      Performs z0 += a*z2.                                                  *
+ *  Arguments:                                                                *
+ *      z0 (struct nf_complex *):                                             *
+ *          A pointer to a complex number.                                    *
+ *      a (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *      z1 (const struct nf_complex *):                                       *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Use the product and sum rules as before.                              *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_affine_transformself(struct nf_complex *z0,
+                                const struct nf_complex *a,
+                                const struct nf_complex *z1)
+{
+    /*  Perform the product using the rule i^2 = -1.                          */
+    z0->real += a->real*z1->real - a->imag*z1->imag;
+    z0->imag += a->real*z1->imag + a->imag*z1->real;
+}
+/*  End of nf_complex_affine_transformself.                                   */
 
 #endif
 /*  End of include guard.                                                     */

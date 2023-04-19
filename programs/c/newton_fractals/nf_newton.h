@@ -6,6 +6,7 @@
 #include "nf_inline.h"
 #include "nf_complex.h"
 #include "nf_setup.h"
+#include "nf_complex_poly.h"
 
 typedef struct nf_complex (*complex_function)(const struct nf_complex *);
 
@@ -23,6 +24,28 @@ nf_newton(complex_function f, complex_function fp, struct nf_complex *z0)
           break;
 
         fp_z0 = fp(z0);
+        nf_complex_divideby(&factor, &fp_z0);
+        nf_complex_subtractfrom(z0, &factor);
+        iters++;
+    }
+
+    return iters;
+}
+
+NF_INLINE unsigned int
+nf_newton_poly(const struct nf_complex_poly *poly, struct nf_complex *z0)
+{
+    struct nf_complex fp_z0, factor;
+    unsigned int iters = 0U;
+
+    while (iters < nf_setup_max_iters)
+    {
+        factor = nf_complex_poly_eval(poly, z0);
+
+        if (nf_complex_abs(&factor) < nf_setup_eps)
+          break;
+
+        fp_z0 = nf_complex_dpoly_eval(poly, z0);
         nf_complex_divideby(&factor, &fp_z0);
         nf_complex_subtractfrom(z0, &factor);
         iters++;
