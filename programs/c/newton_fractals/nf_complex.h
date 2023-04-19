@@ -475,6 +475,32 @@ nf_complex_abs(const struct nf_complex *z)
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      nf_complex_abssq                                                      *
+ *  Purpose:                                                                  *
+ *      Computes the square of the absolute value of a complex number.        *
+ *  Arguments:                                                                *
+ *      z (const struct nf_complex *):                                        *
+ *          A complex number.                                                 *
+ *  Outputs:                                                                  *
+ *      abs_sq_z (double):                                                    *
+ *          The square of the modulus, or absolute value, of z.               *
+ *  Method:                                                                   *
+ *      Invoke the Pythagoras theorem. If z = x + i*y = (x, y) we have:       *
+ *                                                                            *
+ *            |z|^2 = x^2 + y^2                                               *
+ *                                                                            *
+ *      This is computed and returned.                                        *
+ ******************************************************************************/
+NF_INLINE double
+nf_complex_abssq(const struct nf_complex *z)
+{
+    /*  Use the Pythagorean formula and return.                               */
+    return z->real*z->real + z->imag*z->imag;
+}
+/*  End of nf_complex_abssq.                                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      nf_complex_dist                                                       *
  *  Purpose:                                                                  *
  *      Computes the distance between two points in the complex plane.        *
@@ -500,6 +526,28 @@ nf_complex_dist(const struct nf_complex *z0, const struct nf_complex *z1)
     return sqrt(dx*dx + dy*dy);
 }
 /*  End of nf_complex_dist.                                                   */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_arg                                                        *
+ *  Purpose:                                                                  *
+ *      Computes the argument, of phase, of a complex number.                 *
+ *  Arguments:                                                                *
+ *      z (const struct nf_complex *):                                        *
+ *          A complex number.                                                 *
+ *  Outputs:                                                                  *
+ *      arg_z (double):                                                       *
+ *          The azimuthal angle of z.                                         *
+ *  Method:                                                                   *
+ *      Compute the angle the point (x, y) makes with the x axis using atan2. *
+ ******************************************************************************/
+NF_INLINE double
+nf_complex_arg(const struct nf_complex *z)
+{
+    /*  Compute the angle the complex number makes with the x axis via atan2. */
+    return atan2(z->imag, z->real);
+}
+/*  End of nf_complex_arg.                                                    */
 
 #endif
 /*  End of include guard.                                                     */
