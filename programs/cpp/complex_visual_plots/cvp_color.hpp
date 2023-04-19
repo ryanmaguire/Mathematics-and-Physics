@@ -21,7 +21,7 @@
  *      Provides a class for using colors.                                    *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/02/28                                                        *
+ *  Date:   2023/04/18                                                        *
  ******************************************************************************/
 
 /* Include guard to prevent including this file twice.                        */
@@ -34,7 +34,7 @@
 /*  Basic class for creating and writing to PPM files.                        */
 #include "cvp_ppm.hpp"
 
-/*  Namespace for the mini-project. "Newtonian Black Holes."                  */
+/*  Namespace for the mini-project. "Complex Visual Plots."                   */
 namespace cvp {
 
     /*  Simple struct for working with colors in a PPM file.                  */
