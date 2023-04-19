@@ -344,9 +344,10 @@ nf_complex_divide(const struct nf_complex *z0, const struct nf_complex *z1)
     /*  Declare a variable for the quotient.                                  */
     struct nf_complex quot;
 
-    /*  The quotient z/w can be written as z * (1/w). Use this.               */
+    /*  The quotient z0 / z1 can be written as z0 * (1/z1). Use this.         */
     double denom = 1.0 / (z1->real*z1->real + z1->imag*z1->imag);
 
+    /*  Compute z0 * z1_bar / |z1|^2.                                         */
     quot.real = (z0->real*z1->real + z0->imag*z1->imag)*denom;
     quot.imag = (z0->imag*z1->real - z0->real*z1->imag)*denom;
     return quot;
@@ -379,9 +380,10 @@ nf_complex_divideby(struct nf_complex *z0, const struct nf_complex *z1)
     const double real = z0->real;
     const double imag = z0->imag;
 
-    /*  The quotient z/w can be written as z * (1/w). Use this.               */
+    /*  The quotient z0 / z1 can be written as z0 * (1/z1). Use this.         */
     double denom = 1.0 / (z1->real*z1->real + z1->imag*z1->imag);
 
+    /*  Compute z0 * z1_bar / |z1|^2.                                         */
     z0->real = (real*z1->real + imag*z1->imag)*denom;
     z0->imag = (imag*z1->real - real*z1->imag)*denom;
 }
@@ -430,7 +432,7 @@ nf_complex_square(const struct nf_complex *z)
 NF_INLINE void
 nf_complex_squareself(struct nf_complex *z)
 {
-    /*  Declare a variable for the output.                                    */
+    /*  Avoid overwriting the data by copying it to two local variables.      */
     const double real = z->real;
     const double imag = z->imag;
 
@@ -458,8 +460,8 @@ nf_complex_squareself(struct nf_complex *z)
  *                                                                            *
  *      This is computed and returned.                                        *
  *  Notes:                                                                    *
- *      This is the "unsage" way of computing the absolute value. If x or y   *
- *      are larger than 10^154 there square overflows to infinity. This       *
+ *      This is the "unsafe" way of computing the absolute value. If x or y   *
+ *      are larger than 10^154 their square overflows to infinity. This       *
  *      almost never occurs with numbers used in practice, so this method of  *
  *      computing |z| is fine.                                                *
  ******************************************************************************/
