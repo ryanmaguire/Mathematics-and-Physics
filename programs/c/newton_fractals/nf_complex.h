@@ -194,6 +194,58 @@ nf_complex_addto(struct nf_complex *z0, const struct nf_complex *z1)
 
 /******************************************************************************
  *  Function:                                                                 *
+ *      nf_complex_add_real                                                   *
+ *  Purpose:                                                                  *
+ *      Adds a real number to a complex one.                                  *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Output:                                                                   *
+ *      sum (struct nf_complex):                                              *
+ *          The sum of z and a.                                               *
+ *  Method:                                                                   *
+ *      Add the double to the real part of z and return.                      *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_add_real(double a, const struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex sum;
+
+    /*  Add the real number to the real part of z and copy the imaginary part.*/
+    sum.real = z->real + a;
+    sum.imag = z->imag;
+    return sum;
+}
+/*  End of nf_complex_add_real.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_addto_real                                                 *
+ *  Purpose:                                                                  *
+ *      Adds a real number to a complex one.                                  *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *  Output:                                                                   *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Add the double to the real part of z and return.                      *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_addto_real(double a, struct nf_complex *z)
+{
+    /*  Add the real number to the real part of z and return.                 */
+    z->real += a;
+}
+/*  End of nf_complex_addto_real.                                             */
+
+/******************************************************************************
+ *  Function:                                                                 *
  *      nf_complex_subtract                                                   *
  *  Purpose:                                                                  *
  *      Subtracts two complex numbers.                                        *
@@ -255,6 +307,55 @@ nf_complex_subtractfrom(struct nf_complex *z0, const struct nf_complex *z1)
     z0->imag -= z1->imag;
 }
 /*  End of nf_complex_subtractfrom.                                           */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_subtract_real                                              *
+ *  Purpose:                                                                  *
+ *      Subtracts a complex number from a real one.                           *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Output:                                                                   *
+ *      diff (struct nf_complex):                                             *
+ *          The difference of a and z, a - z.                                 *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_subtract_real(double a, const struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex diff;
+
+    /*  Subtract the real part of z from a and negate the imaginary part.     */
+    diff.real = a - z->real;
+    diff.imag = -z->imag;
+    return diff;
+}
+/*  End of nf_complex_subtract_real.                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_subtractfrom_real                                          *
+ *  Purpose:                                                                  *
+ *      Subtracts a complex number from a real one.                           *
+ *  Arguments:                                                                *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *  Output:                                                                   *
+ *      None (void).                                                          *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_subtractfrom_real(double a,  struct nf_complex *z)
+{
+    /*  Subtract the real part of z from a and negate the imaginary part.     */
+    z->real = a - z->real;
+    z->imag = -z->imag;
+}
+/*  End of nf_complex_subtractfrom_real.                                      */
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -323,6 +424,59 @@ nf_complex_multiplyby(struct nf_complex *z0, const struct nf_complex *z1)
     z0->imag = real*z1->imag + imag*z1->real;
 }
 /*  End of nf_complex_multiplyby.                                             */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_multiply_real                                              *
+ *  Purpose:                                                                  *
+ *      Multiplies a complex number by a real one.                            *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (const struct nf_complex *):                                        *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      prod (struct nf_complex):                                             *
+ *          The product a*z.                                                  *
+ *  Method:                                                                   *
+ *      Scale the real and imaginary parts of z by a.                         *
+ ******************************************************************************/
+NF_INLINE struct nf_complex
+nf_complex_multiply_real(double a, const struct nf_complex *z)
+{
+    /*  Declare a variable for the output.                                    */
+    struct nf_complex prod;
+
+    /*  Scale the real and imaginary parts of z by a and return.              */
+    prod.real = a*z->real;
+    prod.imag = a*z->imag;
+    return prod;
+}
+/*  End of nf_complex_multiply_real.                                          */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_complex_multiplyby_real                                            *
+ *  Purpose:                                                                  *
+ *      Multiplies a complex number by a real one.                            *
+ *  Arguments:                                                                *
+ *      a (double):                                                           *
+ *          A real number.                                                    *
+ *      z (struct nf_complex *):                                              *
+ *          A pointer to a complex number.                                    *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Scale the real and imaginary parts of z by a.                         *
+ ******************************************************************************/
+NF_INLINE void
+nf_complex_multiplyby_real(double a, struct nf_complex *z)
+{
+    /*  Scale the real and imaginary parts of z by a and return.              */
+    z->real *= a;
+    z->imag *= a;
+}
+/*  End of nf_complex_multiplyby_real.                                        */
 
 /******************************************************************************
  *  Function:                                                                 *
