@@ -18,61 +18,45 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides routines for coloring complex functions.                     *
+ *      Provides routines for generating colors on the color wheel.           *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/18                                                        *
+ *  Date:   2023/04/20                                                        *
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef CVP_COLORERS_H
-#define CVP_COLORERS_H
-
-/*  atan function provided here.                                              */
-#include <math.h>
+#ifndef NF_COLORERS_H
+#define NF_COLORERS_H
 
 /*  NF_INLINE macro provided here.                                            */
 #include "nf_inline.h"
 
-/*  Complex class defined here.                                               */
-#include "nf_complex.h"
-
-/*  Class for working with colors in RGB format.                              */
+/*  Struct for working with colors in RGB format.                             */
 #include "nf_color.h"
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nf_color_from_complex                                                 *
+ *      nf_color_from_angle                                                   *
  *  Purpose:                                                                  *
- *      Creates an RGB color from a complex number. The intensity is given by *
- *      the magnitude of the number, and the color is from the argument.      *
+ *      Creates an RGB color from an angle between 0 and 2 pi.                *
  *  Arguments:                                                                *
- *      z (const struct nf_complex *):                                        *
- *          A complex number.                                                 *
+ *      angle (double):                                                       *
+ *          A real number between 0 and 2 pi.                                 *
  *  Outputs:                                                                  *
  *      c (struct nf_color):                                                  *
- *          The color given by the modulus and argument of the input.         *
+ *          The color in the spectrum blue-to-green-to-red given by the angle.*
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
- *      and then scale this by the magnitude.                                 *
+ *      Create a rainbow gradient red-to-blue from the angle given.           *
  ******************************************************************************/
 NF_INLINE struct nf_color
-nf_color_from_complex(const struct nf_complex *z)
+nf_color_from_angle(double angle)
 {
     /*  There are 1024 possible colors given by the gradient. This scale      *
      *  factor helps normalize the argument.                                  */
-    const double gradient_factor = 1023.0 / M_2_PI;
+    const double gradient_factor = 1023.0 / (2.0 * M_PI);
 
-    /*  Compute the argument and modulus of the input complex number.         */
-    const double arg_z = nf_complex_arg(z);
-    const double abs_z = nf_complex_abs(z);
-
-    /*  Scale the argument from (-pi, pi) to (0, 1023).                       */
-    double val = (arg_z + M_PI) * gradient_factor;
-
-    /*  The atan function compresses the intensity to prohibit arbitrarily    *
-     *  bright points. This allows the drawing to fit into an actual PPM.     */
-    const double t = atan(5.0*abs_z) / M_PI_2;
+    /*  Scale the argument from (0, 2 pi) to (0, 1023).                       */
+    double val = angle * gradient_factor;
 
     /*  Lastly, a color for the output.                                       */
     struct nf_color out;
@@ -121,35 +105,32 @@ nf_color_from_complex(const struct nf_complex *z)
         out.blue = 0x00U;
     }
 
-    /*  Scale the color by the atan factor and return.                        */
-    return nf_color_scale(&out, t);
+    return out;
 }
-/*  End of nf_color_from_complex.                                             */
+/*  End of nf_color_from_angle.                                             */
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nf_color_wheel_from_complex                                           *
+ *      nf_color_wheel_from_angle                                             *
  *  Purpose:                                                                  *
- *      Creates an RGB color from a complex number. The intensity is given by *
- *      the magnitude of the number, and the color is from the argument.      *
+ *      Creates an RGB color from an angle between 0 and 2 pi.                *
  *  Arguments:                                                                *
- *      z (const struct nf_complex *):                                        *
- *          A complex number.                                                 *
+ *      angle (double):                                                       *
+ *          A real number between 0 and 2 pi.                                 *
  *  Outputs:                                                                  *
  *      c (struct nf_color):                                                  *
- *          The color given by the modulus and argument of the input.         *
+ *          The color given by the angle on the color wheel.                  *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
- *      and then scale this by the magnitude.                                 *
+ *      Create a rainbow gradient red-to-blue-to-red from the angle given.    *
  ******************************************************************************/
 NF_INLINE struct nf_color
-nf_color_wheel_from_complex(double angle)
+nf_color_wheel_from_angle(double angle)
 {
     /*  There are 1535 possible colors given by the gradient. This scale      *
      *  factor helps normalize the argument.                                  */
     const double gradient_factor = 1535.0 / (2.0 * M_PI);
 
-    /*  Scale the argument from (-pi, pi) to (0, 1023).                       */
+    /*  Scale the argument from (0, 2 pi) to (0, 1535).                       */
     double val = angle * gradient_factor;
 
     /*  Lastly, a color for the output.                                       */
@@ -223,12 +204,9 @@ nf_color_wheel_from_complex(double angle)
         out.blue = 0xFFU;
     }
 
-    printf("%f %f %u %u %u\n", angle, val, out.red, out.green, out.blue);
-
-    /*  Scale the color by the atan factor and return.                        */
     return out;
 }
-/*  End of color_wheel_from_complex.                                          */
+/*  End of nf_color_wheel_from_angle.                                         */
 
 #endif
 /*  End of include guard.                                                     */
