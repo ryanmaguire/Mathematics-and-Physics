@@ -30,7 +30,8 @@
 /*  The Newton iteration for z^3 - 1.                                         */
 static inline cvp::complex f(cvp::complex z)
 {
-    return z - (z*z*z - 1.0)/(3.0*z*z);
+    /*  z - (z^3 - 1) / (3z^2) simplifies to (2z^3 + 1) / (3z^3).             */
+    return (2.0*z*z*z + 1.0) / (3.0*z*z);
 }
 
 /*  Routine for plotting the first three iterations of Newton's method.       */
