@@ -45,7 +45,7 @@ The files are written in plain C without any dependences (other than the
 standard library). You can compile with or without OpenMP support using
 `clang` or `gcc`. For example:
 ```
-gcc -fopenmp -O3 -flto newtonian_black_hole.c -o test.out
+gcc -fopenmp -O3 -flto newtonian_black_hole.c -o test.out -lm
 ```
 To compile without OpenMP just remove the `-fopenmp` option.
 
