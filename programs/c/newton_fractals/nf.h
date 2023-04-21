@@ -143,7 +143,7 @@
     for (y = 0U; y < nf_setup_ysize; ++y)                                      \
     {                                                                          \
         /*  Convert the y coordinate of the pixel to the imaginary part of z.*/\
-        const double imag = nf_setup_ymin + nf_setup_py_factor*(double)y;      \
+        const double imag = nf_setup_ymax - nf_setup_py_factor*(double)y;      \
                                                                                \
         /*  Loop over the x coordindates.                                    */\
         for (x = 0U; x < nf_setup_xsize; ++x)                                  \
@@ -275,7 +275,7 @@
     for (y = 0U; y < nf_setup_ysize; ++y)                                      \
     {                                                                          \
         /*  Convert the y coordinate of the pixel to the imaginary part of z.*/\
-        const double imag = nf_setup_ymin + nf_setup_py_factor*(double)y;      \
+        const double imag = nf_setup_ymax - nf_setup_py_factor*(double)y;      \
                                                                                \
         /*  Loop over the x coordindates.                                    */\
         for (x = 0U; x < nf_setup_xsize; ++x)                                  \
