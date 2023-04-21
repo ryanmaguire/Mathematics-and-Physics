@@ -28,7 +28,7 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.5pt));

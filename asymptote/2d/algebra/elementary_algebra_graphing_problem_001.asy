@@ -25,66 +25,20 @@
 import settings;
 settings.outformat = "pdf";
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
+/*  Sharp tikz style arrows provided here.                                    */
+access "../../custom_arrows.asy" as arrows;
+
+/*  Functions for creating paths from real-valued functions.                  */
+access "../../path_functions.asy" as pf;
+
+/*  Functions for adding grid lines to a drawing.                             */
+access "../../grid_lines.asy" as grid;
+
+/*  Function for plotting the x and y axes.                                   */
+access "../../coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
 size(256);
-
-/*  Function for producing a path from a real-valued function.                */
-path PathFromFunction(real func(real), real a, real b, int n_samples)
-{
-    /*  Declare necessary variables.                                          */
-    path g;
-    real dx, x, start, end;
-
-    /*  There must be at least two samples to create a path.                  */
-    assert(n_samples >= 2);
-
-    /*  The end points can not be equal.                                      */
-    assert(a != b);
-
-    /*  Set the starting point. This is whichever value is smaller.           */
-    if (a < b)
-    {
-        start = a;
-        end = b;
-    }
-    else
-    {
-        start = b;
-        end = a;
-    }
-
-    /*  The samples are uniformly spaced throughout the interval (start, end).*/
-    dx = (end - start) / (real)n_samples;
-    x = start;
-
-    /*  Initialize the path to the starting point.                            */
-    g = (x, func(x));
-    x += dx;
-
-    /*  Loop over the samples and append them to the path.                    */
-    while (x < end)
-    {
-        g = g .. (x, func(x));
-        x += dx;
-    }
-
-    /*  Add the end point to the path.                                        */
-    g = g .. (end, func(end));
-
-    /*  If a < b, then start = a and end = b. Return as normal.               */
-    if (a < b)
-        return g;
-
-    /*  Otherwise, start = b and end = a. Reverse the path and return.        */
-    else
-        return reverse(g);
-}
-/*  End of PathFromFunction.                                                  */
 
 /*  The parabola function to be drawn.                                        */
 real two_minus_x_squared(real x)
@@ -101,45 +55,25 @@ real sqrt_two_minus_x(real x)
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.2mm) + fontsize(8pt));
 
-/*  Variable for indexing.                                                    */
-int n;
-
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -9;
 int grid_end = 9;
 
-/*  Variables for drawing the grid, and drawing the axes.                     */
-pair top, bottom, left, right;
-
 /*  Length of the grid lines.                                                 */
-real gridlength = 10.2;
+real grid_length = 10.2;
 
-/*  Length of the axes.                                                       */
-real axeslength = 10.5;
+/*  Start and end points for the x and y coordinate axes.                     */
+pair axis_start = (-10.5, -10.5);
+pair axis_end = (10.5, 10.5);
 
 /*  Length of tick marks.                                                     */
-real ticklength = 0.2;
-
-/*  Size of the labels for the tick marks.                                    */
-real tickfont = 5pt;
-
-/*  Label for the tick marks.                                                 */
-Label ticklabel;
-
-/*  Thin grey pen used for the grid.                                          */
-pen thingreyp = gray(0.8) + linewidth(0.3pt);
-
-/*  Thicker black pen used for the axes.                                      */
-pen axesp = black + linewidth(0.8pt);
-
-/*  Black pen used for tick marks.                                            */
-pen tickp = black + linewidth(0.2pt);
+real tick_length = 0.2;
 
 /*  Size of arrow heads.                                                      */
-real arsize = 5bp;
+real arrow_size = 5bp;
 
 /*  Pen for labels.                                                           */
-pen labelp = fontsize(6pt);
+pen label_pen = fontsize(6pt);
 
 /*  Number of samples for square root and parabola functions.                 */
 int samples = 20;
@@ -147,67 +81,39 @@ int samples = 20;
 /*  Path used for the square root and parabola functions.                     */
 path g;
 
-/*  Loop through and draw the lines for the grid.                             */
-for (n = grid_start; n <= grid_end; ++n)
-{
-    /*  The grid consists of straight lines left-to-right and top-to-bottom.  *
-     *  Compute the current set of lines to be drawn and draw them.           */
-    bottom = (n, -gridlength);
-    top = (n, gridlength);
-    left = (-gridlength, n);
-    right = (gridlength, n);
+/*  Arrow used for all curves.                                                */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
 
-    draw(bottom -- top, thingreyp);
-    draw(left -- right, thingreyp);
+/*  Add grid lines to the drawing.                                            */
+grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length, tick_length);
 
-    /*  If n is zero, do not draw tick marks. The labels overlap with the     *
-     *  axes lines and it isn't pretty.                                       */
-    if (n == 0)
-        continue;
-
-    /*  Otherwise, draw in tick marks and labels.                             */
-    else
-    {
-        ticklabel = Label("$"+string(n)+"$", position=1.0, fontsize(tickfont));
-        draw(ticklabel, (n, ticklength) -- (n, -ticklength), tickp);
-        draw(ticklabel, (ticklength, n) -- (-ticklength, n), tickp);
-    }
-}
-/*  End of for-loop drawing the guide-grid.                                   */
-
-/*  Draw the axes.                                                            */
-bottom = (0.0, -axeslength);
-top = (0.0, axeslength);
-left = (-axeslength, 0.0);
-right = (axeslength, 0.0);
-
-draw(Label("$y$", position=1.0), bottom -- top, E, axesp, SharpArrows(arsize));
-draw(Label("$x$", position=1.0), left -- right, S, axesp, SharpArrows(arsize));
+/*  Draw the coordinate axes.                                                 */
+axes.DrawAndLabelCoordinateAxes(axis_start, axis_end);
 
 /*  Draw the function |x - 3|.                                                */
-draw((-7.0, 10.0) -- (3.0, 0.0) -- (10.0, 7.0), blue, SharpArrows(arsize));
+draw((-7.0, 10.0) -- (3.0, 0.0) -- (10.0, 7.0), blue, sharp_arrow);
 
 /*  Several straight lines.                                                   */
-draw((-3.0, -10.0) -- (-3.0, 10.0), green, SharpArrows(arsize));
-draw((-10.0, 2.0) -- (10.0, 2.0), purple, SharpArrows(arsize));
-draw((-7.5, 10.0) -- (10.0, -1.667), cyan, SharpArrows(arsize));
-draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, SharpArrows(arsize));
-draw((0.0, -10.0) -- (10.0, 0.0), red, SharpArrows(arsize));
+draw((-3.0, -10.0) -- (-3.0, 10.0), green, sharp_arrow);
+draw((-10.0, 2.0) -- (10.0, 2.0), purple, sharp_arrow);
+draw((-7.5, 10.0) -- (10.0, -1.667), cyan, sharp_arrow);
+draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, sharp_arrow);
+draw((0.0, -10.0) -- (10.0, 0.0), red, sharp_arrow);
 
 /*  Draw the parabola 2-x^2.                                                  */
-g = PathFromFunction(two_minus_x_squared, -3.46, 3.46, samples);
-draw(g, orange, SharpArrows(arsize));
+g = pf.PathFromFunction(two_minus_x_squared, -3.46, 3.46, samples);
+draw(g, orange, sharp_arrow);
 
 /*  Lastly, the function sqrt(2 - x).                                         */
-g = PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
-draw(g, brown, SharpArrow(arsize));
+g = pf.PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
+draw(g, brown, sharp_arrow);
 
 /*  Label all of the functions.                                               */
-label("$y=|x-3|$", (8.4, 3.7), blue + labelp);
-label("$x=-3$", (-4.1, 4.5), green + labelp);
-label("$y=2$", (8.0, 2.5), purple + labelp);
-label("$y=-\frac{2}{3}x+5$", (3.0, 4.5), cyan + labelp);
-label("$3x-2y=6$", (6.0, 8.4), pink + labelp);
-label("$y=-x^{2}+2$", (4.2, -3.2), orange + labelp);
-label("$y=x-10$", (7.2, -4.5), red + labelp);
-label("$y=\sqrt{2-x}$", (-7.0, 3.5), brown + labelp);
+label("$y=|x-3|$", (8.4, 3.7), blue + label_pen);
+label("$x=-3$", (-4.1, 4.5), green + label_pen);
+label("$y=2$", (8.0, 2.5), purple + label_pen);
+label("$y=-\frac{2}{3}x+5$", (3.0, 4.5), cyan + label_pen);
+label("$3x-2y=6$", (6.0, 8.4), pink + label_pen);
+label("$y=-x^{2}+2$", (4.2, -3.2), orange + label_pen);
+label("$y=x-10$", (7.2, -4.5), red + label_pen);
+label("$y=\sqrt{2-x}$", (-7.0, 3.5), brown + label_pen);
