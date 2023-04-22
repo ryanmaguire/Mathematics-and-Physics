@@ -47,10 +47,10 @@
  *      Creates an RGB color from a complex number. The intensity is given by *
  *      the magnitude of the number, and the color is from the argument.      *
  *  Arguments:                                                                *
- *      z (cvp::complex):                                                     *
+ *      z (cvp_complex):                                                      *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
- *      c (cvp::color):                                                       *
+ *      c (cvp_color):                                                        *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
  *      Create a rainbow gradient red-to-blue from the argument of the input  *
@@ -72,7 +72,7 @@ cvp_color_from_complex(const struct cvp_complex *z)
 
     /*  The atan function compresses the intensity to prohibit arbitrarily    *
      *  bright points. This allows the drawing to fit into an actual PPM.     */
-    const double t = atan(5.0*abs_z) / M_PI_2;
+    const double t = atan(5.0*abs_z) / (0.5 * M_PI);
 
     /*  Lastly, a color for the output.                                       */
     struct cvp_color out;
@@ -140,8 +140,8 @@ cvp_color_from_complex(const struct cvp_complex *z)
  *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
- *      and then scale this by the magnitude.                                 *
+ *      Create a rainbow gradient red-to-blue-to-red from the argument of the *
+ *      input and then scale this by the magnitude.                           *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_wheel_from_complex(const struct cvp_complex *z)
@@ -159,7 +159,7 @@ cvp_color_wheel_from_complex(const struct cvp_complex *z)
 
     /*  The atan function compresses the intensity to prohibit arbitrarily    *
      *  bright points. This allows the drawing to fit into an actual PPM.     */
-    const double t = atan(5.0*abs_z) / M_PI_2;
+    const double t = atan(5.0*abs_z) / (0.5 * M_PI);
 
     /*  Lastly, a color for the output.                                       */
     struct cvp_color out;
