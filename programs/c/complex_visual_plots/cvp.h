@@ -46,18 +46,21 @@
 /*  Functions for converting complex numbers into colors given here.          */
 #include "cvp_colorers.h"
 
+/*  Coloring functions for coloring points in the complex plane.              */
 typedef struct cvp_color (*colorer)(const struct cvp_complex *);
+
+/*  Complex-valued functions with complex inputs.                             */
 typedef struct cvp_complex (*complex_func)(const struct cvp_complex *);
 
 /******************************************************************************
  *  Function:                                                                 *
- *      cvp::complex_plot                                                     *
+ *      cvp_complex_plot                                                      *
  *  Purpose:                                                                  *
  *      Creates a plot from a complex function based on argument and modulus. *
  *  Arguments:                                                                *
- *      cfunc (Tfunc):                                                        *
+ *      cfunc (complex_func):                                                 *
  *          A complex-valued function of a complex variable.                  *
- *      color (Tcolor):                                                       *
+ *      color (colorer):                                                      *
  *          Coloring function for converting complex numbers into colors.     *
  *      name (const char *):                                                  *
  *          The name of the output PPM file.                                  *
@@ -123,15 +126,15 @@ cvp_complex_plot(complex_func cfunc, colorer color, const char *name)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      cvp::iters_plot                                                       *
+ *      cvp_iters_plot                                                        *
  *  Purpose:                                                                  *
  *      Creates a plot from repeated evaluation of a complex function.        *
  *  Arguments:                                                                *
- *      cfunc (Tfunc):                                                        *
+ *      cfunc (complex_func):                                                 *
  *          A complex-valued function of a complex variable.                  *
  *      iters (unsigned int):                                                 *
  *          The number of times to call the function.                         *
- *      color (Tcolor):                                                       *
+ *      color (colorer):                                                      *
  *          Coloring function for converting complex numbers into colors.     *
  *      name (const char *):                                                  *
  *          The name of the output PPM file.                                  *
@@ -203,3 +206,4 @@ cvp_iters_plot(complex_func cfunc, unsigned int iters,
 /*  End of cvp::iters_plot.                                                   */
 
 #endif
+/*  End of include guard.                                                     */
