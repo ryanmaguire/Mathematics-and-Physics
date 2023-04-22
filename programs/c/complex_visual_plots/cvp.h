@@ -31,13 +31,13 @@
 /*  malloc and free are given here.                                           */
 #include <stdlib.h>
 
-/*  Complex class provided here.                                              */
+/*  Complex struct provided here.                                             */
 #include "cvp_complex.h"
 
-/*  Class for working with colors in RGB format.                              */
+/*  Struct for working with colors in RGB format.                             */
 #include "cvp_color.h"
 
-/*  Class for creating and writing to PPM files.                              */
+/*  Struct for creating and writing to PPM files.                             */
 #include "cvp_ppm.h"
 
 /*  Basic setup parameters for plotting functions provided here.              */
@@ -203,7 +203,7 @@ cvp_iters_plot(complex_func cfunc, unsigned int iters,
     /*  Close the ppm file.                                                   */
     cvp_ppm_close(&PPM);
 }
-/*  End of cvp::iters_plot.                                                   */
+/*  End of cvp_iters_plot.                                                    */
 
 #endif
 /*  End of include guard.                                                     */
