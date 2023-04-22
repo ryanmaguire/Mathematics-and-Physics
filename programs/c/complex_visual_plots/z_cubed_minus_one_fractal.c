@@ -30,12 +30,30 @@
 /*  The function to be plotted.                                               */
 CVP_INLINE struct cvp_complex f(const struct cvp_complex *z)
 {
+#if 0
+
+    /*  Alternative computation of (2z^3 + 1) / (3z^2) using real numbers.    */
+    const double x2 = z->real * z->real;
+    const double y2 = z->imag * z->imag;
+    const double x4 = x2*x2;
+    const double y4 = y2*y2;
+    const double x2y2 = x2*y2;
+    const double x2_y2_sq = x4 + 2.0*x2y2 + y2*y2;
+    const double denom = 1.0 / (3.0 * x2_y2_sq);
+
+    const double real = z->real*(2.0*x4 + 4.0*x2y2 + z->real + 2.0*y4) - y2;
+    const double imag = 2.0*z->imag*(x2_y2_sq - z->real);
+    const struct cvp_complex w = {real*denom, imag*denom};
+#else
+
+    /*  Compute (2z^3 + 1) / (3z^2) using complex functions.                  */
     const struct cvp_complex z_sq = cvp_complex_square(z);
     struct cvp_complex w = cvp_complex_multiply(&z_sq, z);
     cvp_complex_multiplyby_real(2.0, &w);
     cvp_complex_addto_real(1.0, &w);
     cvp_complex_divideby(&w, &z_sq);
     cvp_complex_multiplyby_real(1.0 / 3.0, &w);
+#endif
     return w;
 }
 
