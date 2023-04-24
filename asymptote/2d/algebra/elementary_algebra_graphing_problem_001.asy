@@ -66,9 +66,6 @@ real grid_length = 10.2;
 pair axis_start = (-10.5, -10.5);
 pair axis_end = (10.5, 10.5);
 
-/*  Length of tick marks.                                                     */
-real tick_length = 0.2;
-
 /*  Size of arrow heads.                                                      */
 real arrow_size = 5bp;
 
@@ -85,7 +82,7 @@ path g;
 arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
 
 /*  Add grid lines to the drawing.                                            */
-grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length, tick_length);
+grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 
 /*  Draw the coordinate axes.                                                 */
 axes.DrawAndLabelCoordinateAxes(axis_start, axis_end);

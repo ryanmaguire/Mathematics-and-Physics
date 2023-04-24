@@ -81,9 +81,9 @@ void DrawGridLines(int grid_start, int grid_end, real grid_length,
  *          The right-most and top-most integer that recieves a grid line.    *
  *      grid_length (real):                                                   *
  *          The length of the grid lines.                                     *
- *      tick_length (real):                                                   *
- *          The length of the tick marks.                                     *
  *  Keywords:                                                                 *
+ *      tick_length (real):                                                   *
+ *          The length of the tick marks. Default is 0.2.                     *
  *      grid_pen (pen):                                                       *
  *          The pen used to draw the grid lines.                              *
  *      tick_pen (pen):                                                       *
@@ -96,7 +96,7 @@ void DrawGridLines(int grid_start, int grid_end, real grid_length,
  *      None (void).                                                          *
  ******************************************************************************/
 void DrawGridLinesWithTickMarks(int grid_start, int grid_end,
-                                real grid_length, real tick_length,
+                                real grid_length, real tick_length = 0.2,
                                 pen grid_pen = default_grid_pen,
                                 pen tick_pen = default_tick_pen,
                                 bool label_ticks = true, int grid_skip = 1)
