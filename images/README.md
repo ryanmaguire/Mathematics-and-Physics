@@ -1,8 +1,11 @@
-# Photos
+# Images
 This directory contains images and paintings of mathematicians and physicists
 described throughout the book. Since the images are not produced via code, the
 raw files must be kept in this repository since there is no means of "building"
 them later.
+
+The shell scripts that run through all of the asymptote code will also dump
+their results here. These created figures are also used in the book.
 
 All photos are works that are in the public domain, or released under the GNU
 Free Documentation License.
