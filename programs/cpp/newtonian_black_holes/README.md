@@ -1,8 +1,7 @@
 # Table of Contents
 1. [Newtonian Black Holes](#nbh)
 2. [Compiling](#compiling)
-4. [License](#license)
-
+3. [License](#license)
 
 # Newtonian Black Holes <a name="nbh"></a>
 This is a very small project to experiment with ray tracing and

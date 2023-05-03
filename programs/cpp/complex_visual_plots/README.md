@@ -1,7 +1,7 @@
 # Table of Contents
 1. [Complex Visual Plots](#cvp)
 2. [Compiling](#compiling)
-4. [License](#license)
+3. [License](#license)
 
 # Complex Visual Plots <a name="cvp"></a>
 This project contains files for visualizing complex functions. Given such
