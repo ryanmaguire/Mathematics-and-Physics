@@ -28,6 +28,12 @@
 #ifndef CVP_COLORERS_H
 #define CVP_COLORERS_H
 
+/*
+ *  TODO:
+ *      Colorer from angle only (constant intensity).
+ *      Colorer from modulus only (disregard angle).
+ */
+
 /*  atan function provided here.                                              */
 #include <math.h>
 
