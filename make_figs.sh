@@ -4,7 +4,8 @@ if [ ! "$BASH_VERSION" ] ; then
         exit 1
 fi
 
-for x in $(find asymptote/ -name *.asy -not -path "asymptote/animations/*"); do
+# 2D drawings.
+for x in $(find asymptote/2d/ -name *.asy); do
     filename=$(basename $x .asy)
     echo "Processing: $x"
     asy $x;
@@ -16,3 +17,15 @@ for x in $(find asymptote/ -name *.asy -not -path "asymptote/animations/*"); do
     fi
 done
 
+# 3D drawings.
+for x in $(find asymptote/3d/ -name *.asy); do
+    filename=$(basename $x .asy)
+    echo "Processing: $x"
+    asy $x;
+
+    if [ -e $filename.pdf ]; then
+        mv $filename.pdf ./images/
+    elif [ -e $filename.eps ]; then
+        mv $filename.eps ./images/
+    fi
+done
