@@ -172,5 +172,96 @@ cvp_color_scaleby(struct cvp_color *c, double t)
 }
 /*  End of cvp_color_scaleby.                                                 */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_normalize                                                   *
+ *  Purpose:                                                                  *
+ *      Normalizes the intensity of a color to 255.                           *
+ *  Arguments:                                                                *
+ *      c (const struct cvp_color *):                                         *
+ *          A pointer to the color to be normalized.                          *
+ *  Outputs:                                                                  *
+ *      normalized (struct cvp_color):                                        *
+ *          The color c normalized to intensity 255.                          *
+ *  Method:                                                                   *
+ *      Treat the ordered triple (r, g, b) as a vector and normalize.         *
+ ******************************************************************************/
+CVP_INLINE struct cvp_color
+cvp_color_normalize(const struct cvp_color *c)
+{
+    /*  Treat the color (r, g, b) as a three dimensional vector.              */
+    const double x = (double)c->red;
+    const double y = (double)c->green;
+    const double z = (double)c->blue;
+
+    /*  We normalize by using the reciprocal of the norm. Compute ||c||^2.    */
+    const double norm_sq = x*x + y*y + z*z;
+
+    /*  If the square of the norm is zero the input is black. Return black.   */
+    if (norm_sq == 0.0)
+        return *c;
+
+    /*  Otherwise normalize the color to intensity 255.                       */
+    else
+    {
+        /*  We normalize to intensity 255 so that red, green, and blue are    *
+         *  treated as "unit" colors. Normalizing them does nothing.          */
+        const double factor = 255.0 / sqrt(norm_sq);
+
+        /*  color struct for the output.                                      */
+        struct cvp_color out;
+
+        /*  Scale the RGB components of the input and return.                 */
+        out.red = (unsigned char)(factor * x);
+        out.green = (unsigned char)(factor * y);
+        out.blue = (unsigned char)(factor * z);
+        return out;
+    }
+}
+/*  End of cvp_color_normalize.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_normalize                                                   *
+ *  Purpose:                                                                  *
+ *      Normalizes the intensity of a color to 255.                           *
+ *  Arguments:                                                                *
+ *      c (struct cvp_color *):                                               *
+ *          A pointer to the color to be normalized.                          *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Treat the ordered triple (r, g, b) as a vector and normalize.         *
+ ******************************************************************************/
+CVP_INLINE void
+cvp_color_normalizeself(struct cvp_color *c)
+{
+    /*  Treat the color (r, g, b) as a three dimensional vector.              */
+    const double x = (double)c->red;
+    const double y = (double)c->green;
+    const double z = (double)c->blue;
+
+    /*  We normalize by using the reciprocal of the norm. Compute ||c||^2.    */
+    const double norm_sq = x*x + y*y + z*z;
+
+    /*  If the square of the norm is zero the input is black. Return black.   */
+    if (norm_sq == 0.0)
+        return;
+
+    /*  Otherwise normalize the color to intensity 255.                       */
+    else
+    {
+        /*  We normalize to intensity 255 so that red, green, and blue are    *
+         *  treated as "unit" colors. Normalizing them does nothing.          */
+        const double factor = 255.0 / sqrt(norm_sq);
+
+        /*  Scale the RGB components of the input and return.                 */
+        c->red = (unsigned char)(factor * x);
+        c->green = (unsigned char)(factor * y);
+        c->blue = (unsigned char)(factor * z);
+    }
+}
+/*  End of cvp_color_normalizeself.                                           */
+
 #endif
 /*  End of include guard.                                                     */
