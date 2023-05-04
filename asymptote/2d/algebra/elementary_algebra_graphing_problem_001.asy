@@ -26,16 +26,16 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Sharp tikz style arrows provided here.                                    */
-access "../../custom_arrows.asy" as arrows;
+access "custom_arrows.asy" as arrows;
 
 /*  Functions for creating paths from real-valued functions.                  */
-access "../../path_functions.asy" as pf;
+access "path_functions.asy" as pf;
 
 /*  Functions for adding grid lines to a drawing.                             */
-access "../../grid_lines.asy" as grid;
+access "grid_lines.asy" as grid;
 
 /*  Function for plotting the x and y axes.                                   */
-access "../../coordinate_axes.asy" as axes;
+access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
 size(256);

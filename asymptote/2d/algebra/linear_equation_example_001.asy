@@ -26,10 +26,10 @@ import settings;
 settings.outformat = "pdf";
 
 /*  Functions for adding grid lines to a drawing.                             */
-access "../../grid_lines.asy" as grid;
+access "grid_lines.asy" as grid;
 
 /*  Function for plotting the x and y axes.                                   */
-access "../../coordinate_axes.asy" as axes;
+access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
 size(256);
