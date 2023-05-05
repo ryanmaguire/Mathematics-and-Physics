@@ -46,6 +46,9 @@
 /*  Struct for storing the complex roots of a real or complex polynomial.     */
 #include "nf_complex_roots.h"
 
+/*  Functions and structs for creating GIF files and writing to them.         */
+#include "nf_gif.h"
+
 /*  Routines for performing the Newton-Raphson method on functions.           */
 #include "nf_newton.h"
 
