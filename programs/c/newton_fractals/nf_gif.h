@@ -47,35 +47,35 @@ struct nf_gif_bit_status {
 
 /*  The LZW dictionary is a 256-ary tree constructed as the file is encoded,  *
  *  this is one node.                                                         */
-typedef struct nf_gif_lz_node {
+struct nf_gif_lz_node {
     unsigned short int m_next[256];
-} GifLzwNode;
+};
 
 /*  max, min, and abs functions.                                              */
 NF_INLINE int GifIMax(int l, int r) { return l>r?l:r; }
 NF_INLINE int GifIMin(int l, int r) { return l<r?l:r; }
-NF_INLINE int GifIAbs(int i) { return i<0?-i:i; }
 
 /*  Walks the k-d tree to pick the palette entry for a desired color. Takes   *
  *  as in/out parameters the current best color and its error - only changes  *
  *  them if it finds a better color in its subtree. This is the major hotspot *
  *  in the code at the moment.                                                */
 NF_INLINE void
-GifGetClosestPaletteColor(struct nf_gif_palette* pPal, int r, int g, int b,
-                          int* bestInd, int* bestDiff, int treeRoot)
+nf_gif_get_closest_palette_color(struct nf_gif_palette* palette,
+                                 int red, int green, int blue,
+                                 int *bestInd, int *bestDiff, int treeRoot)
 {
     /*  Base case, reached the bottom of the tree.                            */
-    if (treeRoot > (1 << pPal->bitDepth) - 1)
+    if (treeRoot > (1 << palette->bitDepth) - 1)
     {
-        int ind = treeRoot - (1 << pPal->bitDepth);
+        int ind = treeRoot - (1 << palette->bitDepth);
 
         if (ind == kGifTransIndex)
             return;
 
         /*  Check whether this color is better than the current winner.       */
-        int r_err = r - ((int)pPal->r[ind]);
-        int g_err = g - ((int)pPal->g[ind]);
-        int b_err = b - ((int)pPal->b[ind]);
+        int r_err = red - ((int)palette->r[ind]);
+        int g_err = green - ((int)palette->g[ind]);
+        int b_err = blue - ((int)palette->b[ind]);
         int diff = abs(r_err) + abs(g_err) + abs(b_err);
 
         if (diff < *bestDiff)
@@ -87,93 +87,99 @@ GifGetClosestPaletteColor(struct nf_gif_palette* pPal, int r, int g, int b,
         return;
     }
 
-    // take the appropriate color (r, g, or b) for this node of the k-d tree
-    int comps[3]; comps[0] = r; comps[1] = g; comps[2] = b;
-    int splitComp = comps[pPal->treeSplitElt[treeRoot]];
+    /*  Take the appropriate color (r, g, or b) for this node of the k-d tree.*/
+    int comps[3];
+    comps[0] = red;
+    comps[1] = green;
+    comps[2] = blue;
+    int splitComp = comps[palette->treeSplitElt[treeRoot]];
+    int splitPos = palette->treeSplit[treeRoot];
 
-    int splitPos = pPal->treeSplit[treeRoot];
-    if(splitPos > splitComp)
+    if (splitPos > splitComp)
     {
-        // check the left subtree
-        GifGetClosestPaletteColor(pPal, r, g, b, bestInd, bestDiff, treeRoot*2);
-        if( *bestDiff > splitPos - splitComp )
-        {
-            // cannot prove there's not a better value in the right subtree, check that too
-            GifGetClosestPaletteColor(pPal, r, g, b, bestInd, bestDiff, treeRoot*2+1);
-        }
+        /*  Check the left subtree.                                           */
+        nf_gif_get_closest_palette_color(palette, red, green, blue,
+                                         bestInd, bestDiff, 2*treeRoot);
+        /*  Cannot prove that there is no better value in the right subtree,  *
+         *  check this as well.                                               */
+        if (*bestDiff > splitPos - splitComp)
+            nf_gif_get_closest_palette_color(palette, red, green, blue,
+                                             bestInd, bestDiff, 2*treeRoot + 1);
     }
     else
     {
-        GifGetClosestPaletteColor(pPal, r, g, b, bestInd, bestDiff, treeRoot*2+1);
-        if( *bestDiff > splitComp - splitPos )
-        {
-            GifGetClosestPaletteColor(pPal, r, g, b, bestInd, bestDiff, treeRoot*2);
-        }
+        /*  Check the right subtree.                                          */
+        nf_gif_get_closest_palette_color(palette, red, green, blue,
+                                         bestInd, bestDiff, 2*treeRoot + 1);
+
+        /*  Same idea as before but mirrored, check the left subtree.         */
+        if (*bestDiff > splitComp - splitPos)
+            nf_gif_get_closest_palette_color(palette, red, green, blue,
+                                             bestInd, bestDiff, 2*treeRoot);
     }
+}
+/*  End of nf_gif_get_closest_palette_color.                                  */
+
+NF_INLINE void
+nf_swap_bytes(unsigned char *c0, unsigned char *c1)
+{
+    unsigned char tmp = *c0;
+    *c0 = *c1;
+    *c1 = tmp;
 }
 
 NF_INLINE void
-GifSwapPixels(uint8_t* image, int pixA, int pixB)
+nf_gif_swap_pixels(unsigned char *image, int pixA, int pixB)
 {
-    uint8_t rA = image[pixA*4];
-    uint8_t gA = image[pixA*4+1];
-    uint8_t bA = image[pixA*4+2];
-    uint8_t aA = image[pixA*4+3];
-
-    uint8_t rB = image[pixB*4];
-    uint8_t gB = image[pixB*4+1];
-    uint8_t bB = image[pixB*4+2];
-    uint8_t aB = image[pixA*4+3];
-
-    image[pixA*4] = rB;
-    image[pixA*4+1] = gB;
-    image[pixA*4+2] = bB;
-    image[pixA*4+3] = aB;
-
-    image[pixB*4] = rA;
-    image[pixB*4+1] = gA;
-    image[pixB*4+2] = bA;
-    image[pixB*4+3] = aA;
+    nf_swap_bytes(&image[pixA*4], &image[pixB*4]);
+    nf_swap_bytes(&image[pixA*4 + 1], &image[pixB*4 + 1]);
+    nf_swap_bytes(&image[pixA*4 + 2], &image[pixB*4 + 2]);
+    nf_swap_bytes(&image[pixA*4 + 3], &image[pixB*4 + 3]);
 }
 
-// just the partition operation from quicksort
+/*  Just the partition operation from quicksort.                              */
 NF_INLINE int
-GifPartition(uint8_t* image, const int left, const int right,
+GifPartition(unsigned char *image, const int left, const int right,
              const int elt, int pivotIndex)
 {
-    const int pivotValue = image[(pivotIndex)*4+elt];
-    GifSwapPixels(image, pivotIndex, right-1);
+    const int pivotValue = image[(pivotIndex)*4 + elt];
     int storeIndex = left;
     nf_bool split = nf_false;
+    nf_gif_swap_pixels(image, pivotIndex, right-1);
 
-    for(int ii=left; ii<right-1; ++ii)
+    for (int ii = left; ii < right - 1; ++ii)
     {
         int arrayVal = image[ii*4+elt];
-        if( arrayVal < pivotValue )
+
+        if (arrayVal < pivotValue)
         {
-            GifSwapPixels(image, ii, storeIndex);
+            nf_gif_swap_pixels(image, ii, storeIndex);
             ++storeIndex;
         }
-        else if( arrayVal == pivotValue )
+
+        else if (arrayVal == pivotValue)
         {
-            if(split)
+            if (split)
             {
-                GifSwapPixels(image, ii, storeIndex);
+                nf_gif_swap_pixels(image, ii, storeIndex);
                 ++storeIndex;
             }
+
             split = !split;
         }
     }
-    GifSwapPixels(image, storeIndex, right-1);
+
+    nf_gif_swap_pixels(image, storeIndex, right - 1);
     return storeIndex;
 }
 
-// Perform an incomplete sort, finding all elements above and below the desired median
+/*  Perform an incomplete sort, finding all elements above and below the      *
+ *  desired median.                                                           */
 NF_INLINE void
 GifPartitionByMedian(uint8_t* image, int left, int right,
                      int com, int neededCenter)
 {
-    if (left < right-1)
+    if (left < right - 1)
     {
         int pivotIndex = left + (right-left)/2;
 
@@ -420,7 +426,7 @@ GifDitherImage(const uint8_t* lastFrame, const uint8_t* nextFrame,
             int32_t bestInd = kGifTransIndex;
 
             // Search the palete
-            GifGetClosestPaletteColor(pPal, rr, gg, bb, &bestInd, &bestDiff, 1);
+            nf_gif_get_closest_palette_color(pPal, rr, gg, bb, &bestInd, &bestDiff, 1);
 
             // Write the result to the temp buffer
             int32_t r_err = nextPix[0] - (int32_t)(pPal->r[bestInd]) * 256;
@@ -482,13 +488,14 @@ GifDitherImage(const uint8_t* lastFrame, const uint8_t* nextFrame,
     free(quantPixels);
 }
 
-// Picks palette colors for the image using simple thresholding, no dithering
+/*  Pick palette colors for the image using simple thresholding, no dithering.*/
 NF_INLINE void
 GifThresholdImage(const uint8_t* lastFrame, const uint8_t* nextFrame,
                   uint8_t* outFrame, uint32_t width, uint32_t height,
                   struct nf_gif_palette* pPal)
 {
     uint32_t numPixels = width*height;
+
     for( uint32_t ii=0; ii<numPixels; ++ii )
     {
         // if a previous color is available, and it matches the current color,
@@ -508,7 +515,7 @@ GifThresholdImage(const uint8_t* lastFrame, const uint8_t* nextFrame,
             // palettize the pixel
             int32_t bestDiff = 1000000;
             int32_t bestInd = 1;
-            GifGetClosestPaletteColor(pPal, nextFrame[0], nextFrame[1], nextFrame[2], &bestInd, &bestDiff, 1);
+            nf_gif_get_closest_palette_color(pPal, nextFrame[0], nextFrame[1], nextFrame[2], &bestInd, &bestDiff, 1);
 
             // Write the resulting color to the output buffer
             outFrame[0] = pPal->r[bestInd];
@@ -517,32 +524,37 @@ GifThresholdImage(const uint8_t* lastFrame, const uint8_t* nextFrame,
             outFrame[3] = (uint8_t)bestInd;
         }
 
-        if(lastFrame) lastFrame += 4;
+        if (lastFrame)
+            lastFrame += 4;
+
         outFrame += 4;
         nextFrame += 4;
     }
 }
 
 // insert a single bit
-NF_INLINE void GifWriteBit( struct nf_gif_bit_status* stat, uint32_t bit)
+NF_INLINE void
+GifWriteBit(struct nf_gif_bit_status* stat, unsigned int bit)
 {
     bit = bit & 1;
     bit = bit << stat->bitIndex;
     stat->byte |= bit;
 
     ++stat->bitIndex;
-    if( stat->bitIndex > 7 )
+    if (stat->bitIndex > 7)
     {
-        // move the newly-finished byte to the chunk buffer
+        /*  Move the newly-finished byte to the chunk buffer.                 */
         stat->chunk[stat->chunkIndex++] = stat->byte;
-        // and start a new byte
+
+        /*  And start a new byte.                                             */
         stat->bitIndex = 0;
         stat->byte = 0;
     }
 }
 
 // write all bytes so far to the file
-NF_INLINE void GifWriteChunk(FILE* f, struct nf_gif_bit_status* stat)
+NF_INLINE void
+GifWriteChunk(FILE* f, struct nf_gif_bit_status* stat)
 {
     fputc((int)stat->chunkIndex, f);
     fwrite(stat->chunk, 1, stat->chunkIndex, f);
@@ -556,15 +568,13 @@ NF_INLINE void
 GifWriteCode(FILE* f, struct nf_gif_bit_status* stat,
              uint32_t code, uint32_t length)
 {
-    for( uint32_t ii=0; ii<length; ++ii )
+    for (uint32_t ii = 0; ii < length; ++ii)
     {
         GifWriteBit(stat, code);
         code = code >> 1;
 
-        if( stat->chunkIndex == 255 )
-        {
+        if (stat->chunkIndex == 255)
             GifWriteChunk(f, stat);
-        }
     }
 }
 
@@ -626,7 +636,7 @@ GifWriteLzwImage(FILE* f, uint8_t* image, uint32_t left,
 
     fputc(minCodeSize, f); // min code size 8 bits
 
-    GifLzwNode *codetree = calloc(sizeof(*codetree), 4096U);
+    struct nf_gif_lz_node *codetree = calloc(sizeof(*codetree), 4096U);
 
     int32_t curCode = -1;
     uint32_t codeSize = (uint32_t)minCodeSize + 1;
@@ -655,12 +665,12 @@ GifWriteLzwImage(FILE* f, uint8_t* image, uint32_t left,
             //WriteCode( f, stat, nextValue, codeSize );
             //WriteCode( f, stat, 256, codeSize );
 
-            if( curCode < 0 )
+            if (curCode < 0)
             {
                 // first value in a new run
                 curCode = nextValue;
             }
-            else if( codetree[curCode].m_next[nextValue] )
+            else if(codetree[curCode].m_next[nextValue])
             {
                 // current run already in the dictionary
                 curCode = codetree[curCode].m_next[nextValue];
@@ -673,18 +683,18 @@ GifWriteLzwImage(FILE* f, uint8_t* image, uint32_t left,
                 // insert the new run into the dictionary
                 codetree[curCode].m_next[nextValue] = (uint16_t)++maxCode;
 
-                if( maxCode >= (1ul << codeSize) )
+                if (maxCode >= (1ul << codeSize))
                 {
                     // dictionary entry count has broken a size barrier,
                     // we need more bits for codes
                     codeSize++;
                 }
-                if( maxCode == 4095 )
+                if (maxCode == 4095)
                 {
                     // the dictionary is full, clear it out and begin anew
                     GifWriteCode(f, &stat, clearCode, codeSize); // clear tree
 
-                    memset(codetree, 0, sizeof(GifLzwNode)*4096);
+                    memset(codetree, 0, sizeof(*codetree)*4096);
                     codeSize = (uint32_t)(minCodeSize + 1);
                     maxCode = clearCode+1;
                 }
@@ -694,115 +704,143 @@ GifWriteLzwImage(FILE* f, uint8_t* image, uint32_t left,
         }
     }
 
-    // compression footer
+    /*  Compression footer.                                                   */
     GifWriteCode(f, &stat, (uint32_t)curCode, codeSize);
     GifWriteCode(f, &stat, clearCode, codeSize);
     GifWriteCode(f, &stat, clearCode + 1, (uint32_t)minCodeSize + 1);
 
     // write out the last partial chunk
-    while( stat.bitIndex ) GifWriteBit(&stat, 0);
-    if( stat.chunkIndex ) GifWriteChunk(f, &stat);
+    while (stat.bitIndex )
+        GifWriteBit(&stat, 0);
+
+    if (stat.chunkIndex)
+        GifWriteChunk(f, &stat);
 
     fputc(0, f); // image block terminator
 
     free(codetree);
 }
 
-// Creates a gif file.
-// The input GIFWriter is assumed to be uninitialized.
-// The delay value is the time between frames in hundredths of a second - note that not all viewers pay much attention to this value.
+/*  Creates a gif file. The input GIF writer is assumed to be uninitialized.  *
+ *  The delay value is the time between frames in hundredths of a second.     *
+ *  Note that not all viewers pay much attention to this value.               */
 NF_INLINE nf_bool
-GifBegin(struct nf_gif_writer* writer, const char* filename, uint32_t width,
-         uint32_t height, uint32_t delay, int32_t bitDepth, nf_bool dither)
+nf_gif_begin(struct nf_gif_writer* writer, const char* filename,
+             unsigned int width, unsigned int height, unsigned int delay)
 {
-    (void)bitDepth; (void)dither; // Mute "Unused argument" warnings
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
-	writer->f = 0;
+	  writer->f = 0;
     fopen_s(&writer->f, filename, "wb");
 #else
     writer->f = fopen(filename, "wb");
 #endif
-    if(!writer->f) return nf_false;
+
+    if(!writer->f)
+        return nf_false;
 
     writer->firstFrame = nf_true;
 
-    // allocate
-    writer->oldImage = (uint8_t*)malloc(width*height*4);
-
+    /*  Allocate.                                                             */
+    writer->oldImage = malloc(width*height*4);
     fputs("GIF89a", writer->f);
 
-    // screen descriptor
+    /*  Screen descriptor.                                                    */
     fputc(width & 0xff, writer->f);
     fputc((width >> 8) & 0xff, writer->f);
     fputc(height & 0xff, writer->f);
     fputc((height >> 8) & 0xff, writer->f);
 
-    fputc(0xf0, writer->f);  // there is an unsorted global color table of 2 entries
-    fputc(0, writer->f);     // background color
-    fputc(0, writer->f);     // pixels are square (we need to specify this because it's 1989)
+    /*  There is an unsorted global color table of 2 entries.                 */
+    fputc(0xF0, writer->f);
 
-    // now the "global" palette (really just a dummy palette)
-    // color 0: black
-    fputc(0, writer->f);
-    fputc(0, writer->f);
-    fputc(0, writer->f);
-    // color 1: also black
-    fputc(0, writer->f);
-    fputc(0, writer->f);
+    /*  Background color.                                                     */
     fputc(0, writer->f);
 
-    if( delay != 0 )
+    /*  Pixels are square (we need to specify this because it's 1989).        */
+    fputc(0, writer->f);
+
+    /*  Now the "global" palette (really just a dummy palette).               *
+     *  color 0: black.                                                       */
+    fputc(0, writer->f);
+    fputc(0, writer->f);
+    fputc(0, writer->f);
+
+    /*  color 1: also black.                                                  */
+    fputc(0, writer->f);
+    fputc(0, writer->f);
+    fputc(0, writer->f);
+
+    if (delay != 0)
     {
-        // animation header
-        fputc(0x21, writer->f); // extension
-        fputc(0xff, writer->f); // application specific
-        fputc(11, writer->f); // length 11
-        fputs("NETSCAPE2.0", writer->f); // yes, really
-        fputc(3, writer->f); // 3 bytes of NETSCAPE2.0 data
+        /*  Animation header. This is the extension.                          */
+        fputc(0x21, writer->f);
 
-        fputc(1, writer->f); // JUST BECAUSE
-        fputc(0, writer->f); // loop infinitely (byte 0)
-        fputc(0, writer->f); // loop infinitely (byte 1)
+        /*  Application specific.                                             */
+        fputc(0xff, writer->f);
 
-        fputc(0, writer->f); // block terminator
+        /*  Length 11.                                                        */
+        fputc(11, writer->f);
+
+        /*  Yes, really.                                                      */
+        fputs("NETSCAPE2.0", writer->f);
+
+        /*  3 bytes of NETSCAPE2.0 data.                                      */
+        fputc(3, writer->f);
+
+        /*  JUST BECAUSE.                                                     */
+        fputc(1, writer->f);
+
+        /*  Loop infinitely (byte 0).                                         */
+        fputc(0, writer->f);
+
+        /*  Loop infinitely (byte 1).                                         */
+        fputc(0, writer->f);
+
+        /*  Block terminator.                                                 */
+        fputc(0, writer->f);
     }
 
     return nf_true;
 }
+/*  End of nf_gif_begin.                                                      */
 
-// Writes out a new frame to a GIF in progress.
-// The GIFWriter should have been created by GIFBegin.
-// AFAIK, it is legal to use different bit depths for different frames of an image -
-// this may be handy to save bits in animations that don't change much.
+/*  Writes out a new frame to a GIF in progress. The GIF writer should have   *
+ *  been created by GIFBegin. As far as I knot it is legal to use different   *
+ *  bit depths for different frames of an image. This may be handy to save    *
+ *  bits in animations that don't change much.                                */
 NF_INLINE void
-GifWriteFrame(struct nf_gif_writer* writer, const uint8_t* image, uint32_t width,
-              uint32_t height, uint32_t delay, int bitDepth, nf_bool dither)
+nf_gif_write_frame(struct nf_gif_writer *writer, const unsigned char *image,
+                   unsigned int width, unsigned int height, unsigned int delay,
+                   int bitDepth, nf_bool dither)
 {
+    struct nf_gif_palette pal;
+    unsigned char *old_image;
+
     if (!writer->f)
         return;
 
-    const uint8_t* oldImage = writer->firstFrame? NULL : writer->oldImage;
-    writer->firstFrame = nf_false;
+    if (writer->firstFrame && dither)
+        old_image = NULL;
+    else
+        old_image = writer->oldImage;
 
-    struct nf_gif_palette pal;
-    GifMakePalette((dither? NULL : oldImage), image, width, height, bitDepth, dither, &pal);
+    writer->firstFrame = nf_false;
+    GifMakePalette(old_image, image, width, height, bitDepth, dither, &pal);
 
     if(dither)
-        GifDitherImage(oldImage, image, writer->oldImage, width, height, &pal);
+        GifDitherImage(old_image, image, writer->oldImage, width, height, &pal);
     else
-        GifThresholdImage(oldImage, image, writer->oldImage, width, height, &pal);
+        GifThresholdImage(old_image, image, writer->oldImage, width, height, &pal);
 
     GifWriteLzwImage(writer->f, writer->oldImage, 0, 0, width, height, delay, &pal);
-
-    return;
 }
 
-// Writes the EOF code, closes the file handle, and frees temp memory used by a GIF.
-// Many if not most viewers will still display a GIF properly if the EOF code is missing,
-// but it's still a good idea to write it out.
-NF_INLINE void GifEnd(struct nf_gif_writer* writer)
+/*  Writes the EOF code, closes the file handle, and frees temp memory used   *
+ *  by a GIF. Many if not most viewers will still display a GIF properly if   *
+ *  the EOF code is missing, but it's still a good idea to write it out.      */
+NF_INLINE void nf_gif_end(struct nf_gif_writer* writer)
 {
-    if(!writer->f)
+    if (!writer->f)
         return;
 
     fputc(0x3b, writer->f);
