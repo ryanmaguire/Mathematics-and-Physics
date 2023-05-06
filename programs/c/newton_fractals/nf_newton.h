@@ -40,8 +40,14 @@
 /*  Real polynomial struct provided here with Horner's method evaluations.    */
 #include "nf_real_poly.h"
 
+/*  Real rational functions with evalutions and derivatives.                  */
+#include "nf_real_rational.h"
+
 /*  Complex polynomial struct provided here with Horner's method evaluations. */
 #include "nf_complex_poly.h"
+
+/*  Complex rational functions with evalutions and derivatives.               */
+#include "nf_complex_rational.h"
 
 /*  Typedef for complex-valued functions with complex inputs.                 */
 typedef struct nf_complex (*complex_function)(const struct nf_complex *);
@@ -179,7 +185,7 @@ nf_newton_complex_poly(const struct nf_complex_poly *poly,
  *  Purpose:                                                                  *
  *      Performs Newton's method on a given polynomial with guess z0.         *
  *  Arguments:                                                                *
- *      poly (struct nf_complex_poly *):                                      *
+ *      poly (struct nf_real_poly *):                                         *
  *          A polynomial with real coefficients which represents our function.*
  *      z0 (struct nf_complex *):                                             *
  *          A pointer to a complex number. This is our initial guess for      *
@@ -234,6 +240,132 @@ nf_newton_real_poly(const struct nf_real_poly *poly, struct nf_complex *z0)
     return iters;
 }
 /*  End of nf_newton_real_poly.                                               */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_newton_complex_rational                                            *
+ *  Purpose:                                                                  *
+ *      Performs Newton's method on a given rational function with guess z0.  *
+ *  Arguments:                                                                *
+ *      rat (struct nf_complex_rational *):                                   *
+ *          A rational function with complex coefficients.                    *
+ *      z0 (struct nf_complex *):                                             *
+ *          A pointer to a complex number. This is our initial guess for      *
+ *          Newton's method. The resulting root will be stored here.          *
+ *  Outputs:                                                                  *
+ *      iters (unsigned int):                                                 *
+ *          The number of iterations required to get to the desired error.    *
+ *  Method:                                                                   *
+ *      Newton's method is iterative. We define:                              *
+ *                                                                            *
+ *          z_{n+1} = z_{n} - f(z_{n}) / f'(z_{n})                            *
+ *                                                                            *
+ *      This is calculated until |f(z)| is small, or we've performed the      *
+ *      maximum number of iterations allowed.                                 *
+ ******************************************************************************/
+NF_INLINE unsigned int
+nf_newton_complex_rational(const struct nf_complex_rational *rat,
+                           struct nf_complex *z0)
+{
+    /*  Declare a variable for the derivative of f at z0.                     */
+    struct nf_complex fp_z0;
+
+    /*  And a variable for f at z0. This variable will serve a few purposes   *
+     *  to save on wasteful code, so we'll just label it "factor".            */
+    struct nf_complex factor;
+
+    /*  Set the iteration count to zero.                                      */
+    unsigned int iters = 0U;
+
+    /*  Perform Newton's method until we've done too many iterations.         */
+    while (iters < nf_setup_max_iters)
+    {
+        /*  Evaluate f at the current guess point.                            */
+        factor = nf_complex_rational_eval(rat, z0);
+
+        /*  If |f(z0)| is small than z0 is near the root. We can stop.        */
+        if (nf_complex_abssq(&factor) < nf_setup_eps_sq)
+            break;
+
+        /*  Otherwise perform Newton's method. Compute f'(z0).                */
+        fp_z0 = nf_complex_drational_eval(rat, z0);
+
+        /*  Compute f(z0) / f'(z0) and store the result in factor.            */
+        nf_complex_divideby(&factor, &fp_z0);
+
+        /*  Compute z0 - f(z0) / f'(z0) and store the result in z0.           */
+        nf_complex_subtractfrom(z0, &factor);
+
+        /*  Increment the number of iterations we've performed.               */
+        iters++;
+    }
+
+    return iters;
+}
+/*  End of nf_newton_complex_rational.                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_newton_real_rational                                               *
+ *  Purpose:                                                                  *
+ *      Performs Newton's method on a given rational function with guess z0.  *
+ *  Arguments:                                                                *
+ *      rat (struct nf_real_rational *):                                      *
+ *          A rational function with real coefficients.                       *
+ *      z0 (struct nf_complex *):                                             *
+ *          A pointer to a complex number. This is our initial guess for      *
+ *          Newton's method. The resulting root will be stored here.          *
+ *  Outputs:                                                                  *
+ *      iters (unsigned int):                                                 *
+ *          The number of iterations required to get to the desired error.    *
+ *  Method:                                                                   *
+ *      Newton's method is iterative. We define:                              *
+ *                                                                            *
+ *          z_{n+1} = z_{n} - f(z_{n}) / f'(z_{n})                            *
+ *                                                                            *
+ *      This is calculated until |f(z)| is small, or we've performed the      *
+ *      maximum number of iterations allowed.                                 *
+ ******************************************************************************/
+NF_INLINE unsigned int
+nf_newton_real_rational(const struct nf_real_rational *rat,
+                        struct nf_complex *z0)
+{
+    /*  Declare a variable for the derivative of f at z0.                     */
+    struct nf_complex fp_z0;
+
+    /*  And a variable for f at z0. This variable will serve a few purposes   *
+     *  to save on wasteful code, so we'll just label it "factor".            */
+    struct nf_complex factor;
+
+    /*  Set the iteration count to zero.                                      */
+    unsigned int iters = 0U;
+
+    /*  Perform Newton's method until we've done too many iterations.         */
+    while (iters < nf_setup_max_iters)
+    {
+        /*  Evaluate f at the current guess point.                            */
+        factor = nf_real_rational_complex_eval(rat, z0);
+
+        /*  If |f(z0)| is small than z0 is near the root. We can stop.        */
+        if (nf_complex_abssq(&factor) < nf_setup_eps_sq)
+            break;
+
+        /*  Otherwise perform Newton's method. Compute f'(z0).                */
+        fp_z0 = nf_real_drational_complex_eval(rat, z0);
+
+        /*  Compute f(z0) / f'(z0) and store the result in factor.            */
+        nf_complex_divideby(&factor, &fp_z0);
+
+        /*  Compute z0 - f(z0) / f'(z0) and store the result in z0.           */
+        nf_complex_subtractfrom(z0, &factor);
+
+        /*  Increment the number of iterations we've performed.               */
+        iters++;
+    }
+
+    return iters;
+}
+/*  End of nf_newton_real_rational.                                           */
 
 #endif
 /*  End of include guard.                                                     */
