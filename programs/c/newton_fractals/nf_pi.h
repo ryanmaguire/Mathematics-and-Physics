@@ -18,31 +18,19 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides a macro for safely inlining without assuming the user has    *
- *      C99 features. Works with C89 compilers as well.                       *
+ *      Provides various multiples of pi.                                     *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/12                                                        *
+ *  Date:   2023/05/05                                                        *
  ******************************************************************************/
 
 /*  Include guard to prevent including this file twice.                       */
-#ifndef NF_INLINE_H
-#define NF_INLINE_H
+#ifndef NF_PI_H
+#define NF_PI_H
 
-/*  Check the __STDC_VERSION__ macro for inline support.                      */
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
-
-/*  C99 and higher have inline as a keyword. Nothing to add here.             */
-#define NF_INLINE static inline
-
-#else
-/*  Else for #if __STDC_VERSION__ >= 199901L.                                 */
-
-/*  Otherwise we can somewhat mimic inlining with "static".                   */
-#define NF_INLINE static
-
-#endif
-/*  End of #if __STDC_VERSION__ >= 199901L.                                   */
+/*  Pi and Two Pi are used frequently in this project.                        */
+#define NF_PI (3.141592653589793)
+#define NF_TWO_PI (6.283185307179586)
 
 #endif
 /*  End of include guard.                                                     */

@@ -34,6 +34,9 @@
 /*  Struct for working with colors in RGB format.                             */
 #include "nf_color.h"
 
+/*  Multiples of Pi provided here.                                            */
+#include "nf_pi.h"
+
 /******************************************************************************
  *  Function:                                                                 *
  *      nf_color_from_angle                                                   *
@@ -53,7 +56,7 @@ nf_color_from_angle(double angle)
 {
     /*  There are 1024 possible colors given by the gradient. This scale      *
      *  factor helps normalize the argument.                                  */
-    const double gradient_factor = 1023.0 / (2.0 * M_PI);
+    const double gradient_factor = 1023.0 / (NF_TWO_PI);
 
     /*  Scale the argument from (0, 2 pi) to (0, 1023).                       */
     double val = angle * gradient_factor;
@@ -128,7 +131,7 @@ nf_color_wheel_from_angle(double angle)
 {
     /*  There are 1535 possible colors given by the gradient. This scale      *
      *  factor helps normalize the argument.                                  */
-    const double gradient_factor = 1535.0 / (2.0 * M_PI);
+    const double gradient_factor = 1535.0 / (NF_TWO_PI);
 
     /*  Scale the argument from (0, 2 pi) to (0, 1535).                       */
     double val = angle * gradient_factor;

@@ -222,7 +222,7 @@ nf_complex_poly_roots(const struct nf_complex_poly *poly)
                 break;
 
             /*  Angle of the current sample on the circle.                    */
-            angle = (2.0 * M_PI * sample_ind) / samples_per_circle;
+            angle = (NF_TWO_PI * sample_ind) / samples_per_circle;
 
             /*  Compute the point (radius, angle) in polar coordinates.       */
             p.real = radius*cos(angle);
@@ -431,7 +431,7 @@ nf_real_poly_roots(const struct nf_real_poly *poly)
                 break;
 
             /*  Angle of the current sample on the circle.                    */
-            angle = (2.0 * M_PI * sample_ind) / samples_per_circle;
+            angle = (NF_TWO_PI * sample_ind) / samples_per_circle;
 
             /*  Compute the point (radius, angle) in polar coordinates.       */
             p.real = radius*cos(angle);
@@ -564,7 +564,7 @@ nf_complex_roots_get_colors(unsigned int number_of_roots)
     for (n = 0U; n < number_of_roots; ++n)
     {
         /*  Split the circle 0 -> 2 pi into number_of_roots segments.         */
-        angle = (2.0 * M_PI * n) / number_of_roots;
+        angle = (NF_TWO_PI * n) / number_of_roots;
 
         /*  Get a color for this angle.                                       */
         out[n] = nf_color_wheel_from_angle(angle);
