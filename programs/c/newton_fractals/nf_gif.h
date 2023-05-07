@@ -84,7 +84,7 @@ struct nf_gif_lz_node {
 };
 
 NF_INLINE int
-GifIMax(int l, int r)
+nf_int_max(int l, int r)
 {
     if (l < r)
         return r;
@@ -93,7 +93,7 @@ GifIMax(int l, int r)
 }
 
 NF_INLINE int
-GifIMin(int l, int r)
+nf_int_min(int l, int r)
 {
     if (r < l)
         return r;
@@ -194,8 +194,8 @@ nf_gif_swap_pixels(unsigned char *image, int pixA, int pixB)
 
 /*  Just the partition operation from quicksort.                              */
 NF_INLINE int
-GifPartition(unsigned char *image, const int left, const int right,
-             const int elt, int pivotIndex)
+nf_gif_partition(unsigned char *image, const int left, const int right,
+                 const int elt, int pivotIndex)
 {
     const int pivotValue = image[(pivotIndex)*4 + elt];
     int storeIndex = left;
@@ -232,7 +232,7 @@ GifPartition(unsigned char *image, const int left, const int right,
 /*  Perform an incomplete sort, finding all elements above and below the      *
  *  desired median.                                                           */
 NF_INLINE void
-GifPartitionByMedian(unsigned char *image, int left, int right,
+nf_gif_partition_by_median(unsigned char *image, int left, int right,
                      int com, int neededCenter)
 {
     /*  Variable used in the sort algorithm for the pivot.                    */
@@ -241,22 +241,24 @@ GifPartitionByMedian(unsigned char *image, int left, int right,
     if (left < right - 1)
     {
         pivotIndex = left + (right-left)/2;
-        pivotIndex = GifPartition(image, left, right, com, pivotIndex);
+        pivotIndex = nf_gif_partition(image, left, right, com, pivotIndex);
 
         /*  Only "sort" the section of the array that contains the median.    */
-        if(pivotIndex > neededCenter)
-            GifPartitionByMedian(image, left, pivotIndex, com, neededCenter);
+        if (pivotIndex > neededCenter)
+            nf_gif_partition_by_median(image, left, pivotIndex,
+                                       com, neededCenter);
 
-        if(pivotIndex < neededCenter)
-            GifPartitionByMedian(image, pivotIndex+1, right, com, neededCenter);
+        if (pivotIndex < neededCenter)
+            nf_gif_partition_by_median(image, pivotIndex + 1, right,
+                                       com, neededCenter);
     }
 }
 
 /*  Build a palette by creating a balanced k-d tree for all pixels.           */
 NF_INLINE void
-GifSplitPalette(unsigned char *image, int numPixels, int firstElt, int lastElt,
-                int splitElt, int splitDist, int treeNode,
-                nf_bool buildForDither, struct nf_gif_palette* pal)
+nf_gif_split_palette(unsigned char *image, int numPixels, int firstElt,
+                     int lastElt, int splitElt, int splitDist, int treeNode,
+                     nf_bool buildForDither, struct nf_gif_palette* pal)
 {
     int ii;
 
@@ -280,9 +282,9 @@ GifSplitPalette(unsigned char *image, int numPixels, int firstElt, int lastElt,
 
                 for (ii = 0; ii < numPixels; ++ii)
                 {
-                    r = (unsigned int)GifIMin((int)r, image[ii * 4 + 0]);
-                    g = (unsigned int)GifIMin((int)g, image[ii * 4 + 1]);
-                    b = (unsigned int)GifIMin((int)b, image[ii * 4 + 2]);
+                    r = (unsigned int)nf_int_min((int)r, image[ii * 4 + 0]);
+                    g = (unsigned int)nf_int_min((int)g, image[ii * 4 + 1]);
+                    b = (unsigned int)nf_int_min((int)b, image[ii * 4 + 2]);
                 }
 
                 pal->r[firstElt] = (unsigned char)r;
@@ -301,9 +303,9 @@ GifSplitPalette(unsigned char *image, int numPixels, int firstElt, int lastElt,
 
                 for (ii = 0; ii < numPixels; ++ii)
                 {
-                    r = (unsigned int)GifIMax((int)r, image[ii * 4 + 0]);
-                    g = (unsigned int)GifIMax((int)g, image[ii * 4 + 1]);
-                    b = (unsigned int)GifIMax((int)b, image[ii * 4 + 2]);
+                    r = (unsigned int)nf_int_max((int)r, image[ii * 4 + 0]);
+                    g = (unsigned int)nf_int_max((int)g, image[ii * 4 + 1]);
+                    b = (unsigned int)nf_int_max((int)b, image[ii * 4 + 2]);
                 }
 
                 pal->r[firstElt] = (unsigned char)r;
@@ -389,16 +391,18 @@ GifSplitPalette(unsigned char *image, int numPixels, int firstElt, int lastElt,
     int subPixelsA = numPixels * (splitElt - firstElt) / (lastElt - firstElt);
     int subPixelsB = numPixels-subPixelsA;
 
-    GifPartitionByMedian(image, 0, numPixels, splitCom, subPixelsA);
+    nf_gif_partition_by_median(image, 0, numPixels, splitCom, subPixelsA);
 
     pal->treeSplitElt[treeNode] = (unsigned char)splitCom;
     pal->treeSplit[treeNode] = image[subPixelsA*4+splitCom];
 
-    GifSplitPalette(image, subPixelsA, firstElt, splitElt, splitElt-splitDist,
-                    splitDist/2, treeNode*2, buildForDither, pal);
-    GifSplitPalette(image + subPixelsA*4, subPixelsB, splitElt, lastElt,
-                    splitElt+splitDist, splitDist/2, treeNode*2+1,
-                    buildForDither, pal);
+    nf_gif_split_palette(image, subPixelsA, firstElt, splitElt,
+                         splitElt-splitDist, splitDist/2, treeNode*2,
+                         buildForDither, pal);
+
+    nf_gif_split_palette(image + subPixelsA*4, subPixelsB, splitElt, lastElt,
+                         splitElt+splitDist, splitDist/2, treeNode*2 + 1,
+                         buildForDither, pal);
 }
 
 /*  Finds all pixels that have changed from the previous image and moves them *
@@ -452,11 +456,11 @@ GifMakePalette(const unsigned char *lastFrame, const unsigned char *nextFrame,
     const int splitDist = splitElt/2;
     memcpy(destroyableImage, nextFrame, imageSize);
 
-    if(lastFrame)
+    if (lastFrame)
         numPixels = GifPickChangedPixels(lastFrame, destroyableImage, numPixels);
 
-    GifSplitPalette(destroyableImage, numPixels, 1, lastElt,
-                    splitElt, splitDist, 1, buildForDither, pPal);
+    nf_gif_split_palette(destroyableImage, numPixels, 1, lastElt,
+                         splitElt, splitDist, 1, buildForDither, pPal);
 
     free(destroyableImage);
 
@@ -541,33 +545,33 @@ GifDitherImage(const unsigned char *lastFrame, const unsigned char *nextFrame,
             if (quantloc_7 < numPixels)
             {
                 int* pix7 = quantPixels+4*quantloc_7;
-                pix7[0] += GifIMax( -pix7[0], r_err * 7 / 16 );
-                pix7[1] += GifIMax( -pix7[1], g_err * 7 / 16 );
-                pix7[2] += GifIMax( -pix7[2], b_err * 7 / 16 );
+                pix7[0] += nf_int_max( -pix7[0], r_err * 7 / 16 );
+                pix7[1] += nf_int_max( -pix7[1], g_err * 7 / 16 );
+                pix7[2] += nf_int_max( -pix7[2], b_err * 7 / 16 );
             }
 
             if (quantloc_3 < numPixels)
             {
                 int* pix3 = quantPixels+4*quantloc_3;
-                pix3[0] += GifIMax( -pix3[0], r_err * 3 / 16 );
-                pix3[1] += GifIMax( -pix3[1], g_err * 3 / 16 );
-                pix3[2] += GifIMax( -pix3[2], b_err * 3 / 16 );
+                pix3[0] += nf_int_max( -pix3[0], r_err * 3 / 16 );
+                pix3[1] += nf_int_max( -pix3[1], g_err * 3 / 16 );
+                pix3[2] += nf_int_max( -pix3[2], b_err * 3 / 16 );
             }
 
             if (quantloc_5 < numPixels)
             {
                 int* pix5 = quantPixels+4*quantloc_5;
-                pix5[0] += GifIMax( -pix5[0], r_err * 5 / 16 );
-                pix5[1] += GifIMax( -pix5[1], g_err * 5 / 16 );
-                pix5[2] += GifIMax( -pix5[2], b_err * 5 / 16 );
+                pix5[0] += nf_int_max( -pix5[0], r_err * 5 / 16 );
+                pix5[1] += nf_int_max( -pix5[1], g_err * 5 / 16 );
+                pix5[2] += nf_int_max( -pix5[2], b_err * 5 / 16 );
             }
 
             if (quantloc_1 < numPixels)
             {
                 int* pix1 = quantPixels+4*quantloc_1;
-                pix1[0] += GifIMax( -pix1[0], r_err / 16 );
-                pix1[1] += GifIMax( -pix1[1], g_err / 16 );
-                pix1[2] += GifIMax( -pix1[2], b_err / 16 );
+                pix1[0] += nf_int_max( -pix1[0], r_err / 16 );
+                pix1[1] += nf_int_max( -pix1[1], g_err / 16 );
+                pix1[2] += nf_int_max( -pix1[2], b_err / 16 );
             }
         }
     }

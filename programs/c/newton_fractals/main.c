@@ -16,9 +16,9 @@ int main(void)
     const double center_x = 0.001643721971153;
     const double center_y = -0.822467633298876;
     double ds = 3.0;
-    const unsigned int width = 512U;
-    const unsigned int height = 512U;
-    const unsigned int nframes = 150U;
+    const unsigned int width = 256U;
+    const unsigned int height = 256U;
+    const unsigned int nframes = 100U;
     unsigned char *image = malloc(sizeof(*image)*width*height*4);
 
     unsigned int x, y, iters, frame;
