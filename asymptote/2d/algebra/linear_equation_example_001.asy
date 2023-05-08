@@ -47,9 +47,6 @@ real grid_length = 3.9;
 /*  Length of the coordinate axes.                                            */
 real axis_length = 4.2;
 
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
 /*  Pen for labels.                                                           */
 pen label_pen = fontsize(6pt);
 

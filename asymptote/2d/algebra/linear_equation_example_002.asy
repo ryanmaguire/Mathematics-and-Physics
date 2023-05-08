@@ -25,100 +25,47 @@
 import settings;
 settings.outformat = "pdf";
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
+/*  Functions for adding grid lines to a drawing.                             */
+access "grid_lines.asy" as grid;
+
+/*  Function for plotting the x and y axes.                                   */
+access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
-size(128);
+size(256);
 
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.5pt));
-
-/*  Variable for indexing.                                                    */
-int n;
 
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -3;
 int grid_end = 3;
 
-/*  Variables for drawing the grid, and drawing the axes.                     */
-pair top, bottom, left, right;
-
 /*  Length of the grid lines.                                                 */
-real gridlength = 3.9;
+real grid_length = 3.9;
 
 /*  Length of the axes.                                                       */
-real axeslength = 4.2;
-
-/*  Length of tick marks.                                                     */
-real ticklength = 0.2;
-
-/*  Size of the labels for the tick marks.                                    */
-real tickfont = 5pt;
-
-/*  Label for the tick marks.                                                 */
-Label ticklabel;
-
-/*  Thin grey pen used for the grid.                                          */
-pen thingreyp = gray(0.8) + linewidth(0.3pt);
-
-/*  Thicker black pen used for the axes.                                      */
-pen axesp = black + linewidth(0.7pt) + fontsize(9pt);
-
-/*  Black pen used for tick marks.                                            */
-pen tickp = black + linewidth(0.2pt);
-
-/*  Size of arrow heads.                                                      */
-real arsize = 5bp;
+real axis_length = 4.2;
 
 /*  Pen for labels.                                                           */
-pen labelp = fontsize(6pt);
+pen label_pen = fontsize(6pt);
 
 /*  Start and end points for the line representing the linear equation.       */
 pair start = (-2.32, -4.2);
 pair end = (2.72, 4.2);
 
+/*  Start and end of the x and y axes.                                        */
+pair axes_start = (-axis_length, -axis_length);
+pair axes_end = (axis_length, axis_length);
+
 /*  Radius for dots representing points in the plane.                         */
 real rDot = 0.07;
 
-/*  Loop through and draw the lines for the grid.                             */
-for (n = grid_start; n <= grid_end; ++n)
-{
-    /*  The grid consists of straight lines left-to-right and top-to-bottom.  *
-     *  Compute the current set of lines to be drawn and draw them.           */
-    bottom = (n, -gridlength);
-    top = (n, gridlength);
-    left = (-gridlength, n);
-    right = (gridlength, n);
+/*  Add grid lines to the drawing.                                            */
+grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 
-    draw(bottom -- top, thingreyp);
-    draw(left -- right, thingreyp);
-
-    /*  If n is zero, do not draw tick marks. The labels overlap with the     *
-     *  axes lines and it isn't pretty.                                       */
-    if (n == 0)
-        continue;
-
-    /*  Otherwise, draw in tick marks and labels.                             */
-    else
-    {
-        ticklabel = Label("$"+string(n)+"$", position=1.0, fontsize(tickfont));
-        draw(ticklabel, (n, ticklength) -- (n, -ticklength), tickp);
-        draw(ticklabel, (ticklength, n) -- (-ticklength, n), tickp);
-    }
-}
-/*  End of for-loop drawing the guide-grid.                                   */
-
-/*  Draw the axes.                                                            */
-bottom = (0.0, -axeslength);
-top = (0.0, axeslength);
-left = (-axeslength, 0.0);
-right = (axeslength, 0.0);
-
-draw(Label("$y$", position=1.0), bottom -- top, E, axesp, SharpArrows(arsize));
-draw(Label("$x$", position=1.0), left -- right, S, axesp, SharpArrows(arsize));
+/*  Draw the coordinate axes.                                                 */
+axes.DrawAndLabelCoordinateAxes(axes_start, axes_end);
 
 /*  Draw the line representing the linear equation.                           */
 draw(start -- end);
@@ -126,5 +73,5 @@ draw(start -- end);
 /*  Label two points on the line.                                             */
 filldraw(circle((-1.0, -2.0), rDot), black, black);
 filldraw(circle((2.0, 3.0), rDot), black, black);
-label("$(2, 3)$", (1.58, 3.5), labelp);
-label("$(-1, -2)$", (-2.08, -1.5), labelp);
+label("$(2, 3)$", (1.58, 3.5), label_pen);
+label("$(-1, -2)$", (-2.08, -1.5), label_pen);
