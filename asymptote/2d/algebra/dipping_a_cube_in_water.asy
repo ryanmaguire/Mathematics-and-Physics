@@ -27,6 +27,9 @@
 import settings;
 settings.outformat = "pdf";
 
+/*  Create 3D drawings using 2D points.                                       */
+access "projection.asy" as proj;
+
 /*  Size of the figure.                                                       */
 size(256);
 
@@ -41,56 +44,46 @@ pen thindashp = thinp + linetype("4 4");
 pen bluedashp = bluep + linetype("4 4");
 pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
 
-/*  Function for making 3D drawings with 2D points.                           */
-pair xyzpoint(real x, real y, real z)
-{
-    pair X = (-0.4*x, -0.4*x);
-    pair Y = (y, 0.0);
-    pair Z = (0.0, z);
-    return X + Y + Z;
-}
-/*  End of xyzpoint.                                                          */
-
 /*  Coordinates for all of the points in the cube.                            */
-pair O = xyzpoint(0, 0, 0);
-pair x = xyzpoint(6, 0, 0);
-pair y = xyzpoint(0, 6, 0);
-pair z = xyzpoint(0, 0, 6);
-pair xy = xyzpoint(6, 6, 0);
-pair xz = xyzpoint(6, 0, 6);
-pair yz = xyzpoint(0, 6, 6);
-pair xyz = xyzpoint(6, 6, 6);
-pair MID = xyzpoint(3, 3, 3);
-pair a1 = xyzpoint(3, 0, 6);
-pair a2 = xyzpoint(3, 6, 6);
-pair a3 = xyzpoint(0, 3, 6);
-pair a4 = xyzpoint(6, 3, 6);
-pair b1 = xyzpoint(0, 0, 3);
-pair b2 = xyzpoint(6, 0, 3);
+pair O = proj.XYZPoint(0, 0, 0);
+pair x = proj.XYZPoint(6, 0, 0);
+pair y = proj.XYZPoint(0, 6, 0);
+pair z = proj.XYZPoint(0, 0, 6);
+pair xy = proj.XYZPoint(6, 6, 0);
+pair xz = proj.XYZPoint(6, 0, 6);
+pair yz = proj.XYZPoint(0, 6, 6);
+pair xyz = proj.XYZPoint(6, 6, 6);
+pair MID = proj.XYZPoint(3, 3, 3);
+pair a1 = proj.XYZPoint(3, 0, 6);
+pair a2 = proj.XYZPoint(3, 6, 6);
+pair a3 = proj.XYZPoint(0, 3, 6);
+pair a4 = proj.XYZPoint(6, 3, 6);
+pair b1 = proj.XYZPoint(0, 0, 3);
+pair b2 = proj.XYZPoint(6, 0, 3);
 pair b3 = a1;
-pair b4 = xyzpoint(3, 0, 0);
+pair b4 = proj.XYZPoint(3, 0, 0);
 pair c1 = b2;
-pair c2 = xyzpoint(6, 6, 3);
+pair c2 = proj.XYZPoint(6, 6, 3);
 pair c3 = a4;
-pair c4 = xyzpoint(6, 3, 0);
-pair d1 = xyzpoint(0, 6, 3);
+pair c4 = proj.XYZPoint(6, 3, 0);
+pair d1 = proj.XYZPoint(0, 6, 3);
 pair d2 = c2;
 pair d3 = a2;
-pair d4 = xyzpoint(3, 6, 0);
+pair d4 = proj.XYZPoint(3, 6, 0);
 pair e1 = a3;
-pair e2 = xyzpoint(0, 3, 0);
+pair e2 = proj.XYZPoint(0, 3, 0);
 pair e3 = b1;
 pair e4 = d1;
 pair f1 = e2;
 pair f2 = c4;
 pair f3 = b4;
 pair f4 = d4;
-pair A = xyzpoint(3, 3, 6);
-pair B = xyzpoint(3, 0, 3);
-pair C = xyzpoint(6, 3, 3);
-pair D = xyzpoint(3, 6, 3);
-pair E = xyzpoint(0, 3, 3);
-pair F = xyzpoint(3, 3, 0);
+pair A = proj.XYZPoint(3, 3, 6);
+pair B = proj.XYZPoint(3, 0, 3);
+pair C = proj.XYZPoint(6, 3, 3);
+pair D = proj.XYZPoint(3, 6, 3);
+pair E = proj.XYZPoint(0, 3, 3);
+pair F = proj.XYZPoint(3, 3, 0);
 
 /*  Draw the back of the cube.                                                */
 draw(O -- x, dashp);
