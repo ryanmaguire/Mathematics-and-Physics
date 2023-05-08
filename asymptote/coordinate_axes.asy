@@ -77,3 +77,40 @@ void DrawAndLabelCoordinateAxes(pair start, pair end,
     draw(y_label, bottom -- top, y_label_dir, axis_pen, arrow);
 }
 /*  End of DrawAndLabelCoordinateAxes.                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      DrawAndLabelSquareCoordinateAxes                                      *
+ *  Purpose:                                                                  *
+ *      Draw x and y axes with the same lengths.                              *
+ *  Arguments:                                                                *
+ *      axis_length (real):                                                   *
+ *          The length of the x and y axes.                                   *
+ *  Keywords:                                                                 *
+ *      x_label_dir (pair):                                                   *
+ *          The direction of the label for the x axis. Default is South.      *
+ *      y_label_dir (pair):                                                   *
+ *          The direction of the label for the y axis. Default is East.       *
+ *      axis_pen (pen):                                                       *
+ *          Pen used to draw the axis.                                        *
+ *      arrow (arrowbar):                                                     *
+ *          Arrow used to end the axes.                                       *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
+void DrawAndLabelSquareCoordinateAxes(real axis_length,
+                                      pair x_label_dir = S,
+                                      pair y_label_dir = E,
+                                      pen axis_pen = default_axis_pen,
+                                      arrowbar arrow = default_arrow)
+{
+    /*  Compute the start and end points of the axes.                         */
+    pair start = (-axis_length, -axis_length);
+    pair end = (axis_length, axis_length);
+
+    /*  Pass these points to the main axes functions.                         */
+    DrawAndLabelCoordinateAxes(start, end, x_label_dir = x_label_dir,
+                               y_label_dir = y_label_dir,
+                               axis_pen = axis_pen, arrow = arrow);
+}
+/*  End of DrawAndLabelSquareCoordinateAxes.                                  */
