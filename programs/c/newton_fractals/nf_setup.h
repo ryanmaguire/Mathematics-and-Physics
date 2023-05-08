@@ -31,6 +31,15 @@
 /*  NF_INLINE macro found here.                                               */
 #include "nf_inline.h"
 
+/*  3D vectors found here.                                                    */
+#include "nf_vec3.h"
+
+/*  Define the camera angle for the image of the sphere. This is where the    *
+ *  observer looking at the sphere will be placed. The output image is        *
+ *  normalized to take up the entire screen, so u and lambda*u will have the  *
+ *  same result for any positive lambda. u and -u will have different results.*/
+static const struct nf_vec3 nf_camera_pos = {1.0, 1.0, 1.0};
+
 /*  User defined parameters for the fractals.                                 */
 #define NF_XMIN (-2.0)
 #define NF_XMAX (+2.0)
