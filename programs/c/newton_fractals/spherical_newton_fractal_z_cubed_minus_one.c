@@ -18,77 +18,26 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides routines for spherical geometry.                             *
+ *      Generates a Newton fractal for p(z) = z^3 - 1.                        *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/05/08                                                        *
  ******************************************************************************/
 
-/*  Include guard to prevent including this file twice.                       */
-#ifndef NF_SPHERICAL_H
-#define NF_SPHERICAL_H
+/*  Functions for creating Newton fractals.                                   */
+#include "nf.h"
 
-/*  NF_INLINE macro provided here.                                            */
-#include "nf_inline.h"
-
-/*  Basic 2D vector struct and routines.                                      */
-#include "nf_vec2.h"
-
-/*  3D Euclidean geometry and 3D vectors.                                     */
-#include "nf_vec3.h"
-
-/*  Computes the stereographic projection about a point on a sphere.          */
-NF_INLINE struct nf_vec2
-nf_stereographic_projection(const struct nf_vec3 *u)
+/*  Routine for plotting the Newton fractal for z^3 - 1.                      */
+int main(void)
 {
-    struct nf_vec2 out;
+    /*  The coefficients for the polynomial p(z) = -1 + z^3.                  */
+    double coeffs[4] = {-1.0, 0.0, 0.0, 1.0};
 
-    const double denom = 1.0 / (1.0 - u->z);
+    /*  Name of the output PPM file.                                          */
+    const char *name = "newton_fractal_z_cubed_minus_one_real.ppm";
 
-    out.x = u->x * denom;
-    out.y = u->y * denom;
-    return out;
+    /*  Create the Newton fractal.                                            */
+    NF_REAL_SPHERICAL_NEWTON_FRACTAL(coeffs, name);
+    return 0;
 }
-
-NF_INLINE struct nf_vec3
-nf_inverse_orthographic_projection(const struct nf_vec2 *p,
-                                   const struct nf_vec3 *u)
-{
-    struct nf_vec3 out, X, Y;
-    const double z = sqrt(1.0 - nf_vec2_normsq(p));
-
-    if (u->x == 0.0)
-    {
-        X.x = 1.0;
-        X.y = 0.0;
-        X.z = 0.0;
-    }
-    else
-    {
-        if (u->y == 0.0)
-        {
-            X.x = 0.0;
-            X.y = 1.0;
-            X.z = 0.0;
-        }
-        else
-        {
-            X.x = 1.0;
-            X.y = -u->y /u->x;
-            X.z = 0.0;
-        }
-
-        nf_vec3_normalizeself(&X);
-    }
-
-    Y = nf_vec3_cross_product(&X, u);
-
-    out.x = p->x*X.x + p->y*Y.x + z*u->x;
-    out.y = p->x*X.y + p->y*Y.y + z*u->y;
-    out.z = p->x*X.z + p->y*Y.z + z*u->z;
-
-    return out;
-}
-
-#endif
-/*  End of include guard.                                                     */
+/*  End of main.                                                              */

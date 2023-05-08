@@ -67,6 +67,9 @@
 /*  Struct and routines for working with real rational functions.             */
 #include "nf_real_rational.h"
 
+/*  Functions for working with the complex plane and Riemann sphere.          */
+#include "nf_riemann_sphere.h"
+
 /*  Basic setup parameters for the fractals provided here.                    */
 #include "nf_setup.h"
 
@@ -504,6 +507,10 @@
     /*  Factor used for darkening colors based on the number iterations.     */\
     double scale;                                                              \
                                                                                \
+    /*  Increment factor for incrementing pixels.                            */\
+    const double nf_px_factor = 2.0 / (double)nf_setup_xsize;                  \
+    const double nf_py_factor = 2.0 / (double)nf_setup_ysize;                  \
+                                                                               \
     /*  Variable for treating a pixel in the PPM as a complex number.        */\
     struct nf_complex z;                                                       \
                                                                                \
@@ -568,17 +575,29 @@
     for (y = 0U; y < nf_setup_ysize; ++y)                                      \
     {                                                                          \
         /*  Convert the y coordinate of the pixel to the imaginary part of z.*/\
-        const double imag = nf_setup_ymax - nf_setup_py_factor*(double)y;      \
+        const double imag = 1.0 - nf_py_factor*(double)y;                      \
                                                                                \
         /*  Loop over the x coordindates.                                    */\
         for (x = 0U; x < nf_setup_xsize; ++x)                                  \
         {                                                                      \
             /*  Compute the real part of the complex number z from the pixel.*/\
-            const double real = nf_setup_xmin + nf_setup_px_factor*(double)x;  \
+            const double real = -1.0 + nf_px_factor*(double)x;                 \
                                                                                \
             /*  Treat the point (real, imag) as a complex number.            */\
             z.real = real;                                                     \
             z.imag = imag;                                                     \
+                                                                               \
+            /*  Skip points falling outside of the unit disk.                */\
+            if (nf_complex_abssq(&z) >= 1.0)                                   \
+            {                                                                  \
+                /*  Color these points black.                                */\
+                c = nf_black;                                                  \
+                nf_color_write_to_ppm(&c, &ppm);                               \
+                continue;                                                      \
+            }                                                                  \
+                                                                               \
+            /*  Otherwise go from unit disk to sphere to plane.              */\
+            nf_complex_unit_disk_to_plane(&z, &u);                             \
                                                                                \
             /*  Perform Newton's method for poly with guess z0 = z.          */\
             iters = nf_newton_real_poly(&poly, &z);                            \
