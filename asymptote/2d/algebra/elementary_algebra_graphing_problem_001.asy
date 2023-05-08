@@ -62,10 +62,6 @@ int grid_end = 9;
 /*  Length of the grid lines.                                                 */
 real grid_length = 10.2;
 
-/*  Start and end points for the x and y coordinate axes.                     */
-pair axis_start = (-10.5, -10.5);
-pair axis_end = (10.5, 10.5);
-
 /*  Size of arrow heads.                                                      */
 real arrow_size = 5bp;
 
@@ -85,7 +81,7 @@ arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
 grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 
 /*  Draw the coordinate axes.                                                 */
-axes.DrawAndLabelCoordinateAxes(axis_start, axis_end);
+axes.DrawAndLabelSquareCoordinateAxes(grid_length);
 
 /*  Draw the function |x - 3|.                                                */
 draw((-7.0, 10.0) -- (3.0, 0.0) -- (10.0, 7.0), blue, sharp_arrow);
