@@ -61,7 +61,7 @@ real rDot = 0.07;
 grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 
 /*  Draw the coordinate axes.                                                 */
-axes.DrawAndLabelCoordinateAxes(start, end);
+axes.DrawAndLabelSquareCoordinateAxes(axis_length);
 
 /*  Draw the line representing the linear equation.                           */
 draw(start -- end);

@@ -54,10 +54,6 @@ pen label_pen = fontsize(6pt);
 pair start = (-2.32, -4.2);
 pair end = (2.72, 4.2);
 
-/*  Start and end of the x and y axes.                                        */
-pair axes_start = (-axis_length, -axis_length);
-pair axes_end = (axis_length, axis_length);
-
 /*  Radius for dots representing points in the plane.                         */
 real rDot = 0.07;
 
@@ -65,7 +61,7 @@ real rDot = 0.07;
 grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 
 /*  Draw the coordinate axes.                                                 */
-axes.DrawAndLabelCoordinateAxes(axes_start, axes_end);
+axes.DrawAndLabelSquareCoordinateAxes(axis_length);
 
 /*  Draw the line representing the linear equation.                           */
 draw(start -- end);
