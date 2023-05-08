@@ -70,6 +70,9 @@
 /*  Basic setup parameters for the fractals provided here.                    */
 #include "nf_setup.h"
 
+/*  2D Euclidean geometry and vector routines.                                */
+#include "nf_vec2.h"
+
 /*  3D Euclidean geometry and vector routines.                                */
 #include "nf_vec3.h"
 
