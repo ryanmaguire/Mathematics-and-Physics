@@ -24,6 +24,10 @@
  *  Date:   2023/05/04                                                        *
  ******************************************************************************/
 
+/*  Include guard to prevent including this file twice.                       */
+#ifndef NF_GIF_H
+#define NF_GIF_H
+
 /*  FILE data type, fputc, and more found here.                               */
 #include <stdio.h>
 
@@ -965,3 +969,6 @@ NF_INLINE void nf_gif_end(struct nf_gif_writer* writer)
     writer->f = NULL;
     writer->oldImage = NULL;
 }
+
+#endif
+/*  End of include guard.                                                     */
