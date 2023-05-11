@@ -263,5 +263,22 @@ cvp_color_normalizeself(struct cvp_color *c)
 }
 /*  End of cvp_color_normalizeself.                                           */
 
+CVP_INLINE void
+cvp_negate_channel(unsigned char *channel)
+{
+    if (*channel == 0x00U)
+        *channel = 0xFFU;
+    else
+      *channel = -*channel;
+}
+
+CVP_INLINE void
+cvp_color_negate(struct cvp_color *c)
+{
+    cvp_negate_channel(&c->red);
+    cvp_negate_channel(&c->green);
+    cvp_negate_channel(&c->blue);
+}
+
 #endif
 /*  End of include guard.                                                     */
