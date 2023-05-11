@@ -30,7 +30,7 @@
 #define CVP_INLINE_H
 
 /*  Check the __STDC_VERSION__ macro for inline support.                      */
-#if __STDC_VERSION__ >= 199901L
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /*  C99 and higher have inline as a keyword. Nothing to add here.             */
 #define CVP_INLINE static inline
