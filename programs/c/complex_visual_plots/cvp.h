@@ -148,7 +148,7 @@ cvp_iters_plot(complex_func cfunc, unsigned int iters,
     /*  Variables for the x and y coordinates of a given pixel.               */
     unsigned int x, y;
 
-    /*  Variable for keeping tracks of the number of iterations performed.    */
+    /*  Variable for keeping track of the number of iterations performed.     */
     unsigned int ind;
 
     /*  Variables for the real and imaginary parts of a given complex number. */
@@ -192,6 +192,98 @@ cvp_iters_plot(complex_func cfunc, unsigned int iters,
 
             /*  Get the color corresponding to this pixel.                    */
             c = color(&z);
+
+            /*  Write the color to the ppm file.                              */
+            cvp_color_write_to_ppm(&c, &PPM);
+        }
+        /*  End of x for-loop.                                                */
+    }
+    /*  End of y for-loop.                                                    */
+
+    /*  Close the ppm file.                                                   */
+    cvp_ppm_close(&PPM);
+}
+/*  End of cvp_iters_plot.                                                    */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_mandel_plot                                                       *
+ *  Purpose:                                                                  *
+ *      Creates a plot from repeated evaluation of a complex function and     *
+ *      shifting the output by z. This helps visualize the Mandelbrot sets of *
+ *      complex functions (which correspond to infinite iterations).          *
+ *  Arguments:                                                                *
+ *      cfunc (complex_func):                                                 *
+ *          A complex-valued function of a complex variable.                  *
+ *      iters (unsigned int):                                                 *
+ *          The number of times to call the function.                         *
+ *      color (colorer):                                                      *
+ *          Coloring function for converting complex numbers into colors.     *
+ *      name (const char *):                                                  *
+ *          The name of the output PPM file.                                  *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
+CVP_INLINE void
+cvp_mandel_plot(complex_func cfunc, unsigned int iters,
+                colorer color, const char *name)
+{
+    /*  Variables for the x and y coordinates of a given pixel.               */
+    unsigned int x, y;
+
+    /*  Variable for keeping track of the number of iterations performed.     */
+    unsigned int ind;
+
+    /*  Variables for the real and imaginary parts of a given complex number. */
+    double z_re, z_im;
+
+    /*  Variable for the complex number z_re + i*z_im.                        */
+    struct cvp_complex z;
+
+    /*  Variable for the Mandelbrot iterations, w_{n+1} = f(w_n) + z.         */
+    struct cvp_complex w;
+
+    /*  Color for the pixel corresponding to w.                               */
+    struct cvp_color c;
+
+    /*  Variable for the ppm file.                                            */
+    struct cvp_ppm PPM = cvp_ppm_create(name);
+
+    /*  Check if the constructor failed.                                      */
+    if (!PPM.fp)
+        return;
+
+    /*  Initialize the ppm file to the default values.                        */
+    cvp_ppm_init(&PPM);
+
+    /*  Loop over the y coordinates of the ppm file.                          */
+    for (y = 0U; y < cvp_setup_ysize; y++)
+    {
+        /*  Compute the y coordinate in the plane corresponding to the pixel. */
+        z_im = cvp_setup_ymax - cvp_setup_pyfactor*y;
+
+        /*  Loop over the x coordinates of the ppm file.                      */
+        for (x = 0U; x < cvp_setup_xsize; x++)
+        {
+            /*  Compute the corresponding x coordinate.                       */
+            z_re = cvp_setup_xmin + cvp_setup_pxfactor*x;
+
+            /*  Treat the ordered pair (z_re, z_im) as a complex number.      */
+            z.real = z_re;
+            z.imag = z_im;
+
+            /*  Initialize the sequence, w_{0} = z.                           */
+            w = z;
+
+            /*  Perform the Mandelbrot iteration w_{n+1} = f(w_{n}) + z.      */
+            for (ind = 0U; ind < iters; ++ind)
+            {
+                w = cfunc(&w);
+                cvp_complex_addto(&w, &z);
+            }
+
+            /*  Get the color corresponding to this pixel.                    */
+            c = color(&w);
 
             /*  Write the color to the ppm file.                              */
             cvp_color_write_to_ppm(&c, &PPM);
