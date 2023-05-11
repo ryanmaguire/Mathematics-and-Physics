@@ -263,22 +263,54 @@ cvp_color_normalizeself(struct cvp_color *c)
 }
 /*  End of cvp_color_normalizeself.                                           */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_negate_channel                                                    *
+ *  Purpose:                                                                  *
+ *      Negates a color channel. Black maps to white, white maps to black.    *
+ *  Arguments:                                                                *
+ *      channel (unsigned char *):                                            *
+ *          A color channel for a color. Red, green, or blue.                 *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      For non-zero colors, negate the input. For zero set to 255.           *
+ ******************************************************************************/
 CVP_INLINE void
 cvp_negate_channel(unsigned char *channel)
 {
+    /*  Negating black does nothing since -0 = 0. Set to 255.                 */
     if (*channel == 0x00U)
         *channel = 0xFFU;
+
+    /*  All other colors can be safely negated.                               */
     else
       *channel = -*channel;
 }
+/*  End of cvp_negate_channel.                                                */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_negate                                                      *
+ *  Purpose:                                                                  *
+ *      Negates all channels of a color.                                      *
+ *  Arguments:                                                                *
+ *      c (struct cvp_color *):                                               *
+ *          The color to be negated.                                          *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Negate the red, green, and blue channels of the color.                *
+ ******************************************************************************/
 CVP_INLINE void
 cvp_color_negate(struct cvp_color *c)
 {
+    /*  Negate each channel in the color.                                     */
     cvp_negate_channel(&c->red);
     cvp_negate_channel(&c->green);
     cvp_negate_channel(&c->blue);
 }
+/*  End of cvp_color_negate.                                                  */
 
 #endif
 /*  End of include guard.                                                     */
