@@ -40,16 +40,34 @@
 /*  Struct for working with colors in RGB format.                             */
 #include "cvp_color.h"
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_from_angle                                                  *
+ *  Purpose:                                                                  *
+ *      Creates a color from an angle between -pi and pi.                     *
+ *  Arguments:                                                                *
+ *      angle (double):                                                       *
+ *          The angle, between -pi and pi, for the color.                     *
+ *  Outputs:                                                                  *
+ *      c (struct cvp_color):                                                 *
+ *          The color corresponding to the angle.                             *
+ *  Notes:                                                                    *
+ *      The input should be between -pi and pi. Values less than -pi will     *
+ *      return blue, and values greater than pi yield red.                    *
+ *  Method:                                                                   *
+ *      Create a gradient blue-cyan-green-yellow-red.                         *
+ ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_from_angle(double angle)
 {
     /*  There are 1024 possible colors given by the gradient. This scale      *
-     *  factor helps normalize the argument.                                  */
+     *  factor helps normalize the angle.                                     */
     const double gradient_factor = 1023.0 / (2.0 * M_PI);
 
-    /*  Scale the argument from (-pi, pi) to (0, 1023).                       */
+    /*  Scale the angle from (-pi, pi) to (0, 1023).                          */
     double val = (angle + M_PI) * gradient_factor;
 
+    /*  Color struct for the output.                                          */
     struct cvp_color out;
 
     /*  For 0 <= val < 256 transition from blue to cyan.                      */
@@ -98,15 +116,33 @@ cvp_color_from_angle(double angle)
 
     return out;
 }
+/*  End of cvp_color_from_angle.                                              */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_wheel_from_angle                                            *
+ *  Purpose:                                                                  *
+ *      Creates a color on the color wheel from an angle between -pi and pi.  *
+ *  Arguments:                                                                *
+ *      angle (double):                                                       *
+ *          The angle, between -pi and pi, for the color.                     *
+ *  Outputs:                                                                  *
+ *      c (struct cvp_color):                                                 *
+ *          The color corresponding to the angle.                             *
+ *  Notes:                                                                    *
+ *      The input should be between -pi and pi. Values outside this range     *
+ *      return blue.                                                          *
+ *  Method:                                                                   *
+ *      Create a gradient blue-cyan-green-yellow-red-magenta-blue.            *
+ ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_wheel_from_angle(double angle)
 {
     /*  There are 1535 possible colors given by the gradient. This scale      *
-     *  factor helps normalize the argument.                                  */
+     *  factor helps normalize the angle.                                     */
     const double gradient_factor = 1535.0 / (2.0 * M_PI);
 
-    /*  Scale the argument from (-pi, pi) to (0, 1023).                       */
+    /*  Scale the angle from (-pi, pi) to (0, 1023).                          */
     double val = (angle + M_PI) * gradient_factor;
 
     /*  Lastly, a color for the output.                                       */
@@ -182,40 +218,54 @@ cvp_color_wheel_from_angle(double angle)
 
     return out;
 }
+/*  End of cvp_color_wheel_from_angle.                                        */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_color_scale_factor_from_complex                                   *
+ *  Purpose:                                                                  *
+ *      Compresses the modulus of complex numbers from [0, inf] to [0, 1].    *
+ *  Arguments:                                                                *
+ *      z (const struct cvp_complex *):                                       *
+ *          A complex number.                                                 *
+ *  Outputs:                                                                  *
+ *      scale (double):                                                       *
+ *          Scale factor such that scale*|z| < 1.                             *
+ *  Method:                                                                   *
+ *      Use the atan function to compress |z| to a finite range.              *
+ ******************************************************************************/
 CVP_INLINE double
 cvp_color_scale_factor_from_complex(const struct cvp_complex *z)
 {
-    /*  Compute the argument and modulus of the input complex number.         */
+    /*  Compute the modulus of the input complex number.                      */
     const double abs_z = cvp_complex_abs(z);
 
     /*  The atan function compresses the intensity to prohibit arbitrarily    *
      *  bright points. This allows the drawing to fit into an actual PPM.     */
     return atan(5.0*abs_z) / (0.5 * M_PI);
 }
+/*  End of cvp_color_scale_factor_from_complex.                               */
 
 /******************************************************************************
  *  Function:                                                                 *
  *      cvp_color_from_argument                                               *
  *  Purpose:                                                                  *
- *      Creates an RGB color from a complex number. The intensity is given by *
- *      the magnitude of the number, and the color is from the argument.      *
+ *      Creates an RGB color from a complex number. The color corresponds to  *
+ *      the argument of the input, which is the angle made with the x axis.   *
  *  Arguments:                                                                *
- *      z (cvp_complex):                                                      *
+ *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
  *      c (cvp_color):                                                        *
- *          The color given by the modulus and argument of the input.         *
+ *          The color given by the argument of the input.                     *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
- *      and then scale this by the magnitude.                                 *
+ *      Compute the argument and use cvp_color_from_angle.                    *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_from_argument(const struct cvp_complex *z)
 {
-    /*  Compute the argument and modulus of the input complex number.         */
+    /*  Compute the angle made by the complex number and use this to color z. */
     const double arg_z = cvp_complex_arg(z);
-
     return cvp_color_from_angle(arg_z);
 }
 /*  End of cvp_color_from_argument.                                           */
@@ -224,25 +274,22 @@ cvp_color_from_argument(const struct cvp_complex *z)
  *  Function:                                                                 *
  *      cvp_color_wheel_from_argument                                         *
  *  Purpose:                                                                  *
- *      Creates an RGB color from a complex number. The intensity is given by *
- *      the magnitude of the number, and the color is from the argument.      *
+ *      Creates an RGB color from a complex number. The color corresponds to  *
+ *      the argument of the input.                                            *
  *  Arguments:                                                                *
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
  *      c (struct cvp_color):                                                 *
- *          The color given by the modulus and argument of the input.         *
+ *          The color given by the argument of the input.                     *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue-to-red from the argument of the *
- *      input and then scale this by the magnitude.                           *
+ *      Compute the argument and use cvp_color_wheel_from_angle.              *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_wheel_from_argument(const struct cvp_complex *z)
 {
-    /*  Compute the argument and modulus of the input complex number.         */
+    /*  Compute the angle made by the complex number and use this to color z. */
     const double arg_z = cvp_complex_arg(z);
-
-    /*  Compute the color from the angle.                                     */
     return cvp_color_wheel_from_angle(arg_z);
 }
 /*  End of cvp_color_wheel_from_argument.                                     */
@@ -254,13 +301,13 @@ cvp_color_wheel_from_argument(const struct cvp_complex *z)
  *      Creates an RGB color from a complex number. The intensity is given by *
  *      the magnitude of the number, and the color is from the argument.      *
  *  Arguments:                                                                *
- *      z (cvp_complex):                                                      *
+ *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
  *      c (cvp_color):                                                        *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
+ *      Create a rainbow gradient blue-to-red from the argument of the input  *
  *      and then scale this by the magnitude.                                 *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
@@ -269,10 +316,8 @@ cvp_color_from_complex(const struct cvp_complex *z)
     /*  Scale factor to darken the color based on the magnitude of z.         */
     const double t = cvp_color_scale_factor_from_complex(z);
 
-    /*  Lastly, a color for the output.                                       */
+    /*  Get the color from the argument and scale by t.                       */
     struct cvp_color out = cvp_color_from_argument(z);
-
-    /*  Scale the color by the atan factor and return.                        */
     cvp_color_scaleby(&out, t);
     return out;
 }
@@ -280,7 +325,7 @@ cvp_color_from_complex(const struct cvp_complex *z)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      color_wheel_from_complex                                              *
+ *      cvp_color_wheel_from_complex                                          *
  *  Purpose:                                                                  *
  *      Creates an RGB color from a complex number. The intensity is given by *
  *      the magnitude of the number, and the color is from the argument.      *
@@ -291,8 +336,8 @@ cvp_color_from_complex(const struct cvp_complex *z)
  *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue-to-red from the argument of the *
- *      input and then scale this by the magnitude.                           *
+ *      Create a rainbow gradient blue-to-red-to-blue from the argument of    *
+ *      the input and then scale this by the magnitude.                       *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_wheel_from_complex(const struct cvp_complex *z)
@@ -313,29 +358,28 @@ cvp_color_wheel_from_complex(const struct cvp_complex *z)
  *  Purpose:                                                                  *
  *      Creates a color from a complex number with normalized intensity.      *
  *  Arguments:                                                                *
- *      z (cvp_complex):                                                      *
+ *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
  *      c (cvp_color):                                                        *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the argument of the input  *
+ *      Create a rainbow gradient blue-to-red from the argument of the input  *
  *      and then scale this by the magnitude.                                 *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_normalized_color_from_complex(const struct cvp_complex *z)
 {
-
     /*  Scale factor to darken the color based on the magnitude of z.         */
     const double t = cvp_color_scale_factor_from_complex(z);
 
-    /*  Lastly, a color for the output.                                       */
+    /*  Get the color from the argument.                                      */
     struct cvp_color out = cvp_color_from_argument(z);
 
     /*  Normalize the intensity of the color to 255.                          */
     cvp_color_normalizeself(&out);
 
-    /*  Scale the color by the atan factor and return.                        */
+    /*  Scale the color by the scale factor and return.                       */
     cvp_color_scaleby(&out, t);
     return out;
 }
@@ -354,8 +398,8 @@ cvp_normalized_color_from_complex(const struct cvp_complex *z)
  *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue-to-red from the argument of the *
- *      input and then scale this by the magnitude.                           *
+ *      Create a rainbow gradient blue-to-red-to-blue from the argument of    *
+ *      the input and then scale this by the magnitude.                       *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_normalized_color_wheel_from_complex(const struct cvp_complex *z)
@@ -369,7 +413,7 @@ cvp_normalized_color_wheel_from_complex(const struct cvp_complex *z)
     /*  Normalize the intensity of the color to 255.                          */
     cvp_color_normalizeself(&out);
 
-    /*  Scale the color by the atan factor and return.                        */
+    /*  Scale the color by the scale factor and return.                       */
     cvp_color_scaleby(&out, t);
     return out;
 }
@@ -387,7 +431,7 @@ cvp_normalized_color_wheel_from_complex(const struct cvp_complex *z)
  *      c (cvp_color):                                                        *
  *          The color given by the modulus of the input.                      *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue from the modulus of the input.  *
+ *      Create a rainbow gradient blue-to-red from the modulus of the input.  *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_color_from_modulus(const struct cvp_complex *z)
@@ -398,22 +442,18 @@ cvp_color_from_modulus(const struct cvp_complex *z)
     /*  Transform the modulus to [-pi, pi].                                   */
     const double angle = atan(abs_z) * 4.0 - M_PI;
 
-    /*  Lastly, a color for the output.                                       */
+    /*  Treat this number as an angle on the color wheel.                     */
     return cvp_color_from_angle(angle);
 }
-/*  End of cvp_color_from_complex.                                            */
+/*  End of cvp_color_from_modulus.                                            */
 
 /******************************************************************************
  *  Function:                                                                 *
  *      cvp_color_wheel_from_modulus                                          *
  *  Purpose:                                                                  *
- *      Creates an RGB color from a complex number in a "swapped" manner. The *
- *      modulus gives an angle on the color wheel instead of the argument.    *
- *      Take |z| and transform it via atan(|z|) * 2 / pi. We have a mapping   *
- *      the complex plane to [0, 1]. We identify 0 and 1 together and get a   *
- *      mapping of the complex plane to the circle (really the Riemann sphere *
- *      to the circle since we allow z = infinity). The angle on the circle   *
- *      gives us a color on the color wheel.                                  *
+ *      Creates an RGB color on the color wheel from the modulus of a complex *
+ *      number. The modulus is scaled and shift to (-pi, pi) and this value   *
+ *      is treated as an angle on the color wheel.                            *
  *  Arguments:                                                                *
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
@@ -421,7 +461,7 @@ cvp_color_from_modulus(const struct cvp_complex *z)
  *      c (struct cvp_color):                                                 *
  *          The color given by z.                                             *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue-to-red from the modulus of the  *
+ *      Create a rainbow gradient blue-to-red-to-blue from the modulus of the *
  *      input and return.                                                     *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
@@ -443,7 +483,8 @@ cvp_color_wheel_from_modulus(const struct cvp_complex *z)
  *      cvp_negative_color_wheel_from_complex                                 *
  *  Purpose:                                                                  *
  *      Creates an RGB color from a complex number. The intensity is given by *
- *      the magnitude of the number, and the color is from the argument.      *
+ *      the magnitude of the number, and the color is from the argument. The  *
+ *      channels of the final color are negated and returned.                 *
  *  Arguments:                                                                *
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
@@ -451,8 +492,43 @@ cvp_color_wheel_from_modulus(const struct cvp_complex *z)
  *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
- *      Create a rainbow gradient red-to-blue-to-red from the argument of the *
- *      input and then scale this by the magnitude.                           *
+ *      Create a rainbow gradient blue-to-red from the argument of the input  *
+ *      and then scale this by the magnitude.                                 *
+ ******************************************************************************/
+CVP_INLINE struct cvp_color
+cvp_negative_color_from_complex(const struct cvp_complex *z)
+{
+    /*  Scale factor to darken the color based on the magnitude of z.         */
+    const double t = cvp_color_scale_factor_from_complex(z);
+
+    /*  Get the color from the argument.                                      */
+    struct cvp_color out = cvp_color_from_argument(z);
+
+    /*  Negate each channel of the color.                                     */
+    cvp_color_negate(&out);
+
+    /*  Scale the color by the scale factor and return.                       */
+    cvp_color_scaleby(&out, t);
+    return out;
+}
+/*  End of cvp_negative_color_from_complex.                                   */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      cvp_negative_color_wheel_from_complex                                 *
+ *  Purpose:                                                                  *
+ *      Creates an RGB color from a complex number. The intensity is given by *
+ *      the magnitude of the number, and the color is from the argument. The  *
+ *      channels of the final color are negated and returned.                 *
+ *  Arguments:                                                                *
+ *      z (const struct cvp_complex *):                                       *
+ *          A complex number.                                                 *
+ *  Outputs:                                                                  *
+ *      c (struct cvp_color):                                                 *
+ *          The color given by the modulus and argument of the input.         *
+ *  Method:                                                                   *
+ *      Create a rainbow gradient blue-to-red-to-blue from the argument of    *
+ *      the input and then scale this by the magnitude.                       *
  ******************************************************************************/
 CVP_INLINE struct cvp_color
 cvp_negative_color_wheel_from_complex(const struct cvp_complex *z)
@@ -460,9 +536,13 @@ cvp_negative_color_wheel_from_complex(const struct cvp_complex *z)
     /*  Scale factor to darken the color based on the magnitude of z.         */
     const double t = cvp_color_scale_factor_from_complex(z);
 
-    /*  Get the color from the argument and scale by t.                       */
+    /*  Get the color from the argument.                                      */
     struct cvp_color out = cvp_color_wheel_from_argument(z);
+
+    /*  Negate each channel of the color.                                     */
     cvp_color_negate(&out);
+
+    /*  Scale the color by the scale factor and return.                       */
     cvp_color_scaleby(&out, t);
     return out;
 }
