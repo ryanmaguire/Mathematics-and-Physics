@@ -70,8 +70,12 @@ cvp_color_from_angle(double angle)
     /*  Color struct for the output.                                          */
     struct cvp_color out;
 
+    /*  Values outside the legal range (angle < -pi). Return blue.            */
+    if (val < 0.0)
+        return cvp_blue;
+
     /*  For 0 <= val < 256 transition from blue to cyan.                      */
-    if (val < 256.0)
+    else if (val < 256.0)
     {
         out.red = 0x00U;
         out.green = (unsigned char)val;
@@ -103,7 +107,7 @@ cvp_color_from_angle(double angle)
     }
 
     /*  For 768 <= val < 1024 transition from yellow to red.                  */
-    else
+    else if (val < 1024.0)
     {
         /*  Shift val back to the range (0, 256).                             */
         val -= 768.0;
@@ -113,6 +117,10 @@ cvp_color_from_angle(double angle)
         out.green = (unsigned char)(256.0 - val);
         out.blue = 0x00U;
     }
+
+    /*  Values outside the legal range (angle > +pi). Return red.             */
+    else
+        return cvp_red;
 
     return out;
 }
@@ -148,8 +156,12 @@ cvp_color_wheel_from_angle(double angle)
     /*  Lastly, a color for the output.                                       */
     struct cvp_color out;
 
+    /*  Values outside the legal range (angle < -pi). Return blue.            */
+    if (val < 0.0)
+        return cvp_blue;
+
     /*  For 0 <= val < 256 transition from blue to cyan.                      */
-    if (val < 256.0)
+    else if (val < 256.0)
     {
         out.red = 0x00U;
         out.green = (unsigned char)val;
@@ -205,7 +217,7 @@ cvp_color_wheel_from_angle(double angle)
     }
 
     /*  Finally transition from magenta back to blue.                         */
-    else
+    else if (val < 1536.0)
     {
         /*  Shift val back to the range (0, 256).                             */
         val -= 1280.0;
@@ -215,6 +227,10 @@ cvp_color_wheel_from_angle(double angle)
         out.green = 0x00U;
         out.blue = 0xFFU;
     }
+
+    /*  Values outside the legal range (angle > +pi). Return blue.            */
+    else
+        return cvp_blue;
 
     return out;
 }
@@ -256,7 +272,7 @@ cvp_color_scale_factor_from_complex(const struct cvp_complex *z)
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
- *      c (cvp_color):                                                        *
+ *      c (struct cvp_color):                                                 *
  *          The color given by the argument of the input.                     *
  *  Method:                                                                   *
  *      Compute the argument and use cvp_color_from_angle.                    *
@@ -304,7 +320,7 @@ cvp_color_wheel_from_argument(const struct cvp_complex *z)
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
- *      c (cvp_color):                                                        *
+ *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
  *      Create a rainbow gradient blue-to-red from the argument of the input  *
@@ -361,7 +377,7 @@ cvp_color_wheel_from_complex(const struct cvp_complex *z)
  *      z (const struct cvp_complex *):                                       *
  *          A complex number.                                                 *
  *  Outputs:                                                                  *
- *      c (cvp_color):                                                        *
+ *      c (struct cvp_color):                                                 *
  *          The color given by the modulus and argument of the input.         *
  *  Method:                                                                   *
  *      Create a rainbow gradient blue-to-red from the argument of the input  *
