@@ -178,5 +178,145 @@ nf_color_scaleby(struct nf_color *c, double t)
 }
 /*  End of nf_color_scaleby.                                                  */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_color_normalize                                                    *
+ *  Purpose:                                                                  *
+ *      Normalizes the intensity of a color to 255.                           *
+ *  Arguments:                                                                *
+ *      c (const struct nf_color *):                                          *
+ *          A pointer to the color to be normalized.                          *
+ *  Outputs:                                                                  *
+ *      normalized (struct nf_color):                                         *
+ *          The color c normalized to intensity 255.                          *
+ *  Method:                                                                   *
+ *      Treat the ordered triple (r, g, b) as a vector and normalize.         *
+ ******************************************************************************/
+NF_INLINE struct nf_color
+nf_color_normalize(const struct nf_color *c)
+{
+    /*  Treat the color (r, g, b) as a three dimensional vector.              */
+    const double x = (double)c->red;
+    const double y = (double)c->green;
+    const double z = (double)c->blue;
+
+    /*  We normalize by using the reciprocal of the norm. Compute ||c||^2.    */
+    const double norm_sq = x*x + y*y + z*z;
+
+    /*  If the square of the norm is zero the input is black. Return black.   */
+    if (norm_sq == 0.0)
+        return *c;
+
+    /*  Otherwise normalize the color to intensity 255.                       */
+    else
+    {
+        /*  We normalize to intensity 255 so that red, green, and blue are    *
+         *  treated as "unit" colors. Normalizing them does nothing.          */
+        const double factor = 255.0 / sqrt(norm_sq);
+
+        /*  color struct for the output.                                      */
+        struct nf_color out;
+
+        /*  Scale the RGB components of the input and return.                 */
+        out.red = (unsigned char)(factor * x);
+        out.green = (unsigned char)(factor * y);
+        out.blue = (unsigned char)(factor * z);
+        return out;
+    }
+}
+/*  End of nf_color_normalize.                                                */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_color_normalize                                                    *
+ *  Purpose:                                                                  *
+ *      Normalizes the intensity of a color to 255.                           *
+ *  Arguments:                                                                *
+ *      c (struct nf_color *):                                                *
+ *          A pointer to the color to be normalized.                          *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Treat the ordered triple (r, g, b) as a vector and normalize.         *
+ ******************************************************************************/
+NF_INLINE void
+nf_color_normalizeself(struct nf_color *c)
+{
+    /*  Treat the color (r, g, b) as a three dimensional vector.              */
+    const double x = (double)c->red;
+    const double y = (double)c->green;
+    const double z = (double)c->blue;
+
+    /*  We normalize by using the reciprocal of the norm. Compute ||c||^2.    */
+    const double norm_sq = x*x + y*y + z*z;
+
+    /*  If the square of the norm is zero the input is black. Return black.   */
+    if (norm_sq == 0.0)
+        return;
+
+    /*  Otherwise normalize the color to intensity 255.                       */
+    else
+    {
+        /*  We normalize to intensity 255 so that red, green, and blue are    *
+         *  treated as "unit" colors. Normalizing them does nothing.          */
+        const double factor = 255.0 / sqrt(norm_sq);
+
+        /*  Scale the RGB components of the input and return.                 */
+        c->red = (unsigned char)(factor * x);
+        c->green = (unsigned char)(factor * y);
+        c->blue = (unsigned char)(factor * z);
+    }
+}
+/*  End of nf_color_normalizeself.                                            */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_negate_channel                                                     *
+ *  Purpose:                                                                  *
+ *      Negates a color channel. Black maps to white, white maps to black.    *
+ *  Arguments:                                                                *
+ *      channel (unsigned char *):                                            *
+ *          A color channel for a color. Red, green, or blue.                 *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      For non-zero colors, negate the input. For zero set to 255.           *
+ ******************************************************************************/
+NF_INLINE void
+nf_negate_channel(unsigned char *channel)
+{
+    /*  Negating black does nothing since -0 = 0. Set to 255.                 */
+    if (*channel == 0x00U)
+        *channel = 0xFFU;
+
+    /*  All other colors can be safely negated.                               */
+    else
+      *channel = -*channel;
+}
+/*  End of nf_negate_channel.                                                 */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nf_color_negate                                                       *
+ *  Purpose:                                                                  *
+ *      Negates all channels of a color.                                      *
+ *  Arguments:                                                                *
+ *      c (struct nf_color *):                                                *
+ *          The color to be negated.                                          *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Negate the red, green, and blue channels of the color.                *
+ ******************************************************************************/
+NF_INLINE void
+nf_color_negate(struct nf_color *c)
+{
+    /*  Negate each channel in the color.                                     */
+    nf_negate_channel(&c->red);
+    nf_negate_channel(&c->green);
+    nf_negate_channel(&c->blue);
+}
+/*  End of nf_color_negate.                                                   */
+
 #endif
 /*  End of include guard.                                                     */

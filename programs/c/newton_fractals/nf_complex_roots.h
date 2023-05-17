@@ -563,8 +563,8 @@ nf_complex_roots_get_colors(unsigned int number_of_roots)
     /*  Loop over angles in the color wheel and add these colors to the array.*/
     for (n = 0U; n < number_of_roots; ++n)
     {
-        /*  Split the circle 0 -> 2 pi into number_of_roots segments.         */
-        angle = (NF_TWO_PI * n) / number_of_roots;
+        /*  Split the circle -pi -> pi into number_of_roots segments.         */
+        angle = (NF_TWO_PI * n) / number_of_roots - NF_PI;
 
         /*  Get a color for this angle.                                       */
         out[n] = nf_color_wheel_from_angle(angle);

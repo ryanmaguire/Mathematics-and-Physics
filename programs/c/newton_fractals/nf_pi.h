@@ -29,8 +29,11 @@
 #define NF_PI_H
 
 /*  Pi and Two Pi are used frequently in this project.                        */
-#define NF_PI (3.141592653589793)
-#define NF_TWO_PI (6.283185307179586)
+#define NF_PI (3.1415926535897932384626433832795028)
+#define NF_TWO_PI (6.28318530717958647692528676655900559)
+
+/*  Pi / 2 also has several used.                                             */
+#define NF_HALF_PI (1.5707963267948966192313216916397514)
 
 #endif
 /*  End of include guard.                                                     */
