@@ -124,7 +124,7 @@
     /*  Check if the init function failed.                                   */\
     if (!ppm.fp)                                                               \
     {                                                                          \
-        puts("nf_ppm_init failed and return NULL for FILE pointer. Abort.");   \
+        puts("nf_ppm_init failed and returned NULL for FILE pointer. Abort."); \
         return -1;                                                             \
     }                                                                          \
                                                                                \
@@ -256,7 +256,7 @@
     /*  Check if the init function failed.                                   */\
     if (!ppm.fp)                                                               \
     {                                                                          \
-        puts("nf_ppm_init failed and return NULL for FILE pointer. Abort.");   \
+        puts("nf_ppm_init failed and returned NULL for FILE pointer. Abort."); \
         return -1;                                                             \
     }                                                                          \
                                                                                \
@@ -349,7 +349,7 @@
 /*  Macro for creating Newton fractals from real rational functions.          */
 #define NF_REAL_RAT_NEWTON_FRACTAL(num, den, name)                             \
                                                                                \
-    /*  The degree can be computed by the length of the array minus 1.       */\
+    /*  The degrees can be computed from the lengths of the arrays minus 1.  */\
     const unsigned int numdeg = sizeof(num)/sizeof(num[0]) - 1U;               \
     const unsigned int dendeg = sizeof(den)/sizeof(den[0]) - 1U;               \
                                                                                \
@@ -393,7 +393,7 @@
     /*  Check if the init function failed.                                   */\
     if (!ppm.fp)                                                               \
     {                                                                          \
-        puts("nf_ppm_init failed and return NULL for FILE pointer. Abort.");   \
+        puts("nf_ppm_init failed and returned NULL for FILE pointer. Abort."); \
         return -1;                                                             \
     }                                                                          \
                                                                                \
@@ -483,7 +483,7 @@
     /*  will add a semi-colon at the end of the call to this macro.          */\
     free(colors)
 
-/*  Macro for creating Newton fractals from real polynomials.                 */
+/*  Macro for creating spherical Newton fractals from real polynomials.       */
 #define NF_REAL_SPHERICAL_NEWTON_FRACTAL(coeffs, name)                         \
                                                                                \
     /*  Normalize the camera distance to one.                                */\
@@ -532,7 +532,7 @@
     /*  Check if the init function failed.                                   */\
     if (!ppm.fp)                                                               \
     {                                                                          \
-        puts("nf_ppm_init failed and return NULL for FILE pointer. Abort.");   \
+        puts("nf_ppm_init failed and returned NULL for FILE pointer. Abort."); \
         return -1;                                                             \
     }                                                                          \
                                                                                \
