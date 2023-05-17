@@ -21,7 +21,7 @@
  *  Notes:                                                                    *
  *      This file is an "extra" and is not compiled as part of libtmpl.       *
  ******************************************************************************
- *  Author:     Ryan Maguire, Dartmouth College                               *
+ *  Author:     Ryan Maguire                                                  *
  *  Date:       October 26, 2021                                              *
  ******************************************************************************/
 
