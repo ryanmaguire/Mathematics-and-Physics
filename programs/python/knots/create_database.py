@@ -38,9 +38,11 @@ import pandas
 # The input from the user is the CSV containing the list of DT codes.
 DT_CODE_FILE_NAME = sys.argv[1]
 
-# The names of the output files for the two invariants.
-JONES_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-4] + "-jones.csv"
-HOMFLY_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-4] + "-homfly.csv"
+# The names of the output files for the two invariants. The input file name
+# ends with "dt_.csv" so we remove the last 7 characters and append the name
+# of the invariant instead.
+JONES_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-jones.csv"
+HOMFLY_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-homfly.csv"
 
 # Extract the data from the CSV.
 CSV_DATA = pandas.read_csv(DT_CODE_FILE_NAME)
