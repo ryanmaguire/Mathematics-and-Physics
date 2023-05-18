@@ -26,6 +26,10 @@
 ################################################################################
 """
 
+# pylint will complain that regina does not have a "Link" attribute, even
+# though it does. The following line disables this erroneous warning.
+# pylint: disable=E1101
+
 # Needed for parsing inputs.
 import sys
 
