@@ -72,11 +72,13 @@ for n in range(n_knots):
     for n in range(DT_LEN):
         if JonesList[n] == jones or JonesList[n] == mirror:
             print("Match: %s" % DTList[n],
-                  "Crossing Number: %d" % (len(dt)),
-                  "DT Code %s" % dt)
+                  "- Match Crossing Number: %d" % (len(DTList[n])),
+                  "- DT Code: %s" % dt,
+                  "- Crossing Number: %d" % (len(dt)))
 
     for n in range(DT_MIRROR_LEN):
         if JonesMirrorList[n] == jones or JonesMirrorList[n] == mirror:
             print("Mirror Match: %s" % DTMirrorList[n],
-                  "Crossing Number: %d" % (len(dt)),
-                  "DT Code %s" % dt)
+                  "- Match Crossing Number: %d" % (len(DTMirrorList[n])),
+                  "- DT Code: %s" % dt,
+                  "- Crossing Number: %d" % (len(dt)))

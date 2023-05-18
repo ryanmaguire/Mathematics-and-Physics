@@ -1,7 +1,9 @@
+import sys
 import regina
 import numpy
+import pandas
 
-# Largest number of twists we'll check for torus knots.
+filename = sys.argv[1]
 torus_start = 2
 torus_end = 50
 torus_count = 0
@@ -13,8 +15,7 @@ DTMirrorList = []
 one = regina.Laurent(0)
 one_minus_pow_neg_q = one - regina.Laurent(-4)
 one_minus_pow_pos_q = one - regina.Laurent(4)
-fp = open("dt_code.txt")
-
+data = pandas.read_csv(filename)
 maxdeg = 0
 mindeg = 0
 
@@ -28,10 +29,10 @@ for m in range(torus_start, torus_end):
         if (n == 0) or (n == 1) or (n == -1):
             continue
 
-        if (numpy.gcd(m, n) != 1):
+        elif (numpy.gcd(m, n) != 1):
             continue
 
-        if n * (m-1) > torus_end:
+        elif n * (m-1) > torus_end:
             continue
 
         a = regina.Laurent((m-1)*(n-1))
@@ -61,7 +62,15 @@ for m in range(torus_start, torus_end):
         TorusStringList.append("(%d, %d)" % (m, n))
         torus_count += 1
 
-for pd in fp:
+n_knots = len(data.dt_code)
+skip = 100000
+
+for n in range(n_knots):
+    if (n % skip == 0):
+        print("\t", n, n_knots)
+
+    pd = data.dt_code[n]
+
     L = regina.Link.fromDT(pd)
     j = L.jones()
     f = j*one_minus_pow_pos_q
@@ -72,11 +81,10 @@ for pd in fp:
         if KnotList[n] == f or MirrorList[n] == fm:
             T = L.complement(True)
             S = DTList[n].complement(True)
-
             if not T.isIsomorphicTo(S):
                 S = DTMirrorList[n].complement(True)
                 if not T.isIsomorphicTo(S):
                     if DTList[n].dt() != pd and DTMirrorList[n].dt() != pd:
                         print("Match: %s" % TorusStringList[n],
-                              "Crossing Number: %d" % (pd.count(" ") + 1),
-                              "DT Code %s" % pd)
+                              "- Crossing Number: %d" % (len(pd)),
+                              "- DT Code: %s" % pd)

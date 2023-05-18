@@ -1,6 +1,9 @@
-
+import sys
 import regina
 import numpy
+import pandas
+
+filename = sys.argv[1]
 
 twist_start = 0
 twist_end = 40
@@ -21,7 +24,7 @@ inv_square = regina.Laurent(-2)
 inv_quartic = regina.Laurent(-4)
 inv_sextic = regina.Laurent(-6)
 
-fp = open("dt_code.txt")
+data = pandas.read_csv(filename)
 
 for m in range(twist_start, twist_end):
 
@@ -32,7 +35,7 @@ for m in range(twist_start, twist_end):
         d = regina.Laurent(2*m)
 
         f = sextic + square - a + b
-        g = inv_sextic + inv_square - c + d 
+        g = inv_sextic + inv_square - c + d
     else:
         a = regina.Laurent(-2*m)
         b = regina.Laurent(-2*m - 6)
@@ -48,8 +51,15 @@ for m in range(twist_start, twist_end):
     TwistInd.append(m)
     twist_count += 1
 
-for pd in fp:
-    pd = pd.replace("\n", "")
+n_knots = len(data.dt_code)
+skip = 100000
+
+for n in range(n_knots):
+    if (n % skip == 0):
+        print("\t", n, n_knots)
+
+    pd = data.dt_code[n]
+
     L = regina.Link.fromDT(pd)
     j = L.jones()
     f = j*one_plus_pow_pos_q
@@ -57,7 +67,7 @@ for pd in fp:
 
     for n in range(twist_count):
         if KnotList[n] == f or MirrorList[n] == fm:
-            print("Match: %s" % TwistInd[n],
-                  "Crossing Number: %d" % (pd.count(" ") + 1),
-                  "DT Code %s" % pd)
+            print("Match: m_%s" % TwistInd[n],
+                  "- Crossing Number: %d" % (len(pd)),
+                  "- DT Code: %s" % pd)
 
