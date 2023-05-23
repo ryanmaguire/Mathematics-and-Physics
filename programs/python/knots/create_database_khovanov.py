@@ -19,10 +19,10 @@
 #   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Simple script for creating the Jones and HOMFLY database.              #
+#       Simple script for creating the Khovanov database.                      #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
-#   Date:       May 18, 2023.                                                  #
+#   Date:       May 23, 2023.                                                  #
 ################################################################################
 """
 
@@ -33,6 +33,9 @@
 # Needed for parsing inputs.
 import sys
 
+# Passes strings to the Java function.
+import os
+
 # Used for computing knot invariants.
 import regina
 
@@ -42,11 +45,10 @@ import pandas
 # The input from the user is the CSV containing the list of DT codes.
 DT_CODE_FILE_NAME = sys.argv[1]
 
-# The names of the output files for the two invariants. The input file name
-# ends with "dt_.csv" so we remove the last 7 characters and append the name
+# The names of the output file for the invariant. The input file name
+# ends with "_dt.csv" so we remove the last 7 characters and append the name
 # of the invariant instead.
-JONES_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-jones.csv"
-HOMFLY_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-homfly.csv"
+KHOVANOV_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-khovanov.csv"
 
 # Extract the data from the CSV.
 CSV_DATA = pandas.read_csv(DT_CODE_FILE_NAME)
@@ -55,9 +57,8 @@ CSV_DATA = pandas.read_csv(DT_CODE_FILE_NAME)
 NUMBER_OF_KNOTS = len(CSV_DATA.dt_code)
 SKIP = 100000
 
-# Open the files for the Jones and HOMFLY polynomials with write permissions.
-JONES_FILE = open(JONES_FILE_NAME, "w")
-HOMFLY_FILE = open(HOMFLY_FILE_NAME, "w")
+# Open the files for the Khovanov polynomial with write permissions.
+KHOVANOV_FILE = open(KHOVANOV_FILE_NAME, "w")
 
 # Loop through each DT code.
 for CURRENT_KNOT in range(NUMBER_OF_KNOTS):
@@ -66,14 +67,10 @@ for CURRENT_KNOT in range(NUMBER_OF_KNOTS):
     if CURRENT_KNOT % SKIP == 0:
         print("\t", CURRENT_KNOT, NUMBER_OF_KNOTS)
 
-    # Get the knot the current DT code represents.
+    # Get the knot the current DT code represents. Convert it to PD code.
     DT_STRING = CSV_DATA.dt_code[CURRENT_KNOT]
-    REG_LINK = regina.Link.fromDT(DT_STRING)
+    PD_STRING = regina.Link.fromDT(DT_STRING).pd()
 
     # Shrink the strings by removing spaces.
-    JONES_STRING = str(REG_LINK.jones()).replace(" ", "")
-    HOMFLY_STRING = str(REG_LINK.homfly()).replace(" ", "")
-
-    # Write the results to the new CSV files.
-    JONES_FILE.write(DT_STRING + "," + JONES_STRING + "\n")
-    HOMFLY_FILE.write(DT_STRING + "," + HOMFLY_STRING + "\n")
+    ARG_STRING = "echo %s | bash javakh.sh" % PD_STRING
+    os.system(ARG_STRING)
