@@ -49,6 +49,7 @@ DT_CODE_FILE_NAME = sys.argv[1]
 # ends with "_dt.csv" so we remove the last 7 characters and append the name
 # of the invariant instead.
 KHOVANOV_FILE_NAME = (DT_CODE_FILE_NAME.split("/")[-1])[0:-7] + "-khovanov.csv"
+KHOVANOV_FILE_NAME = "data/" + KHOVANOV_FILE_NAME
 
 # Extract the data from the CSV.
 CSV_DATA = pandas.read_csv(DT_CODE_FILE_NAME)
@@ -72,5 +73,8 @@ for CURRENT_KNOT in range(NUMBER_OF_KNOTS):
     PD_STRING = regina.Link.fromDT(DT_STRING).pd()
 
     # Shrink the strings by removing spaces.
+    os.system("printf \"%s,\" >> %s" % (DT_STRING, KHOVANOV_FILE_NAME))
     ARG_STRING = "echo %s | bash javakh.sh" % PD_STRING
+    ARG_STRING = ARG_STRING + " | tr -d '\"' | tr -d ' '"
+    ARG_STRING = ARG_STRING + " >> %s" % KHOVANOV_FILE_NAME
     os.system(ARG_STRING)
