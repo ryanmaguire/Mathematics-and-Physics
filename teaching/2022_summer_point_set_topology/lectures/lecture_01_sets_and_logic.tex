@@ -20,6 +20,12 @@
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
 \usepackage{float}
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -28,6 +34,8 @@
     urlcolor=Cerulean,
     citecolor=SkyBlue
 }
+
+\renewcommand\thesubfigure{\arabic{figure}.\arabic{subfigure}}
 
 %------------------------Theorem Styles-------------------------%
 \theoremstyle{plain}
@@ -70,7 +78,7 @@
 
 \title{Point-Set Topology: Lecture 1}
 \author{Ryan Maguire}
-\date{Summer 2022}
+\date{\today}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -126,9 +134,24 @@
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../../../images/tetrahedron_001.pdf}
-            \caption{A Tetrahedron}
-            \label{fig:tetrahedron_001}
+            \begin{subfigure}[b]{0.34\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{../../../images/tetrahedron_001.pdf}
+                }
+                \caption{A Tetrahedron}
+                \label{fig:tetrahedron_001}
+            \end{subfigure}
+            \begin{subfigure}[b]{0.64\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{../../../images/polyhedral_torus_001.pdf}
+                }
+                \caption{A Polyhedral Torus}
+                \label{fig:polyhedral_torus_001}
+            \end{subfigure}
+            \caption{Examples of Polyhedra}
+            \label{fig:polyhedra_example}
         \end{figure}
         \par\hfill\par
         The next discovery that motivates topology is the
@@ -142,19 +165,13 @@
         long as the polyhedron can be \textit{continuously deformed} into a
         sphere. If we have a polyhedron that can be continuously deformed into
         a torus, we get a different number. Examining
-        Fig.~\ref{fig:polyhedral_torus_001} we count:
+        Fig.~\subref{fig:polyhedral_torus_001} we count:
         \begin{equation}
             V-E+F=0
         \end{equation}
         This \textit{alternating sum} is called the
         \textit{Euler characteristic}
         of the polyhedron and it is preserved by continuous deformations.
-        \begin{figure}
-            \centering
-            \includegraphics{../../../images/polyhedral_torus_001.pdf}
-            \caption{A Polyhedral Torus}
-            \label{fig:polyhedral_torus_001}
-        \end{figure}
     \section{Sets}
         Sets are the main object dealt with in most branches of mathematics.
         \begin{definition}[\textbf{Set}]
@@ -182,8 +199,8 @@
             All of these mean the set $A$.
         \end{example}
         \begin{notation}[\textbf{Containment}]
-            If $A$ is a set and $a$ is an element of $a$, we write
-            $a\in{A}$. If $a$ is not an element of $a$, we write
+            If $A$ is a set and $a$ is an element of $A$, we write
+            $a\in{A}$. If $a$ is not an element of $A$, we write
             $a\notin{A}$.
         \end{notation}
         The expression $a\in{A}$ reads aloud as
@@ -196,7 +213,7 @@
             $A$.
         \end{example}
         Sets are usually constructed with set-builder notation. If we have
-        some set $X$ that we know exists, we can take a sentence $P$, and
+        some set $X$ that we know exists, we can take a sentence $P$ and
         apply it to all elements $x\in{X}$.
         This is expressed
         \begin{equation}
@@ -255,9 +272,10 @@
             \begin{equation}
                 A\cup{B}=\{\,x\;|\;x\in{A}\textrm{ or }x\in{B}\,\}
             \end{equation}
+            That is, the set of all elements in $A$, or in $B$, or in both.
         \end{definition}
         The union of two sets can be visualized with a
-        \textit{Venn diagram} (Fig.~\ref{fig:venn_diagram_union_001}). It is
+        \textit{Venn diagram} (Fig.~\subref{fig:venn_diagram_union_001}). It is
         worth detailing what the word \textit{or} means. In English there are
         two uses of the word or, the \textit{inclusive or} and the
         \textit{exclusive or}. Given two sentences $P$ and $Q$, the exclusive or
@@ -277,9 +295,18 @@
         \end{example}
         \begin{figure}
             \centering
-            \includegraphics{../../../images/venn_diagram_union_001.pdf}
-            \caption{Venn Diagram for Union}
-            \label{fig:venn_diagram_union_001}
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../../images/venn_diagram_union_001.pdf}
+                \caption{Venn Diagram for Union}
+                \label{fig:venn_diagram_union_001}
+            \end{subfigure}
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../../images/venn_diagram_intersection_001.pdf}
+                \caption{Venn Diagram for Intersection}
+                \label{fig:venn_diagram_intersection_001}
+            \end{subfigure}
         \end{figure}
         \begin{definition}[\textbf{Intersection of Two Sets}]
             The intersection of two sets $A$ and $B$ is the set $A\cap{B}$
@@ -287,6 +314,8 @@
             \begin{equation}
                 A\cap{B}=\{\,x\;|\;x\in{A}\textrm{ and }x\in{B}\,\}
             \end{equation}
+            That is, the set of all elements that are in both $A$ and $B$
+            simultaneously.
         \end{definition}
         The word \textit{and} is easier to understand since its mathematical
         use matches the grammatical one. Given two sentences $P$ and $Q$,
@@ -301,9 +330,10 @@
             The only element $A$ and $B$ have in common is 3.
         \end{example}
         Intersection can also be represented by a Venn diagram
-        (See Fig.~\ref{fig:venn_diagram_intersection_001}). What if $A$ and $B$
+        (See Fig.~\subref{fig:venn_diagram_intersection_001}). What if $A$ and $B$
         have no sets in common? Let's consider the following example.
         \begin{example}
+            \label{ex:disjoint_sets}%
             Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,4,\,5,\,6\,\}$. The
             intersection $A\cap{B}$ is the set of elements in both $A$ and $B$.
             But $A$ and $B$ have no elements in common, so the intersection
@@ -311,15 +341,19 @@
             occasionally written as $\emptyset=\{\,\}$. We have
             $A\cap{B}=\emptyset$.
         \end{example}
-        Disjoint sets are sets $A$ and $B$ such that $A\cap{B}=\emptyset$.
-        In the previous example, $A$ and $B$ are disjoint.
+        The axioms of set theory provide the existence of the empty set, but
+        we'll just take it as a definition and move on.
+        \begin{definition}[\textbf{The Empty Set}]
+            The empty set is the unique set $\emptyset$ that contains no
+            elements. That is, for all $x$, it is true that $x\notin\emptyset$.
+            We may write $\emptyset=\{\,\}$ for convenience.
+        \end{definition}
+        \begin{definition}[\textbf{Disjoint Sets}]
+            Disjoint sets are sets $A$ and $B$ that have no elements in common.
+            That is, sets $A$ and $B$ such that $A\cap{B}=\emptyset$.
+        \end{definition}
+        The sets in Ex.~\ref{ex:disjoint_sets} are disjoint.
         \par\hfill\par
-        \begin{figure}
-            \centering
-            \includegraphics{../../../images/venn_diagram_intersection_001.pdf}
-            \caption{Venn Diagram for Intersection}
-            \label{fig:venn_diagram_intersection_001}
-        \end{figure}
         The next operation is set difference. It is somewhat like subtraction
         for sets.
         \begin{definition}[\textbf{Set Difference}]
@@ -331,13 +365,7 @@
             That is, the set of all elements in $B$ that are not in $A$.
         \end{definition}
         The Venn diagram for set difference is given in
-        Fig.~\ref{fig:venn_diagram_set_difference_001}.
-        \begin{figure}
-            \centering
-            \includegraphics{../../../images/venn_diagram_set_difference_001.pdf}
-            \caption{Venn Diagram for Set Difference}
-            \label{fig:venn_diagram_set_difference_001}
-        \end{figure}
+        Fig.~\subref{fig:venn_diagram_set_difference_001}.
         \begin{example}
             Let $A=\{\,1,\,2,\,3\,\}$ and $B=\{\,3,\,4,\,5\,\}$. The set
             difference $B\setminus{A}$ is:
@@ -350,6 +378,21 @@
         The last operation is \textit{symmetric difference} and it is defined
         in terms of the other three. We will not use it, but for completeness
         the Venn diagram is shown.
+        \begin{figure}
+            \centering
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../../images/venn_diagram_set_difference_001.pdf}
+                \caption{Venn Diagram for Set Difference}
+                \label{fig:venn_diagram_set_difference_001}
+            \end{subfigure}
+            \begin{subfigure}[b]{0.49\textwidth}
+                \centering
+                \includegraphics{../../../images/venn_diagram_symmetric_difference_001.pdf}
+                \caption{Venn Diagram for Symmetric Difference}
+                \label{fig:venn_diagram_symmetric_difference_001}
+            \end{subfigure}
+        \end{figure}
         \begin{definition}[\textbf{Symmetric Difference}]
             The symmetric difference of two sets $A$ and $B$ is the set
             $A\ominus{B}$ defined by:
@@ -359,16 +402,11 @@
             That is, the set of all elements in either $A$ or $B$, but not both.
         \end{definition}
         Symmetric difference is the set equivalent of the exclusive or.
-        The Venn diagram is shown in Fig.~\ref{fig:venn_diagram_symmetric_difference_001}.
-        \begin{figure}
-            \centering
-            \includegraphics{../../../images/venn_diagram_symmetric_difference_001.pdf}
-            \caption{Venn Diagram for Symmetric Difference}
-            \label{fig:venn_diagram_symmetric_difference_001}
-        \end{figure}
+        The Venn diagram is shown in
+        Fig.~\subref{fig:venn_diagram_symmetric_difference_001}.
         \par\hfill\par
         There are several theorems relating union, intersection, and set
-        difference. They are proven in the text, but will just be listed here.
+        difference. We will use them often.
         \begin{align}
             A\cup{B}&=B\cup{A}\tag{Commutativity of Unions}\\
             A\cap{B}&=B\cap{A}\tag{Commutativity of Intersections}\\
