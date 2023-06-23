@@ -1,4 +1,7 @@
 #!/bin/bash
+
+export ASYMPTOTE_DIR=$(pwd)/asymptote/
+
 if [ ! "$BASH_VERSION" ] ; then
         echo "Please use BASH to run this script ($0)" 1>&2
         exit 1
