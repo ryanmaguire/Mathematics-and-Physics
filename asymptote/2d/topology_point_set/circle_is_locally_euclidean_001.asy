@@ -32,6 +32,9 @@ settings.outformat = "pdf";
 /*  Size of the figure.                                                       */
 size(256);
 
+/*  Needed for the \color command in LaTeX.                                   */
+texpreamble("\usepackage{xcolor}");
+
 defaultpen(black + linewidth(0.7pt) + fontsize(12pt));
 
 texpreamble("\usepackage{amssymb}");
