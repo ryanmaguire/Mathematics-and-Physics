@@ -19,15 +19,8 @@
 \usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
-\usepackage{float}
 \usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,
-    urlcolor=Cerulean,
-    citecolor=SkyBlue
-}
+\hypersetup{colorlinks=true, linkcolor=blue}
 
 %------------------------Theorem Styles-------------------------%
 \theoremstyle{plain}
@@ -48,8 +41,6 @@
 \theoremstyle{normal}
 \newtheorem{examplex}{Example}[section]
 \newtheorem{definitionx}{Definition}[section]
-\newtheorem{notationx}{Notation}[section]
-\newtheorem{axiomx}{Axiom}[section]
 
 \newenvironment{example}{%
     \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
@@ -65,7 +56,7 @@
 
 \title{Point-Set Topology: Lecture 6}
 \author{Ryan Maguire}
-\date{Summer 2022}
+\date{\today}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -84,13 +75,14 @@
         \end{example}
         \begin{example}
             In the real line $\mathbb{R}$ with the standard metric
-            $d(x,\,y)=|x-y|$ there are no proper subsets that are both open and
-            closed. Open sets are formed by open intervals $(a,\,b)$ and the
-            union of such sets. Closed sets are the complements of these sets.
-            Examples include closed intervals $[a,\,b]$, single points
-            $\{\,x\,\}$, and finite subsets of the real line. There are many
-            other examples not of this form. The rationals $\mathbb{Q}$ are
-            neither closed nor open. It is not open since $(a,\,b)$ always
+            $d(x,\,y)=|x-y|$ there are no proper non-empty
+            subsets that are both open and closed. Open sets are formed by
+            open intervals $(a,\,b)$ and the union of such sets. Closed sets
+            are the complements of these sets. Examples include closed
+            intervals $[a,\,b]$, single points $\{\,x\,\}$, and finite subsets
+            of the real line. There are many other examples not of this form.
+            The rationals $\mathbb{Q}$ are neither closed nor open.
+            It is not open since $(a,\,b)$ always
             contains irrational numbers for $a<b$, and hence can't be a
             subset of $\mathbb{Q}$. It is not closed since every irrational can
             be approximated by a sequence of rationals.
@@ -161,9 +153,9 @@
             triangle inequality. Thus, $(A,\,d_{A})$ is a metric space.
         \end{proof}
         \begin{definition}[\textbf{Metric Subspace}]
-            A metric subspace of a metric space $(X,\,d)$ is the metric space
-            $(A,\,d_{A})$ where $A\subseteq{X}$ and $d_{A}$ is the restriction
-            of $d$ to $A\times{A}$.
+            A metric subspace of a metric space $(X,\,d)$ is a metric space
+            $(A,\,d_{A})$ where $A$ is a subset $A\subseteq{X}$ and $d_{A}$
+            is the restriction of $d$ to $A\times{A}$.
         \end{definition}
         \begin{example}
             Equip $\mathbb{R}^{2}$ with the Euclidean metric and define
@@ -176,7 +168,7 @@
         \end{example}
         \begin{example}
             The unit sphere is defined similarly as a subspace of
-            $\mathbb{R}^{2}$. It is the set of all points
+            $\mathbb{R}^{3}$. It is the set of all points
             $\mathbf{x}\in\mathbb{R}^{3}$ such that $||\mathbf{x}||_{2}=1$.
             In general the $n$ dimensional sphere $\mathbb{S}^{n}$ is the
             subset of all points in $\mathbb{R}^{n+1}$ such that
@@ -345,6 +337,54 @@
             \lim_{n\rightarrow\infty}f(a_{n})=
                 f\big(\lim_{n\rightarrow\infty}a_{n}\big)=f(x)
         \end{equation}
+        This reads nicely as
+        \textit{the image of a convergent sequence is a convergent sequence}.
+        Similarly you could say $f$
+        \textit{maps convergent sequences to convergent sequences}.
+        \par\hfill\par
+        The simplest functions from calculus (constants and the identity) are
+        always continuous, regardless of the metrics.
+        \begin{theorem}
+            If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
+            $f:X\rightarrow{Y}$ is a constant function, then $f$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            For let $a:\mathbb{N}\rightarrow{X}$ be a convergent sequence.
+            Since $f$ is a contant function there is a $y\in{Y}$ such that
+            $f(x)=y$ for all $x\in{X}$. But then
+            $f(a_{n})=y$ for all $n\in\mathbb{N}$, meaning the image of the
+            sequence under $f$ is a constant sequence, which is in turn a
+            convergent sequence. Hence $f$ is continuous.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d)$ is a metric space and if
+            $\textrm{id}_{X}:X\rightarrow{X}$ is the identity function,
+            $\textrm{id}_{X}(x)=x$, then $\textrm{id}_{X}$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            For if $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence, then
+            $\textrm{id}_{X}(a_{n})=a_{n}$, which is still a convergent
+            sequence. So $\textrm{id}_{X}$ is continuous.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
+            $f:X\rightarrow{Y}$ is an isometry, then $f$ is continuous.
+        \end{theorem}
+        \begin{proof}
+            For let $a:\mathbb{N}\rightarrow{X}$ be a convergent sequence with
+            limit $x\in{X}$. Then given $\varepsilon>0$ there is an
+            $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and $n>N$ implies
+            $d_{X}(a_{n},\,x)<\varepsilon$. But then for all $n>N$ we have:
+            \begin{equation}
+                d_{Y}\big(f(a_{n}),\,f(x)\big)
+                    =d_{X}(a_{n},\,x)
+                    <\varepsilon
+            \end{equation}
+            and hence $f(a_{n})\rightarrow{f}(x)$. That is, $f$ is continuous.
+        \end{proof}
+        This theorem does not reverse. Since isometries must be injective,
+        any non-injective constant function (i.e., the co-domain has more than
+        two points) would be continuous but not an isometry.
         \begin{theorem}
             If $(X,\,d_{X})$ and $(Y,\,d_{Y})$ are metric spaces, and if
             $f:X\rightarrow{Y}$ is a function, then $f$ is continuous if and
