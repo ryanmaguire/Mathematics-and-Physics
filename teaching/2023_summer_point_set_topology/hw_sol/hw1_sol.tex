@@ -22,6 +22,7 @@
 \usepackage{xcolor}                             % Coloring text.
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=blue}
+\newcommand\largeoverset[2]{\overset{\textstyle #1\mathstrut}{#2}}
 
 %------------------------Theorem Styles-------------------------%
 
@@ -124,10 +125,11 @@
                     $P$&$Q$&$R$&
                     $P\Rightarrow{Q}$&$P\Rightarrow{R}$&$Q\Rightarrow{R}$&
                     $P\Rightarrow(Q\Rightarrow{R})$&
-                    $(P\Rightarrow{Q})\Rightarrow(P\Rightarrow{R})$&
-                    $\big(P\Rightarrow(Q\Rightarrow{R})\big)%
-                     \Rightarrow\big((P\Rightarrow{Q})%
-                     \Rightarrow(P\Rightarrow{R})\big)$\\
+                    $\largeoverset{(P\Rightarrow{Q})\Rightarrow}%
+                     {(P\Rightarrow{R})}$&
+                    $\largeoverset{\big(P\Rightarrow(Q\Rightarrow{R})\big)%
+                     \Rightarrow}{\big((P\Rightarrow{Q})%
+                     \Rightarrow(P\Rightarrow{R})\big)}$\\
                     \hline
                     False&False&False&True&True&True&True&True&True\\
                     False&False&True&True&True&True&True&True&True\\
@@ -189,7 +191,8 @@
         \par\hfill\par
         This is not an \textit{independent} system of axioms, the first
         statement can be proved from axioms 2 and 3 (together with
-        \textit{modus ponens}). Let $R=P$ and $Q=P\Rightarrow{P}$. Then we have:
+        \textit{modus ponens}). By setting $R=P$ and $Q=(P\Rightarrow{P})$
+        we obtain:
         \begin{align}
             \big(P\Rightarrow(Q\Rightarrow{R})\big)
             &\Rightarrow\big((P\Rightarrow{Q})\Rightarrow(P\Rightarrow{R})\big)
@@ -263,6 +266,39 @@
         true when both $P$ and $Q$ are true. The truth table is given in
         Tab.~\ref{tab:truth_tab_conjunction}.
         \par\hfill\par
+        We can use the Hilbert system to prove some of the basic laws of logical
+        \textit{or} and \textit{and}, such as commutativity, associativity, and
+        much more. To prove commutativity we wish to show that:
+        \begin{equation}
+            P\lor{Q}\Leftrightarrow{Q}\lor{P}
+        \end{equation}
+        which is equivalent to two implications:
+        \begin{align}
+            P\lor{Q}&\Rightarrow{Q}\lor{P}\\
+            Q\lor{P}&\Rightarrow{P}\lor{Q}
+        \end{align}
+        Since we have defined disjunction using implication and negation, we
+        can expand the $\lor$ symbol out and get the following implications:
+        \begin{align}
+            (\neg{P}\Rightarrow{Q})&\Rightarrow(\neg{Q}\Rightarrow{P})\\
+            (\neg{Q}\Rightarrow{P})&\Rightarrow(\neg{P}\Rightarrow{Q})
+        \end{align}
+        Let's prove these two claims. Hilbert's fourth says
+        $(\neg{P}\Rightarrow\neg{Q})\Rightarrow(Q\Rightarrow{P})$. Substituting
+        $P=P$ and $Q=\neg{Q}$, and invoking the law of double negation
+        $(Q\Leftrightarrow\neg\neg{Q})$, we get:
+        \begin{equation}
+            (\neg{P}\Rightarrow{Q})\Rightarrow(\neg{Q}\Rightarrow{P})
+        \end{equation}
+        Which is the first desired implication. Returning to Hilbert's fourth
+        axiom, $(\neg{P}\Rightarrow\neg{Q})\Rightarrow(Q\Rightarrow{P})$, if
+        we substitute $P=Q$ and $Q=\neg{P}$, we get:
+        \begin{equation}
+            (\neg{Q}\Rightarrow{P})\Rightarrow(\neg{P}\Rightarrow{Q})
+        \end{equation}
+        which is the second desired implication. Hence
+        $P\lor{Q}\Rightarrow{Q}\lor{P}$ and $Q\lor{P}\Rightarrow{P}\lor{Q}$.
+        That is, the logical \textit{or} is commutative.
         \begin{table}
             \centering
             \begin{tabular}{c | c | c | c | c}
@@ -319,6 +355,66 @@
                 \end{equation}
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        Let's start with $A\cup(B\cap{C})=(A\cup{B})\cap(A\cup{C})$. We do this
+        by showing the left-hand side is a subset of the right-hand side, and
+        vice-versa. Suppose $x\in{A}\cup(B\cap{C})$. Then, by definition of
+        union, $x\in{A}$ or $x\in{B}\cap{C}$. Then $x\in{A}$ or $x\in{B}$ and
+        $x\in{C}$. But if $x\in{A}$, then $x\in{A}$ or $x\in{B}$, by definition
+        of \textit{or}. Similarly if $x\in{A}$, then $x\in{A}$ or $x\in{C}$.
+        Hence if $x\in{A}$ then $x\in{A}$ or $B$ and $x\in{A}$ or $C$, so
+        $x\in(A\cup{B})\cap(A\cup{C})$. If $x\in{B}\cap{C}$, then $x\in{B}$ and
+        $C$ by definition of intersection. Again by our use of the word
+        \textit{or}, $x\in{A}$ or $x\in{B}$ and $x\in{A}$ or $x\in{C}$, so
+        $x\in(A\cup{B})\cap(A\cup{C})$, meaning
+        $A\cup(B\cap{C})\subseteq(A\cup{B})\cap(A\cup{C})$. In the other
+        direction, if $x\in(A\cup{B})\cap(A\cup{C})$, then
+        $x\in{A}\cup{B}$ and $x\in{A}\cup{C}$. So either $x\in{A}$ is true,
+        or $x\in{B}$ and $x\in{C}$ is true, meaning
+        $x\in{A}\cup(B\cap{C})$, and hence
+        $(A\cup{B})\cap(A\cup{C})\subseteq{A}\cup(B\cap{C})$. Thus,
+        $A\cup(B\cap{C})=(A\cup{B})\cap(A\cup{C})$.
+        \par\hfill\par
+        For the next equality we need to show that
+        $A\cap(B\cup{C})\subseteq(A\cap{B})\cup(A\cap{C})$ and
+        $(A\cap{B})\cup(A\cap{C})\subseteq{A}\cap(B\cup{C})$.
+        Suppose $x\in{A}\cap(B\cup{C})$. Then $x\in{A}$ and
+        $x\in{B}\cup{C}$, by the definition of intersection. But then
+        $x\in{A}$ and $x\in{B}$, or $x\in{A}$ and $x\in{C}$, by definition of
+        union. Hence $x\in{A}\cap{B}$ or $x\in{A}\cap{C}$, meaning
+        $x\in(A\cap{B})\cup(A\cap{C})$. In the other direction, if
+        $x\in(A\cap{B})\cup(A\cap{C})$, then $x\in{A}\cap{B}$ or
+        $x\in{A}\cap{C}$. But then $x\in{A}$ and $x\in{B}$, or
+        $x\in{A}$ and $x\in{C}$, by definition of intersection. This means
+        $x\in{A}$ and either $x\in{B}$ or $x\in{C}$, meaning
+        $x\in{A}\cap(B\cup{C})$.
+        \par\hfill\par
+        Now for the De Morgan laws. Suppose $x\in{X}\setminus(A\cup{B})$.
+        Then $x\notin{A}\cup{B}$, which means $x\notin{A}$ and
+        $x\notin{B}$. That is, $x\in(X\setminus{A})\cap(X\setminus{B})$,
+        so $X\setminus(A\cup{B})\subseteq(X\setminus{A})\cap(X\setminus{B})$.
+        Now suppose $x\in(X\setminus{A})\cap(X\setminus{B})$. Then
+        $x\in{X}\setminus{A}$ and $x\in{X}\setminus{B}$. That is,
+        $x\notin{A}$ and $x\notin{B}$, and hence $x\notin{A}\cup{B}$. But if
+        $x\notin{A}\cup{B}$ and $x\in{X}$, then $x\in{X}\setminus(A\cup{B})$.
+        Therefore
+        $(X\setminus{A})\cap(X\setminus{B})\subseteq{X}\setminus(A\cup{B})$,
+        and thus $(X\setminus{A})\cap(X\setminus{B})={X}\setminus(A\cup{B})$.
+        \par\hfill\par
+        The other De Morgan law is dealt with similarly. Suppose
+        $x\in{X}\setminus(A\cap{B})$. Then $x\notin{A}\cap{B}$, meaning
+        $x\notin{A}$ or $x\notin{B}$. But then
+        $x\in(X\setminus{A})\cup(X\setminus{B})$, implying
+        $X\setminus(A\cap{B})\subseteq(X\setminus{A})\cup(X\setminus{B})$.
+        Now suppose $x\in(X\setminus{A})\cup(X\setminus{B})$. Then
+        $x\notin{A}$ or $x\notin{B}$. But then $x\notin{A}\cap{B}$, and
+        therefore $x\in{X}\setminus(A\cap{B})$.
+        We conclude that
+        $X\setminus(A\cap{B})=(X\setminus{A})\cup(X\setminus{B})$.
+    \end{proof}
+    \newpage
+    \color{blue}
     \begin{problem}
         \textbf{(The Cantor-Schroeder-Bernstein Theorem)}
         \par\hfill\par
@@ -338,6 +434,65 @@
                 second, and vice-versa.
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        The problem is \textit{vacuous} if $A$ or $B$ are empty, so first
+        suppose they are not. Since $A$ is non-empty, pick some $x\in{A}$.
+        Given an injective function $f:A\rightarrow{B}$, define
+        $g:B\rightarrow{A}$ as follows:
+        \begin{equation}
+            g(b)=
+            \begin{cases}
+                a\in{A}\textrm{ such that }f(a)=b\\
+                x\textrm{ if such an element does not exist}
+            \end{cases}
+        \end{equation}
+        There's no axiom of choice needed here, since $f$ is injective we have
+        a well-defined function. $g$ is surjective. Given $a\in{A}$ let
+        $b=f(a)$. Then $g(b)=a$ by definition.
+        \par\hfill\par
+        Given a surjection $f:A\rightarrow{B}$, for each
+        $b\in{B}$ pick some $a_{b}\in{A}$ such that
+        $f(a_{b})=b$ and define $g(b)=a_{b}$. This \textit{choosing} does invoke
+        the axiom of choice, but very subtly. The function $g$ is an injective
+        function from $B$ to $A$ since
+        $g(b_{0})=g(b_{1})$ implies $a_{b_{0}}=a_{b_{1}}$, which means:
+        \begin{equation}
+            b_{0}=f(a_{b_{0}})=f(a_{b_{1}})=b_{1}
+        \end{equation}
+        and hence $b_{0}=b_{1}$, so $g$ is injective.
+        \par\hfill\par
+        Now suppose the first Cantor-Schroeder-Bernstein theorem is true.
+        That is, if there exists injective functions $f:A\rightarrow{B}$ and
+        $g:B\rightarrow{A}$, then there is a bijection $h:A\rightarrow{B}$.
+        Let's use this to prove the second Cantor-Schroeder-Bernstein theorem.
+        Suppose $\tilde{f}:A\rightarrow{B}$ and $\tilde{g}:B\rightarrow{A}$ are
+        surjective functions. By the previous part of the problem there then
+        exists injective functions $f:A\rightarrow{B}$ and $g:B\rightarrow{A}$.
+        But then by the first Cantor-Schroeder-Bernstein theorem there is a
+        bijection $h:A\rightarrow{B}$. Hence the existence of surjective
+        functions $\tilde{f}:A\rightarrow{B}$ and $\tilde{g}:B\rightarrow{B}$
+        implies the existence of a bijection $h:A\rightarrow{B}$.
+        \par\hfill\par
+        In the other direction, suppose the second Cantor-Schroeder-Bernstein
+        theorem holds. That is, if $f:A\rightarrow{B}$ and $g:B\rightarrow{A}$
+        are surjective functions, then there is a bijection $h:A\rightarrow{B}$.
+        Given injective function $\tilde{f}:A\rightarrow{B}$ and
+        $\tilde{g}:B\rightarrow{A}$, by the previous part of the problem there
+        are surjective functions $f:A\rightarrow{B}$ and $g:B\rightarrow{A}$.
+        Then by the second Cantor-Schroeder-Bernstein theorem there is a
+        bijection $h:A\rightarrow{B}$. Hence the existence of injective
+        functions $\tilde{f}:A\rightarrow{B}$ and $\tilde{g}:B\rightarrow{A}$
+        implies the existence of a bijection $h:A\rightarrow{B}$.
+        \par\hfill\par
+        Since the first Cantor-Schroeder-Bernstein theorem implies the second,
+        and vice-versa, all you need to do is prove \textit{one} of them, and
+        the second immediately follows. Most texts usually prove the first one,
+        that if there exists injective function $f:A\rightarrow{B}$ and
+        $g:B\rightarrow{A}$, then there is a bijection $h:A\rightarrow{B}$.
+    \end{proof}
+    \newpage
+    \color{blue}
     \begin{problem}
         \textbf{(Induced Metrics)}
         \par\hfill\par
@@ -370,6 +525,62 @@
                 a norm.
         \end{itemize}
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        This function is indeed a metric. It is positive-definite since
+        $||\mathbf{x}||$ is non-negative and:
+        \begin{align}
+            d(\mathbf{x},\,\mathbf{y})&=0\\
+            \Leftrightarrow||\mathbf{x}-\mathbf{y}||&=0\\
+            \Leftrightarrow\mathbf{x}-\mathbf{y}&=\mathbf{0}\\
+            \Leftrightarrow\mathbf{x}&=\mathbf{y}
+        \end{align}
+        It is symmetric since:
+        \begin{align}
+            d(\mathbf{x},\,\mathbf{y})&=||\mathbf{x}-\mathbf{y}||\\
+                &=||(-1)(\mathbf{y}-\mathbf{x})||\\
+                &=|-1|\;||\mathbf{y}-\mathbf{x}||\\
+                &=||\mathbf{y}-\mathbf{x}||\\
+                &=d(\mathbf{y},\,\mathbf{x})
+        \end{align}
+        Lastly, the triangle inequality is satisfied. We have, for any
+        $\mathbf{x},\mathbf{y},\mathbf{z}\in\mathbb{R}^{n}$:
+        \begin{align}
+            d(\mathbf{x},\,\mathbf{y})&=||\mathbf{x}-\mathbf{y}||\\
+                &=||\mathbf{x}+\mathbf{0}-\mathbf{y}||\\
+                &=||\mathbf{x}+(-\mathbf{z}+\mathbf{z})-\mathbf{y}||\\
+                &=||(\mathbf{x}-\mathbf{z})+(\mathbf{z}-\mathbf{y})||\\
+                &\leq||\mathbf{x}-\mathbf{z}||+||\mathbf{z}-\mathbf{y}||\\
+                &=||\mathbf{x}-\mathbf{z}||+|\mathbf{y}-\mathbf{z}||\\
+                &=d(\mathbf{x},\,\mathbf{z})+d(\mathbf{y},\,\mathbf{z})
+        \end{align}
+        So $d$ is a metric.
+        \par\hfill\par
+        The balls in a normed vector space are convex. Since translation
+        $T:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n}$, defined by
+        $T(\mathbf{x})=\mathbf{x}+\mathbf{a}$ for some fixed
+        $\mathbf{a}\in\mathbb{R}^{n}$, is a global isometry, and since
+        $||a\mathbf{x}||=|a|\;||\mathbf{x}||$ for all real $a\in\mathbb{R}$,
+        we can consider open balls of radius 1 centered at the origin. Let
+        $\mathbf{x},\,\mathbf{y}\in\mathbb{R}^{n}$ be such that
+        $d(\mathbf{x},\,\mathbf{0})<1$ and $d(\mathbf{y},\,\mathbf{0})<1$.
+        In other words, suppose $||\mathbf{x}||<1$ and $||\mathbf{y}||<1$.
+        Then for any $0\leq{t}\leq{1}$ we have:
+        \begin{align}
+            ||t\mathbf{x}+(1-t)\mathbf{y}||
+                &\leq||t\mathbf{x}||+||(1-t)\mathbf{y}||
+                    \tag{Triangle Inequality}\\
+                &=|t|\;||\mathbf{x}||+|1-t|\;||\mathbf{y}||
+                    \tag{Factoring Scalars}\\
+                &<|t|+|1-t|
+                    \tag{Since $||\mathbf{x}||<1$ and $||\mathbf{y}||<1$}\\
+                &=t+1-t\tag{Since $0\leq{t}\leq{1}$}\\
+                &=1\tag{Simplify}
+        \end{align}
+        And hence this point lies in the unit ball as well.
+    \end{proof}
+    \newpage
+    \color{blue}
     \begin{problem}
         \textbf{(Connected Subsets)}
         \par\hfill\par
@@ -380,4 +591,16 @@
         are disjoint non-empty open sets. Give an example that shows that
         open balls do not need to be connected.
     \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        There are many examples, but the easiest is probably the discrete
+        metric on a two point set. Let $X=\{\,0,\,1\,\}$ and $d$ be the
+        discrete metric on $X$. The ball of radius 2 centered about zero is
+        disconnected since it can be written as the union of the ball of radius
+        1 about 0 and the ball of radius 1 about 1, two non-empty disjoint
+        open sets. That is, the set $\{\,0,\,1\,\}$, which is the open ball of
+        radius 2 centered at 0, can be written as the union of
+        $\{\,0\,\}$ and $\{\,1\,\}$, which are the open balls of radius 1
+        centered about 0 and 1, respectively.
+    \end{proof}
 \end{document}
