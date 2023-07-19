@@ -15,19 +15,11 @@
 %   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
 %------------------------------------------------------------------------------%
 \documentclass{article}
-\usepackage{graphicx}                           % Needed for figures.
 \usepackage{amsmath}                            % Needed for align.
 \usepackage{amssymb}                            % Needed for mathbb.
 \usepackage{amsthm}                             % For the theorem environment.
-\usepackage{float}
 \usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,
-    urlcolor=Cerulean,
-    citecolor=SkyBlue
-}
+\hypersetup{colorlinks=true, linkcolor=blue}
 
 %------------------------Theorem Styles-------------------------%
 \theoremstyle{plain}
@@ -48,8 +40,6 @@
 \theoremstyle{normal}
 \newtheorem{examplex}{Example}[section]
 \newtheorem{definitionx}{Definition}[section]
-\newtheorem{notationx}{Notation}[section]
-\newtheorem{axiomx}{Axiom}[section]
 
 \newenvironment{example}{%
     \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
@@ -65,7 +55,7 @@
 
 \title{Point-Set Topology: Lecture 13}
 \author{Ryan Maguire}
-\date{Summer 2022}
+\date{\today}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -155,8 +145,7 @@
         particular space is first-countable rather than prove it is sequential,
         so the following theorem has many uses in topology.
         \begin{theorem}
-            If $(X,\,\tau)$ is a first-countable topological space, then it is
-            sequential.
+            If $(X,\,\tau)$ is first-countable, then it is sequential.
         \end{theorem}
         \begin{proof}
             Suppose not. Then there is $\mathcal{U}\subseteq{X}$ that is
@@ -372,25 +361,28 @@
             That is, $\mathcal{B}$ is the set of all balls of rational radii
             centered at all points in $A$. Since $A$ and $\mathbb{Q}$ are
             countable, the set $\mathcal{B}$ is countable as well.
-            $\mathcal{B}$ is a basis. It covers $X$, for given $y\in{X}$,
-            pick any $x\in{A}$ and $r\in\mathbb{Q}^{+}$ such that
-            $r>d(x,\,y)$. Then $y\in{B}_{r}^{(X,\,d)}(x)$, which is an element
-            of $\mathcal{B}$, so $\mathcal{B}$ is an open cover of $(X,\,\tau)$.
-            Suppose $\mathcal{U},\mathcal{V}\in\tau$ and
-            $x\in\mathcal{U}\cap\mathcal{V}$. Since $\mathcal{U}\cap\mathcal{V}$
-            is open and $x\in\mathcal{U}\cap\mathcal{V}$ there is an
-            $r>0$ such that
-            $B_{r}^{(X,\,d)}(x)\subseteq\mathcal{U}\cap\mathcal{V}$. But since
-            $r>0$, $r/4>0$ as well, so $B_{r/4}^{(X,\,d)}(x)$ is open. But
-            $A$ is dense, so there is a $y\in{A}$ such that
-            $y\in{B}_{r/4}^{(X,\,d)}(x)$. Choose
-            $\varepsilon\in\mathbb{Q}^{+}$ such that $r/4<\varepsilon<r/2$.
-            Then $B_{\varepsilon}^{(X,\,d)}(y)\subseteq{B}_{r}^{(X,\,d)}(x)$,
-            so $B_{\varepsilon}^{(X,\,d)}(y)\subseteq\mathcal{U}\cap\mathcal{V}$
-            but also $x\in{B}_{\varepsilon}^{(X,\,d)}(y)$. That is, we've found
-            an element of $\mathcal{B}$ that contains $x$ and fits inside of
-            $\mathcal{U}\cap\mathcal{V}$. Hence, $\mathcal{B}$ is a countable
-            basis. Therefore, $(X,\,\tau)$ is second countable.
+            $\mathcal{B}$ is a basis. We need to show the for all
+            $\mathcal{U}\in\tau$ there is some $\mathcal{O}\subseteq\mathcal{B}$
+            such that $\bigcup\mathcal{O}=\mathcal{B}$. Let
+            $\mathcal{O}$ be the set of all elements in $\mathcal{B}$ that are
+            subsets of $\mathcal{O}$. Then $\bigcup\mathcal{O}=\mathcal{U}$.
+            One direction of the equality is immediate.
+            $\bigcup\mathcal{O}\subseteq\mathcal{U}$ is true since all of the
+            elements of $\mathcal{O}$ are subsets of $\mathcal{U}$. Let us
+            reverse this inclusion. Let $y\in\mathcal{U}$. Since
+            $\mathcal{U}$ is open, there is some $\varepsilon>0$ suc that
+            $B_{\varepsilon}^{(X,\,d)}(y)\subseteq\mathcal{U}$. But if
+            $\varepsilon>0$, then $\varepsilon/4>0$, and the ball of radius
+            $\varepsilon/4$ centered about $y$ is open and non-empty, since it
+            includes $y$. But $A$ is dense, so the intersection of
+            $B_{\varepsilon/4}^{(X,\,d)}(y)$ with $A$ is non-empty. Let
+            $x\in{A}$ be an element of this intersection, and choose
+            $q\in\mathbb{Q}^{+}$ such that $\varepsilon/4<q<\varepsilon/2$.
+            Then $y\in{B}_{q}^{(X,\,d)}(x)$ and
+            $B_{q}^{(X,\,d)}(x)\subseteq{B}_{\varepsilon}^{(X,\,d)}(y)$, and
+            hence $B_{q}^{(X,\,d)}(x)\subseteq\mathcal{U}$, meaning
+            $y\in\bigcup\mathcal{O}$. So $\mathcal{B}$ is a countable basis of
+            $\tau$.
         \end{proof}
         The trick \textit{seems} to hint that a separable first-countable space
         should be second-countable, but this is \textbf{false}. The metric
