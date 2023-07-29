@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
+access settings;
 settings.outformat = "pdf";
 
 /*  Functions for adding grid lines to a drawing.                             */
@@ -32,10 +32,10 @@ access "grid_lines.asy" as grid;
 access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
-size(256);
+size(512);
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.5pt));
+defaultpen(black + linewidth(0.8pt));
 
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -3;
@@ -48,7 +48,7 @@ real grid_length = 3.9;
 real axis_length = 4.2;
 
 /*  Pen for labels.                                                           */
-pen label_pen = fontsize(6pt);
+pen label_pen = fontsize(12pt);
 
 /*  Start and end points for the line representing the linear equation.       */
 pair start = (-axis_length, -axis_length);

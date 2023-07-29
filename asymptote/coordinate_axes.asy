@@ -25,10 +25,10 @@
 access "custom_arrows.asy" as arrows;
 
 /*  Default arrow head.                                                       */
-arrowbar default_arrow = arrows.SharpArrow(5bp);
+arrowbar default_arrow = arrows.SharpArrow(8bp);
 
 /*  Default axis pen. Adequate for most drawings.                             */
-pen default_axis_pen = black + linewidth(0.8pt);
+pen default_axis_pen = black + linewidth(1.2pt) + fontsize(12pt);
 
 /******************************************************************************
  *  Function:                                                                 *
@@ -65,8 +65,8 @@ void DrawAndLabelCoordinateAxes(pair start, pair end,
     pair right = (end.x, 0.0);
 
     /*  Similarly provide the start and end of the y axis.                    */
-    pair bottom = (0.0, start.x);
-    pair top = (0.0, end.x);
+    pair bottom = (0.0, start.y);
+    pair top = (0.0, end.y);
 
     /*  Create labels for the two axes.                                       */
     Label x_label = Label("$x$", position = 1.0);
@@ -114,3 +114,42 @@ void DrawAndLabelSquareCoordinateAxes(real axis_length,
                                axis_pen = axis_pen, arrow = arrow);
 }
 /*  End of DrawAndLabelSquareCoordinateAxes.                                  */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      DrawAndLabelRectangularCoordinateAxes                                 *
+ *  Purpose:                                                                  *
+ *      Draw x and y axes with the same lengths.                              *
+ *  Arguments:                                                                *
+ *      axis_start (real):                                                    *
+ *          Starting value of the x and y axes.                               *
+ *      axis_end (real):                                                      *
+ *          Final value of the x and y axes.                                  *
+ *  Keywords:                                                                 *
+ *      x_label_dir (pair):                                                   *
+ *          The direction of the label for the x axis. Default is South.      *
+ *      y_label_dir (pair):                                                   *
+ *          The direction of the label for the y axis. Default is East.       *
+ *      axis_pen (pen):                                                       *
+ *          Pen used to draw the axis.                                        *
+ *      arrow (arrowbar):                                                     *
+ *          Arrow used to end the axes.                                       *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
+void DrawAndLabelRectangularCoordinateAxes(real axis_start, real axis_end,
+                                           pair x_label_dir = S,
+                                           pair y_label_dir = E,
+                                           pen axis_pen = default_axis_pen,
+                                           arrowbar arrow = default_arrow)
+{
+    /*  Compute the start and end points of the axes.                         */
+    pair start = (axis_start, axis_start);
+    pair end = (axis_end, axis_end);
+
+    /*  Pass these points to the main axes functions.                         */
+    DrawAndLabelCoordinateAxes(start, end, x_label_dir = x_label_dir,
+                               y_label_dir = y_label_dir,
+                               axis_pen = axis_pen, arrow = arrow);
+}
+/*  End of DrawAndLabelRectangularCoordinateAxes.                             */

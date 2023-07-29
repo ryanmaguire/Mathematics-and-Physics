@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
+access settings;
 settings.outformat = "pdf";
 
 /*  Sharp tikz style arrows provided here.                                    */
@@ -38,7 +38,7 @@ access "grid_lines.asy" as grid;
 access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
-size(256);
+size(512);
 
 /*  The parabola function to be drawn.                                        */
 real two_minus_x_squared(real x)
@@ -53,7 +53,7 @@ real sqrt_two_minus_x(real x)
 }
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.2mm) + fontsize(8pt));
+defaultpen(black + linewidth(0.8) + fontsize(12pt));
 
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -9;
@@ -66,7 +66,7 @@ real grid_length = 10.2;
 real arrow_size = 5bp;
 
 /*  Pen for labels.                                                           */
-pen label_pen = fontsize(6pt);
+pen label_pen = fontsize(12pt);
 
 /*  Number of samples for square root and parabola functions.                 */
 int samples = 20;

@@ -24,25 +24,25 @@
  ******************************************************************************/
 
 /*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
+access settings;
 settings.outformat = "pdf";
 
 /*  Create 3D drawings using 2D points.                                       */
 access "projection.asy" as proj;
 
 /*  Size of the figure.                                                       */
-size(256);
+size(512);
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.5pt));
+defaultpen(black + linewidth(0.8pt));
 
 /*  Other pens used.                                                          */
 pen dashp = defaultpen + linetype("4 4");
-pen thinp = black + linewidth(0.1pt);
-pen bluep = blue + linewidth(0.5pt);
+pen thinp = black + linewidth(0.3pt);
+pen bluep = blue + linewidth(0.8pt);
 pen thindashp = thinp + linetype("4 4");
 pen bluedashp = bluep + linetype("4 4");
-pen greendashp = green + linewidth(0.4pt) + linetype("4 4");
+pen greendashp = green + linewidth(0.8pt) + linetype("4 4");
 
 /*  Coordinates for all of the points in the cube.                            */
 pair O = proj.XYZPoint(0, 0, 0);
