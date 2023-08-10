@@ -1,0 +1,262 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{xcolor}                             % Coloring text.
+
+%------------------------Theorem Styles-------------------------%
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{problem}{Problem}
+
+\title{Point-Set Topology: Homework 3}
+\date{Summer 2023}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \color{blue}
+    \begin{problem}
+        \textbf{(Separability)}
+        \par\hfill\par
+        A separable topological space is a space $(X,\,\tau)$ such that there
+        is a countable subset $A\subseteq{X}$ such that
+        $\textrm{Cl}_{\tau}(A)=X$.
+        A metric space is separable if and only if it is second-countable. This
+        feature is special to metric spaces. Take $\mathbb{R}$ with the
+        standard topology, and equip $\mathbb{R}/\mathbb{Z}$ with the
+        quotient topology. Intuitively this is infinite many circles all
+        touching at $0$. It is not first-countable, and hence not
+        second-countable, even though $\mathbb{R}$ is. It is still separable.
+        \begin{itemize}
+            \item (6 Points) Let $(X,\,\tau)$ be a separable topological space.
+                Let $R$ be any equivalence relation on $X$. Prove that
+                $(X/R,\,\tau_{X/R})$ is separable. That is, separability is
+                a topological property preserved by quotients.
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        Since $(X,\,\tau)$ is separable, there is a countable dense subset
+        $A$. Let $q:X\rightarrow{X}/R$ be the quotient map, $q(x)=[x]$ where
+        $[x]$ is the equivalence class of $x$, and let $B=q[A]$. Since $B$ is
+        the image of a countable set, it too is countable. We must prove
+        $\textrm{Cl}_{\tau_{X/R}}(B)=X/R$. Let
+        $\tilde{\mathcal{C}}\subseteq{X}/R$
+        be a closed set containing $B$. But $q$ is continuous, and so the
+        pre-image of closed sets is closed, meaning
+        $q^{-1}[\tilde{\mathcal{C}}]$ is closed. Let
+        $\mathcal{C}=q^{-1}[\tilde{\mathcal{C}}]$. Then $\mathcal{C}$ is a
+        closed set that contains $A$ since $q[A]=B$. But if
+        $A\subseteq\mathcal{C}$ and $\mathcal{C}$ is closed, then
+        $\textrm{Cl}_{\tau}(A)\subseteq\mathcal{C}$. But
+        $\textrm{Cl}_{\tau}(A)=X$, and hence $\mathcal{C}=X$. But then, since
+        quotient maps are surjective, we have that
+        $q[\mathcal{C}]=q[X]=X/R$. But
+        $q[\mathcal{C}]\subseteq\tilde{\mathcal{C}}$, by definition of
+        $\mathcal{C}$ and $\tilde{\mathcal{C}}$, and hence
+        $\tilde{\mathcal{C}}=X/R$. That is, if $\tilde{\mathcal{C}}$ is a
+        closed subset of $X/R$ such that $B\subseteq\tilde{\mathcal{C}}$, then
+        $\tilde{\mathcal{C}}=X/R$. Hence
+        $\textrm{Cl}_{\tau_{X/R}}(B)=X/R$, so $B$ is a countable dense subset
+        and $(X/R,\,\tau_{X/R})$ is separable.
+    \end{proof}
+    \newpage
+    \color{blue}
+    \begin{problem}
+        \textbf{(Embeddings)}
+        \par\hfill\par
+        The bug-eyed line is a quotient space of
+        $X=\mathbb{R}\times\{\,0,\,1\,\}$ where $\mathbb{R}$ has the standard
+        Euclidean topology and $\{\,0,\,1\,\}$ has the discrete topology. $X$
+        is given the product topology. We identity
+        $(x,\,0)$ with $(x,\,1)$ for all $x\ne{0}$ and then take the quotient
+        of $X$ under this relation. This idea is shown in
+        Fig.~\ref{fig:bug_eyed_line}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/bug_eyed_line_001.pdf}
+            \caption{The Bug-Eyed Line Construction}
+            \label{fig:bug_eyed_line}
+        \end{figure}
+        \begin{itemize}
+            \item (6 Points) Prove that it is impossible to embed
+            the bug-eyed line into $\mathbb{R}^{n}$ for all $n\in\mathbb{N}$.
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        This space is not Hausdorff. For let $q:X\rightarrow{X}/R$ be the
+        canonical quotient map, and define $0'=q((0,\,0))$ and
+        $0''=q((0,\,1))$. These are the two origins in the buy-eyed line.
+        Let $\mathcal{U}\subseteq{X}/R$ be an open set about $0'$ and
+        $\mathcal{V}\subseteq{X}/R$ be an open set about $0''$. Then
+        $q^{-1}[\mathcal{U}],q^{-1}[\mathcal{V}]\subseteq{X}$ are open
+        subsets of $X$ since $q$ is continuous. Moreover, $(0,\,0)$ is an
+        element of $q^{-1}[\mathcal{U}]$ and $(0,\,1)$ is an element of
+        $q^{-1}[\mathcal{V}]$. But the topology on $X$ is the product topology
+        from $\mathbb{R}$ and $\mathbb{Z}_{2}=\{\,0,\,1\,\}$, the latter given
+        the discrete topology. So an open subset about
+        $(0,\,0)$ must contain all points between $(-\varepsilon,\,0)$ and
+        $(\varepsilon,\,0)$. A similar statement can be made for
+        $(0,\,1)$. Since $(x,\,0)$ and $(x,\,1)$ are identified by the relation
+        for all $x\ne{0}$, projecting these open intervals down to the quotient
+        space shows that $\mathcal{U}$ and $\mathcal{V}$ must overlap.
+        Hence $(X/R,\,\tau_{X/R})$ is not Hausdorff. But if
+        $f:X/R\rightarrow\mathbb{R}^{n}$ is an embedding, then
+        $X/R$ is homeomorphic to the subspace $f[X/R]\subseteq\mathbb{R}^{n}$.
+        But $\mathbb{R}^{n}$ is Hausdorff, so all of its subspaces are
+        Hausdorff. So no such embedding could possibly exist.
+        \par\hfill\par
+    \end{proof}
+    Fig.~\ref{fig:bug_eyed_line_open} provides a visual of the description of
+    open sets given in solution. Any open set containing the first origin
+    must overlap with any open set containing the second. We imagine the
+    bug-eyed line as the real line with an extra origin that is almost
+    indistinguishable from the first. This space is Fr\'{e}chet, however.
+    The two origins are indeed still closed.
+    \begin{figure}
+        \centering
+        \includegraphics{../../../images/bug_eyed_line_002.pdf}
+        \caption{Open Sets in the Bug-Eyed Line}
+        \label{fig:bug_eyed_line_open}
+    \end{figure}
+    \newpage
+    \color{blue}
+    \begin{problem}
+        \textbf{(Quotients)}
+        \par\hfill\par
+        Let $X=\mathbb{R}/\mathbb{Q}$, equipped with the quotient topology where
+        $\mathbb{R}$ carries the usual Euclidean topology.
+        \begin{itemize}
+            \item (4 Points) Is this space Hausdorff? Is it Fr\'{e}chet?
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        This space is not Hausdorff. A subset of $\mathbb{R}/\mathbb{Q}$ is
+        open if and only if the pre-image is open. This is one of the
+        defining characteristics of the quotient map $q$.
+        Let $[x],[y]\in\mathbb{R}/\mathbb{Q}$. There are three possibilities.
+        Both $x$ and $y$ are irrational, only one of $x$ and $y$ are irrational,
+        and both $x$ and $y$ are rational. If $x$ and $y$ are rational, then
+        $[x]=[y]$, so we may discard this possibility. Suppose both
+        $x$ and $y$ are irrational. Let $\mathcal{U},\mathcal{V}$ be
+        open sets about $[x]$ and $[y]$, respectively. Then
+        $q^{-1}[\mathcal{U}]$ and $q^{-1}[\mathcal{V}]$ are open sets
+        containing $x$ and $y$, respectively. But open sets in $\mathbb{R}$
+        are described by the metric. So there is some $\varepsilon_{x}>0$ and
+        some $\varepsilon_{y}>0$ such that
+        $(x-\varepsilon_{x},\,x+\varepsilon_{x})\subseteq{q}^{-1}[\mathcal{U}]$
+        and
+        $(y-\varepsilon_{y},\,y+\varepsilon_{y})\subseteq{q}^{-1}[\mathcal{V}]$.
+        But there must be a rational number between
+        $x+\varepsilon_{x}$ and a rational number between $y+\varepsilon_{y}$.
+        But all rationals are identified together by the equivalence relation,
+        meaning these rationals map to the same point under $q$. Hence
+        $\mathcal{U}$ and $\mathcal{V}$ must overlap, so $[x]$ and $[y]$ can not
+        be separated by open sets.
+        \par\hfill\par
+        If $x$ is irrational and $y$ is rational, the argument is almost
+        identical. Any open set about $[x]$ must contain $[y]$ by the previous
+        argument, and hence $[x]$ and $[y]$ can not be separated by open sets
+        either. So $\mathbb{R}/\mathbb{Q}$ is not Hausdorff.
+        \par\hfill\par
+        The space is also not Fr\'{e}chet. Given irrational numbers $x$ and
+        $y$ we can indeed find open sets for $[x]$ and $[y]$ satisfying the
+        Fr\'{e}chet condition. Namely, set
+        $\mathcal{U}=\mathbb{R}\setminus\{\,y\,\}$ and
+        $\mathcal{V}=\mathbb{R}\setminus\{\,x\,\}$. These sets are open in
+        $\mathbb{R}$ and moreover they are saturated with respect to $q$.
+        Hence $q[\mathcal{U}]$ and $q[\mathcal{V}]$ are open sets with
+        $[x]\in{q}[\mathcal{U}]$, $[x]\notin{q}[\mathcal{V}]$, and
+        $[y]\in{q}[\mathcal{V}]$ and $[y]\notin{q}[\mathcal{U}]$. The
+        problem arises when we consider $x$ irrational and $y$ rational. When
+        exploring the Hausdorff property we saw that any open set containing
+        $[x]$ must also contain $[y]$, and hence the Fr\'{e}chet condition
+        cannot be satisfied. $\mathbb{R}/\mathbb{Q}$ is neither Hausdorff nor
+        Fr\'{e}chet.
+    \end{proof}
+    \newpage
+    \color{blue}
+    \begin{problem}
+        \textbf{(Products)}
+        \par\hfill\par
+        Consider topological spaces $(X,\,\tau_{X})$, $(Y,\,\tau_{Y})$, and
+        $(Z,\,\tau_{Z})$. Equip $X\times{Y}$ with the product topology
+        $\tau_{X\times{Y}}$.
+        \begin{itemize}
+            \item (6 Points) Prove that a function
+                $f:Z\rightarrow{X}\times{Y}$ is continuous if and only if the
+                component functions $\textrm{proj}_{X}\circ{f}:Z\rightarrow{X}$
+                and $\textrm{proj}_{Y}\circ{f}:Z\rightarrow{Y}$ are continuous.
+        \end{itemize}
+    \end{problem}
+    \color{black}
+    \begin{proof}[Solution]
+        One direction is easier than the other. If $f$ is continuous, then
+        since projections are continuous, $\textrm{proj}_{X}\circ{f}$ and
+        $\textrm{proj}_{Y}\circ{f}$ are the compositions of continuous
+        functions, which are therefore continuous. That is, if $f$ is continuous,
+        then so are the component functions. In the other direction, suppose
+        the component functions are continuous. Let $z\in{Z}$ and
+        $\mathcal{W}\in\tau_{X\times{Y}}$ be any open set containing
+        $f(z)$. Since $\tau_{X\times{Y}}$ has as a basis the set of all open
+        rectangles, there must be some open sets $\mathcal{U}\in\tau_{X}$ and
+        $\mathcal{V}\in\tau_{Y}$ such that $f(z)\in\mathcal{U}\times\mathcal{V}$
+        and $\mathcal{U}\times\mathcal{V}\subseteq\mathcal{W}$. But
+        $\textrm{proj}_{X}\circ{f}$ is continuous, and
+        $(\textrm{proj}_{X}\circ{f})(z)\in\mathcal{U}$, so there is an open set
+        $\mathcal{E}_{X}$ such that $z\in\mathcal{E}_{X}$ and
+        $(\textrm{proj}_{X}\circ{f})[\mathcal{E}_{X}]\subseteq\mathcal{U}$.
+        Similarly there exists a set $\mathcal{E}_{Y}$ for
+        $\textrm{proj}_{Y}\circ{f}$. Let
+        $\mathcal{E}=\mathcal{E}_{X}\cap\mathcal{E}_{Y}$. Then $\mathcal{E}$
+        is open, being the intersection of two open sets, and
+        $z\in\mathcal{E}$. Moreover,
+        $f[\mathcal{E}]\subseteq\mathcal{U}\times\mathcal{V}$. For let
+        $(x,\,y)\in{f}[\mathcal{E}]$. Then
+        $\textrm{proj}_{X}\big((x,\,y)\big)=x$ and hence $x\in\mathcal{U}$, and
+        $\textrm{proj}_{Y}\big((x,\,y)\big)=y$ and so $y\in\mathcal{V}$. But
+        then $(x,\,y)\in\mathcal{U}\times\mathcal{V}$, meaning
+        $f[\mathcal{E}]\subseteq\mathcal{U}\times\mathcal{V}$. But
+        $\mathcal{U}\times\mathcal{V}\subseteq\mathcal{W}$, and hence
+        $f[\mathcal{E}]\subseteq\mathcal{W}$. That is, for all
+        $z\in{Z}$ and for every open set $\mathcal{W}$ containing $f(z)$ there
+        is an open set $\mathcal{E}\subseteq{Z}$ such that
+        $z\in\mathcal{E}$ and $f[\mathcal{E}]\subseteq\mathcal{W}$. So $f$ is
+        continuous.
+    \end{proof}
+\end{document}
