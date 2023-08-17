@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{HW VII}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \section*{Problem 1}
+        $0,1,1,1,4,3,3,2,8$.
+        \par\hfill\par\noindent
+        Going right to left, there are $n$ possible numbers that could
+        be greater than the last, $n-1$ greater than the second last,
+        and so on, yielding $n!$, which is the same size as the number of
+        permutations of $\mathbb{Z}_{n}$. If we cut this off at $k$, we'd have
+        $1\cdot{2}\cdots\cdot{k}\cdot{k}\cdots{k}$. We can use this to get the
+        expected maximum. The number of ways to have the maximum be 2 is the
+        number of ways to have at most 2 minus the number of ways to have at
+        most 1. Similarly, the number of ways to have maximum $k$ is the number
+        of ways to have maximum at most $k$ minus the number of ways to have
+        maximum at most $k-1$. To get the expectation  value, we weight this
+        by $k$, yielding:
+        \begin{equation}
+            \sum_{k=0}^{n}\Big(\frac{kk!k^{n-k}}{n!}-
+                \frac{k(k-1)^{n+1-k}}{n!}\Big)
+        \end{equation}
+        Shifting the sum for the term on the right, and noting the $k=0$ part
+        is redundant, yields:
+        \begin{equation}
+            \sum_{k=1}^{n}\frac{k!k^{n+1-k}}{n!}
+            -\sum_{k=0}^{n-1}\frac{(k+1)k^{n-k}}{n!}
+        \end{equation}
+        This telescopes, giving us roughly:
+        \begin{equation}
+            \sum_{k=1}^{n-1}\frac{k!k^{n-k}}{n!}
+        \end{equation}
+        Which, since the $k=n$ term is 1, we get similar asymptotics yielding
+        $\sqrt{\pi{n}/2}$.
+    \section*{Problem 2}
+        A pass corresponds precisely to an inversion, so the expected number is
+        the same as the expected maximum of the inversion table. There is
+        always one extra pass at the end, but asymptotically this is the same.
+\end{document}

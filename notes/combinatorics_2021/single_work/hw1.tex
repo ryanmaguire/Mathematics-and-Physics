@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{HW I}
+\author{Ryan Maguire}
+\date{\today}
+
+
+\begin{document}
+    \maketitle
+    \section*{Problem 1}
+        I asked Ben Adenbaum for clarification on what \textit{combinatorial proof} meant
+        and asked about what compositions are, as well as consulted Wikipedia.
+        \par\hfill\par\noindent
+        First, we compute the size of each set and then just compare the formulas.
+        \par\hfill\par\noindent
+        The number of compositions of a positive integer $n$ can be found by writing
+        $n=1+1+\cdots+1$ where there are $n$ 1's. There are then $n-1$ + symbols. At each
+        plus sign we can choose to insert a parenthesis or not, dividing the 1's to get
+        new numbers. For example, $6=1+1+1+1+1+1=(1+1)+(1)+(1+1+1)=2+1+3$, which
+        corresponds to the example $(2,1,3)$ outlined in the problem. Since there are
+        $n-1$ plus signs, we have $2^{n-1}$ total possibilities. So there are
+        $2^{n-1}$ compositions of a positive number $n$.
+        \par\hfill\par\noindent
+        The size of $\{1,\dots,n\}$ is, by the very definition of cardinality, $n$.
+        \par\hfill\par\noindent
+        The number of permutations of $\{1,2,\dots,n\}$ is $n!$ as can be shown by
+        induction. Supposing it holds for $\{1,2,\dots,n\}$, given the set $\{1,\dots,n+1\}$,
+        there are $n+1$ ways to choose the first element of our permutation, and then by
+        induction $n!$ ways for the rest, yielding $(n+1)\cdot{n}!=(n+1)!$ permutations.
+        \par\hfill\par\noindent
+        The set of prime numbers smaller than $n$ can be injectively embedded into
+        $\{1,2,\dots,n\}$ by the identity mapping. This injection is never surjective
+        since $1$ and $n$ will not be in the set of prime numbers \textit{less} than $n$.
+        \par\hfill\par\noindent
+        Lastly, the power set of $\{1,2,\dots,n\}$ can be shown to have cardinality $2^{n}$
+        by induction. Supposing it true for $\{1,2,\dots,n\}$, given the set
+        $\{1,2,\dots,n,n+1\}$, for any subset either $n+1$ lies in the subset of it does not.
+        Ignoring it, we obtain a subset of $\{1,2,\dots,n\}$. By induction there are
+        $2^{n}$ such sets. Hence there are $2^{n}$ subsets of $\{1,2,\dots,n,n+1\}$
+        containing $n+1$ and $2^{n}$ not containing it, and the intersection of this
+        division is empty. Hence there are $2^{n}+2^{n}=2^{n+1}$ subsets of
+        $\{1,2,\dots,n,n+1\}$.
+        \par\hfill\par\noindent
+        Now, we compare. Letting $P_{n}$ denote the number of primes less than $n$, we have
+        $P_{n}<n$. We also trivially have $2^{n-1}<2^{n}$. We can see that $2^{n-1}>n$ for all
+        $n>2$ by looking at the derivatives of $2^{x-1}$ and $x$. One is increasing, and the
+        other is constant. For $n=1$ and $n=2$, $2^{n-1}=n$. So, for $n>2$ we so for have
+        $P_{n}<n<2^{n-1}<2^{n}$. Lastly, $n!$. We can show that this will eventually be bigger
+        than $2^{n}$ since:
+        \begin{subequations}
+            \begin{align}
+                n!&=n\cdot(n-1)\cdots{4}\cdot{3}\cdot{2}\\
+                  &>4\cdot{4}\cdots{4}\cdot{3}\cdot{2}\\
+                  &>2\cdot{2}\cdots{2}\cdot{2}\cdot{2}\cdot{2}\\
+                  &=2^{n}
+            \end{align}
+        \end{subequations}
+        Where we split one of the fours into $2\cdot{2}$ to get the extra 2 at the end.
+        So, for large enough $n$ we have:
+        \begin{equation}
+            P_{n}<n<2^{n-1}<2^{n}<n!
+        \end{equation}
+    \section*{Problem 2}
+        Big $O$ notation indicates an upper bound, not a lower one.
+        It would make sense to say \textit{The running time of the algorithm is at most}
+        $O(n^{3})$. The $\Omega$ notation gives a lower bound. As mentioned in office hour,
+        $O(n^{3})$ doesn't rule out the algorithm being $O(n^{2})$, for example.
+    \section*{Problem 3}
+        Suppose $f(N)=N\log_{2}(N)+O(N)$. Then:
+        \begin{equation}
+            \frac{f(N)}{N\log_{2}(N)}=\frac{N\log_{2}(N)+O(N)}{N\log_{2}(N)}
+            =1+\frac{O(N)}{N\log_{2}(N)}
+        \end{equation}
+        But any element of $O(N)$ will be dominated, eventually, by $N\log_{2}(N)$ since 
+        $N/(N\log_{2}(N))=1/\log_{2}(N)\Rightarrow{0}$. Hence $f(N)/(N\log_{2}(N))$
+        tends to a constant, and is therefore bounded both above and below, so
+        $f(N)=\Theta(N\log_{2}(N))$.
+    \section*{Problem 4}
+        My understanding is that this is a far more general version of the Birthday
+        problem. We want the probability that 2 keys have the same value, 3 keys, 4 keys,
+        etc., and the compute the expectation value of this. I was unable to get a
+        general formula, unfortunately, and resorted to a program. The value for
+        the probability that there are 2 keys with the same value is exactly the
+        birthday problem. On the next page is the code used to simulate the problem
+        and the output it generated.
+        \newpage
+        \begin{lstlisting}[
+            language=C,
+            gobble=12,
+            basicstyle=\footnotesize\ttfamily,
+            keywordstyle=\bfseries\color{green!40!black},
+            commentstyle=\itshape\color{purple!40!black},
+            identifierstyle=\color{blue}
+        ]
+            #include <stdlib.h>
+            #include <stdio.h>
+            
+            int main(void)
+            {
+                /*  Variables for indexing.                         */
+                unsigned int l, m, n;
+                
+                /*  Number of keys in the file.                     */
+                unsigned int N     = 1E4;
+                
+                /*  Maximum key in the file.                        */
+                unsigned int max   = 1E6;
+                
+                /*  Number of simulations we'll run.                */
+                unsigned int iters = 100;
+                
+                /*  Random array of keys.                           */
+                unsigned int *x = malloc(sizeof(*x) * N);
+                
+                /*  Variables for computing the expected value.     */
+                double average = 0.0;
+                unsigned int counter, old;
+            
+                /*  Loop over iters number of simulations.          */
+                for (l = 0; l < iters; ++l)
+                {
+                    /*  Reset the counter to zero and randomize x.  */
+                    counter = 0;
+                    old = 0;
+                    for (n = 0; n < N; ++n)
+                        x[n] = (rand() % max);
+            
+                    /*  Check how many entries of x equal m.        */
+                    for (m = 0; m < max; ++m)
+                    {
+                        for (n = 0; n < N; ++n)
+                        {
+                            if (x[n] == m)
+                                ++counter;
+                        }
+                        /*  If counter = old + 1, no duplicates.    */
+                        if (counter - old == 1)
+                            counter = old;
+                        else
+                            old = counter;
+                    }
+                    average += counter;
+                }
+                average /= iters;
+                printf("Average Value: %f\n", average);
+                free(x);
+                return 0;
+            }
+        \end{lstlisting}
+        Fixed typo from previous rendition. 10 simulations yield "Average Value: 104.100000"
+        and 100 gave "Average Value: 98.290000" which seems better.
+\end{document}

@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{HW II}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \section*{Problem 1}
+        Actual code is attached. The pseudo-code goes something like:
+        \begin{enumerate}
+            \item If length of list is 1, return list.
+            \item If length of list is 2, sort list. This is to avoid floor(length/3) being zero.
+            \item Otherwise, split list in two sublists of lengths floor(length/3) and one of that is
+                  length - $2\cdot\text{floor(length/3)}$, label LA, LB, and LC, respectively.
+            \item Set LA to mergesort(LA), LB to mergesort(LB), and LC to mergesort LC.
+            \item Return threewaymerge(LA, LB, LC).
+        \end{enumerate}
+        threewaymerge looks as follows:
+        \begin{enumerate}
+            \item Append ``infinity'' to the end of LA, LB, LC.
+            \item Set k, indA, indB, and indC to zero.
+            \item while ( k $<$ (size(LA) + size(LB) + size(LC)) do 
+            \begin{enumerate}
+                \item if (LA[indA] $\leq$ LB[indB] and LA[indA] $\leq$ LC[indC]) set out[k] = LA[indA]. Increment indA.
+                \item else if (LB[indB] $\leq$ LC[indC]) set out[k] = LB[indB]. Increment indB.
+                \item else set out[k] = LC[indC]. Increment indC.
+                \item increment k.
+            \end{enumerate}
+            \item Return out.
+        \end{enumerate}
+        We can see that this will also be $O\big(n\ln(n)\big)$. We make the hypothesis that for $n=3^{m}$ we have
+        $T(m)=T(m/3)+T(m/3)+T(m/3)+\Theta(n)$ where $\Theta(n)$ comes from the merging procedure. Following the
+        exact steps from class, we end up with $3^{m}\Theta(1)+m\Theta(n)$ which we then simplify using $m=\log_{3}(n)$,
+        and then recognizing $\Theta\big(\log_{3}(n)\big)=\Theta\big(\ln(n)\big)$, we have
+        $T(n)\in\Theta\big(n\ln(n)\big)$. This can be seen in the attached plots as well where a least squares-fit to the
+        sorting problem for arrays of size 1 to 8000 was performed, minimizing the error in:
+        \begin{equation}
+            \sqrt{\sum_{n=0}^{N-1}\Big(\text{data}[n]-an\ln(n)\Big)^2}
+        \end{equation}
+        Yielding $a\approx{0.048}$.
+    \section*{Problem 2}
+        Going in a slightly different order, we can find a closed form pretty nicely using the
+        binomial theorem. For $2^{n}$, counting the number of 1's that occur in all of the numbers
+        before $2^{n}$ is just counting the number of 1 that can fit into $n$ slots.
+        There are $\binom{n}{1}$ ways to have one 1, $\binom{n}{2}$ ways to have 2, and so forth.
+        The total number is the weighted sum:
+        \begin{equation}
+            p_{2^{n}}=\sum_{k=1}^{n}k\binom{n}{k}
+        \end{equation}
+        The binomial theorem tells us how to simplify this, and we get the closed form:
+        \begin{equation}
+            p_{2^{n}}=n2^{n-1}
+        \end{equation}
+        Which agrees with all of the values in the table. This can also give us a
+        recurrence:
+        \begin{subequations}
+            \begin{align}
+                p_{2^{n+1}}&=(n+1)2^{n}\\
+                    &=n2^{n}+2^{n}\\
+                    &=2(n2^{n-1})+2^{n}\\
+                    &=2p_{2^{n}}+2^{n}
+            \end{align}
+        \end{subequations}
+        Asympotically, we know the function is strictly increasing, so:
+        \begin{equation}
+            p_{2^{\text{floor}(\log_{2}(n))}}\leq{p}_{n}\leq{p}_{2^{\text{ceil}(\log_{2}(n))}}
+        \end{equation}
+        Which gives us:
+        \begin{equation}
+            m2^{m-1}\leq{p}_{n}\leq(m+1)2^{m}
+        \end{equation}
+        Using $m\approx\log_{2}(n)$, we have $p_{n}\in{O}(n\log_{2}(n))$.
+        We can also try to make sense of this intuitively. $\log_{2}(n)$ is telling us
+        how many binary digits there are, and $n/2$ is the average of the values between $1$ and $n$.
+        So $(n/2)\cdot\log_{2}(n)$ is roughly how many ones occur in the numbers less than $n$.
+        But $(n/2)\cdot\log_{2}(n)$ is in $O(n\cdot\log_{2}(n))$.
+    \section*{Problem 3}
+        The fastest way to find a single book is to just search through the entire list top to bottom.
+        This linear search has a best case of $O(1)$ (the book is on top) and a worst case of $O(n)$.
+        The average case is, similar to the max algorithm, $\ln(n)+\gamma$, $\gamma$ being the
+        Euler-Mascheroni constant, which we can also approximate with $H_{n}$, the $n^{th}$ harmonic
+        number.
+        \par\hfill\par
+        If we are getting queries daily, we should sort first, alphabetically. Perform a merge-sort
+        giving us a time-complexity of $n\ln(n)$. When we receive a query we may then perform a
+        binary search. Start at the middle, if the requested book is less than this middle book,
+        go to the one-fourth point, if greater than go to the three-fourths point, and if the
+        middle book is the one we want, we're done. This has worst case scenario of $\log_{2}(n)$
+        meaning our overall worst-case scenario for the $\sqrt{n}$ days is $n\ln(n)+\sqrt{n}\ln(n)$.
+        Compare this with a linear sort every day, we would have $n\sqrt{n}=n^{3/2}$, which is worse.
+\end{document}

@@ -1,0 +1,164 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{HW III}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \section*{Problem 1}
+        We first take the log of the recurrence relation to
+        get:
+        \begin{subequations}
+            \begin{align}
+                \ln(a_{n})&=\ln\big(\sqrt{a_{n-1}a_{n-2}}\big)\\
+                    &=\frac{1}{2}\ln(a_{n-1}a_{n-2})\\
+                    &=\frac{1}{2}\ln(a_{n-1})+
+                        \frac{1}{2}\ln(a_{n-2})
+            \end{align}
+        \end{subequations}
+        Labeling $F_{n}=\ln(a_{n})$ (since this looks like a
+        Fibonacci sequence), we obtain:
+        \begin{equation}
+            F_{n}=\frac{1}{2}F_{n-1}+\frac{1}{2}F_{n-2}
+        \end{equation}
+        If we've studied difference equations, we know how to
+        handle this, but if not we can use differential equations
+        to guess how to solve this. We propose a solution of the
+        form $F_{n}=a^{n}$ for some constant $a$. We get:
+        \begin{subequations}
+            \begin{align}
+                a^{n+2}&=\frac{1}{2}a^{n+1}+\frac{1}{2}a^{n}\\
+                \Rightarrow
+                a^{2}-\frac{1}{2}a-\frac{1}{2}&=0
+            \end{align}
+        \end{subequations}
+        This quadratic has two solutions, $a=1$ and
+        $a=-\frac{1}{2}$ so the solution is a linear combination
+        of these two. We get:
+        \begin{equation}
+            F_{n}=c_{0}+c_{1}\big(-\frac{1}{2}\big)^{n}
+        \end{equation}
+        We have two initial conditions, $F_{0}=\ln(1)=0$ and
+        $F_{1}=\ln(2)$. Using this we have:
+        \begin{subequations}
+            \begin{align}
+                c_{0}+c_{1}&=0\\
+                c_{0}-\frac{1}{2}c_{1}&=1
+            \end{align}
+        \end{subequations}
+        This gives us $c_{0}=2\ln(2)/3$ and
+        $c_{1}=-2\ln(2)/3$. The sequence we wanted was the
+        exponential of this:
+        \begin{equation}
+            a_{n}=\exp\Big[
+                \frac{2\ln(2)}{3}\Big(
+                    1-\big(-\frac{1}{2}\big)^{n}
+                \Big)
+            \Big]
+        \end{equation}
+        We can determine the limit with this, invoking
+        the definition $x^{y}=\exp(y\ln(x))$, we see that
+        this tends to $2^{2/3}$.
+        \par\hfill\par
+        The attached code shows that within 50 iterations we
+        approach the limit to within the precision of my machine
+        (16 significant digits).
+    \section*{Problem 2}
+        Lots of help from Ben on this one, and I didn't quite get
+        it.
+        \par\hfill\par
+        $\exp(x)$ is the exponential generating function for the
+        constant sequence $a_{n}=1$. Since we can't have a
+        zero partition, we need to remove the zeroth term, meaning
+        our exponential generating function will look like:
+        \begin{equation}
+            f(x)=\sum_{n=0}^{\infty}\frac{(\exp(x)-1)}{n!}
+                =\exp\big(\exp(x)-1\big)
+        \end{equation}
+        One way I think works, and gives the same answer, is to
+        just try to find a formula for counting the number of
+        partitions, which gives us a recurrence relation:
+        \begin{equation}
+            P_{n}=\sum_{k=0}^{n}\binom{n}{k}P_{k}
+        \end{equation}
+        If we differentiate $f(x)$ we get:
+        \begin{subequations}
+            \begin{align}
+                f(x)&=\sum_{n=0}^{\infty}\frac{P_{n}}{n!}x^{n}\\
+                \Rightarrow
+                \dot{f}(x)&=\sum_{n=0}^{\infty}\Big(
+                        \sum_{k=0}^{n}\binom{n}{k}P_{k}
+                    \Big)\frac{x^{n-1}}{(n-1)!}
+            \end{align}
+        \end{subequations}
+        But we can note that this is just a Cauchy product:
+        \begin{equation}
+            \sum_{n=0}^{\infty}\sum_{m=0}^{\infty}
+                a_{m}b_{n}
+            =\sum_{k=0}^{\infty}c_{k}
+        \end{equation}
+        Where $c_{k}=\sum_{k=0}^{n}a_{k}b_{n-k}$. So we have:
+        \begin{equation}
+            \dot{f}(x)=
+                \sum_{n=0}^{\infty}\frac{x^{n}}{n!}
+                \sum_{m=0}^{\infty}\frac{P_{m}}{m!}x^{m}
+                =\exp(x)f(x)
+        \end{equation}
+        So now we have a first order linear differential
+        equation, which we can rewrite as:
+        \begin{equation}
+            \dot{y}-\exp(x)y=0
+        \end{equation}
+        We do the standard trick with
+        $\mu(x)=\exp(\int\exp(x))=\exp(\exp(x))$ giving us:
+        \begin{equation}
+            f(x)=C\exp\big(\exp(x)\big)
+        \end{equation}
+        The initial condition is $f(0)=1$, so $C=1/e$, hence:
+        \begin{equation}
+            f(x)=\exp\big(\exp(x)-1\big)
+        \end{equation}
+        For part b, ignoring singletons is removing both the
+        zero term and the coefficient of $x$, which gives us:
+        \begin{equation}
+            g(x)=\exp\big(\exp(x)-x-1\big)
+        \end{equation}
+    \section*{Problem 3}
+        Using an inclusion-exclusion idea where we count how
+        many permutations have at least 1 fixed point, then how
+        many have two, removing duplicates, and proceeding, we
+        can get:
+        \begin{equation}
+            a_{n}=n!\sum_{k=0}^{n}\frac{(-1)^{k}}{k!}
+        \end{equation}
+        To compute the exponential generating function, we have:
+        \begin{equation}
+            f(x)=\sum_{n=0}^{\infty}\frac{a_{n}}{n!}x^{n}
+            =\sum_{n=0}^{\infty}\sum_{k=0}^{n}
+                \frac{(-1)^{k}}{k!}x^{n}
+        \end{equation}
+        Trying to get this into the form of a Cauchy product,
+        we have:
+        \begin{equation}
+            f(x)=\sum_{n=0}^{\infty}\sum_{k=0}^{n}
+                \frac{(-1)^{n-k}}{(n-k)!}x^{k}x^{n-k}
+                =\sum_{k=0}^{\infty}\frac{(-1)^{k}}{k!}x^{k}
+                    \sum_{n=0}^{\infty}x^{n}
+                    =\frac{\exp(-x)}{(1-x)}
+        \end{equation}
+        The proportion amongsts all permutations is:
+        \begin{equation}
+            \frac{n!\sum_{k=0}^{n}\frac{(-1)^{k}}{k!}}{n!}
+            =\sum_{k=0}^{n}\frac{(-1)^{k}}{k!}
+        \end{equation}
+        The limit as $n$ tends to infinity is just $\exp(-1)$,
+        or $1/e$. For the last part, we are looking for a
+        derangement to occur. The probability will be the
+        $30^{th}$ partial sum, but since the convergence is so
+        fast we can approximate this as $1/e$.
+\end{document}

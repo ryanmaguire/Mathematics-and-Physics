@@ -1,0 +1,435 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Miscellaneous Lecture Notes}
+%
+\subsection{Orthogonal Projections}
+%
+\begin{definition}
+The span of $\{X_{1},\hdots, X_{k}\} \subset \mathbb{R}^n$, denoted $\Span(X_{1},\hdots,X_{k})$, is the set of all linear combinations of $\{X_1,\hdots,X_{k}\}$, $\Span(X_{1},\hdots,X_{k})=\{\sum_{i=1}^{k} a_i X_i: a_i \in \mathbb{R}\}$.
+\end{definition}
+%
+\begin{remark}
+\makebox[0.81\linewidth][s]{If $X_1,\hdots, X_k$ are linearly independent, then $\Span(X_1,\hdots, X_k)$ is a} $k-$dimensional subspace of $\mathbb{R}^n$.
+\end{remark}
+%
+{
+If we are given a set of $k-$linearly independent vectors $\{X_1,\hdots, X_k\}\subset\mathbb{R}^n$, and some other vector $Y$, we may wish to consider the orthogonal projection of $Y$ onto the $k-$dimensional subspace spanned the vectors $X_1,\hdots, X_k$. That is, we may wish to find a vector $Y'\in$ $\Span(X_1,\hdots, X_k)$ such that $Y-Y'$ is orthogonal to $\Span(X_1,\hdots, X_k)$.
+}
+%
+\begin{theorem}
+If $\{X_1,\hdots, X_k\}\subset\mathbb{R}^n$ is linearly independent, $W = \Span(X_1,\hdots, X_n)$, and if $Y\in \mathbb{R}^n$ is such that $Y\perp X_i$ for $i=1,2,\hdots, k$, then $\forall_{Z\in W}$, $Y\perp Z$.
+\end{theorem}
+\begin{proof}
+For let $Y\in \mathbb{R}^n$ be such that for $i=1,2,\hdots, k$, $Y\perp X_i$. Let $Z\in W$. Then $Z= \sum_{i=1}^{k} a_i X_i$, where $a_i\in \mathbb{R}$. But then $\langle Y, Z\rangle = \sum_{i=1}^{k} a_i \langle Y, X_i\rangle = \sum_{i=1}^{k} a_i\cdot 0 = 0$. 
+\end{proof}
+%
+\begin{lemma}
+If $P$ is an $n\times k$ matrix whose columns are linearly independent, then $P^TP$ is invertible.
+\end{lemma}
+\begin{proof}
+Suppose $P^TPX = 0$. Then $PX$ is orthogonal to the columns of $P$. But $PX$ is a linear combination of the columns of $P$, and thus $PX$ must be orthogonal to itself. Therefore $PX = 0$. But as the columns of $P$ are linearly independent, if $PX = 0$, then $X=0$. Thus $P^TPX = 0$ if and only if $X=0$. Therefore $P^TP$ is invertible.
+\end{proof}
+%
+{
+So we need $X_i^T(Y-Y') = 0$. Let $X_i = (x_{1i},x_{2i},\hdots, x_{ni})^{T}$ and let $P = (x_{ij})$. Then we have $P^T(Y-Y') = 0$, or $P^TY = P^T Y'$. But $Y'\in W$, so $Y' = \sum_{i=1}^{k} c_i X_i = P(c_1,\hdots, c_k)^T = PC$. So we have $P^TY = P^TPC$, and thus $C = (P^TP)^{-1}P^TY$. Therefore $Y'=P(P^TP)^{-1}P^T Y$.
+}
+%
+\begin{definition}
+The projection matrix of $\Span(X_{1},\hdots,X_{k})$ is $P(P^TP)^{-1}P^T$.
+\end{definition}
+%
+\begin{theorem}
+If $Q = P(P^TP)^{-1}P^T$ is a projection matrix for some subspace $W$, then:
+\begin{enumerate}
+    \begin{multicols}{2}
+        \item $Q^T =Q$.
+        \item $Q^2 = Q$.
+    \end{multicols}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+In order,
+\begin{enumerate}
+\item   \begin{align*}
+            Q^T &= \big(P(P^TP)^{-1}P^T\big)^T & &= P((P^TP)^T)^{-1}P^T\\
+            &= (P^T)^T\big(P(P^TP)^{-1}\big)^T & &= P(P^TP)^{-1}P^T\\
+            &= P \big((P^TP)^{-1}\big)^TP^T & &= Q\\
+        \end{align*}
+\item   \begin{align*}
+            Q^2 &= QQ & &=P(P^TP)^{-1}P^T\\
+            &= P(P^TP)^{-1}P^T P(P^TP)^{-1}P^T & &= Q\\
+            &= P\big((PT^TP)^{-1}(P^TP)\big)(P^TP)^{-1}P^T
+        \end{align*}
+\end{enumerate}
+\end{proof}
+%
+\begin{theorem}
+If $Q$ is an $n\times n$ matrix, $Q = Q^{2}$, and $Q=Q^{T}$, then there is a subspace $W\subset \mathbb{R}^{n}$ such that $Q$ is the projection matrix of $Q$.
+\end{theorem}
+%
+\subsection{Reflections}
+%
+{
+Let $W$ be a plane passing through the origin, and suppose we want to reflect a vector $v$ across this plane. Let $u$ be a unit vector along $W^{\perp}$. That is, $u$ is normal to the plane. The projection of $v$ along the line through $u$ is then given by $\hat{v} = Proj_{u}(v) = u(u^Tu)^{-1}u^Tv$. But $u$ is a unit vector, and therefore $u^Tu = 1$, so $\hat{v} = uu^T v$. Let $Q_u = uu^T$. The definition of the reflection of $v$ across $W$ is the vector $\Refl_{W}(v)$ such that has the same magnitude as $v$ lying on the opposite side of $W$. Thus $v-\Refl_{W}(v) = 2Q_u v$, and so we have:
+\begin{equation*}
+    \Refl_{W}(v) = v-2Q_u v = (I-2Q_u)v =(I-2uu^T)v
+\end{equation*}
+}
+%
+\begin{definition}
+$H_{W} = I-2uu^T$ is called the Reflection (Householder) Matrix for $W$.
+\end{definition}
+%
+\begin{definition}
+An orthogonal matrix is a matrix $P$ such that $P^TP = I$.
+\end{definition}
+%
+\subsection{Lecture Notes on Orthogonal Matrices}
+%
+\begin{definition}
+An orthoganal matrix is a $n\times n$ matrix $A$ such that $A^{T}A = I$.
+\end{definition}
+%
+\begin{theorem}
+If $A$ is an orthogonal matrix, then $A^T = A^{-1}$.
+\end{theorem}
+\begin{proof}
+For $A^TA = I$, and inverses are unique. Thus $A^T = A^{-1}$.
+\end{proof}
+%
+If we let $A_{i} = Ae_{i}$, then $A^TA = (A_{i}^{T}A_{j}) = I$. Therefore $A_i^TA_j = \delta_{ij}$.
+%
+\begin{theorem}
+If $A$ is an $n\times n$ real-valued matrix and $A_i = Ae_i$, $i=1,2,\hdots, n$, then $A$ is orthogonal if and only if $\{A_1,\hdots, A_n\}$ is an orthonormal set of vectors.
+\end{theorem}
+\begin{proof}
+If $A$ is orthogonal, then $A_{i}^{T}A_{j} = \delta_{ij}$, and from this we have orthonormality. If $\{A_1,\hdots, A_n\}$ is orthonormal, then $A^TA = I$ and is therefore orthogonal.
+\end{proof}
+%
+\begin{theorem}
+The following statements are equivalent:
+\begin{enumerate}
+    \item $A$ is orthogonal
+    \item $\forall_{X\in\mathbb{R}^{n}}$, $\norm{AX} = \norm{X}$
+    \item $\forall_{X,Y\in\mathbb{R}^{n}}$, $\langle AX, AY\rangle = \langle X, Y\rangle$
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We show $1\Rightarrow 2 \Rightarrow 3 \Rightarrow 1$.
+\begin{enumerate}
+\item If $A$ is orthogonal, then $A^TA = I$. But then we have:
+        \begin{align*}
+            \norm{AX}^{2} &= (AX)^{T}AX & &= X^{T}IX\\ 
+            &= (X^{T}A^{T})AX & &= X^{T}X\\ 
+            &= X^{T}(A^{T}A)X & &= \norm{X}^{2}
+        \end{align*}
+    Therefore $\norm{AX} = \norm{X}$.
+\item If $A$ is a square matrix such that $\forall_{X\in\mathbb{R}^{n}}$, $\norm{AX} = \norm{X}$, then:
+    \begin{align*}
+        \norm{X+Y}^{2} &= (X+Y)^T(X+Y)\\
+        &= X^TX+X^TY+Y^TX+Y^TY\\
+        &= \norm{X}^2+2X^TY+\norm{Y}^2
+    \end{align*}
+    But:
+    \begin{align*}
+        \norm{A(X+Y)}^{2} &= \norm{AX+AY}^{2}\\
+        &= \norm{AX}^{2}+2(AX)^{T}AY+\norm{AY}^2\\
+        &= \norm{X}^{2}+2(AX)^{T}AY+\norm{Y}^2
+    \end{align*}
+    Therefore $(AX)^TAY = X^TY$. That is, $\langle AX, AY\rangle = \langle X, Y\rangle$.
+    \item If $A$ is a square matrix such that $\forall_{X,Y\in \mathbb{R}^n}$, $\langle AX, AY\rangle = \langle X, Y\rangle$, and $A_i =  Ae_i$, then:
+        \begin{align*}
+            A_{i}^{T}A_{j} &= (Ae_{i})^{T}Ae_{j} & &= \langle e_i, e_j\rangle\\
+            &= \langle Ae_{i}, Ae_{j}\rangle & &= \delta_{ij}
+        \end{align*}
+        Therefore, $A$ is orthogonal.
+\end{enumerate}
+\end{proof}
+%
+\begin{theorem}
+If $A$ and $B$ are $n\times n$ orthogonal matrices, then $AB$ is orthogonal.
+\end{theorem}
+\begin{proof}
+For if $A^{T}A = I$ and $B^{T}B = I$, then $(AB)^{T}AB = B^{T}A^{T}AB = B^{T}IB = B^{T}B = I$. Therefore $AB$ is orthogonal.
+\end{proof}
+%
+\begin{theorem}
+\label{theorem:LINEAR_ALGEBRA_orthogonal_matrices_have_determinant_pm_1}
+If $A$ is an $n\times n$ orthogonal matrix, then $\det(A) = 1$ or $-1$.
+\end{theorem}
+\begin{proof}
+For $\det(I) = \det(A^TA) = \det(A^T)\det(A) = \det(A)^2$. Thus, $\det(A) = \pm 1$.
+\end{proof}
+%
+\begin{remark}
+The converse of theorem \ref{theorem:LINEAR_ALGEBRA_orthogonal_matrices_have_determinant_pm_1} is false.
+\end{remark}
+%
+Recall that if $u\in \mathbb{R}^n$ is a unit vector and $W = u^{\perp}$, then $H=2uu^T$ is the reflection matrix for $W$. Reflections preserve distance, and therefore $H$ must be orthogonal. 
+%
+\begin{theorem}
+If $A$ is an $n\times n$ orthogonal matrix, then there exist $k$ $n\times n$ reflection matrices $H_1,\hdots, H_k$, $0\leq k \leq n$, such that $A = \prod_{i=1}^{j}H_i$.
+\end{theorem}
+\begin{proof}
+We prove by induction. The base case is trivial. Suppose it holds for $n-1$. Let $z = Ae_n$, and let $H$ be the reflection matrix that exchanges $z$ and $e_n$. Then $HAe_n = Hz = e_n$, so $HA$ fixes $e_n$. But $HA$ is an orthogonal matrix, and thus preserves distances and angles. Thus $HA$ maps $\mathbb{R}^{n-1}$ onto itself, and thus by induction there are $H_2,\hdots, H_k$ such that $HA = \prod_{i=2}^{k} H_i$. Letting $H_{1}=H$, we have $A = HHA = \prod_{i=1}^{k}H_i$.
+\end{proof}
+%
+\begin{theorem}
+If $H$ is a reflection matrix, then $\det(H) = -1$.
+\end{theorem}
+%
+\begin{theorem}
+If $A$ is an orthogonal matrix and $A=\prod_{i=1}^{k} H_i$, then $\det(A) = (-1)^k$.
+\end{theorem}
+%
+If $A$ is an orthogonal $2\times 2$ matrix, then we know that columns must be unit vectors that are also orthogonal (Orthonormal). That is, the two columns must lie on the unit circle about the origin. So we may express the first column as $\big(\cos(\theta),\sin(\theta)\big)$ for some angle $\theta$. There are then two options for the seconds column: $\big(-\sin(\theta),\cos(\theta)\big)$ or $\big(\sin(\theta),-\cos(\theta)\big)$. The first is the rotation matrix which rotates $\mathbb{R}^2$ counterclockwise around the origin, and the second is the reflection matrix that makes a reflection across the line that makes an angle $\frac{\theta}{2}$ with the $x-$axis. 
+%
+\begin{theorem}
+If $A$ is a $3\times 3$ orthogonal matrix, then one of the following is true:
+\begin{enumerate}
+\item If $\det(A) = 1$, then $A$ is a rotation matrix.
+\item If $\det(A) = -1$ and $A=A^T$, then either $A=-I$ or $A$ is a reflection matrix.
+\item If $\det(A) = -1$ and $A\ne A^T$, then $A$ is the product of three reflections.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+$A$ must be the product of $0,1,2,$ or $3$ reflection matrices. If $\det(A) = 1$, then $A$ is the product of an even number of reflections, and thus either $A=I$ or $A$ is the product of two reflections, and is thus a rotation. If $\det(A)=-1$, then $A$ is the product of an odd number of reflections, either $1$ or $3$. If $A$ is a single reflection, then $A=H$ for some Householder matrix $H$. Thus $A^T = A$. Conversely, if $A = A^T$ and $\det(A) = -1$, then $\det(-A) = 1$, and $-A^T = -A = -A^{-1}$. Therefore $-A$ is a rotation whose square is the identity. If $A\ne I$, then $A$ must be a rotation of $\pi/2$ around some axis, and thus $A$ is a reflection. If $\det(A) = -1$, and $A\ne A^T$, then $A$ cannot be a rotation or a pure reflection, and thus $A$ is the product of $3$ reflection matrices.
+\end{proof}
+%
+\begin{theorem}
+If $A$ and $B$ are $3\times 3$ rotation matrices, then $AB$ is a rotation matrix.
+\end{theorem}
+\begin{proof}
+For $A$ and $B$ must be orthogonal, and thus $AB$ is orthogonal. But $\det(AB) = \det(A)\det(B) = 1\cdot 1 = 1$, and thus $AB$ is an orthogonal matrix with determinant equal to $1$, and is therefore a rotation matrix.
+\end{proof}
+%
+\subsection{Rotations}
+%
+{
+The $2\times 2$ matrix $A_{\theta} = \begin{bmatrix*}[r] \cos(\theta) & -\sin(\theta) \\ \sin(\theta) & \cos(\theta)\end{bmatrix*}$ rotates the plane $\mathbb{R}^2$ counter-clockwise by the angle $\theta$ around the origin. The question that then arises is, ``Is there a similar way to do this for $\mathbb{R}^3$"? The simple case would be rotating by an angle $\theta$ about the $z-$axis, analogous the rotating the Earth by $\theta$ about the North Pole. This fixes the $z-$axis and acts on the $xy$ plane only. This can be represented by the matrix:
+}
+%
+\begin{equation*}
+ S_{\theta} = \begin{bmatrix*} \cos(\theta) & -\sin(\theta) & 0 \\ \sin(\theta) & \phantom{-}\cos(\theta) & 0\\ 0 & \phantom{-}0 & 1 \end{bmatrix*}   
+\end{equation*}
+%
+{
+$S_{\theta}$ is an orthogonal matrix. That is, $S_{\theta} S_{\theta}^T = I$, and therefore $S_{\theta}^T = S_{\theta}^{-1}$. Suppose we want to rotate by an angle $\theta$ about a different axis. Let $\mathbf{u}$ be a unit vector pointing in the direction of the axis of rotation and let $R_{\theta,\mathbf{u}}$ be the new rotation matrix. To compute $R_{\theta,\mathbf{u}}$ we need to choose a unit vector $\mathbf{v}$ that is orthogonal to $\mathbf{u}$. Let $\mathbf{w} = \mathbf{u}\times \mathbf{v}$. Then $\{\mathbf{u},\mathbf{v},\mathbf{w}\}$ is an orthonormal basis of $\mathbb{R}^3$ such that $\mathbf{v}\times \mathbf{w} = \mathbf{u}$. Let:
+}
+\begin{equation*}
+    P = \begin{bmatrix} v_1 & w_1 & u_1 \\ v_2 & w_2 & u_2 \\ v_3 & w_3 & u_3 \end{bmatrix}
+\end{equation*}
+The columns of $P$ form an orthonormal set, and therefore $P$ is orthogonal. In particular:
+\begin{align*}
+    P^{T}\mathbf{v} &= e_{1} & P^{T}\mathbf{w} &= e_{2} & P^{T}\mathbf{u} &= e_{3}
+\end{align*}
+%
+\begin{theorem}
+If $\theta \in [0,2\pi]$ and $\mathbf{u}\in \mathbb{R}^3$ is a unit vector, then $R_{\theta, \mathbf{u}} = PS_{\theta}P^T$.
+\end{theorem}
+\begin{proof}
+For:
+\begin{align*}
+    PS_{\theta}P^T\mathbf{u} &= PS_{\theta} (0,0,1)^{T} & PS_{\theta}P^{T}\mathbf{v} &= \cos(\theta)\mathbf{v}+\sin(\theta) \mathbf{w}\\
+    &= P(0,0,1)^{T} & PS_{\theta}P^{T} \mathbf{w} &= -\sin(\theta) \mathbf{v}+\cos(\theta) \mathbf{w}\\
+    &= \mathbf{u}
+\end{align*}
+Thus, if $X = a\mathbf{v}+b\mathbf{w}+c\mathbf{u}$, then:
+\begin{align*}
+    PS_{\theta}P^TX &= a(\cos(\theta)\mathbf{v}+\sin(\theta)\mathbf{w})+b(-\sin(\theta) \mathbf{v}+\cos(\theta)\mathbf{w})+c\mathbf{u}\\
+    &= R_{\theta,\mathbf{u}}X
+\end{align*}
+\end{proof}
+%
+From the orthogonality of $P$ and $S_{\theta}$ we have that $R_{\theta,\mathbf{u}}$ is also orthogonal.
+%
+\begin{theorem}
+\label{theorem:LINEAR_ALGEBRA_a_rotation_matrix_is_an_orthoganal_matrix_with_determinant_1}
+A rotation matrix $R$ is an orthogonal matrix with determinant $1$.
+\end{theorem}
+\begin{proof}
+For:
+\begin{align*}
+    R^{T}R &= (PS_{\theta}P^{T})^{T}PS_{\theta}P^{T} & &=PS_{\theta}^{T}S_{\theta}P^{T}\\
+    &= (PS_{\theta}^{T}P^{T})PS_{\theta}P^{T} & &= PP^{T}\\
+    &= PS_{\theta}^{T}(P^{T}P)S_{\theta}P^{T} & &= I
+\end{align*}
+%
+And
+%
+\begin{align*}
+    \det(R) &= \det(PS_{\theta}P^T) & &=\det(P)\det(S_{\theta})\frac{1}{\det(P)}\\
+    &= \det(P)\det(S_{\theta})\det(P^T) & &= \det(S_{\theta})\\
+    &= \det(P)\det(S_{\theta})\det(P^{-1}) & &= 1
+\end{align*}
+\end{proof}
+%
+\begin{remark}
+The converse of theorem \ref{theorem:LINEAR_ALGEBRA_a_rotation_matrix_is_an_orthoganal_matrix_with_determinant_1} is also true.
+\end{remark}
+%
+We now turn to the question of how to compute the rotation of $\mathbb{R}^3$ represented by a given orthogonal matrix. If $R$ is an orthogonal matrix such that $\det(R) = 1$, how do we compute the angle of rotation? Firstly, recall that the trace of a matrix $\Tr(A)$, is the sum of the diagonal components $\Tr(A) = a_{11}+\hdots + a_{nn}$.
+%
+\begin{theorem}
+If $A$ and $B$ are $n\times n$ matrices, then $\Tr(AB) = \Tr(BA)$
+\end{theorem}
+\begin{theorem}
+If $R$ is a rotation matrix of angle $\theta$, then $\cos(\theta) = \frac{\Tr(R) - 1}{2}$.
+\end{theorem}
+\begin{proof}
+Since $R = PS_{\theta} P^T = PS_{\theta}P^{-1}$, we have:
+\begin{equation*}
+    \Tr(R) = \Tr(PS_{\theta}P^{-1}) = \Tr(PP^{-1}S_{\theta}) = \Tr(S_{\theta}) = 1+2\cos(\theta)\Rightarrow \cos(\theta) = \frac{\Tr(R)-1}{2}
+\end{equation*}
+\end{proof}
+%
+This doesn't tell us everything, as we still don't know $\mathbf{u}$, and $\cos(\theta) = \cos(-\theta)$, so we still don't know the sign of $\theta$. Since $R$ is an orthogonal matrix, $R^T = R^{-1}$. So if $\mathbf{u}$ lies on the axis of rotation, then $(R-R^T)\mathbf{u} = R\mathbf{u}-R^{-1}\mathbf{u} = \mathbf{u}-\mathbf{u} = 0$. Thus we can find the axis of rotation by determining the null space of $R-R^T$. 
+\begin{equation*}
+    R = \begin{bmatrix} r_{11} & r_{12} & r_{13} \\ r_{21} & r_{22} & r_{23} \\ r_{31} & r_{32} & r_{33} \end{bmatrix} \Rightarrow R-R^{T} = \begin{bmatrix} 0 & r_{12} - r_{21} & r_{13} - r_{31} \\ r_{21} - r_{12} & 0 & r_{23}-r_{32} \\ r_{31} - r_{13} & r_{32} - r_{23} & 0 \end{bmatrix}
+\end{equation*}
+Let $\alpha = r_{12} - r_{21},\beta = r_{13} - r_{31},$ and $\gamma = r_{23}-r_{32}$. Then:
+\begin{equation*}
+    R-R^T = \begin{bmatrix} 0 & \alpha & \beta \\ -\alpha & 0 & \gamma \\ -\beta & -\gamma & 0 \end{bmatrix}
+\end{equation*}
+This suggests that $\mathbf{u}$ is parallel to $(-\gamma, \beta, -\alpha)^{T} = (r_{32}-r_{23}, r_{13}-r_{31}, r_{21}-r_{12})^{T}$.
+%
+\begin{theorem}
+If $R$ is a rotation matrix such that $R\ne R^T$, then the axis of rotation of $R$ is parallel to $\mathbf{q}=(-\gamma, \beta, -\alpha)^{T} = 2\sin(\theta)\mathbf{u}$, where $\mathbf{u}$ is a unit vector about the axis of rotation.
+\end{theorem}
+\begin{proof}
+Let $R = PS_{\theta}P^T$. Then:
+\begin{align*}
+    R-R^{T} &= PS_{\theta}P^{T} - PS_{\theta}^{T}P^{T} & &= P\begin{bmatrix}0 & -2\sin(\theta) & 0 \\ 2\sin(\theta) & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix}P^{T}\\
+    &= P(S_{\theta}-S_{\theta}^{T})P^{T} & &= 2\sin(\theta)(\mathbf{w}\mathbf{v}^{T} - \mathbf{v}\mathbf{w}^{T})
+\end{align*} 
+Where $\mathbf{v}$ is orthogonal to $\mathbf{u}$ and $\mathbf{w} = \mathbf{u}\times \mathbf{v}$. Therefore:
+\begin{equation*}
+    \mathbf{q} = (-\gamma, \beta, -\alpha)^{T} = 2\sin(\theta) \mathbf{v}\times \mathbf{w} = 2\sin(\theta) \mathbf{u}
+\end{equation*}
+\end{proof}
+%
+\begin{remark}
+What about the case when $R-R^T = 0$? When this happens either $\theta = 0$ or $\theta = \pi$. If $\theta = 0$, then this is the identity rotation and thus $R = I$, and we are done. If $R\ne I$, then $\theta = \pi$. To find out the axis of rotation, we have that:
+%
+\begin{equation*}
+    R = PS_{\pi}P^T = \begin{bmatrix}-1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1 \end{bmatrix} = -\mathbf{v}\mathbf{v}^T - \mathbf{w}\mathbf{w}^T +\mathbf{u}\mathbf{u}^T    
+\end{equation*}
+%
+But $\mathbf{v},\mathbf{w},$ and $\mathbf{u}$ form an orthonormal basis, and therefore $\mathbf{v}\mathbf{v}^T + \mathbf{w}\mathbf{w}^T+\mathbf{u}\mathbf{u}^T = I$. Thus, $R = -I+2\mathbf{u}\mathbf{u}^T$, so $\mathbf{u} \mathbf{u}^T = \frac{1}{2}(R+I)$. But the columns of $\mathbf{u}\mathbf{u}^T$ are parallel to $\mathbf{u}$, and therefore we can determine $\mathbf{u}$ by normalizing one of the columns of $\frac{1}{2}(R+I)$.
+\end{remark}
+%
+\subsection{The Matrix Exponential}
+%
+\begin{definition}
+If $A$ is an $n\times n$ matrix, then the exponential of $A$ is $e^{A} =\sum_{k=0}^{\infty} \frac{A^k}{k!}$.
+\end{definition}
+%
+\begin{remark}
+Notationally, we write $A^0 = I$. For any complex-valued matrix $A$ of finite dimension, it can be shown that this sum converges.
+\end{remark}
+%
+\begin{theorem}
+If $A$ and $P$ are complex $n\times n$ matrices and $P$ is an $n\times n$ invertible matrix, then $e^{P^{-1}AP} = P^{-1}e^{A}P$.
+\end{theorem}
+\begin{proof}
+For all $m\in \mathbb{N}$, $(P^{-1}AP)^{m} = P^{-1}A^mP$. Thus:
+\begin{equation*}
+    e^{P^{-1}AP} = \sum_{k=0}^{\infty} P^{-1}\frac{A^k}{k!}P = P^{-1}\big(\sum_{k=0}^{\infty} \frac{A^k}{k!}\big)P = P^{-1}e^A P
+\end{equation*}
+\end{proof}
+%
+\begin{theorem}
+If $0$ is the zero matrix, then $e^0 = I$.
+\end{theorem}
+%
+\begin{theorem}
+If $A$ is an $n\times n$ matrix and $m\in \mathbb{N}$, then $A^{m} e^{A} = e^{A} A^{m}$.
+\end{theorem}
+\begin{proof}
+For $A^{m} e^{A} = A^{m} \sum_{k=0}^{\infty} \frac{A^{k}}{k!} = \sum_{k=0}^{\infty} \frac{A^{k+m}}{k!} = \big(\sum_{k=0}^{\infty} \frac{A^k}{k!}\big)A^{m}$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ is an $n\times n$ matrix, then $e^{A^{T}} = (e^{A})^{T}$.
+\end{theorem}
+\begin{proof}
+For $e^{A^{T}} = \sum_{k=0}^{\infty} \frac{(A^{T})^{k}}{k!} = \sum_{k=0}^{\infty} \frac{(A^{k})^{T}}{k!} = \big(\sum_{k=0}^{\infty} \frac{A^{k}}{k!}\big)^{T} = (e^{A})^{T}$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ and $B$ are $n\times n$ matrices and if $AB = BA$, then $Ae^{B} = e^{B} A$.
+\end{theorem}
+\begin{proof}
+For $Ae^{B} = A\sum_{k=0}^{\infty} \frac{B^{k}}{k!} = \sum_{k=0}^{\infty} A\frac{B^{k}}{k!} = \sum_{k=0}^{\infty} \frac{B^{k}}{k!}A = \big(\sum_{k=0}^{\infty} \frac{B^{k}}{k!}\big)A = e^{B}A$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ and $B$ are $n\times n$ matrices and $AB = BA$, then $e^{A}e^{B} = e^{B}e^{A}$.
+\end{theorem}
+\begin{proof}
+For:
+\begin{align*}
+e^A e^B &= e^A\sum_{k=0}^{\infty} \frac{B^k}{k!} & &=\sum_{k=0}^{\infty}\big(\sum_{j=0}^{\infty} \frac{B^k}{k!}\frac{A^j}{j!}\big) \\
+&= \sum_{k=0}^{\infty} e^A\frac{B^k}{k!} & &=\sum_{k=0}^{\infty}\big(\sum_{j=0}^{\infty} \frac{B^k}{k!}\big)\frac{A^j}{j!} \\
+&= \sum_{k=0}^{\infty} \big(\sum_{j=0}^{\infty} \frac{A^j}{j!}\big) \frac{B^k}{k!} & &= \sum_{k=0}^{\infty} \frac{B^k}{k!} \sum_{j=0}^{\infty} \frac{A^j}{j!} \\
+&= \sum_{k=0}^{\infty}\big(\sum_{j=0}^{\infty} \frac{A^j}{j!}\frac{B^k}{k!}\big) & &= e^Be^A
+\end{align*}
+\end{proof}
+%
+If is NOT true that $e^{A+B} = e^Ae^B$, in general. Matrix exponentiation lacks this feature.
+%
+\begin{theorem}
+If $A$ is a $n\times n$ matrix and $s,t\in \mathbb{C}$, then $e^{A(s+T)} = e^{As}e^{At}$.
+\end{theorem}
+\begin{proof}
+For $e^{As}e^{At} = \sum_{j=0}^{\infty} \sum_{k=0}^{\infty} \frac{A^{j+k}s^jt^k}{j!k!}$. Letting $n = j+k$, so $j = n-k$, we have $\sum_{n=0}^{\infty} \sum_{k=0}^{\infty} \frac{A^n}{n!}\frac{n!}{k!(n-k)!}s^{n-k}t^k = \sum_{n=0}^{\infty}\frac{A^n}{n!}\big(\sum_{k=0}^{\infty} \frac{n!}{k!(n-k)!}s^{n-k}t^k\big)$. From the binomial theorem, the expression inside the parenthesis is equal to $(s+t)^n$. So we have $e^{As}e^{At}=\sum_{n=0}^{\infty} \frac{A^n(t+s)^n}{n!} = e^{A(s+t)}$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ is an $n\times n$ matrix, then $e^A$ is invertible and $(e^A)^{-1} = e^{-A}$.
+\end{theorem}
+\begin{proof}
+For $I = e^{0} = e^{A(1-1)} = e^Ae^{-A}$. Thus $(e^{A})^{-1} = e^{-A}$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ is an $n\times n$ matrix and $t\in \mathbb{R}$, then $\frac{d}{dt}\big(e^{At}\big) = Ae^{At}$.
+\end{theorem}
+\begin{proof}
+For $\underset{h\rightarrow 0}\lim \frac{e^{A(t+h)}-e^{At}}{h} = e^{At}\underset{h\rightarrow 0}\lim \frac{e^{Ah}-I}{h} = e^{At}\underset{h\rightarrow 0}\lim\big[A+\frac{A^2}{2!}h+\hdots\big] = e^{At}A = Ae^{At}$.
+\end{proof}
+%
+\begin{theorem}
+If $A$ and $B$ are $n\times n$ matrices and $AB=BA$, then $e^{A+B} = e^{A}e^{B}$.
+\end{theorem}
+\begin{proof}
+For let $g(t) = e^{(A+B)t}e^{-Bt}e^{-At}$. Then from commutativity of $A$ and $B$, $g'(t) = 0$. But then $g(t)$ is a constant. From the definition, $g(0) = I$, and thus $g(t) = I$. So $e^{(A+B)t}e^{-Bt}e^{-At} = I$, and therefore $e^{(A+B)t} = e^{At}e^{Bt}$.
+\end{proof}
+%
+\begin{theorem}
+If $A^{2} = 0$, then $e^{A} = I+A$.
+\end{theorem}
+\begin{proof}
+For $e^{A} = I+A+A^{2}\big(\frac{I}{2!}+\frac{A}{3!}+\hdots\big) = I+A+0 = I+A$.
+\end{proof}
+%
+\subsection{Linear Systems of Ordinary Differential Equations}
+%
+Consider the equation $y' = ky$, where $k$ is some constant. We can solve this via calculus using separation of variables:
+\begin{equation*}
+    \frac{y'}{y} = k\Rightarrow \int \frac{y'}{y}dx = \int kdx \Rightarrow \ln(y) = kx+c \Rightarrow y = e^c e^{kx}    
+\end{equation*}
+Setting $x=0$, we have $e^c = y_0$. So $y = y_0e^{kx}$. Let us solve this a different way: Let $F(x) = e^{-kx}y$, and let $y'=kx$. Differentiating we have:
+\begin{equation*}
+    F'(x) = -ke^{kx}y + e^{-kx}y' = -ke^{-kx}+e^{=kx}ky = 0    
+\end{equation*}
+So $F'(x) = 0$, and therefore $F(x)$ is a constant. Setting $x=0$, we have $F(x) = y_0$. So $y = y_0e^{kx}$. This shows us that $y_0e^{kx}$ is the $only$ solution to this problem. Let:
+\begin{equation*}
+    Y(t) = \begin{bmatrix} y_1(t) \\ y_2(t)\end{bmatrix}    
+\end{equation*}
+Where $A$ is an $n\times n$ matrix, and consider the system $Y'(t) = AY(t)$. Let $F(t) = e^{-At}Y(t)$. Then $F'(t) = 0$, and we have that $Y(t) = Y_0 e^{At}$.
+%
+\begin{theorem}
+If $Y:\mathbb{R}\rightarrow \mathbb{R}^n$ is a differentiable function such that $Y'(t) = AY(t)$, where $A$ is a diagonalizable matrix with eigenvalues $\lambda_1,\hdots, \lambda_n$ and eigenvectors $v_1,\hdots, v_n$, then $Y(t) = \sum_{k=1}^{n} \lambda_k e^{\lambda_k t}v_k$
+\end{theorem}
+\end{document}

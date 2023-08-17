@@ -1,0 +1,155 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{a5paper, margin=14mm}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\setlength{\parindent}{0em}
+\newcommand{\ceil}[2][]{#1\lceil#2#1\rceil}
+
+\begin{document}
+    \section*{Cooley-Tukey FFT}
+        Briefly for those who were excited to hear about FFT's.
+        \begin{itemize}
+            \item Divide and conquer algorithm, very similar in structure to merge sort,
+                  the last step being a Discrete Fourier Transform (DFT), rather than a sort.
+            \item Only works for inputs of size $2^{n}$.
+            \item Time complexity $O\big(n\ln(n)\big)$.
+            \item Still the best known algorithm, implemented by major FFT software packages like
+                  FFTW (Fastest Fourier Transform in the West), KISSFFT
+                  (Keep It Simple, Stupid - FFT), and more.
+            \item For inputs whose size is not a power of 2, use Bluestein Chirp $z$ transform.
+            \begin{itemize}
+                \item This requires using the Tukey-Cooley FFT algorithm 3 times on a data set whose
+                      size is the next power of 2 greater than the input. So roughly $O\big(n\ln(n)\big)$,
+                      with the worst case being $n=2^{m}+1$ for some $m$ since we'd need to pad with zeros
+                      until we have $2^{m+1}$.
+            \end{itemize}
+        \end{itemize}
+    \section*{Computing All Roots of a Polynomial}
+        This combines topology, chaos theory, algebra, numerical analysis, and complex analysis, but
+        most importantly the end result is very pretty. If we have a polynomial $p(z)$ of degree $n$
+        with real or complex coefficients, we know it has at most $n$ roots. We don't need the
+        fundamental theorem of algebra, only need that $x-\alpha$, with $\alpha$ a root, will divide
+        $p$. So there's no circularity in using the following method to prove the fundamental theorem
+        of algebra and find \textit{all} of the roots of $p$.
+        \par\hfill\par
+        We first look at the \textit{basins of attractions} of our polynomial. We use Newton's method
+        of root finding on every point in the complex plane, and assign it one of $n+1$ colors
+        depending on what root Newton's method converge to, or black if no root was found.
+        Surprisingly enough, most points will work, and the structure is very chaotic (fractal).
+        For a polynomial $p(z)=z^{n}-1$, the set of points where this does not work has measure zero
+        and forms an interesting Julia set.
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton001.png}}
+            \caption{Basins of Attraction for $z^{3}-1$}
+            \label{fig:z3_minus_1}
+        \end{figure}
+        The three basins of attraction in Fig.~\ref{fig:z3_minus_1} have a very interesting
+        topological property: They are three disjoint open sets with the same boundary.
+        We get similar results for the other polynomials of the form $z^{n}-1$.
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton002.png}}
+            \caption{Basins of Attraction for $z^{8}-1$}
+            \label{fig:z8_minus_1}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton003.png}}
+            \caption{Basins of Attraction for $z^{10}-1$}
+            \label{fig:z10_minus_1}
+        \end{figure}
+        Note, the giant black hole in the middle does not indicate these points fail to converge.
+        The set of points failing to converge is the Julia set of measure zero. The black
+        holes are regions where Newton's Method required more than the fixed number of iterations
+        my code allowed for, before giving up. This will be important later when determining
+        complexity.
+        \par\hfill\par
+        Before moving to the main theorem, I should note there are polynomials that will have
+        regions failing to converge with positive measure. These regions are usually cyclic,
+        after a few iterations Newton's method will become periodic between a finite number of
+        points. A simple exmaple is $z^{3}-2z-2$, shown in Fig.~\ref{fig:z3_minus_2z_minus_2}.
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton004.png}}
+            \caption{Basins of Attraction for $z^{3}-2z-2$}
+            \label{fig:z3_minus_2z_minus_2}
+        \end{figure}
+        The main theorem is that these basins of attraction, for every single root, will
+        go off to infinity and will never squeeze infinitely tight. In other words,
+        if we use stereographic projection, together with inverse orthographic projection so
+        that we may draw on a 2D piece of paper, we always get figures like the one in
+        Fig.~\ref{fig:z2_minus_1_on_sphere}.
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton005.png}}
+            \caption{Newton Fractal for $z^{3}-1$ on $\mathbb{S}^{2}$}
+            \label{fig:z2_minus_1_on_sphere}
+        \end{figure}
+        There is nothing special about $z^{3}-1$. I chose two other random polynomials,
+        and these yield the following images.
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton006.png}}
+            \caption{Newton Fractal on $\mathbb{S}^{2}$}
+            \label{fig:newton_fractal_on_sphere}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{images/newton007.png}}
+            \caption{Another Newton Fractal on $\mathbb{S}^{2}$}
+            \label{fig:another_newton_fractal_on_sphere}
+        \end{figure}
+        In every example there is a path from any root to the north pole,
+        without the path squeezing infinitely tight. We can use this to find
+        every single root. First, we restrict ourselves to polynomials where all
+        of the roots lie in the unit disk. This is not too restrictive since
+        $z\mapsto{z}/(|a_{0}|+\dots+|a_{n}|)$ will transform any
+        (non-constant) polynomial to one with this property. Next, we evenly sample
+        several circles with enough points so that we're guaranteed some subset of these points
+        will converge to every single root. Because the width of these basins does not shrink
+        to zero, we can compute the magical sampling numbers. If $n$ is the degree, the number
+        of circles needed is:
+        \begin{equation}
+            s=\ceil{0.26632\ln(n)}
+        \end{equation}
+        The radii of these circles is:
+        \begin{equation}
+            r_{k}=\big(1+\sqrt{2}\big)\Big(\frac{n-1}{n}\Big)^{(2k-1)/4s}
+        \end{equation}
+        With $1\leq{j}\leq{s}$. The number of points needed is:
+        \begin{equation}
+            N=\ceil{8.32547n\ln(n)}
+        \end{equation}
+        We sample these points evenly, giving them angles $\theta_{j}=2\pi{j}/N$.
+        So, in total, the number of points we need is:
+        \begin{equation}
+            K_{0}=\ceil{0.26632\ln(n)}\cdot\ceil{8.32547n\ln(n)}
+        \end{equation}
+        The number of iterations needed is dependent on the accuracy you wish to obtain,
+        the radius of the starting circle, and the degree of the polynomial. To be
+        $\varepsilon$ close will require at most:
+        \begin{equation}
+            K_{1}=\ceil{n\ln\Big(\frac{R}{\varepsilon}\Big)}\leq
+                \ceil{n|\ln\big((1+\sqrt{2})\varepsilon\big)|}
+        \end{equation}
+        iterations. The inequality comes from the fact that $R$ is bounded by $1+\sqrt{2}$.
+        The total complexity is then:
+        \begin{subequations}
+            \begin{align}
+                K&=K_{0}\cdot{K}_{1}\\
+                &\leq
+                \ceil{0.26632\ln(n)}\cdot\ceil{8.32547n\ln(n)}
+                    \ceil{n|\ln\big((1+\sqrt{2})\varepsilon\big)|}\\
+                &\approx{2}.23n^{2}\ln^{2}(n)|\ln\big((1+\sqrt{2})\varepsilon\big)|\\
+                &\in{O}\Big(n^{2}\ln^{2}(n)\Big)
+            \end{align}
+        \end{subequations}
+        These computations are worst case scenario. In practice the convergence is much faster,
+        and once $n$ roots have been found, you may stop the process since we know there can be
+        no more.
+\end{document}

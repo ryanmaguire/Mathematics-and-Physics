@@ -1,0 +1,131 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{HW V}
+\author{Ryan Maguire}
+\date{\vspace{-2ex}}
+
+\begin{document}
+    \maketitle
+    Boatload of help from Ben and you.
+    \section*{Problem 1}
+        First we consider sequences that start with 1. Since there can be no two
+        consecutive zeros, we know that if the next element of the sequence is a
+        zero, the following one has to be a 1. In other words, we can build our
+        sequence with words in $\{1\}$ and $\{10\}$. This will give us:
+        \begin{equation}
+            \sum_{n\in\mathbb{N}}(1+z)^{n}=\frac{1}{1-z-z^{2}}
+        \end{equation}
+        Now we have the choice of a sequence starting with 1 or 0, and since the 0 case
+        instantly reduces the that 1 case for a sequence of length $n-1$ (the next word must
+        be a 1), we have:
+        \begin{equation}
+            \frac{1}{1-z-z^{2}} + z\frac{1}{1-z-z^{2}}=\frac{1+z}{1-z-z^{2}}
+        \end{equation}
+        We can use induction to count the total number of sequences. The number of sequences
+        for $F_{n+1}$ is going to be the number in $F_{n}$ plus the number in
+        $F_{n-1}$, simply by using the argument with removing the first entry twice.
+        That is, first entry is either 0 or 1, in the 0 case we reduce to a sequence of
+        length $n-1$, doing this again reduces to length $n-2$. So we have:
+        \begin{equation}
+            F_{n+1}=F_{n}+F_{n-1}
+        \end{equation}
+        The initial conditions are $F_{0}=1$ and $F_{1}=2$ since there is one empty word
+        and the two words of length 1 are $0$ and $1$. This is the shifted Fibonacci
+        sequence. We solve by writing:
+        \begin{equation}
+            F_{n}=\alpha{a}^{n}
+        \end{equation}
+        This yields:
+        \begin{subequations}
+            \begin{align}
+                F_{n+2}&=F_{n+1}+F_{n}\\
+                \Rightarrow
+                \alpha{a}^{n+2}&=\alpha{a}^{n+1}+\alpha{a}^{n}\\
+                \Rightarrow
+                a^{2}-a-1&=0
+            \end{align}
+        \end{subequations}
+        And so $\alpha=\phi$, the golden ratio, or $(1-\sqrt{5})/2$, the anti-golden ratio.
+        We take a linear combination, yielding:
+        \begin{equation}
+            F_{n}=\alpha\Big(\frac{1+\sqrt{5}}{2}\Big)^{n}+
+                \beta\Big(\frac{1-\sqrt{5}}{2}\Big)^{n}
+        \end{equation}
+        Solving for $\alpha$ and $\beta$ requires the initial conditions, but ignoring
+        that for now, the generating function is:
+        \begin{equation}
+            f(x)=\sum_{n\in\mathbb{N}}\alpha\phi^{n}x^{n}+\beta\bar{\phi}^{n}x^{n}
+        \end{equation}
+        Using $\phi$ and $\bar{\phi}$ for the golden and anti-golden ratios,
+        respectively. This is a geometric series, yielding:
+        \begin{equation}
+            \frac{\alpha}{1-\phi{x}}+\frac{\beta}{1-\bar{\phi}x}
+        \end{equation}
+        Now to deal with these pesky constants which all cancel. Solving for $\alpha$
+        and $\beta$ requires solving:
+        \begin{subequations}
+            \begin{align}
+                \alpha+\beta&=1\\
+                \alpha\phi+\beta\bar{\phi}&=2
+            \end{align}
+        \end{subequations}
+        In other words, $\beta=1-\alpha$ and:
+        \begin{equation}
+            \alpha\phi+(1-\alpha)\bar{\phi}=2
+        \end{equation}
+        Collecting the $\alpha$, we get:
+        \begin{equation}
+            \alpha=\frac{2-\bar{\phi}}{\phi-\bar{\phi}}
+        \end{equation}
+        We see that $\phi-\bar{\phi}$ is just $\sqrt{5}$, i.e. the discriminant of the
+        polynomial. So we have:
+        \begin{equation}
+            \alpha=\frac{2-\frac{1-\sqrt{5}}{2}}{\sqrt{5}}
+                =\frac{3+\sqrt{5}}{2\sqrt{5}}
+        \end{equation}
+        And at this point the arithmetic is extremely boring, but we see that we have:
+        \begin{equation}
+            \frac{\alpha}{1-\phi{x}}+\frac{\beta}{1-\bar{\phi}x}
+                =\frac{\alpha(1-\bar{\phi}x) + \beta(1-\phi{x})}
+                    {1-\phi{x}-\bar{\phi}x+\phi\bar{\phi}x^{2}}
+        \end{equation}
+        And while I'm not a betting man, I'd wager this is equal to
+        $(1+z)/(1-z-z^{2})$.
+    \section*{Problem 2}
+        We use the following counting scheme, noting that for all parts we'd have:
+        \begin{equation}
+            \prod_{m\in\mathbb{N}}\sum_{n\in\mathbb{N}}x^{mn}
+            =\prod_{m\in\mathbb{N}}\frac{1}{1-x^{m}}
+        \end{equation}
+        Now we just remove the even parts, yielding:
+        \begin{equation}
+            \prod_{m\in\mathbb{N}}\sum_{n\in\mathbb{N}}x^{n(2m+1)}
+            =\prod_{m\in\mathbb{N}}\frac{1}{1-x^{2m+1}}
+        \end{equation}
+        For the second one, we do a similar thing, but note that since we are not allowed
+        repetitions, we are doing the product over $1+z^{n}$, giving us:
+        \begin{equation}
+            \prod_{n\in\mathbb{N}}(1+z^{n})
+        \end{equation}
+        Which is bigger is a trick question, they are the same. Multiplying by 1
+        infinitely many times, ignoring swaps of products and sums, we multiply by
+        $\frac{1-z^{2n}}{1-z^{2n}}$ for all $n$ to the product
+        $\prod_{n\in\mathbb{N}}(1+z^{n})$ and then note that this is just the product
+        over all of the odd parts in the bottom, which is part a.
+    \section*{Problem 3}
+        Have more buckets with \textit{degenerate} trees than perfect binary trees,
+        weighting so that the probability of any one tree is equal to all others. Since
+        there are two degenerate trees with probability $1/n!$ each, you would need a lot
+        of buckets with degenerate trees.
+        \par\hfill\par\noindent
+        For any distribution, you can get a \textit{normal} distribution, where left-most
+        on the graph corresponds to the degenerate tree going all the way down to the
+        left, and similar for the right, with a perfect binary tree, every one has two
+        children, in the middle, by using a pseudo-random number generator and building
+        a tree based on the output of the generator, removing repeat numbers so you are
+        guaranteed an actual tree.
+\end{document}

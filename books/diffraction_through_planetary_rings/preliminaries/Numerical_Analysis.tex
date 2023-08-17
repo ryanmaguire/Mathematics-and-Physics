@@ -1,0 +1,121 @@
+\section{Numerical Analysis}
+    \subsection{Power Series}
+    \subsection{Asymptotic Expansions}
+    \subsection{Stationary Phase Approximation}
+        Suppose $g$ is an analytical function about
+        the origin (i.e. it has a convergent MacLaurin series),
+        and consider the integral:
+        \begin{equation}
+            I(k) = \int_{a}^{b}e^{ikg(x)}dx
+        \end{equation}
+        Suppose that there is a $c\in(a,b)$ such
+        that $g'(c)=0$ and $g''(c)\ne 0$. Then:
+        \begin{align}
+            \nonumber I(k)&=e^{ikg(c)}\int_{a}^{b}e^{ik[g(x)-g(c)]}dx\\
+            &=e^{ikg(c)}\int_{a}^{b}e^{ik[\frac{g''(c)}{2}(x-c)^{2}+\hdots]}dx
+        \end{align}
+        Higher terms are extremely oscillatory, and so we neglect them.
+        Note that higher terms can indeed cancel each
+        other out, meaning these neglected terms may
+        not be negligible. For example, if
+        $g(x)=-sin(\pi x)$, then $\exp(ig(x))$ is never
+        too oscillatory. However, so long as the interval
+        $[a,b]$ is small enough, the approximation is still
+        valid. The previously mentioned $g(x)$ is how
+        one approximates the $J_{0}(x)$ Bessel function.
+        Out integral then becomes:
+        \begin{align}
+            I(k)&\approx e^{ikg(c)}
+                    \int_{a}^{b}e^{ik\frac{g''(c)}{2}(x-c)^{2}}dx\\
+                &\approx e^{ikg(c)}
+                    \int_{\infty}^{\infty}
+                    \exp(ik\frac{g''(c)}{2}(x-c)^{2})\diff{x}\\
+                &=e^{ikg(c)}\sqrt{\frac{2\pi i}{kg''(c)}}
+        \end{align}
+        We can use this for our double integral,
+        and make it a single integral. The first and
+        second integrals of $\psi$ are nasty, however.
+        \begin{equation}
+            \begin{split}
+                \frac{\partial\psi}{\partial\phi}
+                &=kD\Big[\frac{2D\rho\cos(B)
+                    \sin(\phi)+2\rho\rho_{0}
+                \sin(\phi-\phi_{0})}{2D^2\sqrt{1+2\cos(B)
+                \frac{\rho_{0}\cos(\phi_{0})-\rho\cos(\phi)}{D}+
+                \frac{\rho^{2}+\rho_{0}^{2}-
+                2\rho\rho_{0}\cos(\phi-\phi_{0})}{D^2}}}\\
+                &\quad\quad\quad\quad\quad
+                -\frac{\rho\cos(B)\sin(\phi)}{D}\Big]
+            \end{split}
+        \end{equation}
+        The second derivative is equally bad.
+        Solving for $\frac{\partial\psi}{\partial\phi}=0$
+        must be done iteratively by successive approximations.
+        A further approximation can be made as $\psi$
+        is analytic in $\phi$. Let $\phi_{s}$ be
+        the solution to $\frac{\partial\psi}{\partial\phi}$
+        and let $\phi_{s_{n}}$ be a sequence such that
+        $\phi_{s_{n}}\rightarrow\phi_{s}$.
+    \subsection{Root Finding}
+        \begin{figure}[H]
+            \centering
+            \captionsetup{type=figure}
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{images/NewtonRoots.png}}
+            \caption{Newton Fractal for $z^{3}-1=0$}
+            \label{fig:Diff_Theory_Newton_Fractal}
+        \end{figure}
+        The Python code used to generated this is given below.
+        It can be altered to try various functions, and this
+        is encouraged.
+        \newpage
+        \begin{lstlisting}[%
+            language=python,
+            basicstyle=\footnotesize\ttfamily,
+            frame=single,
+            gobble=16
+        ]
+            from PIL import Image
+            import numpy as np
+
+            # Set range for x and y axes.
+            x_min, x_max = -1.0, 1.0
+            y_min, y_max = -1.0, 1.0
+
+            # Colors for the roots (Red, Green, Blue).
+            colors = [(255, 0, 30), (0, 255, 30), (0, 30, 255)]
+
+            size = 1024
+            img = Image.new("RGB", (size, size), (255, 255, 255))
+
+            # List the roots of z^3-1
+            roots = [1.0+0.0j, -0.5+0.8660254037844386j, -0.5-0.8660254037844386j]
+            roots = np.array(roots)
+            for y in range(size):
+                z_y = y * (y_max - y_min)/(size - 1) + y_min
+                for x in range(size):
+                    z_x = x * (x_max - x_min)/(size - 1) + x_min
+                    z = complex(z_x, z_y)
+
+                    # Allow 40 iterations for Newton-Raphson.
+                    for iters in range(40):
+                        # Perfrom Newton-Raphson on z^3 - 1 (Simplifying as well).
+                        root = (2.0*z*z*z + 1)/(3.0*z*z)
+
+                        # Checks for convergence
+                        if abs(root - z) < 10e-10:
+                            break
+                        z = root
+
+                    ind = np.min((
+                        np.abs(root-roots) == np.min(np.abs(root-roots))
+                    ).nonzero())
+                    col = colors[ind]
+                    col = [k for k in col]
+
+                    # Create a gradient in color to emphasize rate of convergence.
+                    col[ind] -= 10*iters
+                    col = tuple([k for k in col])
+                    img.putpixel((x, y), col)
+            img.save("NewtonRoots.png", "PNG")
+        \end{lstlisting}
