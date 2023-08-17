@@ -274,18 +274,81 @@
             is locally finite as well
         \end{theorem}
         \begin{proof}
-            Homework.
+            Let $x\in{X}$. Since $\mathcal{A}$ is locally finite, there is
+            a $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\cap{A}=\emptyset$ for all but finitely many
+            elements of $\mathcal{A}$. Suppose $A\in\mathcal{A}$ and
+            $\mathcal{U}\cap{A}=\emptyset$. Let us show that
+            $\mathcal{U}\cap\textrm{Cl}_{\tau}(A)=\emptyset$. Since
+            $\mathcal{U}$ is open, and since $\mathcal{U}\cap{A}=\emptyset$,
+            we have that $X\setminus\mathcal{U}$ is closed and
+            $A\subseteq{X}\setminus\mathcal{U}$. But since
+            $X\setminus\mathcal{U}$ is closed we have
+            $\textrm{Cl}_{\tau}(A)\subseteq{X}\setminus\mathcal{U}$. But then
+            $\mathcal{U}\cap\textrm{Cl}_{\tau}(A)=\emptyset$. This means
+            for all $A\in\mathcal{A}$, $A\cap\mathcal{U}$ is non-empty
+            if and only if $\textrm{Cl}_{\tau}(A)\cap\mathcal{U}$ is non-empty.
+            Since only finitely many elements of $\mathcal{A}$ have non-empty
+            intersection with $\mathcal{U}$, the exact same number of sets
+            in $\mathcal{A}'$ will have non-empty intersection with
+            $\mathcal{U}$. Hence the collection $\mathcal{A}'$ is locally
+            finite.
         \end{proof}
         \begin{theorem}
             If $(X,\,\tau)$ is a topological space, and if
             $\mathcal{A}\subseteq\mathcal{P}(X)$ is locally finite, then:
             \begin{equation}
-                \textrm{Cl}_{\tau}\Big(\bigcup_{A\in\mathcal{A}}A\big)
+                \textrm{Cl}_{\tau}\Big(\bigcup_{A\in\mathcal{A}}A\Big)
                 =\bigcup_{A\in\mathcal{A}}\textrm{Cl}_{\tau}(A)
             \end{equation}
         \end{theorem}
         \begin{proof}
-            Also homework.
+            Even without the locally finite assumption, we may prove that:
+            \begin{equation}
+                \bigcup_{A\in\mathcal{A}}\textrm{Cl}_{\tau}(A)\subseteq
+                \textrm{Cl}_{\tau}\Big(\bigcup_{A\in\mathcal{A}}A\Big)
+            \end{equation}
+            Since $A\in\mathcal{A}$ we have that $A\subseteq\bigcup\mathcal{A}$.
+            But then
+            $\textrm{Cl}_{\tau}(A)\subseteq\textrm{Cl}_{\tau}(\bigcup\mathcal{A})$.
+            Since this is true of all $A\in\mathcal{A}$, the union on the
+            left-hand side of the equation must be a subset of the
+            right-hand side. To prove the reverse inclusion requires the
+            locally finite condition. Let
+            $x\in\textrm{Cl}_{\tau}(\bigcup\mathcal{A})$. Since
+            $\mathcal{A}$ is locally finite, there is an open set
+            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$ and
+            $\mathcal{U}\cap{A}=\emptyset$ for all but finitely many
+            $A\in\mathcal{A}$. But $\mathcal{U}$ is open, $x\in\mathcal{U}$,
+            and $x\in\textrm{Cl}_{\tau}(\bigcup\mathcal{A})$ meaning
+            $\mathcal{U}\cap\bigcup\mathcal{A}$ is non-empty. But since
+            only finitely many elements of $\mathcal{A}$ can intersect
+            $\mathcal{U}$, and since the number of such elements is not zero
+            by the previous statement, we may label the sets
+            $A_{0},\dots,A_{n}$ for some $n\in\mathbb{N}$. But then:
+            \begin{equation}
+                \textrm{Cl}_{\tau}\Big(
+                    \bigcap_{A\in\mathcal{A}}\big(A\cap\mathcal{U}\big)
+                \Big)
+                =\textrm{Cl}_{\tau}\Big(
+                    \bigcap_{k=0}^{n}\big(A_{k}\cap\mathcal{U}\big)
+                \Big)
+                =\bigcup_{k=0}^{n}\textrm{Cl}_{\tau}\big(
+                    A_{k}\cap\mathcal{U}_{n}
+                \big)
+            \end{equation}
+            But also:
+            \begin{equation}
+                \bigcup_{k=0}^{n}\textrm{Cl}_{\tau}\big(
+                    A_{k}\cap\mathcal{U}_{n}
+                \big)
+                \subseteq
+                \bigcup_{k=0}^{n}\textrm{Cl}_{\tau}\big(A_{k}\big)
+                \subseteq\bigcup_{A\in\mathcal{A}}\textrm{Cl}_{\tau}(A)
+            \end{equation}
+            From this we may conclude that
+            $x\in\bigcup_{A\in\mathcal{A}}\textrm{Cl}_{\tau}(A)$, and hence
+            we have equality.
         \end{proof}
         \begin{theorem}
             If $(X,\,\tau)$ is paracompact and Hausdorff, then it is regular.
@@ -355,7 +418,39 @@
             $\mathcal{O}=\bigcup_{n\in\mathbb{N}}\Delta_{n}$.
         \end{definition}
         Now for some results related to this notion, paracompactness, and
-        metrization.
+        metrization. First, a little lemma.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a metrizable topological space, if $d$ is a
+            metric that induces the topology, if $A\subseteq{X}$, and if
+            $r\in\mathbb{R}^{+}$, then the set:
+            \begin{equation}
+                S_{r}(A)
+                =\{\,x\in{X}\;|\;
+                    B_{r}^{(X,\,d)}(x)\subseteq{A}\,\}
+            \end{equation}
+            is closed.
+        \end{theorem}
+        \begin{proof}
+            For if not then there is a sequence
+            $a:\mathbb{N}\rightarrow{S}_{r}(A)$ that converges to a
+            point $x\in{X}$ but $x\notin{S}_{r}(A)$. But if
+            $x\notin{S}_{r}(A)$, then there is a point $y\in{X}$ such that
+            $d(x,\,y)<r$ and $y\notin{A}$. Let $\varepsilon=r-d(x,\,y)$. Since
+            $\varepsilon>0$ and $a_{n}\rightarrow{x}$, there is an
+            $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and $n>N$ implies
+            $d(x,\,a_{n})<\varepsilon$. Let $n=N+1$. Then $n>N$ and hence
+            $d(x,\,a_{n})<\varepsilon$. But then:
+            \begin{align}
+                d(a_{n},\,y)
+                    &\leq{d}(a_{n},\,x)+d(x,\,y)\\
+                    &<\varepsilon+d(x,\,y)\\
+                    &=(r-d(x,\,y))+d(x,\,y)\\
+                    &=r
+            \end{align}
+            And hence $d(a_{n},\,y)<r$. But then $y\in{B}_{r}^{(X,\,d)}(a_{n})$.
+            But $a_{n}\in{S}_{r}(A)$, so $B_{r}^{(X,\,d)}(a_{n})\subseteq{A}$.
+            But then $y\in{A}$, a contradiction. Hence, $S_{r}(A)$ is closed.
+        \end{proof}
         \begin{theorem}
             If $(X,\,\tau)$ is metrizable, and if $\mathcal{O}\subseteq\tau$ is
             an open cover, then there is a $\sigma$ locally finite open cover
@@ -381,7 +476,8 @@
             \end{equation}
             That is, the set of all points in $\mathcal{U}$ that can be
             surrounded with a ball of radius $1/(n+1)$ that is completely
-            contained in $\mathcal{U}$. Define $T_{n}(\mathcal{U})$ via:
+            contained in $\mathcal{U}$. Each $S_{n}(\mathcal{U})$ is closed by
+            the previous theorem. Define $T_{n}(\mathcal{U})$ via:
             \begin{equation}
                 T_{n}(\mathcal{U})=
                 S_{n}(\mathcal{U})\setminus\bigcup
@@ -393,10 +489,9 @@
             $\prec$ in the last part of this equation. For all
             $x\in{T}_{n}(\mathcal{U})$ and $y\in{T}_{n}(\mathcal{V})$, with
             $\mathcal{U},\mathcal{V}\in\mathcal{O}$ distinct, we have from this
-            construction that $d(x,\,y)\geq\frac{1}{n+1}$. The sets
-            $S_{n}(\mathcal{U})$ are closed, and $T_{n}(\mathcal{U})$
-            is the difference of an open set from a closed set, which is
-            therefore closed.
+            construction that $d(x,\,y)\geq\frac{1}{n+1}$. The set
+            $T_{n}(\mathcal{U})$ is the difference of an open set from a
+            closed set, which is therefore closed.
             We want open sets. Define $E_{n}(\mathcal{U})$ via:
             \begin{equation}
                 E_{n}(\mathcal{U})=
@@ -437,7 +532,8 @@
         them. First, Stone's paracompactness theorem, but also the fact that
         every regular Lindel\"{o}f space is paracompact, essentially for free.
         \begin{theorem}
-            If $(X,\,\tau)$ is regular, if $\mathcal{O}\subseteq\tau$ is an
+            If $(X,\,\tau)$ is a topological space, if
+            $\mathcal{O}\subseteq\tau$ is an
             open cover, and if $\mathcal{X}$ is a $\sigma$ locally finite open
             cover that is a refinement of $\mathcal{O}$, then there is a
             locally finite cover (but not necessarily an open one)
@@ -473,7 +569,8 @@
             By the well-ordering property of the natural numbers there is a
             least such number $N\in\mathbb{N}$ such that $x\in\mathcal{U}_{N}$.
             Then for all $n<N$ we have $x\notin\mathcal{U}_{n}$, and hence
-            by definition $x\in{S}_{N}(\mathcal{U}_{N})$. So
+            by definition $x\in{S}_{N}(\mathcal{V})$ where
+            $\mathcal{V}\in\mathcal{A}_{N}$ is such that $x\in\mathcal{V}$. So
             $\Delta$ covers $X$. Next, it is locally finite. Given
             $x\in{X}$, since each $\mathcal{A}_{n}$ is locally finite we have
             that there is a $\mathcal{V}_{n}\in\tau$ such that
