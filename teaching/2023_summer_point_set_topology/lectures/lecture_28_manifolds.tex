@@ -1,0 +1,746 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue}
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 28}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \section{Topological Manifolds}
+        Topological manifolds are spaces that \textit{look} like
+        $\mathbb{R}^{n}$, and that are topologically \textit{nice}. They are
+        one of the primary motivators for general topology and have widespread
+        applications in physics, computer graphics, and other branches of
+        mathematics.
+        \begin{definition}[\textbf{Locally Euclidean Topological Space}]
+            A locally Euclidean topological space is a topological space
+            $(X,\,\tau)$ such that for all $x\in{X}$ there is an open set
+            $\mathcal{U}\in\tau$ such that $x\in\mathcal{U}$, and
+            $n\in\mathbb{N}$, and a continuous injective open mapping
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$.
+        \end{definition}
+        Since $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is an injective
+        function, it is bijective onto it's image. Hence
+        $\varphi:\mathcal{U}\rightarrow\varphi[\mathcal{U}]$ is a continuous
+        bijective open mapping, which is therefore a homeomorphism. Another way
+        of stating the definition of locally Euclidean spaces is that every
+        point has an open set about it that is homeomorphic to an open subset
+        of $\mathbb{R}^{n}$ for some $n\in\mathbb{N}$.
+        \begin{example}
+            Euclidean space $\mathbb{R}^{n}$ with the standard Euclidean
+            topology $\tau_{\mathbb{R}^{n}}$ is locally Euclidean. Given a
+            point $\mathbf{x}\in\mathbb{R}^{n}$ choose
+            $\mathcal{U}=\mathbb{R}^{n}$ and
+            $\varphi=\textrm{id}_{\mathbb{R}^{n}}$. That is, the open set
+            about $\mathbf{x}$ is all of Euclidean space, and the function
+            $\varphi$ is the identity. The identity is always a homeomorphism,
+            which is therefore a continuous injective open mapping. This shows
+            us that Euclidean space is indeed locally Euclidean.
+        \end{example}
+        \begin{example}
+            If $\mathcal{V}\subseteq\mathbb{R}^{n}$ is an open subset, then
+            $(\mathcal{V},\,\tau_{\mathcal{V}})$ is locally Euclidean where
+            $\tau_{\mathcal{V}}$ is the subspace topology inherited from the
+            standard Euclidean topology $\tau_{\mathbb{R}^{n}}$. Given a point
+            $\mathbf{x}\in\mathcal{V}$, choose
+            $\mathcal{U}=\mathcal{V}$ and $\varphi=\iota_{\mathcal{V}}$, the
+            inclusion mapping. Since $\mathcal{V}$ is open,
+            $\iota_{\mathcal{V}}$ is an open mapping, and inclusion mappings
+            are always injective and continuous. Thus any open subspace of
+            $\mathbb{R}^{n}$ is locally Euclidean.
+        \end{example}
+        \begin{example}
+            The bug-eyed line, which is the quotient of
+            $\mathbb{R}\times\mathbb{Z}_{2}$ under the identification
+            $(x,\,0)R(x,\,1)$ for all $x\ne{0}$, is locally Euclidean. For
+            points away from the double-origin the bug-eyed line looks, locally,
+            like the real line. The only cause for concern is the two origins.
+            Label $0'=[(0,\,0)]$ and $0''=[(0,\,1)]$. The set
+            $(-1,\,1)\times\{\,0\,\}$ is open in the product space
+            $\mathbb{R}\times\mathbb{Z}_{2}$ since $\mathbb{Z}_{2}$ is discrete
+            and $(-1,\,1)$ is open in $\mathbb{R}$. The set
+            $\big((-1,\,0)\cup(0,\,1)\big)\times\{\,1\,\}$ is also open by the
+            same reason. Let $\mathcal{U}$ be the union of these two open sets,
+            which is therefore open. Note that this set is saturated with
+            respect to the quotient map. That is,
+            $\mathcal{U}=q^{-1}\big[q[\mathcal{U}]\big]$. But the quotient map
+            takes saturated open sets to saturated open sets, so
+            $q[\mathcal{U}]$ is open in the quotient topology. This open set
+            is homeomorphic to $(-1,\,1)$ and contains $0'$. We can do a
+            similar argument for $0''$ showing that the bug-eyed line is
+            locally Euclidean. Note, however, that it is not Hausdorff.
+        \end{example}
+        \begin{example}
+            The long-line is locally Euclidean. Given any point in the
+            long-line it \textit{locally} looks like $(-1,\,1)$, the open
+            unit interval in $\mathbb{R}$. This space is very \textit{large},
+            it is not second-countable. Note then that is would be impossible
+            to embed the long-line into Euclidean space, no matter how large
+            the dimension.
+        \end{example}
+        Topological manifolds should be nice enough that it is possible to
+        embed them into $\mathbb{R}^{n}$. This is not a requirement, however,
+        but the previous two examples show use that \textit{locally Euclidean}
+        by itself can still yield bizarre examples. This motivates the
+        following definition.
+        \begin{definition}[\textbf{Topological Manifold}]
+            A topological manifold is a topological space $(X,\,\tau)$ that
+            is locally Euclidean, second-countable, and Hausdorff.
+        \end{definition}
+        \begin{example}
+            $\mathbb{R}^{n}$ is a topological manifold, with its standard
+            topology. It is locally Euclidean, as seen previously, and it is
+            also second-countable (being the product of a second-countable
+            space) and Hausdorff (since it is metrizable).
+        \end{example}
+        \begin{example}
+            If $\mathcal{V}\subseteq\mathbb{R}^{n}$ is an open subset, then
+            $(\mathcal{V},\,\tau_{\mathcal{V}})$ is a topological manifold.
+            We've already shown that such a space is locally Euclidean, but it
+            is also Hausdorff and second-countable since these properties are
+            inherited by subspaces.
+        \end{example}
+        \begin{example}
+            As far as set theory is concerned, a function
+            $f:A\rightarrow{B}$ from a set $A$ to a set $B$ is a subset of
+            $A\times{B}$ satisfying certain properties. We can use this to
+            define locally Euclidean topological spaces by looking at
+            continuous functions from $\mathbb{R}^{m}$ to $\mathbb{R}^{n}$ for
+            some $m,n\in\mathbb{N}$. Given
+            $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$, continuous,
+            $f\subseteq\mathbb{R}^{m}\times\mathbb{R}^{n}$ can be given the
+            subspace topology. This makes it a closed subset since $f$ is
+            continuous. It is also a locally Euclidean subspace. For given
+            $\big(\mathbf{x},\,f(\mathbf{x})\big)\in{f}$, let
+            $\mathcal{U}=f$ and define $F:f\rightarrow\mathbb{R}^{m}$ via:
+            \begin{equation}
+                F\big((\mathbf{x},\,f(\mathbf{x})\big)=\mathbf{x}
+            \end{equation}
+            This is just the projection of the elements of
+            $f\subseteq\mathbb{R}^{m}\times\mathbb{R}^{n}$ onto
+            $\mathbb{R}^{m}$. Projections are continuous. Let's show
+            $F$ is injective and an open mapping. It is injective since given:
+            \begin{equation}
+                \big(\mathbf{x}_{0},\,f(\mathbf{x}_{0})\big)
+                \ne\big(\mathbf{x}_{1},\,f(\mathbf{x}_{1})\big)
+            \end{equation}
+            we must have $\mathbf{x}_{0}\ne\mathbf{x}_{1}$ (since if
+            $\mathbf{x}_{0}=\mathbf{x}_{1}$, then
+            $f(\mathbf{x}_{0})=f(\mathbf{x}_{1})$ by definition of a function).
+            So then:
+            \begin{equation}
+                F\big((\mathbf{x}_{0},\,f(\mathbf{x}_{0})\big)
+                \ne{F}\big((\mathbf{x}_{1},\,f(\mathbf{x}_{1})\big)
+            \end{equation}
+            meaning $F$ is injective. There is a continuous inverse
+            $F^{-1}:\mathbb{R}^{m}\rightarrow{f}$ given by:
+            \begin{equation}
+                F^{-1}(\mathbf{x})
+                =\big(\mathbf{x},\,f(\mathbf{x})\big)
+            \end{equation}
+            Since $f$ is continuous, $F^{-1}$ is continuous since both
+            components are continuous. So $F$ is an open mapping and $f$
+            is a locally Euclidean subspace of
+            $\mathbb{R}^{m}\times\mathbb{R}^{n}$. Since subspaces of
+            $\mathbb{R}^{m+n}$ are also Hausdorff and second-countable, this
+            shows us that the \textit{graph} of a continuous function
+            $f:\mathbb{R}^{m}\rightarrow\mathbb{R}^{n}$ is a topological
+            manifold.
+        \end{example}
+        \begin{example}
+            $\mathbb{S}^{1}$ with the subspace topology from $\mathbb{R}^{2}$
+            is locally Euclidean. We'll show this in two ways. First, via
+            orthographic projection. We split the circle into four parts:
+            \begin{align}
+                \mathcal{U}_{\textrm{North}}
+                &=\{\,(x,\,y)\in\mathbb{S}^{1}\;|\;y>0\,\}\\
+                \mathcal{U}_{\textrm{South}}
+                &=\{\,(x,\,y)\in\mathbb{S}^{1}\;|\;y<0\,\}\\
+                \mathcal{U}_{\textrm{East}}
+                &=\{\,(x,\,y)\in\mathbb{S}^{1}\;|\;x>0\,\}\\
+                \mathcal{U}_{\textrm{West}}
+                &=\{\,(x,\,y)\in\mathbb{S}^{1}\;|\;x<0\,\}
+            \end{align}
+            See Fig.~\ref{fig:circle_is_locally_euclidean_001}.
+            Then we define four functions:
+            \begin{align}
+                \varphi_{\textrm{North}}:
+                \mathcal{U}_{\textrm{North}}&\rightarrow\mathbb{R}&
+                \quad\quad
+                \varphi_{\textrm{North}}\big((x,\,y)\big)&=x\\
+                \varphi_{\textrm{South}}:
+                \mathcal{U}_{\textrm{South}}&\rightarrow\mathbb{R}&
+                \quad\quad
+                \varphi_{\textrm{South}}\big((x,\,y)\big)&=x\\
+                \varphi_{\textrm{East}}:
+                \mathcal{U}_{\textrm{East}}&\rightarrow\mathbb{R}&
+                \quad\quad
+                \varphi_{\textrm{East}}\big((x,\,y)\big)&=y\\
+                \varphi_{\textrm{West}}:
+                \mathcal{U}_{\textrm{West}}&\rightarrow\mathbb{R}&
+                \quad\quad
+                \varphi_{\textrm{West}}\big((x,\,y)\big)&=y
+            \end{align}
+            Since these are projection mappings, they are continuous. From
+            how the four open sets are defined, each is also injective. To
+            show it is an open mapping we just need to find a continuous
+            inverse with respect to the image of these sets. Note that for all
+            four functions the range is $(-1,\,1)$. We have the following
+            inverse functions:
+            \begin{align}
+                \varphi_{\textrm{North}}^{-1}(x)
+                &=\big(x,\,\sqrt{1-x^{2}}\big)\\
+                \varphi_{\textrm{South}}^{-1}(x)
+                &=\big(x,\,-\sqrt{1-x^{2}}\big)\\
+                \varphi_{\textrm{East}}^{-1}(y)
+                &=\big(\sqrt{1-y^{2}},\,y\big)\\
+                \varphi_{\textrm{West}}^{-1}(y)
+                &=\big(-\sqrt{1-y^{2}},\,y\big)
+            \end{align}
+            each of which is continuous since the square root function is
+            continuous. The four sets also cover $\mathbb{S}^{1}$, showing that
+            $\mathbb{S}^{1}$ is locally Euclidean. Since
+            $\mathbb{R}^{2}$ is second-countable and locally Euclidean,
+            $\mathbb{S}^{1}$ is as well. Hence the circle is a topological
+            manifold.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/circle_is_locally_euclidean_001.pdf}
+            \caption{Cover of $\mathbb{S}^{1}$ with Locally Euclidean Sets}
+            \label{fig:circle_is_locally_euclidean_001}
+        \end{figure}
+        This shows we can cover $\mathbb{S}^{1}$ using four sets each of which
+        is homeomorphic to an open subset of $\mathbb{R}$. We can do better,
+        only two sets are needed. Place an observer at the north pole
+        $N=(0,\,1)$. Given any other point $(x,\,y)$ the line from the
+        observer to the point is not parallel to the $x$ axis, meaning
+        eventually it must intersect it. Let's solve for when. The line segment
+        $\alpha(t)=(1-t)N+t(x,\,y)$ starts at the north pole at time $t=0$ and
+        ends at the point $(x,\,y)$ on the circle at time $t=1$. The line
+        intersects the $x$ axis when the $y$ component is zero. Thus we wish
+        to solve $1-t+ty=0$ for $t$. We get:
+        \begin{equation}
+            t_{0}=\frac{1}{1-y}
+        \end{equation}
+        The $x$ coordinate at time $t=t_{0}$ is then:
+        \begin{equation}
+            \varphi_{N}\big((x,\,y)\big)
+            =\frac{x}{1-y}
+        \end{equation}
+        This is \textit{stereographic projection} about the north pole. It is
+        continuous since it is a rational function. It is also bijective with a
+        continuous inverse. Given $X\in\mathbb{R}$ we can solve for the value
+        $(x,\,y)\in\mathbb{S}^{1}$ that gets mapped to $X$ by reversing the
+        previous process. The line
+        $\beta(t)=(1-t)N+t(X,\,0)$ starts at the north pole and ends at
+        $(X,\,0)$. We wish to solve for the time $t$ when
+        $||\beta(t)||_{2}=1$ which corresponds to the moment the line
+        intersects the circle. We have:
+        \begin{align}
+            ||\beta(t)||_{2}
+            &=||(1-t)N+t(X,\,0)||_{2}\\
+            &=||(1-t)(0,\,1)+t(X,\,0)||_{2}\\
+            &=||(tX,\,1-t)||_{2}\\
+            &=\sqrt{(tX)^{2}+(1-t)^{2}}
+        \end{align}
+        Solving for $||\beta(t)||_{2}=1$ is equivalent to solving
+        $||\beta(t)||_{2}^{2}=1$ so we need to consider the expression
+        $(tX)^{2}+(1-t)^{2}$. We get:
+        \begin{align}
+            1&=(tX)^{2}+(1-t)^{2}\\
+            &=t^{2}X^{2}+1-2t+t^{2}\\
+            &=t^{2}(1+X^{2})-2t+1
+        \end{align}
+        meaning we want to solve for $t^{2}(1+X^{2})-2t=0$. The solution
+        $t=0$ corresponds to the North pole, which is not the one we want.
+        Dividing through by $t$ we get:
+        \begin{equation}
+            t_{1}=\frac{2}{1+X^{2}}
+        \end{equation}
+        The point $(x,\,y)$ corresponds to $\beta(t_{1})$ and is given by:
+        \begin{equation}
+            \varphi_{N}^{-1}(X)=
+            \Big(\frac{2X}{1+X^{2}},\,\frac{-1+X^{2}}{1+X^{2}}\Big)
+        \end{equation}
+        This function is continuous since it is a rational function in each
+        component. Because of this
+        $\varphi_{N}:\mathbb{S}^{1}\setminus\{\,(0,\,1)\,\}\rightarrow\mathbb{R}$
+        is a homeomorphism. Doing a similar projection about the south pole
+        shows that $\mathbb{S}^{1}$ can be covered by two open sets,
+        $\mathbb{S}^{1}\setminus\{\,(0,\,1)\,\}$ and
+        $\mathbb{S}^{1}\setminus\{\,(0,\,-1)\,\}$, each of which is
+        homeomorphic to $\mathbb{R}$.
+        \par\hfill\par
+        It is impossible to do this with one set. This is because
+        $\mathbb{S}^{1}$ is not homeomorphic to an open subset of
+        $\mathbb{R}$ since $\mathbb{S}^{1}$ is compact and the only open subset
+        of $\mathbb{R}$ that is compact is the empty set, but
+        $\mathbb{S}^{1}$ is non-empty. So two is the best we can do.
+        \begin{example}
+            The sphere $\mathbb{S}^{n}\subseteq\mathbb{R}^{n+1}$ is also
+            locally Euclidean for all $n\in\mathbb{N}$. Define
+            $\mathcal{U}_{k}^{\pm}\subseteq\mathbb{S}^{n}$ via:
+            \begin{align}
+                \mathcal{U}_{k}^{+}
+                &=\{\,\mathbf{x}\in\mathbb{S}^{n}\;|\;
+                    \mathbf{x}_{k}>0\,\}\\
+                \mathcal{U}_{k}^{-}
+                &=\{\,\mathbf{x}\in\mathbb{S}^{n}\;|\;
+                    \mathbf{x}_{k}<0\,\}
+            \end{align}
+            These $2n+2$ open sets cover $\mathbb{S}^{n}$ and each is
+            homeomorphic to an open subset of $\mathbb{R}^{n}$. Define
+            $\varphi_{k}^{\pm}:\mathcal{U}_{k}^{\pm}\rightarrow{B}_{1}^{\mathbb{R}^{n}}(\mathbf{0})$
+            via:
+            \begin{equation}
+                \varphi_{k}^{\pm}(\mathbf{x})=
+                (\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,
+                    \mathbf{x}_{k+1},\,\mathbf{x}_{n})
+            \end{equation}
+            That is, projecting down that $k^{th}$ axis. This is continuous
+            with a continuous inverse
+            ${\varphi_{k}^{\pm}}^{-1}:B_{1}^{\mathbb{R}^{n}}(\mathbf{0})\rightarrow\mathcal{U}_{k}^{\pm}$
+            given by:
+            \begin{equation}
+                {\varphi_{k}^{\pm}}^{-1}(\mathbf{x})
+                =(\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,
+                    \pm\sqrt{1-||\mathbf{x}||_{2}^{2}},\,\mathbf{x}_{k},\,
+                    \dots,\,\mathbf{x}_{n-1})
+            \end{equation}
+            This is also continuous, so $\mathbb{S}^{n}$ is locally Euclidean.
+            For reasons similar to the circle, the higher dimensional spheres
+            are also topological manifolds.
+        \end{example}
+        These mappings are called \textit{orthographic projections}. They are
+        formed by placing an observer at \textit{infinity} and projecting what
+        they see down to the plane. This is shown in
+        Fig.~\ref{fig:orthographic_projection_001}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/sphere_orthographic_projection_001.pdf}
+            \caption{Orthographic Projection of the Sphere}
+            \label{fig:orthographic_projection_001}
+        \end{figure}
+        \begin{definition}[\textbf{Topological Chart}]
+            A topological chart of dimension $n$ in a topological space
+            $(X,\,\tau)$ about a point $x\in{X}$ is an ordered pair
+            $(\mathcal{U},\,\varphi)$ such that $\mathcal{U}\in\tau$,
+            $x\in\mathcal{U}$, and
+            $\varphi:\mathcal{U}\rightarrow\mathbb{R}^{n}$ is an injective
+            continuous open mapping.
+        \end{definition}
+        Locally Euclidean could equivalently be described as a topological space
+        $(X,\,\tau)$ such that for all $x\in{X}$ there is a chart
+        $(\mathcal{U},\,\varphi)$ such that $x\in\mathcal{U}$. A collection of
+        charts that covers a space is called an \textit{atlas}.
+        \begin{definition}[\textbf{Topological Atlas}]
+            A topological atlas for a topological space $(X,\,\tau)$ is a
+            set $\mathcal{A}$ of topological charts in $(X,\,\tau)$ such that
+            for all $x\in{X}$ there is a $(\mathcal{U},\,\varphi)\in\mathcal{A}$
+            such that $x\in\mathcal{U}$.
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/sphere_stereographic_projection.pdf}
+            \caption{Stereographic Projection for the Sphere}
+            \label{fig:sphere_stereographic_projection}
+        \end{figure}
+        That is, an atlas is a collection of charts whose domains cover the
+        space. Think of an actual atlas used for navigating. The pages consist
+        of various locations on the globe, but only provides local information.
+        To get information that is more global requires piecing some of the
+        charts of the atlas together. A locally Euclidean space is a topological
+        space $(X,\,\tau)$ such that there exists an atlas $\mathcal{A}$ for it.
+        We've shown that $\mathbb{S}^{n}$ can be covered by $2n+2$ charts using
+        orthographic projection. We can do better using stereographic projection
+        the same way we did for $\mathbb{S}^{1}$. This is shown for
+        $\mathbb{S}^{2}$ in Fig.~\ref{fig:sphere_stereographic_projection}.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/sphere_near_sided_projection.pdf}
+            \caption{Near-Sided Projection of the Sphere}
+            \label{fig:sphere_near_sided_projection}
+        \end{figure}
+        There are two other types of projections that are useful for geometric
+        reasons in covering $\mathbb{S}^{n}$. These are the near-sided and
+        far-sided projections. Near-sided projection is shown in
+        Fig.~\ref{fig:sphere_near_sided_projection}. The idea is to take an
+        observer and place them somewhere on the $z$ axis above the sphere.
+        The portion of the sphere that is visible is then projected down to the
+        $xy$ plane. Far-sided projection is the opposite. You place the
+        observer at the same spot but remove everything that can be seen.
+        The result is a hollow semi-sphere. You then unwrap this on to the
+        plane to get the projection. This is shown in
+        Fig.~\ref{fig:sphere_far_sided_projection}. Stereographic projection
+        is then just far-sided projection at the north pole, and orthographic
+        projection is far-sided projection at infinity.
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/sphere_far_sided_projection.pdf}
+            \caption{Far-Sided Projection of the Sphere}
+            \label{fig:sphere_far_sided_projection}
+        \end{figure}
+       \begin{example}[\textbf{Real Projective Space}]
+            Let $X=\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$. Define the
+            equivalence relation $R$ on $X$ via $\mathbf{x}R\mathbf{y}$ if and
+            only if $\mathbf{y}=\lambda\mathbf{x}$ for some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$. $\mathbb{RP}^{n}$ is the
+            set $X/R$ and the topology $\tau_{\mathbb{RP}^{n}}$ is the
+            quotient topology induced by $R$. As a set this is the set of all
+            lines in $\mathbb{R}^{n+1}$ that pass through the origin. That is,
+            a point $[\mathbf{x}]\in\mathbb{RP}^{n}$ is the entire line through
+            the origin that passes through the point $\mathbf{x}$. Let's start
+            with $\mathbb{RP}^{1}$. Any line can be described by an angle
+            $0\leq\theta<\pi$. If you vary the line you are on slightly, you
+            are just varying this angle. Hopefully it becomes intuitive that
+            $\mathbb{RP}^{1}$ is in fact a one dimensional locally Euclidean
+            space (it may not be intuitive as to why it is Hausdorff or
+            second countable, but we'll get there). A similar thinking applies
+            to $\mathbb{RP}^{n}$. Let's be precise. Let
+            $\mathcal{U}_{k}\subseteq{X}$ be defined by:
+            \begin{equation}
+                \mathcal{U}_{k}
+                =\{\,\mathbf{x}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}\;
+                    |\;\mathbf{x}_{k}\ne{0}\,\}
+            \end{equation}
+            This is the complement of the $k^{\textrm{th}}$ axis, which is open
+            since the $k^{\textrm{th}}$ axis is closed. It is also saturated
+            with respect to the canonical quotient map
+            $q:X\rightarrow\mathbb{RP}^{n}$ defined by
+            $q(\mathbf{x})=[\mathbf{x}]$. That is,
+            $q^{-1}\big[q[\mathcal{U}_{k}]\big]=\mathcal{U}_{k}$. It is always
+            the case that
+            $\mathcal{U}_{k}\subseteq{q}^{-1}\big[q[\mathcal{U}_{k}]\big]$,
+            let's show this reverses for our particular set $\mathcal{U}_{k}$.
+            Let $\mathbf{x}\in{q}^{-1}\big[q[\mathcal{U}_{k}]\big]$. Then
+            $[\mathbf{x}]\in{q}\big[\mathcal{U}_{k}\big]$ so there is some
+            $\mathbf{y}\in\mathcal{U}_{k}$ such that
+            $[\mathbf{x}]=[\mathbf{y}]$. But then
+            $\mathbf{y}_{k}\ne{0}$ and $\mathbf{x}=\lambda\mathbf{y}$ for some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$. But then
+            $\mathbf{x}_{k}\ne{0}$, and hence $\mathbf{x}\in\mathcal{U}_{k}$.
+            So $\mathcal{U}_{k}$ is saturated. But since $q$ is a quotient map,
+            if $\mathcal{U}_{k}$ is open and saturated, the set
+            $\tilde{\mathcal{U}}_{k}=q[\mathcal{U}_{k}]$ is open. Define
+            $\varphi_{k}:\tilde{\mathcal{U}}_{k}\rightarrow\mathbb{R}^{n}$ via:
+            \begin{equation}
+                \varphi_{k}\big([\mathbf{x}]\big)
+                =\Big(\frac{\mathbf{x}_{0}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{k-1}}{\mathbf{x}_{k}},\,
+                    \frac{\mathbf{x}_{k+1}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{n}}{\mathbf{x}_{k}}\Big)
+            \end{equation}
+            We have to prove this is well-defined in two regards. First, there
+            is no division by zero since $\mathbf{x}\in\mathcal{U}_{k}$ implies
+            $\mathbf{x}_{k}\ne{0}$. Second, this is well defined as a function.
+            By that I mean if $[\mathbf{x}]=[\mathbf{y}]$, then there is some
+            $\lambda\in\mathbb{R}\setminus\{\,0\,\}$ such that
+            $\mathbf{y}=\lambda\mathbf{x}$. But then:
+            \begin{align}
+                \varphi_{k}\big([\mathbf{y}]\big)
+                &=\Big(\frac{\mathbf{y}_{0}}{\mathbf{y}_{k}},\,\dots,\,
+                    \frac{\mathbf{y}_{k-1}}{\mathbf{y}_{k}},\,
+                    \frac{\mathbf{y}_{k+1}}{\mathbf{y}_{k}},\,\dots,\,
+                    \frac{\mathbf{y}_{n}}{\mathbf{y}_{k}}\Big)\\
+                &=\Big(\frac{\lambda\mathbf{x}_{0}}{\lambda\mathbf{x}_{k}},\,
+                    \dots,\,
+                    \frac{\lambda\mathbf{x}_{k-1}}{\lambda\mathbf{x}_{k}},\,
+                    \frac{\lambda\mathbf{x}_{k+1}}{\lambda\mathbf{x}_{k}},\,
+                    \dots,\,
+                    \frac{\lambda\mathbf{x}_{n}}{\lambda\mathbf{x}_{k}}\Big)\\
+                &=\Big(\frac{\mathbf{x}_{0}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{k-1}}{\mathbf{x}_{k}},\,
+                    \frac{\mathbf{x}_{k+1}}{\mathbf{x}_{k}},\,\dots,\,
+                    \frac{\mathbf{x}_{n}}{\mathbf{x}_{k}}\Big)\\
+                &=\varphi_{k}\big([\mathbf{x}]\big)
+            \end{align}
+            So it is well-defined. It is also continuous. This is one of the
+            characteristics of the quotient map. Given a topological space
+            $(Y,\,\tau_{Y})$ and a function $f:X/R\rightarrow{Y}$, $f$ is
+            continuous if and only if $f\circ{q}:X\rightarrow{Y}$ is
+            continuous where $q:X\rightarrow{X}/R$ is the canonical quotient
+            map. The composition $\varphi_{k}\circ{q}$ is a rational function,
+            which is continuous, so $\varphi_{k}$ is continuous. The inverse
+            function is given by:
+            \begin{equation}
+                \varphi_{k}^{-1}(\mathbf{x})
+                =\big[
+                    (\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,1,\,
+                    \mathbf{x}_{k},\,\dots,\,\mathbf{x}_{n-1})
+                \big]
+            \end{equation}
+            which is continuous since the function
+            $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$
+            defined by:
+            \begin{equation}
+                f(\mathbf{x})=
+                (\mathbf{x}_{0},\,\dots,\,\mathbf{x}_{k-1},\,1,\,
+                    \mathbf{x}_{k},\,\dots,\,\mathbf{x}_{n-1})
+            \end{equation}
+            is continuous, so $\varphi_{k}^{-1}$ is the composition of
+            continuous functions. Since the sets
+            $\mathcal{U}_{k}$ cover
+            $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$, the sets
+            $\tilde{\mathcal{U}}_{k}$ also cover $\mathbb{RP}^{n}$. Because of
+            this $\mathbb{RP}^{n}$ is locally Euclidean. It is also second
+            countable since it can be covered with finitely many open sets
+            each of which is homeomorphic to an open subset of $\mathbb{R}^{n}$,
+            which is hence second countable. Since $\mathbb{RP}^{n}$ is the
+            finite union of second countable open subspaces, it is second
+            countable itself. It is also Hausdorff. Given
+            $[\mathbf{x}]\ne[\mathbf{y}]$ we have that $\mathbf{y}$ is not
+            of the form $\lambda\mathbf{x}$ for any real number, meaning
+            $\mathbf{x}$ and $\mathbf{y}$ lie on different lines through the
+            origin. Let $\theta$ be defined by:
+            \begin{equation}
+                \theta=
+                \frac{1}{4}\arccos\Big(
+                    \frac{\mathbf{x}\cdot\mathbf{y}}
+                        {||\mathbf{x}||_{2}\,||\mathbf{y}||_{2}}
+                \Big)
+            \end{equation}
+            $\theta$ is one-fourth the angle made between the lines through
+            the origin spanned by $\mathbf{x}$ and $\mathbf{y}$. Let
+            $\mathcal{U}$ and $\mathcal{V}$ be defined by:
+            \begin{align}
+                \mathcal{U}
+                &=\big\{\,
+                    \mathbf{z}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}
+                        \;|\;\measuredangle(\mathbf{x},\,\mathbf{z})<\theta\,
+                    \big\}\\
+                \mathcal{V}
+                &=\big\{\,
+                    \mathbf{z}\in\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}
+                        \;|\;\measuredangle(\mathbf{y},\,\mathbf{z})<\theta\,
+                    \big\}
+            \end{align}
+            Where $\measuredangle(\mathbf{p},\,\mathbf{q})$ is the angle
+            between the non-zero vectors $\mathbf{p}$ and $\mathbf{q}$. These
+            sets are open cones in
+            $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$
+            (Fig.~\ref{fig:rpn_is_hausdorff_001}) which are also
+            saturated with respect to $q$, and by the choice of $\theta$ they
+            are disjoint. But then $\tilde{\mathcal{U}}=q[\mathcal{U}]$ and
+            $\tilde{\mathcal{V}}=q[\mathcal{V}]$ are disjoint open subsets of
+            $\mathbb{RP}^{n}$ such that
+            $[\mathbf{x}]\in\tilde{\mathcal{U}}$ and
+            $[\mathbf{y}]\in\tilde{\mathcal{V}}$. Hence $\mathbb{RP}^{n}$ is
+            Hausdorff. The real projective space is therefore a topological
+            manifold.
+        \end{example}
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/rpn_is_hausdorff_001.pdf}
+            \caption{$\mathbb{RP}^{n}$ is Hausdorff}
+            \label{fig:rpn_is_hausdorff_001}
+        \end{figure}
+        The elements of $\mathbb{RP}^{n}$ are equivalence classes of
+        $\mathbb{R}^{n+1}\setminus\{\,\mathbf{0}\,\}$. A
+        \textit{point} in $\mathbb{RP}^{n}$ is a \textit{line} in
+        $\mathbb{R}^{n+1}$ through the origin. It is not immediately clear that
+        $\mathbb{RP}^{n}$ can be embedded as a subspace of $\mathbb{R}^{N}$ for
+        some $N\in\mathbb{N}$. It indeed can, in fact
+        $\mathbb{RP}^{n}$ can be embedded into $\mathbb{R}^{2n}$ for all $n>0$,
+        but this is by no means obvious. The case $n=1$ is slightly obvious if
+        you really think about what $\mathbb{RP}^{1}$ is
+        (it's just a circle $\mathbb{S}^{1}$). The case $\mathbb{RP}^{2}$ is
+        less obvious ($\mathbb{RP}^{2}$ is \textbf{not} a sphere). We can not
+        embed the real projective plane into $\mathbb{R}^{3}$, unlike the
+        sphere. If we try we'll end up with a surface that must intersect
+        itself. This is shown in
+        Fig.~\ref{fig:real_proj_plane_cross_cap_001}. This representation is
+        known as the \textit{cross cap}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/real_proj_plane_cross_cap_001.pdf}
+            \caption{The Real Projective Plane}
+            \label{fig:real_proj_plane_cross_cap_001}
+        \end{figure}
+        We can do better than this. The cross cap has a crease in it, and this
+        can be removed. David Hilbert, one of the pioneering mathematicians of
+        the early $20^{\textrm{th}}$ century, thought it impossible to draw the
+        real projective plane in $\mathbb{R}^{3}$ in such a way that it has
+        no crease. He asked his student Werney Boy to try and prove this.
+        Instead Boy discovered a method of drawing the real projective plane
+        in $\mathbb{R}^{3}$ that has no crease (it is still self intersecting).
+        This is called the \textit{Boy surface}. It is shown in
+        Fig.~\ref{fig:boy_surface_apery_immersion}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/boy_surface_apery_immersion.pdf}
+            \caption{The Boy Surface}
+            \label{fig:boy_surface_apery_immersion}
+        \end{figure}
+        Bryant and Kusner discovered a way to do this using somewhat simpler
+        functions involving complex variables. The Bryant-Kusner parameteriation
+        is shown in Fig.~\ref{fig:boy_surface_bryant_kusner_parameterization}.
+        \begin{figure}
+            \centering
+            \includegraphics{../../../images/boy_surface_bryant_kusner_parameterization.pdf}
+            \caption{The Bryant-Kusner Parameterization of the Boy Surface}
+            \label{fig:boy_surface_bryant_kusner_parameterization}
+        \end{figure}
+    \section{Smooth Manifolds}
+        The general topological spaces does not have any notion of derivative.
+        We can speak of continuity, by differentiation in $\mathbb{R}^{n}$
+        requires a function to \textit{locally} be approximated by a
+        \textit{tangent-hyperplane}. That is, the tangent line for functions
+        $f:\mathbb{R}\rightarrow\mathbb{R}$, and tangent plane for functions
+        $F:\mathbb{R}^{2}\rightarrow\mathbb{R}$.
+        \textit{Topological vector spaces} (vector spaces with a topology that
+        makes scalar multiplication and vector addition continuous) have
+        enough structure, but this is perhaps too prohibitive. Topological
+        manifolds also have enough structure that one can ask questions about
+        smoothness. Let $(X,\,\tau)$ be a topological manifold, and let
+        $x\in{X}$. Given two charts $(\mathcal{U},\,\varphi)$ and
+        $(\mathcal{V},\,\psi)$ that contain $x$, the function
+        $\psi\circ\varphi^{-1}$ is a continuous function from
+        $\varphi[\mathcal{U}\cap\mathcal{V}]$ to
+        $\psi[\mathcal{U}\cap\mathcal{V}]$, both of which are open subsets of
+        $\mathbb{R}^{n}$. That is, if we label
+        $\mathcal{E}=\varphi[\mathcal{U}\cap\mathcal{V}]$ and
+        $\mathcal{W}=\psi[\mathcal{U}\cap\mathcal{V}]$, then
+        $\psi\circ\varphi^{-1}:\mathcal{E}\rightarrow\mathcal{W}$ is a
+        continuous function from an open subset of Euclidean space to another
+        open subset of Euclidean space. It is then perfectly valid to ask if
+        this function has partial derivatives, or continuous partial
+        derivatives, or if \textit{all partial derivatives of all orders} exist.
+        That is, if the function is \textit{smooth}. This motivates the
+        following.
+        \begin{definition}[\textbf{Smoothly Compatible Charts}]
+            Smoothly compatible charts in a topological space $(X,\,\tau)$
+            are charts $(\mathcal{U},\,\varphi)$ and $(\mathcal{V},\,\psi)$
+            in $(X,\,\tau)$ such that either
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$, or the function
+            $\psi\circ\varphi^{-1}:\varphi[\mathcal{U}\cap\mathcal{V}]%
+             \rightarrow\psi[\mathcal{U}\cap\mathcal{V}]$
+            is smooth (as a function from on open subset of $\mathbb{R}^{n}$ to
+            another open subset of $\mathbb{R}^{n}$).
+        \end{definition}
+        \begin{definition}[\textbf{Smooth Atlas}]
+            A smooth atlas on a topological space $(X,\,\tau)$ is an atlas
+            $\mathcal{A}$ on $(X,\,\tau)$ such that for all
+            $(\mathcal{U},\,\varphi),(\mathcal{V},\,\psi)\in\mathcal{A}$ it is
+            true that $(\mathcal{U},\,\varphi)$ and $(\mathcal{V},\,\psi)$ are
+            \textit{smoothly compatible}.
+        \end{definition}
+        Recall our analogy with an actual atlas. A smooth atlas says that as
+        you transition from one chart to another, this is done
+        \textit{smoothly}. That is, suppose you have two maps containing
+        sections of Europe. The first map has Paris, the second map has Berlin,
+        and they overlap somewhere in between. As you travel from Paris to
+        Berlin you start with the first map, since it contains Paris. Eventually
+        you'll reach the edge of the first map and need to start using the
+        second. When you do this, when you \textit{transition} between maps,
+        it would be nice if the second map looked roughly the same as the first
+        map in this overlapping region. That is, it would be nice if you could
+        \textit{smoothly transition} between maps. This is precisely what the
+        smooth compatibility condition does. A smooth atlas allows you to
+        navigate anywhere in you space using smooth transitions.
+        \begin{definition}[\textbf{Smooth Manifold}]
+            A smooth manifold is an ordered triple $(X,\,\tau,\,\mathcal{A})$
+            such that $(X,\,\tau)$ is a topological manifold, and
+            $\mathcal{A}$ is a smooth atlas for $(X,\,\tau)$.
+        \end{definition}
+        The examples of topological manifolds that we've so far discussed are
+        all smooth manifolds, when the appropriate atlas is chosen. This then
+        inspires the following question.
+        \begin{equation}
+            \textrm{Are all topological manifolds also smooth manifolds?}
+        \end{equation}
+        Let's provide a definition.
+        \begin{definition}[\textbf{Smoothable Manifold}]
+            A smooth manifold is a topological manifold $(X,\,\tau)$ such that
+            there exists a smooth atlas $\mathcal{A}$ for $(X,\,\tau)$.
+        \end{definition}
+        Kervaire showed in 1960 that there are 10-dimensional
+        topological manifolds that are not smoothable. That is, there is no
+        smooth atlas for the space. Freedman found a compact 4-dimensional
+        example in 1982. Kuiper's example, found in 1967, gives an 8-dimensional
+        example that has a rather explicit formula. Note that the sphere
+        $\mathbb{S}^{2}$ can be described by $x^{2}+y^{2}=1$. Under certain
+        conditions, functions $f:X\rightarrow\mathbb{R}$ can yield topological
+        manifolds by considering $f^{-1}[\{\,c\,\}]$ for some constant
+        $c\in\mathbb{R}$. For example $f:\mathbb{R}^{2}\rightarrow\mathbb{R}$
+        defined by $f(x,\,y)=x^{2}+y^{2}$. The circle is the pre-image
+        $f^{-1}[\{\,1\,\}]$. In a similar manner, consider the function
+        $f:\mathbb{C}^{5}\rightarrow\mathbb{C}$ defined by:
+        \begin{align}
+            \nonumber
+            f(&z_{1},\,z_{2},\,z_{3},\,z_{4},\,z_{5})
+                =\\
+                &z_{1}^{5}(1+z_{1})
+                +z_{2}^{3}(1+ez_{2}^{3})
+                +z_{3}^{2}(1+e^{2}z_{3}^{4})
+                +z_{4}^{2}(1+e^{3}z_{4}^{4})
+                +z_{5}^{2}(1+e^{4}z_{5}^{4})
+        \end{align}
+        Where $e$ is the standard Euler constant.
+        Note that $\mathbb{C}^{5}$ can be identified with $\mathbb{R}^{10}$
+        and $\mathbb{C}$ can be seen as $\mathbb{R}^{2}$. The pre-image of
+        $\{\,0\,\}$ is an 8-dimensional manifold that cannot be smoothed.
+        \par\hfill\par
+        In dimensions 1, 2, and 3, all topological manifolds are smoothable.
+        The cube may not be smooth itself, but we can smooth it out into a
+        sphere. Similarly, a triangle can be smoothed into a circle. The fact
+        that some topological manifolds cannot be smooth becomes very hard to
+        imagine. This difficulty is amplified by the fact that the first
+        examples of such a phenomenon occur with four dimensional spaces.
+    \section{Tangent Spaces}
+\end{document}
