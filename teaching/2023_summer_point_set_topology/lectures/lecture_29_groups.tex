@@ -321,7 +321,7 @@
         come from groups are \textit{left-translation} and
         \textit{right-translation}. These are defined as follows.
         \begin{definition}[\textbf{Left-Translation of a Group}]
-            Left-translation of a group $(G,\,*)$ be an element $a\in{G}$ is
+            Left-translation of a group $(G,\,*)$ by an element $a\in{G}$ is
             the function $L_{a}:G\rightarrow{G}$ defined by:
             \begin{equation}
                 L_{a}(x)=a*x
@@ -330,7 +330,7 @@
         \end{definition}
         Right-translation is similarly defined.
         \begin{definition}[\textbf{Right-Translation of a Group}]
-            Right-translation of a group $(G,\,*)$ be an element $a\in{G}$ is
+            Right-translation of a group $(G,\,*)$ by an element $a\in{G}$ is
             the function $R_{a}:G\rightarrow{G}$ defined by:
             \begin{equation}
                 R_{a}(x)=x*a
@@ -432,6 +432,11 @@
             $x,y\in{H}$, and hence $x*y\in{H}$ since
             $L_{x}[H]=H$. So $H$ is a subgroup.
         \end{proof}
+        This cannot be relaxed to just \textit{some} element of $H$. That is,
+        $L_{a}[H]=H$ for some $a\in{H}$ need not imply $H$ is a subgroup. Take,
+        for a simple example, $\mathbb{N}$ with addition $+$. This is a subset
+        of $\mathbb{Z}$ but not a subgroup, it lacks inverses. However
+        $L_{0}[\mathbb{N}]=\mathbb{N}$ is still true, and $0\in\mathbb{N}$.
     \section{Homomorphisms}
         Continuous functions are the main functions of study in topology.
         Continuity is solely described by the topologies. For groups we have a
@@ -456,8 +461,8 @@
         \begin{theorem}
             If $(G,\,*)$ and $(G',\,*')$ are groups, if
             $\varphi:G\rightarrow{G}'$ is a group homomorphism, and if
-            $e\in{G}$ and $e'\in{G}'$ are the identity elements, then
-            $\varphi(e)=\varphi(e')$.
+            $e\in{G}$ and $e'\in{G}'$ are the identities, then
+            $\varphi(e)=e'$.
         \end{theorem}
         \begin{proof}
             We have:
@@ -501,7 +506,7 @@
             $a,b\in{H}$ such that $a'=\varphi(a)$ and $b'=\varphi(b)$. But
             then $a'*b'=\varphi(a)*\varphi(b)=\varphi(a*b)$. Since $H$ is a
             subgroup, $a*b\in{H}$ is true, and hence $a'*b'\in\varphi[H]$.
-            Hence $\varphi[H]$ is a subgroup.
+            Therefore $\varphi[H]$ is a subgroup.
         \end{proof}
         Mimicing topology, the \textit{pre-image} of a subgroup is also a
         subgroup.
@@ -524,8 +529,21 @@
             $\varphi(a)*'\varphi(b)=\varphi(a*b)$ and hence
             $a*b\in{H}$. Thus $H=\varphi^{-1}[H']$ is a subgroup.
         \end{proof}
-        Just like \textit{homeomorphisms} told use when two topological spaces
-        are the same (topologically), \textit{isomorphisms} tell us when
+        Unlike topology, this does not reverse. That is, homomorphisms can not
+        be described by pre-images.
+        \begin{example}
+            Let $(\mathbb{Z}_{2},\,+_{2})$ be the group of addition mod 2, and
+            $(\mathbb{Z}_{3},\,+_{3})$ be the group of addition mod 3.
+            Define $\varphi:\mathbb{Z}_{2}\rightarrow\mathbb{Z}_{3}$ via
+            $\varphi(n)=n$. The only subgroups of $\mathbb{Z}_{3}$ are
+            $\{\,0\,\}$ and $\{\,0,\,1,\,2\,\}$. In both cases
+            the pre-image under $\varphi$ is a subgroup of $\mathbb{Z}_{2}$.
+            However, $\varphi$ is not a homomorphism. Note that
+            $\varphi(1+_{2}1)=\varphi(0)=0$, but
+            $\varphi(1)+_{3}\varphi(1)=1+_{3}1=2$.
+        \end{example}
+        Just like how \textit{homeomorphisms} tell us when two topological
+        spaces are the same (topologically), \textit{isomorphisms} tell us when
         two groups are the same (algebraically).
         \begin{definition}[\textbf{Group Isomorphism}]
             A group isomorphism from a group $(G,\,*)$ to a group
@@ -556,4 +574,195 @@
             and therefore $\varphi^{-1}$ is a group homomorphism.
         \end{proof}
     \section{Conjugation and Normal Subgroups}
+        Groups need not be Abelian (commutative). The general linear group
+        of invertible $n\times{n}$ matrices serves as the counterexample to
+        the claim, and serves as an example of a very useful and important
+        non-Abelian group. \textit{Conjugation} measures, to some extent, how
+        two elements fail to commute.
+        \begin{definition}[\textbf{Conjugation of a Group}]
+            The conjugation of a group $(G,\,*)$ by an element $g\in{G}$ is
+            the function $\textrm{conj}_{g}:G\rightarrow{G}$ defined by:
+            \begin{equation}
+                \textrm{conj}_{g}(a)=g*a*g^{-1}
+            \end{equation}
+            for all $a\in{G}$.
+        \end{definition}
+        \begin{theorem}
+            If $(G,\,*)$ is an Abelian group, and if $g\in{G}$, then
+            $\textrm{conj}_{g}=\textrm{id}_{G}$.
+        \end{theorem}
+        \begin{proof}
+            For let $a\in{G}$. Then:
+            \begin{align}
+                \textrm{conj}_{g}(a)
+                &=g*a*g^{-1}\tag{Definition of $\textrm{conj}_{g}$}\\
+                &=g*g^{-1}*a\tag{Commutativity}\\
+                &=e*a\tag{Inverse}\\
+                &=a\tag{Identity}
+            \end{align}
+            and hence $\textrm{conj}_{g}(a)=a$ for all $a$, meaning
+            $\textrm{conj}_{g}$ is the identity function.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a\in{G}$, and if $g\in{G}$, then:
+            \begin{equation}
+                \textrm{conj}_{g}(a^{-1})=\textrm{conj}_{g}(a)^{-1}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            By the uniqueness of inverses, we need only show that
+            $\textrm{conj}_{g}(a^{-1})$ is an inverse of
+            $\textrm{conj}_{g}(a)$. We have:
+            \begin{align}
+                \textrm{conj}_{g}(a^{-1})*\textrm{conj}_{g}(a)
+                &=\big(g*a^{-1}*g^{-1}\big)*\big(g*a*g^{-1}\big)
+                    \tag{Substitution}\\
+                &=(g*a^{-1})*(g^{-1}*g)*(a*g^{-1})\tag{Associativity}\\
+                &=(g*a^{-1})*e*(a*g^{-1})\tag{Inverse}\\
+                &=(g*a^{-1})*(a*g^{-1})\tag{Identity}\\
+                &=g*(a^{-1}*a)*g^{-1}\tag{Associativity}\\
+                &=g*e*g^{-1}\tag{Inverse}\\
+                &=g*g^{-1}\tag{Identity}\\
+                &=e\tag{Inverse}
+            \end{align}
+            By the uniqueness of inverses,
+            $\textrm{conj}_{g}(a^{-1})=\textrm{conj}_{g}(a)^{-1}$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $g\in{G}$, and if $a,b\in{G}$, then:
+            \begin{equation}
+                \textrm{conj}_{g}(a*b)
+                =\textrm{conj}_{g}(a)*\textrm{conj}_{g}(b)
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            We have:
+            \begin{align}
+                \textrm{conj}_{g}(a*b)
+                &=g*(a*b)*g^{-1}\tag{Definition of $\textrm{conj}_{g}$}\\
+                &=g*(a*e*b)*g^{-1}\tag{Identity}\\
+                &=g*(a*(g^{-1}*g)*b)*g^{-1}\tag{Inverse}\\
+                &=(g*a*g^{-1})*(g*b*a^{-1})\tag{Associativity}\\
+                &=\textrm{conj}_{g}(a)*\textrm{conj}_{g}(b)
+                    \tag{Definition of $\textrm{conj}_{g}$}
+            \end{align}
+            and so the theorem is proved.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, and if $g\in{G}$, then
+            $\textrm{conj}_{g}:G\rightarrow{G}$ is a group homomorphism.
+        \end{theorem}
+        \begin{proof}
+            By the previous theorem
+            $\textrm{conj}_{g}(a*b)=\textrm{conj}_{g}(a)*\textrm{conj}_{g}(b)$
+            and hence $\textrm{conj}_{g}$ is a group homomorphism.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $g\in{G}$, and if $H\subseteq{G}$ is
+            a subgroup, then $\textrm{conj}_{g}[H]\subseteq{G}$ is a
+            subgroup.
+        \end{theorem}
+        \begin{proof}
+            Since $H$ is a subgroup and $\textrm{conj}_{g}:G\rightarrow{G}$
+            is a group homomorphism, $\textrm{conj}_{g}[H]$ is a subgroup.
+        \end{proof}
+        \begin{definition}[\textbf{Normal Subgroup}]
+            A normal subgroup of a group $(G,\,*)$ is a subgroup
+            $H\subseteq{G}$ such that for all $g\in{G}$ it is true that
+            $\textrm{conj}_{g}[N]=N$. That is, for all $a\in{N}$ and for all
+            $g\in{G}$ we have $g*n*g^{-1}\in{N}$.
+        \end{definition}
+        Note that it is not required that $g*n*g^{-1}=n$, merely that
+        conjugation of an element in the subgroup yields another element of
+        the subgroup. Normal subgroups are those that are \textit{closed}
+        under conjugation.
+        \section{Cosets and Quotient Groups}
+            Subgroups can be used to decompose a group into disjoint pieces.
+            That is, we take the subgroup and then use left-translation by
+            different elements of the group until every element is covered.
+            This has two uses. First, it gives a nice partitioning of the group
+            and can be used to prove things like \textit{Lagrange's theorem}
+            for finite groups. Secondly, it yields an equivalence relation
+            which can then be used to form quotient sets. Under the right
+            conditions the quotient set can be given a group struct such that
+            the canonical quotient map is a group homomorphism. First, a
+            definition.
+            \begin{definition}[\textbf{Left-Coset in a Group}]
+                The left-coset of a subset $A\subseteq{G}$ in a group
+                $(G,\,*)$ with respect to an element $a\in{G}$ is the set
+                $L_{a}[A]$, where $L_{a}$ is the left-translation function.
+            \end{definition}
+            In most contexts $A$ is actually a subgroup, and we usually label
+            this as $H\subseteq{G}$. Many textbooks then denote the left-coset
+            of $H$ by $a$ as $aH$. For topological applications
+            left-translation is a central tool and we usually think of this as
+            a \textit{function}, so we'll stick with $L_{a}[H]$.
+            \begin{theorem}
+                If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup, and
+                if $a,b\in{G}$, then either $L_{a}[H]=L_{b}[H]$ or
+                $L_{a}[H]\cap{L}_{b}[H]=\emptyset$.
+            \end{theorem}
+            \begin{proof}
+                For suppose $L_{a}[H]\cap{L}_{b}[H]\ne\emptyset$. That is,
+                there is some $c\in{L}_{a}[H]\cap{L}_{b}[H]$. Then, by
+                definition of left-translation, there exists $x,y\in{H}$ such
+                that $c=a*x$ and $c=b*y$. That is, $a*x=b*y$. But then
+                $a=b*y*x^{-1}$. But $H$ is a subgroup, so $y*x^{-1}\in{H}$, and
+                hence $a\in{L}_{b}[H]$. Given $z\in{L}_{a}[H]$, we have
+                $z=a*w$ for some $w\in{H}$, and therefore
+                $z=b*(y*x^{-1}*w)$. But $y*x^{-1}*w\in{H}$ since $H$ is a
+                subgroup. Thus $z\in{L}_{b}[H]$, meaning
+                $L_{a}[H]\subseteq{L}_{b}[H]$. By a similar argument it is true
+                that $L_{b}[H]\subseteq{L}_{a}[H]$ and hence
+                $L_{a}[H]=L_{b}[H]$. That is, either $L_{a}[H]$ and $L_{b}[H]$
+                are disjoint or equal.
+            \end{proof}
+            \begin{theorem}
+                If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup,
+                and if $\Lambda$ is the set:
+                \begin{equation}
+                    \Lambda=\{\,L_{a}[H]\subseteq{G}\;|\;a\in{G}\,\}
+                \end{equation}
+                then $\Lambda$ partitions $G$. That is, $\bigcup\Lambda=G$ and
+                distinct elements of $\Lambda$ are disjoint.
+            \end{theorem}
+            \begin{proof}
+                By the previous theorem distinct elements of $\Lambda$ are
+                disjoint. We need only show that $\bigcup\Lambda=G$. Let
+                $a\in{G}$. Since $H$ is a subgroup, $e\in{H}$ where $e\in{G}$
+                is the unique identity element. But then $a*e=a$, and hence
+                $a\in{L}_{a}[H]$. Thus $a\in\bigcup\Lambda$. That is, $\Lambda$
+                partitions $G$.
+            \end{proof}
+            Partitions and equivalence relations are really the same thing. If
+            $R$ is an equivalence relation on $X$, we get a partition by
+            considering the set of all equivalence classes of $X$. That is,
+            the equivalence classes $[x]\subseteq{X}$ cover the set, and
+            equivalence classes are either identical or disjoint. Conversely,
+            if we have a partition, we may form an equivalence relation by
+            saying that $xRy$ is true if and only if $x$ and $y$ belong to the
+            same partition set. Because of this, the left-posets of a subgroup
+            give us an equivalence relation on a group, meaning we may form the
+            quotient set, which we denote $G/H$.
+            It is natural to ask if the quotient set can be
+            endowed with a group operation, much the way we equipped quotients
+            of topological spaces with the quotient topology. Unlike
+            topological spaces, where \textit{any} quotient set can be given
+            the quotient topology, for the quotient of a group to be a group
+            itself the subgroup must be \textit{normal}.
+            If $N\subseteq{G}$ is a normal subgroup, we may define:
+            \begin{equation}
+                L_{a}[N]\tilde{*}L_{b}[N]=L_{a*b}[N]
+            \end{equation}
+            Since $N$ is closed under conjugation, this is a well-defined
+            operation. Almost by construction, the quotient map
+            $q:G\rightarrow{G}/N$ defined by
+            $q(a)=[a]=L_{a}[N]$ is a group homomorphism. That is:
+            \begin{equation}
+                q(a*b)
+                =L_{a*b}[N]
+                =L_{a}[N]\tilde{*}L_{b}[N]
+                =q(a)\tilde{*}q(b)
+            \end{equation}
+            so $q$ is a group homomorphism.
 \end{document}
