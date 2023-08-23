@@ -1,0 +1,266 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+
+%------------------------Theorem Styles-------------------------%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}[section]
+\newtheorem{definitionx}{Definition}[section]
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\newenvironment{definition}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\definitionx%
+}{%
+    \popQED\enddefinitionx%
+}
+
+\title{Point-Set Topology: Lecture 29}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    In algebraic topology one uses algebraic structures like groups and
+    vector spaces to solve topological problems. This is usually done by
+    \textit{associating} some algebraic object with a given topological space,
+    and showing that homotopy equivalences or homeomorphisms preserve
+    the nature of this algebraic device. We won't be exploring this route, it
+    deserves its own course. Instead we'll dive into
+    \textit{topological algebra}. Here we reverse the idea, attaching a
+    topology to algebraic structures. In particular we'll discuss
+    \textit{topological groups}, perhaps the simplest object of study in
+    topological algebra. There are a few motivating examples for the study of
+    topological groups.
+    \begin{itemize}
+        \item A \textit{real topological vector space} is a real vector space
+            $(V,\,+)$ together with a topology $\tau$ that makes vector
+            addition $(v,\,w)\mapsto{v+w}$ and scalar multiplication
+            $(a,\,v)\mapsto{a}v$ continuous operations. The additive nature of
+            vector addition yields an Abelian group, meaning every topological
+            vector space has a canonical topological group associated to it.
+        \item A \textit{Banach space} is a normed vector space (usually over
+            $\mathbb{R}$ or $\mathbb{C}$) such that the metric induced by the
+            norm yields a \textit{complete} metric space. Banach spaces are,
+            in particular, topological vector spaces and the addition of
+            vectors forms a topological group.
+        \item A Lie group is a smooth manifold with a group operation that is
+            \textit{smooth}. Lie groups are, in particular, topological groups.
+    \end{itemize}
+    There is no pre-requesite for algebra, so we'll take the time to develop
+    the basics of group theory.
+    \section{Group Theory}
+        There are a few competing views on how best to describe groups. Some
+        say it is the study of symmetry. One may also view groups as
+        combinatorial objects. I'll take the approach of
+        \textit{generalized arithmetic}. The addition of integers and the
+        multiplication of matrices provide two motivating examples of groups.
+        Many of the theorems involving these two arithmetics need only a few
+        common traits. Groups generalize these traits to abstract objects.
+        \begin{definition}[(\textbf{Group})]
+            A group is an ordered pair $(G,\,*)$ such that $G$ is a set and
+            $*:G\times{G}\rightarrow{G}$ is a function (called a
+            \textit{binary operation}) that is \textit{associative}, has an
+            \textit{identity}, and contains \textit{inverse elements}. That is:
+            \begin{enumerate}
+                \item For $a,\,b,\,c\in{G}$ it is true that
+                    $a*(b*c)=(a*b)*c$ (Associativity)
+                \item There is an $e\in{G}$ such that $a*e=e*a=a$ for all
+                    $a\in{G}$ (Identity)
+                \item For all $a\in{G}$ there is a $b\in{G}$ such that
+                    $a*b=b*a=e$ (Inverses)
+            \end{enumerate}
+        \end{definition}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, and if $e,e'\in{G}$ are identities, then
+            $e=e'$
+        \end{theorem}
+        \begin{proof}
+            Since $e$ and $e'$ are identities we have:
+            \begin{equation}
+                e=e*e'=e'
+            \end{equation}
+            and hence $e=e'$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a\in{G}$, and if $b$ and $b'$ are
+            inverses of $a$, then $b=b'$.
+        \end{theorem}
+        \begin{proof}
+            For let $e\in{G}$ be the unique identity. Then we have:
+            \begin{align}
+                b&=b*e\tag{Identity}\\
+                &=b*(a*b')\tag{Inverse}\\
+                &=(b*a)*b'\tag{Associativity}\\
+                &=e*b'\tag{Inverse}\\
+                &=b'\tag{Identity}
+            \end{align}
+            and hence $b=b'$.
+        \end{proof}
+        Because of this, given $a\in{G}$ we denote by $a^{-1}$ the
+        \textit{unique} inverse of $a$.
+        \begin{theorem}
+            If $(G,\,*)$ is a group, and if $a,b\in{G}$, then
+            $(a*b)^{-1}=b^{-1}*a^{-1}$.
+        \end{theorem}
+        \begin{proof}
+            Since inverses are unique, we need only prove that
+            $b^{-1}*a^{-1}$ is indeed an inverse of $a*b$. We have:
+            \begin{align}
+                (a*b)*(b^{-1}*a^{-1})&=
+                    a*\big((b*b^{-1})*a^{-1}\big)\tag{Associativity}\\
+                    &=a*(e*a^{-1})\tag{Inverse}\\
+                    &=a*a^{-1}\tag{Identity}\\
+                    &=e\tag{Inverse}
+            \end{align}
+            by the uniqueness of inverses, $(a*b)^{-1}=b^{-1}*a^{-1}$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, and if $a\in{G}$, then
+            $(a^{-1})^{-1}=a$.
+        \end{theorem}
+        \begin{proof}
+            We have that:
+            \begin{align}
+                a&=a*e\tag{Identity}\\
+                &=a*\big(a^{-1}*(a^{-1})^{-1}\big)\tag{Inverse}\\
+                &=(a*a^{-1})*(a^{-1})^{-1}\tag{Associativity}\\
+                &=e*(a^{-1})^{-1}\tag{Inverse}\\
+                &=(a^{-1})^{-1}\tag{Identity}
+            \end{align}
+            and hence $a=(a^{-1})^{-1}$.
+        \end{proof}
+        \begin{theorem}[\textbf{Left-Cancellation Law}]
+            If $(G,\,*)$ is a group, if $a,b,c\in{G}$, and if
+            $a*b=a*c$, then $b=c$.
+        \end{theorem}
+        \begin{proof}
+            Letting $e\in{G}$ be the unique inverse, if $a*b=a*c$, then we have:
+            \begin{align}
+                b&=e*b\tag{Identity}\\
+                &=(a^{-1}*a)*b\tag{Inverse}\\
+                &=a^{-1}*(a*b)\tag{Associativity}\\
+                &=a^{-1}*(a*c)\tag{Hypothesis}\\
+                &=(a^{-1}*a)*c\tag{Associativity}\\
+                &=e*c\tag{Inverse}\\
+                &=c\tag{Identity}
+            \end{align}
+            so we conclude that $b=c$.
+        \end{proof}
+        We can mirror this argument to prove the right-cancellation law.
+        \begin{theorem}[\textbf{Right-Cancellation Law}]
+            If $(G,\,*)$ is a group, if $a,b,c\in{G}$, and if $b*a=c*a$, then
+            $b=c$.
+        \end{theorem}
+        \begin{proof}
+            Letting $e\in{G}$ be the unique inverse, if $b*a=c*a$, then we have:
+            \begin{align}
+                b&=b*e\tag{Identity}\\
+                &=b*(a*a^{-1})\tag{Inverse}\\
+                &=(b*a)*a^{-1}\tag{Associativity}\\
+                &=(c*a)*a^{-1}\tag{Hypothesis}\\
+                &=c*(a*a^{-1})\tag{Associativity}\\
+                &=c*e\tag{Inverse}\\
+                &=c\tag{Identity}
+            \end{align}
+            and hence $b=c$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a,b\in{G}$, and if
+            $a=a*b$, then $b=e$ where $e\in{G}$ is the unique identity element.
+        \end{theorem}
+        \begin{proof}
+            We have that:
+            \begin{align}
+                a*b&=a\tag{Hypothesis}\\
+                &=a*e\tag{Identity}
+            \end{align}
+            and hence $a*b=a*e$. By the left-cancellation law, $b=e$.
+        \end{proof}
+        \begin{definition}[\textbf{Subgroup}]
+            A subgroup of a group $(G,\,*)$ is a subset $H\subseteq{G}$ such
+            that the restriction of $*$ to $H\times{H}$ yields a group. That
+            is, $(H,\,*_{H})$ is a group.
+        \end{definition}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $e\in{G}$ is the unique identity, and
+            if $H\subseteq{G}$ is a subgroup, then $e\in{H}$.
+        \end{theorem}
+        \begin{proof}
+            Since $(H,\,*_{H})$ is a group, there is some identity element
+            $e_{H}\in{H}$. But then $e_{H}*_{H}e_{H}=e_{H}$. But
+            $*_{H}$ is just the restriction of $*$ to $H$, so
+            $e_{H}*e_{H}=e_{H}$. By the previous theorem, $e_{H}=e$, so
+            $e\in{H}$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup, and
+            if $a\in{H}$, then $a^{1}\in{H}$.
+        \end{theorem}
+        \begin{proof}
+            Since $(H,\,*_{H})$ is a group, and since $a\in{H}$, there is an
+            inverse element $a_{H}^{-1}$ such that
+            $a*a_{H}^{-1}=a_{H}^{-1}*a=e_{H}$. But by the previous theorem,
+            $e_{H}=e$, so $a*a_{H}^{-1}=a_{H}^{-1}*a=e$. But $(G,\,*)$ is a
+            group and inverses are unique, so $a_{H}^{-1}=a^{-1}$. Hence
+            $a^{-1}\in{H}$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, and if $H\subseteq{G}$, then $H$ is a
+            subgroup if and only if $H$ is non-empty and for all $a\in{H}$
+            it is true that $a^{-1}\in{H}$, and if for all $a,b\in{H}$ it is
+            true that $a*b\in{H}$.
+        \end{theorem}
+        \begin{proof}
+            By the previous two theorems, if $H\subseteq{G}$ is a subgroup,
+            then it is closed to group multiplication and inversion. Suppose
+            $H\subseteq{G}$ is closed to inversion and multiplication. We need
+            only show that $H$ has an identity element (it has inverses, and
+            the group operation is associative, so the restriction to $H$ is
+            associative as well). Since $H$ is non-empty, there is some
+            $a\in{H}$. But $H$ is closed to inversion, so $a^{-1}\in{H}$. But
+            $H$ is also closed under multiplication, meaning $a*a^{-1}\in{H}$.
+            But $a*a^{-1}=e$, and hence $e\in{H}$. That is, $H$ is a subgroup.
+        \end{proof}
+    \section{Homomorphisms}
+\end{document}
