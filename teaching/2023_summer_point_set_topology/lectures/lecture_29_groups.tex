@@ -87,8 +87,8 @@
         \item A Lie group is a smooth manifold with a group operation that is
             \textit{smooth}. Lie groups are, in particular, topological groups.
     \end{itemize}
-    There is no pre-requesite for algebra, so we'll take the time to develop
-    the basics of group theory.
+    There is no pre-requesite for algebra in this course, so we'll take the
+    time to develop the basics of group theory.
     \section{Group Theory}
         There are a few competing views on how best to describe groups. Some
         say it is the study of symmetry. One may also view groups as
@@ -97,8 +97,8 @@
         multiplication of matrices provide two motivating examples of groups.
         Many of the theorems involving these two arithmetics need only a few
         common traits. Groups generalize these traits to abstract objects.
-        \begin{definition}[(\textbf{Group})]
-            A group is an ordered pair $(G,\,*)$ such that $G$ is a set and
+        \begin{definition}[\textbf{Group}]
+            A group is an ordered pair $(G,\,*)$ where $G$ is a set and
             $*:G\times{G}\rightarrow{G}$ is a function (called a
             \textit{binary operation}) that is \textit{associative}, has an
             \textit{identity}, and contains \textit{inverse elements}. That is:
@@ -111,6 +111,46 @@
                     $a*b=b*a=e$ (Inverses)
             \end{enumerate}
         \end{definition}
+        \begin{example}
+            The integers $\mathbb{Z}$ with addition form a group. That is,
+            $(\mathbb{Z},\,+)$ is a group. It is perhaps one of the simplest
+            group structures. Addition is associative, zero serves as an
+            identity, and for all $n\in\mathbb{Z}$, $-n$ is an additive inverse.
+        \end{example}
+        \begin{example}
+            The real numbers with addition $(\mathbb{R},\,+)$ also form a group.
+            Note that we may identify $(\mathbb{Z},\,+)$ as a \textit{subgroup}
+            (defined soon) of the real numbers.
+        \end{example}
+        \begin{example}
+            The positive real numbers $\mathbb{R}^{+}$, together with ordinary
+            multiplication, form a group. That is,
+            $(\mathbb{R}^{+},\,\cdot\,)$ is a group. Multiplication is indeed
+            associative, and 1 serves as the identity. Since we have excluded
+            0 from the set, for all $x\in\mathbb{R}^{+}$, $\frac{1}{x}$ is the
+            inverse of $x$.
+        \end{example}
+        \begin{example}
+            Let $GL_{n}(\mathbb{R})$ be the set of all $n\times{n}$ matrices
+            of real numbers with non-zero determinant. That is, all matrices
+            $A\in\mathbb{R}^{n\times{n}}$ such that $A^{-1}$ exists. This
+            set, together with matrix multiplication, forms a group. This is
+            the \textit{general linear group} of order $n$. Matrix
+            multiplication is associative, and the identity matrix $I_{n}$
+            serves as the identity. Since the set consists solely of invertible
+            matrices, inverses exist in $GL_{n}(\mathbb{R})$. Note that, unlike
+            the previous examples, matrix multiplication is \textit{not}
+            commutative. That is, given $A,B\in{GL}_{n}(\mathbb{R})$, it is
+            possible for $AB\ne{BA}$ to be true.
+        \end{example}
+        \textit{Commutative} groups are useful enough to deserve a name.
+        \begin{definition}[\textbf{Abelian Group}]
+            An Abelian group is a group $(G,\,*)$ such that for all $a,b\in{G}$
+            it is true that $a*b=b*a$.
+        \end{definition}
+        We now take the time to explore the basic properties that all groups
+        have in common. None of these are \textit{deep} theorems, and come
+        straight from the definition.
         \begin{theorem}
             If $(G,\,*)$ is a group, and if $e,e'\in{G}$ are identities, then
             $e=e'$
@@ -217,6 +257,18 @@
             \end{align}
             and hence $a*b=a*e$. By the left-cancellation law, $b=e$.
         \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a,b\in{G}$, and if
+            $a=b*a$, then $b=e$ where $e\in{G}$ is the unique identity element.
+        \end{theorem}
+        \begin{proof}
+            We have that:
+            \begin{align}
+                b*a&=a\tag{Hypothesis}\\
+                &=e*a\tag{Identity}
+            \end{align}
+            and hence $b*a=e*a$. By the right-cancellation law, $b=e$.
+        \end{proof}
         \begin{definition}[\textbf{Subgroup}]
             A subgroup of a group $(G,\,*)$ is a subset $H\subseteq{G}$ such
             that the restriction of $*$ to $H\times{H}$ yields a group. That
@@ -224,18 +276,19 @@
         \end{definition}
         \begin{theorem}
             If $(G,\,*)$ is a group, if $e\in{G}$ is the unique identity, and
-            if $H\subseteq{G}$ is a subgroup, then $e\in{H}$.
+            if $H\subseteq{G}$ is a subgroup, then $e\in{H}$ and $e$ is the
+            identity of $(H,\,*_{H})$.
         \end{theorem}
         \begin{proof}
             Since $(H,\,*_{H})$ is a group, there is some identity element
             $e_{H}\in{H}$. But then $e_{H}*_{H}e_{H}=e_{H}$. But
             $*_{H}$ is just the restriction of $*$ to $H$, so
             $e_{H}*e_{H}=e_{H}$. By the previous theorem, $e_{H}=e$, so
-            $e\in{H}$.
+            $e\in{H}$ and $e$ is the identity of $(H,\,*_{H})$.
         \end{proof}
         \begin{theorem}
             If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup, and
-            if $a\in{H}$, then $a^{1}\in{H}$.
+            if $a\in{H}$, then $a^{-1}\in{H}$.
         \end{theorem}
         \begin{proof}
             Since $(H,\,*_{H})$ is a group, and since $a\in{H}$, there is an
@@ -247,14 +300,16 @@
         \end{proof}
         \begin{theorem}
             If $(G,\,*)$ is a group, and if $H\subseteq{G}$, then $H$ is a
-            subgroup if and only if $H$ is non-empty and for all $a\in{H}$
-            it is true that $a^{-1}\in{H}$, and if for all $a,b\in{H}$ it is
+            subgroup if and only if $H$ is non-empty, for all $a\in{H}$
+            it is true that $a^{-1}\in{H}$, and for all $a,b\in{H}$ it is
             true that $a*b\in{H}$.
         \end{theorem}
         \begin{proof}
             By the previous two theorems, if $H\subseteq{G}$ is a subgroup,
-            then it is closed to group multiplication and inversion. Suppose
-            $H\subseteq{G}$ is closed to inversion and multiplication. We need
+            then it is closed to group multiplication and inversion. It also
+            non-empty since $e\in{H}$. In the reverse direction, suppose
+            $H\subseteq{G}$ is non-empty and
+            closed to inversion and multiplication. We need
             only show that $H$ has an identity element (it has inverses, and
             the group operation is associative, so the restriction to $H$ is
             associative as well). Since $H$ is non-empty, there is some
@@ -262,5 +317,243 @@
             $H$ is also closed under multiplication, meaning $a*a^{-1}\in{H}$.
             But $a*a^{-1}=e$, and hence $e\in{H}$. That is, $H$ is a subgroup.
         \end{proof}
+        For topology and geometry, two of the most important operations that
+        come from groups are \textit{left-translation} and
+        \textit{right-translation}. These are defined as follows.
+        \begin{definition}[\textbf{Left-Translation of a Group}]
+            Left-translation of a group $(G,\,*)$ be an element $a\in{G}$ is
+            the function $L_{a}:G\rightarrow{G}$ defined by:
+            \begin{equation}
+                L_{a}(x)=a*x
+            \end{equation}
+            That is, each element is translated on the left by $a$.
+        \end{definition}
+        Right-translation is similarly defined.
+        \begin{definition}[\textbf{Right-Translation of a Group}]
+            Right-translation of a group $(G,\,*)$ be an element $a\in{G}$ is
+            the function $R_{a}:G\rightarrow{G}$ defined by:
+            \begin{equation}
+                R_{a}(x)=x*a
+            \end{equation}
+            That is, each element is translated on the right by $a$.
+        \end{definition}
+        Left-translation and right-translation by the same element may yield
+        different functions if $(G,\,*)$ is not Abelian (commutative).
+        Regardless, translation is always a bijection.
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a\in{G}$, and if
+            $L_{a}:G\rightarrow{G}$ is left-translation by $a$, then
+            $L_{a}$ is bijective.
+        \end{theorem}
+        \begin{proof}
+            First, $L_{a}$ is injective. For let $x,y\in{G}$ and suppose
+            $L_{a}(x)=L_{a}(y)$. By the definition of left-translation this
+            means $a*x=a*y$. By the left-cancellation law, $x=y$, and hence
+            $L_{a}$ is injective. It is also surjective. For let
+            $y\in{G}$ and let $x=a^{-1}*y$. Then we have:
+            \begin{align}
+                L_{a}(x)&=a*x\tag{Definition}\\
+                &=a*(a^{-1}*y)\tag{Substitution}\\
+                &=(a*a^{-1})*y\tag{Associativity}\\
+                &=e*y\tag{Inverse}\\
+                &=y\tag{Identity}
+            \end{align}
+            and hence $L_{a}(x)=y$, so $L_{a}$ is surjective. Since $L_{a}$ is
+            injective and surjective, it is bijective.
+        \end{proof}
+        The same result holds for right-translation. The proof is also a mirror
+        of left-translation.
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $a\in{G}$, and if
+            $R_{a}:G\rightarrow{G}$ is right-translation by $a$, then
+            $R_{a}$ is bijective.
+        \end{theorem}
+        \begin{proof}
+            Indeed, $R_{a}$ is injective. For let $x,y\in{G}$ and suppose
+            $R_{a}(x)=R_{a}(y)$. That is, $x*a=y*a$. By the right-cancellation
+            law, $x=y$, and hence $R_{a}$ is injective. It is also surjective.
+            For let $y\in{G}$ and let $x=y*a^{-1}$. Then we have:
+            \begin{align}
+                R_{a}(x)&=x*a\tag{Definition}\\
+                &=(y*a^{-1})*a\tag{Substitution}\\
+                &=y*(a^{-1}*a)\tag{Associativity}\\
+                &=y*e\tag{Inverse}\\
+                &=y\tag{Identity}
+            \end{align}
+            and hence $R_{a}(x)=y$, so $R_{a}$ is surjective. Since $R_{a}$ is
+            injective and surjective, it is bijective.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup, and if
+            $a\in{H}$, then $L_{a}[H]=H$. That is, left-translation of a
+            subgroup by an element of the subgroup results in the subgroup.
+        \end{theorem}
+        \begin{proof}
+            For let $x\in{H}$ and set $y=a^{-1}*x$. Since $a\in{H}$ and $H$ is
+            a subgroup, we have that $a^{-1}\in{H}$. Since $x\in{H}$ and $H$
+            is a subgroup we also have that $a^{-1}*x\in{H}$. Hence $y\in{H}$.
+            But then:
+            \begin{equation}
+                L_{a}(y)=a*(a^{-1}*x)=(a^{-1}*a)*x=e*x=x
+            \end{equation}
+            and therefore $x\in{L}_{a}[H]$. That is, $H\subseteq{L}_{a}[H]$. In
+            the reverse direction, let $y\in{L}_{a}[H]$. Then
+            $y=L_{a}(x)$ for some $x\in{H}$. That is, $y=a*x$. But then
+            $x=a^{-1}*y$. But $a^{-1}\in{H}$ and $y\in{H}$, and hence
+            $a^{-1}*y\in{H}$ since $H$ is a subgroup. That is,
+            $x\in{H}$, and thus $L_{a}[H]\subseteq{H}$. We conclude that
+            $H=L_{a}[H]$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $H\subseteq{G}$ is a subgroup, and if
+            $a\in{H}$, then $R_{a}[H]=H$. That is, right-translation of a
+            subgroup by an element of the subgroup results in the subgroup.
+        \end{theorem}
+        \begin{proof}
+            The proof is a mirrored mimicry of the previous theorem.
+        \end{proof}
+        This reverses.
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $H\subseteq{G}$, if $H$ is non-empty,
+            and if for all $a\in{H}$ it is true that
+            $L_{a}[H]=H$, then $H$ is a subgroup.
+        \end{theorem}
+        \begin{proof}
+            First note that $e\in{H}$, where $e\in{G}$ is the unique identity.
+            Since $H$ is non-empty there is some $a\in{H}$. But if $a\in{H}$,
+            then by hypothesis $L_{a}[H]=H$, and hence $a\in{L}_{a}[H]$.
+            That is, there is some $x\in{H}$ such that $L_{a}(x)=a$, and hence
+            $a=a*x$. By the left-cancellation law, $x=e$ and $e\in{H}$. So $H$
+            contains the identity. It also contains inverses. Since $e\in{H}$
+            and $L_{a}[H]=H$ we have that $L_{a}(x)=e$ for some $x\in{H}$.
+            That is, $a*x=e$. By the uniqueness of inverses, $x=a^{-1}$ so
+            $a^{-1}\in{H}$. Finally, $H$ is
+            closed under multiplication since $x*y=L_{x}(y)$ for all
+            $x,y\in{H}$, and hence $x*y\in{H}$ since
+            $L_{x}[H]=H$. So $H$ is a subgroup.
+        \end{proof}
     \section{Homomorphisms}
+        Continuous functions are the main functions of study in topology.
+        Continuity is solely described by the topologies. For groups we have a
+        set and a binary operation, so not much to play with. The main functions
+        of study for group theory should then be functions that respect or
+        preserve the binary operation in some way. This motivates the definition
+        of \textit{group homomorphisms}.
+        \begin{definition}[\textbf{Group Homomorphism}]
+            A group homomorphism from a group $(G,\,*)$ to a group
+            $(G',\,*')$ is a function $\varphi:G\rightarrow{G}'$ such that
+            for all $a,b\in{G}$ it is true that
+            $\varphi(a*b)=\varphi(a)*'\varphi(b)$.
+        \end{definition}
+        \begin{example}
+            Define $\varphi:\mathbb{Z}\rightarrow\mathbb{Z}_{2}$ by
+            $\varphi(n)=n\textrm{ mod }2$. If $\mathbb{Z}$ is given integer
+            arithmetic, and if $\mathbb{Z}_{2}$ is equipped with
+            \textit{modular arithmetic}, then $\varphi$ is a group homomorphism.
+            $\varphi$ sends even integers to 0 and odd integers to 1.
+        \end{example}
+        Group homomorphisms preserve many aspects of the group.
+        \begin{theorem}
+            If $(G,\,*)$ and $(G',\,*')$ are groups, if
+            $\varphi:G\rightarrow{G}'$ is a group homomorphism, and if
+            $e\in{G}$ and $e'\in{G}'$ are the identity elements, then
+            $\varphi(e)=\varphi(e')$.
+        \end{theorem}
+        \begin{proof}
+            We have:
+            \begin{align}
+                \varphi(e)&=\varphi(e*e)\tag{Identity}\\
+                &=\varphi(e)*'\varphi(e)\tag{Homomorphism}
+            \end{align}
+            and hence $\varphi(e)=\varphi(e)*'\varphi(e)$. By the cancellation
+            law, $\varphi(e)=e'$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ and $(G',\,*')$ are groups, if
+            $\varphi:G\rightarrow{G}'$ is a group homomorphism, and if
+            $a\in{G}$, then $\varphi(a^{-1})=\varphi(a)^{-1}$.
+        \end{theorem}
+        \begin{proof}
+            Since inverses are unique, we need only show that
+            $\varphi(a^{-1})$ is an inverse for $\varphi(a)$. We have:
+            \begin{align}
+                \varphi(a)*\varphi(a^{-1})
+                &=\varphi(a*a^{-1})\tag{Homomorphism}\\
+                &=\varphi(e)\tag{Identity}\\
+                &=e'\tag{Previous Theorem}
+            \end{align}
+            and hence $\varphi(a^{-1})=\varphi(a)^{-1}$.
+        \end{proof}
+        \begin{theorem}
+            If $(G,\,*)$ and $(G',\,*')$ are groups, if
+            $\varphi:G\rightarrow{G}'$ is a group homormorphism, and if
+            $H\subseteq{G}$ is a subgroup, then
+            $\varphi[H]\subseteq{G}'$ is a subgroup.
+        \end{theorem}
+        \begin{proof}
+            Since $H$ is a subgroup, $e\in{H}$ is true, and hence
+            $e'\in\varphi[H]$ is also true. Hence $\varphi[H]$ is non-empty.
+            If $a'\in\varphi[H]$, then $a'=\varphi(a)$ for some $a\in{H}$.
+            But $H$ is a subgroup, so $a^{-1}\in{H}$ and hence
+            $\varphi(a^{-1})\in\varphi[H]$. But
+            $\varphi(a^{-1})=\varphi(a)^{-1}$, and hence
+            $a'^{-1}\in\varphi[H]$. Lastly, if $a',b'\in{H}$, then there are
+            $a,b\in{H}$ such that $a'=\varphi(a)$ and $b'=\varphi(b)$. But
+            then $a'*b'=\varphi(a)*\varphi(b)=\varphi(a*b)$. Since $H$ is a
+            subgroup, $a*b\in{H}$ is true, and hence $a'*b'\in\varphi[H]$.
+            Hence $\varphi[H]$ is a subgroup.
+        \end{proof}
+        Mimicing topology, the \textit{pre-image} of a subgroup is also a
+        subgroup.
+        \begin{theorem}
+            If $(G,\,*)$ and $(G',\,*')$ and groups, if
+            $\varphi:G\rightarrow{G}'$ is a group homomorphism,
+            and if $H'\subseteq{G}'$ is a subgroup, then
+            $\varphi^{-1}[H']\subseteq{G}$ is a subgroup.
+        \end{theorem}
+        \begin{proof}
+            Let $H=\varphi^{-1}[H']$. Firstly, the set is non-empty since
+            $e'\in{H}'$, and hence $e\in{H}$. Let's prove $H$ is closed to
+            inversions and products. Let
+            $a\in{H}$. Then $\varphi(a)\in{H}'$. But $H'$ is a subgroup,
+            so $\varphi(a)^{-1}\in{H}'$. But $\varphi(a)^{-1}=\varphi(a^{-1})$
+            and hence $a^{-1}\in{H}$. That is, $H$ is closed to inversion.
+            Lastly, let $a,b\in{H}$. Then $\varphi(a)\in{H}'$ and
+            $\varphi(b)\in{H}'$. But $H'$ is a subgroup, so
+            $\varphi(a)*'\varphi(b)\in{H}'$. But
+            $\varphi(a)*'\varphi(b)=\varphi(a*b)$ and hence
+            $a*b\in{H}$. Thus $H=\varphi^{-1}[H']$ is a subgroup.
+        \end{proof}
+        Just like \textit{homeomorphisms} told use when two topological spaces
+        are the same (topologically), \textit{isomorphisms} tell us when
+        two groups are the same (algebraically).
+        \begin{definition}[\textbf{Group Isomorphism}]
+            A group isomorphism from a group $(G,\,*)$ to a group
+            $(G',\,*')$ is a bijective group homomorphism
+            $\varphi:G\rightarrow{G}'$ such that
+            $\varphi^{-1}:G'\rightarrow{G}$ is also a group homomorphism.
+        \end{definition}
+        In topology a bijective continuous function need not have a continuous
+        inverse. Group theorists do not have such worries.
+        \begin{theorem}
+            If $(G,\,*)$ and $(G',\,*')$ are groups, and if
+            $\varphi:G\rightarrow{G}'$ is a bijective group homomorphism,
+            then $\varphi^{-1}$ is a group homomorphism.
+        \end{theorem}
+        \begin{proof}
+            For let $a',b'\in{G}'$. Since $\varphi$ is bijective, there are
+            $a,b\in{G}$ such that $a'=\varphi(a)$ and $b'=\varphi(b)$. But then,
+            since $\varphi$ is bijective, we also have
+            $a=\varphi^{-1}(a')$ and $b=\varphi^{-1}(b')$. Hence:
+            \begin{align}
+                \varphi^{-1}(a'*'b')
+                &=\varphi^{-1}\big(\varphi(a)*'\varphi(b)\big)
+                    \tag{Substitution}\\
+                &=\varphi^{-1}\big(\varphi(a*b)\big)\tag{Homomorphism}\\
+                &=a*b\tag{Inverse Function}\\
+                &=\varphi^{-1}(a')*\varphi^{-1}(b')\tag{Substitution}
+            \end{align}
+            and therefore $\varphi^{-1}$ is a group homomorphism.
+        \end{proof}
+    \section{Conjugation and Normal Subgroups}
 \end{document}
