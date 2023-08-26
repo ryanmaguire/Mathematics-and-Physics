@@ -70,7 +70,7 @@
             $\eta:X\rightarrow{X}$ defined by:
             \begin{align}
                 m(x,\,y)&=x*y\\
-                \eta(x)=x^{-1}
+                \eta(x)&=x^{-1}
             \end{align}
             are continuous (here $X\times{X}$ is given the product topology).
             That is, the group operations are continuous functions.
@@ -125,7 +125,7 @@
             If $(X,\,\tau)$ is a topological space, and if $(X,\,*)$ is a
             group, then $(X,\,\tau,\,*)$ is a topological group if and only
             if the function $f:X\times{X}\rightarrow{X}$ defined by
-            $f\big((x,\,y)\big)=x*y^{-1}$ is continuous.
+            $f(x,\,y)=x*y^{-1}$ is continuous.
         \end{theorem}
         \begin{proof}
             The function $f(x,\,y)=x*y^{-1}$ can be seen as a
@@ -183,6 +183,15 @@
         \begin{proof}
             Left-translation is a homeomorphism, so it is also an closed map.
         \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau,\,*)$ is a topological group, if $a\in{X}$, and if
+            $R_{a}:X\rightarrow{X}$ denotes right-translation by $a$, then
+            $R_{a}$ is a homeomorphism. In particular it is both an open map
+            and a closed map.
+        \end{theorem}
+        \begin{proof}
+            The proof is similar to that for left-translation.
+        \end{proof}
         Conjugation is also a homeomorphism, but it is also a group isomorphism.
         Functions that are both continuous and homomorphisms are one of the
         main objects of study in topological groups.
@@ -205,6 +214,10 @@
             topologies and also a group isomorphism with respect to
             the group operations.
         \end{definition}
+        Note we did \textbf{not} just define this as a
+        \textit{continuous group isomorphism} since we would like the
+        inverse function to be continuous as well. Hence we defined this as a
+        \textit{homeomorphic group isomorphism}.
         \begin{theorem}
             If $(X,\,\tau,\,*)$ is a topological group and if $g\in{X}$, then
             $\textrm{conj}_{g}$ is a topological group
@@ -214,7 +227,222 @@
         \begin{proof}
             We have already proven that conjugation is a group isomorphism.
             It is also a homeomorphism since:
+            \begin{align}
+                \textrm{conj}_{g}(a)
+                &=g*a*g^{-1}\tag{Definition of $\textrm{conj}_{g}$}\\
+                &=g*(a*g^{-1})\tag{Associativity}\\
+                &=L_{g}(a*g^{-1})\tag{Definition of $L_{g}$}\\
+                &=L_{g}\big(R_{g^{-1}}(a)\big)\tag{Definition of $R_{g^{-1}}$}\\
+                &=(L_{g}\circ{R}_{g^{-1}})(a)\tag{Definition of Composition}
+            \end{align}
+            And hence conjugation is the composition of a left-translation and
+            a right-translation, which is the composition of homeomorphisms,
+            which is therefore a homeomorphism.
         \end{proof}
-    \section{Kolmogorov Quotients}
-    \section{Major Results}
+        Left-translations, right-translations, and conjugations allow us to
+        show that topological groups have a lot of nice properties. For
+        one thing, topological groups are \textit{homogeneous}.
+        \begin{definition}[\textbf{Homogeneous Topological Space}]
+            A homogeneous topological space is a topological space $(X,\,\tau)$
+            such that for all $x,y\in{X}$ there is a homeomorphism
+            $f:X\rightarrow{X}$ such that $f(x)=y$.
+        \end{definition}
+        This means that every point in the space looks like every other point.
+        Euclidean spaces are examples of homogeneous topological spaces, as
+        are all connected topological manifolds. Topological groups are also
+        homogeneous.
+        \begin{theorem}
+            If $(X,\,\tau,\,*)$ is a topological group, then $(X,\,\tau)$ is a
+            homogeneous topological space.
+        \end{theorem}
+        \begin{proof}
+            For let $a,b\in{X}$ and define
+            $f:X\rightarrow{X}$ by $f(x)=b*x*a^{-1}$. Then $f$ is a
+            homeomorphism, being the composition of left and right-translations.
+            But also:
+            \begin{equation}
+                f(a)=b*a*a^{-1}=b*e=b
+            \end{equation}
+            And hence $(X,\,\tau)$ is a homogeneous topological space.
+        \end{proof}
+        Homogeneity can be used to prove a lot of nice properties. For one,
+        if there are nice \textit{local} topological properties around the
+        origin, then these properties might become \textit{global} by using
+        translations. Let's motivate this by example.
+        \begin{definition}[\textbf{Kolmogorov Topological Space}]
+            A Kolmogorov topological space is a topological space
+            $(X,\,\tau)$ such that for all $x,y\in{X}$ there is an open set
+            $\mathcal{U}\in\tau$ such that either $x\in\mathcal{U}$ and
+            $y\notin\mathcal{U}$, or $x\notin\mathcal{U}$ and $y\in\mathcal{U}$.
+        \end{definition}
+        This is the weakest of the separation properties, weaker than the
+        Hausdorff and Frech\'{e}t properties. A Kolmogorov space need not be
+        Hausdorff or Frech\'{e}t.
+        \begin{example}
+            Define $\tau$ on $\mathbb{N}$ to be:
+            \begin{equation}
+                \tau=\{\,
+                    \mathbb{Z}_{n}\subseteq\mathbb{Z}\;|\;n\in\mathbb{N}\,
+                \}\cup\{\,\mathbb{N}\,\}
+            \end{equation}
+            This is a topology since the sets are nested, so the union and
+            intersection properties are satisfied. It is Kolmogorov. Given
+            $n,m\in\mathbb{N}$, $n\ne{m}$, choose
+            $\mathcal{U}=\mathbb{Z}_{k+1}$ where $k=\textrm{min}(m,\,n)$. Then
+            $\mathcal{U}$ is open can contains one one of $m$ and $n$, but not
+            both. The space is not Frech\'{e}t since no point can be separated
+            from $0$.
+        \end{example}
+        What's remarkable is that Kolmorogov topological groups are Frech\'{e}t,
+        Hausdorff, regular, and completely regular. We'll prove the first two
+        of the assertions. First we'll need a little lemma.
+        \begin{theorem}
+            If $(G,\,*)$ is a group, if $A\subseteq{G}$, if $x,y\in{G}$, if
+            $x\in{A}$ and $y\notin{A}$, and if
+            $B=L_{x}\big[R_{y}[A^{-1}]\big]$, where:
+            \begin{equation}
+                A^{-1}=\{\,a^{-1}\in{G}\;|\;a\in{A}\,\}
+            \end{equation}
+            then $x\notin{B}$ and $y\in{B}$.
+        \end{theorem}
+        \begin{proof}
+            First, $y\in{B}$ since $x\in{A}$, and hence
+            $x^{-1}\in{A}^{-1}$, so $L_{x}\big(R_{y}(x^{-1})\big)\in{B}$.
+            But:
+            \begin{equation}
+                L_{x}\big(R_{y}(x^{-1})\big)=x*x^{-1}*y=e*y=y
+            \end{equation}
+            and therefore $y\in{B}$. Second, $x\notin{B}$. For if
+            $x\in{B}$, then $x=x*a^{-1}*y$ for some $a\in{A}$. But then by the
+            cancellation law, $a^{-1}*y=e$. But inverses are unique, meaning
+            $y=a$. But then $y\in{A}$, which is a contradiction. So
+            $x\notin{B}$ and $y\in{B}$, completing the proof.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau,\,*)$ is a topological group, and if
+            $\eta:X\rightarrow{X}$ is defined by $\eta(x)=x^{-1}$, then
+            $\eta$ is a homeomorphism.
+        \end{theorem}
+        \begin{proof}
+            $\eta$ is continuous since $(X,\,\tau,\,*)$ is a topological
+            group. It is also bijective. It is injective since
+            $x^{-1}=y^{-1}$ implies $x=y$ since inverses are unique. It is
+            surjective since $(X,\,*)$ is a group, and hence every element has
+            an inverse. Lastly, the inverse is continuous since the inverse of
+            $\eta$ is $\eta$. That is:
+            \begin{align}
+                \eta^{2}(x)
+                &=(\eta\circ\eta)(x)\\
+                &=\eta\big(\eta(x)\big)\\
+                &=\eta(x^{-1})\\
+                &=(x^{-1})^{-1}\\
+                &=x
+            \end{align}
+            And hence $\eta=\eta^{-1}$. But then $\eta^{-1}$ is continuous,
+            so $\eta$ is a homeomorphism.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau,\,*)$ is a topological group, and if
+            $(X,\,\tau)$ is a Kolmogorov topological space, then it is a
+            Frech\'{e}t topological space.
+        \end{theorem}
+        \begin{proof}
+            For let $x,y\in{X}$. Since $(X,\,\tau)$ is a Kolmogorov space, there
+            is a $\mathcal{U}\in\tau$ such that either $x\in\mathcal{U}$ and
+            $y\notin\mathcal{U}$, or $x\notin\mathcal{U}$ and
+            $y\in\mathcal{U}$. Suppose the former (the proof is symmetric).
+            Let $\mathcal{V}=(L_{x}\circ{R}_{y})[\mathcal{U}^{-1}]$ where:
+            \begin{equation}
+                \mathcal{U}^{-1}=\{\,a^{-1}\in{X}\;|\;a\in\mathcal{U}\,\}
+            \end{equation}
+            Then $\mathcal{U}^{-1}$ is the image of the inversion function
+            $\eta:X\rightarrow{X}$ defined by $\eta(x)=x^{-1}$. Since
+            $\eta$ is a homeomorphism, it is an open mapping. Since
+            $\mathcal{U}$ is open, $\mathcal{U}^{-1}$ is also open. Hence
+            $\mathcal{V}$ is also open since left-translations and
+            right-translations are open mappings as well. By a previous theorem,
+            since $x\in\mathcal{U}$ and $y\notin\mathcal{U}$, we have
+            $x\notin\mathcal{V}$ and $y\in\mathcal{V}$. Hence
+            $(X,\,\tau)$ is a Frech\'{e}t space.
+        \end{proof}
+        The Hausdorff property will be implied as well.
+        \begin{theorem}
+            If $(X,\,\tau)$ is a topological space, then it is Hausdorff if and
+            only if the set:
+            \begin{equation}
+                \Delta=\{\,(x,\,x)\in{X}\times{X}\;|\;x\in{X}\,\}
+            \end{equation}
+            is closed with respect to the product topology.
+        \end{theorem}
+        \begin{proof}
+            First, suppose $\Delta$ is closed with respect to the product
+            topology. Let's show that $(X,\,\tau)$ is Hausdorff. Let
+            $x,y\in{X}$ with $x\ne{y}$. Since $x\ne{y}$ we have that
+            $(x,\,y)\notin\Delta$, meaning
+            $(x,\,y)\in{X}\times{X}\setminus\Delta$. But since
+            $\Delta\subseteq{X}\times{X}$ is closed,
+            $X\times{X}\setminus\Delta$ is open. Then from the definition
+            of the product topology, there must be open sets
+            $\mathcal{U},\,\mathcal{V}\in\tau$ such that
+            $\mathcal{U}\times\mathcal{V}\subseteq{X}\times{X}\setminus\Delta$
+            and $(x,\,y)\in\mathcal{U}\times\mathcal{V}$. But also
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$. For if
+            $z\in\mathcal{U}\cap\mathcal{V}$, then
+            $(z,\,z)\in{X}\times{X}\setminus\Delta$, which is a contradiction
+            since $(z,\,z)\in\Delta$. Hence $(X,\,\tau)$ is Hausdorff.
+            In the other direction, suppose $(X,\,\tau)$ is a Hausdorff space
+            and let's show that $\Delta$ is closed. To do this we prove that
+            $X\times{X}\setminus\Delta$ is open. Let
+            $(x,\,y)\in{X}\times{X}\setminus\Delta$. Then $x\ne{y}$. But
+            $(X,\,\tau)$ is Hausdorff so there are open sets
+            $\mathcal{U},\mathcal{V}\in\tau$ such that
+            $x\in\mathcal{U}$, $y\in\mathcal{V}$, and
+            $\mathcal{U}\cap\mathcal{V}=\emptyset$. But then
+            $\mathcal{U}\times\mathcal{V}$ is an open subset of
+            $X\times{X}$ that contains $(x,\,y)$, and since the sets are
+            disjoint the product is contained entirely inside of
+            $X\times{X}\setminus\Delta$. Hence, $\Delta$ is closed.
+        \end{proof}
+        \begin{theorem}
+            If $(X,\,\tau,\,*)$ is a topological group, and if $(X,\,\tau)$
+            is a Kolmogorov space, then it is Hausdorff.
+        \end{theorem}
+        \begin{proof}
+            We have proven that Kolmogorov topological groups are Frech\'{e}t,
+            and hence $\{\,e\,\}$ is closed, where $e$ is the unique identity
+            element of $(X,\,*)$. But since $(X,\,\tau,\,*)$ is a
+            topological group, the function $f:X\times{X}\rightarrow{X}$
+            defined by $f(x,\,y)=x*y^{-1}$ is continuous. But the set:
+            \begin{equation}
+                \Delta=\{\,(x,\,x)\in{X}\times{X}\;|\;x\in{X}\,\}
+            \end{equation}
+            is the pre-image of the set $\{\,e\,\}$ by $f$. Since $f$ is
+            continuous and $\{\,e\,\}$ is closed, $\Delta$ is closed as well.
+            Since the diagonal is closed, $(X,\,\tau)$ is Hausdorff.
+        \end{proof}
+        The idea around Kolmogorov spaces allow us to define the notion of
+        points being \textit{topologically distinguishable}. Two points are
+        topologically indistinguishable if they belong to all of the same open
+        sets. That is, the topology can't tell them apart. This yields an
+        equivalence relation on the points in a topological space, and the
+        resulting quotient is the \textit{Kolmogorov quotient}. It always yields
+        a Kolmogorov topological space. What's more, a topological space is a
+        Kolmogorov space if and only if it is homeomorphic to it's
+        Kolmogorov quotient.
+        \par\hfill\par
+        In the context of groups there's a bit more to it. If $(X,\,\tau,\,*)$
+        is a topological group, and if $e\in{X}$ is the unique identity, then
+        $\textrm{Cl}_{\tau}(\{\,e\,\})$ is a closed normal subgroup. That is,
+        it is a closed subset as far as the topology is concerned, but it is
+        also a normal subgroup. The points in the closure of $e$ are precisely
+        the ones that are topologically indistinguishable from the identity.
+        The equivalence relation induced by being
+        topologically indistinguishable
+        partitions the space into the cosets of $\textrm{Cl}_{\tau}(\{\,e\,\})$
+        (viewed as a normal subgroup). The quotient space is hence also a
+        topological group, and since it is Kolmogorov, it is automatically
+        Frech\'{e}t and Hausdorff. So every topological group has a canonical
+        Hausdorff topological group associated to it. Because of this many
+        authors require topological groups to have, as part of the definition,
+        the Kolmogorov or Frech\'{e}t or Hausdorff properties.
 \end{document}
