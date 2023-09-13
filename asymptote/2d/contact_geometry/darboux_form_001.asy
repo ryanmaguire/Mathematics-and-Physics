@@ -53,6 +53,7 @@ real ds = 1.0/6.0;
 /*  Size of the displacement in the z-direction. Used for drawing planes.     */
 real dz = 0.1;
 
+/*  Arrow head for the coordinate axes.                                       */
 arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
 
 /*  Function for drawing the plane representing the contact structure at the  *
