@@ -73,3 +73,82 @@ path PathFromFunction(real func(real), real a, real b, int n_samples)
         return reverse(g);
 }
 /*  End of PathFromFunction.                                                  */
+
+/* Given an array of pairs, draw a smooth curve through the points.           */
+path PathFromPoints(pair[] Pts, bool closed = false)
+{
+    /*  Declare necessary variables.                                          */
+    path g;
+    int n;
+
+    /*  Assert that the collection of points has at least 2 points.           */
+    assert(Pts.length > 1);
+
+    /*  Start the path going from the zeroth point to the first.              */
+    g = Pts[0] .. Pts[1];
+
+    /* Loop through the array and construct the path.                         */
+    for (n = 2; n < Pts.length; ++n)
+        g = g .. Pts[n];
+
+    /* If the closed Boolean is true, close the path into a cycle.            */
+    if (closed)
+        g = g .. cycle;
+
+    return g;
+}
+/*  End of PathFromPoints.                                                    */
+
+/* Given an array of pairs, draw a polygonal curve through the point.         */
+path PolyFromPoints(pair[] Pts, bool closed)
+{
+    /*  Declare necessary variables.                                          */
+    path g;
+    int n;
+
+    /*  Assert that the collection of points has at least 2 points.           */
+    assert(Pts.length > 1);
+
+    /*  Start the path going from the zeroth point to the first.              */
+    g = Pts[0] -- Pts[1];
+
+    /* Loop through the array and construct the path.                         */
+    for (n = 2; n < Pts.length; ++n)
+        g = g -- Pts[n];
+
+    /* If the closed Boolean is true, close the path into a cycle.            */
+    if (closed)
+        g = g -- cycle;
+
+    return g;
+}
+/*  End of PolyFromPoints.                                                    */
+
+/* Given an array of pairs and an array of reals, draw a path between the     *
+ * pairs with angle specified by the array of reals.                          */
+path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, bool closed)
+{
+    /*  Declare necessary variables.                                          */
+    path g;
+    int n;
+
+    /*  Assert that the collection of points has at least 2 points.           */
+    assert(Pts.length > 1);
+
+    /*  The point and direction arrays must be the same size.                 */
+    assert(Pts.length = Dirs.length);
+
+    /*  Set the start of the path.                                            */
+    g = Pts[0]{dir(Dirs[0])} .. Pts[1]{dir(Dirs[1])};
+
+    /* Loop through the arrays and construct the path.                        */
+    for (n = 2; n < ArSize; ++n)
+        g = g .. Pts[n]{dir(Dirs[n])};
+
+    /* If the closed Boolean is true, close the path into a cycle.            */
+    if (closed)
+        g = g .. cycle;
+
+    return g;
+}
+/*  End of PathFromPointsAndAngles.                                           */
