@@ -10,4 +10,3 @@ for x in $(find asymptote/ -name *.asy -path "asymptote/animations/*"); do
     asy $x;
     mv $filename.gif ./images/
 done
-

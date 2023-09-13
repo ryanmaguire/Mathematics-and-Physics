@@ -29,7 +29,7 @@
  ******************************************************************************/
 
 /*  Stealth arrow head like the one tikz has.                                 */
-arrowhead StealthHead(real dir=arrowdir, real barb=arrowbarb)
+arrowhead StealthHead(real dir = arrowdir, real barb = arrowbarb)
 {
     arrowhead a;
 
@@ -90,7 +90,7 @@ arrowhead StealthHead = StealthHead();
 
 /*  Private function required for making an arrow drawing function. This is   *
  *  mostly copy/paste of the original asymptote code.                         */
-private real position(position currentpos, real size, path g, bool center)
+private real Position(position currentpos, real size, path g, bool center)
 {
     /*  Set pos to the real value equivalent of position.                     */
     real pos = currentpos.position.x;
@@ -108,9 +108,10 @@ private real position(position currentpos, real size, path g, bool center)
 
     return pos;
 }
+/*  End of Position.                                                          */
 
 /*  Function for drawing a sharp arrow with the arrow head at the front end.  */
-private void drawsharparrow(frame f, arrowhead arhead = DefaultHead,
+private void DrawSharpArrow(frame f, arrowhead arhead = DefaultHead,
                             path g, pen p = currentpen, real size = 0,
                             real angle = arrowangle, filltype fill = null,
                             position currentpos = EndPoint,
@@ -141,7 +142,7 @@ private void drawsharparrow(frame f, arrowhead arhead = DefaultHead,
     size = min(arrowsizelimit*arclength(g), size);
 
     /*  Convert the current position into a real number.                      */
-    pos = position(currentpos, size, g, center);
+    pos = Position(currentpos, size, g, center);
 
     /*  Adjust the path by the selected margin.                               */
     g = the_margin(g, p).g;
@@ -180,10 +181,10 @@ private void drawsharparrow(frame f, arrowhead arhead = DefaultHead,
     /*  Fill the arrow head, setting line width to 0.0 to make it "sharp".    */
     fill.fill(f, head, p + linewidth(0.0) + solid);
 }
-/*  End of drawsharparrow.                                                    */
+/*  End of DrawSharpArrow.                                                    */
 
 /*  Function for drawing sharp arrows at both ends of a path.                 */
-private void drawsharparrow2(frame f, arrowhead arhead = DefaultHead,
+private void DrawSharpArrow2(frame f, arrowhead arhead = DefaultHead,
                              path g, pen p = currentpen, real size = 0,
                              real angle = arrowangle, filltype fill = null,
                              margin the_margin = NoMargin)
@@ -227,10 +228,10 @@ private void drawsharparrow2(frame f, arrowhead arhead = DefaultHead,
     fill.fill(f, head, p + linewidth(0.0) + solid);
     fill.fill(f, tail, p + linewidth(0.0) + solid);
 }
-/*  End of drawsharparrow2.                                                   */
+/*  End of DrawSharpArrow2.                                                   */
 
 /*  Function that adds a sharp arrow to the actual picture.                   */
-private picture sharparrow(arrowhead arhead = DefaultHead,
+private picture SharpArrow(arrowhead arhead = DefaultHead,
                            path g, pen p = currentpen, real size = 0,
                            real angle = arrowangle, filltype fill = null,
                            position currentpos = EndPoint, bool forwards = true,
@@ -253,7 +254,7 @@ private picture sharparrow(arrowhead arhead = DefaultHead,
     pic.add(
         new void(frame f, transform t)
         {
-            drawsharparrow(f, arhead, t*g, p, size, angle, fill,
+            DrawSharpArrow(f, arhead, t*g, p, size, angle, fill,
                            currentpos, forwards, the_margin, center);
         }
     );
@@ -262,7 +263,7 @@ private picture sharparrow(arrowhead arhead = DefaultHead,
     pic.addPath(g, p);
 
     /*  Get the real value equivalent of currentpos.                          */
-    pos = position(currentpos, size, g, center);
+    pos = Position(currentpos, size, g, center);
 
     /*  If the path should be backwards, reverse it.                          */
     if (!forwards)
@@ -277,10 +278,10 @@ private picture sharparrow(arrowhead arhead = DefaultHead,
     addArrow(pic, arhead, G, p, size, angle, fill, pos);
     return pic;
 }
-/*  End of sharparrow.                                                        */
+/*  End of SharpArrow.                                                        */
 
-/*  Same as sharparrow, but with arrows at both ends of the path.             */
-picture sharparrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
+/*  Same as SharpArrow, but with arrows at both ends of the path.             */
+picture SharpArrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
                     real size = 0, real angle = arrowangle,
                     filltype fill = null, margin the_margin = NoMargin)
 {
@@ -298,7 +299,7 @@ picture sharparrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
     pic.add(
         new void(frame f, transform t)
         {
-            drawsharparrow2(f, arhead, t*g, p, size, angle, fill, the_margin);
+            DrawSharpArrow2(f, arhead, t*g, p, size, angle, fill, the_margin);
         }
     );
 
@@ -313,7 +314,7 @@ picture sharparrow2(arrowhead arhead = DefaultHead, path g, pen p = currentpen,
     addArrow(pic, arhead, reverse(g), p, size, angle, fill, L);
     return pic;
 }
-/*  End of sharparrow2.                                                       */
+/*  End of SharpArrow2.                                                       */
 
 /*  Function to be used with draw for adding an arrow at the start of a path. */
 arrowbar BeginSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
@@ -324,7 +325,7 @@ arrowbar BeginSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
     {
         add(
             pic,
-            sharparrow(
+            SharpArrow(
                 arhead, g, p, size, angle, fill,
                 currentpos, forwards = false, the_margin
             )
@@ -336,15 +337,15 @@ arrowbar BeginSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
 /*  End of BeginSharpArrow.                                                   */
 
 /*  Function to be used with draw for adding an arrow at the end of a path.   */
-arrowbar SharpArrow(arrowhead arhead=DefaultHead, real size=0,
-                    real angle=arrowangle, filltype fill=null,
-                    position currentpos=EndPoint)
+arrowbar SharpArrow(arrowhead arhead = DefaultHead, real size = 0,
+                    real angle = arrowangle, filltype fill = null,
+                    position currentpos = EndPoint)
 {
     return new bool(picture pic, path g, pen p, margin the_margin)
     {
         add(
             pic,
-            sharparrow(arhead, g, p, size, angle, fill, currentpos, the_margin)
+            SharpArrow(arhead, g, p, size, angle, fill, currentpos, the_margin)
         );
 
         return false;
@@ -365,7 +366,7 @@ arrowbar MidSharpArrow(arrowhead arhead = DefaultHead, real size = 0,
     {
         add(
             pic,
-            sharparrow(
+            SharpArrow(
                 arhead, g, p, size, angle, fill,
                 MidPoint, the_margin, center = true
             )
@@ -382,9 +383,8 @@ arrowbar SharpArrows(arrowhead arhead = DefaultHead, real size = 0,
 {
     return new bool(picture pic, path g, pen p, margin the_margin)
     {
-        add(pic, sharparrow2(arhead, g, p, size, angle, fill, the_margin));
+        add(pic, SharpArrow2(arhead, g, p, size, angle, fill, the_margin));
         return false;
     };
 }
 /*  End of SharpArrows.                                                       */
-
