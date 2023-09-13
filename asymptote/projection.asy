@@ -35,7 +35,7 @@ real shear_factor = -0.4;
  *  Outputs:                                                                  *
  *      None (void).                                                          *
  ******************************************************************************/
-void reset_shear(real new_factor)
+void ResetShear(real new_factor)
 {
     shear_factor = new_factor;
 }
