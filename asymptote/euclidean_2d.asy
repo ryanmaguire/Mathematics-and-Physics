@@ -240,3 +240,36 @@ pair PlaneToDisk2D(pair P)
     return Scale2D(factor, P);
 }
 /*  End of PlaneToDisk2D.                                                     */
+
+/*  Compute the dot product of two 2-dimensional vectors.                     */
+real DotProduct2D(pair P, pair Q)
+{
+    /*  Compute the Euclidean dot product and return.                         */
+    return P.x*Q.x + P.y*Q.y;
+}
+/*  End of DotProduct2D.                                                      */
+
+/*  Returns the angle between X and Y relative to the point O.                */
+real RelAngle2D(pair O, pair X, pair Y)
+{
+    /*  Compute the relative position vectors from X and Y to O.              */
+    pair P = X - O;
+    pair Q = Y - O;
+
+    /*  Compute the dot product of P and Q.                                   */
+    real dot_prod = DotProduct2D(P, Q);
+
+    /*  Compute the product of the norms of P and Q as well.                  */
+    real abs_prod = EuclideanNorm2D(P)*EuclideanNorm2D(Q);
+
+    /*  If abs_prod is 0, either P = O, or Q = O. In either case the angle is *
+     *  undefined, so return Not-a-Number.                                    */
+    if (abs_prod == 0.0)
+        return nan;
+
+    /*  Otherwise, use the fact that <a|b> = ||a|| ||b|| cos(theta), where    *
+     *  <a|b> denotes the dot product of a and b, and ||a|| represents the    *
+     *  Euclidean norm of a. Using this, we solve for theta.                  */
+    return acos(dot_prod / abs_prod);
+}
+/*  End of RelAngle2D.                                                        */

@@ -18,62 +18,21 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
+/*  PDF is easiest to use in LaTeX, so output this.                           */
+access settings;
+settings.outformat = "pdf";
+
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
+
+/*  Basic geometry routines found here.                                       */
+access "euclidean_2d.asy" as euc2;
 
 /*  Size of the output figure.                                                */
 size(256);
 
 /*  Default pen for drawing figures.                                          */
 defaultpen(black + linewidth(0.5pt) + fontsize(7pt));
-
-/*  Compute the dot product of two 2-dimensional vectors.                     */
-real DotProduct2D(pair A, pair B)
-{
-    /*  Compute the Euclidean dot product and return.                         */
-    return A.x*B.x + A.y*B.y;
-}
-/*  End of DotProduct2D.                                                      */
-
-/*  Returns the Euclidean norm of a 2-dimensional point.                      */
-real EuclideanNorm2D(pair A)
-{
-    /*  Using Pythagoras, we simply compute sqrt(x^2 + y^2).                  */
-    return  sqrt(A.x*A.x + A.y*A.y);
-}
-/*  End of EuclideanNorm2D.                                                   */
-
-/*  Returns the angle between X and Y relative to the point O.                */
-real RelAngle2D(pair O, pair X, pair Y)
-{
-    /*  Declare necessary variables.                                          */
-    pair P, Q;
-    real dot_prod, abs_prod;
-
-    /*  Compute the vectors from O to X and O to Y, respectively.             */
-    P = X - O;
-    Q = Y - O;
-
-    /*  Compute the dot product of P and Q.                                   */
-    dot_prod = DotProduct2D(P, Q);
-
-    /*  Compute the product of the norms of P and Q as well.                  */
-    abs_prod = EuclideanNorm2D(P)*EuclideanNorm2D(Q);
-
-    /*  If abs_prod is 0, either P = O, or Q = O. In either case the angle is *
-     *  undefined, so return Not-a-Number.                                    */
-    if (abs_prod == 0.0)
-        return nan;
-
-    /*  Otherwise, use the fact that <a|b> = ||a|| ||b|| cos(theta), where    *
-     *  <a|b> denotes the dot product of a and b, and ||a|| represents the    *
-     *  Euclidean norm of a. Using this, we solve for theta.                  */
-    else
-        return acos(dot_prod/abs_prod);
-}
-/*  End of RelAngle2D.                                                        */
 
 /*  Radius for drawing dots.                                                  */
 real rDot = 0.03;
@@ -100,8 +59,8 @@ pair L0_End = scale(1.0 - end)*A + scale(end)*C;
 pair L1_End = scale(1.0 - end)*B + scale(end)*C;
 
 /*  The angles the two lines make.                                            */
-real angle1 = RelAngle2D(A, B, C);
-real angle2 = RelAngle2D(B, A, C);
+real angle1 = euc2.RelAngle2D(A, B, C);
+real angle2 = euc2.RelAngle2D(B, A, C);
 
 /*  Factor for converting from radians to degrees.                            */
 real r2d = 0.017453292519943295;
