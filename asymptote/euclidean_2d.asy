@@ -104,7 +104,20 @@ pair RectToPolar2D(pair P)
 }
 /*  End of RectToPolar2D.                                                     */
 
-/*  Function for converting a polar coordinate to rectangular.                */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PolarToRect2D                                                         *
+ *  Purpose:                                                                  *
+ *      Converts a point in the plane from polar to rectangular coordinates.  *
+ *  Arguments:                                                                *
+ *      P (pair):                                                             *
+ *          A point in the Euclidean plane in polar coordinates.              *
+ *  Output:                                                                   *
+ *      rect (pair):                                                          *
+ *          P in rectangular coordinates.                                     *
+ *  Method:                                                                   *
+ *      Compute x = r cos(phi) and y = r sin(phi).                            *
+ ******************************************************************************/
 pair PolarToRect2D(pair P)
 {
     /*  Extract the radius and theta from the polar point P.                  */
@@ -116,27 +129,114 @@ pair PolarToRect2D(pair P)
 }
 /*  End of PolarToRect2D.                                                     */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      Scale2D                                                               *
+ *  Purpose:                                                                  *
+ *      Scales a point in the plane by a real number.                         *
+ *  Arguments:                                                                *
+ *      r (real):                                                             *
+ *          A real number, the scalar being multiplied to the point.          *
+ *      P (pair):                                                             *
+ *          A point in the Euclidean plane.                                   *
+ *  Output:                                                                   *
+ *      rP (pair):                                                            *
+ *          The point r*P, P scaled by r.                                     *
+ *  Method:                                                                   *
+ *      Multiply component-wise. Given P = (x, y), return (r*x, r*y).         *
+ ******************************************************************************/
 pair Scale2D(real r, pair P)
 {
     return (r*P.x, r*P.y);
 }
+/*  End of Scale2D.                                                           */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      MidPoint2D                                                            *
+ *  Purpose:                                                                  *
+ *      Computes the midpoint of two points in the plane.                     *
+ *  Arguments:                                                                *
+ *      P (real):                                                             *
+ *          A point in the Euclidean plane.                                   *
+ *      Q (pair):                                                             *
+ *          Another point in the Euclidean plane.                             *
+ *  Output:                                                                   *
+ *      mid (pair):                                                           *
+ *          The midpoint of P and Q.                                          *
+ *  Method:                                                                   *
+ *      Compute the average of the vector sum. That is:                       *
+ *                                                                            *
+ *                P + Q                                                       *
+ *          mid = -----                                                       *
+ *                  2                                                         *
+ *                                                                            *
+ *              = (Px, Py) + (Qx, Qy)                                         *
+ *                -------------------                                         *
+ *                         2                                                  *
+ *                                                                            *
+ *              = (Px + Qx, Py + Qy)                                          *
+ *                ------------------                                          *
+ *                        2                                                   *
+ *                 -                 -                                        *
+ *                | Px + Qx   Py + Qy |                                       *
+ *              = | ------- , ------- |                                       *
+ *                |    2         2    |                                       *
+ *                 -                 -                                        *
+ *                                                                            *
+ *      This is computed and returned.                                        *
+ ******************************************************************************/
 pair MidPoint2D(pair P, pair Q)
 {
     return Scale2D(0.5, P + Q);
 }
+/*  End of MidPoint2D.                                                        */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PointOnLine2D                                                         *
+ *  Purpose:                                                                  *
+ *      Computes the point on a line parameterized by two fixed points.       *
+ *  Arguments:                                                                *
+ *      t (real):                                                             *
+ *          The time parameter corresponding to the desired point.            *
+ *      P (pair):                                                             *
+ *          The starting point for the line, corresponding to t = 0.          *
+ *      Q (pair):                                                             *
+ *          The finishing point for the line, corresponding to t = 1.         *
+ *  Output:                                                                   *
+ *      out (pair):                                                           *
+ *          The point (1-t)P + tQ.                                            *
+ *  Method:                                                                   *
+ *      Compute (1-t)*P and t*Q and then compute their sum.                   *
+ ******************************************************************************/
 pair PointOnLine2D(real t, pair P, pair Q)
 {
     pair X0 = Scale2D(1.0 - t, P);
     pair X1 = Scale2D(t, Q);
     return X0 + X1;
 }
+/*  End of PointOnLine2D.                                                     */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PlaneToDisk2D                                                         *
+ *  Purpose:                                                                  *
+ *      Provides an explicit smooth transformation of the Euclidean plane to  *
+ *      the unit disk (i.e. a diffeomorphism).                                *
+ *  Arguments:                                                                *
+ *      P (pair):                                                             *
+ *          A point in the Euclidean plane.                                   *
+ *  Output:                                                                   *
+ *      out (pair):                                                           *
+ *          The point P transformed to the unit disk.                         *
+ *  Method:                                                                   *
+ *      Compute 1 / (1 + ||P||^2) and scale the input by this.                *
+ ******************************************************************************/
 pair PlaneToDisk2D(pair P)
 {
     real norm_squared = EuclideanNormSquared2D(P);
     real factor = 1.0 / (1.0 + norm_squared);
     return Scale2D(factor, P);
 }
-
+/*  End of PlaneToDisk2D.                                                     */
