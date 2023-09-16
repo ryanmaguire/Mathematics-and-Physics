@@ -22,14 +22,8 @@
  *      is used often in notes and lectures in this project.                  *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(64);
@@ -40,8 +34,13 @@ defaultpen(fontsize(9pt));
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
 
-/*  Set arrow size, and mark three points for A, B, and C.                    */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Mark three points for A, B, and C.                                        */
 pair A = (0.0, 0.0);
 pair B = (0.0, -1.0);
 pair C = (1.0, 0.0);
@@ -50,9 +49,9 @@ pair C = (1.0, 0.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, W, fpen, SharpArrow(arsize), margins);
-draw("$g$", B -- C, SE, fpen, SharpArrow(arsize), margins);
-draw("$h$", A -- C, N, fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- B, W, fpen, sharp_arrow, margins);
+draw("$g$", B -- C, SE, fpen, sharp_arrow, margins);
+draw("$h$", A -- C, N, fpen, sharp_arrow, margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);

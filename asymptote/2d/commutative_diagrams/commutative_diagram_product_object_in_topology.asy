@@ -18,14 +18,8 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(256);
@@ -36,8 +30,13 @@ defaultpen(fontsize(10pt));
 /*  Pen used to label the induced function.                                   */
 pen dpen = fontsize(10pt) + linetype("4 4");
 
-/*  Set arrow size, and mark three points for A, B, and C.                    */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Mark three points for the labels.                                         */
 pair Y = (0.0, 0.0);
 pair X1 = (-1.5, -1.0);
 pair X2 = (1.5, -1.0);
@@ -48,11 +47,11 @@ margin margins = TrueMargin(0.5cm, 0.5cm);
 margin widemargins = TrueMargin(0.8cm, 0.5cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f_{1}$", Y -- X1, NW, SharpArrow(arsize), margins);
-draw("$f_{2}$", Y -- X2, NE, SharpArrow(arsize), margins);
-draw("$f$", Y -- X12, W, SharpArrow(arsize), margins);
-draw("$\pi_{1}$", X12 -- X1, S, SharpArrow(arsize), widemargins);
-draw("$\pi_{2}$", X12 -- X2, S, SharpArrow(arsize), widemargins);
+draw("$f_{1}$", Y -- X1, NW, sharp_arrow, margins);
+draw("$f_{2}$", Y -- X2, NE, sharp_arrow, margins);
+draw("$f$", Y -- X12, W, sharp_arrow, margins);
+draw("$\pi_{1}$", X12 -- X1, S, sharp_arrow, widemargins);
+draw("$\pi_{2}$", X12 -- X2, S, sharp_arrow, widemargins);
 
 /*  Label the points.                                                         */
 label("$X_{1}$", X1);

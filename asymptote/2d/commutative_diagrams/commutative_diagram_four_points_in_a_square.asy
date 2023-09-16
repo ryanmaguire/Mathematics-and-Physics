@@ -22,14 +22,8 @@
  *      arrows drawn so that the figure commutes.                             *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(128);
@@ -40,8 +34,13 @@ defaultpen(fontsize(9pt));
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
 
-/*  Size of the arrows, and coordinates for the labels.                       */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Coordinates for the labels.                                               */
 pair A = (0.0, 0.0);
 pair B = (2.0, 0.0);
 pair C = (0.0, -2.0);
@@ -51,10 +50,10 @@ pair D = (2.0, -2.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$\alpha$", A -- B, N, fpen, SharpArrow(arsize), margins);
-draw("$\beta$",  B -- D, E, fpen, SharpArrow(arsize), margins);
-draw("$\gamma$", A -- C, W, fpen, SharpArrow(arsize), margins);
-draw("$\delta$", C -- D, S, fpen, SharpArrow(arsize), margins);
+draw("$\alpha$", A -- B, N, fpen, sharp_arrow, margins);
+draw("$\beta$",  B -- D, E, fpen, sharp_arrow, margins);
+draw("$\gamma$", A -- C, W, fpen, sharp_arrow, margins);
+draw("$\delta$", C -- D, S, fpen, sharp_arrow, margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);

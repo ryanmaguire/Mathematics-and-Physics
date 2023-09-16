@@ -22,14 +22,8 @@
  *      used for projections and one of the maps is labeled "pi".             *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(64);
@@ -40,8 +34,13 @@ defaultpen(fontsize(9pt));
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
 
-/*  Arrow size and coordinates for labels.                                    */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Coordinates for labels.                                                   */
 pair A = (0.0, 0.0);
 pair B = (1.0, 0.0);
 pair C = (0.0, -1.0);
@@ -50,9 +49,9 @@ pair C = (0.0, -1.0);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, N, fpen, SharpArrow(arsize), margins);
-draw("$\pi$", A -- C, W, fpen, SharpArrow(arsize), margins);
-draw("$\tilde{f}$", C -- B, SE, fpen, SharpArrow(arsize), margins);
+draw("$f$", A -- B, N, fpen, sharp_arrow, margins);
+draw("$\pi$", A -- C, W, fpen, sharp_arrow, margins);
+draw("$\tilde{f}$", C -- B, SE, fpen, sharp_arrow, margins);
 
 /*  Add labels.                                                               */
 label("$A$", A);

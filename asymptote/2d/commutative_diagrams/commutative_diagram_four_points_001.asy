@@ -23,14 +23,8 @@
  *      two triangular regions. This is used in various lecture notes.        *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(128);
@@ -41,8 +35,13 @@ defaultpen(fontsize(9pt));
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
 
-/*  Mark coordinates for the points, and specify the arrow size.              */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Mark coordinates for the points.                                          */
 real height = -0.7;
 real width = 0.9;
 pair A = (0.0, 0.0);
@@ -54,11 +53,11 @@ pair D = (width, -height);
 margin margins = TrueMargin(0.4cm, 0.4cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f_{1}$", A -- D, SE, fpen, SharpArrow(arsize), margins);
-draw("$f_{2}$", B -- D, S, fpen, SharpArrow(arsize), margins);
-draw("$f_{3}$", C -- D, NE, fpen, SharpArrow(arsize), margins);
-draw("$g_{1}$", A -- B, W, fpen, SharpArrow(arsize), margins);
-draw("$g_{2}$", B -- C, W, fpen, SharpArrow(arsize), margins);
+draw("$f_{1}$", A -- D, SE, fpen, sharp_arrow, margins);
+draw("$f_{2}$", B -- D, S, fpen, sharp_arrow, margins);
+draw("$f_{3}$", C -- D, NE, fpen, sharp_arrow, margins);
+draw("$g_{1}$", A -- B, W, fpen, sharp_arrow, margins);
+draw("$g_{2}$", B -- C, W, fpen, sharp_arrow, margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);

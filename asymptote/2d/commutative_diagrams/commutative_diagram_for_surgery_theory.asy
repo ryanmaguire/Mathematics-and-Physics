@@ -22,14 +22,8 @@
  *      surgery theory.                                                       *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of output.                                                           */
 size(256);
@@ -43,8 +37,13 @@ transform T;
 /*  Pen used to label functions.                                              */
 pen fpen = fontsize(7pt);
 
-/*  Arrow size and coordinates for points.                                    */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Coordinates for the points.                                               */
 pair M = (0.0, 0.0);
 pair BG = (1.0, 0.0);
 pair BO = (1.0, -1.0);
@@ -56,9 +55,9 @@ pair GO = (4.0, 0.5);
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
 /*  Draw the arrows.                                                          */
-draw("$f$", BG -- BO, E, fpen, SharpArrow(arsize), margins);
-draw("$\varphi$", M -- BG, N, fpen, SharpArrow(arsize), margins);
-draw("$\tilde{\varphi}$", M -- BO, SW, fpen, SharpArrow(arsize), margins);
+draw("$f$", BG -- BO, E, fpen, sharp_arrow, margins);
+draw("$\varphi$", M -- BG, N, fpen, sharp_arrow, margins);
+draw("$\tilde{\varphi}$", M -- BO, SW, fpen, sharp_arrow, margins);
 
 /*  Label points.                                                             */
 label("$M$", M);
@@ -72,9 +71,9 @@ BO = T*BO;
 BG = T*BG;
 
 /*  Draw arrows.                                                              */
-draw("$f$", BG -- BO, E, fpen, SharpArrow(arsize), margins);
-draw("$?$", M -- BG, N, fpen, SharpArrow(arsize), margins);
-draw("$\tilde{\varphi}$", M -- BO, SW, fpen, SharpArrow(arsize), margins);
+draw("$f$", BG -- BO, E, fpen, sharp_arrow, margins);
+draw("$?$", M -- BG, N, fpen, sharp_arrow, margins);
+draw("$\tilde{\varphi}$", M -- BO, SW, fpen, sharp_arrow, margins);
 
 /*  Label coordinates.                                                        */
 label("$M$", M);
@@ -89,11 +88,11 @@ BO = T*BO;
 BG = T*BG;
 
 /*  Draw the arrows.                                                          */
-draw("$f_{1}$", M -- GO, NW, fpen, SharpArrow(arsize), margins);
-draw("$f_{2}$", M -- BG, S, fpen, SharpArrow(arsize), margins);
-draw("$f_{3}$", M -- BO, SW, fpen, SharpArrow(arsize), margins);
-draw("$g_{1}$", GO -- BG, E, fpen, SharpArrow(arsize), margins);
-draw("$g_{2}$", BG -- BO, E, fpen, SharpArrow(arsize), margins);
+draw("$f_{1}$", M -- GO, NW, fpen, sharp_arrow, margins);
+draw("$f_{2}$", M -- BG, S, fpen, sharp_arrow, margins);
+draw("$f_{3}$", M -- BO, SW, fpen, sharp_arrow, margins);
+draw("$g_{1}$", GO -- BG, E, fpen, sharp_arrow, margins);
+draw("$g_{2}$", BG -- BO, E, fpen, sharp_arrow, margins);
 
 /*  Label the points.                                                         */
 label("$M$", M);

@@ -23,14 +23,8 @@
  *      the Five-Lemma that occurs in homological algebra.                    *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of output.                                                           */
 size(256);
@@ -44,6 +38,12 @@ pen fpen = fontsize(7pt);
 /*  Margins for the arrows to prevent overlap with labels.                    */
 margin margins = TrueMargin(0.3cm, 0.3cm);
 
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
 /*  Variable used for indexing.                                               */
 int n;
 
@@ -52,9 +52,6 @@ int N_Nodes = 5;
 
 /*  Pairs for drawing the nodes later in the for-loop.                        */
 pair A, B, C, D;
-
-/*  Size of the arrow heads.                                                  */
-real arsize = 5bp;
 
 /*  Loop over all of the points and label various functions and nodes.        */
 for (n = 1; n < N_Nodes; ++n)
@@ -66,9 +63,9 @@ for (n = 1; n < N_Nodes; ++n)
     D = (2.0*(n + 1.0), 0.0);
 
     /*  Draw arrows and label the functions between these nodes.              */
-    draw("$f_{"+string(n)+"}$", A -- B, E, fpen, SharpArrow(arsize), margins);
-    draw("$g_{"+string(n)+"}$", A -- C, S, fpen, SharpArrow(arsize), margins);
-    draw("$h_{"+string(n)+"}$", B -- D, N, fpen, SharpArrow(arsize), margins);
+    draw("$f_{"+string(n)+"}$", A -- B, E, fpen, sharp_arrow, margins);
+    draw("$g_{"+string(n)+"}$", A -- C, S, fpen, sharp_arrow, margins);
+    draw("$h_{"+string(n)+"}$", B -- D, N, fpen, sharp_arrow, margins);
 
     /*  Label the actual nodes.                                               */
     label("$A_{"+string(n)+"}$", A);
@@ -79,6 +76,6 @@ for (n = 1; n < N_Nodes; ++n)
 /*  Label and draw the final nodes.                                           */
 A = (2.0*n, 2.0);
 B = (2.0*n, 0.0);
-draw("$f_{"+string(n)+"}$", A -- B, E, fpen, SharpArrow(arsize), margins);
+draw("$f_{"+string(n)+"}$", A -- B, E, fpen, sharp_arrow, margins);
 label("$A_{"+string(n)+"}$", A);
 label("$B_{"+string(n)+"}$", B);

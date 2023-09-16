@@ -28,14 +28,8 @@
  *      demonstrates this idea via commutative diagram.                       *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
+/*  Sharp tikz style arrows provided here.                                    */
+access "custom_arrows.asy" as arrows;
 
 /*  Size of the output figure.                                                */
 size(128);
@@ -46,8 +40,13 @@ defaultpen(fontsize(10pt));
 /*  Pen used to label the induced function.                                   */
 pen dpen = fontsize(10pt) + linetype("4 4");
 
-/*  Set arrow size, and mark three points for A, B, and C.                    */
-real arsize = 5bp;
+/*  Size of arrow heads.                                                      */
+real arrow_size = 5bp;
+
+/*  Arrow used for all lines.                                                 */
+arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+
+/*  Mark three points for A, B, and C.                                        */
 pair A = (0.0, 0.0);
 pair B = (1.0, 0.5);
 pair C = (1.0, -0.5);
@@ -56,9 +55,9 @@ pair C = (1.0, -0.5);
 margin margins = TrueMargin(0.5cm, 0.5cm);
 
 /*  Draw the arrows.                                                          */
-draw("$\alpha$", A -- B, NW, SharpArrow(arsize), margins);
-draw("$\tilde{f}$", B -- C, E, dpen, SharpArrow(arsize), margins);
-draw("$f$", A -- C, SW, SharpArrow(arsize), margins);
+draw("$\alpha$", A -- B, NW, sharp_arrow, margins);
+draw("$\tilde{f}$", B -- C, E, dpen, sharp_arrow, margins);
+draw("$f$", A -- C, SW, sharp_arrow, margins);
 
 /*  Label the points.                                                         */
 label("$X$", A);
