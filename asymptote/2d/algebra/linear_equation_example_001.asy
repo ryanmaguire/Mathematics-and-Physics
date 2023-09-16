@@ -21,10 +21,6 @@
  *      Draw a line representing a linear equation y = ax in the plane.       *
  ******************************************************************************/
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-access settings;
-settings.outformat = "pdf";
-
 /*  Functions for adding grid lines to a drawing.                             */
 access "grid_lines.asy" as grid;
 

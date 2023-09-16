@@ -21,10 +21,6 @@
  *      Draw a visual for the slope-intercept form of a line.                 *
  ******************************************************************************/
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
-
 /*  Sharp tikz style arrows provided here.                                    */
 access "custom_arrows.asy" as arrows;
 

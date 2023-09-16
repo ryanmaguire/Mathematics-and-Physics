@@ -23,10 +23,6 @@
  *      vertices of the cube facing down.                                     *
  ******************************************************************************/
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-access settings;
-settings.outformat = "pdf";
-
 /*  Create 3D drawings using 2D points.                                       */
 access "projection.asy" as proj;
 

@@ -21,10 +21,6 @@
  *      Plots for a graphing problem for students studying elementary algebra.*
  ******************************************************************************/
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-access settings;
-settings.outformat = "pdf";
-
 /*  Sharp tikz style arrows provided here.                                    */
 access "custom_arrows.asy" as arrows;
 
