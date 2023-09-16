@@ -136,13 +136,13 @@ path PathFromPointsAndAngles(pair[] Pts, real[] Dirs, bool closed)
     assert(Pts.length > 1);
 
     /*  The point and direction arrays must be the same size.                 */
-    assert(Pts.length = Dirs.length);
+    assert(Pts.length == Dirs.length);
 
     /*  Set the start of the path.                                            */
     g = Pts[0]{dir(Dirs[0])} .. Pts[1]{dir(Dirs[1])};
 
     /* Loop through the arrays and construct the path.                        */
-    for (n = 2; n < ArSize; ++n)
+    for (n = 2; n < Pts.length; ++n)
         g = g .. Pts[n]{dir(Dirs[n])};
 
     /* If the closed Boolean is true, close the path into a cycle.            */
