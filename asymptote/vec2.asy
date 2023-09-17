@@ -206,7 +206,7 @@ struct Vec2 {
      *  Arguments:                                                            *
      *      None (void).                                                      *
      *  Output:                                                               *
-     *      ortho (Vec3):                                                     *
+     *      ortho (Vec2):                                                     *
      *          A vector that is orthogonal to *this* with the same magnitude.*
      *  Method:                                                               *
      *      Return (-this.y, this.x). This follows the right-hand rule.       *
@@ -228,7 +228,7 @@ struct Vec2 {
      *  Arguments:                                                            *
      *      None (void).                                                      *
      *  Output:                                                               *
-     *      unit_ortho (Vec3):                                                *
+     *      unit_ortho (Vec2):                                                *
      *          A vector that is orthogonal to *this* with unit magnitude.    *
      *  Method:                                                               *
      *      Normalize (-this.y, this.x). This follows the right-hand rule.    *
