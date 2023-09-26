@@ -30,15 +30,15 @@ access "projection.asy" as proj;
 size(512);
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.8pt));
+defaultpen(black + linewidth(1.0pt));
 
 /*  Other pens used.                                                          */
 pen dashp = defaultpen + linetype("4 4");
-pen thinp = black + linewidth(0.3pt);
-pen bluep = blue + linewidth(0.8pt);
+pen thinp = black + linewidth(0.5pt);
+pen bluep = blue + linewidth(1.0pt);
 pen thindashp = thinp + linetype("4 4");
 pen bluedashp = bluep + linetype("4 4");
-pen greendashp = green + linewidth(0.8pt) + linetype("4 4");
+pen greendashp = green + linewidth(1.0pt) + linetype("4 4");
 
 /*  Coordinates for all of the points in the cube.                            */
 pair O = proj.XYZPoint(0, 0, 0);
