@@ -31,10 +31,10 @@ access "grid_lines.asy" as grid;
 access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
-size(256);
+size(512);
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.5pt) + fontsize(10pt));
+defaultpen(black + linewidth(0.5pt) + fontsize(14pt));
 
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -3;
@@ -47,7 +47,7 @@ real grid_length = 3.9;
 real axes_length = 4.2;
 
 /*  Pen for dashed lines.                                                     */
-pen dash_pen = black + linewidth(0.5pt) + linetype("4 4") + fontsize(10pt);
+pen dash_pen = black + linewidth(0.5pt) + linetype("4 4") + fontsize(14pt);
 
 /*  Start and end points for the line representing the linear equation.       */
 pair start = (-4.0, -1.0);
