@@ -62,7 +62,7 @@ real grid_length = 10.2;
 real arrow_size = 5bp;
 
 /*  Pen for labels.                                                           */
-pen label_pen = fontsize(12pt);
+pen label_pen = fontsize(14pt);
 
 /*  Number of samples for square root and parabola functions.                 */
 int samples = 20;
