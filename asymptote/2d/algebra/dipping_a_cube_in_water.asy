@@ -26,19 +26,8 @@
 /*  Create 3D drawings using 2D points.                                       */
 access "projection.asy" as proj;
 
-/*  Size of the figure.                                                       */
-size(512);
-
-/*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(1.0pt));
-
-/*  Other pens used.                                                          */
-pen dashp = defaultpen + linetype("4 4");
-pen thinp = black + linewidth(0.5pt);
-pen bluep = blue + linewidth(1.0pt);
-pen thindashp = thinp + linetype("4 4");
-pen bluedashp = bluep + linetype("4 4");
-pen greendashp = green + linewidth(1.0pt) + linetype("4 4");
+/*  Default pens and parameters for size(512) drawings provided here.         */
+import "size_512_default_settings.asy" as default;
 
 /*  Coordinates for all of the points in the cube.                            */
 pair O = proj.XYZPoint(0, 0, 0);
@@ -82,50 +71,50 @@ pair E = proj.XYZPoint(0, 3, 3);
 pair F = proj.XYZPoint(3, 3, 0);
 
 /*  Draw the back of the cube.                                                */
-draw(O -- x, dashp);
-draw(O -- y, dashp);
-draw(O -- z, dashp);
+draw(O -- x, default.dash_pen);
+draw(O -- y, default.dash_pen);
+draw(O -- z, default.dash_pen);
 
 /*  Thin lines that make crosses on each of the outer faces.                  */
-draw(a1 -- a2, thinp);
-draw(a3 -- a4, thinp);
-draw(c1 -- c2, thinp);
-draw(c3 -- c4, thinp);
-draw(d1 -- d2, thinp);
-draw(d3 -- d4, thinp);
+draw(a1 -- a2, default.thin_pen);
+draw(a3 -- a4, default.thin_pen);
+draw(c1 -- c2, default.thin_pen);
+draw(c3 -- c4, default.thin_pen);
+draw(d1 -- d2, default.thin_pen);
+draw(d3 -- d4, default.thin_pen);
 
 /*  Dashed lines that makes crosses on each of the inner faces.               */
-draw(b1 -- b2, thindashp);
-draw(b3 -- b4, thindashp);
-draw(e1 -- e2, thindashp);
-draw(e3 -- e4, thindashp);
-draw(f1 -- f2, thindashp);
-draw(f3 -- f4, thindashp);
+draw(b1 -- b2, default.thin_dash_pen);
+draw(b3 -- b4, default.thin_dash_pen);
+draw(e1 -- e2, default.thin_dash_pen);
+draw(e3 -- e4, default.thin_dash_pen);
+draw(f1 -- f2, default.thin_dash_pen);
+draw(f3 -- f4, default.thin_dash_pen);
 
 /*  Dashed lines on the inside of the cube connecting the centers of the      *
  *  faces to the center of the cube.                                          */
-draw(A -- MID, thindashp);
-draw(B -- MID, thindashp);
-draw(C -- MID, thindashp);
-draw(D -- MID, thindashp);
-draw(E -- MID, thindashp);
-draw(F -- MID, thindashp);
+draw(A -- MID, default.thin_dash_pen);
+draw(B -- MID, default.thin_dash_pen);
+draw(C -- MID, default.thin_dash_pen);
+draw(D -- MID, default.thin_dash_pen);
+draw(E -- MID, default.thin_dash_pen);
+draw(F -- MID, default.thin_dash_pen);
 
 /*  Draw the hexagon.                                                         */
-draw(a1 -- a3, bluep);
-draw(a3 -- d1, bluedashp);
-draw(d1 -- d4, bluep);
-draw(d4 -- c4, bluedashp);
-draw(c4 -- b2, bluep);
-draw(b2 -- a1, bluedashp);
+draw(a1 -- a3, default.blue_pen);
+draw(a3 -- d1, default.blue_dash_pen);
+draw(d1 -- d4, default.blue_pen);
+draw(d4 -- c4, default.blue_dash_pen);
+draw(c4 -- b2, default.blue_pen);
+draw(b2 -- a1, default.blue_dash_pen);
 
 /*  Draw the spokes of the hexagon.                                           */
-draw(a1 -- MID, greendashp);
-draw(a3 -- MID, greendashp);
-draw(d1 -- MID, greendashp);
-draw(c4 -- MID, greendashp);
-draw(d4 -- MID, greendashp);
-draw(b2 -- MID, greendashp);
+draw(a1 -- MID, default.green_dash_pen);
+draw(a3 -- MID, default.green_dash_pen);
+draw(d1 -- MID, default.green_dash_pen);
+draw(c4 -- MID, default.green_dash_pen);
+draw(d4 -- MID, default.green_dash_pen);
+draw(b2 -- MID, default.green_dash_pen);
 
 /*  Draw the front of the cube.                                               */
 draw(x -- xy);
