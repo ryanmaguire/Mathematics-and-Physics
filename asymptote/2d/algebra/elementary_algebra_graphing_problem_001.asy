@@ -49,7 +49,7 @@ real sqrt_two_minus_x(real x)
 }
 
 /*  Default pen for drawings.                                                 */
-defaultpen(black + linewidth(0.8) + fontsize(12pt));
+defaultpen(black + linewidth(0.8) + fontsize(14pt));
 
 /*  Start and end values for the square guide-grid to be drawn.               */
 int grid_start = -9;
@@ -67,8 +67,9 @@ pen label_pen = fontsize(14pt);
 /*  Number of samples for square root and parabola functions.                 */
 int samples = 20;
 
-/*  Path used for the square root and parabola functions.                     */
-path g;
+/*  Paths used for the square root and parabola functions.                    */
+path g_square = pf.PathFromFunction(two_minus_x_squared, -3.46, 3.46, samples);
+path g_root = pf.PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
 
 /*  Arrow used for all curves.                                                */
 arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
@@ -90,12 +91,10 @@ draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, sharp_arrow);
 draw((0.0, -10.0) -- (10.0, 0.0), red, sharp_arrow);
 
 /*  Draw the parabola 2-x^2.                                                  */
-g = pf.PathFromFunction(two_minus_x_squared, -3.46, 3.46, samples);
-draw(g, orange, sharp_arrow);
+draw(g_square, orange, sharp_arrow);
 
 /*  Lastly, the function sqrt(2 - x).                                         */
-g = pf.PathFromFunction(sqrt_two_minus_x, 2.0, -10.0, samples);
-draw(g, brown, sharp_arrow);
+draw(g_root, brown, sharp_arrow);
 
 /*  Label all of the functions.                                               */
 label("$y=|x-3|$", (8.4, 3.7), blue + label_pen);
