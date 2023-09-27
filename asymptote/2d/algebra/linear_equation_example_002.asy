@@ -28,7 +28,7 @@ access "grid_lines.asy" as grid;
 access "coordinate_axes.asy" as axes;
 
 /*  Size of the figure.                                                       */
-size(256);
+size(512);
 
 /*  Default pen for drawings.                                                 */
 defaultpen(black + linewidth(0.5pt));
@@ -44,7 +44,7 @@ real grid_length = 3.9;
 real axis_length = 4.2;
 
 /*  Pen for labels.                                                           */
-pen label_pen = fontsize(6pt);
+pen label_pen = fontsize(14pt);
 
 /*  Start and end points for the line representing the linear equation.       */
 pair start = (-2.32, -4.2);
