@@ -53,9 +53,6 @@ pen dash_pen = black + linewidth(0.5pt) + linetype("4 4") + fontsize(14pt);
 pair start = (-4.0, -1.0);
 pair end = (4.0, 3.0);
 
-/*  Radius for dots representing points in the plane.                         */
-real rDot = 0.07;
-
 /*  Coordinates for the points on the triangle indicating rise over run.      */
 pair p1 = (0.0, 1.0);
 pair p2 = (2.0, 1.0);
