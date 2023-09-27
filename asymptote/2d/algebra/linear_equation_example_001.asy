@@ -44,7 +44,7 @@ real grid_length = 3.9;
 real axis_length = 4.2;
 
 /*  Pen for labels.                                                           */
-pen label_pen = fontsize(12pt);
+pen label_pen = fontsize(14pt);
 
 /*  Start and end points for the line representing the linear equation.       */
 pair start = (-axis_length, -axis_length);
