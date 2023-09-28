@@ -16,35 +16,44 @@
  *  You should have received a copy of the GNU General Public License         *
  *  along with Mathematics-and-Physics.  If not, see                          *
  *  <https://www.gnu.org/licenses/>.                                          *
+ ******************************************************************************
+ *  Purpose:                                                                  *
+ *      Draws several curves and shows their winding numbers.                 *
  ******************************************************************************/
 
 /*  Default pens and parameters for size(256) drawings provided here.         */
 import "size_256_default_settings.asy" as default;
 
+/*  Radius of the simple circular curves for winding number +/- 1.            */
 real r = 1.0;
 
+/*  Points of which the winding numbers are computed with respect to.         */
 pair A = (0.0, 0.0);
 pair B = (2.9*r, 0.0);
 pair C = (4.7*r, -1.0*r);
 pair D = (2.9*r, -2.5*r);
 pair E = (0.0, -2.5*r);
 
+/*  More compilicated path to depict a curve with winding number 2.           */
 path g = (0.0, r) .. (0.6*r, 0.0) .. (0.0, -r) .. (-0.6*r, 0.0) ..
          (0.0, r) .. (0.2*r, 1.1*r) .. (0.0, -1.2*r) ..
          (-0.2*r, 1.1*r) .. cycle;
 
+/*  Draw all of the curves.                                                   */
 draw(reverse(circle(B, r)), default.mid_sharp_arrow);
 draw(circle(D, r), default.mid_sharp_arrow);
 draw(circle(C + (r, 0.0), 0.7*r), default.mid_sharp_arrow);
 draw(g, default.mid_sharp_arrow);
 draw(shift(E)*reverse(g), default.mid_sharp_arrow);
 
+/*  Indicate the chosen points for each curve.                                */
 filldraw(circle(A, default.dot_radius));
 filldraw(circle(B, default.dot_radius));
 filldraw(circle(C, default.dot_radius));
 filldraw(circle(D, default.dot_radius));
 filldraw(circle(E, default.dot_radius));
 
+/*  Label the winding numbers.                                                */
 label("$-2$", A, 2.0*SW);
 label("$-1$", B, 2.0*SW);
 label("$0$", C, 2.0*SW);
