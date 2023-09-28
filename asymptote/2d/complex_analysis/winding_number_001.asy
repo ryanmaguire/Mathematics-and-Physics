@@ -18,22 +18,11 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
+/*  Default pens and parameters for size(256) drawings provided here.         */
+import "size_256_default_settings.asy" as default;
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
-
-/*  Size of the output figure.                                                */
-size(256);
-
-defaultpen(black + linewidth(0.7pt) + fontsize(10pt));
-
-real arsize = 8bp;
 real r = 1.0;
+
 pair A = (0.0, 0.0);
 pair B = (2.9*r, 0.0);
 pair C = (4.7*r, -1.0*r);
@@ -44,16 +33,17 @@ path g = (0.0, r) .. (0.6*r, 0.0) .. (0.0, -r) .. (-0.6*r, 0.0) ..
          (0.0, r) .. (0.2*r, 1.1*r) .. (0.0, -1.2*r) ..
          (-0.2*r, 1.1*r) .. cycle;
 
-draw(reverse(circle(B, r)), MidSharpArrow(arsize));
-draw(circle(D, r), MidSharpArrow(arsize));
-draw(circle(C + (r, 0.0), 0.7*r), MidSharpArrow(arsize));
-draw(g, MidSharpArrow(arsize));
-draw(shift(E)*reverse(g), MidSharpArrow(arsize));
-dot(A);
-dot(B);
-dot(C);
-dot(D);
-dot(E);
+draw(reverse(circle(B, r)), default.mid_sharp_arrow);
+draw(circle(D, r), default.mid_sharp_arrow);
+draw(circle(C + (r, 0.0), 0.7*r), default.mid_sharp_arrow);
+draw(g, default.mid_sharp_arrow);
+draw(shift(E)*reverse(g), default.mid_sharp_arrow);
+
+filldraw(circle(A, default.dot_radius));
+filldraw(circle(B, default.dot_radius));
+filldraw(circle(C, default.dot_radius));
+filldraw(circle(D, default.dot_radius));
+filldraw(circle(E, default.dot_radius));
 
 label("$-2$", A, 2.0*SW);
 label("$-1$", B, 2.0*SW);

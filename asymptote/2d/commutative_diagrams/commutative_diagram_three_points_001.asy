@@ -22,36 +22,18 @@
  *      is used often in notes and lectures in this project.                  *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of the output figure.                                                */
-size(64);
-
-/*  Default pen used for labels.                                              */
-defaultpen(fontsize(9pt));
-
-/*  Pen used to label functions.                                              */
-pen fpen = fontsize(7pt);
-
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+/*  Default pens and parameters for size(64) drawings provided here.          */
+import "size_64_default_settings.asy" as default;
 
 /*  Mark three points for A, B, and C.                                        */
 pair A = (0.0, 0.0);
 pair B = (0.0, -1.0);
 pair C = (1.0, 0.0);
 
-/*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
-
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, W, fpen, sharp_arrow, margins);
-draw("$g$", B -- C, SE, fpen, sharp_arrow, margins);
-draw("$h$", A -- C, N, fpen, sharp_arrow, margins);
+draw("$f$", A -- B, W, default.sharp_arrow, default.small_margins);
+draw("$g$", B -- C, SE, default.sharp_arrow, default.small_margins);
+draw("$h$", A -- C, N, default.sharp_arrow, default.small_margins);
 
 /*  Label the points.                                                         */
 label("$A$", A);

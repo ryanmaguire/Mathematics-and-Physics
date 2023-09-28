@@ -22,26 +22,11 @@
  *      surgery theory.                                                       *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of output.                                                           */
-size(256);
-
-/*  Default font size for labels.                                             */
-defaultpen(fontsize(9pt));
+/*  Default pens and parameters for size(256) drawings provided here.         */
+import "size_256_default_settings.asy" as default;
 
 /*  Transform for shifting later.                                             */
 transform T;
-
-/*  Pen used to label functions.                                              */
-pen fpen = fontsize(7pt);
-
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
 
 /*  Coordinates for the points.                                               */
 pair M = (0.0, 0.0);
@@ -51,13 +36,15 @@ pair BO = (1.0, -1.0);
 /*  This label is only used on the third diagram.                             */
 pair GO = (4.0, 0.5);
 
-/*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
+/*  Labels for the functions between nodes.                                   */
+Label f = Label("$f$");
+Label phi = Label("$\varphi$");
+Label tphi = Label("$\tilde{\varphi}$");
 
 /*  Draw the arrows.                                                          */
-draw("$f$", BG -- BO, E, fpen, sharp_arrow, margins);
-draw("$\varphi$", M -- BG, N, fpen, sharp_arrow, margins);
-draw("$\tilde{\varphi}$", M -- BO, SW, fpen, sharp_arrow, margins);
+draw(f, BG -- BO, E, default.sharp_arrow, default.margins);
+draw(phi, M -- BG, N, default.sharp_arrow, default.margins);
+draw(tphi, M -- BO, SW, default.sharp_arrow, default.margins);
 
 /*  Label points.                                                             */
 label("$M$", M);
@@ -71,9 +58,9 @@ BO = T*BO;
 BG = T*BG;
 
 /*  Draw arrows.                                                              */
-draw("$f$", BG -- BO, E, fpen, sharp_arrow, margins);
-draw("$?$", M -- BG, N, fpen, sharp_arrow, margins);
-draw("$\tilde{\varphi}$", M -- BO, SW, fpen, sharp_arrow, margins);
+draw(f, BG -- BO, E, default.sharp_arrow, default.margins);
+draw("$?$", M -- BG, N, default.sharp_arrow, default.margins);
+draw(tphi, M -- BO, SW, default.sharp_arrow, default.margins);
 
 /*  Label coordinates.                                                        */
 label("$M$", M);
@@ -88,11 +75,11 @@ BO = T*BO;
 BG = T*BG;
 
 /*  Draw the arrows.                                                          */
-draw("$f_{1}$", M -- GO, NW, fpen, sharp_arrow, margins);
-draw("$f_{2}$", M -- BG, S, fpen, sharp_arrow, margins);
-draw("$f_{3}$", M -- BO, SW, fpen, sharp_arrow, margins);
-draw("$g_{1}$", GO -- BG, E, fpen, sharp_arrow, margins);
-draw("$g_{2}$", BG -- BO, E, fpen, sharp_arrow, margins);
+draw("$f_{1}$", M -- GO, NW, default.sharp_arrow, default.margins);
+draw("$f_{2}$", M -- BG, S, default.sharp_arrow, default.margins);
+draw("$f_{3}$", M -- BO, SW, default.sharp_arrow, default.margins);
+draw("$g_{1}$", GO -- BG, E, default.sharp_arrow, default.margins);
+draw("$g_{2}$", BG -- BO, E, default.sharp_arrow, default.margins);
 
 /*  Label the points.                                                         */
 label("$M$", M);

@@ -23,26 +23,8 @@
  *      the Five-Lemma that occurs in homological algebra.                    *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of output.                                                           */
-size(256);
-
-/*  Default pen used for labels.                                              */
-defaultpen(fontsize(9pt));
-
-/*  Pen used to label functions.                                              */
-pen fpen = fontsize(7pt);
-
-/*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
-
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+/*  Default pens and parameters for size(256) drawings provided here.         */
+import "size_256_default_settings.asy" as default;
 
 /*  Variable used for indexing.                                               */
 int n;
@@ -53,6 +35,9 @@ int N_Nodes = 5;
 /*  Pairs for drawing the nodes later in the for-loop.                        */
 pair A, B, C, D;
 
+/*  The final node as a string.                                               */
+string Ns = string(N_Nodes);
+
 /*  Loop over all of the points and label various functions and nodes.        */
 for (n = 1; n < N_Nodes; ++n)
 {
@@ -62,20 +47,23 @@ for (n = 1; n < N_Nodes; ++n)
     C = (2.0*(n + 1.0), 2.0);
     D = (2.0*(n + 1.0), 0.0);
 
+    /*  Convert the current index to a string for the labels.                 */
+    string ns = string(n);
+
     /*  Draw arrows and label the functions between these nodes.              */
-    draw("$f_{"+string(n)+"}$", A -- B, E, fpen, sharp_arrow, margins);
-    draw("$g_{"+string(n)+"}$", A -- C, S, fpen, sharp_arrow, margins);
-    draw("$h_{"+string(n)+"}$", B -- D, N, fpen, sharp_arrow, margins);
+    draw("$f_{"+ns+"}$", A -- B, E, default.sharp_arrow, default.small_margins);
+    draw("$g_{"+ns+"}$", A -- C, S, default.sharp_arrow, default.small_margins);
+    draw("$h_{"+ns+"}$", B -- D, N, default.sharp_arrow, default.small_margins);
 
     /*  Label the actual nodes.                                               */
-    label("$A_{"+string(n)+"}$", A);
-    label("$B_{"+string(n)+"}$", B);
+    label("$A_{"+ns+"}$", A);
+    label("$B_{"+ns+"}$", B);
 }
 /*  End of for-loop drawing all but the last two nodes.                       */
 
 /*  Label and draw the final nodes.                                           */
 A = (2.0*n, 2.0);
 B = (2.0*n, 0.0);
-draw("$f_{"+string(n)+"}$", A -- B, E, fpen, sharp_arrow, margins);
-label("$A_{"+string(n)+"}$", A);
-label("$B_{"+string(n)+"}$", B);
+draw("$f_{"+Ns+"}$", A -- B, E, default.sharp_arrow, default.small_margins);
+label("$A_{"+Ns+"}$", A);
+label("$B_{"+Ns+"}$", B);

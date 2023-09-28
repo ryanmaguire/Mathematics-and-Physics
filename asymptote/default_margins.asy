@@ -18,31 +18,10 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Draws a commutative diagram with 4 vertices, three in 1 column on the *
- *      left and 1 by itself on the right, with arrows connecting to form     *
- *      two triangular regions. This is used in various lecture notes.        *
+ *      Provides commonly used margin sizes for plots and labels.             *
  ******************************************************************************/
 
-/*  Default pens and parameters for size(128) drawings provided here.         */
-import "size_128_default_settings.asy" as default;
-
-/*  Mark coordinates for the points.                                          */
-real height = -0.7;
-real width = 0.9;
-pair A = (0.0, 0.0);
-pair B = (0.0, -height);
-pair C = (0.0, -2.0*height);
-pair D = (width, -height);
-
-/*  Draw the arrows.                                                          */
-draw("$f_{1}$", A -- D, SE, default.sharp_arrow, default.small_margins);
-draw("$f_{2}$", B -- D, S, default.sharp_arrow, default.small_margins);
-draw("$f_{3}$", C -- D, NE, default.sharp_arrow, default.small_margins);
-draw("$g_{1}$", A -- B, W, default.sharp_arrow, default.small_margins);
-draw("$g_{2}$", B -- C, W, default.sharp_arrow, default.small_margins);
-
-/*  Label the points.                                                         */
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
-label("$D$", D);
+/*  These three sizes are sufficient for most drawings.                       */
+margin small_margins = TrueMargin(0.3cm, 0.3cm);
+margin margins = TrueMargin(0.5cm, 0.5cm);
+margin large_margins = TrueMargin(0.8cm, 0.8cm);

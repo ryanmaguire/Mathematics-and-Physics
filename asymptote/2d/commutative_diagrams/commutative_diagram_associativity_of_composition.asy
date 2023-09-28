@@ -21,17 +21,8 @@
  *      Draw a commutative diagram showing associativity of composition.      *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of the figure.                                                       */
-size(256);
-
-/*  Default pen for labels and drawings.                                      */
-defaultpen(black + fontsize(10pt) + linewidth(0.7pt));
-
-/*  Pen for labels.                                                           */
-pen label_pen = fontsize(12pt);
+/*  Default pens and parameters for size(256) drawings provided here.         */
+import "size_256_default_settings.asy" as default;
 
 /*  Four points for the vertices of the commutative diagram.                  */
 pair A = (-3.0, 0.000);
@@ -39,25 +30,21 @@ pair B = (+0.0, 5.196);
 pair C = (+3.0, 0.000);
 pair D = (+0.0, 1.732);
 
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
-
 /*  Label the points.                                                         */
-label("$A$", A, label_pen);
-label("$B$", B, label_pen);
-label("$C$", C, label_pen);
-label("$D$", D, label_pen);
+label("$A$", A);
+label("$B$", B);
+label("$C$", C);
+label("$D$", D);
 
-/*  Margins to prevent lines from overlapping with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
+/*  Labels for the three rotated arrows. These are the function compositions. */
+Label h = rotate(-30)*Label("$h$");
+Label hg = rotate(-90)*Label("$h\circ{g}$");
+Label hgf = rotate(30)*Label("$h\circ{g}\circ{f}$");
 
 /*  Draw arrows between the points.                                           */
-draw("$f$", A -- B, NW, sharp_arrow, margins);
-draw("$g$", B -- C, NE, sharp_arrow, margins);
-draw("$g\circ{f}$", A -- C, sharp_arrow, margins);
-draw(rotate(-30)*"$h$", C -- D, SW, sharp_arrow, margins);
-draw(rotate(-90)*"$h\circ{g}$", B -- D, E, sharp_arrow, margins);
-draw(rotate(30)*"$h\circ{g}\circ{f}$", A -- D, sharp_arrow, margins);
+draw("$f$", A -- B, NW, default.sharp_arrow, default.margins);
+draw("$g$", B -- C, NE, default.sharp_arrow, default.margins);
+draw("$g\circ{f}$", A -- C, default.sharp_arrow, default.margins);
+draw(h, C -- D, SW, default.sharp_arrow, default.margins);
+draw(hg, B -- D, E, default.sharp_arrow, default.margins);
+draw(hgf, A -- D, default.sharp_arrow, default.margins);

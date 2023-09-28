@@ -22,36 +22,18 @@
  *      used for projections and one of the maps is labeled "pi".             *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of the output figure.                                                */
-size(64);
-
-/*  Default pen used for labels.                                              */
-defaultpen(fontsize(9pt));
-
-/*  Pen used to label functions.                                              */
-pen fpen = fontsize(7pt);
-
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+/*  Default pens and parameters for size(64) drawings provided here.          */
+import "size_64_default_settings.asy" as default;
 
 /*  Coordinates for labels.                                                   */
 pair A = (0.0, 0.0);
 pair B = (1.0, 0.0);
 pair C = (0.0, -1.0);
 
-/*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.3cm, 0.3cm);
-
 /*  Draw the arrows.                                                          */
-draw("$f$", A -- B, N, fpen, sharp_arrow, margins);
-draw("$\pi$", A -- C, W, fpen, sharp_arrow, margins);
-draw("$\tilde{f}$", C -- B, SE, fpen, sharp_arrow, margins);
+draw("$f$", A -- B, N, default.sharp_arrow, default.small_margins);
+draw("$\pi$", A -- C, W, default.sharp_arrow, default.small_margins);
+draw("$\tilde{f}$", C -- B, SE, default.sharp_arrow, default.small_margins);
 
 /*  Add labels.                                                               */
 label("$A$", A);

@@ -18,31 +18,27 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Draws a commutative diagram with 4 vertices, three in 1 column on the *
- *      left and 1 by itself on the right, with arrows connecting to form     *
- *      two triangular regions. This is used in various lecture notes.        *
+ *      Provides default pens, arrows, and more for size(256) images.         *
  ******************************************************************************/
 
-/*  Default pens and parameters for size(128) drawings provided here.         */
-import "size_128_default_settings.asy" as default;
+/*  Default margin sizes that are commonly used provided here.                */
+include default_margins;
 
-/*  Mark coordinates for the points.                                          */
-real height = -0.7;
-real width = 0.9;
-pair A = (0.0, 0.0);
-pair B = (0.0, -height);
-pair C = (0.0, -2.0*height);
-pair D = (width, -height);
+/*  Sharp tikz style arrows provided here.                                    */
+include default_arrows;
 
-/*  Draw the arrows.                                                          */
-draw("$f_{1}$", A -- D, SE, default.sharp_arrow, default.small_margins);
-draw("$f_{2}$", B -- D, S, default.sharp_arrow, default.small_margins);
-draw("$f_{3}$", C -- D, NE, default.sharp_arrow, default.small_margins);
-draw("$g_{1}$", A -- B, W, default.sharp_arrow, default.small_margins);
-draw("$g_{2}$", B -- C, W, default.sharp_arrow, default.small_margins);
+/*  The size of an image for size_256_default_settings is... 256.             */
+size(256);
 
-/*  Label the points.                                                         */
-label("$A$", A);
-label("$B$", B);
-label("$C$", C);
-label("$D$", D);
+/*  Radius used for creating dots to label points.                            */
+real dot_radius = 0.05;
+
+/*  Default types, font sizes, and pen sizes that are most commonly used.     */
+pen label_size = fontsize(12pt);
+pen dash_type = linetype("4 4");
+pen thin_line_width = linewidth(0.4pt);
+pen line_width = linewidth(0.7);
+pen thick_line_width = linewidth(1.0);
+
+/*  Dashed pens, colored pens, and dashed colored pens defined in this file.  */
+include default_pens;

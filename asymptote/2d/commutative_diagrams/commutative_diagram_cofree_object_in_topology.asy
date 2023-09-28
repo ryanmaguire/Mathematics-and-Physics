@@ -28,36 +28,21 @@
  *      are the empty set and X. This figure shows this commutative diagram.  *
  ******************************************************************************/
 
-/*  Sharp tikz style arrows provided here.                                    */
-access "custom_arrows.asy" as arrows;
-
-/*  Size of the output figure.                                                */
-size(128);
-
-/*  Default pen used for labels.                                              */
-defaultpen(fontsize(10pt));
-
-/*  Pen used to label the induced function.                                   */
-pen dpen = fontsize(10pt) + linetype("4 4");
-
-/*  Size of arrow heads.                                                      */
-real arrow_size = 5bp;
-
-/*  Arrow used for all lines.                                                 */
-arrowbar sharp_arrow = arrows.SharpArrow(arrow_size);
+/*  Default pens and parameters for size(128) drawings provided here.         */
+import "size_128_default_settings.asy" as default;
 
 /*  Mark three points for A, B, and C.                                        */
 pair A = (0.0, 0.0);
 pair B = (1.0, 0.5);
 pair C = (1.0, -0.5);
 
-/*  Margins for the arrows to prevent overlap with labels.                    */
-margin margins = TrueMargin(0.5cm, 0.5cm);
+/*  Label for the dashed arrow. "tilde-f."                                    */
+Label tf = Label("$\tilde{f}$");
 
 /*  Draw the arrows.                                                          */
-draw("$\alpha$", A -- B, NW, sharp_arrow, margins);
-draw("$\tilde{f}$", C -- B, E, dpen, sharp_arrow, margins);
-draw("$f$", C -- A, SW, sharp_arrow, margins);
+draw("$\alpha$", A -- B, NW, default.sharp_arrow, default.margins);
+draw(tf, C -- B, E, default.dash_pen, default.sharp_arrow, default.margins);
+draw("$f$", C -- A, SW, default.sharp_arrow, default.margins);
 
 /*  Label the points.                                                         */
 label("$X$", A);
