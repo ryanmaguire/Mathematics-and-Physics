@@ -34,9 +34,9 @@
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
 
-\title{Continuity (NOT FINISHED)}
+\title{$\varepsilon-\delta$ Continuity - Exponential Function}
 \author{Ryan Maguire}
-\date{Fall 2021}
+\date{\today}
 
 % No indent and no paragraph skip.
 \setlength{\parindent}{0em}
@@ -89,41 +89,56 @@
         \Rightarrow
         \exp(x_{0})\big|\exp(x-x_{0})-1\big|<\varepsilon
     \end{equation}
-    Since we only care about $|x-x_{0}|<\delta$, we update our
-    wish-list:
+    Now we note that $x_{0}$ is a fixed-point, not a variable like $x$. We can
+    divide to obtain:
     \begin{equation}
         \textbf{Want:}\quad
         |x-x_{0}|<\delta
         \Rightarrow
-        \exp(x_{0})\big|\exp(\delta)-1\big|\leq\varepsilon
+        \big|\exp(x-x_{0})-1\big|<\frac{\varepsilon}{\exp(x_{0})}
     \end{equation}
-    This says we want:
+    The inequality $|a|<b$ is equivalent to $-b<a<b$. Using this, we rewrite
+    the previous inequality as follows:
     \begin{equation}
-        \frac{-\varepsilon}{\exp(x_{0})}\leq
-        \exp(\delta)-1\leq\frac{\varepsilon}{\exp(x_{0})}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        -\frac{\varepsilon}{\exp(x_{0})}
+            <\exp(x-x_{0})-1
+            <\frac{\varepsilon}{\exp(x_{0})}
     \end{equation}
-    Or equivalently:
+    Simplifying by adding $1$ to each side, we have:
     \begin{equation}
-        \frac{-\varepsilon}{\exp(x_{0})}+1\leq
-        \exp(\delta)\leq\frac{\varepsilon}{\exp(x_{0})}+1
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        1-\frac{\varepsilon}{\exp(x_{0})}
+            <\exp(x-x_{0})
+            <1+\frac{\varepsilon}{\exp(x_{0})}
     \end{equation}
-    Since we seek a $\delta>0$, the expression
-    $1-\varepsilon/\exp(x_{0})\leq\exp(\delta)$ will be true since
-    $1-\varepsilon/\exp(x_{0})<1$ and $\exp(\delta)>1$ for $\delta>0$. So we
-    only need to worry about $\exp(\delta)\leq\varepsilon/\exp(x_{0})+1$.
-    Choosing $\delta=\ln\big(1+\varepsilon/\exp(x_{0})\big)$ does the trick.
-    \par\hfill\par
-    This effort was to find a candidate $\delta$. Now that we've
-    found one, let's show that it works. Let $\varepsilon>0$. Choose
-    $\delta=\ln\big(1+\varepsilon/\exp(x_{0})\big)$. If
-    $|x-x_{0}|<\delta$, then
-    $|x-x_{0}|<\ln\big(1+\varepsilon/\exp(x_{0})\big)$. Since $a<b$ implies
-    $\exp(a)<\exp(b)$, if $|x-x_{0}|<\ln\big(1+\varepsilon/\exp(x_{0})\big)$,
-    then $\exp(|x-x_{0}|)<1+\varepsilon/\exp(x_{0})$. But then
-    $\exp(x_{0})(\exp(|x-x_{0}|)-1)<\varepsilon$. But:
+    If $\varepsilon\geq\exp(x_{0})$, we could restrict our attention to making
+    $|x-x_{0}|<\delta\Rightarrow{0}<\exp(x-x_{0})<2$, since this would then
+    imply the previous inequality. This could by done by choosing
+    $\delta=\frac{1}{2}$ since $0<\exp(\frac{1}{2})<2$. So we now consider the
+    case where $\varepsilon<\exp(x_{0})$. In this case both
+    $1-\varepsilon/\exp(x_{0})$ and $1+\varepsilon/\exp(x_{0})$ are positive
+    numbers, so we may take their natural logs. The natural logarithm is
+    also a strictly increasing function, so if $a<b<c$ is true, then
+    $\ln(a)<\ln(b)<\ln(c)$ is also true. Using this, we update our wishlist:
     \begin{equation}
-        \exp(x_{0})\big(\exp(x-x_{0})-1\big)
-        =\exp(x_{0})-\exp(x_{0})
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \ln\big(1-\frac{\varepsilon}{\exp(x_{0})}\big)
+            <x-x_{0}
+            <\ln\big(1+\frac{\varepsilon}{\exp(x_{0})}\big)
+    \end{equation}
+    This hints at making the following definition:
+    \begin{equation}
+        \delta=\textrm{min}\Big(
+            \big|\ln\big(1-\frac{\varepsilon}{\exp(x_{0})}\big)\big|,\,
+            \ln\big(1+\frac{\varepsilon}{\exp(x_{0})}\big)
+        \Big)
     \end{equation}
     \newpage
     I, the copyright holder of this work, release it into the public domain.
