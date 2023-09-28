@@ -48,6 +48,45 @@ struct Complex {
 
     /**************************************************************************
      *  Method:                                                               *
+     *      RealProjection                                                    *
+     *  Purpose:                                                              *
+     *      Computes the projection of *this* onto the real axis.             *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Output:                                                               *
+     *      z_real (Complex):                                                 *
+     *          The real projection of *this*.                                *
+     *  Method:                                                               *
+     *      Zero out the imaginary part, return (this.re, 0).                 *
+     **************************************************************************/
+    Complex RealProjection()
+    {
+        return Complex(this.re, 0.0);
+    }
+
+    /**************************************************************************
+     *  Method:                                                               *
+     *      ImagProjection                                                    *
+     *  Purpose:                                                              *
+     *      Computes the projection of *this* onto the imaginary axis.        *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Output:                                                               *
+     *      z_imag (Complex):                                                 *
+     *          The imaginary projection of *this*.                           *
+     *  Method:                                                               *
+     *      Zero out the real part, return (0, this.im).                      *
+     **************************************************************************/
+    Complex ImagProjection()
+    {
+        return Complex(0.0, this.im);
+    }
+
+    /*  Verbose alias for the imaginary projection function.                  */
+    Complex ImaginaryProjection() = ImagProjection;
+
+    /**************************************************************************
+     *  Method:                                                               *
      *      AbsSq                                                             *
      *  Purpose:                                                              *
      *      Computes the square of the modulus of the complex number.         *
