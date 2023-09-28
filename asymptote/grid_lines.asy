@@ -105,7 +105,7 @@ void DrawGridLinesWithTickMarks(int grid_start, int grid_end,
     int n;
 
     /*  Loop through and draw the lines for the grid.                         */
-    for (n = grid_start; n <= grid_end; ++n)
+    for (n = grid_start; n <= grid_end; n += grid_skip)
     {
         /*  The grid consists of straight lines left-to-right and             *
          *  top-to-bottom. Compute the current set of lines to be drawn.      */
