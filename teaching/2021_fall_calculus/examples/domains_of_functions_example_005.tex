@@ -15,9 +15,11 @@
 %   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
 %------------------------------------------------------------------------------%
 \documentclass{article}
+\usepackage{amsmath}                            % Needed for cases statement.
 \usepackage{graphicx}                           % Needed for figures.
 \usepackage{hyperref}                           % Hyperlinks for figures.
 \hypersetup{colorlinks=true, linkcolor=blue}    % Colors for hyperref.
+\graphicspath{{../../../images/}}
 
 \title{Domains of Functions}
 \author{Ryan Maguire}
@@ -29,48 +31,49 @@
 
 \begin{document}
     \maketitle
-    When an expression involves logarithmic functions such as the natural
-    log we need to be careful that the input is positive. The log base
-    $b$ (with $b>1$) of a real number $x$ returns the number $y$ such that
-    $x=b^{y}$. Since $b^{y}$ can never be negative, $\log_{b}(x)$ has no
-    meaning for negative values of $x$. For 0, we can say
-    $\log_{b}(0)=-\infty$ since $b^{-\infty}=0$ (more precisely, $b^{x}$ tends
-    to zero as $x$ approaches $-\infty$), but $-\infty$ is not a real
-    number and so 0 must be excluded from the input of $\log_{b}$.
-    A plot of $2^{x}$ is given in Fig.~\ref{fig:two_to_the_x} indicating that
-    $2^{x}$ is never negative and tends to $0$ as $x$ tends to $-\infty$.
-    \par\hfill\par
-    Consider the expression below:
+    Consider the following function:
     \begin{equation}
-        f(x)=\frac{1}{x\ln(x)}
+        f(x)=\frac{\sin(x)}{x}
     \end{equation}
-    There are a few restrictions on $x$ for $f(x)$ to be well-defined. Firstly,
-    we have a division so we need the denominator to be non-zero. We must
-    avoid $x\ln(x)=0$. If $x\ln(x)=0$, then either $x=0$ or $\ln(x)=0$. For
-    any $b>1$, $\log_{b}(x)=0$ is true precisely when $x=1$. If we want
-    $1=b^{y}$, we use that fact that for any non-zero real number $b$ it is
-    true that $b^{0}=1$. This gives us $\log_{b}(1)=0$. So, in particular,
-    $\ln(1)=0$. To avoid a division by zero in our expression we need
-    $x\ne{0}$ and $x\ne{1}$. There is another restriction. We need that
-    $\ln(x)$ is well-defined as well. This occurs when $x>0$. So, in total
-    we need $x\ne{0}$, $x\ne{1}$, and $x>0$. The requirement $x>0$ excludes
-    0 so we can rid ourselves of the first requirement, and need
-    $x>0$ and $x\ne{1}$. We can write the domain of $f$ as:
+    This function is well defined everywhere except for $x=0$. However, the
+    \textit{small angle approximation}, often used by physicists, states that
+    if $x$ is a small real number, then $\sin(x)\approx{x}$. The symbol
+    $\approx$ means \textit{is approximately equal to}. We can verify this
+    from the graph of the two functions close to the origin. By examining
+    Fig.~\ref{fig:small_angle_approx} we see that for small values the graphs
+    of $\sin(x)$ and $x$ are nearly identical. Using this we have, for
+    small $x$, the following:
     \begin{equation}
-        D=(0,1)\cup(1,\infty)
+        \frac{\sin(x)}{x}\approx\frac{x}{x}=1
     \end{equation}
-    The function is plotted in Fig.~\ref{fig:one_by_x_lnx}.
+    And indeed the \textit{limit} of $f(x)$ as $x$ approaches zero is 1, even
+    though $f(0)$ is undefined. With this we can define a new function by
+    \textit{filling in} where $f(x)$ is undefined. This is the
+    \textit{sinc} function, and it's use is widespread in physics, engineering,
+    and signal processing.
+    \begin{equation}
+        \textrm{sinc}(x)=
+        \begin{cases}
+            \frac{\sin(x)}{x},&x\ne{0}\\
+            1,&x=0
+        \end{cases}
+    \end{equation}
+    Since the limit of $\textrm{sinc}(x)$ as $x$ approaches zero is 1, and
+    since $\textrm{sinc}(0)=1$, we have from the
+    \textit{limit definition of continuity} that $\textrm{sinc}(x)$ is
+    continuous at 0. This function is shown in
+    Fig.~\ref{fig:sinc_x}.
     \begin{figure}
         \centering
-        \includegraphics{../../images/two_to_the_x.pdf}
-        \caption{The function $2^{x}$}
-        \label{fig:two_to_the_x}
+        \includegraphics{small_angle_approximation.pdf}
+        \caption{Small Angle Approximation}
+        \label{fig:small_angle_approx}
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics{../../images/one_by_x_times_ln_x.pdf}
-        \caption{The function $f(x)=1/x\ln(x)$}
-        \label{fig:one_by_x_lnx}
+        \includegraphics{sinc_x.pdf}
+        \caption{The sinc function}
+        \label{fig:sinc_x}
     \end{figure}
     \newpage
     I, the copyright holder of this work, release it into the public domain.
