@@ -12,22 +12,21 @@ currentprojection = perspective(
 size(256);
 
 pen mpen = black;
-
 int samplesx = 10;
 int samplesy = 6;
-triple O = (0.0, 0.0, 0.0);
-triple X = (1.0, 0.0, 0.0);
-triple Y = (0.0, 1.0, 0.0);
-triple Z = (0.0, 0.0, 1.0);
-
-real[][] T0 = reflect(O, Y, X);
-real[][] T1 = reflect(O, Y, Z);
 
 // Material for the xy plane.
 material blob = material(
     diffusepen = gray(0.7) + opacity(0.8),
     emissivepen = gray(0.2),
     specularpen = gray(0.1)
+);
+
+// Material for the curves.
+material pipe = material(
+    diffusepen = blue + 0.3*green,
+    emissivepen = gray(0.20),
+    specularpen = gray(0.20)
 );
 
 triple LineSegment(real t, triple A, triple B)
@@ -46,12 +45,14 @@ triple f(pair t)
     return LineSegment(lambda, A, P);
 }
 
-surface s0 = surface(f, (0.0, -1.0), (2.0*pi, 1.0), samplesx, samplesy, Spline);
-surface s1 = T0 * s0;
-surface s2 = T1 * s0;
-surface s3 = T0 * s2;
+surface s = surface(f, (0.0, -1.0), (2pi, 1.0), samplesx, samplesy, Spline);
+draw(s, surfacepen=blob, meshpen = mpen);
 
-draw(s0, surfacepen=blob, meshpen = mpen);
-draw(s1, surfacepen=blob, meshpen = mpen);
-draw(s2, surfacepen=blob, meshpen = mpen);
-draw(s3, surfacepen=blob, meshpen = mpen);
+s = reflect((0, 0, 0), (0, 1, 0), (1, 0, 0))*s;
+draw(s, surfacepen = blob, meshpen = mpen);
+
+s = reflect((0, 0, 0), (0, 1, 0), (0, 0, 1))*s;
+draw(s, surfacepen = blob, meshpen = mpen);
+
+s = reflect((0, 0, 0), (0, 1, 0), (1, 0, 0))*s;
+draw(s, surfacepen = blob, meshpen = mpen);
