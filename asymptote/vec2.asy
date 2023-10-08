@@ -322,6 +322,12 @@ struct Vec2 {
         return (this.x, this.y, 0.0);
     }
     /*  End of AsTriple.                                                      */
+
+    path LineTo(Vec2 v)
+    {
+        path g = this.AsPair() -- v.AsPair();
+        return g;
+    }
 }
 
 /*  Alternative constructor from two real numbers.                            */
@@ -339,6 +345,15 @@ Vec2 FromPolar(real r, real theta)
     Vec2 v = new Vec2;
     v.x = r * cos(theta);
     v.y = r * sin(theta);
+    return v;
+}
+
+/*  Construct a unit-length vector from a given angle.                        */
+Vec2 UnitVector(real theta)
+{
+    Vec2 v = new Vec2;
+    v.x = cos(theta);
+    v.y = sin(theta);
     return v;
 }
 
@@ -564,3 +579,48 @@ Vec2 operator / (Vec2 v, Vec2 u)
 
     return Vec2(x, y);
 }
+
+Vec2 operator cast(pair P)
+{
+    return FromPair(P);
+}
+
+guide PolygonThroughPoints(Vec2[] v)
+{
+    guide g;
+    int n;
+
+    assert(v.length > 1);
+
+    g = v[0].AsPair();
+
+    for (n = 1; n < v.length; ++n)
+        g = g -- v[n].AsPair();
+
+    return g;
+}
+
+guide CurveThroughPoints(Vec2[] v)
+{
+    guide g;
+    int n;
+
+    assert(v.length > 1);
+
+    g = v[0].AsPair() .. v[1].AsPair();
+
+    for (n = 2; n < v.length; ++n)
+        g = g .. v[n].AsPair();
+
+    return g;
+}
+
+Vec2 NorthEast = UnitVector(0.25 * pi);
+Vec2 NorthWest = UnitVector(0.75 * pi);
+Vec2 SouthWest = UnitVector(1.25 * pi);
+Vec2 SouthEast = UnitVector(1.75 * pi);
+
+Vec2 East = Vec2(1.0, 0.0);
+Vec2 North = Vec2(0.0, 1.0);
+Vec2 West = Vec2(-1.0, 0.0);
+Vec2 South = Vec2(0.0, -1.0);
