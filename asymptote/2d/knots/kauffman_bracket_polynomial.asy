@@ -18,58 +18,57 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 import "size_512_default_settings.asy" as default;
+import "vec2.asy" as vec2;
 
-pen white_pen = white + linewidth(5.0);
-pen big_pen = fontsize(32pt);
+vec2.Vec2 LeftBracket[] = new vec2.Vec2[3];
+vec2.Vec2 RightBracket[] = new vec2.Vec2[3];
 
-pair A[] = new pair[8];
-pair B[] = new pair[8];
-pair C = (0.0, 0.0);
+vec2.Vec2 B[] = new vec2.Vec2[8];
+vec2.Vec2 C = vec2.Vec2(0.0, 0.0);
 
-void init_pairs(pair center)
+void init_pairs(vec2.Vec2 center)
 {
-    A[0] = (-1.0, 1.0) + center;
-    A[1] = (-1.3, 0.0) + center;
-    A[2] = (-1.0, -1.0) + center;
-    A[3] = (-0.7, 0.0) + center;
-    A[4] = (1.0, 1.0) + center;
-    A[5] = (1.3, 0.0) + center;
-    A[6] = (1.0, -1.0) + center;
-    A[7] = (0.7, 0.0) + center;
+    LeftBracket[0] = vec2.Vec2(-1.0, 1.0) + center;
+    LeftBracket[1] = vec2.Vec2(-1.3, 0.0) + center;
+    LeftBracket[2] = vec2.Vec2(-1.0, -1.0) + center;
 
-    B[0] = expi(0.75 * pi) + center;
-    B[1] = center - (0.5, 0.0);
-    B[2] = expi(1.25 * pi) + center;
-    B[3] = center - (0.0, 0.5);
-    B[4] = expi(1.75 * pi) + center;
-    B[5] = center + (0.5, 0.0);
-    B[6] = expi(0.25 * pi) + center;
-    B[7] = center + (0.0, 0.5);
+    RightBracket[0] = vec2.Vec2(1.0, 1.0) + center;
+    RightBracket[1] = vec2.Vec2(1.3, 0.0) + center;
+    RightBracket[2] = vec2.Vec2(1.0, -1.0) + center;
 
-    draw(A[0] -- A[1] -- A[2]);
-    draw(A[4] -- A[5] -- A[6]);
-    draw(circle(C, 1.0), default.dash_pen);
+    B[0] = center + vec2.NorthWest;
+    B[1] = center + 0.5*vec2.West;
+    B[2] = center + vec2.SouthWest;
+    B[3] = center + 0.5*vec2.South;
+    B[4] = center + vec2.SouthEast;
+    B[5] = center + 0.5*vec2.East;
+    B[6] = center + vec2.NorthEast;
+    B[7] = center + 0.5*vec2.North;
+
+    draw(vec2.PolygonThroughPoints(LeftBracket));
+    draw(vec2.PolygonThroughPoints(RightBracket));
+    draw(circle(C.AsPair(), 1.0), default.dash_pen);
 }
 
 init_pairs(C);
+draw(B[2].LineTo(0.1 * B[2]), default.thick_pen);
+draw(B[6].LineTo(0.1 * B[6]), default.thick_pen);
+draw(B[0].LineTo(B[4]), default.thick_pen);
 
-draw(B[0] -- B[4], default.thick_pen);
-draw(B[2] -- B[6], white_pen);
-draw(B[2] -- B[6], default.thick_pen);
-
-C += (5.0, 0.0);
-
+C += (4.5, 0.0);
 init_pairs(C);
-draw(B[0] .. B[1] .. B[2]);
-draw(B[4] .. B[5] .. B[6]);
+vec2.Vec2[] FirstCurve = {B[6], B[7], B[0]};
+vec2.Vec2[] SecondCurve = {B[2], B[3], B[4]};
+draw(vec2.CurveThroughPoints(FirstCurve));
+draw(vec2.CurveThroughPoints(SecondCurve));
 
-C += (5.2, 0.0);
-
+C += (4.8, 0.0);
 init_pairs(C);
-draw(B[6] .. B[7] .. B[0]);
-draw(B[2] .. B[3] .. B[4]);
+vec2.Vec2[] ThirdCurve = {B[0], B[1], B[2]};
+vec2.Vec2[] FourthCurve = {B[4], B[5], B[6]};
+draw(vec2.CurveThroughPoints(ThirdCurve));
+draw(vec2.CurveThroughPoints(FourthCurve));
 
-label("$=$", (2.3, 0.0), big_pen);
-label("$q$", (3.2, 0.0), big_pen);
-label("$+$", (7.2, 0.0), big_pen);
-label("$q^{-1}$", (8.3, 0.0), big_pen);
+label("$=$", (2.2, 0.0), default.massive_pen);
+label("$-$", (6.8, 0.0), default.massive_pen);
+label("$q$", (7.6, 0.0), default.massive_pen);
