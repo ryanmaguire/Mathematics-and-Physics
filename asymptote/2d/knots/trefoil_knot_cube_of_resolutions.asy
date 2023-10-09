@@ -18,22 +18,8 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Needed for making the output a PDF file.                                  */
-import settings;
-
-/*  Make sure custom_arrows.asy is in your path. This file is found in the    *
- *  asymptote/ folder of this project. You'll need to edit the                *
- *  ASYMPTOTE_DIR environment variable to include this.                       */
-import custom_arrows;
-
-/*  Used for drawing parametric equations.                                    */
+import "size_256_default_settings.asy" as default;
 import graph;
-
-/*  PDF works best in LaTeX, so use this.                                     */
-settings.outformat = "pdf";
-
-/*  Size of the figure.                                                       */
-size(256);
 
 /*  Default pen for drawings and text.                                        */
 defaultpen(black + linewidth(0.6pt) + fontsize(7pt));
@@ -74,10 +60,11 @@ pair labelpos = scale(r2)*expi(c);
 path g0 = A1 .. B .. C1 .. D .. E1 .. F .. cycle;
 path g1 = A0 .. C0 .. E0 .. cycle;
 path g2;
-pen whitepen = white + linewidth(2.4pt);
 
 margin diagmarg = TrueMargin(1.0cm, 1.0cm);
 margin horimarg = TrueMargin(0.9cm, 0.9cm);
+margin rightmarg = TrueMargin(1.0cm, 1.67cm);
+margin leftmarg = TrueMargin(1.67cm, 1.0cm);
 
 /*  Projection of the trefoil parameterization onto the xy plane.             */
 pair tref(real t)
@@ -132,20 +119,20 @@ draw(shift(3.0*xshift, 0.0)*g0);
 draw(shift(3.0*xshift, 0.0)*g1);
 draw(shift(3.0*xshift, 0.0)*g2);
 
-draw((0.0, 0.0) -- (xshift, yshift), SharpArrow(arsize), diagmarg);
-draw((0.0, 0.0) -- (xshift, -yshift), SharpArrow(arsize), diagmarg);
-draw((0.0, 0.0) -- (xshift, 0.0), SharpArrow(arsize), horimarg);
-draw((xshift, 0.0) -- (2.0*xshift, yshift), SharpArrow(arsize), diagmarg);
-draw((xshift, 0.0) -- (2.0*xshift, -yshift), SharpArrow(arsize), diagmarg);
-draw((2.0*xshift, yshift) -- (3.0*xshift, 0.0), SharpArrow(arsize), diagmarg);
-draw((2.0*xshift, -yshift) -- (3.0*xshift, 0.0), SharpArrow(arsize), diagmarg);
-draw((xshift, yshift) -- (2.0*xshift, 0.0), whitepen, diagmarg);
-draw((xshift, -yshift) -- (2.0*xshift, 0.0), whitepen, diagmarg);
-draw((xshift, yshift) -- (2.0*xshift, 0.0), SharpArrow(arsize), diagmarg);
-draw((xshift, -yshift) -- (2.0*xshift, 0.0), SharpArrow(arsize), diagmarg);
-draw((2.0*xshift, 0.0) -- (3.0*xshift, 0.0), SharpArrow(arsize), horimarg);
-draw((xshift, yshift) -- (2.0*xshift, yshift), SharpArrow(arsize), horimarg);
-draw((xshift, -yshift) -- (2.0*xshift, -yshift), SharpArrow(arsize), horimarg);
+draw((0.0, 0.0) -- (xshift, yshift), default.sharp_arrow, diagmarg);
+draw((0.0, 0.0) -- (xshift, -yshift), default.sharp_arrow, diagmarg);
+draw((0.0, 0.0) -- (xshift, 0.0), default.sharp_arrow, horimarg);
+draw((xshift, 0.0) -- (2.0*xshift, yshift), rightmarg);
+draw((xshift, 0.0) -- (2.0*xshift, yshift), default.sharp_arrow, leftmarg);
+draw((xshift, 0.0) -- (2.0*xshift, -yshift), rightmarg);
+draw((xshift, 0.0) -- (2.0*xshift, -yshift), default.sharp_arrow, leftmarg);
+draw((2.0*xshift, yshift) -- (3.0*xshift, 0.0), default.sharp_arrow, diagmarg);
+draw((2.0*xshift, -yshift) -- (3.0*xshift, 0.0), default.sharp_arrow, diagmarg);
+draw((xshift, yshift) -- (2.0*xshift, 0.0), default.sharp_arrow, diagmarg);
+draw((xshift, -yshift) -- (2.0*xshift, 0.0), default.sharp_arrow, diagmarg);
+draw((2.0*xshift, 0.0) -- (3.0*xshift, 0.0), default.sharp_arrow, horimarg);
+draw((xshift, yshift) -- (2.0*xshift, yshift), default.sharp_arrow, horimarg);
+draw((xshift, -yshift) -- (2.0*xshift, -yshift), default.sharp_arrow, horimarg);
 
 label("$000$", labelpos);
 label("$001$", shift(xshift, yshift)*labelpos);
