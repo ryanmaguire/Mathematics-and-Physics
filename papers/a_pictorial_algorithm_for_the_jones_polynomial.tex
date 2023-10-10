@@ -82,30 +82,28 @@
 \setlength{\parskip}{0em}
 
 % Title page information.
-\title{Conjectures on Legendrian and Transversally Simple Knots and Links and an
-       Iterative Algorithm for the Jones' Polynomial}
-\author{Vladimir Chernov\hspace{2em}Ryan Maguire}
-\date{Fall 2021}
+\title{A Pictorial Algorithm for the Jones Polynomial Using Extended Gauss Code}
+\author{Ryan Maguire}
+\date{\today}
+
+% Location of all of the images for the paper.
+\graphicspath{{../images/}}
 
 \begin{document}
     \maketitle
     \tableofcontents
     \begin{abstract}
         \noindent
-        A theorem of Kronheimer and Mrowka states that Khovanov homology is
-        able to detect the unknot \cite{kronheimermrowka2010}. That is, if a
-        knot has the Khovanov homology of the unknot, then it is
-        isomorphic to it. A similar result holds for Knot Floer
-        homology. The unknot is the simplest of the torus knots, which is a
-        class of knots known to be Legendrian simple. It is conjectured that
-        Khovanov and Knot Floer homology are able to distinguish Legendrian
-        and Transversally simple knot. An iterative algorithm for computing
-        the Jones' polynomial of a knot is described and an analysis of the
-        computational complexity is given. This algorithm is then used to
-	efficiently compare the Khovanov homologies of all knots of up to 13
-	crossings with all torus knots of up to 50 crossings, providing
-	numerical evidence for this conjecture on the first $\approx12,000$
-	knots.
+        The Jones polynomial is a strong link invariant that is computationally
+        expensive. It can be defined in terms of a normalization of the Kauffman
+        bracket by introducing a factor of the \textit{writhe} of the link.
+        The recursive nature of the definition of the Kauffman bracket yields a
+        straight-forward algorithm for it's computation, but this is
+        exponential in both time in space. By expanding the recursion tree one
+        get's an algorithm that is exponential in time, but constant in space.
+        This has been done and implemented in several programming libraries.
+        In this paper a \textit{pictorial} algorithm is devised in terms of
+        extended Gauss code.
     \end{abstract}
     \section{Extended Gauss Code}
         Given a knot diagram, it is reasonable for a mathematician to wish to
@@ -114,14 +112,12 @@
         Orient the knot, label the crossings, and choose a starting point.
         Walk along the diagram, following the orientation, and record the
         crossings. That is, write down the crossing number, and whether the
-        the path goes under or over the crossing with a $U$ or $O$,
+        path goes under or over the crossing with a $U$ or $O$,
         respectively. This is illustrated via example for the right-handed
         trefoil knot in Fig.~\ref{fig:right_handed_trefoil_gauss_code}.
         \begin{figure}
             \centering
-            \includegraphics{%
-                ../images/trefoil_knot_oriented_with_gauss_code.pdf%
-            }
+            \includegraphics{trefoil_knot_oriented_with_gauss_code.pdf}
             \caption{Gauss Code for the Right-Handed Trefoil}
             \label{fig:right_handed_trefoil_gauss_code}
         \end{figure}
@@ -135,13 +131,11 @@
         starting point, we end up with
         Fig.~\ref{fig:left_handed_trefoil_gauss_code}. The resulting Gauss code
         is the same as the Gauss code we get for the right-handed trefoil.
-        These are different knots since they have different Jones' polynomials,
+        These are different knots since they have different Jones polynomials,
         meaning Gauss code cannot distinguish mirrors.
         \begin{figure}
             \centering
-            \includegraphics{%
-                ../images/trefoil_knot_mirror_oriented_with_gauss_code.pdf%
-            }
+            \includegraphics{trefoil_knot_mirror_oriented_with_gauss_code.pdf}
             \caption{Gauss Code for the Left-Handed Trefoil}
             \label{fig:left_handed_trefoil_gauss_code}
         \end{figure}
@@ -150,7 +144,7 @@
         over and which is under. This is shown in Fig.~\ref{fig:crossing_signs}.
         \begin{figure}
             \centering
-            \includegraphics{../images/crossing_signs.pdf}
+            \includegraphics{crossing_signs.pdf}
             \caption{Crossing Signs}
             \label{fig:crossing_signs}
         \end{figure}
@@ -158,9 +152,7 @@
         (also called signed Gauss code).
         \begin{figure}
             \centering
-            \includegraphics{%
-                ../images/trefoil_knot_oriented_with_extended_gauss_code.pdf%
-            }
+            \includegraphics{trefoil_knot_oriented_with_extended_gauss_code.pdf}
             \caption{Extended Gauss Code for the Right-Handed Trefoil}
             \label{fig:right_hand_trefoil_extended_gauss}
         \end{figure}
@@ -175,17 +167,17 @@
         $0\leq{n}\leq{N-1}$ ($t$ for \textit{type}, $s$ for \textit{sign}, and
         $n$ for indexing). One could represent this in the C programming
         language as follows.
-        \begin{lstlisting}[style=CStyle, gobble=12]
-            enum crossing_sign {negative_crossing, positive_crossing};
-            enum crossing_type {under_crossing, over_crossing};
+\begin{lstlisting}[style=CStyle]
+enum crossing_sign {negative_crossing, positive_crossing};
+enum crossing_type {under_crossing, over_crossing};
 
-            struct knot {
-                unsigned int number_of_crossings;
-                enum crossing_sign *sign;
-                enum crossing_type *type;
-                unsigned int *crossing_number;
-            };
-        \end{lstlisting}
+struct knot {
+    unsigned int number_of_crossings;
+    enum crossing_sign *sign;
+    enum crossing_type *type;
+    unsigned int *crossing_number;
+};
+\end{lstlisting}
         The pointers to the arrays \texttt{sign}, \texttt{type}, and
         \texttt{crossing\_number} each having 2 times
         \texttt{number\_of\_crossings} many elements.
@@ -210,7 +202,7 @@
         (Fig.~\ref{fig:chain_link_fence_knot}).
         \begin{figure}
             \centering
-            \includegraphics{../images/chain_link_fence_knot_virtual.pdf}
+            \includegraphics{chain_link_fence_knot_virtual.pdf}
             \caption{The Chain Link Fence Knot}
             \label{fig:chain_link_fence_knot}
         \end{figure}
@@ -223,13 +215,13 @@
         on the flat torus (Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}).
         \begin{figure}
             \centering
-            \includegraphics{../images/chain_link_fence_knot_on_torus.pdf}
+            \includegraphics{chain_link_fence_knot_on_torus.pdf}
             \caption{The Chain Link Fence Knot on a Torus}
             \label{fig:chain_link_fence_knot_on_torus}
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../images/chain_link_fence_knot_on_flat_torus.pdf}
+            \includegraphics{chain_link_fence_knot_on_flat_torus.pdf}
             \caption{The Chain Link Fence Knot on a Flat Torus}
             \label{fig:chain_link_fence_knot_on_flat_torus}
         \end{figure}
@@ -252,9 +244,7 @@
         \begin{figure}
             \centering
             \resizebox{\textwidth}{!}{%
-                \includegraphics{%
-                    ../images/chain_link_fence_knot_on_flat_torus_universal_cover.pdf%
-                }%
+                \includegraphics{chain_link_fence_knot_on_flat_torus_universal_cover.pdf}%
             }
             \caption{Lift of the Chain Link Fence Knot to $\mathbb{R}^{2}$}
             \label{fig:chain_link_fence_knot_on_flat_torus_universal_cover}
@@ -263,7 +253,7 @@
         The Kauffman bracket polynomial is an invariant for
         \textit{framed links}. It is not a link invariant since the polynomial
         is not preserved by Reidemeister I moves (though this can be salvaged
-        by a proper normalization, resulting in the Jones' polynomial). The
+        by a proper normalization, resulting in the Jones polynomial). The
         definition we'll give in the next section is similar to the
         description provided in \cite{barnatan2002khovanov}. It is recursive
         and requires us to \textit{resolve crossings}. Resolving a crossing
@@ -274,7 +264,7 @@
         Fig.~\ref{fig:resolving_crossing}.
         \begin{figure}
             \centering
-            \includegraphics{../images/resolving_crossings.pdf}
+            \includegraphics{resolving_crossings.pdf}
             \caption{Resolving a Crossing}
             \label{fig:resolving_crossing}
         \end{figure}
@@ -296,16 +286,14 @@
         Fig.~\ref{fig:figure_eight_knot_cube_of_resolutions}.
         \begin{figure}
             \centering
-            \includegraphics{../images/trefoil_knot_cube_of_resolutions.pdf}
+            \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
             \caption{Cube of Resolutions for the Left-Handed Trefoil}
             \label{fig:trefoil_knot_cube_of_resolutions}
         \end{figure}
         \begin{figure}
             \centering
             \resizebox{\textwidth}{!}{%
-                \includegraphics{%
-                    ../images/figure_eight_knot_cube_of_resolutions.pdf%
-                }%
+                \includegraphics{figure_eight_knot_cube_of_resolutions.pdf}%
             }
             \caption{Cube of Resolutions for the Figure-Eight}
             \label{fig:figure_eight_knot_cube_of_resolutions}
@@ -418,25 +406,25 @@
         \par\hfill\par
         \begin{figure}
             \centering
-            \includegraphics{../images/trefoil_knot_framed_001.pdf}
+            \includegraphics{trefoil_knot_framed_001.pdf}
             \caption{Framed Left-Handed Trefoil}
             \label{fig:trefoil_knot_framed_001}
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../images/thickened_crossings.pdf}
+            \includegraphics{thickened_crossings.pdf}
             \caption{Signed Crossings in a Framed Knot}
             \label{fig:thickened_crossings}
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../images/thickened_negative_crossing_smoothings.pdf}
+            \includegraphics{thickened_negative_crossing_smoothings.pdf}
             \caption{Smoothing a Negative Crossing in a Framed Knot}
             \label{fig:thickened_negative_crossing_smoothings}
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../images/thickened_positive_crossing_smoothings.pdf}
+            \includegraphics{thickened_positive_crossing_smoothings.pdf}
             \caption{Smoothing a Positive Crossing in a Framed Knot}
             \label{fig:thickened_positive_crossing_smoothings}
         \end{figure}
@@ -515,13 +503,13 @@
         circles from this resolution.
         \begin{figure}
             \centering
-            \includegraphics{../images/thickened_crossing_labeled.pdf}
+            \includegraphics{thickened_crossing_labeled.pdf}
             \caption{Thickened Crossings with Labels}
             \label{fig:thickened_crossings_labeled}
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics{../images/thickened_crossings_resolved_labeled.pdf}
+            \includegraphics{thickened_crossings_resolved_labeled.pdf}
             \caption{Thickened Resolved Crossings with Labels}
             \label{fig:thickened_crossings_resolved_labeled}
         \end{figure}
@@ -612,7 +600,7 @@
         constant $C$, but the constant is large enough that the algorithm is
         not feasible for most knots.
         \par\hfill\par
-        To obtain the unnormalized Jones' polynomial we simply need to shift
+        To obtain the unnormalized Jones polynomial we simply need to shift
         the degree of the resulting Kauffman bracket polynomial. This is
         defined by:
         \begin{equation}
@@ -636,31 +624,31 @@
         The main benefit is that the algorithm is \textit{iterative} instead of
         recursive. The complexity is bad enough that the recursive
         algorithms may result in stack overflows. Such is the case with some of
-        the Python packages that exist to compute the Jones' polynomial. The
-        computation of the Jones' polynomial of a 30 crossing knot results in
+        the Python packages that exist to compute the Jones polynomial. The
+        computation of the Jones polynomial of a 30 crossing knot results in
         runtime errors do to too many recursions. With infinite memory, 30
-        crossing knots could have their Jones' polynomials computed na\"{i}vely
+        crossing knots could have their Jones polynomials computed na\"{i}vely
         in about a day or so if one wishes to wait that long. The benefit of
         this iterative method is that it requires only $O(N)$ space,
         not $O(2^{N})$, so infinite memory isn't needed. One could hit
-        \textit{go} and wait a day and then have the Jones' polynomial of their
+        \textit{go} and wait a day and then have the Jones polynomial of their
         knot.
     \section{Results}
         A theorem of Mrowka and Kronheimer states that the Khovanov homology
         detects the unknot. That is, if a given knot has the same Khovanov
         homology as the unknot, then that knot \textit{is} the unknot.
-        The unnormalized Jones' polynomial is the graded Euler characteristic of
+        The unnormalized Jones polynomial is the graded Euler characteristic of
         Khovanov homology, so it has been conjectured that the Jones's
         polynomial also detects the unknot. This is currently unknown. The
         algorithm described here has been used, in combination with the
         Python packages \texttt{snappy} and \texttt{regina}, to look for
         numerical evidence of stronger conjectures. The unknot is the simplest
         of the torus knots, so a natural generalization is
-        \textit{does the Jones' polynomial distinguish torus knots}? That is,
-        if a knot has the same Jones' polynomial as a torus knot, is that knot
+        \textit{does the Jones polynomial distinguish torus knots}? That is,
+        if a knot has the same Jones polynomial as a torus knot, is that knot
         a torus knot itself? The answer is no via counterexample. Just in the
         Rolfsen table, the $10_{132}$ knot matches in $T(2,5)$ torus knot.
-        Beyond the Rolfsen table, the 12 crossing knot K12n749 has the same Jones'
+        Beyond the Rolfsen table, the 12 crossing knot K12n749 has the same Jones
         polynomial as the the torus knot $T(2,7)$. In both instances the
         Khovanov homologies were different, leading to the following conjecture:
         \textit{Does Khovanov homology distinguish torus knots?} This is a
@@ -668,7 +656,7 @@
         supporting evidence amongst the first 2,977 knots (all knots of less
         than or equal to 12 crossings).
         The unknot is also the simplest of the twist knots. A modification of
-        the Jones' polynomial conjecture for the unknot is whether the Jones'
+        the Jones polynomial conjecture for the unknot is whether the Jones
         polynomial distinguishes twist knots. This is also false, but the first
         counterexamples don't occur until 11 crossings. These knots are
         described in Tab.~\ref{tab:counterexamples_twist_knot_conjecture}. Since
