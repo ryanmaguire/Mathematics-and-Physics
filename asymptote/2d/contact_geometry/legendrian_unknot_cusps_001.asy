@@ -18,14 +18,8 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  Needed for making the output a PDF file.                                  */
-import settings;
-
 /*  Used for drawing parametric equations.                                    */
 import graph;
-
-/*  PDF works best in LaTeX, so use this.                                     */
-settings.outformat = "pdf";
 
 /*  Size of the figure.                                                       */
 size(256);

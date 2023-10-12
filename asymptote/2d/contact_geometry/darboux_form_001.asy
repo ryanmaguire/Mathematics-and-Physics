@@ -27,10 +27,6 @@ access "custom_arrows.asy" as arrows;
 /*  Create 3D drawings using 2D points.                                       */
 access "projection.asy" as proj;
 
-/*  PDF is easiest to use in LaTeX, so output this.                           */
-import settings;
-settings.outformat = "pdf";
-
 /*  Size of the output figure.                                                */
 size(512);
 
