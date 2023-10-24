@@ -1,0 +1,265 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       October 24, 2023                                               %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Linking Numbers and Causality in Spacetimes}
+\author{Ryan Maguire}
+\date{November 11, 2023}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item Contact Manifolds
+            \item Spacetimes
+            \item Causality and Linking
+            \item Linking and Affine Linking Numbers
+            \item Causality
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        Contact manifolds are the odd dimensional analogue of symplectic
+        manifolds. Both ideas arise from classical mechanics.
+        \begin{itemize}
+            \item
+                The \textit{phase-space} of a particle $(p,\,q)$, $p$ being
+                momentum, $q$ be position, yields an even dimensional symplectic
+                manifold.
+            \item
+                Hypersurfaces of constant energy yield odd dimensional contact
+                manifolds.
+        \end{itemize}
+        The exact definition attempts to characterize
+        \textit{maximum non-integrability}, the opposite of the
+        Frobenius theorem.
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        A contact manifold is a smooth odd dimensional $2n+1$ manifold $M$ with
+        a distribution of co-dimension 1 hyperplanes in the tangent bundle $TM$
+        with the property that no submanifold $S$ of dimension $m>n$ has
+        its tangent spaces given as subspaces of the hyperplanes in the
+        distribution.
+        \par\hfill\par
+        Locally this amounts to the existence of a one-form $\alpha$ such that
+        \begin{equation}
+            \alpha\land(\textrm{d}\,\alpha)^{k}\ne{0}
+        \end{equation}
+        The hyperplane at a point $p\in{M}$ is given by the kernel of
+        $\alpha_{p}:T_{p}M\rightarrow\mathbb{R}$.
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        The Darboux theorem makes contact manifolds a lot more concrete. It says
+        that for a contact manifold $M$ and for any $p\in{M}$ there is a chart
+        $(\mathcal{U},\,\varphi)$ about $p$ such that:
+        \begin{equation}
+            \alpha=\textrm{d}\varphi_{2n+1}-
+                \sum_{k=1}^{n}\varphi_{2k}\;\textrm{d}\varphi_{2k-1}
+        \end{equation}
+        For $\mathbb{R}^{3}$ we can use a global chart and this becomes:
+        \begin{equation}
+            \alpha=\textrm{d}z-y\textrm{d}x
+        \end{equation}
+        The hyperplane at $(x,\,y,\,z)$ is spanned by the vectors:
+        \begin{equation}
+            \mathbf{v}=\partial{y}\quad\quad\mathbf{w}=\partial{x}+y\partial{z}
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{\includegraphics{darboux_form_001.pdf}}
+            \caption{The Standard Contact Structure on $\mathbb{R}^{3}$}
+            \label{fig:contact_on_r3}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        The spherical cotangent bundle of a Riemannian manifold $(M,\,g)$
+        naturally carries a contact structure. $STM\subseteq{TM}$ can be
+        defined as all pairs $(p,\,v)\in{TM}$ with $g_{p}(v,\,v)=1$, and the
+        metric $g$ gives us an isomorphism between $TM$ and $T^{*}M$. $ST^{*}M$
+        can be defined as the image of $STM$ under this isomorphism.
+        \par\hfill\par
+        A point $\tilde{v}\in{ST}^{*}M$ can be identified with a linear
+        functional $v:T_{p}M\rightarrow\mathbb{R}$ modulo multiplication by a
+        positive real number, where $p=\textrm{proj}_{M}(\tilde{v})$, the
+        canonical projection from $ST^{*}M$ to $M$. This corresponds to the
+        hyperplane $\textrm{ker}(v)\subseteq{T}_{p}M$.
+    \end{frame}
+    \begin{frame}{Contact Manifolds}
+        Pulling this back by $\textrm{d}\,\textrm{proj}_{M}$ gives us a
+        hyperplane distribution in $ST^{*}M$:
+        \begin{equation}
+            \chi=\{\,\textrm{d}\,
+                \textrm{proj}_{M}^{-1}\big[\textrm{ker}(v)\big]\;|\;
+                    \tilde{v}\in{S}T^{*}M\,\}
+        \end{equation}
+        This distribution of hyperplanes yields a contact structure on
+        $ST^{*}M$, the one-form $\alpha$ that invokes it is called the
+        \textit{Liouville form}.
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        Shifting slightly from Riemannian and contact manifolds, we now consider
+        Lorentz manifolds, which are special types of semi-Riemannian manifolds.
+        Semi-Riemannian manifolds are ordered pairs $(M,\,g)$ where $M$ is an
+        $n$ dimensional smooth manifolds and $g$ is a
+        \textit{pseudo-Riemannian} metric, also called a semi-Riemannian metric.
+        \par\hfill\par
+        Pseudo-Riemannian metrics retain the symmetric bilinearity conditions,
+        but relax \textit{positive-definiteness} to \textit{non-degeneracy}.
+        That is, for all $p\in{M}$, and for all non-zero $v\in{T}_{p}M$, there
+        is a $w\in{T}_{p}M$ such that $g_{p}(v,\,w)\ne{0}$.
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        Positive-definiteness implies non-degeneracy (choose $w=v$), but not
+        the other way around. The \textit{Minkowski metric} on
+        $\mathbb{R}^{n+1}$ is defined by:
+        \begin{equation}
+            g=-\textrm{d}t^{2}+\sum_{k=1}^{n}\textrm{d}x_{k}^{2}
+        \end{equation}
+        $g$ is indeed a pseudo-Riemannian metric on $\mathbb{R}^{n+1}$, but not
+        a Riemannian one.
+        \par\hfill\par
+        The set of \textit{null vectors} ($g_{p}(v,\,v)=0$) in Minkowsky space
+        satisfies the equation of a cone:
+        \begin{equation}
+            \textrm{d}t=\sqrt{\sum_{k=1}^{n}\textrm{d}x_{k}^{2}}
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        Sylvester's theorem tells us that for any point $p\in{M}$ and for any
+        chart $(\mathcal{U},\,\varphi)$ about $p$ the metric $g$ will be given
+        by the same number of positive components and negative components.
+        \par\hfill\par
+        That is, there are fixed integers $(n_{+},\,n_{-})$ such that
+        $n_{+}+n_{-}=n$, and $g$ contains $n_{+}$ positive parts and $n_{-}$
+        negative parts in any representation of it. This is the
+        \textit{signature} of the metric.
+        \par\hfill\par
+        A Lorentz manifold is a
+        semi-Riemannian manifold $(X,\,g)$ of dimension $n+1$
+        with signature $(n,\,1)$.%
+        \footnote{%
+            Riemannian manifolds have signature $(n,\,0)$.
+        }
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        At each point in a Lorentz manifold $(X,\,g)$ the set of null vectors
+        is given by a cone.
+        \par\hfill\par
+        For $n\geq{2}$ this splits $T_{p}M$ into three
+        parts: A connected open subset (the exterior of the cone), a
+        disconnected open subset (the interior of the cone),
+        and the cone itself.
+        \par\hfill\par
+        A \textit{time-orientation} on a Lorentz manifold is smooth choice of
+        one of the components of the interior part of the cone as one varies
+        from point to point. This choice is called the \textit{future}
+        direction.%
+        \footnote{%
+            Orientability and time-orientability are separate notions. All four
+            combinations of orientable and time-orientable are possible on
+            Lorentz manifolds.
+        }
+        \par\hfill\par
+        A \textit{spacetime} is a time-oriented Lorentz manifold.
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        We interpret vectors $v\in{T}_{p}X$ with
+        $g_{p}(v,\,v)\leq{0}$ as those that have speeds less than that of light.
+        This interpretation becomes evident when we abuse notation a bit:
+        \begin{align}
+            -c^{2}\textrm{d}t^{2}+\sum_{k=1}^{n}\textrm{d}x_{k}^{2}
+            &\leq{0}\\
+            \Rightarrow
+            \sqrt{\sum_{k=1}^{n}\textrm{d}x_{k}^{2}}
+            &\leq{c}\textrm{dt}\\
+            \Rightarrow
+            \sqrt{\sum_{k=1}^{n}\big(\frac{\textrm{d}x_{k}}{\textrm{d}t}\big)^{2}}
+            &\leq{c}\\
+            \Rightarrow
+            ||\mathbf{v}||\leq{c}
+        \end{align}
+        where $||\mathbf{v}||$ is meant to represent the speed of the particle
+        and $c$ is the speed of light, taken to be 1 for convenience.
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        The future and past of a point $p$, denoted $I_{p}^{+}$ and $I_{p}^{-}$,
+        respectively, are all points in $X$ that can be connected to $p$ by a
+        curve whose speed is always bounded by the speed of light.
+        \par\hfill\par
+        \textit{Nice} spacetimes have the following properties:
+        \begin{itemize}
+            \item
+                $I_{p}^{+}\cap{I}_{q}^{-}$ is compact for all $p,q\in{X}$.
+            \item
+                No time travel.
+        \end{itemize}
+        No time travel means there is no future-pointing curve $\gamma$ (not
+        exceeding the speed of light) that starts at a point $p$ and later
+        returns to $p$.
+        \par\hfill\par
+        These spacetimes are called \textit{globally hyperbolic}.
+    \end{frame}
+    \begin{frame}{Spacetimes}
+        \begin{theorem}[Geroch, 1970]
+            Globally hyperbolic spacetimes $(X,\,g)$ are homeomorphic to
+            $M\times\mathbb{R}$ for some topological manifold $M$.
+        \end{theorem}
+        \begin{theorem}[Bernal-S\'{a}nchez, 2003]
+            Globally hyperbolic spacetimes $(X,\,g)$ are diffeomorphic to
+            $M\times\mathbb{R}$ for some smooth manifold $M$, and the
+            restriction of $g$ to $M\times\{t\}$ can be made Riemannian for all
+            $t\in\mathbb{R}$.
+        \end{theorem}
+        Morever, $M\times\{t\}$ is a \textit{Cauchy hypersurface}, a submanifold
+        with the property that particles that at less-than-or-equal-to the
+        speed of light will intersect $M$ at precisely one time moment $t_{0}$.
+    \end{frame}
+    \begin{frame}{Causality and Linking}
+        The \textit{sky} of a point $p$ in a spacetime $(X,\,g)$ is the space
+        of all light-rays passing through $p$.
+        \par\hfill\par
+        If $(X,\,g)$ is globally hyperbolic, the sky of a point $p$ can be given
+        a more explicit topological and geometric structure. Let $M$ be a
+        Cauchy surface so that $X$ is diffeomorphic to $M\times\mathbb{R}$ and
+        let $t_{0}\in\mathbb{R}$ be the unique time such that
+        $p\in{M}\times\{t_{0}\}$. Since $(M,\,g|_{M})$ is Riemannian, for any
+        ray of light $\gamma$ passing through $p$ the linear functional
+        $\phi:T_{p}M\rightarrow\mathbb{R}$ defined by:
+        \begin{equation}
+            \phi(v)=g_{p}\big(v,\,\dot{\gamma}(t)\big)
+        \end{equation}
+        is non-zero. It hence defines a point in $ST^{*}M$. The sky of a point
+        can thus be identified with the fibre of $p$ under the canonical
+        projection $\textrm{proj}_{M}:ST^{*}M\rightarrow{M}$.
+    \end{frame}
+    \begin{frame}{Causality and Linking}
+        The skies of two points $p,q\in{X}$ can be used to answer questions
+        about \textit{causality}. That is, whether or not it is possible for
+        $p$ and $q$ to communicate with each other by sending messages that
+        do not travel faster than light.
+        \par\hfill\par
+        In some sense the skies of $p$ and $q$ may be \textit{linked} in
+        $ST^{*}M$.
+    \end{frame}
+\end{document}
