@@ -103,7 +103,7 @@
         get's an algorithm that is exponential in time, but constant in space.
         This has been done and implemented in several programming libraries.
         In this paper a \textit{pictorial} algorithm is devised in terms of
-        extended Gauss code.
+        extended Gauss code and a literate program is presented.
     \end{abstract}
     \section{Extended Gauss Code}
         Given a knot diagram, it is reasonable for a mathematician to wish to
@@ -287,7 +287,7 @@ struct knot {
         \begin{figure}
             \centering
             \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
-            \caption{Cube of Resolutions for the Left-Handed Trefoil}
+            \caption{Cube of Resolutions for the Right-Handed Trefoil}
             \label{fig:trefoil_knot_cube_of_resolutions}
         \end{figure}
         \begin{figure}
@@ -332,22 +332,29 @@ struct knot {
         The Hamming weight is a well studied function and efficient methods of
         computing it are known, including constant-time algorithms if one
         restricts their attention to fixed-width integers
-        (usually 32 or 64 bit). A general and portable algorithm can be done in
+        (usually 32 or 64 bit).%
+        \footnote{
+            By \textit{constant time} on a finite set of inputs I mean the
+            required \textit{human} time for an input $n=1$ is about the same
+            as $n=2^{32}-1$.
+        }
+        A general and portable algorithm can be done in
         $\log(n)$ time as follows.
-        \begin{lstlisting}[style=CStyle, gobble=12]
-            static unsigned int hamming_weight(unsigned int val)
-            {
-                unsigned int result = 0U;
+        \newpage
+\begin{lstlisting}[style=CStyle]
+static unsigned int hamming_weight(unsigned int val)
+{
+    unsigned int result = 0U;
 
-                while(val != 0U)
-                {
-                    result += val & 1U;
-                    val = val >> 1U;
-                }
+    while(val != 0U)
+    {
+        result += val & 1U;
+        val = val >> 1U;
+    }
 
-                return result;
-            }
-        \end{lstlisting}
+    return result;
+}
+\end{lstlisting}
         The code \texttt{result += val \& 1U} may need explanation.
         \texttt{val \& 1U} performs a bitwise \texttt{AND} with \texttt{val} and
         1. Since the binary representation of 1 is zero in all slots except the
@@ -366,6 +373,17 @@ struct knot {
         in Fig.~\ref{fig:right_hand_trefoil_extended_gauss} corresponding to
         $7=111_{2}$, the loop will end after 3 steps, one step for each
         crossing. The $000_{2}$ resolution exits immediately.
+        \par\hfill\par
+        If speed is our game we can use compiler-intrinsics, pending the
+        compiler we are using. \texttt{GCC} offers the \texttt{popcount}
+        function. We could write:
+\begin{lstlisting}[style=CStyle]
+static unsigned int hamming_weight(unsigned int val)
+{
+    return __builtin__popcount(val);
+}
+\end{lstlisting}
+        This will greatly improve performance, but breaks portability.
         \par\hfill\par
         With the Hamming weight settled, the remaining information needed to
         compute the Kauffman bracket is the number of circles that result from
@@ -435,39 +453,39 @@ struct knot {
         crossing, and first entry is the index of the over-crossing. It is then
         useful to describe a \texttt{struct} for this ordered pair, and an
         algorithm to obtain this array.
-        \begin{lstlisting}[style=CStyle, gobble=12]
-            struct CrossingIndices {
-                unsigned int under;
-                unsigned int over;
-            };
+\begin{lstlisting}[style=CStyle]
+struct crossing_indices {
+    unsigned int under;
+    unsigned int over;
+};
 
-            static struct CrossingIndices *get_indices(struct knot *K)
-            {
-                unsigned int n;
-                struct CrossingIndices *ind;
+static struct crossing_indices *get_indices(const struct knot *K)
+{
+    unsigned int n;
+    struct crossing_indices *ind;
 
-                if (!K)
-                    return NULL;
+    if (!K)
+        return NULL;
 
-                if (K->number_of_crossings == 0U)
-                    return NULL;
+    if (K->number_of_crossings == 0U)
+        return NULL;
 
-                ind = malloc(sizeof(*ind)*K->number_of_crossings);
+    ind = malloc(sizeof(*ind) * K->number_of_crossings);
 
-                if (!ind)
-                    return NULL;
+    if (!ind)
+        return NULL;
 
-                for (n = 0U; n < 2U * K->number_of_crossings; ++n)
-                {
-                    if (K->type[n] == over_crossing)
-                        ind[K->crossing_number[n]].over = n;
-                    else
-                         ind[K->crossing_number[n]].under = n;
-                }
+    for (n = 0U; n < 2U * K->number_of_crossings; ++n)
+    {
+        if (K->type[n] == over_crossing)
+            ind[K->crossing_number[n]].over = n;
+        else
+             ind[K->crossing_number[n]].under = n;
+    }
 
-                return ind;
-            }
-        \end{lstlisting}
+    return ind;
+}
+\end{lstlisting}
         The error checks are for good programming practice: Check if your
         input pointer is \texttt{NULL}, don't assume \texttt{malloc} was
         successful, and don't pass zero to \texttt{malloc}. The actual algorithm
@@ -684,7 +702,7 @@ struct knot {
         \end{table}
     \newpage
     \bibliographystyle{plain}
-    \bibliography{../biblio.bib}
+    \bibliography{bib.bib}
     \newpage
     The source code used to generate this document is free software and released
     under version 3 of the GNU General Public License.
