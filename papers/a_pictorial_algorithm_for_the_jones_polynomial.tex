@@ -342,7 +342,7 @@ struct knot {
         $\log(n)$ time as follows.
         \newpage
 \begin{lstlisting}[style=CStyle]
-static unsigned int hamming_weight(unsigned int val)
+unsigned int hamming_weight(unsigned int val)
 {
     unsigned int result = 0U;
 
@@ -378,12 +378,23 @@ static unsigned int hamming_weight(unsigned int val)
         compiler we are using. \texttt{GCC} offers the \texttt{popcount}
         function. We could write:
 \begin{lstlisting}[style=CStyle]
-static unsigned int hamming_weight(unsigned int val)
+unsigned int hamming_weight(unsigned int val)
 {
-    return __builtin__popcount(val);
+    return __builtin_popcount(val);
 }
 \end{lstlisting}
         This will greatly improve performance, but breaks portability.
+        \texttt{MSVC} users (Windows) may find the following helpful:
+
+\begin{lstlisting}[style=CStyle]
+#include <intrin.h>
+
+unsigned int hamming_weight(unsigned int val)
+{
+    return __popcnt(val);
+}
+\end{lstlisting}
+        Again, recognizing that this is not a portable solution.
         \par\hfill\par
         With the Hamming weight settled, the remaining information needed to
         compute the Kauffman bracket is the number of circles that result from
@@ -459,7 +470,7 @@ struct crossing_indices {
     unsigned int over;
 };
 
-static struct crossing_indices *get_indices(const struct knot *K)
+struct crossing_indices *get_indices(const struct knot *K)
 {
     unsigned int n;
     struct crossing_indices *ind;
