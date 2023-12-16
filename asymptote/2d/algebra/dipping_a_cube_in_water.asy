@@ -24,105 +24,105 @@
  ******************************************************************************/
 
 /*  Create 3D drawings using 2D points.                                       */
-access "projection.asy" as proj;
+import "vec2.asy" as vec2;
 
 /*  Default pens and parameters for size(512) drawings provided here.         */
 import "size_512_default_settings.asy" as default;
 
 /*  Coordinates for all of the points in the cube.                            */
-pair O = proj.XYZPoint(0, 0, 0);
-pair x = proj.XYZPoint(6, 0, 0);
-pair y = proj.XYZPoint(0, 6, 0);
-pair z = proj.XYZPoint(0, 0, 6);
-pair xy = proj.XYZPoint(6, 6, 0);
-pair xz = proj.XYZPoint(6, 0, 6);
-pair yz = proj.XYZPoint(0, 6, 6);
-pair xyz = proj.XYZPoint(6, 6, 6);
-pair MID = proj.XYZPoint(3, 3, 3);
-pair a1 = proj.XYZPoint(3, 0, 6);
-pair a2 = proj.XYZPoint(3, 6, 6);
-pair a3 = proj.XYZPoint(0, 3, 6);
-pair a4 = proj.XYZPoint(6, 3, 6);
-pair b1 = proj.XYZPoint(0, 0, 3);
-pair b2 = proj.XYZPoint(6, 0, 3);
-pair b3 = a1;
-pair b4 = proj.XYZPoint(3, 0, 0);
-pair c1 = b2;
-pair c2 = proj.XYZPoint(6, 6, 3);
-pair c3 = a4;
-pair c4 = proj.XYZPoint(6, 3, 0);
-pair d1 = proj.XYZPoint(0, 6, 3);
-pair d2 = c2;
-pair d3 = a2;
-pair d4 = proj.XYZPoint(3, 6, 0);
-pair e1 = a3;
-pair e2 = proj.XYZPoint(0, 3, 0);
-pair e3 = b1;
-pair e4 = d1;
-pair f1 = e2;
-pair f2 = c4;
-pair f3 = b4;
-pair f4 = d4;
-pair A = proj.XYZPoint(3, 3, 6);
-pair B = proj.XYZPoint(3, 0, 3);
-pair C = proj.XYZPoint(6, 3, 3);
-pair D = proj.XYZPoint(3, 6, 3);
-pair E = proj.XYZPoint(0, 3, 3);
-pair F = proj.XYZPoint(3, 3, 0);
+vec2.Vec2 O = vec2.ProjectXYZ(0, 0, 0);
+vec2.Vec2 x = vec2.ProjectXYZ(6, 0, 0);
+vec2.Vec2 y = vec2.ProjectXYZ(0, 6, 0);
+vec2.Vec2 z = vec2.ProjectXYZ(0, 0, 6);
+vec2.Vec2 xy = vec2.ProjectXYZ(6, 6, 0);
+vec2.Vec2 xz = vec2.ProjectXYZ(6, 0, 6);
+vec2.Vec2 yz = vec2.ProjectXYZ(0, 6, 6);
+vec2.Vec2 xyz = vec2.ProjectXYZ(6, 6, 6);
+vec2.Vec2 MID = vec2.ProjectXYZ(3, 3, 3);
+vec2.Vec2 a1 = vec2.ProjectXYZ(3, 0, 6);
+vec2.Vec2 a2 = vec2.ProjectXYZ(3, 6, 6);
+vec2.Vec2 a3 = vec2.ProjectXYZ(0, 3, 6);
+vec2.Vec2 a4 = vec2.ProjectXYZ(6, 3, 6);
+vec2.Vec2 b1 = vec2.ProjectXYZ(0, 0, 3);
+vec2.Vec2 b2 = vec2.ProjectXYZ(6, 0, 3);
+vec2.Vec2 b3 = a1;
+vec2.Vec2 b4 = vec2.ProjectXYZ(3, 0, 0);
+vec2.Vec2 c1 = b2;
+vec2.Vec2 c2 = vec2.ProjectXYZ(6, 6, 3);
+vec2.Vec2 c3 = a4;
+vec2.Vec2 c4 = vec2.ProjectXYZ(6, 3, 0);
+vec2.Vec2 d1 = vec2.ProjectXYZ(0, 6, 3);
+vec2.Vec2 d2 = c2;
+vec2.Vec2 d3 = a2;
+vec2.Vec2 d4 = vec2.ProjectXYZ(3, 6, 0);
+vec2.Vec2 e1 = a3;
+vec2.Vec2 e2 = vec2.ProjectXYZ(0, 3, 0);
+vec2.Vec2 e3 = b1;
+vec2.Vec2 e4 = d1;
+vec2.Vec2 f1 = e2;
+vec2.Vec2 f2 = c4;
+vec2.Vec2 f3 = b4;
+vec2.Vec2 f4 = d4;
+vec2.Vec2 A = vec2.ProjectXYZ(3, 3, 6);
+vec2.Vec2 B = vec2.ProjectXYZ(3, 0, 3);
+vec2.Vec2 C = vec2.ProjectXYZ(6, 3, 3);
+vec2.Vec2 D = vec2.ProjectXYZ(3, 6, 3);
+vec2.Vec2 E = vec2.ProjectXYZ(0, 3, 3);
+vec2.Vec2 F = vec2.ProjectXYZ(3, 3, 0);
 
 /*  Draw the back of the cube.                                                */
-draw(O -- x, default.dash_pen);
-draw(O -- y, default.dash_pen);
-draw(O -- z, default.dash_pen);
+draw(O.LineTo(x), default.dash_pen);
+draw(O.LineTo(y), default.dash_pen);
+draw(O.LineTo(z), default.dash_pen);
 
 /*  Thin lines that make crosses on each of the outer faces.                  */
-draw(a1 -- a2, default.thin_pen);
-draw(a3 -- a4, default.thin_pen);
-draw(c1 -- c2, default.thin_pen);
-draw(c3 -- c4, default.thin_pen);
-draw(d1 -- d2, default.thin_pen);
-draw(d3 -- d4, default.thin_pen);
+draw(a1.LineTo(a2), default.thin_pen);
+draw(a3.LineTo(a4), default.thin_pen);
+draw(c1.LineTo(c2), default.thin_pen);
+draw(c3.LineTo(c4), default.thin_pen);
+draw(d1.LineTo(d2), default.thin_pen);
+draw(d3.LineTo(d4), default.thin_pen);
 
 /*  Dashed lines that makes crosses on each of the inner faces.               */
-draw(b1 -- b2, default.thin_dash_pen);
-draw(b3 -- b4, default.thin_dash_pen);
-draw(e1 -- e2, default.thin_dash_pen);
-draw(e3 -- e4, default.thin_dash_pen);
-draw(f1 -- f2, default.thin_dash_pen);
-draw(f3 -- f4, default.thin_dash_pen);
+draw(b1.LineTo(b2), default.thin_dash_pen);
+draw(b3.LineTo(b4), default.thin_dash_pen);
+draw(e1.LineTo(e2), default.thin_dash_pen);
+draw(e3.LineTo(e4), default.thin_dash_pen);
+draw(f1.LineTo(f2), default.thin_dash_pen);
+draw(f3.LineTo(f4), default.thin_dash_pen);
 
 /*  Dashed lines on the inside of the cube connecting the centers of the      *
  *  faces to the center of the cube.                                          */
-draw(A -- MID, default.thin_dash_pen);
-draw(B -- MID, default.thin_dash_pen);
-draw(C -- MID, default.thin_dash_pen);
-draw(D -- MID, default.thin_dash_pen);
-draw(E -- MID, default.thin_dash_pen);
-draw(F -- MID, default.thin_dash_pen);
+draw(A.LineTo(MID), default.thin_dash_pen);
+draw(B.LineTo(MID), default.thin_dash_pen);
+draw(C.LineTo(MID), default.thin_dash_pen);
+draw(D.LineTo(MID), default.thin_dash_pen);
+draw(E.LineTo(MID), default.thin_dash_pen);
+draw(F.LineTo(MID), default.thin_dash_pen);
 
 /*  Draw the hexagon.                                                         */
-draw(a1 -- a3, default.blue_pen);
-draw(a3 -- d1, default.blue_dash_pen);
-draw(d1 -- d4, default.blue_pen);
-draw(d4 -- c4, default.blue_dash_pen);
-draw(c4 -- b2, default.blue_pen);
-draw(b2 -- a1, default.blue_dash_pen);
+draw(a1.LineTo(a3), default.blue_pen);
+draw(a3.LineTo(d1), default.blue_dash_pen);
+draw(d1.LineTo(d4), default.blue_pen);
+draw(d4.LineTo(c4), default.blue_dash_pen);
+draw(c4.LineTo(b2), default.blue_pen);
+draw(b2.LineTo(a1), default.blue_dash_pen);
 
 /*  Draw the spokes of the hexagon.                                           */
-draw(a1 -- MID, default.green_dash_pen);
-draw(a3 -- MID, default.green_dash_pen);
-draw(d1 -- MID, default.green_dash_pen);
-draw(c4 -- MID, default.green_dash_pen);
-draw(d4 -- MID, default.green_dash_pen);
-draw(b2 -- MID, default.green_dash_pen);
+draw(a1.LineTo(MID), default.green_dash_pen);
+draw(a3.LineTo(MID), default.green_dash_pen);
+draw(d1.LineTo(MID), default.green_dash_pen);
+draw(c4.LineTo(MID), default.green_dash_pen);
+draw(d4.LineTo(MID), default.green_dash_pen);
+draw(b2.LineTo(MID), default.green_dash_pen);
 
 /*  Draw the front of the cube.                                               */
-draw(x -- xy);
-draw(y -- xy);
-draw(x -- xz);
-draw(z -- xz);
-draw(y -- yz);
-draw(z -- yz);
-draw(xy -- xyz);
-draw(yz -- xyz);
-draw(xz -- xyz);
+draw(x.LineTo(xy));
+draw(y.LineTo(xy));
+draw(x.LineTo(xz));
+draw(z.LineTo(xz));
+draw(y.LineTo(yz));
+draw(z.LineTo(yz));
+draw(xy.LineTo(xyz));
+draw(yz.LineTo(xyz));
+draw(xz.LineTo(xyz));

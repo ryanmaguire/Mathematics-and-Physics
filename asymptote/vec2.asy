@@ -323,11 +323,25 @@ struct Vec2 {
     }
     /*  End of AsTriple.                                                      */
 
-    path LineTo(Vec2 v)
+    /**************************************************************************
+     *  Method:                                                               *
+     *      LineTo                                                            *
+     *  Purpose:                                                              *
+     *      Creates a guide for a line from *this* to another vector.         *
+     *  Arguments:                                                            *
+     *      v (Vec2):                                                         *
+     *          Another vector, the end point of the line starting at *this*. *
+     *  Output:                                                               *
+     *      g (guide):                                                        *
+     *          The line from *this* to v.                                    *
+     **************************************************************************/
+    guide LineTo(Vec2 v)
     {
-        path g = this.AsPair() -- v.AsPair();
+        /*  Convert the vectors to pairs and use asymptote primitives.        */
+        guide g = this.AsPair() -- v.AsPair();
         return g;
     }
+    /*  End of LineTo.                                                        */
 }
 
 /*  Alternative constructor from two real numbers.                            */
@@ -349,7 +363,7 @@ Vec2 FromPolar(real r, real theta)
 }
 
 /*  Construct a unit-length vector from a given angle.                        */
-Vec2 UnitVector(real theta)
+Vec2 UnitVectorFromAngle(real theta)
 {
     Vec2 v = new Vec2;
     v.x = cos(theta);
@@ -580,6 +594,11 @@ Vec2 operator / (Vec2 v, Vec2 u)
     return Vec2(x, y);
 }
 
+void AddLineTo(guide g, Vec2 v)
+{
+    g = g -- v.AsPair();
+}
+
 Vec2 operator cast(pair P)
 {
     return FromPair(P);
@@ -615,12 +634,32 @@ guide CurveThroughPoints(Vec2[] v)
     return g;
 }
 
-Vec2 NorthEast = UnitVector(0.25 * pi);
-Vec2 NorthWest = UnitVector(0.75 * pi);
-Vec2 SouthWest = UnitVector(1.25 * pi);
-Vec2 SouthEast = UnitVector(1.75 * pi);
+Vec2 NorthEast = UnitVectorFromAngle(0.25 * pi);
+Vec2 NorthWest = UnitVectorFromAngle(0.75 * pi);
+Vec2 SouthWest = UnitVectorFromAngle(1.25 * pi);
+Vec2 SouthEast = UnitVectorFromAngle(1.75 * pi);
 
 Vec2 East = Vec2(1.0, 0.0);
 Vec2 North = Vec2(0.0, 1.0);
 Vec2 West = Vec2(-1.0, 0.0);
 Vec2 South = Vec2(0.0, -1.0);
+
+real shear_factor = -0.4;
+
+void ResetShear(real shear)
+{
+    shear_factor = shear;
+}
+
+Vec2 ProjectXYZ(real x, real y, real z)
+{
+    /*  The x component is computed from the y and z axes by shearing.        */
+    Vec2 X = Vec2(shear_factor*x, shear_factor*x);
+
+    /*  The y and z axes are unchanged by the projection.                     */
+    Vec2 Y = Vec2(y, 0.0);
+    Vec2 Z = Vec2(0.0, z);
+
+    /*  The final result (the projection) is the sum of the three terms.      */
+    return X + Y + Z;
+}
