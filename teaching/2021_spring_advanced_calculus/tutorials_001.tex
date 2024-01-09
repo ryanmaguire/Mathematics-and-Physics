@@ -1,0 +1,275 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage[font=scriptsize,
+            labelformat=simple,
+            labelsep=colon]{subcaption} % Subfigure captions.
+\usepackage[font={scriptsize},
+            hypcap=true,
+            labelsep=colon]{caption}    % Figure captions.
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue}
+\renewcommand\thesubfigure{\arabic{figure}.\arabic{subfigure}}
+
+% Define theorem style for default spacing and normal font.
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+% Define default environments.
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}
+
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\title{Advanced Calculus: Tutorial 1}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    The following notes are from my tutorials for advanced calculus during
+    the spring 2021 semester at Dartmouth college. The nature of tutorial
+    sessions makes the handwritten notes very scattered as students ask
+    questions about different aspects of the course. These types notes
+    reflect this scattering of information as well.
+    \begin{example}[\textbf{Basics of Linear Functions}]
+        A linear function $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is a
+        function that respects vector addition. Formally this means that if
+        $\mathbf{x}_{1},\mathbf{x}_{2}\in\mathbb{R}$ are vectors, then
+        \begin{equation}
+            f(\mathbf{x}_{1}+\mathbf{x}_{2})
+            =f(\mathbf{x}_{1})+f(\mathbf{x}_{2})
+        \end{equation}
+        Moreover it respects scalar multiplication. That is, if
+        $a\in\mathbb{R}$ and $\mathbf{x}\in\mathbb{R}^{n}$, then:
+        \begin{equation}
+            f(a\cdot\mathbf{x})=a\cdot{f}(\mathbf{x})
+        \end{equation}
+        The multiplication symbol is often omitted in the notation, and this
+        may be rewritten as:
+        \begin{equation}
+            f(a\mathbf{x})=a\,f(\mathbf{x})
+        \end{equation}
+        Another way to put this uses bases. If
+        $\{\,\mathbf{e}_{1},\,\cdots,\,\mathbf{e}_{n}\,\}$ is a basis for
+        $\mathbb{R}^{n}$ and if $\mathbf{x}\in\mathbb{R}^{n}$ is given by:
+        \begin{equation}
+            \mathbf{x}=\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}
+        \end{equation}
+        where $a_{k}\in\mathbb{R}$ are scalars, then:
+        \begin{equation}
+            f(\mathbf{x})
+            =f\Big(\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}\Big)
+            =\sum_{k=1}^{n}a_{k}\,f(\mathbf{e}_{k})
+        \end{equation}
+        Linear functions $f:\mathbb{R}\rightarrow\mathbb{R}$ are just functions
+        of the form $f(x)=ax$. We can prove this using elementary calculus.
+        Let $a=f(1)$, the value of $f$ at $x=1$. We have:
+        \begin{align}
+            \frac{f(x+h)-f(x)}{h}
+            &=\frac{f(x)+f(h)-f(x)}{h}
+            \tag{Linearity}\\
+            &=\frac{f(h)}{h}
+            \tag{Simplify}\\
+            &=\frac{h\,f(1)}{h}
+            \tag{Linearity}\\
+            &=\frac{ah}{h}
+            \tag{Definition of $a$}\\
+            &=a
+        \end{align}
+        If we take limits we see that $f'(x)=a$ for all $x\in\mathbb{R}$.
+        Integration tells us $f(x)=ax+b$ for some $b\in\mathbb{R}$. We now show
+        that $b=0$. We have:
+        \begin{equation}
+            f(0)=f(0\cdot{0})=0\cdot{f}(0)=0
+        \end{equation}
+        And hence $f(0)=0$. Since $f(x)=ax+b$, this tells us that $b=0$. So the
+        equation for $f$ is $f(x)=ax$.
+    \end{example}
+    \begin{example}[\textbf{Basis of a Vector Space}]
+        A basis for $\mathbb{R}^{n}$ is a set of
+        \textit{linearly independent vectors}
+        $\{\,\mathbf{e}_{1},\,\cdots,\,\mathbf{e}_{n}\,\}$ that
+        \textit{span} the entirety of $\mathbb{R}^{n}$. That is, every
+        vector $\mathbf{x}\in\mathbb{R}^{n}$ can be uniquely written as:
+        \begin{equation}
+            \mathbf{x}=\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}
+        \end{equation}
+        for (unique) scalars $a_{1},\,\dots,\,a_{n}$. As a simple example,
+        consider $\mathbb{R}^{2}$ and define
+        $\mathbf{e}_{1}=(1,\,0)$ and $\mathbf{e}_{2}=(0,\,1)$. Then given a
+        vector $\mathbf{x}=(x_{1},\,x_{2})$ we can write
+        $\mathbf{x}=x_{1}\mathbf{e}_{1}+x_{2}\mathbf{e}_{2}$.
+    \end{example}
+    \begin{example}[\textbf{Linear Functions Defined Using Bases}]
+        A linear function is uniquely determined by its behavior on a basis.
+        That is, if $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ is a linear
+        function, and if we know the value of $f(\mathbf{e}_{k})$ for all
+        $\mathbf{e}_{k}$ in a basis set
+        $\{\,\mathbf{e}_{1},\,\cdots,\,\mathbf{e}_{n}\,\}$, then we can compute
+        $f(\mathbf{x})$ for any $\mathbf{x}\in\mathbb{R}^{n}$. That is, if we
+        know the vectors $\mathbf{v}_{k}\in\mathbb{R}^{m}$ such that
+        $f(\mathbf{e}_{k})=\mathbf{v}_{k}$, we know all there is to know about
+        the function. For let $\mathbf{x}\in\mathbb{R}^{n}$. Then there are
+        (unique) scalars $a_{k}\in\mathbb{R}$ such that:
+        \begin{equation}
+            \mathbf{x}=\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}
+        \end{equation}
+        This is the definition of a basis. Since $f$ is linear, and since we
+        know $f(\mathbf{e}_{k})=\mathbf{v}_{k}$ for each $k$, we have:
+        \begin{equation}
+            f(\mathbf{x})
+            =f\Big(\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}\Big)
+            =\sum_{k=1}^{n}a_{k}\,f(\mathbf{e}_{k})
+            =\sum_{k=1}^{n}a_{k}\mathbf{v}_{k}
+        \end{equation}
+        allowing us to compute $f(\mathbf{x})$ for any arbitrary vector
+        $\mathbf{x}\in\mathbb{R}^{n}$.
+    \end{example}
+    \begin{example}[\textbf{Reflections}]
+        A reflection $f:\mathbb{R}^{n}\rightarrow\mathbb{R}^{n}$ (note the
+        domain and co-domain are the same here) about a \textbf{non-zero}
+        vector $\mathbf{v}\in\mathbb{R}^{n}$ is the linear function defined by:
+        \begin{equation}
+            f(\mathbf{x})
+            =\mathbf{x}-2
+            \frac{\langle\,\mathbf{x}\,|\,\mathbf{v}\,\rangle}
+                 {\langle\,\mathbf{v}\,|\,\mathbf{v}\,\rangle}
+            \mathbf{v}
+        \end{equation}
+        where $\langle\,\mathbf{x}\,|\,\mathbf{v}\,\rangle$ denotes the
+        standard Euclidean inner product, also called the Euclidean
+        \textit{dot product}, between vectors. To be explicit, if
+        $\mathbf{x}=(x_{1},\,\dots,\,x_{n})$ and
+        $\mathbf{y}=(y_{1},\,\dots,\,y_{n})$, then we have:
+        \begin{equation}
+            \langle\,\mathbf{x}\,|\,\mathbf{y}\,\rangle
+            =\sum_{k=1}^{n}x_{k}y_{k}
+        \end{equation}
+        Let's derive this. A reflection should negate any vector parallel to
+        the vector we are reflecting. This is $\mathbf{v}$ in our example.
+        That is, $f(\mathbf{x})=-\mathbf{x}$ for any vector $\mathbf{x}$ that
+        is a scalar multiple of $\mathbf{v}$. Secondly, any vector that is
+        perpendicular to $\mathbf{v}$ should be untouched. Think of the plane
+        $\mathbb{R}^{2}$ reflecting the $x$ axis. The positive $x$ axis is
+        flipped to the negative $x$ axis, and the $y$ axis remains stationary.
+        \par\hfill\par
+        The set of all vectors perpendicular to $\mathbf{v}$ forms a
+        \textit{vector subspace} of $\mathbb{R}^{n}$. Moreover, a basis
+        $\{\,\mathbf{e}_{1},\,\cdots,\,\mathbf{e}_{n-1}\,\}$ for this subspace,
+        together with $\mathbf{v}$, forms a basis for all of $\mathbb{R}^{n}$.
+        Let's write this as $\{\,\mathbf{e}_{1},\,\cdots,\,\mathbf{e}_{n}\,\}$
+        where we define $\mathbf{e}_{n}=\mathbf{v}$. Our previous conditions
+        now translate to a formula for the basis elements:
+        \begin{equation}
+            f(\mathbf{e}_{k})=
+            \begin{cases}
+                \mathbf{e}_{k}&k\ne{n}\\
+                -\mathbf{e}_{k}&k=n
+            \end{cases}
+        \end{equation}
+        Given $\mathbf{x}\in\mathbb{R}$ we may write:
+        \begin{equation}
+            f(\mathbf{x}=\sum_{k=1}^{n}a_{k}\mathbf{e}_{k}
+        \end{equation}
+        for appropriate scalars $a_{k}$. Since $f$ is linear, and since we know
+        how it works on a basis, we have:
+        \begin{equation}
+            f(\mathbf{x})=\sum_{k=1}^{n}a_{k}\,f(\mathbf{e}_{k})
+            =\Big(\sum_{k=1}^{n-1}a_{k}\mathbf{e}_{k}\Big)-a_{n}\mathbf{e}_{n}
+        \end{equation}
+        Very close to the original formula for $\mathbf{x}$. Let us add back
+        the minus component (and then subtract it out so as to not change the
+        formula). We get:
+        \begin{align}
+            f(\mathbf{x})
+            &=\Big(
+                \sum_{k=1}^{n-1}a_{k}\mathbf{e}_{k}
+            \Big)-a_{n}\mathbf{e}_{n}\\
+            &=\Big(
+                \sum_{k=1}^{n-1}a_{k}\mathbf{e}_{k}
+            \Big)+(a_{n}\mathbf{e}_{n}-a_{n}\mathbf{e}_{n})
+            -a_{n}\mathbf{e}_{n}\\
+            &=\Big(
+                \sum_{k=1}^{n}a_{k}\mathbf{e}_{k}
+            \Big)-2a_{n}\mathbf{e}_{n}\\
+            &=\mathbf{x}-2a_{n}\mathbf{e}_{n}
+        \end{align}
+        We'll complete our formula if we can rewrite $2a_{n}\mathbf{e}_{n}$ in
+        a different manner. Remember that $\mathbf{e}_{n}$ is
+        orthogonal to $\mathbf{e}_{k}$ for all $k\ne{n}$. From the linearity of
+        the inner product we get:
+        \begin{align}
+            \langle\,\mathbf{x}\,|\,\mathbf{e}_{n}\,\rangle
+            &=
+            \langle\,
+                \sum_{k=1}^{n}a_{k}\mathbf{e}_{k}\,|\,\mathbf{e}_{k}
+            \rangle\\
+            &=
+            \sum_{k=1}^{n}\langle\,
+                a_{k}\mathbf{e}_{k}\,|\,\mathbf{e}_{k}
+            \rangle\\
+            &=\sum_{k=1}^{n}a_{k}\langle\,
+                \mathbf{e}_{k}\,|\,\mathbf{e}_{k}
+            \rangle\\
+            &=a_{n}\langle\,\mathbf{e}_{n}\,|\,\mathbf{e}_{n}\,\rangle
+        \end{align}
+        We hence obtain:
+        \begin{equation}
+            a_{n}=\frac{\langle\,\mathbf{x}\,|\,\mathbf{e}_{n}\,\rangle}
+                       {\langle\,\mathbf{e}_{n}\,|\,\mathbf{e}_{n}\,\rangle}
+        \end{equation}
+        Our previous formula then becomes:
+        \begin{equation}
+            f(\mathbf{x})
+            =\mathbf{x}-2
+            \frac{\langle\,\mathbf{x}\,|\,\mathbf{e}_{n}\,\rangle}
+                 {\langle\,\mathbf{e}_{n}\,|\,\mathbf{e}_{n}\,\rangle}
+            \mathbf{e}_{n}
+        \end{equation}
+        Recalling that we set $\mathbf{v}=\mathbf{e}_{n}$, we obtain:
+        \begin{equation}
+            f(\mathbf{x})
+            =\mathbf{x}-2
+            \frac{\langle\,\mathbf{x}\,|\,\mathbf{v}\,\rangle}
+                 {\langle\,\mathbf{v}\,|\,\mathbf{v}\,\rangle}
+            \mathbf{v}
+        \end{equation}
+        Precisely as claimed.
+    \end{example}
+    \begin{example}[\textbf{Reflections in the Plane}]
+    \end{example}
+\end{document}
