@@ -853,3 +853,14 @@ Vec2 ProjectXYZ(real x, real y, real z)
     return X + Y + Z;
 }
 /*  End of ProjectXYZ.                                                        */
+
+void DrawDot(Vec2 v, real r, pen fillpen = black, pen drawpen = black)
+{
+    filldraw(circle(v.AsPair(), r), fillpen = fillpen, drawpen = drawpen);
+}
+
+void AddLabel(picture pic = currentpicture, Label L, Vec2 v,
+              align a = NoAlign, pen p = currentpen, filltype f = NoFill)
+{
+    label(pic = pic, L, v.AsPair(), align = a, p = p, filltype = f);
+}

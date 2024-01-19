@@ -21,6 +21,9 @@
  *      Draw two lines representing a linear system of equations.             *
  ******************************************************************************/
 
+/*  Two dimensional vector struct provided here.                              */
+import "vec2.asy" as vec2;
+
 /*  Functions for adding grid lines to a drawing.                             */
 access "grid_lines.asy" as grid;
 
@@ -41,10 +44,14 @@ real grid_length = 4.1;
 real axis_length = 4.2;
 
 /*  Start and end points for the lines representing the linear equations.     */
-pair starta = (-4.0, 3.0);
-pair enda = (4.0, -2.333333);
-pair startb = (-4.0, 1.0);
-pair endb = (4.0, -0.333333);
+vec2.Vec2 starta = vec2.Vec2(-4.0, 3.0);
+vec2.Vec2 enda = vec2.Vec2(4.0, -2.333333);
+vec2.Vec2 startb = vec2.Vec2(-4.0, 1.0);
+vec2.Vec2 endb = vec2.Vec2(4.0, -0.333333);
+
+/*  Points for the labels.                                                    */
+vec2.Vec2 L1 = vec2.Vec2(-3.0, 3.5);
+vec2.Vec2 L2 = vec2.Vec2(-3.0, 1.2);
 
 /*  Add grid lines to the drawing.                                            */
 grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
@@ -53,9 +60,9 @@ grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 axes.DrawAndLabelSquareCoordinateAxes(axis_length);
 
 /*  Draw the lines representing the linear equations.                         */
-draw(starta -- enda, default.red_pen);
-draw(startb -- endb, default.blue_pen);
+draw(starta.LineTo(enda), default.red_pen);
+draw(startb.LineTo(endb), default.blue_pen);
 
 /*  Label two points on the line.                                             */
-label("$2x+3y=1$", (-3.0, 3.5));
-label("$x+6y=2$", (-3.0, 1.2));
+vec2.AddLabel("$2x+3y=1$", L1);
+vec2.AddLabel("$x+6y=2$", L2);
