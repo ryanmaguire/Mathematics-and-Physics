@@ -30,3 +30,5 @@ real arrow_size = 5bp;
 /*  The default arrow head uses the "tikz-stealth" style in custom_arrows.    */
 arrowbar sharp_arrow = custom_arrows.SharpArrow(arrow_size);
 arrowbar mid_sharp_arrow = custom_arrows.MidSharpArrow(arrow_size);
+arrowbar begin_sharp_arrow = custom_arrows.BeginSharpArrow(arrow_size);
+arrowbar sharp_arrows = custom_arrows.SharpArrows(arrow_size);

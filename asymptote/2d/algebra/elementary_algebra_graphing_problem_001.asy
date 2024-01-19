@@ -21,6 +21,9 @@
  *      Plots for a graphing problem for students studying elementary algebra.*
  ******************************************************************************/
 
+/*  Create 3D drawings using 2D points.                                       */
+import "vec2.asy" as vec2;
+
 /*  Functions for creating paths from real-valued functions.                  */
 access "path_functions.asy" as pf;
 
@@ -65,18 +68,36 @@ grid.DrawGridLinesWithTickMarks(grid_start, grid_end, grid_length);
 /*  Draw the coordinate axes.                                                 */
 axes.DrawAndLabelSquareCoordinateAxes(grid_length);
 
-/*  Draw the function |x - 3|.                                                */
-draw((-7.0, 10.0) -- (3.0, 0.0) -- (10.0, 7.0), blue, default.sharp_arrow);
+/*  Points for the lines. Used for linear equations of the form y = mx + b.   */
+vec2.Vec2 A0 = vec2.Vec2(-3.00, -10.0);
+vec2.Vec2 A1 = vec2.Vec2(-3.00, +10.0);
+vec2.Vec2 B0 = vec2.Vec2(-10.0, +2.00);
+vec2.Vec2 B1 = vec2.Vec2(+10.0, +2.00);
+vec2.Vec2 C0 = vec2.Vec2(-7.50, +10.0);
+vec2.Vec2 C1 = vec2.Vec2(+10.0, -1.67);
+vec2.Vec2 D0 = vec2.Vec2(-4.67, -10.0);
+vec2.Vec2 D1 = vec2.Vec2(+8.67, +10.0);
+vec2.Vec2 E0 = vec2.Vec2(+0.00, -10.0);
+vec2.Vec2 E1 = vec2.Vec2(+10.0, +0.00);
+
+/*  Used for the function f(x) = |x - 3|.                                     */
+vec2.Vec2 F0 = vec2.Vec2(-7.00, +10.0);
+vec2.Vec2 F1 = vec2.Vec2(+3.00, +0.00);
+vec2.Vec2 F2 = vec2.Vec2(+10.0, +7.00);
+vec2.Vec2 FPts[] = {F0, F1, F2};
 
 /*  Several straight lines.                                                   */
-draw((-3.0, -10.0) -- (-3.0, 10.0), green, default.sharp_arrow);
-draw((-10.0, 2.0) -- (10.0, 2.0), purple, default.sharp_arrow);
-draw((-7.5, 10.0) -- (10.0, -1.667), cyan, default.sharp_arrow);
-draw((-4.6666, -10.0) -- (8.6666, 10.0), pink, default.sharp_arrow);
-draw((0.0, -10.0) -- (10.0, 0.0), red, default.sharp_arrow);
+draw(A0.LineTo(A1), green, default.sharp_arrows);
+draw(B0.LineTo(B1), purple, default.sharp_arrows);
+draw(C0.LineTo(C1), cyan, default.sharp_arrows);
+draw(D0.LineTo(D1), pink, default.sharp_arrows);
+draw(E0.LineTo(E1), red, default.sharp_arrows);
 
-/*  Draw the parabola 2-x^2.                                                  */
-draw(g_square, orange, default.sharp_arrow);
+/*  Draw the function |x - 3|.                                                */
+draw(vec2.PolygonThroughPoints(FPts), blue, default.sharp_arrows);
+
+/*  Draw the parabola 2 - x^2.                                                */
+draw(g_square, orange, default.sharp_arrows);
 
 /*  Lastly, the function sqrt(2 - x).                                         */
 draw(g_root, brown, default.sharp_arrow);

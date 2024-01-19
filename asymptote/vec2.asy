@@ -344,7 +344,20 @@ struct Vec2 {
     /*  End of LineTo.                                                        */
 }
 
-/*  Alternative constructor from two real numbers.                            */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      FromRect                                                              *
+ *  Purpose:                                                                  *
+ *      Creates a vector from Cartesian, or rectangular, coordinates.         *
+ *  Arguments:                                                                *
+ *      x (real):                                                             *
+ *          The x component of the vector.                                    *
+ *      y (real):                                                             *
+ *          The y component of the vector.                                    *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          The vector (x, y) in the plane.                                   *
+ ******************************************************************************/
 Vec2 FromRect(real x, real y)
 {
     Vec2 v = new Vec2;
@@ -352,8 +365,22 @@ Vec2 FromRect(real x, real y)
     v.y = y;
     return v;
 }
+/*  End of FromRect.                                                          */
 
-/*  Constructor from the polar representation of the point.                   */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      FromPolar                                                             *
+ *  Purpose:                                                                  *
+ *      Creates a vector from polar coordinates.                              *
+ *  Arguments:                                                                *
+ *      r (real):                                                             *
+ *          The radial component of the vector.                               *
+ *      theta (real):                                                         *
+ *          The polar angle of the vector.                                    *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          The point r * e^{i theta} in the plane.                           *
+ ******************************************************************************/
 Vec2 FromPolar(real r, real theta)
 {
     Vec2 v = new Vec2;
@@ -361,8 +388,20 @@ Vec2 FromPolar(real r, real theta)
     v.y = r * sin(theta);
     return v;
 }
+/*  End of FromPolar.                                                         */
 
-/*  Construct a unit-length vector from a given angle.                        */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      UnitVectorFromAngle                                                   *
+ *  Purpose:                                                                  *
+ *      Creates a unit vector from a given polar angle.                       *
+ *  Arguments:                                                                *
+ *      theta (real):                                                         *
+ *          The polar angle of the vector.                                    *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          The point e^{i theta} in the plane.                               *
+ ******************************************************************************/
 Vec2 UnitVectorFromAngle(real theta)
 {
     Vec2 v = new Vec2;
@@ -370,8 +409,20 @@ Vec2 UnitVectorFromAngle(real theta)
     v.y = sin(theta);
     return v;
 }
+/*  End of UnitVectorFromAngle.                                               */
 
-/*  Convert a pair (native asymptote data type) into a Vec2 object.           */
+/******************************************************************************
+ *  Function:                                                                 *
+ *      FromPair                                                              *
+ *  Purpose:                                                                  *
+ *      Creates a vector from a pair (native asymptote type).                 *
+ *  Arguments:                                                                *
+ *      P (pair):                                                             *
+ *          A point in the plane.                                             *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          The point converted to a Vec2 object.                             *
+ ******************************************************************************/
 Vec2 FromPair(pair P)
 {
     Vec2 v = new Vec2;
@@ -379,13 +430,25 @@ Vec2 FromPair(pair P)
     v.y = P.y;
     return v;
 }
+/*  End of FromPair.                                                          */
 
-/*  Default initializer for the Vec2 struct. Sets the variable to the origin. */
+/******************************************************************************
+ *  Operator:                                                                 *
+ *      init                                                                  *
+ *  Purpose:                                                                  *
+ *      Constructor for Vec2 objects.                                         *
+ *  Arguments:                                                                *
+ *      None.                                                                 *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          An initialized vector.                                            *
+ ******************************************************************************/
 Vec2 operator init()
 {
     /*  The default constructor sets the output to the origin. Use this.      */
     return Vec2();
 }
+/*  End of init.                                                              */
 
 /******************************************************************************
  *  Operator:                                                                 *
@@ -594,63 +657,189 @@ Vec2 operator / (Vec2 v, Vec2 u)
     return Vec2(x, y);
 }
 
-void AddLineTo(guide g, Vec2 v)
-{
-    g = g -- v.AsPair();
-}
-
+/******************************************************************************
+ *  Operator:                                                                 *
+ *      cast                                                                  *
+ *  Purpose:                                                                  *
+ *      Converts a pair to a Vec2 object.                                     *
+ *  Arguments:                                                                *
+ *      P (pair):                                                             *
+ *          A point in the plane.                                             *
+ *  Output:                                                                   *
+ *      v (Vec2):                                                             *
+ *          The same point as a vector.                                       *
+ ******************************************************************************/
 Vec2 operator cast(pair P)
 {
     return FromPair(P);
 }
+/*  End of cast.                                                              */
 
-guide PolygonThroughPoints(Vec2[] v)
+/******************************************************************************
+ *  Function:                                                                 *
+ *      PolygonThroughPoints                                                  *
+ *  Purpose:                                                                  *
+ *      Creates a piece-wise linear curve through points in the plane.        *
+ *  Arguments:                                                                *
+ *      v (Vec2[]):                                                           *
+ *          An (ordered) array of points.                                     *
+ *  Keywords:                                                                 *
+ *      closed (bool):                                                        *
+ *          Boolean determining if the returned polygon is closed or not.     *
+ *  Outputs:                                                                  *
+ *      g (guide):                                                            *
+ *          A polygonal curve through the points of v.                        *
+ ******************************************************************************/
+guide PolygonThroughPoints(Vec2[] v, bool closed = false)
 {
+    /*  Variable for the polygonal curve. We'll loop through v in a bit.      */
     guide g;
+
+    /*  Dummy variable for indexing over the points in v.                     */
     int n;
 
+    /*  There needs to be at least 2 points to create a curve.                */
     assert(v.length > 1);
 
+    /*  Initialize the curve to start at the zeroth point.                    */
     g = v[0].AsPair();
 
+    /*  Loop through the remaining points of the curve and draw lines.        */
     for (n = 1; n < v.length; ++n)
         g = g -- v[n].AsPair();
 
+    /*  If the closed Boolean is set, cycle back to the start of the path.    */
+    if (closed)
+        g = g -- cycle;
+
     return g;
 }
+/*  End of PolygonThroughPoints.                                              */
 
-guide CurveThroughPoints(Vec2[] v)
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ClosedPolygonThroughPoints                                            *
+ *  Purpose:                                                                  *
+ *      Creates a closed piece-wise linear curve through points in the plane. *
+ *  Arguments:                                                                *
+ *      v (Vec2[]):                                                           *
+ *          An (ordered) array of points.                                     *
+ *  Outputs:                                                                  *
+ *      g (guide):                                                            *
+ *          A closed polygonal curve through the points of v.                 *
+ ******************************************************************************/
+guide ClosedPolygonThroughPoints(Vec2[] v)
 {
+    return PolygonThroughPoints(v, closed = true);
+}
+/*  End of ClosedPolygonThroughPoints.                                        */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      CurveThroughPoints                                                    *
+ *  Purpose:                                                                  *
+ *      Creates a smooth curve through points in the plane.                   *
+ *  Arguments:                                                                *
+ *      v (Vec2[]):                                                           *
+ *          An (ordered) array of points.                                     *
+ *  Keywords:                                                                 *
+ *      closed (bool):                                                        *
+ *          Boolean determining if the returned curve is closed or not.       *
+ *  Outputs:                                                                  *
+ *      g (guide):                                                            *
+ *          A smooth curve through the points of v.                           *
+ ******************************************************************************/
+guide CurveThroughPoints(Vec2[] v, bool closed = false)
+{
+    /*  Variable for the output smooth curve.                                 */
     guide g;
+
+    /*  Dummy variable for indexing over the points of v.                     */
     int n;
 
+    /*  We need at least two points to create a curve.                        */
     assert(v.length > 1);
 
+    /*  Initialize the curve using the first two points. If there are only    *
+     *  two points, the output curve will be the straight line between these. */
     g = v[0].AsPair() .. v[1].AsPair();
 
+    /*  Loop over the remaining points of v and add them to the curve.        */
     for (n = 2; n < v.length; ++n)
         g = g .. v[n].AsPair();
 
+    /*  If the closed Boolean is set, cycle back to the start of the path.    */
+    if (closed)
+        g = g .. cycle;
+
     return g;
 }
+/*  End of CurveThroughPoints.                                                */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ClosedCurveThroughPoints                                              *
+ *  Purpose:                                                                  *
+ *      Creates a closed smooth curve through points in the plane.            *
+ *  Arguments:                                                                *
+ *      v (Vec2[]):                                                           *
+ *          An (ordered) array of points.                                     *
+ *  Outputs:                                                                  *
+ *      g (guide):                                                            *
+ *          A closed smooth curve through the points of v.                    *
+ ******************************************************************************/
+guide ClosedCurveThroughPoints(Vec2[] v)
+{
+    return CurveThroughPoints(v, closed = true);
+}
+/*  End of ClosedCurveThroughPoints.                                          */
+
+/*  Useful directions saved as constants.                                     */
 Vec2 NorthEast = UnitVectorFromAngle(0.25 * pi);
 Vec2 NorthWest = UnitVectorFromAngle(0.75 * pi);
 Vec2 SouthWest = UnitVectorFromAngle(1.25 * pi);
 Vec2 SouthEast = UnitVectorFromAngle(1.75 * pi);
-
 Vec2 East = Vec2(1.0, 0.0);
 Vec2 North = Vec2(0.0, 1.0);
 Vec2 West = Vec2(-1.0, 0.0);
 Vec2 South = Vec2(0.0, -1.0);
 
-real shear_factor = -0.4;
+/*  Value used to scale the axes in the ProjectXYZ function below.            */
+private real shear_factor = -0.4;
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ResetShear                                                            *
+ *  Purpose:                                                                  *
+ *      Resets the shear factor to a user defined value.                      *
+ *  Arguments:                                                                *
+ *      shear (real):                                                         *
+ *          The new shear factor.                                             *
+ *  Outputs:                                                                  *
+ *      None.                                                                 *
+ ******************************************************************************/
 void ResetShear(real shear)
 {
     shear_factor = shear;
 }
+/*  End of ResetShear.                                                        */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      ProjectXYZ                                                            *
+ *  Purpose:                                                                  *
+ *      Mimics points in 3D using a 2D canvas by projecting and shearing.     *
+ *  Arguments:                                                                *
+ *      x (real):                                                             *
+ *          The x component of the point.                                     *
+ *      y (real):                                                             *
+ *          The y component of the point.                                     *
+ *      z (real):                                                             *
+ *          The z component of the point.                                     *
+ *  Outputs:                                                                  *
+ *      P (Vec2):                                                             *
+ *          The point (x, y, z) representing as a 2D point by projecting.     *
+ ******************************************************************************/
 Vec2 ProjectXYZ(real x, real y, real z)
 {
     /*  The x component is computed from the y and z axes by shearing.        */
@@ -663,3 +852,4 @@ Vec2 ProjectXYZ(real x, real y, real z)
     /*  The final result (the projection) is the sum of the three terms.      */
     return X + Y + Z;
 }
+/*  End of ProjectXYZ.                                                        */
