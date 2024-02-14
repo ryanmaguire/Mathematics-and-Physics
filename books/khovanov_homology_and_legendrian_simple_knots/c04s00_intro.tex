@@ -1,0 +1,124 @@
+Khovanov homology is capable of detecting the
+unknot, trefoils, and figure-eight knot. The Khovanov homology with
+coefficients in $\mathbb{Z}/2\mathbb{Z}$ is also capable of detecting
+the cinquefoil knot \cite{BaldwinYingSivekCinquefoilKhovanov},
+which is the $T(5,2)$ torus knot. The Jones
+polynomial, on the other hand, is not capable of detecting the
+$T(5,2)$ torus knot since the $10_{132}$ knot yields the same
+polynomial (See Tab.~\ref{table:matching_torus_knots}).
+These are the easiest of the Legendrian simple knots
+leading us to the following.
+\begin{conjecture}
+    If a link type $L$ is Legendrian simple, then the Khovanov homology
+    of $L$ distinguishes it. That is, if $\tilde{L}$
+    is another link with the same Khovanov homology, then $\tilde{L}$ is
+    equivalent to $L$.
+\end{conjecture}
+Numerical evidence has been tallied for torus knots
+against all prime knots up to 19 crossings. There are many
+torus knots that have the same Jones polynomial as a non-torus knot
+($T(2,5)$ matches 10 and 17 crossing knots, $T(2,7)$
+matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
+so we cannot generalize the Jones unknot conjecture. Nevertheless, in
+all cases the Khovanov homologies were different
+(see Numerical Results section).
+\par\hfill\par
+The computations were done as follows. There are libraries in Python,
+Sage, and C++ for working with knot polynomials. In particular, we used
+Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
+\cite{sage}, and our own ever-growing C library.
+\par\hfill\par
+We first gather the torus knots that could potentially have the same
+Jones polynomial as some other knot based on the bounds of the degree.
+The Jones polynomials of torus knots were computed using the formula
+\cite{jonesfordummyvjones}:
+\begin{equation}
+    \label{eqn:jones_poly_torus}%
+    J(T(m,n))(q)=q^{(m-1)(n-1)/2}
+        \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
+\end{equation}
+The Kauffman bracket, of which the Jones polynomial is a simple
+normalization \cite{barnatan2002khovanov},
+of a knot $K$ with $N$ crossings has the following formula:
+\begin{equation}
+    \langle{K}\rangle=\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
+\end{equation}
+where $w(n)$ is the Hamming weight of $n$, the number of 1's in the
+binary representation, and $c(n)$ is the number of disjoint cycles
+that result in the complete smoothing of $K$ corresponding to
+$0\leq{n}\leq{2}^{N}-1$. With this the degree of the bracket polynomial
+is bounded by $3n$ ($w(n)$ is bounded by $n$, and $c(n)$ is bounded
+by $2n$). The degree of the normalization is bounded by $2n$
+\cite{barnatan2002khovanov}, so the
+Jones polynomial of a knot with $n$ crossings has degree at most $5n$.
+\par\hfill\par
+Since we are looking at knots up to $19$ crossings, we collect the
+co-prime pairs $(m,\,n)$ with $1<m<n$ such that the degree
+is less than $5\cdot{19}=95$. Since the Jones polynomial of a mirror
+can be computed by substituting $q\mapsto{q}^{-1}$
+\cite{jonespolyjones}, we need not look at
+negative values. The Khovanov polynomial makes a similar change,
+$(q,\,t)\mapsto(q^{-1},\,t^{-1})$
+\cite{WATSON2017915}.
+\par\hfill\par
+Using any of the aforementioned libraries, the Jones polynomial of all
+prime knots up to 19 crossings were computed and compared against this
+table of torus knot Jones polynomials (Eqn.~\ref{eqn:jones_poly_torus}).
+If a match was found the regina library was used to determine if the
+knots were actually identical. That is, if the knot whose Jones
+polynomial was being compared against the torus knots was indeed a
+torus knot itself. If the knots were distinct, this knot was saved in a
+text file for later examination. At the end of the computation 4
+non-torus knots had the same Jones polynomial as a torus knot
+(See Tab.~\ref{table:matching_torus_knots}).
+Since the Khovanov polynomial contains the Jones polynomial in it
+(recall $J(L)(q)=Kh(L)(q,-1)$) the only possible non-torus knots with
+the same Khovanov homology as a torus knot were these 4.
+\par\hfill\par
+Using the Java library JavaKh\footnote{%
+    Thanks must be paid to Nikolay Pultsin who made edits to
+    JavaKh-v2 so that it may run on a GNU/Linux machine using
+    OpenJDK 17.
+}
+we found that these four knots with the same Jones polynomials as some
+torus knot all had different Khovanov homologies. Thus, we have the
+following claim:
+\begin{theorem}
+    If a prime knot $K$ has less than or equal to 19 crossings and has
+    the Khovanov homology of a torus knot $T$,
+    then $K$ is equivalent to $T$.
+\end{theorem}
+A similar search through the twist knots yielded more results.
+The Jones polynomials of the twist knots are known, with the formula:
+\begin{equation}
+    J(m_{n})(q)=
+    \begin{cases}
+        (1+q^{-2}+q^{-n}+q^{-n-3})/(1+q),&n\textrm{ odd}\\
+        (1+q-q^{3-n}+q^{-n})/(1+q),&n\textrm{ even}
+    \end{cases}
+\end{equation}
+A search through all prime knots up to 19 crossings against twist knots
+provided many matches for the Jones polynomial
+(See Tab.~\ref{table:matching_twist_knots}), but
+none for Khovanov homology. Infinitely many of the twists knots are
+transversally simple, making them a good candidate to test the following
+conjecture on.
+\begin{conjecture}
+    If a link type $L$ is transversally simple, then the Khovanov
+    homology of $L$ distinguish it. That is, if $\tilde{L}$
+    is another link with the same Khovanov homology, then $\tilde{L}$ is
+    equivalent to $L$.
+\end{conjecture}
+A similar search for Knot Floer Homology (KFH), a homology theory
+first introduced by Peter Ozsv\'{a}th and Zolt\'{a}n Szab\'{o}
+\cite{ozsvathszabo2004}, using the Alexander polynomial
+was performed, but a bug was found that caused knots with identical
+Alexander polynomials to give false negatives. This has been corrected,
+and when performing a new search there are several distinct knots
+with the same Knot Floer Homology as a Legendrian simple knot. Steven
+Sivek pointed
+out that the pretzel knots $P(-3,3,2n+1)$ all have the same KFH, meaning
+the $6_{1}$ twist knot matches the KFH of the $9_{46}$ knot in the
+Rolfsen table. This is what first hinted at a bug in our KFH code.
+Matthew Hedden also informed us that the $T(4,3)$ knot and the
+$(2,3)$ cable of the trefoil also have matching KFH.

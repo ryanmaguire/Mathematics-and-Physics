@@ -545,12 +545,12 @@
             The braid group on $N\in\mathbb{N}^{+}$ strands is group $B_{N}$
             with presentation:
             \begin{equation}
-                B_{N}=\{\,
+                B_{N}=\langle\,
                     \sigma_{0},\,\dots,\,\sigma_{N-2}\;|\;
                     \sigma_{j}\sigma_{j+1}\sigma_{j}
                     =\sigma_{j+1}\sigma_{j}\sigma_{j+1},\,
                     \sigma_{k}\sigma_{\ell}=\sigma_{\ell}\sigma_{k}\,
-                \}
+                \rangle
             \end{equation}
             for all $0\leq{j}\leq{N-3}$ and all $k,\,\ell$ satisfying
             $|k-\ell|\geq{2}$.
@@ -585,4 +585,140 @@
         investigations.
     \subsection{Tait Graphs}
         The last representation we wish to describe is one of the original
-        ones: the \textbf{Tait graph}.
+        ones: the \textbf{Tait graph}. Like the braid group it will play a
+        small role for us, but it is computationally useful and will lend
+        us aid in devising algorithms later on. Projecting a knot or link down
+        to a diagram yields a 4-valent graph where the crossings form the
+        vertices. Being 4-valent with $N$ vertices (for the $N$ crossings),
+        there will be $2N$ edges. Euler's formula states:
+        \begin{equation}
+            V-E+F=2
+        \end{equation}
+        Solving for $F$ tells us there are $N+2$ faces (including the onbounded
+        face). Ensure the components are oriented so that way determine the
+        signs of crossings and pick any of the $N+2$ faces and place a dot
+        inside it.
+        For every face adjacent to this by going \textit{directly across} a
+        crossing (no going left, no going right) place another vertex and
+        draw an edge to your original point. Moreover, color the edge blue or
+        red depending on the sign of the crossing (blue for positive, red for
+        negative). Continue doing this recursively until all possible faces
+        have been dotted and corresponding edges drawn. From planarity of the
+        $N+2$ faces you will have placed dots in roughly half of them and a
+        checkerboard pattern will appear. The resulting graph is one of the
+        two possible Tait graphs for your diagram. The Hopf link is shown in
+        Fig.~\ref{fig:hopf_link_tait_graph_002}. Note that choosing a different
+        orientation for the link may change the signs of the crossings, and in
+        effect will change the coloring of the edges. Knots will not have such
+        issues since signs are orientation independent.
+        \begin{figure}
+            \centering
+            \includegraphics{hopf_link_tait_graph_002.pdf}
+            \caption{Tait Graph of the Hopf Link}
+            \label{fig:hopf_link_tait_graph_002}
+        \end{figure}
+        \par\hfill\par
+        Had you chosen a different face you may end up with the exact same
+        graph, or the \textit{dual} graph in the plane. For example, using the
+        standard right-handed trefoil diagram
+        (Fig.~\ref{fig:trefoil_knot_001}), choosing the face containing
+        infinity will yield a \textit{trigon}, a 3-valent multigraph on two
+        points, like in Fig.~\ref{fig:tait_graph_trefoil_001}. Had you chosen
+        the inner most face you would have constructed the same graph. Choosing
+        one of the clover like faces results in a cyclic graph, a triangle with
+        colored edges as in Fig.~\ref{fig:tait_graph_trefoil_002}. The
+        connection between these two is that they are duals in the plane.
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{tait_graph_trefoil_001}
+                }
+                \vspace{2em}
+                \caption{Trefoil Tait Graph}
+                \label{fig:tait_graph_trefoil_001}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{tait_graph_trefoil_002}
+                }
+                \caption{Dual Trefoil Tait Graph}
+                \label{fig:tait_graph_trefoil_002}
+            \end{minipage}
+        \end{figure}
+        \par\hfill\par
+        Tait graphs for equivalent knot diagrams should be equivalent, and thus
+        we need a mode of translating Reidemeister moves on knot diagrams to
+        Reidemeister moves on Tait graphs. Fortunately this is quite visual and
+        relatively easy to describe.
+        \par\hfill\par
+        Type I tells us we may remove loops. A loop in the Tait graph
+        corresponds to a \textit{leaf}, a vertex connected to a single other
+        vertex, or a \text{loop}, an edge connecting a vertex to itself. Alas,
+        should we find a loop in the graph we may delete it, and should the be
+        a leaf we may delete both the vertex and the sole edge that fall upon
+        it. The resulting Tait graph will be the Tait graph of an equivalent
+        knot diagram.
+        \begin{figure}
+            \centering
+            \includegraphics{tait_graph_reidemeister_1.pdf}
+            \caption{Type I on Tait Graphs}
+            \label{fig:tait_graph_reidemeister_1}
+        \end{figure}
+        \par\hfill\par
+        Type II is almost as easy to describe. A Type II move tells us there
+        will be a vertex of degree 2 (two edges connected to it) of different
+        signs. Label the vertices $A$, $B$, and $C$, $B$ being the vertex in
+        the center of degree 2. By pulling the under strand beneath the upper
+        strand we are deleting one face and fusing two together
+        (Fig.~\ref{fig:tait_graph_reidemeister_2_001}). This translates to
+        deleting vertex $B$ and the two edges connected to it, but also
+        combining vertices $A$ and $C$ into a single vertex with all
+        corresponding edges connected to it.
+        \par\hfill\par
+        Had we chosen the dual graph of
+        Fig.~\ref{fig:tait_graph_reidemeister_2_001} we would look for digonal
+        subgraphs, or subgraphs with two vertices and two edges between them.
+        Type II then says that should the signs of the two edges differ we
+        can just delete them, but leave the vertices in place. To summarize,
+        Type II amounts to deleting degree 2 vertices and the edges of digons
+        whenever the edges alternate in sign.
+        \begin{figure}
+            \centering
+            \includegraphics{tait_graph_reidemeister_2_001.pdf}
+            \caption{Type II on Tait Graphs}
+            \label{fig:tait_graph_reidemeister_2_001}
+        \end{figure}
+        \par\hfill\par
+        Finally we come to Type III. While usually the most difficult to work
+        with, the third Reidemeister move has the pleasant fact that the dual
+        Tait graph yields an identical operation. So instead of two different
+        kinds of Type III moves on Tait graphs, as we had with I and II,
+        there is only one. Examining
+        Fig.~\ref{fig:tait_graph_reidemeister_3_001} shows us how to conduct
+        the operation, we perform the famous
+        $\textrm{Y}-\Delta$ transform, a technique famous in circuit theory
+        and network analysis (see \cite{KennellyYDelta} for the original
+        source material). That is, should we find a triangle in the Tait
+        graph (with correct colorings for the edges) we may place a dot in the
+        center of the triangle and redraw the edges to form a
+        $\textrm{Y}$-shaped object. Similarly we may reverse this and transform
+        a $\textrm{Y}$ into a triangle, or a $\Delta$.
+        \par\hfill\par
+        There is one more operation we may perform on Tait graphs that is not
+        afforded to us in knot and link diagrams. At any point we may take the
+        dual of the graph in the plane, being careful to draw the resulting
+        edges with the proper colors. We may then perform the three
+        Reidemeister moves on this new Tait graph, take the dual again, and
+        so on. Demonstrating the equivalence of knots thus becomes a problem
+        in showing two graphs are the same up to Reidemeister moves and planar
+        duals.
+        \begin{figure}
+            \centering
+            \includegraphics{tait_graph_reidemeister_3_001.pdf}
+            \caption{Type III on Tait Graphs}
+            \label{fig:tait_graph_reidemeister_3_001}
+        \end{figure}

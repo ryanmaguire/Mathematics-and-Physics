@@ -1,0 +1,807 @@
+\section{Jones Polynomial}
+    The main invariant we will be working with is the Jones polynomial. It is
+    far more powerful, statistically speaking, than the Alexander polynomial
+    at distinguishing knots but this comes at the cost of increased
+    computational complexity. Indeed, the computation is known to be
+    \textbf{NP-Hard} and the best algorithms are of $O(2^{c\sqrt{N}})$ where
+    $N$ is the number of crossings and $c$ is some constant (which varies
+    across algorithms). Polynomial-time quantum algorithms have been devised,
+    but these have yet to see practical use.
+    \subsection{The Temperley-Lieb Algebra}
+        The original definition uses braids and the Temperley-Lieb algebra
+        over the commutative ring $\mathbb{Z}[t,\,t^{-1}]$. For a general
+        commutative ring $R$ and fixed element $\delta\in{R}$ we construct
+        and $R$-algebra with generators $e_{0},\,e_{1},\,\dots,\,e_{N-2}$,
+        where $N\in\mathbb{N}$ is fixed, with the following constraints:
+        \begin{align}
+            e_{n}^{2}&=\delta{e}_{n}
+            \tag{for all $0\leq{n}\leq{N-2}$}\\
+            e_{n}e_{n+1}e_{n}&=e_{n}
+            \tag{for all $0\leq{n}\leq{N-3}$}\\
+            e_{n}e_{n-1}e_{n}&=e_{n}
+            \tag{for all $1\leq{n}\leq{N-2}$}\\
+            e_{n}e_{m}&=e_{m}e_{n}
+            \tag{for all $0\leq{m,n}\leq{N-2}$ with $|m-n|\geq{2}$}
+        \end{align}
+        The algebra is denoted $TL_{N}(\delta)$, or just $TL_{N}$ if $\delta$
+        is clear from context. In the case of the Jones polynomial we choose
+        $R=\mathbb{Z}[t,\,t^{-1}]$ and $\delta=-t^{2}-t^{-2}$. For any
+        $N\in\mathbb{N}$ there is a group representation
+        $\rho:B_{N}\rightarrow{TL}_{N}$ where the $n^{\small\textrm{th}}$
+        generator $\sigma_{n}$ of $B_{N}$ is mapped to
+        $te_{n}+t^{-1}\textrm{id}$, where $\textrm{id}\in{TL}_{N}$ is the
+        unital element.
+        \par\hfill\par
+        There exists a trace operation
+        $\textrm{tr}:TL_{n}\rightarrow\mathbb{Z}[t,\,t^{-1}]$ called the
+        \textit{Markov trace} and the Jones polynomial of an element
+        $g\in{B}_{N}$ is defined as:
+        \begin{equation}
+            V_{N}(g)=\delta^{N-1}\textrm{tr}(g)
+        \end{equation}
+        If two words $g_{0}\in{B}_{N}$, $g_{1}\in{B}_{M}$ have isotopic
+        braid closures in the plane, then their Jones polynomials will be
+        identical. By Alexander's theorem every knot and link has a
+        representative braid, and hence the Jones polynomial of the knot is
+        the Jones polynomial of that particular braid.
+    \subsection{Kauffman Bracket}
+        The polynomial is made more pictorial, and lends itself more easily
+        to computation, via the Kauffman bracket polynomial. The Jones
+        polynomial can be computed by an appropriate normalization. The bracket
+        polynomial is defined recursively in terms of
+        \textit{smoothings} of a link diagram. Note, the definition we'll work
+        with is similar to the description provided in
+        \cite{barnatan2002khovanov}. It differs slightly from the original.
+        \par\hfill\par
+        Resolving, or smoothing, a crossing equates to removing it.
+        There are two ways to do this. Given an unoriented knot diagram,
+        we rotate our heads until the over crossing travels from the top left
+        to the bottom right. We will label the two smoothings as the
+        0-smoothing and the 1-smoothing, respectively, and these can be seen
+        in Fig.~\ref{fig:resolving_crossing}. Using such binary notation has
+        a computational benefit as we will soon see.
+        \begin{figure}
+            \centering
+            \includegraphics{resolving_crossings.pdf}
+            \caption{Resolving a Crossing}
+            \label{fig:resolving_crossing}
+        \end{figure}
+        \par\hfill\par
+        For a link diagram $L$ the definition of the Kauffman bracket
+        polynomial is:
+        \begin{align}
+            \langle\emptyset\rangle&=1\\
+            \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
+            \langle{L}\rangle&=
+                \langle{L_{n,0}}\rangle-q\langle{L_{n,1}}\rangle
+        \end{align}
+        where $L_{n,0}$ and $L_{n,1}$ are the links obtained from the
+        0 and 1 smoothings of $L$ at the $n^{th}$ crossing, respectively. The
+        notation $L\sqcup\mathbb{S}^{1}$ means the disjoint union of
+        $L$ with an unknot. Hence the Kauffman bracket of the
+        unknot is $q+q^{-1}$.
+        \par\hfill\par
+        The Kauffman bracket is invariant under Type II and Type III moves.
+        Type I, on the other hands, scales the polynomial by $q$ or $q^{-1}$,
+        depending on the sign of the introduced crossing. Hence the Kauffman
+        bracket is an invariant of \textit{framed} or \textit{regular} knots
+        and links. Since scaling by power of $q$ does not alter the individual
+        coefficients for the polynomial, this finite sequence is indeed a knot
+        invariant. There are two ways to make a polynomial out of this.
+        The first is the \textit{unnormalized} Jones polynomial, defined by:
+        \begin{equation}
+            \tilde{J}_{L}(q)=(-1)^{N_{-}}q^{N_{+}-2N_{-}}\langle{L}\rangle
+        \end{equation}
+        where $N_{+}$ and $N_{-}$ are the number of positive and negative
+        crossings in the diagram, respectively. Noticing the defining
+        equations for the Kauffman bracket imply that for any non-empty link
+        diagram $L$ the bracket polynomial is divisible by $q+q^{-1}$, we
+        define the \textit{normalized} Jones polynomial to be:
+        \begin{equation}
+            J_{L}(q)=\frac{1}{q+q^{-1}}\tilde{J}_{L}(q)
+        \end{equation}
+        This final polynomial gives agreement with the original braid-theoretic
+        definition.
+        \par\hfill\par
+        The other, far less common, method is to scale the bracket so that
+        it is a genuine polynomial, and not a Laurent polynomial. That is,
+        scale the bracket by $q^{-\textrm{mindeg}(\langle{L}\rangle)}$
+        ensuring that the zeroth coefficient is for the constant term. For one
+        thing, being a genuine polynomial, we may study the Julia set and Newton
+        basin's of the associated meromorphic function
+        $z\mapsto{z}-J_{L}(z)/J_{L}'(z)$, $z\in\mathbb{C}$. The topology of
+        such sets would then be dependent only on the Jones polynomial, and
+        are hence knot invariants. The Newton basins for the right-handed
+        trefoil are shown in
+        Fig.~\ref{fig:newton_fractal_right_trefoil_jones}. On the other hand,
+        the mainstream definition satisfies
+        $J_{L}(q)=J_{m(L)}(q^{-1})$ where $m(L)$ is the mirror of $L$.
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{newton_fractal_right_trefoil_jones.png}
+            }
+            \caption{Newton Basins for the Right-Handed Trefoil}
+            \label{fig:newton_fractal_right_trefoil_jones}
+        \end{figure}
+    \subsection{An Explicit Algorithm}
+        Given a link diagram $L$ label the $N$ crossings in some way from $0$
+        to $N-1$. Given any number $0\leq{n}\leq{2}^{N}-1$ we may associate a
+        \textbf{complete smoothing} of the link diagram to $n$ as follows.
+        Write out the number $n$ in binary. Since it falls between $0$ and
+        $2^{N}-1$ this can be done using $N$ bits. If the
+        $k^{\small\textrm{th}}$ bit of $n$ is zero, perform a 0-smoothing at
+        the $k^{\small\textrm{th}}$ crossing. Otherwise perform a 1-smoothing.
+        Every possible combination of smoothings is then uniquely represented
+        by a single integer between $0$ and $2^{N}-1$.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
+            \caption{Cube of Resolutions for the Right-Handed Trefoil}
+            \label{fig:trefoil_knot_cube_of_resolutions}
+        \end{figure}
+        Take, for example, the right-handed trefoil in
+        Fig.~\ref{fig:right_handed_trefoil_gauss_code} with the same labeling
+        scheme given in the figure. There are three crossings and so we have
+        $2^{3}=8$ possible resolutions. The diagram
+        in Fig.~\ref{fig:trefoil_knot_cube_of_resolutions} is called the
+        \textit{cube of resolutions} for the right-handed trefoil.
+        This language is slightly misleading since the cube of
+        resolutions is dependent on the knot diagram, so it is better to say
+        this is the cube of resolutions for the standard diagram of
+        the right-handed trefoil.
+        \par\hfill\par
+        In general, for an $N$ crossing knot, the cube of resolutions will
+        generate an $N$ dimensional hypercube with a different complete
+        smoothing at each vertex. The image becomes complicated very quickly
+        since the size of the cube is exponential in the number of crossings.
+        The cube of resolutions for the figure-eight knot is shown in
+        Fig.~\ref{fig:figure_eight_knot_cube_of_resolutions}.
+        Connecting the appropriate images with arrows results in a tesseract.
+        For neatness, this has been omitted.
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{figure_eight_knot_cube_of_resolutions.pdf}%
+            }
+            \caption{Cube of Resolutions for the Figure-Eight}
+            \label{fig:figure_eight_knot_cube_of_resolutions}
+        \end{figure}
+        \par\hfill\par
+        The third equation reduces an $N$ crossing link into two $N-1$ crossing
+        links, one link obtained from the 0 smoothing, the other from the
+        1 smoothing. If we continue this recursive step we'll end up with
+        $2^{N}$ completely resolved links, each being the disjoint union of
+        circles. Applying the first and second equations, we can inductively
+        prove the following formula for the Kauffman bracket:
+        \begin{equation}
+            \label{eqn:kauffman_bracket}%
+            \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
+                (-q)^{w(n)}(q+q^{-1})^{c(n)}
+        \end{equation}
+        Here, $w(n)$ is the Hamming weight of $n$, the number of 1's
+        that occur in the binary expansion of $n$. Recalling that an integer
+        $0\leq{n}\leq{2}^{N}-1$ represents a complete smoothing of a knot,
+        $c(n)$ is the number of circles that result from the $n$ smoothing.
+        \par\hfill\par
+        The Hamming weight is a well-studied function and efficient methods of
+        computing it are known, including constant-time algorithms if one
+        restricts their attention to fixed-width integers
+        (usually 32 or 64 bit).%
+        \footnote{
+            By \textit{constant time} on a finite set of inputs I mean the
+            required \textit{human} time for an input $n=1$ is about the same
+            as $n=2^{32}-1$.
+        }
+        A general and portable algorithm can be done in
+        $\log(n)$ time as follows.
+\begin{lstlisting}[style=CStyle]
+unsigned int hamming_weight(unsigned int val)
+{
+    unsigned int result = 0U;
+
+    while(val != 0U)
+    {
+        result += val & 1U;
+        val = val >> 1U;
+    }
+
+    return result;
+}
+\end{lstlisting}
+        The code \texttt{result += val \& 1U} may need explanation.
+        \texttt{val \& 1U} performs a bit-wise \texttt{AND} with \texttt{val} and
+        1. Since the binary representation of 1 is zero in all slots except the
+        zeroth bit, \texttt{val \& 1U} is simply checking the zeroth bit of
+        \texttt{val}. We add this value to \texttt{result}, ultimately giving
+        us the Hamming weight. The code \texttt{val = val >> 1U} takes val and
+        shifts it 1 bit to the right. So, if we had $111_{2}$ and shift it to
+        the right, we'd end up with $011_{2}$. Because of this after
+        \texttt{log(val)} steps \texttt{val} would be zero, exiting the
+        while-loop.
+        \par\hfill\par
+        For the Kauffman bracket this function is used with inputs of size
+        $2^{N}-1$, where $N$ is the number of crossings, so the worst-case
+        time complexity at this step is $O(N)$. For example, considering the
+        resolution of the right-handed trefoil
+        in Fig.~\ref{fig:right_hand_trefoil_extended_gauss} corresponding to
+        $7=111_{2}$, the loop will end after 3 steps, one step for each
+        crossing. The $000_{2}$ resolution exits immediately.
+        \par\hfill\par
+        If speed is our game we can use compiler-intrinsics, pending the
+        compiler we are using. \texttt{GCC} offers the \texttt{popcount}
+        function. We could write:
+\begin{lstlisting}[style=CStyle]
+unsigned int hamming_weight(unsigned int val)
+{
+    return __builtin_popcount(val);
+}
+\end{lstlisting}
+        This will greatly improve performance, but breaks portability.
+        \texttt{MSVC} users (Windows) may find the following helpful:
+\newpage
+\begin{lstlisting}[style=CStyle]
+#include <intrin.h>
+
+unsigned int hamming_weight(unsigned int val)
+{
+    return __popcnt(val);
+}
+\end{lstlisting}
+        Again, recognizing that this is not a portable solution.
+        \par\hfill\par
+        With the Hamming weight settled, the remaining information needed to
+        compute the Kauffman bracket is the number of circles that result from
+        the $n^{th}$ smoothing ($0\leq{n}\leq{2}^{N}-1$). This paper gives a
+        simple algorithm using extended Gauss code. The code outlined works for
+        knots, but simple extensions could be made for links. In particular, the
+        algorithm works for \textit{virtual knots} and there is no restriction
+        to the classical setting.
+        \par\hfill\par
+        We modify the algorithm for computing the virtual knot genus so that we
+        may instead count the number of cycles in a complete smoothing of all
+        the crossings. Once again we thicken the knot
+        (like in Fig.~\ref{fig:trefoil_knot_framed_001}). Every
+        crossing becomes a four-way intersection
+        (Fig.~\ref{fig:thickened_crossings}), and the idea is to loop
+        over the $4N$ roads in this thickened knot, $N$ being the number of
+        crossings.
+        \par\hfill\par
+        We first examine the negative crossing. The 0 and 1
+        smoothings are shown in
+        Fig.~\ref{fig:thickened_negative_crossing_smoothings}. Suppose we start
+        on the bottom-left road of the 0-smoothing and walk towards the
+        crossing. The smoothing in the visual equates to a road block, the thick
+        black line we are unable to pass through. We are thus forced to go down
+        the bottom-right road. The arrow for this road is going the wrong way,
+        pointing towards the crossing and we are moving away from it.
+        To preserve orientation we must walk backwards. This
+        translates as follows for extended Gauss code. Approaching a negative
+        crossing from the bottom left road means we have approached $Un-$ in
+        the code reading left-to-right, $n$ being the crossing number. The
+        road block tells us to go down the bottom right road, but in reverse.
+        That is, look for $On-$ in the code and then go
+        to the \textit{previous} entry in the code.
+        This is equivalent to walking backwards. We end up at a new crossing.
+        We now know the rule for approaching a crossing from the bottom left
+        road for a negative crossing given the 0-smoothing. In total there are
+        16 possible cases: Is the sign $+1$ or $-1$, is the type $U$ or $O$, is
+        the smoothing $0$ or $1$, is the direction forwards or backwards. The
+        visuals for these 16 combinations are shown in
+        Fig.~\ref{fig:thickened_negative_crossing_smoothings} and
+        Fig.~\ref{fig:thickened_positive_crossing_smoothings}.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_crossings.pdf}
+            \caption{Signed Crossings in a Framed Knot}
+            \label{fig:thickened_crossings}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_negative_crossing_smoothings.pdf}
+            \caption{Smoothing a Negative Crossing in a Framed Knot}
+            \label{fig:thickened_negative_crossing_smoothings}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_positive_crossing_smoothings.pdf}
+            \caption{Smoothing a Positive Crossing in a Framed Knot}
+            \label{fig:thickened_positive_crossing_smoothings}
+        \end{figure}
+        Jumping from the over-crossing to the under-crossing, and vice-verse,
+        as is needed in the algorithm is made easier if we have an array
+        \texttt{ind} such that \texttt{ind[n]} is an ordered pair whose
+        zeroth entry is the index of the under-crossing for the $n^{th}$
+        crossing, and first entry is the index of the over-crossing. It is then
+        useful to describe a \texttt{struct} for this ordered pair, and an
+        algorithm to obtain this array.
+\newpage
+\begin{lstlisting}[style=CStyle]
+struct crossing_indices {
+    unsigned int under;
+    unsigned int over;
+};
+
+struct crossing_indices *get_indices(const struct knot *K)
+{
+    unsigned int n;
+    struct crossing_indices *ind;
+
+    if (!K)
+        return NULL;
+
+    if (K->number_of_crossings == 0U)
+        return NULL;
+
+    ind = malloc(sizeof(*ind) * K->number_of_crossings);
+
+    if (!ind)
+        return NULL;
+
+    for (n = 0U; n < 2U * K->number_of_crossings; ++n)
+    {
+        if (K->type[n] == over_crossing)
+            ind[K->crossing_number[n]].over = n;
+        else
+             ind[K->crossing_number[n]].under = n;
+    }
+
+    return ind;
+}
+\end{lstlisting}
+        The error checks are for good programming practice: Check if your
+        input pointer is \texttt{NULL}, don't assume \texttt{malloc} was
+        successful, and don't pass zero to \texttt{malloc}. The actual algorithm
+        is contained in the for loop. We loop over the Gauss code, ask which
+        crossing number we have, and then add this index to our array. The
+        loop requires $2N$ steps, $N$ being the number of crossings, so this
+        step is $O(N)$. Unlike the Hamming weight and the number of circles
+        from a resolution, this index-finding algorithm is only needed once. We
+        execute the algorithm at the start and then store the result in
+        memory.
+        \par\hfill\par
+        Because of the 16 possibilities, the full algorithm is lengthy. To make
+        this easier we label the roads so that we can make a table. This is
+        done in Fig.~\ref{fig:thickened_crossings_labeled} and we call this the
+        \textit{road number}. By examining
+        Fig.~\ref{fig:thickened_crossings_resolved_labeled} we can tell where
+        we need to go as we walk along the knot. This is done explicitly in
+        Tab.~\ref{tab:circle_counting_algorithm_where_go}.
+        The table reads as follows.
+        The left \textit{In} column tells you which road you are approaching the
+        crossing from. Note if you are approaching from roads 0 or 1, you are
+        walking forward, and if you are approaching from roads 2 or 3, you are
+        walking backwards. Using the information about the sign and resolution
+        of the crossing, you know which road to leave from. In the Gauss code,
+        if you approach an under crossing, find the corresponding over crossing
+        in the code (and vice-versa). Then go to the previous entry if you are
+        leaving from roads 0 and 1, and the next entry if leaving from roads
+        2 or 3. Eventually you will return to an entry in
+        the Gauss code you have already been to. This amounts to 1 circle from
+        the resolution. Move on to the next element of the Gauss code you have
+        yet to encounter and repeat.
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_crossing_labeled.pdf}
+            \caption{Thickened Crossings with Labels}
+            \label{fig:thickened_crossings_labeled}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_crossings_resolved_labeled.pdf}
+            \caption{Thickened Resolved Crossings with Labels}
+            \label{fig:thickened_crossings_resolved_labeled}
+        \end{figure}
+        \begin{table}
+            \centering
+            \begin{tabular}{c c c c}
+                In&Sign&Resolution&Out\\
+                \hline
+                0&-&0&1\\
+                0&-&1&3\\
+                0&+&0&3\\
+                0&+&1&1\\
+                \hline
+                1&-&0&0\\
+                1&-&1&2\\
+                1&+&0&2\\
+                1&+&1&0\\
+                \hline
+                2&-&0&3\\
+                2&-&1&1\\
+                2&+&0&1\\
+                2&+&1&3\\
+                \hline
+                3&-&0&2\\
+                3&-&1&0\\
+                3&+&0&0\\
+                3&+&1&2
+            \end{tabular}
+            \caption{The Circle Counting Algorithm - Where to Go}
+            \label{tab:circle_counting_algorithm_where_go}
+        \end{table}
+        Tab.~\ref{tab:circle_counting_algorithm_where_start}
+        then tells which road number you are entering based on the sign and type
+        of the crossing, and the direction you are walking. Eventually the code
+        will be exhausted, and the resulting tally is the number of
+        circles from this resolution.
+        \begin{table}
+            \centering
+            \begin{tabular}{c c c c}
+                Type&Sign&Direction&In\\
+                \hline
+                $O$&-&Forward&1\\
+                $O$&-&Backward&3\\
+                $O$&+&Forward&0\\
+                $O$&+&Backward&2\\
+                \hline
+                $U$&-&Forward&0\\
+                $U$&-&Backward&2\\
+                $U$&+&Forward&1\\
+                $U$&+&Backward&3
+            \end{tabular}
+            \caption{The Circle Counting Algorithm - Where to Start}
+            \label{tab:circle_counting_algorithm_where_start}
+        \end{table}
+        \newpage
+        We now give the full details of the algorithm. Since we are using all
+        numbers between 0 and $2^{N}-1$ to describe complete resolutions of the
+        knot the intermediate step must be performed with (at least) $N$-bit
+        wide integers. Since the width of \texttt{int} is usually 32-bits, we
+        restrict ourselves to knots with less than 32 crossings. If we change
+        all of our types to \texttt{long} we can increase this to 64 crossings.
+        We define \texttt{MAX\_CROSSINGS} to be either 32 or 64, pending size
+        of the integers we are using.
+        \par\hfill\par
+        We create a buffer that is \texttt{4*MAX\_CROSSINGS} long to keep track
+        of which roads we have visited. Our code starts as follows.
+\begin{lstlisting}[style=CStyle]
+unsigned int
+circle_count(const struct knot *K,
+             const struct crossing_indices *ind,
+             unsigned int resolution)
+{
+    unsigned int n, number_of_circles, road_index;
+    unsigned int crossing, code_index;
+    unsigned char direction, crossing_resolution, road_number;
+    enum crossing_sign sign;
+
+    unsigned char have_visited[4U * MAX_CROSSINGS];
+
+    const unsigned char forward = 0x00U;
+
+    /* Empty knot, no cycles. */
+    if (!K)
+        return 0U;
+
+    /* Unknot, 1 cycle. */
+    if (K->number_of_crossings == 0U)
+        return 1U;
+
+    /* Invalid input, return 0. */
+    if (!ind)
+        return 0U;
+
+    /* Initialze the buffer to have zero entries. */
+    for (n = 0U; n < 4U * K->number_of_crossings; ++n)
+        have_visited[n] = 0x00U;
+
+    /* Initialize count to zero. */
+    number_of_circles = 0U;
+\end{lstlisting}
+        with all variables and arrays initialize we start the bulk of the
+        algorithm and count the number of cycles corresponding to the given
+        resolution. We loop over the $4N$ roads in our thickened knot.
+\begin{lstlisting}[style=CStyle, firstnumber = 34]
+    for (n = 0U; n < 4U*K->number_of_crossings; ++n)
+    {
+        /* If we've already checked road skip it. */
+        if (have_visited[n])
+            continue;
+\end{lstlisting}
+        Now we need the crossing number, sign of the crossing, and the road
+        number (between 0 and 3). All of this can be obtained from the road
+        index, the dummy variable \texttt{n}. This road index is
+        $n=4c+r$ where $c$ is the crossing number and $r$ is the road number.
+        We compute $c$ by shifting $n$ down by two bits, and we compute $r$ via
+        $r=n\textrm{ mod }4$. This yields the following:
+\begin{lstlisting}[style=CStyle, firstnumber = 40]
+        road_index = n;
+        crossing = road_index >> 2U;
+        road_number = road_index & 0x03U;
+\end{lstlisting}
+        Since the sign does not change between occurences of a crossing, we can
+        grab the sign from either the over or under crossing entry of the Gauss
+        code. We use the crossing table \texttt{ind} that we've already computed
+        to aid us.
+\begin{lstlisting}[style=CStyle, firstnumber = 44]
+        sign = K->sign[ind[crossing].over];
+\end{lstlisting}
+        Lastly we need the direction we are travelling, either forwards or
+        backwards. We set \texttt{forward = 0}, and so have implicitly
+        declared \texttt{backward = 1}. This has the following advantage. By
+        examining Fig.~\ref{fig:thickened_crossings_labeled} we see that the
+        forward direction corresponds to road number 0 and 1, and backwards
+        corresponds to 2 and 3. That is, the direction is determine by the
+        2's bit in the road number. We compute the direction via:
+\begin{lstlisting}[style=CStyle, firstnumber = 46]
+        direction = road_number >> 1U;
+\end{lstlisting}
+        The last bit of information we need is the location of the entry in the
+        Gauss code. This will be called the \textit{code index}. It can be
+        computed by examining the figures above. We have:
+\begin{lstlisting}[style=CStyle, firstnumber = 48]
+        if (sign == positive_crossing)
+        {
+            if (road_number & 0x01U)
+                code_index = ind[crossing].under;
+            else
+                code_index = ind[crossing].over;
+        }
+
+        else
+        {
+            if (road_number & 0x01U)
+                code_index = ind[crossing].over;
+            else
+                code_index = ind[crossing].under;
+        }
+\end{lstlisting}
+        We now loop over all of the roads and compute the number of cycles. We
+        start with:
+\begin{lstlisting}[style=CStyle, firstnumber = 64]
+        while (!have_visited[road_index])
+        {
+            have_visited[road_index] = 0x01U;
+
+            /* How to smooth the mth crossing. Get the mth bit. */
+            crossing_resolution = (resolution >> crossing) & 0x01U;
+\end{lstlisting}
+        Now we need to know which road to leave on. We appeal to
+        Tab.~\ref{tab:circle_counting_algorithm_where_go}. We convert this table
+        into a more algebraic expression as follows. We see from
+        Fig.~\ref{fig:thickened_positive_crossing_smoothings} that if we have a
+        positive crossing with a 0 smoothing, then
+        $0\mapsto{3}$, $1\mapsto{2}$, $2\mapsto{1}$, and $3\mapsto{0}$. We note
+        that this is described by $y=3-x$. Similarly, for a 1 smoothing we have
+        $0\mapsto{1}$, $1\mapsto{0}$, $2\mapsto{3}$, and $3\mapsto{2}$. This
+        is described by $y=(5-x)\textrm{ mod }4$. Negative crossings may be
+        handled by mirroring this. We obtain:
+\begin{lstlisting}[style=CStyle, firstnumber = 71]
+            if (sign == positive_crossing)
+            {
+                if (crossing_resolution == 0x00U)
+                    road_number = 3U - road_number;
+
+                else
+                {
+                    road_number = (5U - road_number) & 0x03U;
+                    direction = 0x01U - direction;
+                }
+            }
+
+            else
+            {
+                if (crossing_resolution == 0x00U)
+                {
+                    road_number = (5U - road_number) & 0x03U;
+                    direction = 0x01U - direction;
+                }
+
+                else
+                    road_number = 3U - road_number;
+            }
+
+            have_visited[4U*crossing + road_number] = 0x01U;
+\end{lstlisting}
+        Changing which road we're on means we've changed the strand we're on.
+        Over goes to under and under goes to over. We need to update this by
+        going to the correct entry in the Gauss code.
+\begin{lstlisting}[style=CStyle, firstnumber=97]
+            if (K->type[code_index] == over_crossing)
+                code_index = ind[crossing].under;
+            else
+                code_index = ind[crossing].over;
+\end{lstlisting}
+        We now move along to the new entry in the Gauss code by moving either
+        forwards or backwards, pending our current direction. If we're at the
+        final entry in the Gauss code and are moving forward, we loop back
+        around to the start. Similarly if we're at the first entry and a walking
+        backwards we loop around to the final entry. This gives us:
+        \newpage
+\begin{lstlisting}[style=CStyle, firstnumber=102]
+            if (direction == forward)
+            {
+                if (code_index == 2U*K->number_of_crossings - 1U)
+                    code_index = 0U;
+                else
+                    ++code_index;
+            }
+
+            else
+            {
+                if (code_index == 0U)
+                    code_index = 2U*K->number_of_crossings - 1U;
+                else
+                    --code_index;
+            }
+\end{lstlisting}
+        Nearly done, we're now at the next entry in the Gauss code, we just need
+        to know which road we're entering from. We use
+        Tab.~\ref{tab:circle_counting_algorithm_where_start} for this.
+\begin{lstlisting}[style=CStyle, firstnumber = 118]
+            if (K->sign[code_index] == positive_crossing)
+            {
+                if (K->type[code_index] == over_crossing)
+                {
+                    if (direction == forward)
+                        road_number = 0U;
+                    else
+                        road_number = 2U;
+                }
+
+                else
+                {
+                    if (direction == forward)
+                        road_number = 1U;
+                    else
+                        road_number = 3U;
+                }
+            }
+
+            else
+            {
+                if (K->type[code_index] == over_crossing)
+                {
+                    if (direction == forward)
+                        road_number = 1U;
+                    else
+                        road_number = 3U;
+                }
+
+                else
+                {
+                    if (direction == forward)
+                        road_number = 0U;
+                    else
+                        road_number = 2U;
+                }
+            }
+        }
+\end{lstlisting}
+        As a slight reduction in code size, these nested conditionals can be
+        replaced by an algebraic expression in our search of the
+        \textit{in} road. We first note that the negative and positive crossings
+        have mirrored conditional statements. We search for four variables
+        $a,b,c,d$ such that:
+        \begin{equation}
+            r=ast+bs+ct+d
+        \end{equation}
+        where $r$ is the road number, $s$ is the sign, and $t$ is the type.
+        Since the sign $s$ and type $t$ are represented by \texttt{enum} data
+        types we may treat them as integers and add them.
+        Tab.~\ref{tab:circle_counting_algorithm_where_start} tells gives us
+        $a=-2$, $b=1$, $c=1$, and $d=2\cdot\texttt{dir}$, where \texttt{dir} is
+        the direction ($\texttt{forward}=0$, $\texttt{backward}=1$). We can
+        compute the output road number via:
+\begin{lstlisting}[style=CStyle]
+unsigned char
+get_road_number(const struct knot *K,
+                unsigned int code_index,
+                unsigned char direction)
+{
+    const unsigned char b = K->sign[code_index];
+    const unsigned char c = K->type[code_index];
+    const unsigned char a = (b * c) << 1U;
+    const unsigned char d = direction << 1U;
+    return b + c + d - a;
+}
+\end{lstlisting}
+        Regardless of preference (nested conditional or algebraic expressions)
+        we now know which road we are entering the crossing from.
+        We now update our variables and go back to the top of the
+        \texttt{while} loop and continue until
+        we encounter a road we've already traveled on. Once this occurs we
+        increment the circle count. We do this until all $4N$ entries of the
+        \texttt{have\_visited} table are set to 1. At this point the
+        \texttt{for} loop will exit. We return the count and exit the function.
+\begin{lstlisting}[style=CStyle, firstnumber = 157]
+            crossing = K->crossing_number[code_index];
+            sign = K->sign[code_index];
+            road_index = (crossing << 2U) + road_number;
+        }
+
+        ++number_of_circles;
+    }
+
+    return number_of_circles;
+}
+\end{lstlisting}
+        Let's use the trefoil as an example. The $000_{2}$ resolution results
+        in 2 circles (Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}). Let's
+        check that the algorithm detects this. The Gauss code is
+        $O0+U1+O2+U0+O1+U2+$. We start by entering the zeroth crossing
+        (road 0). It is an over crossing, so we look ahead in the code and
+        find the corresponding under crossing. It is a positive crossing with
+        the zero resolution, so
+        Tab.~\ref{tab:circle_counting_algorithm_where_go} tells
+        us to leave through road 3. We mark road 0 and road 3 of the zeroth
+        crossing as traveled and proceed. Leaving through road 3 means we
+        travel forward. Hence we wind up at $O1+$ in the code and we are
+        walking forwards. Over-crossing, positive sign, walking forwards means
+        we are entering the crossing from road 0
+        (Tab.~\ref{tab:circle_counting_algorithm_where_start}). We will again
+        leave through road 3 and enter the $O2+$ crossing walking forwards.
+        We again enter road 0 and leave through road 3 and wind up at
+        $O0+$ walking forward, completing our first cycle. The next untouched
+        road is road 1 for the zeroth crossing. This corresponding to $U0+$
+        walking forwards. Tab.~\ref{tab:circle_counting_algorithm_where_go}
+        tells us to leave through road 2. We end up at $U1+$, road 1. Again
+        we leave through road 2 and end up at $U2+$ road 1. We leave through
+        road 2 entering $U0+$, completing our cycle. All of the roads have been
+        marked, and we have 2 circles total, in agreement with
+        Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}.
+        \par\hfill\par
+        To compute the Kauffman bracket we loop over all integers
+        $0\leq{n}\leq{2}^{N}-1$, $N$ being the number of crossings, compute the
+        number of circles corresponding to the $n$ resolution using this
+        algorithm, and perform the sum in Eqn.~\ref{eqn:kauffman_bracket}. The
+        circle counting algorithm requires $4N$ steps since we loop over the
+        $4N$ roads, and the Hamming weight has worst-case complexity $O(N)$,
+        meaning each stage is $O(4N)+O(N)=O(N)$ in time complexity. There are
+        $2^{N}$ total steps, so $O(N2^{N})$ is the total complexity of the
+        computation. The computation of the array of indices at the beginning
+        is $O(N)$, but as mentioned is only required once and is not part of
+        the inner for-loop. The result for the entire algorithm is
+        $O(N+N2^{N})=O(N2^{N})$. This is the same complexity as most usable
+        algorithms. There are known algorithms in time $O(2^{C\sqrt{n}})$ for a
+        constant $C$, but current implementations do not allow for
+        virtual knots.
+        \par\hfill\par
+        To obtain the unnormalized Jones polynomial we simply need to shift
+        the degree of the resulting Kauffman bracket polynomial. This is
+        defined by:
+        \begin{equation}
+            \tilde{J}(L)=(-1)^{N_{-}}q^{N_{+}-2N_{-}}\langle{L}\rangle
+        \end{equation}
+        Where $N_{-}$ is the number of negative crossings and $N_{+}$ is the
+        number of positive crossings. The computation of $N_{-}$ and $N_{+}$
+        is $O(N)$, simply loop through the Gauss code and count.
+        We represent Laurent polynomials by the following struct:
+        \begin{lstlisting}[style=CStyle, gobble=12]
+            struct laurent_polynomial {
+                signed int lowest_degree;
+                signed int highest_degree;
+                signed int *coeffs;
+            };
+        \end{lstlisting}
+        Once $N_{-}$ and $N_{+}$ have been computed,
+        multiplication by $q^{N_{+}-2N_{-}}$ thus takes $O(1)$ in time, we
+        simply add $N_{+}-2N_{-}$ to \texttt{highest\_degree} and
+        \texttt{lowest\_degree}. This step does not impact the computation time
+        in any significant way.
+        \par\hfill\par
+        The main benefit is that the algorithm is \textit{iterative} instead of
+        recursive. The complexity is bad enough that recursive
+        algorithms may result in stack overflows. Such is the case with some of
+        the Python packages that exist to compute the Jones polynomial. The
+        computation of the Jones polynomial of a 30 crossing knot results in
+        runtime errors do to too many recursions. With infinite memory, 30
+        crossing knots could have their Jones polynomials computed na\"{i}vely
+        in about a day or so if one wishes to wait that long. The benefit of
+        this iterative method is that it requires only $O(N)$ space,
+        not $O(2^{N})$, so infinite memory isn't needed. One could hit
+        \textit{go} and wait a day and then have the Jones polynomial of their
+        knot.
+        \par\hfill\par
+        Additionally, since the algorithm works using Gauss code, it is not
+        restricted to the classical settings. Several libraries have routines
+        for the Jones polynomial that run in (rougly) $O(2^{\sqrt{N}})$ time
+        and a thousand crossing knot can be handled in just a few seconds, but
+        these methods do not work (at least, not without modification) on
+        virtual knots. In an ideal world one could get the efficiency of these
+        algorithms working for virtual knots. This is a future aim of the
+        author.
+    \subsection{Tait Graph Expansion}
