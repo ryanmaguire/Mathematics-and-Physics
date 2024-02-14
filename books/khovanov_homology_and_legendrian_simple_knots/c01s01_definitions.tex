@@ -38,24 +38,42 @@
     a slightly harder definition of \textit{knot equivalence}. In the polygonal
     case this comes with ease. Given a piece-wise linear embedding
     $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ with vertices
-    $P_{1},\,\dots,\,P_{n}$ we are allowed to deform $\gamma$ into a new
+    $P_{0},\,\dots,\,P_{n-1}$ we are allowed to deform $\gamma$ into a new
     embedding $\gamma'$ formed by the (ordered) vertices
-    $P_{1},\,\dots,\,P_{n},\,P'$
-    such that the triangle $\Delta{P}_{n}P'P_{1}$ (interior included)
+    $P_{0},\,\dots,\,P_{n-1},\,P_{n}$
+    such that the triangle $\Delta{P}_{n-1}P_{n}P_{0}$ (interior included)
     only intersects $\gamma$
-    along the line segment $\overline{P_{1}P_{n}}$. This is called an
+    along the line segment $P_{0}P_{n-1}$. This is called an
     \textbf{elementary knot equivalence}. With this we define equivalent knots.
+    \newpage
     \begin{definition}[\textbf{Equivalent Knots}]
         Equivalent knots are polygonal embeddings
         $\gamma,\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ that differ by
         a finite number of elementary knot equivalences.
     \end{definition}
-    Knot equivalence induces an equivalence relation on the set of all knots
-    and the \textbf{knot type} of a knot
-    $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ is the equivalence class
-    $K=[\gamma]$. Many texts do not distinguish between a knot and its knot
-    type.
+    A triangle and a square are equivalent knots, as are all regular
+    polygons in the plane, which serve as examples of the unknot.
+    Moreover, by the Jordan curve theorem any two embeddings that
+    lie in a plane $S\subseteq\mathbb{R}^{3}$ are equivalent to the unknot as
+    well. Application of Chazelle's algorithm
+    \cite{ChazelleTriangulationAlgorithm} tells us this equivalence
+    can be demonstrated in linear time.\footnote{%
+        Explicitly, use Chazelle's algorithm to triangulate the polygonal
+        figure. \textit{Collapse} any triangle with a vertex on the boundary
+        of the polygon by deleting said vertex. Continue doing this until there
+        is one triangle left. Both Chazelle's algorithm and this collapsing
+        process run in linear time. Equivalence of two triangles in the
+        plane can be done in constant time.
+    }
     \par\hfill\par
+    Knot equivalence induces an equivalence relation on the set of all knots,
+    and this motivates a definition.
+    \begin{definition}[\textbf{Knot Type}]
+        The knot type of a knot $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$
+        is the equivalence class $\mathcal{K}=[\gamma]$ of all knots that are
+        equivalent to $\gamma$.
+    \end{definition}
+    Many texts do not distinguish between a knot and its knot type.
     While the polygonal definitions of knot and knot equivalence are perhaps
     the easiest to describe, it is also convenient to think of knots as smooth
     embeddings of $\mathbb{S}^{1}$ into $\mathbb{R}^{3}$. Indeed, most of the
@@ -64,314 +82,391 @@
     existence of wild knots \cite[p.~147]{CrowellFoxKnotTheory}. As mentioned,
     the smooth setting has a more verbose definition of knot equivalence.
     Smooth embeddings $\gamma,\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$
-    are considered equivalent if there is an \textbf{ambient isotopy}
-    between them, a smooth family of diffeomorphisms
-    $H_{t}:\mathbb{R}^{3}\rightarrow\mathbb{R}^{3}$ such that
-    $H_{0}|_{\mathbb{S}^{1}}=\gamma$ and $H_{1}|_{\mathbb{S}^{1}}=\gamma'$.%
-    \footnote{%
-        Here we take $\mathbb{S}^{1}\subseteq\mathbb{R}^{3}$
-        to lie in the $xy$ plane.
-    }
-    \footnote{%
-        The definition in \cite[p.~4]{CrowellFoxKnotTheory} only requires a
-        single diffeomorphism $f:\mathbb{R}^{3}\rightarrow\mathbb{R}^{3}$ that
-        takes the image of $\gamma$ to the image of $\gamma'$. Such a
-        definition is unable to distinguish a knot from its \textit{mirror},
-        the result of composing the knot with the reflection $z\mapsto{-z}$.
-        If one requires $f$ be \textit{orientation preserving}, then the
-        two definitions are equivalent.
-    }
-    \footnote{%
-        By a \textit{smooth family} it is meant that the product map
-        $H:\mathbb{R}^{3}\times[0,\,1]\rightarrow\mathbb{R}^{3}$ defined by
-        $H(\mathbf{x},\,t)=H_{t}(\mathbf{x})$ is smooth.
-    }
-    \par\hfill\par
-    Explicit embeddings are rarely given for smooth or polygonal knots. Instead
-    we often study knots via the use of \textbf{knot diagrams}. Given a knot
-    $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ and a vector
-    $\mathbf{v}\in\mathbb{S}^{2}$, by composing $\gamma$ with the projection
-    $\textrm{proj}_{\mathbf{v}}:\mathbb{R}^{3}\rightarrow\mathbb{R}^{2}$ we get
-    a drawing in the plane. For a polygonal knot, a \textbf{regular} projection
-    is one where for each $\mathbf{p}\in\mathbb{R}^{2}$ the pre-image consists
-    of at most two points in $\mathbb{S}^{1}$, and such that vertices of
-    $\gamma$ map to unique points in $\mathbb{R}^{2}$. For a smooth knot, a
-    regular projection is again one such that the pre-image of each
-    $\mathbf{p}\in\mathbb{R}^{2}$ consists of at most two points in
-    $\mathbb{S}^{1}$, but also such that the resulting composition is an
-    \textbf{immersion} from $\mathbb{S}^{1}$ into $\mathbb{R}^{2}$.
-    \par\hfill\par
-    For the general knot $\gamma$ and vector $\mathbf{v}\in\mathbb{S}^{2}$, the
-    resulting projection may not be regular. Fortunately we have the following
-    theorem \cite[p.~22]{LivingstonKnotTheory}.
-    \begin{theorem}
-        If $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ is a
-        (smooth or polygonal) knot, if $\mathbf{v}\in\mathbb{S}^{2}$, and if
-        $\varepsilon>0$, then there is an equivalent knot
-        $\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that:
-        \begin{equation}
-            \max\big(
-                \{\,||\gamma(s)-\gamma'(t)||\;:\;\,s,t\in\mathbb{S}^{1}\,\}
-            \big)<\varepsilon
-        \end{equation}
-        and such that the projection of $\gamma'$ along $\mathbf{v}$ is regular.
-    \end{theorem}
-    \begin{figure}
-        \centering
-        \includegraphics{trefoil_knot_001.pdf}
-        \caption{Trefoil Knot Diagram}
-        \label{fig:trefoil_knot_001}
-    \end{figure}
-    A regular projection of a knot is not enough to completely identify the
-    embedding, we need to keep track of crossing information. This is done by
-    leaving gaps in the curve to indicate which strand is \textit{under} and
-    which is \textit{over}, as in Fig.~\ref{fig:trefoil_knot_001}. A
-    knot projection with the over and under crossings labeled is called a
-    \textbf{knot diagram}.
-    \par\hfill\par
-    Alexander and Briggs \cite{AlexanderBriggs1926}, and independently
-    Kurt Reidemeister \cite{Reidemeister1927}, proved in the 1920s that
-    knot equivalence can be demonstrated using knot diagrams and finite
-    sequences of \textbf{Reidemeister moves}, of which there are three types.
-    \par\hfill\par
-    \begin{figure}
-        \centering
-        \begin{minipage}[b]{0.4\textwidth}
+    are considered equivalent if there is an \textit{ambient isotopy}
+    between them. The definition is quite precise.
+    \newpage
+    \begin{definition}[\textbf{Ambient Isotopy}]
+        An ambient isotopy from a smooth embedding
+        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ to a smooth
+        embedding $\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ is a
+        smooth function
+        $H:\mathbb{R}^{3}\times[0,\,1]\rightarrow\mathbb{R}^{3}$
+        such that for each $t\in[0,\,1]$ the function
+        $H_{t}:\mathbb{R}^{3}\rightarrow\mathbb{R}^{3}$ defined by
+        $H_{t}(\mathbf{x})=H(\mathbf{x},\,t)$ is a diffeomorphism,
+        and such that:
+        \begin{subequations}
+            \begin{align}
+                H_{0}\big((x,\,y,\,0)\big)&=\gamma\big((x,\,y)\big)\\
+                H_{1}\big((x,\,y,\,0)\big)&=\gamma'\big((x,\,y)\big)
+            \end{align}
+        \end{subequations}
+        for each $(x,\,y)\in\mathbb{S}^{1}$. Smoothness of $H$ is taken in
+        the sense of the product smooth structure between a smooth manifold and
+        a smooth manifold with boundary.
+    \end{definition}
+    An ambient isomorphism is a smooth family of diffeomorphisms that
+    drags the first (smooth) knot to the second. A few comments on this.
+    Alternative and inequivalent definitions do exist in the literature.
+    The definition in \cite[p.~4]{CrowellFoxKnotTheory}, for example,
+    requires a single diffeomorphism
+    $f:\mathbb{R}^{3}\rightarrow\mathbb{R}^{3}$ that
+    takes the image of $\gamma$ to the image of $\gamma'$. Such a
+    definition is unable to distinguish a knot from its \textit{mirror},
+    the result of composing the knot with the reflection $z\mapsto{-z}$.
+    If one requires $f$ be \textit{orientation preserving}, then the
+    two definitions are equivalent.
+    \begin{definition}[\textbf{Smoothly Equivalent Knots}]
+        Smoothly equivalent knots are smooth embeddings
+        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ and
+        $\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that there
+        exists an ambient isotopy between them.
+    \end{definition}
+    As in the polygonal case, smooth equivalence yields an equivalence
+    relation. Any smooth knot can be made polygonal by choosing a sufficiently
+    small enough $\varepsilon>0$ and sampling the embedding such that no two
+    successive points are more than $\epsilon$ apart, and then connecting
+    the dots with line segments. By choosing $\epsilon$ small enough we ensure
+    the topology of the complement of the embeddings are identical. This yields
+    a bijection between the knot types of polygonal knots and the knot types
+    of smooth knots, and we may freely swap between the two notions without
+    ambiguity.
+    \subsection{Knot Diagrams}
+        Explicit embeddings are rarely given for smooth or polygonal knots.
+        Instead we often study knots via the use of \textbf{knot diagrams}.
+        Given a knot $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ and a
+        vector $\mathbf{v}\in\mathbb{S}^{2}$, by composing $\gamma$ with the
+        projection
+        $\textrm{proj}_{\mathbf{v}}:\mathbb{R}^{3}\rightarrow\mathbb{R}^{2}$ we
+        get a drawing in the plane. It is possible for the projection to lose
+        too much information, disabling us from identifying the knot from its
+        \textit{shadow}. We call projections that do not do this
+        \textit{regular}.
+        \begin{definition}[\textbf{Regular Knot Projection}]
+            A regular projection of a knot
+            $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ is a projection
+            $\textrm{proj}_{\mathbf{v}}:\mathbb{R}^{3}\rightarrow\mathbb{R}^{2}$
+            along a vector $\mathbf{v}\in\mathbb{S}^{2}$ such that for each
+            $\mathbf{p}\in\mathbb{R}^{2}$ the pre-image consists of at most two
+            points in the image of $\gamma$, and such that vertices of
+            $\gamma$ map to unique points in $\mathbb{R}^{2}$.
+        \end{definition}
+        For a smooth knot a regular projection is again one such that the
+        pre-image of each $\mathbf{p}\in\mathbb{R}^{2}$ consists of at most two
+        points in the image of $\gamma$, but also such that any two
+        $s,t\in\mathbb{S}^{1}$ that project to the same point do so
+        \textit{transversally}
+        \par\hfill\par
+        For the general knot $\gamma$ and vector $\mathbf{v}\in\mathbb{S}^{2}$
+        the resulting projection may not be regular. Fortunately we have the
+        following theorem \cite[p.~22]{LivingstonKnotTheory}.
+        \begin{theorem}
+            If $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ is a
+            (smooth or polygonal) knot, if $\mathbf{v}\in\mathbb{S}^{2}$, and if
+            $\varepsilon>0$, then there is an equivalent knot
+            $\gamma':\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that:
+            \begin{equation}
+                \max\big(
+                    \{\,||\gamma(t)-\gamma'(t)||\;:\;\,t\in\mathbb{S}^{1}\,\}
+                \big)<\varepsilon
+            \end{equation}
+            and such that the projection of $\gamma'$ along $\mathbf{v}$
+            is regular.
+        \end{theorem}
+        \begin{figure}
             \centering
-            \resizebox{\textwidth}{!}{%
-                \includegraphics{reidemeister_1_move.pdf}
-            }
-            \caption{Reidemeister I}
-            \label{fig:reidemeister_1_move}
-        \end{minipage}
-        \hfill
-        \begin{minipage}[b]{0.5\textwidth}
+            \includegraphics{trefoil_knot_001.pdf}
+            \caption{Trefoil Knot Diagram}
+            \label{fig:trefoil_knot_001}
+        \end{figure}
+        A regular projection of a knot is not enough to completely identify the
+        embedding, we need to keep track of crossing information. This is done
+        by leaving gaps in the curve to indicate which strand is \textit{under}
+        and which is \textit{over}, as in Fig.~\ref{fig:trefoil_knot_001}. A
+        knot projection with the over and under crossings labeled is called a
+        \textbf{knot diagram}.
+        \par\hfill\par
+        Alexander and Briggs \cite{AlexanderBriggs1926}, and independently
+        Kurt Reidemeister \cite{Reidemeister1927}, proved in the 1920s that
+        knot equivalence can be demonstrated using knot diagrams and finite
+        sequences of \textbf{Reidemeister moves}, of which there are three
+        types.
+        \par\hfill\par
+        \begin{figure}
             \centering
-            \resizebox{\textwidth}{!}{%
-                \includegraphics{reidemeister_2_move.pdf}
-            }
-            \caption{Reidemeister II}
-            \label{fig:reidemeister_2_move}
-        \end{minipage}
-    \end{figure}
-    \begin{figure}
-        \centering
-        \includegraphics{reidemeister_3_move.pdf}
-        \caption{Reidemeister III}
-        \label{fig:reidemeister_3_move}
-    \end{figure}
-    \textbf{Type I} (Fig.~\ref{fig:reidemeister_1_move}) allows us to undo
-    \textit{loops}. That is, if we find a portion of a knot diagram in which
-    a strand passes over itself, with no other strands of the knot being
-    included, we may cancel out this crossing and reduce it to a straight
-    line. This reduces the number of crossings in the diagram by one.
-    \par\hfill\par
-    \textbf{Type II} (Fig.~\ref{fig:reidemeister_2_move}) involves one strand
-    passing over another twice. If we see see one strand go over another, and
-    then again go over the same strand with no new crossings in between,
-    we may \textit{pull} the bottom strand from underneath the upper one,
-    reducing the number of crossings in the diagram by two.
-    \par\hfill\par
-    \textbf{Type III} (Fig.~\ref{fig:reidemeister_3_move}) is the most
-    complicated, and has the unfortunate fact that it does not reduce the
-    number of crossings in the diagram. If one strand passes entirely beneath
-    two other strands that are making a crossing, we may pull the first
-    strand below this crossing and on to the other side. In both diagrams we
-    have three crossings drawn.
-    \par\hfill\par
-    In addition to these three types, we are also allowed to use their
-    \textit{mirrors}. We may also reverse these three processes by introducing
-    loops or placing one strand on top of another. This is not a redundant task.
-    This will be made clearer after a definition.
-    \begin{definition}[\textbf{Crossing Number of a Knot}]
-        The crossing number of a knot is the minimum number of crossings
-        possible for all equivalent diagrams of the knot.
-    \end{definition}
-    Repeated application of Type I and Type II may result in
-    a knot diagram that has fewer crossings than the one you started with, but
-    this may only be a \textit{local minimum}. To achieve the true crossing
-    number you may first need to make the knot diagram \textit{more}
-    complicated by introducing new crossings via the reverse of these two moves.
-    Indeed, as we will discuss soon, you may need to make the knot diagram
-    a \textit{lot} more complicated before you can make it simpler.
-    \par\hfill\par
-    As mentioned, the sufficiency of these three moves was proved in the 1920s
-    by Alexander, Briggs, and Reidemeister. It is a relatively new fact that
-    all three are \textit{necessary}
-    \cite{OstlundReidemeisterMoves2001},
-    \cite{HaggeReidemeisterRequired2005}. We can easily prove the necessity of
-    Type I by introducing the \textbf{writhe} of a knot diagram, which
-    will be needed later for the Jones polynomial. To do this requires a
-    discussion of \textbf{oriented knots} and \textbf{crossing signs}.
-    \par\hfill\par
-    The circle $\mathbb{S}^{1}$ is an orientable manifold. You can orient it
-    clockwise or counterclockwise with respect to the $x$ axis. That is,
-    start at the $x$ axis and travel to the negative $y$ axis
-    (clockwise), or travel to the positive $y$ axis (counterclockwise).
-    We can copy our chosen orientation onto an embedding of
-    $\mathbb{S}^{1}$ into $\mathbb{R}^{3}$, giving us an oriented knot.
-    \begin{definition}[\textbf{Oriented Knot}]
-        An oriented Knot is a knot
-        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ equipped with an
-        orientation, or a chosen direction.
-    \end{definition}
-    If we project an oriented knot onto a knot diagram, we can make note of the
-    orientation by marking the diagram with arrows indicating the directions
-    at several points. This will be useful for several constructions.
-    \begin{definition}[\textbf{Oriented Knot Diagram}]
-        An oriented knot diagram is a knot diagram of an oriented knot where
-        the orientation of the knot is indicated by directed arrows.
-    \end{definition}
-    The trefoil is given an oriented knot diagram in
-    Fig.~\ref{fig:trefoil_knot_oriented_001}. While slightly artificial (it is
-    always possible to give a knot one of the two possible orientations), we
-    will use oriented knot diagrams to describe things like Gauss codes,
-    writhe, and the Jones polynomial, so the definition is not entirely
-    useless. Indeed, orientations give rise to the notion of
-    \textbf{invertible knots}, embeddings
-    $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ that are equivalent to
-    $\tilde{\gamma}:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ with
-    $\tilde{\gamma}\big((x,\,y)\big)=\gamma\big((x,\,-y)\big)$. That is,
-    knots that are equivalent to the same knot but with the orientation
-    reversed. The existence of \textit{non-invertible knots} was proven in
-    1963 by Hale Trotter (1931-2022 C.E.) \cite{TrotterInvertibleKnots1963}.%
-    \footnote{%
-        Alexander and Briggs mention in \cite[p.~563-564]{AlexanderBriggs1926}
-        that a knot need not be equivalent to its inverse, but do not provide
-        any examples.
-    }
-    \par\hfill\par
-    \begin{figure}
-        \centering
-        \includegraphics{trefoil_knot_oriented_001.pdf}
-        \caption{Oriented Trefoil}
-        \label{fig:trefoil_knot_oriented_001}
-    \end{figure}
-    Once an orientation is given, we may discuss the \textbf{sign} of a
-    crossing. Given an oriented knot diagram $K$ and any crossing in our
-    diagram, we rotate our heads until the \textit{forward} directions for
-    both strand is point upwards in the plane
-    (Fig.~\ref{fig:crossing_signs}). If left-to-right pass over
-    right-to-left, we call the crossing \textit{positive}. Otherwise,
-    if right-to-left passes over left-to-right, we call it crossing
-    negative. The \textbf{sign of the crossing} is the value $-1$ or $+1$,
-    depending on if the crossing is positive or negative. Being integer valued
-    we may sum the signs of all crossings of a knot diagram.
-    \begin{definition}[\textbf{Writhe of a Knot Diagram}]
-        The writhe of an oriented knot diagram is the sum of the signs of all
-        of the crossings in the diagram.
-    \end{definition}
-    It is worth noting that if one were to reverse the orientation, the
-    crossings in Fig.~\ref{fig:crossing_signs} will flip. After turning our
-    heads 180 degrees (carefully as to not fracture ones neck) we will
-    find that the image does not change. Hence the writhe is independent of
-    the orientation and is dependent only on the knot diagram itself. It is
-    not an invariant of the knot. While unchanged by the second and third
-    moves, Type I moves alter the writhe of the diagram by $+1$ or
-    $-1$. By introducing loops we see that the writhe a knot diagram can be
-    any integer for any knot type $K$. Since Type II and Type III do not alter
-    writhe, we see that the Type I move is a necessary Reidemeister move.
-    \begin{figure}
-        \centering
-        \includegraphics{crossing_signs.pdf}
-        \caption{Signs of Crossings}
-        \label{fig:crossing_signs}
-    \end{figure}
-    \par\hfill\par
-    Before moving on, we generalize knots slightly and discuss \textbf{links}.
-    \begin{definition}[\textbf{Link}]
-        A link with $N\in\mathbb{N}$ components is a polygonal embedding of
-        $\sqcup_{n=0}^{N}\mathbb{S}^{1}$ into $\mathbb{R}^{3}$.
-        That is, $N$ distinct knots
-        $\gamma_{n}:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that for all
-        $m\ne{n}$ we have
-        $\gamma_{m}[\mathbb{S}^{1}]\cap\gamma_{n}[\mathbb{S}^{1}]=\emptyset$.
-    \end{definition}
-    \begin{figure}
-        \centering
-        \includegraphics{hopf_link_diagram.pdf}
-        \caption{Hopf Link}
-        \label{fig:hopf_link_diagram}
-    \end{figure}
-    We consider $0\in\mathbb{N}$ to be valid and allow zero component links.
-    This can be useful for computational purpose, for example in the discussion
-    of the Kauffman bracket. $N=1$ is also allowed, in which case we have a
-    knot. The simplest non-trivial link is the \textit{Hopf link} which consists
-    of two components linked together with two crossings
-    (Fig.~\ref{fig:hopf_link_diagram}). This link can be found in
-    Jewish\footnote{%
-        The Josefov Jewish Council building in Prague contains the
-        Hopf link in the form of the star of David \cite{KatlasHopfLink},
-        similar to Fig.~\ref{fig:hopf_link_star_of_david}.
-    }
-    and Japanese\footnote{%
-        The \textit{Chigai Kuginuki}, the emblem, or \textit{mon},
-        of the As\~{o} family depicts a Hopf link \cite{KatlasHopfLink}
-        similar to the one shown in Fig.~\ref{fig:hopf_link_chigai_kuginuki}.
-    }
-    cultures, and almost certainly others. Another celebrated example is
-    the Whitehead link\footnote{%
-        Named after J. H. C. Whitehead who used the link in his
-        construction of the Whitehead
-        manifold, a contractible 3-manifold without boundary that is not
-        homeomorphic to Euclidean 3-space \cite{WhiteheadManifold}.
-        Whitehead had hoped the non-existence of such an object could be
-        used to prove the Poincar\'{e} conjecture
-        \cite{WhiteheadPoincareConjecture}.
-    }
-    (Fig.~\ref{fig:whitehead_link}) which can be found on the
-    hammer Mjolnir of the Norse god Thor
-    \cite[p.~309]{MonteliusMjolnirHopfLink}.
-    \begin{figure}
-        \centering
-        \begin{minipage}[b]{0.49\textwidth}
+            \begin{minipage}[b]{0.4\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{reidemeister_1_move.pdf}
+                }
+                \caption{Reidemeister I}
+                \label{fig:reidemeister_1_move}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.5\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{reidemeister_2_move.pdf}
+                }
+                \caption{Reidemeister II}
+                \label{fig:reidemeister_2_move}
+            \end{minipage}
+        \end{figure}
+        \begin{figure}
             \centering
-            \resizebox{\textwidth}{!}{%
-                \includegraphics{hopf_link_star_of_david.pdf}
-            }
-            \caption{Star of David}
-            \label{fig:hopf_link_star_of_david}
-        \end{minipage}
-        \hfill
-        \begin{minipage}[b]{0.49\textwidth}
-            \centering
-            \resizebox{\textwidth}{!}{%
-                \includegraphics{hopf_link_chigai_kuginuki.pdf}
-            }
-            \vspace{2em}
-            \caption{Chigai Kuginuki}
-            \label{fig:hopf_link_chigai_kuginuki}
-        \end{minipage}
-    \end{figure}
-    \begin{figure}
-        \centering
-        \resizebox{\textwidth}{!}{%
-            \includegraphics{whitehead_link_heraldic.pdf}
+            \includegraphics{reidemeister_3_move.pdf}
+            \caption{Reidemeister III}
+            \label{fig:reidemeister_3_move}
+        \end{figure}
+        \textbf{Type I} (Fig.~\ref{fig:reidemeister_1_move}) allows us to undo
+        \textit{loops}. That is, if we find a portion of a knot diagram in which
+        a strand passes over itself, with no other strands of the knot being
+        included, we may cancel out this crossing and reduce it to a straight
+        line. This reduces the number of crossings in the diagram by one.
+        \par\hfill\par
+        \textbf{Type II} (Fig.~\ref{fig:reidemeister_2_move}) involves one
+        strand passing over another twice. If we see see one strand go over
+        another, and then again go over the same strand with no new crossings
+        in between, we may \textit{pull} the bottom strand from underneath
+        the upper one, reducing the number of crossings in the diagram by two.
+        \par\hfill\par
+        \textbf{Type III} (Fig.~\ref{fig:reidemeister_3_move}) is the most
+        complicated, and has the unfortunate fact that it does not reduce the
+        number of crossings in the diagram. If one strand passes entirely
+        beneath two other strands that are making a crossing, we may pull the
+        first strand below this crossing and on to the other side. In both
+        diagrams we have three crossings drawn.
+        \par\hfill\par
+        In addition to these three types we are also allowed to use their
+        \textit{mirrors}. We may also reverse these three processes by
+        introducing loops or placing one strand on top of another. This is not
+        a redundant task as will be made clearer after a definition.
+        \begin{definition}[\textbf{Crossing Number of a Knot}]
+            The crossing number of a knot is the minimum number of crossings
+            possible for all equivalent diagrams of the knot.
+        \end{definition}
+        Repeated application of Type I and Type II may result in
+        a knot diagram that has fewer crossings than the one you started with,
+        but this may only be a \textit{local minimum}. To achieve the true
+        crossing number you may first need to make the knot diagram
+        \textit{more} complicated by introducing new crossings via the reverse
+        of these two moves. Indeed, as we will discuss soon, you may need to
+        make the knot diagram a \textit{lot} more complicated before you can
+        make it simpler.
+        \par\hfill\par
+        As mentioned, the sufficiency of these three moves was proved in the
+        1920s by Alexander, Briggs, and Reidemeister. It is a relatively new
+        fact that all three are \textit{necessary}
+        \cite{OstlundReidemeisterMoves2001},
+        \cite{HaggeReidemeisterRequired2005}. We can easily prove the necessity
+        of Type I by introducing the \textbf{writhe} of a knot diagram, which
+        will be needed later for the Jones polynomial. To do this requires a
+        discussion of \textbf{oriented knots} and \textbf{crossing signs}.
+        \par\hfill\par
+        The circle $\mathbb{S}^{1}$ is an orientable manifold. You can orient it
+        clockwise or counterclockwise with respect to the $x$ axis. That is,
+        start at the $x$ axis and travel to the negative $y$ axis
+        (clockwise), or travel to the positive $y$ axis (counterclockwise).
+        We can copy our chosen orientation onto an embedding of
+        $\mathbb{S}^{1}$ into $\mathbb{R}^{3}$, giving us an oriented knot.
+        \begin{definition}[\textbf{Oriented Knot}]
+            An oriented Knot is a knot
+            $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ equipped with an
+            orientation, or a chosen direction.
+        \end{definition}
+        If we project an oriented knot onto a knot diagram we can make note of
+        the orientation by marking the diagram with arrows indicating the
+        directions at several points.\footnote{%
+            Technically one arrow is sufficient, but this may cause your
+            reader to become annoyed.
         }
-        \caption{Whitehead Link}
-        \label{fig:whitehead_link}
-    \end{figure}
-    \par\hfill\par
-    Many notions for knots may be mimicked for links. In particular we may
-    consider \textit{link equivalence}, \textit{link types},
-    \textit{regular link projections}, and \textit{link diagrams}, and we
-    may perform all of this in the smooth setting where the embeddings are
-    done smoothly. We may also orient our links and define the
-    writhe of an oriented link
-    diagram. One must be careful in the computation of writhe. Unlike the
-    one-component knot setting, where the writhe is independent of the
-    orientation, for link diagrams the writhe is indeed orientation dependent.
-    In general, given an $N\in\mathbb{N}$ component link, there are
-    $2^{N}$ possible ways to orient it. If we order the components and denote
-    $0$ for a clockwise orientation and $1$ for a counterclockwise one, we
-    obtain a string on $N$ characters where the $k^{\small\textrm{th}}$ entry
-    corresponds to the orientation of the $k^{\small\textrm{th}}$ component.
-    The writhe associated to this combination of orientations will be the same
-    as the writhe of \textit{complement} of this string, the string
-    obtained by swapping all zeros with ones and vice-versa,
-    by an argument identical to the
-    one-component knot case. So there are at most $2^{N-1}$ possible writhes
-    for a link, and this is sharp. The Hopf link in
-    Fig.~\ref{fig:hopf_link_diagram} can take on writhes of $+2$ and $-2$,
-    pending the orientation given. This will cause a slight inconvenience in
-    our definition of the Jones polynomial.
+        This will be useful for several constructions.
+        \begin{definition}[\textbf{Oriented Knot Diagram}]
+            An oriented knot diagram is a knot diagram of an oriented knot
+            where the orientation of the knot is indicated by directed arrows.
+        \end{definition}
+        The trefoil is given an oriented knot diagram in
+        Fig.~\ref{fig:trefoil_knot_oriented_001}. While slightly artificial (it
+        is always possible to give a knot one of the two possible
+        orientations), we will use oriented knot diagrams to describe
+        things like Gauss codes, writhe, and the Jones polynomial, so the
+        definition is not entirely useless. Indeed, orientations give rise to
+        the notion of \textbf{invertible knots}, embeddings
+        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ that are equivalent to
+        $\tilde{\gamma}:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ with
+        $\tilde{\gamma}\big((x,\,y)\big)=\gamma\big((x,\,-y)\big)$. That is,
+        knots that are equivalent to the same knot but with the orientation
+        reversed. The existence of \textit{non-invertible knots} was proven in
+        1963 by Hale Trotter (1931-2022 C.E.)
+        \cite{TrotterInvertibleKnots1963}.\footnote{%
+            Alexander and Briggs mention in
+            \cite[p.~563-564]{AlexanderBriggs1926} that a knot need not
+            be equivalent to its inverse, but do not provide any examples.
+        }
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_oriented_001.pdf}
+            \caption{Oriented Trefoil}
+            \label{fig:trefoil_knot_oriented_001}
+        \end{figure}
+        Once an orientation is given, we may discuss the \textbf{sign} of a
+        crossing. A rigorous definition can be given for smooth embeddings using
+        linear algebra.
+        \begin{definition}[\textbf{Sign of a Crossing}]
+            The sign of a crossing in an oriented knot diagram is the sign of
+            the determinant of the matrix $[\dot{\gamma}(s)\;\dot{\gamma}(t)]$
+            formed by the velocity vectors of $\gamma$ at the unique points
+            $s,t\in\mathbb{S}^{1}$ that project to the crossing, $s$
+            representing the over strand and $t$ representing the under strand.
+        \end{definition}
+        For the sake of being well-defined, and for the sake of computation, the
+        notions \textit{under} and \textit{over} need to be recoverable from the
+        embedding $\gamma$ and the vector $\mathbf{v}$ defining the projection.
+        For $s,t\in\mathbb{S}^{1}$ projecting to the same point along
+        $\mathbf{v}$ the point whose image under $\gamma$ has a greater
+        component along $\mathbf{v}$ is the over strand, and the lesser
+        is the under strand. This makes sense if one thinks of projecting
+        along $\mathbf{v}$ as an orthographic operation, placing an observer
+        infinitely far away in the direction of $\mathbf{v}$. The strand
+        with greater component along $\mathbf{v}$ is the one such an
+        observer would see as the over strand. Note that since $\gamma$ is
+        an embedding the components of $\gamma(s)$ and $\gamma(t)$ along
+        $\mathbf{v}$ will differ, otherwise we'd have $\gamma(s)=\gamma(t)$.
+        \par\hfill\par
+        Since knot diagrams are required to produce transversal crossings, the
+        velocity vectors will span the plane and the determinant will be
+        non-zero. The sign is thus plus or minus one. In principle we now have
+        a straight-forward way of computing the sign of any crossing in a
+        diagram, but this can be made far more visual.
+        Given an oriented knot diagram $K$ and any crossing in our
+        diagram, we rotate our heads until the \textit{forward} directions for
+        both strands are pointing upwards in the plane
+        (Fig.~\ref{fig:crossing_signs}). If left-to-right passes over
+        right-to-left we call the crossing \textit{positive}. Otherwise,
+        if right-to-left passes over left-to-right, we call it negative.
+        The sign of the crossing is the value $-1$ or $+1$, depending on if
+        the crossing is negative or positive. Being integer valued we may sum
+        the signs of all crossings of a knot diagram.
+        \begin{figure}
+            \centering
+            \includegraphics{crossing_signs.pdf}
+            \caption{Signs of Crossings}
+            \label{fig:crossing_signs}
+        \end{figure}
+        \begin{definition}[\textbf{Writhe of a Knot Diagram}]
+            The writhe of an oriented knot diagram is the sum of the signs of
+            all of the crossings in the diagram.
+        \end{definition}
+        It is worth noting that if one were to reverse the orientation the
+        crossings in Fig.~\ref{fig:crossing_signs} will flip. After turning our
+        heads 180 degrees (carefully as to not fracture ones neck) we will
+        find that the image does not change. Using the rigorous definition this
+        can also be seen since the mapping $(x,\,y)\mapsto(-x,\,-y)$ is
+        orientation preserving, being given by a rotation, and does not change
+        the sign of the original determinant. Hence the writhe is independent of
+        the orientation and is dependent only on the knot diagram itself. It is
+        not an invariant of the knot. While unchanged by the second and third
+        moves, Type I moves alter the writhe of the diagram by $+1$ or
+        $-1$. By introducing loops we see that the writhe a knot diagram $K$
+        can be any integer for a given knot type $\mathcal{K}$.
+        Since Type II and Type III do not
+        alter writhe, we see that the Type I move is required.
+    \subsection{Links}
+        We now generalize knots slightly and discuss \textbf{links}.
+        \begin{definition}[\textbf{Link}]
+            A link with $N\in\mathbb{N}$ components is a polygonal embedding of
+            $\sqcup_{n=0}^{N-1}\mathbb{S}^{1}$ into $\mathbb{R}^{3}$.
+            That is, $N$ distinct knots
+            $\gamma_{n}:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that for
+            all $m\ne{n}$ we have
+            $\gamma_{m}[\mathbb{S}^{1}]\cap\gamma_{n}[\mathbb{S}^{1}]=\emptyset$.
+        \end{definition}
+        \begin{figure}
+            \centering
+            \includegraphics{hopf_link_diagram.pdf}
+            \caption{Hopf Link}
+            \label{fig:hopf_link_diagram}
+        \end{figure}
+        We consider $0\in\mathbb{N}$ to be valid and allow zero component links.
+        This can be useful for computational purpose, for example in the
+        discussion of the Kauffman bracket. $N=1$ is also allowed, in which
+        case we have a knot. The simplest non-trivial link is the
+        \textit{Hopf link} which consists of two components linked together
+        with two crossings (Fig.~\ref{fig:hopf_link_diagram}).
+        This link can be found in Jewish\footnote{%
+            The Josefov Jewish Council building in Prague contains the
+            Hopf link in the form of the star of David \cite{KatlasHopfLink},
+            similar to Fig.~\ref{fig:hopf_link_star_of_david}.
+        }
+        and Japanese\footnote{%
+            The \textit{Chigai Kuginuki}, the emblem, or \textit{mon},
+            of the As\~{o} family depicts a Hopf link \cite{KatlasHopfLink}
+            similar to the one shown in Fig.~\ref{fig:hopf_link_chigai_kuginuki}.
+        }
+        cultures, and almost certainly others. Another celebrated example is
+        the Whitehead link\footnote{%
+            Named after J. H. C. Whitehead who used the link in his
+            construction of the Whitehead
+            manifold, a contractible 3-manifold without boundary that is not
+            homeomorphic to Euclidean 3-space \cite{WhiteheadManifold}.
+            Whitehead had hoped the non-existence of such an object could be
+            used to prove the Poincar\'{e} conjecture
+            \cite{WhiteheadPoincareConjecture}.
+        }
+        (Fig.~\ref{fig:whitehead_link}) which can be found on the
+        hammer Mjolnir of the Norse god Thor
+        \cite[p.~309]{MonteliusMjolnirHopfLink}.
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{hopf_link_star_of_david.pdf}
+                }
+                \caption{Star of David}
+                \label{fig:hopf_link_star_of_david}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{hopf_link_chigai_kuginuki.pdf}
+                }
+                \vspace{2em}
+                \caption{Chigai Kuginuki}
+                \label{fig:hopf_link_chigai_kuginuki}
+            \end{minipage}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{whitehead_link_heraldic.pdf}
+            }
+            \caption{Whitehead Link}
+            \label{fig:whitehead_link}
+        \end{figure}
+        \par\hfill\par
+        Many notions for knots may be mimicked for links. In particular we may
+        consider \textit{link equivalence}, \textit{link types},
+        \textit{regular link projections}, and \textit{link diagrams}, and we
+        may perform all of this in the smooth setting where the embeddings are
+        done smoothly. We may also orient our links and define the
+        writhe of an oriented link
+        diagram. One must be careful in the computation of writhe. Unlike the
+        one-component knot setting, where the writhe is independent of the
+        orientation, for link diagrams the writhe is indeed orientation
+        dependent. In general, given an $N\in\mathbb{N}$ component link,
+        there are $2^{N}$ possible ways to orient it. If we order the
+        components and denote $0$ for a clockwise orientation and $1$ for a
+        counterclockwise one, we obtain a string on $N$ characters where the
+        $k^{\small\textrm{th}}$ entry corresponds to the orientation of the
+        $k^{\small\textrm{th}}$ component. The writhe associated to this
+        combination of orientations will be the same as the writhe of
+        \textit{complement} of this string, the string obtained by swapping all
+        zeros with ones and vice-versa, by an argument identical to the
+        one-component knot case. So there are at most $2^{N-1}$ possible writhes
+        for a link, and this is sharp. The Hopf link in
+        Fig.~\ref{fig:hopf_link_diagram} can take on writhes of $+2$ and $-2$,
+        pending the orientation given. This will cause a slight inconvenience
+        in our definition of the Jones polynomial.
