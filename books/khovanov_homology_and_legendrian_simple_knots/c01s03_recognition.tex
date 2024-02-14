@@ -1,0 +1,76 @@
+\section{Knot Recognition}
+    Now that we have the means to represent knots, we take a brief moment to
+    discuss \textit{recognizing} them. Knot theory is an extremely
+    challenging field when it comes to numerical
+    analysis. Many other tasks regularly enjoy polynomial time algorithms and
+    highly optimized implementations. As a popular example, signal processing
+    makes frequent use of the Fast Fourier Transform (FFT) which runs in
+    $O\big(N\log(N)\big)$ time. Let it be known that the dreaded na\"{i}ve
+    Fourier transform runs with a \textit{horrid} $O(N^{2})$ complexity.
+    The inferior $O(N^{2})$ algorithm is considered completely unusable by
+    those in engineering and physics.
+    Professionals in other fields may then think of
+    knot theorists as masochists when they hear that $O(2^{N})$ and
+    $O(N!)$ algorithms are considered decent.
+    \par\hfill\par
+    The quintessential problem in knot theory is that of discerning two knot
+    diagrams. As mentioned,
+    (\cite{Reidemeister1927}, \cite{AlexanderBriggs1926}) it has been known
+    since the 1920s that two knots are equivalent if and only if there is a
+    finite sequence of Reidemeister moves between them. One may then ask
+    \textit{how many moves are needed}?
+    In \cite{HassLagarias2001} Hass and Lagarias found an
+    explicit upper bound for the number of moves required to convert an
+    unknot with $N$ crossings to its usual zero crossing diagram. The
+    bound is $2^{cN}$ where $c$ is the constant $10^{11}$.%
+    \footnote{%
+        The authors remarked that this can be improved.
+        For the simplest input of $N=1$ we get an upper bound of
+        $2.5\times{10}^{30,102,999,566}$ Reidemeister moves,
+        when only one is required.
+    }
+    Henrich and Kauffman were able to improve this for all \textit{reasonable}
+    knot diagrams with a factorial expression. The complexity only grows
+    larger than the Hass-Lagarias formula for knots with more than
+    $10^{10^{10}}$ crossings \cite{HenrichKauffman2010Unknotting}. More
+    recently in 2015 Lackenby discovered a polynomial bound of
+    $(236N)^{11}$ \cite{Lackenby2015Unknotting}.
+    \par\hfill\par
+    It must be reiterated that such bounds are simply for the
+    \textit{unknot}, the simplest of all knots.
+    A simple algorithm for detecting if any knot diagram corresponds to the
+    unknot can be made using these bounds. Loop through all possible
+    combinations of Reidemeister moves of length $(236N)^{11}$ for your
+    initial $N$ crossing knot diagram and if you never
+    find the standard diagram for the unknot you know your original diagram
+    is of a different knot type. In practice the universe will reset itself
+    before your algorithm terminates when implemented on real hardware. That is,
+    there are around $3^{(236N)^{11}}$ combinations of Reidemeister moves to
+    check. Inputting something as small as $N=2$ yields roughly
+    $10^{10^{29}}$ combinations. For comparison, the age of the universe is
+    about $10^{18}$ seconds, and even if we could check, say, one million
+    combinations per second, such super long time scales are starting to
+    approach Poincar\'{e} recurrence.\footnote{%
+        Under several assumptions for our universe.
+    }
+    \par\hfill\par
+    Detecting the unknot requires alternative methods. One of the methods we
+    will discuss in detail is \textit{Khovanov homology}, which was shown in
+    2011 by Kronheimer and Mrowka to detect the unknown
+    \cite{KronheimerMrowka2011KhovanovUnknot}. The na\"{i}ve algorithm runs
+    like $O(2^{N})$, which is still bad but significantly better than our
+    previous $O(3^{(236N)^{11}})$ approach. Morever,
+    Bar-Natan's 2006 paper provides some excellent speed boosts
+    \cite{BarNatan2006FASTKH} allowing us to run the computation
+    (experimentally) like $O(2^{\sqrt{N}})$.
+    \par\hfill\par
+    Recognizing the unknot is still a very active area of research. In 2021
+    Lackenby developed an algorithm that runs in
+    $O(2^{\log(N)^{3}})$, quasi-polynomial time
+    \cite{LackenBy2021QuasiPolyUnknotting}. The complexity of this problem
+    has been well studied. In 2014 Kuperberg proved (assuming the generalized
+    Riemann hypothesis is true) that knottedness is both \texttt{NP} and
+    \texttt{co-NP} \cite{Kuperberg2014KnottednessNP}. This result has also been
+    proved without the assumption of the generalized Riemann hypothesis
+    \cite{Lackenby2021UnknotNP}.
+
