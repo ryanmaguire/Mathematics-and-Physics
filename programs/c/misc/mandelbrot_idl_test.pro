@@ -1,22 +1,31 @@
-function mandelbrot, xcenter, ycenter, radius, size, max_iter, xout, yout
-   if (n_elements(size) eq 0) then size=100
-   if (n_elements(max_iter) eq 0) then max_iter=255
-   dx = double(radius)*2/size
-   xstart = double(xcenter - radius)
-   xstop = double(xcenter + radius)
-   ystart = double(ycenter - radius)
-   ystop = double(ycenter + radius)
-   result = lonarr(size, size)
-   xout = xstart + findgen(size)*dx
-   yout = ystart + findgen(size)*dx
-   s = call_external('mandelbrot.so', 'mandelbrot', $
-                      long(size), $
-                      long(size), $
-                      double(xstart), $
-                      double(ystart), $
-                      double(dx), $
-                      double(dx), $
-                      long(max_iter), $
-                      result)
-   return, result
-end
+FUNCTION MANDELBROT, XCENTER, YCENTER, RADIUS, IMAGE_SIZE, MAX_ITER
+
+   IF N_ELEMENTS(IMAGE_SIZE) EQ 0 THEN BEGIN
+      IMAGE_SIZE = 100
+   ENDIF
+
+   IF N_ELEMENTS(MAX_ITER) EQ 0 THEN BEGIN
+      MAX_ITER = 255
+   ENDIF
+
+   DX = RADIUS * 2.0 / IMAGE_SIZE
+   XSTART = XCENTER - RADIUS
+   YSTART = YCENTER - RADIUS
+
+   RESULT = LONARR(IMAGE_SIZE, IMAGE_SIZE)
+
+   s = CALL_EXTERNAL(   $
+      './mandelbrot.so',  $
+      'mandelbrot',     $
+      LONG(IMAGE_SIZE), $
+      LONG(IMAGE_SIZE), $
+      DOUBLE(XSTART),   $
+      DOUBLE(YSTART),   $
+      DOUBLE(DX),       $
+      DOUBLE(DX),       $
+      LONG(MAX_ITER),   $
+      RESULT            $
+   )
+
+   RETURN, RESULT
+END
