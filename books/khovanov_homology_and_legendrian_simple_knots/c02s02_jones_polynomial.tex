@@ -84,11 +84,15 @@
         is expliclity computed using the braid representation. For coprime
         pairs $(p,\,q)$ the Jones polynomial of $T_{p,\,q}$ is given by:
         \begin{equation}
+            \label{eqn:jones_polynomial_torus_knot}
             J_{T_{p,\,q}}(t)
             =t^{\frac{(p-q)(q-1)}{2}}
             \frac{1-t^{p+1}-t^{q+1}+t^{q+p}}{1-t^{2}}
         \end{equation}
-        We will make free use of this fact throughout.
+        This is a Laurent polynomial in $t^{1/2}$. In the next section we will
+        be using Laurent polynomials in $q$. To swap between the two we make
+        the substitution $q^{2}=t$. We will make free use of
+        Eqn.~\ref{eqn:jones_polynomial_torus_knot} throughout our computations.
     \subsection{Kauffman Bracket}
         The polynomial is made pictorial, and lends itself more easily
         to computation, via the Kauffman bracket polynomial. The Jones
@@ -540,7 +544,6 @@ struct crossing_indices *get_indices(const struct knot *K)
         \par\hfill\par
         We create a buffer that is \texttt{4*MAX\_CROSSINGS} long to keep track
         of which roads we have visited. Our code starts as follows.
-        \newpage
 \begin{lstlisting}[style=CStyle]
 unsigned int
 circle_count(const struct knot *K,
@@ -578,6 +581,7 @@ circle_count(const struct knot *K,
         with all variables and arrays initialized we start the bulk of the
         algorithm and count the number of cycles corresponding to the given
         resolution. We loop over the $4N$ roads in our thickened knot.
+        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber = 34]
     for (n = 0U; n < 4U*K->number_of_crossings; ++n)
     {
@@ -636,6 +640,7 @@ circle_count(const struct knot *K,
 \end{lstlisting}
         We now loop over all of the roads and compute the number of cycles. We
         start with:
+        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber = 64]
         while (!have_visited[road_index])
         {
@@ -654,7 +659,6 @@ circle_count(const struct knot *K,
         $0\mapsto{1}$, $1\mapsto{0}$, $2\mapsto{3}$, and $3\mapsto{2}$. This
         is described by $y=(5-x)\textrm{ mod }4$. Negative crossings may be
         handled by mirroring this. We obtain:
-        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber = 71]
             if (sign == positive_crossing)
             {
@@ -985,13 +989,212 @@ get_road_number(const struct knot *K,
         \subsection{Tait Graph Expansion}
             The next method of computation has two uses for us. Firstly, it is
             very efficient in terms of speed, and secondly it will give us an
-            explicit formula for the Jones polynomial of \textit{twist knots}.
+            explicit formula for the Jones polynomial of \textbf{twist knots}.
             Later on we will appeal to this formula for calculations
             involving twist of over 90 crossings. The exponential nature of
             the algorithms we've thus far presented would otherwise prevent us
             from doing this.
             \par\hfill\par
-            We appeal to the Tait graph. Given an oriented knot or link diagram
+            We start with the Tait graph. Given a knot or link diagram
             the smoothing operations for the Kauffman bracket can translate to
-            operations on the Tait graph.
-        %\subsection{Torus and Twist Knots}
+            operations on the Tait graph. This can be seen in
+            Fig.~\ref{fig:tait_graph_kauffman_negative_smoothing} for negative
+            (red) edges in the graph. For positive edges we would rotate the
+            picture.
+            \par\hfill\par
+            \begin{figure}
+                \centering
+                \resizebox{0.5\textwidth}{!}{%
+                    \includegraphics{tait_graph_kauffman_negative_smoothing.pdf}
+                }
+                \caption{Smoothing a Negative Edge on the Tait Graph}
+                \label{fig:tait_graph_kauffman_negative_smoothing}
+            \end{figure}
+            We see that the Kauffman relation tells us to contract and delete
+            edges, which corresponds to merging and separating faces in the
+            knot diagram. That is, if $T$ is the Tait graph of a knot diagram
+            $K$, smoothing at the $n^{\small\textrm{th}}$ crossing corresponds
+            to smoothing the $n^{\small\textrm{th}}$ edge via:
+            \begin{align}
+                \label{eqns:kauffman_tait_relation}
+                \langle{T}\rangle
+                &=\langle{{T^{n_{-}}_{\textrm{delete}}}}\rangle
+                -q\langle{{T^{n_{-}}_{\textrm{contract}}}}\rangle\\
+                \langle{T}\rangle
+                &=\langle{{T^{n_{+}}_{\textrm{contract}}}}\rangle
+                -q\langle{{T^{n_{+}}_{\textrm{delete}}}}\rangle
+            \end{align}
+            where $n_{\pm}$ indicates whether the edge is positive (blue) or
+            negative (red), respectively.
+            Separating disks will still result in disks, but
+            merging is more subtle. If we are merging two distinct disks we are
+            essentially creating a dogbone, which is still topologically a
+            disk. The issue arises when the two dots in the left hand side of
+            Fig.~\ref{fig:tait_graph_kauffman_negative_smoothing} represent
+            the same face. In such an event we are creating a topological
+            annulus, which is not allowed for Tait graphs since the vertices
+            must represent disks in the knot diagram. The Kauffman reduction
+            $\langle{\mathbb{S}^{1}\sqcup{K}}\rangle=(q+q^{-1})\langle{K}\rangle$
+            comes to the rescue. The inner circle of our annulus corresponds to
+            a cycle in the smoothing of the knot diagram. We may contract it to
+            a point, turning our annulus into a disk, at the cost of a
+            $q+q^{-1}$ term floating around.
+            \begin{figure}
+                \centering
+                \resizebox{0.5\textwidth}{!}{%
+                    \includegraphics{tait_graph_reidemeister_1_dual.pdf}
+                }
+                \caption{Loops in the Tait Graph}
+                \label{fig:tait_graph_reidemeister_1_dual}
+            \end{figure}
+            \par\hfill\par
+            In the case of a blue edge we get:
+            \begin{align}
+                \langle{T}\rangle
+                &=\langle{T^{n_{+}}_{\textrm{contract}}}\rangle
+                -q\langle{T^{n_{+}}_{\textrm{delete}}}\rangle\\
+                &=(q+q^{-1})\langle{T^{n_{+}}_{\textrm{delete}}}\rangle
+                -q\langle{T^{n_{+}}_{\textrm{delete}}}\rangle\\
+                &=q^{-1}\langle{T^{n_{+}}_{\textrm{delete}}}\rangle
+            \end{align}
+            For red we have:
+            \begin{align}
+                \label{eqn:tait_graph_kauffman_bracket_negative_loop_reduction}
+                \langle{T}\rangle
+                &=\langle{{T^{n_{-}}_{\textrm{delete}}}}\rangle
+                -q\langle{{T^{n_{-}}_{\textrm{contract}}}}\rangle\\
+                &=\langle{{T^{n_{-}}_{\textrm{delete}}}}\rangle
+                -q(q+q^{-1})\langle{{T^{n_{-}}_{\textrm{delete}}}}\rangle\\
+                &=-q^{2}\langle{{T^{n_{-}}_{\textrm{delete}}}}\rangle
+            \end{align}
+            This computation merely amounts to the fact that the Kauffman
+            bracket polynomial is not invariant under Type I moves. It does,
+            however, show that the effect of Type I moves on a diagram is
+            is simply shifts of the degree and, possibly, changes in the signs
+            of the coefficients.
+            \par\hfill\par
+            At the end of this deletion and contraction algorithm one will have
+            dots on the plane. These corresponds to isolated faces bounded
+            by cycles. To complete the computation we remove all of these
+            points and replace them with $(q+q^{-1})^{m}$ where $m$ is the
+            number of dots.
+            \par\hfill\par
+            As noted there is a lot of practical uses for this idea. Firstly
+            it presents another algorithm, but one that operates on graphs.
+            Second, and perhaps most important for us, it gives us a fairly
+            simple means of computing the Jones polynomial of twist knots.
+            Lastly, and perhaps most important for knot theorists, it can be
+            modified and used to prove some of the original Tait conjectures.
+            In \cite{ThistlethwaiteSpanningTree} the Kauffman bracket is
+            computed by attaching monomials to each of the spanning trees of
+            the Tait graph and then summing over them. This is a great
+            theoretical tool, but also a powerful computational one.
+            It is known that planar graphs have at most
+            $O(r^{M})$ spanning trees with $r\approx{5.3}$ and where $M$ is the
+            number of vertices \cite{NumberOfSpanningTrees}. This is the
+            worst-case analysis, however, and luck occasionally strikes and
+            gives us a much better bound. The Tait graph for the standard
+            right and left trefoil diagrams have three spannings trees. Indeed,
+            for $T_{2,\,p}$ torus knots there are $p$ spanning trees, reducing
+            the computation to linear.\footnote{%
+                Though, the Jones polynomial has already been computed for
+                all torus knots in Eqn.~\ref{eqn:jones_polynomial_torus_knot}.
+            }
+            \par\hfill\par
+            We now put Eqns.~\ref{eqns:kauffman_tait_relation} to good use
+            and compute the Jones polynomial of all twist knots. To do this
+            we first describe twist knots. The twist knot with $n\in\mathbb{Z}$
+            twists starts by performing $n$ Type I moves on the unit circle,
+            creating a \textit{positive} Type I loop for $n>0$ and a
+            \textit{negative} Type I loop for $n<0$. To create a non-trivial
+            knot we then stretch the ends around and link them together by
+            cutting at a point, lacing, and then tying
+            (see Fig.~\ref{fig:twist_knot_001}).
+            \begin{figure}
+                \centering
+                \resizebox{0.6\textwidth}{!}{%
+                    \includegraphics{twist_knot_001.pdf}
+                }
+                \caption{Twist Knots}
+                \label{fig:twist_knot_001}
+            \end{figure}
+            \begin{figure}
+                \centering
+                \resizebox{0.6\textwidth}{!}{%
+                    \includegraphics{twist_knot_tait_graph_001.pdf}
+                }
+                \caption{Tait Graph of Twist Knots}
+                \label{fig:twist_knot_tait_graph_001}
+            \end{figure}
+            By choosing one of the inner loop faces as the start we obtain a
+            pleasant Tait graph to work with
+            (Fig.~\ref{fig:twist_knot_tait_graph_001}). By performing the
+            Kauffman relation on the bottom right-most edge we obtain
+            Fig.~\ref{fig:twist_knot_tait_graph_kauffman_relation}. The
+            1-smoothing yields a digon with a chain attached ending in a leaf.
+            The dual of a leaf is a loop with the sign flipped
+            (see Fig.~\ref{fig:tait_graph_reidemeister_1_dual}).
+            Appealing to
+            Eqn.~\ref{eqn:tait_graph_kauffman_bracket_negative_loop_reduction}
+            deleting a positive leaf scaled the Kauffman bracket by
+            $-q^{2}$. For the $K_{N}$ twist knot there will be
+            $N-1$ vertices along the chain, deleting all of them yields
+            $(-q^{2})^{N-1}\langle{H}\rangle$ where $H$ is the knot diagram
+            corresponding to the digon, which happens to be the Hopf link.
+            \par\hfill\par
+            The 0-smoothing is even nicer, we have obtained the Tait graph for
+            the $K_{N-1}$ twist knot. We thus have the following recursion
+            relation.
+            \begin{figure}
+                \centering
+                \includegraphics{twist_knot_tait_graph_kauffman_relation.pdf}
+                \caption{Kauffman Relation for the Tait Graph of Twist Knots}
+                \label{fig:twist_knot_tait_graph_kauffman_relation}
+            \end{figure}
+            \begin{align}
+                \langle{K_{N+1}}\rangle
+                &=\langle{K_{N}}\rangle
+                -q(-q^{2})^{N}\langle{H}\rangle\\
+                &=\langle{K_{N}}\rangle
+                +(-1)^{N+1}q^{2N+1}\langle{H}\rangle
+            \end{align}
+            We may expand this recusion out $N$ times until we get $K_{1}$,
+            which is the left-handed trefoil. Our formula becomes
+            \begin{equation}
+                \langle{K_{N+1}}\rangle
+                =\langle{K_{1}}\rangle
+                +\langle{H}\rangle
+                \sum_{k=1}^{k}(-1)^{k+1}q^{2k+1}
+            \end{equation}
+            Using the geometric series we get
+            \begin{equation}
+                \langle{K_{N+1}}\rangle
+                =\langle{K_{1}}\rangle+\langle{H}\rangle
+                \frac{q^{3}}{1+q^{2}}\big(1+(-1)^{N+1}q^{2N}\big)
+            \end{equation}
+            so the computation of the Kauffman bracket for twist knots is
+            reduced to the left-handed trefoil and the Hopf link (in their
+            standard diagrams). The left-handed trefoil produces
+            \begin{equation}
+                \langle{K_{1}}\rangle=(q+q^{-1})(q^{-2}-1-q^{4})
+            \end{equation}
+            and the Hopf link yields
+            \begin{equation}
+                \langle{H}\rangle=
+                (q+q^{-1})(q^{-1}+q^{3})
+            \end{equation}
+            After computing the writhes of the diagram and normalizing
+            by $q+q^{-1}$ we obtain the Jones polynomial:
+            \begin{equation}
+                J_{K_{N}}(q)
+                =\begin{cases}
+                    \frac{q^{6}+q^{2}-q^{6-2N}+q^{-2N}}{1+q^{2}}
+                    &N\textrm{ even}\\
+                    \frac{1+q^{-4}+q^{-2N}-q^{-2N-6}}{1+q^{2}}
+                    &N\textrm{ odd}
+                \end{cases}
+            \end{equation}
+            This computation holds for $N>0$. For $N<0$ we use the
+            reflection formula by noticing that $K_{N}$ and $K_{-1-N}$ are
+            mirrors of each other. We could also repeat the Tait graph
+            computation using red edges, either works.

@@ -1,39 +1,108 @@
 \section{Khovanov Homology}
-    The Khovanov homology of a link is a powerful, if computationally
-    expensive%
-    \footnote{%
-        The na\"{i}ve algorithm is exponential in the number of
-        crossings. Improvements by Bar-Natan \cite{BarNatanFastKhoHo}
-        have sped up computations but no polynomial-time algorithm is
-        known at the time of this writing.
-    },
-    invariant first introduced by Mikhail Khovanov
-    \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
-    for an excellent introduction). It is closely related to the Jones
-    polynomial, but able to distinguish many more knots and links. The
-    homology groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum
-    of homogeneous components $KH_{\ell}^{r}(L)$ and the
-    \textit{Khovanov Polynomial} (See \cite{KatlasKhoHo}) is given by:
+    The next invariant up is the one we're most concerned with.
+    \textbf{Khovanov homology} is a link invariant that generalizes the
+    Jones polynomial by \textit{categorifying} it. The concept was invented by
+    Mikhail Khovanov in \cite{Khovanov1999CatJonesPoly} but we will be
+    following the styling of \cite{BarNatanKhovanovJones} more closely.
+    \par\hfill\par
+    We start with the Kauffman relations, but instead of attaching polynomials
+    to our diagram we use chain complexes. The \textit{Khovanov} bracket of a
+    link diagram $L$ is given recursively via smoothings. We define
+    \begin{align}
+        [[\emptyset]]&=0\rightarrow\mathbb{Z}\rightarrow{0}\\
+        [[\mathbb{S}^{1}\sqcup{L}]]&=V\otimes[[L]]\\
+        [[L]]&=\mathcal{F}
+        \big(
+            0\rightarrow[[L_{n,\,0}]]\rightarrow[[L_{n,\,1}]]\{1\}\rightarrow{0}
+        \big)
+    \end{align}
+    where $V$ is a graded vector space,
+    or more generally a free $\mathbb{Z}[q]$
+    module of rank two with generators of degree $+1$ and $-1$
+    \cite[p.~362]{Khovanov1999CatJonesPoly}, and where
+    $\mathcal{F}$ is the \textit{flatten} operation that converts a
+    double chain complex into a single chain complex by taking direct sums
+    of the components along the diagonals \cite[p.~338]{BarNatanKhovanovJones}.
+    The $\{1\}$ notation indicates the degree shift operation which shifts the
+    grading by $1$. Explicitly, if we have decomposed $V$ into
+    $V=\oplus_{n}V_{n}$, then $V\{1\}_{n}=V_{n-1}$ so that the graded dimension
+    of $V\{1\}$ is $q$ times the graded dimension of $V$.
+    \par\hfill\par
+    The last ingrediant is the differential between $[[L_{n,\,0}]]$ and
+    $[[L_{n,\,1}]]\{1\}$. This is also defined pictorially. We use the cube of
+    resolutions of the knot or link diagram, for example
+    Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}. Recalling our previous
+    binary notation, every complete smoothing corresponds uniquely to a string
+    of length $N$ with entries in $\{\,0,\,1\,\}$ where $N$ is the number of
+    crossings in the diagram. If two strings differ in only one place then
+    there is an edge between them in the cube of resolutions.
+    The edge describes a cobordism
+    (a pair of pants) that either fuses two cycles into one or splits a cycle
+    into two. Re-examining Fig.~\ref{fig:trefoil_knot_cube_of_resolutions} is
+    strongly encouraged here. Fusing amounts to a homomorphism between
+    $V\otimes{V}$ and $V$, whereas splitting needs a map from
+    $V$ to $V\otimes{V}$. For generators $v_{-},\,v_{+}$ of $V$ we define
+    $m:V\otimes{V}\rightarrow{V}$ to be the linear function induced by:
+    \begin{align}
+        m(v_{-}\otimes{v}_{-})&=\mathbf{0}\\
+        m(v_{-}\otimes{v}_{+})&=v_{-}\\
+        m(v_{+}\otimes{v}_{-})&=v_{-}\\
+        m(v_{+}\otimes{v}_{+})&=v_{+}
+    \end{align}
+    and define $\Delta:V\rightarrow{V}\otimes{V}$ via
+    \begin{align}
+            \Delta(v_{-})&=v_{-}\otimes{v}_{-}\\
+            \Delta(v_{+})&=v_{+}\otimes{v}_{-}+v_{-}\otimes{v}_{+}
+    \end{align}
+    See \cite[p.~343]{BarNatanKhovanovJones} for further details. The
+    differential is defined by an alternating sum of such maps over edges whose
+    strings yield the same Hamming weight (sum of the entries in the string).
+    \par\hfill\par
+    By construction the Khovanov homology of a link contains the Jones
+    polynomial. The Poincar\'{e} polynomial of the homology is defined by
+    throwing away the torsion bits. We write
     \begin{equation}
-        Kh(L)(q,t)=
-        \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
+        \label{eqn:khovanov_polynomial}
+        Kh_{L}(q,t)=
+        \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(Kh_{\ell}^{r}(L)\big)
     \end{equation}
-    The Jones polynomial of $L$ is recovered via:
+    where we are writing the $r^{\small\textrm{th}}$ homology group
+    $Kh^{r}(L)$ as the direct sum of homogeneous components
+    $Kh_{\ell}^{r}(L)$ \cite{KatlasKhoHo}.
+    The Jones polynomial is recovered as the graded Euler characteristic, or
+    more explicitly
     \begin{equation}
-        J(L)(q)=Kh(L)(q,-1)
+        J_{L}(q)=Kh_{L}(q,-1)
     \end{equation}
-    Khovanov homology is not a perfect invariant
-    \cite{Watson2007KnotsWI}. That is, there are
+    This invariant is quite strong, but computationally expensive. This cost
+    will be our greatest detriment in our work so when possible we first
+    attempt to use the Jones polynomial. If this fails at differentiating
+    two knots or links we then try to compute Khovanov homology or the
+    \textbf{Khovanov polynomial}, which is the Poincar\'{e} polynomial of
+    Khovanov homology (Eqn.~\ref{eqn:khovanov_polynomial}).
+    \par\hfill\par
+    The invariant is indeed stronger than the Jones polynomial and can
+    distinguish quite a few more knots, though it is not a perfect
+    invariant \cite{Watson2007KnotsWI}. That is, there are
     distinct knots with the same Khovanov homology, but it is a powerful
     invariant and is capable of detecting certain knot types.
-    \begin{theorem}[Kronheimer and Mrowka, 2001]
+    \begin{theorem}[Kronheimer and Mrowka, 2011]
         If a knot $K$ has the same Khovanov homology as the unknot, then $K$
         is equivalent to the unknot.
     \end{theorem}
-    The unknotting problem asks one to determine if a given knot diagram is
-    equivalent to the unknot. Khovanov homology is a powerful enough tool
-    to accomplish this task. The Khovanov polynomial is a generalization of
-    the Jones polynomial and it has been conjectured that if a
+    \begin{proof}
+        \cite{KronheimerMrowka2011KhovanovUnknot}.
+    \end{proof}
+    As discussed, something as simple as determining if a diagram represents
+    the unknot can require super exponential algorithms if we rely on
+    Reidemeister moves alone. The definition of Khovanov homology produces a
+    straight-forward algorithm that runs in $O(2^{N})$ time, albeit with
+    substantially more overhead than the Jones polynomial. Combining the
+    previous theorem gives a considerably more efficient algorithm of
+    unknot detection than randomly looping through Reidemeister combinations.
+    \par\hfill\par
+    Since the Khovanov polynomial is a generalization of
+    the Jones polynomial it has been conjectured that if a
     knot has the same Jones polynomial as the unknot, then that knot is
     equivalent to the unknot. At the time of this writing it has not been
     proven, but there is evidence for and against the claim.
@@ -43,6 +112,9 @@
     all knots of up to 24 crossings are either the unknot, or have a
     Jones polynomial different from the unknot
     \cite{VerificationUnknotJonesConjUpTo24}.
+    \par\hfill\par
+    The numerical results in this work are motivated by the following two
+    theorems.
     \begin{theorem}[Baldwin and Sivek, 2022]
         If a knot $K$ has the same Khovanov homology as either of the
         trefoils, then $K$ is equivalent to one of them.
@@ -53,3 +125,12 @@
     \end{theorem}
     See \cite{BaldwinSivekKhovanovTrefoils} and
     \cite{BaldwinDowlinKhovanovFigureEight}, respectively.
+    \par\hfill\par
+    As mentioned the definitions provides a fairly straight-forward means of
+    implementing an algorithm. This has been done in
+    \cite{sage}. Unfortunately for 14 crossing knots it requires over
+    100GB of data and days of computation for a single knot. 17 crossings
+    knots are unapproachable my such methods. Modification of the
+    symbolic calculus trick for the Jones polynomial can be performed for
+    Khovanov homology \cite{BarNatan2006FASTKH} and with this we can
+    remarkably compute with 60 crossing knots in about a day on modern hardware.
