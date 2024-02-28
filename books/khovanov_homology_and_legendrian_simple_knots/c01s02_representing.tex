@@ -331,8 +331,7 @@
         point. You will have just traced out an $n$-gon for some
         $n\in\mathbb{N}$. Attach a 2-cell by gluing along this polygon.
         Continue doing this until all $4N$ of the corners of the $N$ thickened
-        crossings (again, appeal to
-        Fig.~\ref{fig:thickened_crossings_chapt1}) have
+        crossings (again, see Fig.~\ref{fig:thickened_crossings_chapt1}) have
         been traveled. The total number of faces, which is the total number of
         cycles you've traveled, has now been computed. We require $4N$ steps,
         and so our algorithm does indeed run in linear time.
@@ -658,7 +657,7 @@
         colored edges as in Fig.~\ref{fig:tait_graph_trefoil_002}. The
         connection between these two is that they are duals in the plane.
         Note that the number of edges is the same, but the colorings are
-        different. This can be realized by appealing to
+        different. This can be realized by observing
         Fig.~\ref{fig:tait_graph_signs} and noting that the dual operation
         swaps the two pictures.
         \begin{figure}
@@ -759,3 +758,95 @@
             \caption{Type III on Tait Graphs}
             \label{fig:tait_graph_reidemeister_3_001}
         \end{figure}
+    \subsection{Modified Tait Graphs}
+        Many of the assumptions in the description of the Tait graph used
+        planarity of the knot diagram. Applying such a graph-theoretical
+        idea to virtual knots will need modification. Indeed, the checkerboard
+        pattern will be lost for some virtual knots since this is a
+        phenomenon of the sphere. Consider the chain link fence knot on the
+        flat torus (Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus}).
+        Regardless of which starting face you choose the other face will be
+        given a dot as well. Rather than a checkerboard pattern of chosen
+        faces on the torus we have instead covered the entire manifold. If we
+        na\"{i}vely try to draw this we get
+        Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_tait_graph_naive}. We
+        see that the large face is connected to itself twice but the
+        resuling edges are not loops that can be deleted by Type I moves.
+        Rather, such loops  have information about the topology of the
+        underlying manifold. Moreover, a graph is a set of vertices and a set
+        of edges. The underlying manifold it is embedded on is immaterial.
+        The graph in
+        Fig.~\ref{fig:chain_link_fence_knot_on_flat_torus_tait_graph_naive}
+        should thus be considered equivalent to
+        Fig.~\ref{fig:chain_link_fence_knot_naive_tait_graph}. The issue with
+        this is that
+        Fig.~\ref{fig:chain_link_fence_knot_naive_tait_graph} is already the
+        Tait graph of a (non-standard) Hopf link diagram.
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{%
+                        chain_link_fence_knot_on_flat_torus_tait_graph_naive.pdf
+                    }
+                }
+                \caption{Na\"{i}ve Virtual Tait Graph}
+                \label{fig:chain_link_fence_knot_on_flat_torus_tait_graph_naive}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{%
+                        chain_link_fence_knot_naive_tait_graph.pdf
+                    }
+                }
+                \vspace{3em}
+                \caption{Equivalent Graph}
+                \label{fig:chain_link_fence_knot_naive_tait_graph}
+            \end{minipage}
+        \end{figure}
+        \par\hfill\par
+        The proposed work around is to have two types of edges (still positive
+        and negative) as well as two types of vertices, which we'll call
+        hollow and solid. At each of the crossings in the diagram place a
+        hollow vertex. Choose a starting face and place a solid vertex in it.
+        Draw an edge from the solid vertex to all hollow vertices that border
+        the face, coloring the edges in accordance with
+        Fig.~\ref{fig:tait_graph_signs}. For each face that can be reached
+        by going across a crossing place another solid dot and connect the
+        appropriate edges to hollow vertices. Continue doing this until all
+        possible faces have been claimed. The result is our
+        \textit{virtual} Tait graph. Fig.~\ref{fig:chain_link_fence_tait_graph}
+        depicts this modification for the chain link fence.
+        \begin{figure}
+            \centering
+            \includegraphics{chain_link_fence_tait_graph.pdf}
+            \caption{Virtual Tait Graph}
+            \label{fig:chain_link_fence_tait_graph}
+        \end{figure}
+        \par\hfill\par
+        In the classical setting these new hollow vertices will all be
+        degree 2, a fact derived from the checkerboard pattern that results.
+        For non-classical knots the virtual Tait graph can become more
+        complicated, but the hollow vertices will always be degree 2 or
+        degree 4. This allows us to salvage the Reidemeister operations.
+        \par\hfill\par
+        For Type I we look for leaves where the leaf vertex is solid. We
+        delete the solid vertex and the single hollow vertex adjacent to it,
+        as well as all (2 or 4) edges falling on this hollow vertex. This
+        results in merging the faces and removing the crossing. A similar
+        operation can be done for loops, we look for a solid vertex with two
+        edges connected to a hollow vertex. To ensure the loop
+        corresponds to a Type I move we must insist that the hollow vertex be
+        of degree 2. In this scenario we delete the two edges and the hollow
+        vertex.
+        \par\hfill\par
+        The descriptions of Type II and Type III are similar to before, but
+        planar duals must be replaced with duals on the appropriate manifold.
+        This can be done pictorially by embedding the virtual knot diagram into
+        the fundamental $4g$-gon for the genus $g$ surface the virtual knot
+        lives in as we've done with the flat torus and the
+        chain link fence knot. Later we will get some computational use out of
+        this idea in our discussion of the Kauffman bracket.

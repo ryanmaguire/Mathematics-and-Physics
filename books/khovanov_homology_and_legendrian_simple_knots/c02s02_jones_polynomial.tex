@@ -100,7 +100,7 @@
         polynomial is defined recursively in terms of
         \textit{smoothings} of a link diagram. Note, the definition we'll work
         with is similar to the description provided in
-        \cite{BarNatan2002khovanov}. It differs slightly from the original
+        \cite{BarNatanKhovanovJones}. It differs slightly from the original
         \cite{KauffmanStateModels}.
         \par\hfill\par
         Resolving, or smoothing, a crossing equates to removing it.
@@ -581,7 +581,6 @@ circle_count(const struct knot *K,
         with all variables and arrays initialized we start the bulk of the
         algorithm and count the number of cycles corresponding to the given
         resolution. We loop over the $4N$ roads in our thickened knot.
-        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber = 34]
     for (n = 0U; n < 4U*K->number_of_crossings; ++n)
     {
@@ -640,7 +639,6 @@ circle_count(const struct knot *K,
 \end{lstlisting}
         We now loop over all of the roads and compute the number of cycles. We
         start with:
-        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber = 64]
         while (!have_visited[road_index])
         {
@@ -700,7 +698,6 @@ circle_count(const struct knot *K,
         final entry in the Gauss code and are moving forward, we loop back
         around to the start. Similarly if we're at the first entry and a walking
         backwards we loop around to the final entry. This gives us:
-        \newpage
 \begin{lstlisting}[style=CStyle, firstnumber=102]
             if (direction == forward)
             {
@@ -1198,3 +1195,26 @@ get_road_number(const struct knot *K,
             reflection formula by noticing that $K_{N}$ and $K_{-1-N}$ are
             mirrors of each other. We could also repeat the Tait graph
             computation using red edges, either works.
+            \par\hfill\par
+            We can get an algorithm for virtual knots out of the Tait graph
+            if we use the modifications presented in the first chapter. Given
+            the virtual Tait graph for a virtual knot diagram, for any
+            crossing (hollow vertex) there are three possibilities:
+            \begin{enumerate}
+                \item There are two red edges incident.
+                \item There are two blue edges incident.
+                \item There are two red edges and two blue edges incident.
+            \end{enumerate}
+            Smoothings in the knot diagram equate to deleting hollow vertices,
+            and the Kauffman relations tell us to get a polynomial out of this
+            from the modified Tait graph. For the first two possibilities we
+            have Eqns.~\ref{eqns:kauffman_tait_relation}. An algorithm for
+            virtual knots will be obtained once we've figured out how to
+            resolve a hollow vertex of degree 4. To do this we note that
+            a 0-smoothing will cut the red edges and contract the blue ones,
+            whereas a 1-smoothing does the opposite, cutting blue edges and
+            contracting red ones. As before we must be careful in this
+            contraction, should a loop be created we must remove it and then
+            scale the polynomial by $-q^{2}$ or $q^{-1}$, depending on the
+            color of the edge for the loop. And that's it, we can now compute
+            the Kauffman bracket for virtual Tait graphs as well.
