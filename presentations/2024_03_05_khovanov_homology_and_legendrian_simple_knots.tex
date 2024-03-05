@@ -1,0 +1,823 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       February 17, 2022                                              %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Khovanov Homology and Legendrian Simple Knots}
+\author{Ryan Maguire}
+\date{March 5, 2024}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{enumerate}
+            \item Knots and invariants.
+            \item Contact topology.
+            \item Results.
+        \end{enumerate}
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        Intuitively we all know what a knot is, a loop of string in space that
+        may be tangled in some way. They were a part
+        of various cultures long before they became of interest to the
+        mathematical community.
+        \begin{enumerate}
+            \item The Celtic book of Kells has many complicated knot drawings.
+            \item The Viking legend of Hildr contains the Borromean rings.
+            \item Tibetan Buddhism uses the endless knot as a religious symbol.
+            \item The hammer of Thor, Mj\"{o}lnir, occasionally depicts the Whitehead link.
+        \end{enumerate}
+        Other knots can be found in Islamic, Jewish, and Japanese cultures,
+        with some examples being well over 1000 years old.
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        Mathematically knots are relatively new. Early investigations occurred
+        in the 1700s and early 1800s, but the theory picked up popularity in
+        the mid and late 1800s for two reasons.
+        \begin{enumerate}
+            \item
+                Many problems in electromagnetism involved charged loops
+                of wire that may be linked together.
+            \item
+                Vortex theory, an early attempt at explaining the structure of
+                atoms, used knots and links to describe chemical properties.
+        \end{enumerate}
+        Vortex theory was eventually disproved by J. J. Thompson, ironically
+        as he was attempting to provide evidence for it. Knots were not
+        entirely abandoned and were absorbed into topology in the
+        early $20^{\small\textrm{th}}$ century.
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        Why might we care about knots and links? Two theorems I like.
+        \begin{theorem}[Lickorish-Wallace, 1960]
+            Every compact orientable connected three dimensional manifold
+            can be obtained by taking the 3-sphere $\mathbb{S}^{3}$ and cutting
+            out a link $L$ and gluing it back together with some twists.%
+            \footnote{In technical terms, this is a Dehn surgery.}
+        \end{theorem}
+        \begin{theorem}[Steinitz-Tait, 1877, 1922]
+            Every connected planar graph with signed edges can be represented
+            by a knot diagram. Conversely, every knot diagram can be
+            represented by two connected graphs with signed edges that are
+            related to each other as planar duals.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        So what is a knot?
+        A \textbf{knot} is a smooth or polygonal embedding
+        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$.
+        A \textbf{knot diagram} is a projection of a knot onto the plane where
+        we mark the overlapping points in some way so that we can easily
+        identify which part is going over and which is under.
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_001}
+            \caption{Knot Diagram}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        We'll say two knots are \textbf{equivalent} if we can
+        smoothly deform one into the other without tearing or cutting.
+        \par\hfill\par
+        Knot diagrams turn geometric and analytical objects
+        (functions and embeddings) into combinatorial ones. In the 1920s it was
+        shown that the notion of knot equivalence can be demonstrated
+        using these diagrams and the three \textbf{Reidemeister moves}.
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{reidemeister_1_move}
+                }
+                \caption{Type I Move}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \includegraphics{reidemeister_2_move}
+                }
+                \caption{Type II Move}
+            \end{minipage}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{reidemeister_3_move}
+            }
+            \caption{Type III Move}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Knots and Links}
+        In practice we now have a means of distinguishing two knot diagrams.
+        The number of moves can be quite high, however. Even if one of the
+        diagrams is a simple circle with no other crossings, if the other
+        diagram has $n$ crossing it may take more than
+        $10^{26}\times{n}^{11}$ Reidemeister moves to undo it.\footnote{%
+            This is the best known bound at the time of this writing.
+        }
+        \par\hfill\par
+        Determining if a knot diagram represents an unknotted circle then
+        takes roughly $3^{10^{26}\times{n}^{11}}$ steps and we quickly
+        approach the \textit{transcomputational problem} as $n$ increases.%
+        \footnote{%
+            See the \textit{Bremermann limit} for details on transcomputation.
+        }
+        \par\hfill\par
+        Instead of doing this we invent \textit{invariants}, which are usually
+        algebraic objects attached to knot diagrams that do not change with
+        the three Reidemeister moves. We'll be working with two of these.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Jones polynomial assigns a Laurent polynomial, a polynomial in
+        $q$ and $q^{-1}$ with integer coefficients, to knot diagrams and is
+        an invariant. We can define it pictorially using the Kauffman bracket
+        in terms of smoothings.
+        \begin{figure}
+            \centering
+            \includegraphics{resolving_crossings}
+            \caption{Smoothing Crossings}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Kauffman bracket is defined recursively. Given a knot (or link)
+        diagram $L$ we write:
+        \begin{align}
+            \langle{\emptyset}\rangle
+            &=1\\
+            \langle{\mathbb{S}^{1}\sqcup{L}}\rangle
+            &=(q+q^{-1})\langle{L}\rangle\\
+            \langle{L}\rangle
+            &=\langle{L_{n,\,0}}\rangle-q\langle{L_{n,\,1}}\rangle
+        \end{align}
+        where $\mathbb{S}^{1}\sqcup{L}$ represents the disjoint union of $L$
+        and a circle. The Jones polynomial $J_{L}(q)$ is obtained from
+        $\langle{L}\rangle$ by normalizing it by a factor
+        $\pm{q}^{k}$ for a particular $k$ that depends on the diagram. The
+        computation of this factor is linear in the number of crossings so we
+        can restrict our attention to the Kauffman bracket.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        If we follow this recursive formula we end up with $2^{n}$ different
+        ways of completely smoothing the diagram so that there are no crossings
+        left.
+        \par\hfill\par
+        If we label the crossings 1 to $n$ then every possible smoothing
+        uniquely corresponds to a number between 1 and $2^{n}$. Write your
+        number $1\leq{k}\leq{2}^{n}$ in binary. If the $m^{\small\textrm{th}}$
+        bit is 0 do a 0-smoothing at the $m^{\small\textrm{th}}$ crossing,
+        otherwise do a 1-smoothing. The resulting
+        $2^{n}$ pictures is called the \textbf{cube of resolutions} for the
+        diagram.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions}
+            \caption{Cube of Resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.8\textheight}{%
+                \includegraphics{figure_eight_knot_cube_of_resolutions}
+            }
+            \caption{Cube of Resolutions for the Figure-Eight}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Kauffman bracket is obtained by counting the cycles in the
+        smoothings and summing over them with appropriates weights. We obtain
+        the formula
+        \begin{equation}
+            \langle{L}\rangle
+            =\sum_{k=1}^{2^{n}}(-q)^{w(k)}(q+q^{-1})^{c(k)}
+        \end{equation}
+        where $w(k)$ is the Hamming weight, the number of 1's that occur in
+        the binary expansion of $k$, and $c(k)$ is the number of cycles
+        corresponding to the $k^{\small\textrm{th}}$ complete smoothing.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        Several algorithms exist for the computation of the Jones polynomial
+        and Kauffman bracket, and the complexity is known to be
+        \textbf{NP-Hard}. The computation has been studied in the
+        quantum aspect and a polynomial-time additive approximation method
+        exists.
+        \par\hfill\par
+        The algorithm we'll discuss is one of the simplest, but it lends itself
+        to a clever speed-up trick and a means of computing Khovanov homology
+        as well, which we'll soon discuss.
+    \end{frame}
+    \begin{frame}
+        We first define $PD$ code. Take a knot diagram and pick a starting
+        point. Trace your finger around the knot and label the arcs in
+        increasing order. At each under crossing write
+        \texttt{X[a,b,c,d]} where \texttt{a} is arc you're walking on,
+        \texttt{b} is the strand to your right, \texttt{c} is the strand
+        in front, and \texttt{d} is the strand to the left.
+        \begin{figure}
+            \centering
+            \resizebox{0.4\textwidth}{!}{%
+                \includegraphics{trefoil_knot_arcs_labeled}
+            }
+            \caption{Trefoil with Arcs Labeled}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The $PD$ code of the diagram is the ordered sequence of quadruples
+        \texttt{X[a,b,c,d]} for each under crossing. For the trefoil on the
+        previous page we get \texttt{X[1,5,2,4]}, \texttt{X[3,1,4,0]},
+        \texttt{X[5,3,0,2]}.
+        \par\hfill\par
+        The Kauffman bracket is now computed with a \textit{symbolic calculus}.
+        \begin{figure}
+            \centering
+            \includegraphics{resolving_crossings_pd_label}
+            \caption{Motive for the Symbolic Calculus}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Kauffman relation tells us to replace \texttt{X[a,b,c,d]} with
+        $\texttt{P[a,b]P[c,d]}-q\texttt{P[a,d]P[b,c]}$. The Kauffman bracket
+        becomes a product of these formal polynomials:
+        \begin{equation}
+            \prod_{k=1}^{n}(
+                \texttt{P[ak,bk]P[ck,dk]}-q\texttt{P[ak,dk]P[bk,cd]}
+            )
+        \end{equation}
+        After expanding we have formal products of ordered pairs
+        \texttt{P[a,b]}. We simplify via
+        $\texttt{P[a,b]P[b,c]}\mapsto\texttt{P[a,c]}$ and
+        $\texttt{P[a,b]P[a,b]}\mapsto\texttt{P[a,b]}$. The Kauffman relation
+        then tells us to remove cycles and replace them with $q+q^{-1}$.
+        This amounts to $\texttt{P[a,a]}\mapsto{q}+q^{-1}$.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        This gives us a quick algorithm to implement, but we can improve it.
+        Rather than smoothing all of the crossings at once and expanding we
+        pick one and resolve it using
+        \begin{equation}
+            \nonumber
+            \texttt{X[a,b,c,d]}
+            \mapsto\texttt{P[a,b]P[c,d]}-q\texttt{P[a,d]P[b,c]}
+        \end{equation}
+        We then choose the next crossing \texttt{X[e,f,g,h]} with the most
+        numbers in common with \texttt{X[a,b,c,d]}. We perform the same
+        replacement and simplify. We then add the next crossing with the
+        most numbers in common with the ones we've already worked with.
+        \par\hfill\par
+        By adding crossings in this way we grow our
+        \textit{computational front} minimally, ensuring we have less work to
+        do in the end. This simple trick can dramatically improve performance.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        We've implemented several algorithms for the Jones polynomial. Using
+        this we were able to tabulate the invariant for all prime knots up to
+        19 crossings, over 352 million knots.
+        \par\hfill\par
+        We also examined the strength of the invariant. Below is the
+        legend for the table on the next page.
+        \begin{table}
+            \centering
+            \resizebox{0.8\textwidth}{!}{%
+                \begin{tabular}{| l | l |}
+                    \hline
+                    Keyword & Description\\
+                    \hline
+                    Cr     & Crossing number, largest number of crossings considered.\\
+                    Unique & Number of polynomials that occur for one knot.\\
+                    Almost & Number of polynomials that occur for two knots.\\
+                    Total  & Total number of distinct polynomials in list.\\
+                    Knots  & Total number of knots in list.\\
+                    FracU  & Unique / Total\\
+                    FracT  & Total / Knots\\
+                    FracK  & Unique / Knots\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Legend for the Statistics Table}
+        \end{table}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr &  Unique  &  Almost  &   Total   &   Knots    &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &        1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &        2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &        4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &        7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &       14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &       35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &       84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &      223 &       13 &       236 &       249 & 0.944915 & 0.947791 & 0.895582\\
+                    11 &      626 &       77 &       710 &       801 & 0.881690 & 0.886392 & 0.781523\\
+                    12 &     1981 &      345 &      2420 &      2977 & 0.818595 & 0.812899 & 0.665435\\
+                    13 &     6855 &     1695 &      9287 &     12965 & 0.738129 & 0.716313 & 0.528731\\
+                    14 &    25271 &     7439 &     37578 &     59937 & 0.672495 & 0.626958 & 0.421626\\
+                    15 &   105246 &    35371 &    170363 &    313230 & 0.617775 & 0.543891 & 0.336002\\
+                    16 &   487774 &   173677 &    829284 &   1701935 & 0.588187 & 0.487260 & 0.286600\\
+                    17 &  2498968 &   894450 &   4342890 &   9755328 & 0.575416 & 0.445181 & 0.256164\\
+                    18 & 13817237 &  4863074 &  24116048 &  58021794 & 0.572948 & 0.415638 & 0.238139\\
+                    19 & 82712788 & 27409120 & 141439472 & 352152252 & 0.584793 & 0.401643 & 0.234878\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the Jones Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        Khovanov homology is our next invariant, which generalizes the Jones
+        polynomial. We replace a polynomial with a homological object. The
+        Khovanov bracket is defined via
+        \begin{align}
+            [[\emptyset]]&=0\rightarrow\mathbb{Z}\rightarrow{0}\\
+            [[\mathbb{S}^{1}\sqcup{L}]]&=V\otimes[[L]]\\
+            [[L]]&=\mathcal{F}
+            \big(
+                0\rightarrow[[L_{n,\,0}]]
+                \rightarrow[[L_{n,\,1}]]\{1\}\rightarrow{0}
+            \big)
+        \end{align}
+        where $V$ is a graded vector space of graded dimension
+        $q+q^{-1}$\;\footnote{%
+            Free modules work too.
+        }
+        and $\mathcal{F}$ is the flatten operation that takes a
+        double complex into a chain complex by direct sums along diagonals.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The differential between $[[L_{n,\,0}]]$ and
+        $[[L_{n,\,1}]]\{1\}$ is defined pictorially. We use the cube of
+        resolutions of the knot or link diagram, for example.
+        Recalling our previous binary notation, if two strings differ in only
+        one place then there is an edge between them in the cube of resolutions.
+        \par\hfill\par
+        The edge describes a cobordism
+        (a pair of pants) that either fuses two cycles into one or splits a cycle
+        into two. Fusing amounts to a homomorphism between
+        $V\otimes{V}$ and $V$, whereas splitting needs a map from
+        $V$ to $V\otimes{V}$.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        These are the homomorphisms.
+        \begin{align}
+            m(v_{-}\otimes{v}_{-})&=\mathbf{0}\\
+            m(v_{-}\otimes{v}_{+})&=v_{-}\\
+            m(v_{+}\otimes{v}_{-})&=v_{-}\\
+            m(v_{+}\otimes{v}_{+})&=v_{+}\\
+            \Delta(v_{-})&=v_{-}\otimes{v}_{-}\\
+            \Delta(v_{+})&=v_{+}\otimes{v}_{-}+v_{-}\otimes{v}_{+}
+        \end{align}
+        The differential is defined by an alternating sum of these
+        homomorphisms along strings of equal hamming weight.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions}
+            \caption{Cube of Resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The differential does indeed square to zero and we get a homology
+        out of this. The $r^{\small\textrm{th}}$ homology group
+        $Kh^{r}(L)$ is the direct sum of homogeneous parts
+        $Kh^{r}_{s}(L)$ and the Khovanov polynomial of the diagram is the
+        Poincar\'{e} polynomial of the homology
+        \begin{equation}
+            Kh_{L}(q,\,t)=
+            \sum_{r,\,s}q^{r}t^{s}\textrm{dim}\big(Kh_{s}^{r}(L)\big)
+        \end{equation}
+        The Jones polynomial is recovered via
+        \begin{equation}
+            J_{L}(q)=Kh_{L}(q,\,-1)
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The symbolic calculus can be modified for Khovanov homology and the
+        Khovanov polynomial.
+        \par\hfill\par
+        By experimenting with the \texttt{JavaKh} library we were able to
+        tabulate the Khovanov polynomial of all prime knots up to 17 crossings.
+        This took about two months, 19 crossings would have taken two years.
+        We're currently trying to speed up the computations to make this more
+        approachable.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &       1 &       0 &       1 &       1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &       2 &       0 &       2 &       2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &       4 &       0 &       4 &       4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &       7 &       0 &       7 &       7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &      14 &       0 &      14 &      14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &      35 &       0 &      35 &      35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &      84 &       0 &      84 &      84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &     225 &      12 &     237 &     249 & 0.949367 & 0.951807 & 0.903614\\
+                    11 &     641 &      71 &     718 &     801 & 0.892758 & 0.896380 & 0.800250\\
+                    12 &    2051 &     326 &    2462 &    2977 & 0.833063 & 0.827007 & 0.688949\\
+                    13 &    7223 &    1636 &    9539 &   12965 & 0.757207 & 0.735750 & 0.557115\\
+                    14 &   27317 &    7441 &   39222 &   59937 & 0.696471 & 0.654387 & 0.455762\\
+                    15 &  118534 &   36867 &  182598 &  313230 & 0.649153 & 0.582952 & 0.378425\\
+                    16 &  578928 &  187639 &  919835 & 1701935 & 0.629382 & 0.540464 & 0.340159\\
+                    17 & 3167028 & 1001101 & 5033403 & 9755328 & 0.629202 & 0.515965 & 0.324646\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the Khovanov Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{HOMFLY-PT}
+        Slight digression, the HOMFLY-PT polynomial was also investigated.
+        It too generalizes the Jones polynomial (and also the Alexander
+        polynomial).
+        \par\hfill\par
+        It is different than the Khovanov polynomial, there are
+        knots with different HOMFLY-PT polynomials but the same Khovanov
+        polynomial, and vice-versa.
+        \par\hfill\par
+        Using the \texttt{regina} library we've tabulated the HOMFLY-PT
+        polynomial of all prime knots up to 19 crossings.
+    \end{frame}
+    \begin{frame}{HOMFLY-PT}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &         1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &         2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &         4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &         7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &        14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &        35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &        84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &       241 &        4 &       245 &       249 & 0.983673 & 0.983936 & 0.967871\\
+                    11 &       730 &       34 &       765 &       801 & 0.954248 & 0.955056 & 0.911361\\
+                    12 &      2494 &      210 &      2724 &      2977 & 0.915565 & 0.915015 & 0.837756\\
+                    13 &      9475 &     1302 &     11044 &     12965 & 0.857932 & 0.851832 & 0.730814\\
+                    14 &     39401 &     7170 &     48329 &     59937 & 0.815266 & 0.806330 & 0.657374\\
+                    15 &    186799 &    38833 &    238614 &    313230 & 0.782850 & 0.761785 & 0.596364\\
+                    16 &    979987 &   209669 &   1266261 &   1701935 & 0.773922 & 0.744013 & 0.575808\\
+                    17 &   5559808 &  1157938 &   7175287 &   9755328 & 0.774855 & 0.735525 & 0.569925\\
+                    18 &  33722920 &  6480965 &  42857755 &  58021794 & 0.786857 & 0.738649 & 0.581211\\
+                    19 & 213355372 & 36387952 & 264839694 & 352152252 & 0.805602 & 0.752060 & 0.605861\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the HOMFLY-PT Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        Back to Khovanov homology. While it has been conjectured that the
+        Jones polynomial distinguishes the unknot, it is \textit{known} that
+        Khovanov homology does.
+        \begin{theorem}[Kronheimer-Mrowka, 2011]
+            If a knot has the same Khovanov homology as the unknot, then it
+            is equivalent to the unknot.
+        \end{theorem}
+        It is now known the Khovanov homology also detects the trefoils,
+        figure eight, and the cinquefoils. These results will motivate our
+        work discussed later.
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        Before diving into the results, lets discuss contact topology. The
+        theory derives itself from physics, classical Hamiltonian mechanics
+        in particular. Particles in $n$ dimensions can be described by
+        $2n$ coordinates, their position and momentum. This is the
+        \textit{phase space} coordinates.
+        \par\hfill\par
+        By considering hypersurfaces of constant kinetic energy we obtain
+        $2n-1$ dimensional objects. The properties of these manifolds are
+        axiomatize to create contact structures.
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        A \textbf{contact manifold} is a smooth $2n+1$ dimensional
+        manifold $X$ together with a
+        collection of smooth charts $(\mathcal{U}_{i},\,\varphi_{i})$ and
+        one-forms $\alpha_{i}$ such that the charts cover the manifold and
+        the $\alpha_{i}$ satisfy
+        \begin{equation}
+            \alpha_{i}\land(\textrm{d}\alpha_{i})^{n}=0
+        \end{equation}
+        and such that $\alpha_{i}$ and $\alpha_{k}$ agree whenever
+        $\mathcal{U}_{i}$ and $\mathcal{U}_{k}$ overlap.
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        The kernels of the one-forms describe co-dimension one planes in the
+        tangent space of each point in the manifold.
+        This strange condition on the $\alpha$ is called
+        \textit{maximal non-integrability}. It means there is no hypersurface
+        of dimension greater than $n$ that is everywhere tangent to this
+        collection of planes.
+        \par\hfill\par
+        The Darboux theorem tells us locally any such manifold has a chart
+        $(\mathcal{U},\,\varphi)$ where the one-form $\alpha$ is given by:
+        \begin{equation}
+            \alpha=\sum_{k=1}^{n}
+                \textrm{d}\varphi_{2k}-\varphi_{1}\textrm{d}\varphi_{2k+1}
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        For $\mathbb{R}^{3}$ this tells us we get a contact structure by using
+        a single global chart and the one-form
+        \begin{equation}
+            \alpha=\textrm{d}z-y\textrm{d}x
+        \end{equation}
+        This is the standard contact structure on $\mathbb{R}^{3}$. At each
+        point $(x,\,y,\,z)$ we see that
+        $\partial{y}$ and $\partial{x}+y\partial{z}$ span the kernel of
+        $\alpha$ meaning we can explicitly draw the hyperplane distribution.
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        \begin{figure}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{darboux_form_001}
+            }
+            \caption{Standard Contact Structure on $\mathbb{R}^{3}$}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        While it is impossible for a surface to be everywhere tangent, it is
+        possible for curves, or \textit{knots}, to be. A \textit{Legendrian}
+        knot is a smooth embedding
+        $\gamma:\mathbb{S}^{1}\rightarrow\mathbb{R}^{3}$ such that
+        $\alpha(\dot{\gamma}(t))=0$ for each $t\in\mathbb{S}^{1}$.
+        \par\hfill\par
+        This restriction takes away a degree of freedom from the knot since
+        the $y$ coordinate must satisfy
+        \begin{align}
+            \textrm{d}z-y\textrm{d}x&=0\\
+            \Rightarrow
+            y&=\frac{\textrm{d}z}{\textrm{d}x}\\
+            \Rightarrow{y}(t)&=
+            \frac{\textrm{d}z/\textrm{d}t}{\textrm{d}x/\textrm{d}t}\\
+            \Rightarrow
+            y(t)&=\frac{\dot{z}(t)}{\dot{x}(t)}
+        \end{align}
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        \begin{figure}
+            \centering
+            \resizebox{0.4\textwidth}{!}{%
+                \includegraphics{legendrian_unknot_002}
+            }
+            \caption{Legendrian Unknot}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        For this to be well defined when $\dot{x}(t)=0$ we also need
+        $\dot{z}(t)$ to approach zero as well. The value $y$ is also finite,
+        and since the circle is compact the range of $y$ is also bounded.
+        Hence in a knot diagram there will be no
+        \textit{vertical tangencies} and instead we obtain cusps.
+        \begin{figure}
+            \centering
+            \resizebox{0.45\textwidth}{!}{%
+                \includegraphics{legendrian_unknot_cusps_001.pdf}
+            }
+            \caption{Legendrian Unknot Diagram}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        Two Legendrian knots are \textbf{equivalent} if we can smoothly
+        deform one into the other, keeping the knot Legendrian at each stage
+        of the deformation.
+        \par\hfill\par
+        It is possible for two knots to be topologically equivalent but
+        different as Legendrian embeddings. To distinguish Legendrian knots
+        then requires Legendrian invariants. The two simplest are the
+        Thurston-Bennequin $tb$ and rotation numbers $rot$. A
+        \textbf{Legendrian simple} knot is a knot where all Legendrian
+        embeddings are uniquely determined by these two invariants.
+        \par\hfill\par
+        It is known that are torus knots are Legendrian simple.
+    \end{frame}
+    \begin{frame}{Contact Topology}
+        The contact structure also allows us to describe transverse knots,
+        those that are everywhere transverse to the distribution of hyperplanes.
+        We can also define transverse invariants and transversally simple
+        knots.
+        \par\hfill\par
+        The twist knot knots with a positive number of twist serve as our
+        example of transversally simple knots.
+    \end{frame}
+    \begin{frame}{Results and Conjectures}
+        The knots where Khovanov homology is known to uniquely distinguish are
+        all Legendrian simple. We've conjectured that all such knots may be
+        detectable.
+        \par\hfill\par
+        We computed the Jones polynomial of all prime knots of
+        up to 19 crossings and compared these with the Jones polynomial of
+        torus knots. At the end of this computation four matches were found.
+    \end{frame}
+    \begin{frame}{Results and Conjectures}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                        Torus Knot&
+                        Non-Torus Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $T(2,\,5)$&
+                        \texttt{dciaFHjEbg}&
+                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
+                    \hline
+                        $T(2,\,7)$&
+                        \texttt{fJGkHlICEABd}&
+                        $-q^{20}+q^{18}-q^{16}+q^{14}-q^{12}+q^{10}+q^{6}$\\
+                    \hline
+                        $T(2,\,11)$&
+                        \texttt{gHlImJnKBDFAce}&
+                        $-q^{32}+q^{30}-q^{28}+q^{26}-q^{24}+q^{22}-q^{20}+q^{18}-q^{16}+q^{14}+q^{10}$\\
+                    \hline
+                        $T(2,\,5)$&
+                        \texttt{iNHlPJqCoKFmdABgE}&
+                        $-q^{14}+q^{12}-q^{10}+q^{8}+q^{4}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Torus Knot}
+        \end{table}
+        From this the unknot conjecture cannot be generalized to torus knots
+        or Legendrian simple knots. In each case the Khovanov polynomials
+        are different.
+        \begin{theorem}
+            If a prime knot $K$ has less than or equal to 19 crossings and has
+            the same Khovanov polynomial, or Khovanov homology, as a torus
+            knot, than it is equivalent to it.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{Results and Conjectures}
+        A similar search was performed with the twist knots for transversally
+        simple knots. A lot more matches were found but in each case the
+        Khovanov polynomials differed.
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                        Twist Knot&
+                        Non-Twist Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $m_{2}$&
+                        \texttt{eikGbHJCaFd}&
+                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{dgikFHaEjbc}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{gfJKHlaIEBCD}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{hGJaMlCdEKBfI}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{5}$&
+                        \texttt{bhDGijCkaef}&
+                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{cefIgbajkDh}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{femIbaJKLCGHd}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{jpIFNMrClqOhkEDabg}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{7}$&
+                        \texttt{cgjFHIaDEkb}&
+                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{8}$&
+                        \texttt{knIHoBjCDQrMPaeLgF}&
+                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{9}$&
+                        jopIFMrDlqNhkEabcg&
+                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
+            \label{table:matching_twist_knots}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Results and Conjectures}
+        \begin{theorem}
+            If a prime knot $K$ has 19 or fewer crossings and the same
+            Khovanov homology or Khovanov polynomial as a twist knot, then it
+            is equivalent to it.
+        \end{theorem}
+        An interesting thing to note is that not all twist knots are
+        transversally or Legendrian simple. This may lead one to conjecture
+        that Khovanov homology is able to detect twist knots in general.
+    \end{frame}
+    \begin{frame}{Results and Conjectures}
+        We also looked through the conjectured Legendrian simple knots in
+        the Legendrian knot atlas. Once again many matches were found for the
+        Jones polynomial, but the Khovanov polynomials were all different.
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                    Ng Knot&Matching Knot&Jones Polynomial\\
+                    \hline
+                    $m(6_{2})$&\texttt{glfoJcbKMNDaHIe}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{hknEGmDbJLaIfc}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{gKHlmIdJCEABf}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{ehkjmGIaFlcbd}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(7_{3})$&\texttt{hgelkIbaJFcd}&$-q^{18}+q^{16}-2q^{14}+3q^{12}-2q^{10}+2q^{8}-q^{6}+q^{4}$\\
+                    \hline
+                    $m(7_{4})$&\texttt{gfkHlbjIDaec}&$-q^{16}+q^{14}-2q^{12}+3q^{10}-2q^{8}+3q^{6}-2q^{4}+q^{2}$\\
+                    \hline
+                    $m(9_{48})$&\texttt{gnoqKDjIMrpEaHblfc}&$q^{2}-3+4q^{-2}-4q^{-4}+6q^{-6}-4q^{-8}+3q^{-10}-2q^{-12}$\\
+                    \hline
+                    $m(9_{49})$&\texttt{lFKJIOAEnDCpBhmG}&$q^{-4}-2q^{-6}+4q^{-8}-4q^{-10}+5q^{-12}-4q^{-14}+3q^{-16}-2q^{-18}$\\
+                    \hline
+                    $m(10_{128})$&\texttt{eHPNqGJlBFoiaDCkM}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
+                    \hline
+                    $m(10_{128})$&\texttt{edjkaGIlFbch}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
+                    \hline
+                    $m(10_{136})$&\texttt{igDKHJaEbFC}&$q^{6}-2q^{4}+2q^{2}-2+3q^{-2}-2q^{-4}+2q^{-6}-q^{-8}$\\
+                    \hline
+                    $10_{145}$&\texttt{eoHKqGJnCFmPDibaL}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
+                    \hline
+                    $10_{145}$&\texttt{kNJIpHLFECoMGABd}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
+                    \hline
+                    $10_{161}$&\texttt{hOqrljsnMeipFAgkbcd}&$-q^{22}+q^{20}-q^{18}+q^{16}-q^{14}+q^{12}+q^{6}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Conjectured Legendrian Simple Knots}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Future Work}
+        We were able to implement several algorithms and get computations
+        for the Jones, HOMFLY-PT, and Alexander (not discussed here)
+        polynomials in a reasonable amount of time. All three invariants
+        have been tabulated to prime knots up to 19 crossings.
+        \par\hfill\par
+        The Khovanov computation was still too slow. The previous tabulation
+        effort stopped at 16, and we've been able to push this to 17. By
+        introducing parallel computing and making some optimizations we may
+        be able to get to 19 crossings in a few months, instead of a few years.
+    \end{frame}
+    \begin{frame}{The End}
+        \begin{center}
+            Thank You!
+        \end{center}
+    \end{frame}
+\end{document}
+
