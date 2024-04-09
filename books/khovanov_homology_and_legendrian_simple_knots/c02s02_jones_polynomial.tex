@@ -3,9 +3,12 @@
     far more powerful, statistically speaking, than the Alexander polynomial
     at distinguishing knots but this comes at the cost of increased
     computational complexity. Indeed, the computation is known to be
-    \textbf{NP-Hard} and the best algorithms are of $O(2^{c\sqrt{N}})$ where
+    \textbf{NP-Hard} \cite[p.~2]{Przytycka1991SubexponentiallyCT}
+    and the best algorithms are of
+    $O(\textrm{poly}(N)\cdot{2}^{c\sqrt{N}})$ where
     $N$ is the number of crossings and $c$ is some constant (which varies
-    across algorithms). Polynomial-time quantum algorithms have been devised,
+    across algorithms). Polynomial-time quantum algorithms have been devised
+    \cite{JonesQuantumAlgorithm},
     but these have yet to see practical use.
     \subsection{The Temperley-Lieb Algebra}
         The original definition uses braids and the Temperley-Lieb algebra
@@ -49,7 +52,7 @@
         We will not be using this, for the most part, but the original
         definition allows us to compute the Jones polynomial of all
         \textbf{torus knots}. Given two coprime integers $(p,\,q)$, the
-        $T_{p,\,q}$ torus knots is obtained by wrapping a loop around the
+        $T_{p,\,q}$ torus knot is obtained by wrapping a loop around the
         torus, twisting $p$ times azimuthally for every $q$ turns around the
         meridian. After $p\cdot{q}$ wraps around the torus the loop closes
         up. We can explicitly embed the circle onto the $T_{p,\,q}$ torus knot
@@ -134,7 +137,7 @@
         unknot is $q+q^{-1}$.
         \par\hfill\par
         The Kauffman bracket is invariant under Type II and Type III moves.
-        Type I, on the other hands, scales the polynomial by $q$ or $q^{-1}$,
+        Type I, on the other hand, scales the polynomial by $q$ or $q^{-1}$,
         depending on the sign of the introduced crossing. Hence the Kauffman
         bracket is an invariant of \textit{framed} or \textit{regular} knots
         and links. Since scaling by a power of $q$ does not alter the individual
@@ -149,7 +152,7 @@
         where $N_{+}$ and $N_{-}$ are the number of positive and negative
         crossings in the diagram, respectively. This introduction of the
         crossing signs does not change under Type II and Type III, essentially
-        since the write does not change, and has the added bonus of making
+        since the writhe does not change, and has the added bonus of making
         $J_{L}$ invariant under Type I as well.
         \par\hfill\par
         Noticing that the defining
@@ -171,7 +174,7 @@
         the previous definition yields different polynomials for different
         orientations of the same link. Second, it is a genuine polynomial and
         not a Laurent polynomial. Because of this one may study the Julia set
-        and Newton basin's of the associated meromorphic function
+        and Newton basins of the associated meromorphic function
         $z\mapsto{z}-J_{L}(z)/J_{L}'(z)$, $z\in\mathbb{C}$. The topology of
         such sets are dependent only on the Jones polynomial, and
         are hence knot invariants. The Newton basins for the right-handed
@@ -190,16 +193,31 @@
             \label{fig:newton_fractal_right_trefoil_jones}
         \end{figure}
     \subsection{An Explicit Algorithm Using Gauss Code}
+        We now prove the following.
+        \begin{theorem}
+            There is an algorithm for extended Gauss code with time complexity
+            $O(\textrm{poly}(N)\cdot{2}^{N})$ and spatial complexity
+            $O(N)$ such that the worst, average, and best cases in time are
+            identical.
+        \end{theorem}
+        If we assume certain arithmetic operations are constant, then
+        $\textrm{poly}(N)$ can be replaced by $N$.
+        \par\hfill\par
         The splitting operation
-        $\langle{L}\rangle=\langle{L_{n,\,0}}-q\langle{L_{n,\,1}}\rangle$ at
-        the $n^{\small\textrm{th}}$ crossing in a link diagram $L$ gives us a
-        recursive algorithm for the computation Kauffman bracket, and hence
-        the Jones polynomial. Such an algorithm is not only exponential in
-        time, but exponential in space as well. Analysis of the memory
-        requirements for algorithms has become increasingly rare in modern
-        times since 64GB and 128GB memory is becoming increasingly
+        $\langle{L}\rangle=\langle{L_{n,\,0}}\rangle-q\langle{L_{n,\,1}}\rangle$
+        at the $n^{\small\textrm{th}}$ crossing in a link diagram $L$ gives us a
+        recursive algorithm for the computation of the Kauffman bracket,
+        and hence the Jones polynomial. Such an algorithm is not only
+        exponential in time, but exponential in space as well. This is because
+        the entirety of the recursion tree must be stored in memory near the
+        end of the calculation, and this is about
+        $\textrm{poly}(N)\cdot{2}^{N}$ nodes. Analysis of the
+        memory requirements for algorithms has become increasingly rare in
+        modern times since 64GB and 128GB memory is becoming increasingly
         commonplace even for personal computers, but an exponential-in-space
-        algorithm will eat through this very quickly. By expanding the
+        algorithm will eat through this very quickly. Most implementations
+        avoid this by rewriting the recursive step in some other way.
+        We adopt a similar tactic. By expanding the
         recursive definition into an iterative one we can reduce the memory
         requirements to linear. The time-complexity will still be exponential.
         \par\hfill\par
@@ -229,6 +247,13 @@
         resolutions is dependent on the knot diagram, so it is better to say
         this is the cube of resolutions for the standard diagram of
         the right-handed trefoil.
+        \par\hfill\par
+        The edges in the cube connect resolutions that differ in precisely one
+        bit. Hence there is an edge between \texttt{001} and \texttt{011},
+        as well as \texttt{001} and \texttt{101}, but there is no edge between
+        \texttt{001} and \texttt{010}. This is related to
+        \textit{Hamming weights}, soon to be discussed, and \textit{cobordisms},
+        which will not be discussed.
         \par\hfill\par
         In general, for an $N$ crossing knot, the cube of resolutions will
         generate an $N$ dimensional hypercube with a different complete
@@ -290,7 +315,7 @@ unsigned int hamming_weight(unsigned int val)
     return result;
 }
 \end{lstlisting}
-        The code \texttt{result += val \& 1U} may need explanation.
+        The code \texttt{result += val \& 1U} may need an explanation.
         \texttt{val \& 1U} performs a bit-wise \texttt{AND} with \texttt{val} and
         1. Since the binary representation of 1 is zero in all slots except the
         zeroth bit, \texttt{val \& 1U} is simply checking the zeroth bit of
@@ -371,9 +396,9 @@ unsigned int hamming_weight(unsigned int val)
         This is equivalent to walking backwards. We end up at a new crossing.
         We now know the rule for approaching a crossing from the bottom left
         road for a negative crossing given the 0-smoothing. In total there are
-        16 possible cases: Is the sign \texttt{+1} or \texttt{-1}, is the type
-        \texttt{U} or \texttt{O}, is the smoothing $0$ or $1$,
-        is the direction forwards or backwards. The
+        16 possible cases: Is the sign \texttt{+1} or \texttt{-1}? Is the type
+        \texttt{U} or \texttt{O}? Is the smoothing $0$ or $1$?
+        Is the direction forwards or backwards? The
         visuals for these 16 combinations are shown in
         Fig.~\ref{fig:thickened_negative_crossing_smoothings} and
         Fig.~\ref{fig:thickened_positive_crossing_smoothings}.
@@ -786,9 +811,9 @@ get_road_number(const struct knot *K,
     return b + c + d - a;
 }
 \end{lstlisting}
-        Regardless of preference (nested conditional or algebraic expressions)
+        Regardless of preference (nested conditionals or algebraic expressions)
         we now know which road we are entering the crossing from.
-        We now update our variables and go back to the top of the
+        We update our variables and go back to the top of the
         \texttt{while} loop and continue until
         we encounter a road we've already traveled on. Once this occurs we
         increment the circle count. We do this until all $4N$ entries of the
@@ -843,10 +868,16 @@ get_road_number(const struct knot *K,
         $4N$ roads, and the Hamming weight has worst-case complexity $O(N)$,
         meaning each stage is $O(4N)+O(N)=O(N)$ in time complexity. There are
         $2^{N}$ total steps, so $O(N2^{N})$ is the total complexity of the
-        computation. The computation of the array of indices at the beginning
+        computation. This assumes certain arithmetic operations are constant
+        in time. For arbitrary precision arithmetic beyond 32-bit and 64-bit
+        fixed-width integers this is not so. At any rate, these complexities are
+        polynomial so our total complexity is $O(\textrm{poly}(N)\cdot{2}^{N})$.
+        \par\hfill\par
+        The computation of the array of indices at the beginning
         is $O(N)$, but as mentioned is only required once and is not part of
         the inner for-loop. The result for the entire algorithm is
-        $O(N+N2^{N})=O(N2^{N})$. The primary benefit here is that the space
+        $O(N+\textrm{poly}(N)\cdot{2}^{N})=O(\textrm{poly}(N)\cdot{2}^{N})$.
+        The primary benefit here is that the space
         requirement is linear, only storing the $4N$ array of Booleans in
         memory and the Laurent polynomial itself (which is $O(N)$ in length).
         The algorithm also operates on any valid extended Gauss code, meaning
@@ -878,7 +909,8 @@ get_road_number(const struct knot *K,
         \cite{KatlasJones} and is the implementation used by the
         \texttt{Mathematica} package \texttt{KnotTheory`}. The algorithm
         can be modified to general programming languages lacking symbolic
-        manipulations using doubly linked lists \cite{MaguireJones}.
+        manipulations using doubly linked lists and an implementation
+        is provided by the author \cite{MaguireJones}.
         \par\hfill\par
         The computation begins by examining how smoothing a crossing modifies
         the PD code of a knot. The algorithm can work for link diagrams too
@@ -918,7 +950,7 @@ get_road_number(const struct knot *K,
         resolved the crossings, and similar that the \texttt{b} arc is
         connected to the \texttt{c} arc. \texttt{b} is now redundant and we
         may replace this with \texttt{P[a,c]}. That is, we make the formal
-        substitution $\texttt{P[a,b]P[b,c]}\mapsto\texttt{P[a,c]}$. Similar
+        substitution $\texttt{P[a,b]P[b,c]}\mapsto\texttt{P[a,c]}$. Similarly
         \texttt{P[a,b]P[a,b]} tells us \texttt{a} and \texttt{b} are forming a
         cycle. We may substitute $\texttt{P[a,b]P[a,b]}\mapsto\texttt{P[a,a]}$.
         In both of the substitutions the ordering of the pairs is immaterial.
@@ -932,21 +964,20 @@ get_road_number(const struct knot *K,
         }
         As mentioned, in a general programming language we can mimic these
         formal Laurent polynomial using doubly linked lists where the elements
-        of the linked list are used to represent formula products of ordered
-        pairs. A full implementation is provided, again under the GPLv3
-        license, in \cite{MaguireJones}.
+        of the linked list are used to represent formal products of ordered
+        pairs.
         \par\hfill\par
         The computational complexity in both time and space are on par with the
         previous Gauss code algorithm, though the actual time comparisons show
         the former method is a bit faster. Nevertheless we can modify this
         idea slightly and achieve a remarkable speed boost.
         \par\hfill\par
-        Repeat the previous algorithm by picking some element in the PD code
-        and undergoing the formal substitution
+        Repeat the previous algorithm by picking some element in the PD code,
+        undergoing the formal substitution
         $\texttt{X[a,b,c,d]}\mapsto\texttt{P[a,b]P[c,d]-$q$P[a,d]P[b,c]}$.
         Rather than doing this for each crossing,
         forming a product of affine terms,
-        and then expanding, instead find the entry in the PD code with the
+        and then expanding, we instead find the entry in the PD code with the
         \textit{most} number of elements in common with our starting one.
         That is, the entry \texttt{X[e,f,g,h]} with the highest number of
         matching integers in \texttt{X[a,b,c,d]}. We take this PD code entry
