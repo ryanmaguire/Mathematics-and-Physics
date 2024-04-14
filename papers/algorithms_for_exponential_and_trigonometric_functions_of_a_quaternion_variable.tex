@@ -1,0 +1,694 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2024/01/25                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = blue}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheoremstyle{normal}{\topsep}{\topsep}{}{}{\bfseries}{}{0.5em}{}
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}
+\newtheorem{definitionx}{Definition}
+\newtheorem{notationx}{Notation}
+\newcommand{\bqed}{\hfill$\blacksquare$}
+\newenvironment{example}{\pushQED{\bqed}\examplex}{\popQED\endexamplex}
+\newenvironment{definition}{\pushQED{\bqed}\definitionx}{\popQED\enddefinitionx}
+\newenvironment{notation}{\pushQED{\bqed}\notationx}{\popQED\endnotationx}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\title{Algorithms for Exponential and Trigonometric Functions of a Quaternion Variable}
+\author{Ryan Maguire}
+\date{\today}
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        Computations with exponential and trigonmetric
+        functions for real and complex inputs
+        have long been studied. Efficient algorithms for these calculations
+        exist and have been implemented in various programming libraries such
+        as \texttt{glibc} or \texttt{openlibm}.
+        For a real variable these functions can be computed by reducing the
+        argmument mod $\pi$ and then invoking a Remez minimax polynomial, a
+        Pade approximant, a Taylor series, a lookup table, or (most likely)
+        some combination of these methods. For complex variables we invoke
+        Euler's formula and reduce our work to computations with real numbers.
+        For a quaternion variable these functions are still well-defined, but
+        their computation requires more care due to the loss of commutativity.
+        In this note we'll show how to reduce the computation of trigonometric
+        functions of a quaternion variable to the evaluation of real-valued
+        functions. An implementation in the \texttt{C} programming language is
+        provided in the form of a semi-literate program.
+    \end{abstract}
+    \tableofcontents
+    \section{Quaternions}
+        Complex numbers have long been used as a tool for understanding
+        rotations in the plane. This can be seen using the polar
+        representation of complex number. If we are given $z=re^{i\theta}$ and
+        wish to rotate $z$ by an angle $\omega$ made with the positive real
+        axis (the $x$ axis), we can define
+        $z'=e^{i\omega}$ and compute the product:
+        \begin{equation}
+            \label{eqn:complex_numbers_as_rotations}
+            z\cdot{z}'=re^{i\theta}\cdot{e}^{i\omega}=re^{i(\theta+\omega)}
+        \end{equation}
+        The resulting complex number has the same magnitude, but the angle
+        has been shifted from $\theta$ to $\theta+\omega$, precisely what a
+        rotation is supposed to do.
+        \par\hfill\par
+        In the 1830s the Irish mathematician Sir William Rowan Hamilton began
+        trying to extend this idea to rotations in three dimensions
+        \cite[p.~2]{BuchmannQuaternionHistory}. He thought naturally one would
+        need an algebraic system of \textit{triples}, just like complex numbers
+        can be thought of as an algebraic system of orderd pairs under the
+        identification $z=x+iy=(x,\,y)\in\mathbb{R}^{2}$.
+        After about a decade of unsuccessful attempts at creating such a
+        theory, Hamilton discovered the \textit{quaternions}, an algebraic
+        system of \textit{quadruplets}. Using the convention
+        $1=(1,\,0,\,0,\,0)$, $i=(0,\,1,\,0,\,0)$, $j=(0,\,0,\,1,\,0)$, and
+        $k=(0,\,0,\,0,\,1)$, Hamilton proposed the following rules for
+        multiplication (\cite[p.~158]{HamiltonElementsOfQuaternions},
+        \cite[p.~1]{HamiltonOnQuaternions}):
+        \begin{equation}
+            i^{2}=j^{2}=k^{2}=ijk=-1
+        \end{equation}
+        The product of \textit{elementary} quaternions can be computed using
+        this equality. We have:
+        \begin{align}
+            ij&=-(ij)(k^2)=-(ijk)k=k\\
+            jk&=-(i^2)(jk)=-i(ijk)=i\\
+            ki&=-(ki)(j^{2})=-k(ij)j=-k^{2}j=j
+        \end{align}
+       But we have lost commutativity:
+        \begin{align}
+            ji&=j(jk)=j^{2}k=-k\\
+            kj&=k(ki)=k^{2}i=-i\\
+            ik&=i(ij)=i^{2}j=-j
+        \end{align}
+        Multiplication of arbitrary quaternions (elements of $\mathbb{R}^{4}$)
+        can then be given by the distributive law. This yields a rather
+        messy formula:
+        \begin{align}
+            (a_{1}+ib_{1}+jc_{1}+kd_{1})\cdot&(a_{2}+ib_{2}+jc_{2}+kd_{2})
+            \nonumber\\
+            &=(a_{1}a_{2}-b_{1}b_{2}-c_{1}c_{2}-d_{1}d_{2})\nonumber\\
+            &+i(a_{1}b_{2}+a_{2}b_{1}+c_{1}d_{2}-c_{2}d_{1})\nonumber\\
+            &+j(a_{1}c_{2}+a_{2}c_{1}-b_{1}d_{2}+b_{2}d_{1})\nonumber\\
+            &+k(a_{1}d_{2}+a_{2}d_{1}-b_{1}c_{2}+c_{1}b_{2})
+        \end{align}
+        This algebraic structure on $\mathbb{R}^{4}$ is neither commutative
+        (since $ij=-ji$) nor anti-commutative (since $1i=i1$). Still, it is
+        associative, has an identity, and distributes over vector addition
+        in $\mathbb{R}^{4}$, defined via:
+        \begin{align}
+            (a_{1}+ib_{1}+jc_{1}&+kd_{1})+(a_{2}+ib_{2}+jc_{2}+kd_{2})
+            \nonumber\\
+            &=(a_{1}+a_{2})+i(b_{1}+b_{2})+j(c_{1}+c_{2})+k(d_{1}+d_{2})
+        \end{align}
+        Moreover, non-zero elements have \textit{inverses}. This can be
+        given in precisely the same manner as complex inverses. We define the
+        quaternion conjugate via:
+        \begin{equation}
+            \textrm{conj}(a+ib+jc+kd)=a-ib-jc-kd
+        \end{equation}
+        The quaternion \textit{norm} is just the Euclidean norm in
+        $\mathbb{R}^{4}$:
+        \begin{equation}
+            ||a+ib+jc+kd||=\sqrt{a^{2}+b^{2}+c^{2}+d^{2}}
+        \end{equation}
+        The multiplicative inverse is then:
+        \begin{equation}
+            (a+ib+jc+kd)^{-1}
+            =\frac{\textrm{conj}(a+ib+jc+kd)}{||a+ib+jc+kd||^{2}}
+            =\frac{a-ib-jc-kd}{a^{2}+b^{2}+c^{2}+d^{2}}
+        \end{equation}
+        So what we have is a \textbf{non-commutative field}, sometimes called a
+        \textbf{skew-field} or a \textbf{division ring}
+        \cite[p. 4]{LamNonCommutativeRings}.
+        \subsection{Cayley-Dickson Construction}
+            The complex numbers can be viewed as a 2-dimensional vector space
+            over the real numbers endowed with a product:
+            \begin{equation}
+                (a,\,b)\cdot(c,\,d)=(ac-bd,\,ad+bc)
+            \end{equation}
+            In general an \textbf{algebra} over the real number (or any other
+            field) is a vector space $V$ together with a product
+            $\cdot:V\times{V}\rightarrow{V}$ that is compatible with vector
+            addition and scalar multiplication. That is, the right and left
+            distributive laws hold:
+            \begin{align}
+                \mathbf{x}\cdot(\mathbf{y}+\mathbf{z})
+                &=(\mathbf{x}\cdot\mathbf{y})
+                    +(\mathbf{x}\cdot\mathbf{z})\\
+                (\mathbf{y}+\mathbf{z})\cdot\mathbf{x}
+                &=(\mathbf{y}\cdot\mathbf{x})
+                    +(\mathbf{z}\cdot\mathbf{x})
+            \end{align}
+            and scalar multiplication commutes and associates with the product:
+            \begin{align}
+                a(\mathbf{x}\cdot\mathbf{y})
+                &=(a\mathbf{x})\cdot\mathbf{y}\\
+                &=\mathbf{x}\cdot(a\mathbf{y})
+            \end{align}
+            This is quite a general definition, there is no requirement of a
+            \textit{unit}, nor does the product need to obey the associative or
+            commutative laws. An \textbf{associative algebra} is an algebra
+            where the product satisfies the associative property:
+            \begin{equation}
+                (\mathbf{x}\cdot\mathbf{y})\cdot\mathbf{z}
+                =\mathbf{x}\cdot(\mathbf{y}\cdot\mathbf{z})
+            \end{equation}
+            The lack of associativity in the definition is not without reason.
+            The standard \textbf{cross product} on $\mathbb{R}^{3}$ makes
+            3-dimensional Euclidean space into an algebra over the reals, but
+            the cross product is not associative. For example:
+            \begin{align}
+                (\hat{\mathbf{x}}\times\hat{\mathbf{y}})\times\hat{\mathbf{y}}
+                &=\hat{\mathbf{z}}\times\hat{\mathbf{y}}
+                =-\hat{\mathbf{x}}\\
+                \hat{\mathbf{x}}\times(\hat{\mathbf{y}}\times\hat{\mathbf{y}})
+                &=\hat{\mathbf{x}}\times\mathbf{0}
+                =\mathbf{0}
+            \end{align}
+            Moreover, there is no unit. For every vector
+            $\mathbf{v}\in\mathbb{R}^{3}$ we have
+            $\mathbf{v}\times\mathbf{v}=\mathbf{0}$. Since $\mathbf{0}$ does
+            not act as a multiplicative identity, this shows the cross product
+            gives us a non-unital non-associative algebra over the reals.
+            \par\hfill\par
+            The \textbf{Cayley-Dickson construction} gives us a way of forming
+            a sequence of algebras over the reals
+            (more generally, any algebra equipped with an
+            \textit{involution} over any field. See
+            \cite[p.~45]{SchaferNonassociativeAlgebras}).
+            We start with an algebra $V_{0}$ with product $\cdot$.
+            We create an algebra on $V_{1}=V_{0}\times{V}_{0}$ with product
+            $\star$ as follows. For each $\mathbf{x}\in{V}_{0}$ define:
+            \begin{equation}
+                \overline{\mathbf{x}}=\mathbf{x}
+            \end{equation}
+            and for each $(\mathbf{x},\,\mathbf{y})\in{V}_{1}$ write:
+            \begin{equation}
+                \overline{(\mathbf{x},\,\mathbf{y})}
+                =(\overline{\mathbf{x}},\,-\mathbf{y})
+            \end{equation}
+            We then define $\star$ via:
+            \begin{equation}
+                (\mathbf{x},\,\mathbf{y})\star(\mathbf{z},\,\mathbf{w})
+                =(\mathbf{x}\cdot\mathbf{z}-
+                    \overline{\mathbf{w}}\cdot\mathbf{y},\,
+                \mathbf{w}\cdot\mathbf{x}+
+                    \mathbf{y}\cdot\overline{\mathbf{z}})
+            \end{equation}
+            We define $V_{2}=V_{1}\times{V}_{1}$ and mimic the previous formulas
+            to create a product on $V_{2}$. We can continue this recursively
+            and at each step the result is an algebra over the reals with twice
+            the dimension of the previous entry in the sequence.
+            \par\hfill\par
+            The equations become clearer if we write
+            $(\mathbf{x},\,\mathbf{y})=\mathbf{x}+i\mathbf{y}$ and require
+            $i^{2}=-1$. Invoking the distributive law we have:
+            \begin{subequations}
+                \begin{align}
+                    (\mathbf{x}+i\mathbf{y})\star(\mathbf{z}+i\mathbf{w})
+                    &=\mathbf{x}\cdot\mathbf{y}
+                        +i\mathbf{x}\cdot\mathbf{w}
+                        +i\mathbf{y}\cdot\mathbf{z}
+                        +i^{2}\mathbf{x}\cdot\mathbf{w}\\
+                    &=(\mathbf{x}\cdot\mathbf{z}-\mathbf{y}\cdot\mathbf{w})
+                        +i(\mathbf{x}\cdot\mathbf{z}+\mathbf{y}\cdot\mathbf{z})
+                \end{align}
+            \end{subequations}
+            If $V_{0}=\mathbb{R}$, the real numbers,
+            and $\cdot$ is multiplication of real numbers,
+            this construction yields the complex numbers.
+            \par\hfill\par
+            If $V_{0}=\mathbb{C}$, the complex numbers,
+            and $\cdot$ is the multiplication of
+            complex numbers, then the quaternions are $V_{1}$ in this
+            construction. This gives a convenient way of dealing with
+            quaternions: as ordered pairs of complex numbers:
+            \begin{equation}
+                a+ib+jc+kd
+                =(a+ib)+(c+id)j
+                =z+wj
+            \end{equation}
+            where we recall that $ij=k$.
+            \par\hfill\par
+            If we set $V_{0}=\mathbb{H}$, the quaternions,
+            we can continue and study the
+            \textbf{octonions} $V_{1}=\mathbb{O}$, which is an
+            algebraic structure on $\mathbb{R}^{8}$, but these are
+            neither commutative nor associative. Division by non-zero elements
+            is still well-defined, and so the octonions (like the complex
+            numbers and quaternions) are a \textbf{division algebra}
+            over the reals.
+            \par\hfill\par
+            Repeating this with $V_{0}=\mathbb{O}$ yields the \textbf{sedenions}
+            $V_{1}=\mathbb{S}$,%
+            \footnote{
+                The symbol $\mathbb{S}$ is often reserved for the topological
+                structure on the unit circle
+                $\mathbb{S}=\mathbb{S}^{1}\subset\mathbb{R}^{2}$.
+            }
+            a non-commutative, non-associative algebraic
+            structure for $\mathbb{R}^{16}$. Here is where division is lost.
+            It is possible to have \textbf{zero divisors}, non-zero sedenions
+            $\mathbf{x},\mathbf{y}$ such that
+            $\mathbf{x}\cdot\mathbf{y}=\mathbf{0}$. The algebraic structures
+            become harder to work with as we repeat this process.
+        \subsection{Power Series}
+            For each $n\in\mathbb{N}$ in the Cayley-Dickson construction
+            we have $V_{n}=\mathbb{R}^{2^{n}}$ as a vector space.
+            Since Euclidean spaces naturally have a \textbf{norm},
+            this construction yields \textbf{normed unital algebras} for each
+            natural number. For the complex numbers, quaternions, and
+            octonions we can use this norm to compute inverses.
+            We have:
+            \begin{equation}
+                \mathbf{x}^{-1}
+                =\frac{\textrm{conj}(\mathbf{x})}{||\mathbf{x}||^{2}}
+            \end{equation}
+            The norm also allows us to define a topology on the
+            quaternions, which is identical to the Euclidean topology on
+            $\mathbb{R}^{4}$. Once we have a topology we can study the
+            convergence of sequences. In particular, we can study the
+            convergence of \textbf{sequences of partial sums}. If
+            $q:\mathbb{N}\rightarrow\mathbb{H}$ is a sequence of quaternions,
+            and if $S:\mathbb{N}\rightarrow\mathbb{H}$ is defined by:
+            \begin{equation}
+                S_{N}=\sum_{n=0}^{N}q_{n}
+            \end{equation}
+            We can ask if there is some quaternion $p$ such that
+            $q_{n}\rightarrow{p}$. This would mean for all
+            $\varepsilon>0$ there is an $N\in\mathbb{N}$ such that for all
+            $n\in\mathbb{N}$ with $n>N$ we have
+            $||q_{n}-p||<\varepsilon$. This is the
+            \textbf{metric space definition of convergence}, which is natural
+            since normed vector spaces are metric spaces.
+            \par\hfill\par
+            Like in the case of real and complex variables, certain power
+            series can be shown to converge using the
+            \textbf{absolute convergence test}. For example, consider the
+            exponential function:
+            \begin{equation}
+                \exp(q)
+                =\sum_{n=0}^{\infty}\frac{q^{n}}{n!}
+            \end{equation}
+            This can be shown to converge for all $q\in\mathbb{H}$ since
+            the sequence of partial sums:
+            \begin{equation}
+                S_{N}(q)=\sum_{n=0}^{N}\frac{||q||^{n}}{n!}
+            \end{equation}
+            is a convergent sequence of real numbers (the norm of a quaternion
+            is a real number) so the original sum is absolutely convergent,
+            and hence $\exp(q)$ is well-defined. Similarly the sine and cosine
+            of quaternions can be defined:
+            \begin{align}
+                \cos(q)&=\sum_{n=0}^{\infty}(-1)^{n}\frac{q^{2n}}{(2n)!}\\
+                \sin(q)&=\sum_{n=0}^{\infty}(-1)^{n}\frac{q^{2n+1}}{(2n+1)!}
+            \end{align}
+            Even hyperbolic trigonometric functions are well-defined:
+            \begin{align}
+                \cosh(q)&=\sum_{n=0}^{\infty}\frac{q^{2n}}{(2n)!}\\
+                \sinh(q)&=\sum_{n=0}^{\infty}\frac{q^{2n+1}}{(2n+1)!}
+            \end{align}
+            But one must take care to not invoke formulas that are true for
+            real-valued trigonometric and exponential functions. A classic
+            example is the sum rule for exponentials:
+            \begin{equation}
+                \exp(x+y)=\exp(x)\exp(y)
+            \end{equation}
+            The proof of this uses the fact that real numbers commute under
+            multiplication. In general this is all that is needed, so the
+            formula holds for complex numbers as well:
+            \begin{equation}
+                \exp(z+w)=\exp(z)\exp(w)
+            \end{equation}
+            The proof is an application of the Cauchy product of series:
+            \begin{equation}
+                \Big(\sum_{n=0}^{\infty}a_{n}\Big)
+                    \Big(\sum_{k=0}^{\infty}b_{k}\Big)
+                =\sum_{n=0}^{\infty}\sum_{k=0}^{n}a_{k}b_{n-k}
+            \end{equation}
+            and the binomial theorem:
+            \begin{equation}
+                (x+y)^{n}
+                =\sum_{k=0}^{n}\binom{n}{k}x^{k}y^{n-k}
+                =\sum_{k=0}^{n}\frac{n!}{k!(n-k)!}x^{k}y^{n-k}
+            \end{equation}
+            For $\exp$ we have:
+            \begin{subequations}
+                \begin{align}
+                    \exp(x+y)
+                    &=\sum_{n=0}^{\infty}\frac{(x+y)^{n}}{n!}\\
+                    &=\sum_{n=0}^{\infty}\frac{1}{n!}
+                        \sum_{k=0}^{n}\binom{n}{k}x^{k}y^{n-k}\\
+                    &=\sum_{n=0}^{\infty}\frac{1}{n!}
+                        \sum_{k=0}^{n}\frac{n!}{k!(n-k)!}x^{k}y^{n-k}\\
+                    &=\sum_{n=0}^{\infty}\sum_{k=0}^{n}
+                        \frac{x^{k}}{k!}\frac{y^{n-k}}{(n-k)!}\\
+                    &=\Big(\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\Big)
+                        \Big(\sum_{k=0}^{\infty}\frac{y^{k}}{k!}\Big)\\
+                    &=\exp(x)\exp(y)
+                \end{align}
+            \end{subequations}
+            \textbf{Mertens' theorem} tells us that the Cauchy product formula
+            is valid for absolutely convergent series in any
+            \textbf{Banach algebra} (a normed algebra where the norm induces
+            a \textbf{complete} metric on the space), so in particular it holds
+            for all $V_{n}$ in our Cayley-Hamilton construction
+            (all of the Euclidean spaces are complete with their Euclidean
+            norms). The binomial theorem, on the other hand, requires that the
+            variables commute. We'll need to handle these power series with
+            care if we wish to devise efficient means of computations.
+        \subsection{Evaluation of the Exponential Function}
+            The real-valued quaternions commute with all other quaternions.
+            Moreover, these are the only quaternions with this property
+            (the real numbers form the \textbf{center} of the quaternions).
+            Since multiplication with real numbers does commute, for any
+            quaternion $q\in\mathbb{H}$ and any real number
+            $a\in\mathbb{R}$ we have:
+            \begin{equation}
+                \exp(a+q)=\exp(a)\exp(q)
+            \end{equation}
+            We can use this to simplify our computations. We split a
+            quaternion $q$ into a \textit{real part} and a \textit{vector part},
+            $q=a+\mathbf{v}=a+ib+jc+kd$. The vector part can also be thought of
+            as the \textit{imaginary} or \textit{unreal} part. It is an element
+            of $\mathbb{R}^{3}$. For a purely imaginary quaternion
+            $\mathbf{v}$, the formula for multiplication yields a very nice
+            equation for powers of $\mathbf{v}$. We have:
+            \begin{subequations}
+                \begin{align}
+                    \mathbf{v}^{2}
+                    &=(ib+jc+kd)^{2}\\
+                    &=-b^{2}-c^{2}-d^{2}\\
+                    &=-||\mathbf{v}||^{2}
+                \end{align}
+            \end{subequations}
+            In particular, for even integers $n=2k$ we have:
+            \begin{equation}
+                \mathbf{v}^{2k}
+                =(\mathbf{v}^{2})^{k}
+                =(-||\mathbf{v}||^{2})^{k}
+                =(-1)^{k}||\mathbf{v}||^{2k}
+            \end{equation}
+            which is a real number. The odd powers can be computed from this:
+            \begin{equation}
+                \mathbf{v}^{2k+1}
+                =\mathbf{v}^{2k}\mathbf{v}
+                =(-1)^{k}||\mathbf{v}||^{2k}\mathbf{v}
+            \end{equation}
+            and this is a strictly imaginary quaternion.
+            The exponential series can then be split into even and odd parts.
+            \begin{subequations}
+                \begin{align}
+                    \exp(\mathbf{v})
+                    &=\sum_{n=0}^{\infty}\frac{\mathbf{v}^{n}}{n!}\\
+                    &=\sum_{k=0}^{\infty}\frac{\mathbf{v}^{2k}}{(2k)!}
+                        +\sum_{k=0}^{\infty}\frac{\mathbf{v}^{2k+1}}{(2k+1)!}\\
+                    &=\sum_{k=0}^{\infty}
+                        (-1)^{k}\frac{||\mathbf{v}||^{2k}}{(2k)!}
+                        +\mathbf{v}
+                        \sum_{k=0}^{\infty}(-1)^{k}
+                            \frac{||\mathbf{v}||^{2k}}{(2k+1)}\\
+                    &=\sum_{k=0}^{\infty}
+                        (-1)^{k}\frac{||\mathbf{v}||^{2k}}{(2k)!}
+                        +\frac{\mathbf{v}}{||\mathbf{v}||}
+                        \sum_{k=0}^{\infty}(-1)^{k}
+                            \frac{||\mathbf{v}||^{2k+1}}{(2k+1)}\\
+                    &=\cos(||\mathbf{v}||)+
+                        \frac{\mathbf{v}}{||\mathbf{v}||}\sin(||\mathbf{v}||)
+                \end{align}
+            \end{subequations}
+            Since multiplication with real numbers commutes, for a
+            quaternion $q=a+\mathbf{v}$, with $a\in\mathbb{R}$ and
+            $\mathbf{v}$ strictly imaginary, we have:
+            \begin{subequations}
+                \label{eqn:exp_quaternion_formula}
+                \begin{align}
+                    \exp(a+\mathbf{v})
+                    &=\exp(a)\exp(\mathbf{v})\\
+                    &=\exp(a)\Big(
+                        \cos(||\mathbf{v}||)+
+                        \frac{\mathbf{v}}{||\mathbf{v}||}
+                        \sin(||\mathbf{v}||)
+                    \Big)
+                \end{align}
+            \end{subequations}
+            Two things to note. First, we have reduced the computation of the
+            exponential of a quaternion variable to the evaluation of
+            exponential and trigonometric functions of a real variable.
+            Second, this formula closely mimics Euler's formula for complex
+            numbers. Indeed, Euler's formula is contained within it. If
+            $q=a+ib$ is a \textit{purely complex} quaternion, then:
+            \begin{subequations}
+                \label{eqn:exp_quaternion_purely_complex}
+                \begin{align}
+                    \exp(a+ib)
+                    &=\exp(a)\exp(ib)\\
+                    &=\exp(a)\Big(
+                        \cos(||ib||)+\frac{ib}{||ib||}\sin(||ib||)
+                    \Big)\\
+                    &=\exp(a)\Big(\cos(b)+i\textrm{sgn}(b)\sin(|b|)\Big)\\
+                    &=\exp(a)\Big(\cos(b)+i\sin(b)\Big)
+                \end{align}
+            \end{subequations}
+            where we have used the fact that $\cos$ is an \textbf{even function}
+            and $\sin$ is an \textbf{odd function} in our simplification, and
+            where $\textrm{sgn}$ denotes the \textbf{sign} function.
+            \par\hfill\par
+            The generalization has a geometric interpretation as well.
+            $\mathbf{v}/||\mathbf{v}||$ is a unit vector on the unit sphere
+            $\mathbb{S}^{2}\subseteq\mathbb{R}^{3}$, the \textit{direction} of
+            the vector $\mathbf{v}\in\mathbb{R}^{3}$. For the complex case,
+            $ib/|b|$ is either \textit{north} or \textit{south}, for non-zero
+            $b$. Topologically this is the \textbf{zero-sphere},
+            $\mathbb{S}^{0}$, two isolated points.
+    \section{Trigonometry with Quaternion Variables}
+        Now that the exponential function has been dealt with, we turn our
+        attention to the three main trigonometric functions: cosine, sine, and
+        tangent. Before doing so, let's examine how these functions work when
+        the variables commute. This will give us several familiar formulas for
+        real-valued trigonometric functions, and since real numbers commute
+        with quaternions, we'll be able to apply these formulas in the more
+        general case with little modification.
+        \subsection{The Angle Sum Formulas}
+            Euler's formula is a special case of
+            Eqn.~\ref{eqn:exp_quaternion_formula}, as shown by
+            Eqn.~\ref{eqn:exp_quaternion_purely_complex}. The derivation of
+            Euler's formula requires commutativity and that $i^{2}=-1$. If
+            $q=a+\mathbf{v}$ is a quaternion where $\mathbf{v}$ is non-zero,
+            we can write $q=a+||\mathbf{v}||\hat{\mathbf{v}}$ where
+            $\hat{\mathbf{v}}$ is the unit vector in the direction of
+            $\mathbf{v}$:
+            \begin{equation}
+                \hat{\mathbf{v}}=\frac{\mathbf{v}}{||\mathbf{v}||}
+            \end{equation}
+            $\hat{\mathbf{v}}$ then acts like $i$ for complex numbers since it
+            squares to minus one:
+            \begin{equation}
+                \hat{\mathbf{v}}^{2}
+                =\Big(\frac{\mathbf{v}}{||\mathbf{v}||}\Big)^{2}
+                =\frac{\mathbf{v}^{2}}{||\mathbf{v}||^{2}}
+                =\frac{-||\mathbf{v}||^{2}}{||\mathbf{v}||^{2}}
+                =-1
+            \end{equation}
+            But rather than taking on a zero dimensional role
+            ($i$ is a single point),
+            it takes on a two dimensional role ($\hat{\mathbf{v}}$ can be
+            any point on the unit sphere $\mathbb{S}^{2}$). Let us now try to
+            derive the angle-sum formulas for the sine and cosine of
+            quaternions. For real numbers we have:
+            \begin{align}
+                \label{eqn:angle_sum_formula_cos}
+                \cos(a+b)&=\cos(a)\cos(b)-\sin(a)\sin(b)\\
+                \label{eqn:angle_sum_formula_sin}
+                \sin(a+b)&=\cos(a)\sin(b)+\sin(a)\cos(b)
+            \end{align}
+            These can be derived using Euler's formula. We have:
+            \begin{align}
+                \cos(a+b)+i\sin(a+b)
+                &=\exp\big(i(a+b)\big)\\
+                &=\exp(ia)\exp(ib)\\
+                &=\Big(\cos(a)+i\sin(a)\Big)
+                    \Big(\cos(b)+i\sin(b)\Big)\\
+                &=\Big(\cos(a)\cos(b)-\sin(a)\sin(b)\Big)\nonumber\\
+                &\hspace{2em}
+                    +i\Big(\cos(a)\sin(b)+\sin(a)\cos(b)\Big)
+            \end{align}
+            By comparing real and imaginary parts we obtain
+            Eqns.~\ref{eqn:angle_sum_formula_cos} and
+            \ref{eqn:angle_sum_formula_sin}. If $a$ and $b$ are complex
+            values the formula still holes. This is because the derivation
+            of $\exp(i\theta)=\cos(\theta)+i\sin(\theta)$ does not really
+            require that $\theta$ be real, only that
+            $(i\theta)^{n}=i^{n}\theta^{n}$. In other words, it requires that
+            $i$ and $\theta$ commute. The complex numbers have no issues with
+            commutativity, so we may write:
+            \begin{align}
+                \label{eqn:angle_sum_formula_complex_cos}
+                \cos(z+w)&=\cos(z)\cos(w)-\sin(z)\sin(w)\\
+                \label{eqn:angle_sum_formula_complex_sin}
+                \sin(z+w)&=\cos(z)\sin(w)+\sin(z)\cos(w)
+            \end{align}
+            for complex numbers $z,w\in\mathbb{C}$. For quaternions it is not
+            immediate that our formulas should hold. Let $q\in\mathbb{H}$ be
+            a quaternion, and suppose $\mathbf{u}\in\mathbb{H}$ is a unit
+            imaginary quaternion. That is,
+            $\mathbf{u}=ib+jc+kd$ for some $b,c,d\in\mathbb{R}$ and
+            $||\mathbf{u}||=1$. Furthermore, suppose $\mathbf{u}$ commutes with
+            $q$, $\mathbf{u}q=q\mathbf{u}$. If this is true, then by induction
+            we have $(\mathbf{u}q)^{n}=\mathbf{u}^{n}q^{n}$ for all
+            $n\in\mathbb{N}$. Using this we obtain:
+            \begin{subequations}
+                \begin{align}
+                    \exp(\mathbf{u}q)
+                    &=\sum_{n=0}^{\infty}\frac{(\mathbf{u}q)^{n}}{n!}\\
+                    &=\sum_{n=0}^{\infty}\mathbf{u}^{n}\frac{q^{n}}{n!}\\
+                    &=\sum_{n=0}^{\infty}\mathbf{u}^{2n}\frac{q^{2n}}{(2n)!}
+                        +\sum_{n=0}^{\infty}
+                        \mathbf{u}^{2n+1}\frac{q^{2n+1}}{(2n+1)!}\\
+                    &=\sum_{n=0}^{\infty}(-1)^{n}\frac{q^{2n}}{(2n)!}
+                        +\mathbf{u}
+                        \sum_{n=0}^{\infty}(-1)^{n}\frac{q^{2n+1}}{(2n+1)!}\\
+                    &=\cos(q)+\mathbf{u}\sin(q)
+                \end{align}
+            \end{subequations}
+            A direct mimicry of Euler's formula. If
+            $q=a+\mathbf{v}$, where $\mathbf{v}$ is non-zero,
+            then $\mathbf{u}=\hat{\mathbf{v}}$ is a unit vector that commutes
+            with $q$ since:
+            \begin{equation}
+                \hat{\mathbf{v}}q
+                =\hat{\mathbf{v}}(a+\mathbf{v})
+                =\hat{\mathbf{v}}a+\hat{\mathbf{v}}\mathbf{v}
+                =a\hat{\mathbf{v}}+\mathbf{v}\hat{\mathbf{v}}
+                =(a+\mathbf{v})\hat{\mathbf{v}}
+                =q\hat{\mathbf{v}}
+            \end{equation}
+            Since $\hat{\mathbf{v}}a=a\hat{\mathbf{v}}$ and
+            $\hat{\mathbf{v}}\mathbf{v}=\mathbf{v}\hat{\mathbf{v}}$
+            we have:
+            \begin{equation}
+                \exp\big(\hat{\mathbf{v}}(a+\mathbf{v})\big)=
+                \exp(\hat{\mathbf{v}}a)\exp(\hat{\mathbf{v}}\mathbf{v})
+            \end{equation}
+            Using this we can string together the following equalities.
+            \begin{subequations}
+                \begin{align}
+                    \cos(a+\mathbf{v})+\hat{\mathbf{v}}\sin(a+\mathbf{v})
+                    &=\exp\big(\hat{\mathbf{v}}(a+\mathbf{v})\big)\\
+                    &=\exp(\hat{\mathbf{v}}a)\exp(\hat{\mathbf{v}}\mathbf{v})\\
+                    &=\Big(\cos(a)+\hat{\mathbf{v}}\sin(a)\Big)\Big(
+                            \cos(\mathbf{v})+\hat{\mathbf{v}}\sin(\mathbf{v})
+                        \Big)\\
+                    &=\Big(\cos(a)\cos(\mathbf{v})-\sin(a)\sin(\mathbf{v})\Big)
+                        \nonumber\\
+                        &\hspace{2em}
+                        +\hat{\mathbf{v}}\Big(
+                            \cos(a)\sin(\mathbf{v})+\sin(a)\cos(\mathbf{v})
+                        \Big)
+                \end{align}
+            \end{subequations}
+            It would be nice to say
+            \textit{compare the real and imaginary parts}, just as we did with
+            Euler's formula for complex numbers, but
+            $\cos(a+\mathbf{v})$ and
+            $\cos(a)\cos(\mathbf{v})-\sin(a)\sin(\mathbf{v})$ may have both
+            real and imaginary components. Similarly,
+            $\sin(a+\mathbf{v})$ and
+            $\sin(a)\cos(\mathbf{v})+\cos(a)\sin(\mathbf{v})$ may have mixed
+            parts, so we can't guarantee equality here. However,
+            repeating this calculation with $\mathbf{u}=-\hat{\mathbf{v}}$,
+            which still commutes with $q=a+\mathbf{v}$, shows that we can cancel
+            to obtain:
+            \begin{align}
+                \cos(a+\mathbf{v})
+                &=\cos(a)\cos(\mathbf{v})-\sin(a)\sin(\mathbf{v})\\
+                \sin(a+\mathbf{v})
+                &=\cos(a)\sin(\mathbf{v})+\sin(a)\cos(\mathbf{v})
+            \end{align}
+            And with this we're one step closer to obtain general formulas.
+        \subsection{Sine, Cosine, and Tangent for Quaternions}
+            Now that we have the angle sum formulas for sine and cosine, the
+            computation of trigonometric functions for general quaternions comes
+            with ease. For a strictly imaginary $\mathbf{v}\in\mathbb{H}$
+            we have:
+            \begin{subequations}
+                \begin{align}
+                    \cos(\mathbf{v})
+                    &=\sum_{n=0}^{\infty}(-1)^{n}\frac{\mathbf{v}^{2n}}{(2n)!}\\
+                    &=\sum_{n=0}^{\infty}(-1)^{n}
+                        \frac{(-1)^{n}||\mathbf{v}||^{2n}}{(2n)!}\\
+                    &=\sum_{n=0}^{\infty}\frac{||\mathbf{v}||^{2n}}{(2n)!}\\
+                    &=\cosh(||\mathbf{v}||)
+                \end{align}
+            \end{subequations}
+            Similarly:
+            \begin{subequations}
+                \begin{align}
+                    \sin(\mathbf{v})
+                    &=\sum_{n=0}^{\infty}(-1)^{n}
+                        \frac{\mathbf{v}^{2n+1}}{(2n+1)!}\\
+                    &=\sum_{n=0}^{\infty}(-1)^{n}
+                        \frac{(-1)^{n}\mathbf{v}||\mathbf{v}||^{2n}}{(2n+1)!}\\
+                    &=\mathbf{v}\sum_{n=0}^{\infty}
+                        \frac{||\mathbf{v}||^{2n}}{(2n+1)}\\
+                    &=\frac{\mathbf{v}}{||\mathbf{v}||}
+                        \sum_{n=0}^{\infty}
+                        \frac{||\mathbf{v}||^{2n+1}}{(2n+1)!}\\
+                    &=\frac{\mathbf{v}}{||\mathbf{v}||}\sinh(||\mathbf{v}||)
+                \end{align}
+            \end{subequations}
+            And so for strictly imaginary quaternions sine and cosine have been
+            reduced to hyperbolic sine and hyperbolic cosine of a real input.
+            For the general quaternion we invoke the angle sum formula. If
+            $q=a+\mathbf{v}$ we have:
+            \begin{subequations}
+                \begin{align}
+                    \cos(q)
+                    &=\cos(a+\mathbf{v})\\
+                    &=\cos(a)\cos(\mathbf{v})-\sin(a)\sin(\mathbf{v})\\
+                    &=\cos(a)\cosh(||\mathbf{v}||)
+                        -\frac{\mathbf{v}}{||\mathbf{v}||}
+                        \sin(a)\sinh(||\mathbf{v}||)
+                \end{align}
+            \end{subequations}
+            And similarly:
+            \begin{subequations}
+                \begin{align}
+                    \sin(q)
+                    &=\sin(a+\mathbf{v})\\
+                    &=\cos(a)\sin(\mathbf{v})+\sin(a)\cos(\mathbf{v})\\
+                    &=\frac{\mathbf{v}}{||\mathbf{v}||}
+                        \cos(a)\sinh(||\mathbf{v}||)
+                        +\sin(a)\cosh(||\mathbf{v}||)\\
+                    &=\sin(a)\cosh(||\mathbf{v}||)+
+                        \frac{\mathbf{v}}{||\mathbf{v}||}
+                        \cos(a)\sinh(||\mathbf{v}||)
+                \end{align}
+            \end{subequations}
+    \section{Implementation in \texttt{libtmpl}}
+    \newpage
+    \bibliographystyle{plain}
+    \bibliography{bib.bib}
+\end{document}
