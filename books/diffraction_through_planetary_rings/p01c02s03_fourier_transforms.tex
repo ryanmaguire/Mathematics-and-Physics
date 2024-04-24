@@ -1,0 +1,258 @@
+\section{Fourier Transforms}
+    Suppose you are asked to compute $z=x/y$ for
+    two non-zero real numbers $x$ and $y$. We could perform
+    long-hand division, or transform the problem into
+    subtraction by using the natural logarithm.
+    \begin{equation}
+        z=x/y\Rightarrow
+        \ln(z)=\ln(x/y)\Rightarrow
+        \ln(z)=\ln(x)-\ln(y)
+    \end{equation}
+    Provided that $\ln(x)$ and $\ln(y)$ are somehow known,
+    one can compute the difference and then compute $z$
+    by exponentiating the result. In a similar manner, the
+    Fourier transform is often introduced as a tool for
+    converting one problem into another.
+    \begin{ldefinition}{Fourier Transform}{Fourier_Transform}
+        The Fourier transform of a complex valued integrable function
+        $f:\mathbb{R}\rightarrow\mathbb{C}$ is the function
+        $\mathcal{F}_{\xi}(f):\mathbb{R}\rightarrow\mathbb{C}$ defined by:
+        \begin{equation}
+            F_{\xi}(f)=\int_{\minus\infty}^{\infty}f(t)
+                \exp(\minus{2}\pi{i}\xi{t})\diff{t}
+        \end{equation}
+        This is also called the \textit{spectrum} of $f$.
+    \end{ldefinition}
+    The requirement that $f$ be integrable is to avoid
+    strange issues in mathematics. For the sake of
+    physical application, one may assume every function
+    is integrable. Mathematically this is far from true,
+    but oh well. For the sake of Fourier Analysis, when
+    we say integrable we mean Lebesgue integrable. This
+    simply means that:
+    \begin{equation}
+        \int_{\minus\infty}^{\infty}|f(x)|\diff{x}<\infty
+    \end{equation}
+    \begin{lexample}{}{FT_Hat_Func}
+        Consider the hat function:
+        \begin{equation}
+            f(t)=
+            \begin{cases}
+                0,&|t|\leq{1}\\
+                1,&|t|>1
+            \end{cases}
+        \end{equation}
+        We can compute the Fourier transform of the this
+        explicitly:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)
+            =\int_{\minus\infty}^{\infty}f(t)
+                \exp(\minus{2}\pi{i}\xi{t})\diff{t}
+            =\int_{\minus{1}}^{1}
+                \exp(\minus{2}\pi{i}\xi{t})\diff{t}
+        \end{equation}
+        Here we invoke Euler's Theorem,
+        Thm.~\ref{thm:Euler_Expo_Formula},
+        and note that the integral has symmetric limits.
+        But $\sin$ is an \textit{odd} function, and thus
+        it's integral is zero, and $\cos$ is an even
+        function. Thus, we are left with:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)=
+            2\int_{0}^{1}\cos(2\pi{i}\xi{t})\diff{t}
+            =\frac{\sin(2\pi\xi)}{\pi\xi}
+        \end{equation}
+        We can be even more general, defining:
+        \begin{equation}
+            f(x)=
+            \begin{cases}
+                1,&a\leq{x}\leq{b}\\
+                0,&\textrm{Otherwise}
+            \end{cases}
+        \end{equation}
+        The Fourier transform is then:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)=
+            \frac{i\big(\exp(\minus{2}\pi{i}\xi{b})-
+                    \exp(\minus{2}\pi{i}\xi{a}\big)}{2\pi\xi}
+        \end{equation}
+        Thus we see that the range of the Fourier transform
+        generally lies in the complex plane. Only with
+        sufficient symmetry does the problem collapse down
+        to $\mathbb{R}$.
+    \end{lexample}
+    Recall that a complex number has a polar representation
+    $z=r\exp(i\theta)$. Similarly, for a complex valued
+    function we can write:
+    \begin{equation}
+        f(z)=R(r)\exp\big(i\Theta(\theta)\big)
+    \end{equation}
+    For the Fourier transform of a function, the function
+    $R(r)$ is called the principle amplitude, and
+    $\Theta(\theta)$ is the \textit{phase offset} from
+    this amplitude. The Fourier transform of the hat
+    function defined from $\minus{1}$ to $1$ is plotted
+    in Fig.~\ref{fig:Diff_Theory_FT_of_Hat_Func}.
+    \begin{figure}[H]
+        \centering
+        \captionsetup{type=figure}
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{fourier_transform_square_well.pdf}
+            }
+            \subcaption{Time Domain.}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \includegraphics{fourier_transform_sinc_function.pdf}
+            }
+            \subcaption{Frequency Domain.}
+        \end{subfigure}
+        \caption{Fourier Transform of the Hat Function.}
+        \label{fig:Diff_Theory_FT_of_Hat_Func}
+    \end{figure}
+    \begin{lexample}{}{FT_Decaying_Expo}
+        Let $f:\mathbb{R}\rightarrow\mathbb{R}$ be defined by:
+        \begin{equation}
+            f(t)=
+            \begin{cases}
+                \beta\exp(\minus\alpha{t}),&t\geq{0}\\
+                0,&t<0
+            \end{cases}
+        \end{equation}
+        Where $\alpha$ and $\beta$ are positive real numbers.
+        Since $f(t)$ decays to zero rapidly as
+        $t\rightarrow\infty$, we see that $f$ is a
+        Lebesgue integrable function and has a Fourier
+        transform. We can compute this using the standard
+        methods obtained from a course on integral calculus.
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)=\int_{\minus\infty}^{\infty}f(t)
+                                    \exp(\minus{2}\pi{i}\xi{t})\diff{t}
+                                =\beta\int_{0}^{\infty}
+                                    \exp(\minus\alpha{t})
+                                    \exp(\minus{2}\pi{i}\xi{t})\diff{t}
+        \end{equation}
+        Using the product rule for exponents, we can
+        reduce this to the following line integral:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)=
+            \beta\int_{0}^{\infty}\exp\big(
+                \minus(\alpha+2\pi{i}\xi)t\big)\diff{t}
+        \end{equation}
+        Thus, we are integrating the exponential function
+        along the line $z=\theta{t}$, where
+        $\theta=\tan^{\minus{1}}(2\pi\xi/\alpha)$.
+        Since $\alpha$ is positive, we can use the result
+        from Jordan's Lemma to obtain the solution:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)
+            =\frac{\beta}{\alpha+2\pi{i}\xi}
+        \end{equation}
+        There are two ways to view the Fourier
+        transform: The Cartesian form and the
+        polar form. As was stated before, the
+        polar form represents the \textit{amplitude}
+        and \textit{phase offset} of the Fourier
+        transform, whereas the Cartesian form simply
+        represents the real and imaginary parts. To
+        compute the Cartesian form, we simply invoke
+        Eqn.~\ref{eqn:Mult_Inv_of_Complex} for the inverse
+        of a complex number, and obtain:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)
+            =\beta\frac{\alpha-2\pi{i}\xi}
+                {\alpha^{2}+4\pi^{2}\xi^{2}}
+        \end{equation}
+        For the polar form, we invoke
+        Thm.~\ref{thm:Polar_Form_Comp_Num},
+        take the modulus of $\mathcal{F}_{\xi}(f)$
+        and compute inverse tangents:
+        \begin{equation}
+            \mathcal{F}_{\xi}(f)=
+            \frac{\beta}{\sqrt{\alpha^{2}+4\pi^{2}\xi^{2}}}
+            \exp\Big[i\tan^{\minus{1}}
+                \Big(\frac{\minus{2}\pi\xi}{\alpha}\Big)
+            \Big]
+        \end{equation}
+        The two are plotted below for the case of
+        $\alpha=\beta=1$.
+    \end{lexample}
+    \begin{ldefinition}{Inverse Fourier Transform}
+          {Diff_Theory_Inverse_Fourier_Transform}
+        The inverse Fourier transform of a complex valued
+        integrable function
+        $f:\mathbb{R}\rightarrow\mathbb{C}$ is the function
+        $\mathcal{F}_{t}^{\minus{1}}(f):%
+            \mathbb{R}\rightarrow\mathbb{C}$ defined by:
+        \begin{equation}
+            \mathcal{F}_{t}^{\minus{1}}(f)=
+            \int_{\minus{\infty}}^{\infty}
+                f(\xi)\exp(2\pi{i}\xi{t})\diff{\xi}
+        \end{equation}
+    \end{ldefinition}
+    We now prove what is probably the most useful theorem
+    in Fourier Analysis.
+    \begin{theorem}
+        If $f:\mathbb{R}\rightarrow\mathbb{R}$ is a
+        continuous Lebesgue integrable function,
+        and if its spectrum $F$ is also continuous
+        and Lebesgue integrable, then:
+        \begin{equation}
+            f(t)=\int_{-\infty}^{\infty}F(\omega)
+            \exp(2\pi{i}\omega{t})\diff{\omega}
+        \end{equation}
+    \end{theorem}
+    A powerful application of this is
+    Shannon's Sampling Theorem.
+    \begin{theorem}[Shannon's Sampling Theorem]
+        If $f(t)$ is a continuous
+        Lebesgue integrable function such that
+        its spectrum $F(\omega)$ is differentiable and zero
+        outside the interval $[-W,W]$,
+        then $f(t)$ is uniquely determined
+        by the points $f(\frac{n}{2W})$, $n\in\mathbb{N}$.
+    \end{theorem}
+    \begin{proof}
+        For let $F$ be the spectrum of $f$. That is:
+        \begin{equation}
+            f(t)=\int_{-\infty}^{\infty}F(\omega)
+            \exp(-2\pi{i}\omega{t})\diff{\omega}
+        \end{equation}
+        But $F(\omega)=0$ for $|\omega|>W$. Thus we have:
+        \begin{equation}
+            f(t)=\int_{-W}^{W}F(\omega)
+            \exp(-2\pi{i}\omega{t})\diff{\omega}
+        \end{equation}
+        Then for $n\in\mathbb{N}$, we have:
+        \begin{equation}
+            f\big(\frac{n}{2W}\big)=\int_{-W}^{W}F(\omega)
+            \exp(-2\pi{i}\frac{n}{2W}\omega)\diff{\omega}
+        \end{equation}
+        But $F$ is differentiable, and thus it's Fourier
+        series converges. That is:
+        \begin{subequations}
+            \begin{align}
+                F(\omega)
+                &=\sum_{n=\minus\infty}^{\infty}
+                    \exp(2\pi{i}n\omega)
+                \int_{\minus{W}}^{W}F(\tau)
+                \exp(\minus{2}\pi{i}\frac{n}{2W}\tau)
+                    \diff{\tau}\\
+                &=\sum_{n=-\infty}^{\infty}f
+                  \big(\frac{n}{2W}\big)e^{2\pi{i}n\omega}
+            \end{align}
+        \end{subequations}
+        Therefore $f(\frac{n}{2W})$, $n\in \mathbb{N}$
+        uniquely determines $F(\omega)$. But the
+        spectrum $F(\omega)$ uniquely determines
+        $f(t)$. Therefore $f(t)$ is
+        uniquely determined and:
+        \begin{equation}
+            f(t)=\sum_{n=-\infty}^{\infty}\int_{-W}^{W}
+            f\big(\frac{n}{2W}\big)
+            \exp(2\pi{i}\omega(n+t))\diff{\omega}
+        \end{equation}
+    \end{proof}
