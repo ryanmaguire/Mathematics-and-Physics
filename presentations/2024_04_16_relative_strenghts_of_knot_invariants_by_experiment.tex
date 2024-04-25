@@ -1,0 +1,611 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       March 29, 2024                                                 %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Relative Strengths of Knot Invariants by Experiment}
+\author{Ryan Maguire}
+\date{April 16, 2024}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\graphicspath{{../images/}}
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{enumerate}
+            \item The Alexander Polynomial.
+            \item The Jones Polynomial.
+            \item Khovanov Homology.
+            \item The HOMFLY-PT Polynomial.
+            \item Results and Statistics.
+        \end{enumerate}
+    \end{frame}
+    \begin{frame}{The Alexander Polynomial}
+        One of the oldest invariants in knot theory, the Alexander polynomial
+        is not-so-easy to describe, but very easy to compute. The original
+        definition involves a certain infinite cyclic cover of the complement
+        of a knot embedded into $\mathbb{R}^{3}$
+        (see \cite[p.~53]{LickorishKnotTheory}), but the
+        computation can be explained fairly quickly using knot diagrams.
+        \par\hfill\par
+        For a planar diagram of a knot there will be $N$ crossings and
+        $N+2$ faces using Euler's formula. Create a $N\times(N+2)$ adjacency
+        matrix and fill the entries with affine combinations of terms in the
+        set $\{\,1,\,-1,\,t,\,-t\,\}$ based on the orientation of the crossings.
+        \cite[p.~49]{LivingstonKnotTheory} contains the details.
+        \par\hfill\par
+        Cross out two columns corresponding to faces that do not share a
+        border and take the determinant. The result is the Alexander polynomial
+        up to a multiple of $t^{n}$.
+    \end{frame}
+    \begin{frame}{The Alexander Polynomial}
+        Creating the Alexander matrix runs in $O(N^{2})$ time, where $N$
+        is the number of crossings. The way determinants are taught in
+        linear algebra yields a terrifying $O(N!)$ computation, but $LU$
+        decomposition can speed this up to $O(N^3)$. The Alexander polynomial
+        is hence a polynomial time invariant.
+        \par\hfill\par
+        We can speed the computation up even further using tangles
+        (\cite{BarNatanPolynomialTimeKnotPolynomials}) and implementations
+        exist in \cite{SnapPy} and \cite{MaguireLibtmpl}.
+    \end{frame}
+    \begin{frame}{The Alexander Polynomial}
+        Having such a quick computation means we can tabulate the invariant
+        for the 352+ million prime knots up to crossing number 19 in less than
+        a day.
+        \par\hfill\par
+        This speed comes at a cost, the invariant is not very good at
+        distinguishing knots. Many distinct knots have the same Alexander
+        polynomial. Furthermore, we have the following classical theorem
+        (see \cite{KawauchiSurveyKnotTheory1996}).
+        \begin{theorem}
+            If $p\in\mathbb{Z}[t,\,t^{-1}]$ is a Laurent polynomial such that
+            $p(t)=p(t^{-1})$ and $p(1)=\pm{1}$, then there is a knot $K$
+            such that $\Delta_{K}(t)=p(t)$ where $\Delta_{K}$ is the
+            Alexander polynomial of $K$.
+        \end{theorem}
+        So Alexander polynomials are not uncommon.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Jones polynomial is a knot invariant that is often called
+        \textit{stronger} than the Alexander polynomial, but the two are not
+        directly comparable. There are knots with the same Alexander polynomial
+        but different Jones polynomials ($6_{1}$ and $9_{46}$ in the Rolfsen
+        table), but there are also knots with the
+        same Jones polynomial and different Alexander polynomials
+        (the Figure-Eight $4_{1}$ and the non-alternating knot
+        $K11N19$).
+        \par\hfill\par
+        At the end of this talk we will justify why the Jones polynomial is
+        said to be stronger, but keep those examples in your back pocket!
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The original definition uses the Temperley-Lieb algebra, braid groups,
+        and the Markov trace \cite{jonesfordummyvjones}, but it is
+        computationally
+        beneficial to think in terms of the Kauffman bracket. This is defined
+        in terms of smoothings of crossings.
+        \par\hfill\par
+        \begin{figure}
+            \centering
+            \includegraphics{resolving_crossings.pdf}
+            \caption{Smoothing a Crossing}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Kauffman bracket $\langle{L}\rangle$ of a link diagram $L$ is
+        defined recursively as follows\footnote{%
+            This follows the conventions in \cite{BarNatanKhovanovJones}
+            which differ slightly from the original in
+            \cite{KauffmanStateModels}.
+        }
+        \begin{align}
+            \langle{\emptyset}\rangle&=1\\
+            \langle{\mathbb{S}^{1}\sqcup{L}}\rangle
+            &=(q+q^{-1})\langle{L}\rangle\\
+            \langle{L}\rangle
+            &=\langle{L_{n,\,0}}\rangle-q\langle{L_{n,\,1}}\rangle\\
+        \end{align}
+        where $\mathbb{S}^{1}\sqcup{L}$ denotes the disjoint union of a
+        circle and $L$ unlinked in $\mathbb{R}^{3}$, $L_{n,\,0}$ denotes the
+        zero smoothing at the $n^{\small\textrm{th}}$ crossing, and
+        similarly $L_{n,\,1}$ denotes the one smoothing at the
+        $n^{\small\textrm{th}}$ crossing.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        This is indeed well-defined and invariant
+        under the type II and type III Reidemeister moves. Type I moves scale
+        the result by $q^{-1}$ and $-q^{2}$, depending on the sign of the
+        introduced crossing.
+        \par\hfill\par
+        There are two ways to make the resulting polynomial invariant under
+        type I moves. We can normalize by the writhe, writing
+        \begin{equation}
+            J_{L}(q)=(-q)^{n_{+}-2n_{-}}\langle{L}\rangle
+        \end{equation}
+        where $n_{+}$ and $n_{-}$ are the number of positive and negative
+        crossings in the diagram, respectively.
+        \par\hfill\par
+        Alternatively we could scale $\langle{L}\rangle$ by the monomial
+        $q^{k}$ such that the zeroth term has degree zero. That is, multiply
+        by $q^{-\textrm{mindeg}(\langle{L}\rangle)}$ so that the result is an
+        actual polynomial, instead of a Laurent polynomial.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        There are pros and cons to both definitions. The far more common
+        definition, $J_{L}$, has the nice property that
+        $J_{L}(q)=J_{m(L)}(q^{-1})$ where $m(L)$ is the mirror of $L$,
+        the result of composing the embedding for $L$ with the
+        reflection $z\mapsto{-z}$.
+        \par\hfill\par
+        The alternative definition means we can skip a writhe computation,
+        but this runs in $O(N)$ so it is not a big deal. However, since
+        $p(q)=q^{-\textrm{mindeg}(\langle{L}\rangle)}\langle{L}\rangle$ is a
+        valid polynomial, this alternative method defines a
+        meromorphic map $z\mapsto{z}-p(z)/p'(z)$ and induces a Newton fractal
+        in the complex plane with Newton basins and a Julia set.
+        \par\hfill\par
+        The topology of these
+        sets are dependent only on the polynomial $p$, and are hence knot
+        invariants themselves.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{0.7\textwidth}{!}{%
+                \includegraphics{newton_fractal_right_trefoil_jones.png}
+            }
+            \caption{Newton Fractal for the Right-Handed Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{0.7\textwidth}{!}{%
+                \includegraphics{newton_fractal_right_trefoil_jones_unreduced.png}
+            }
+            \caption{Unreduced Newton Fractal for the Right-Handed Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{0.7\textwidth}{!}{%
+                \includegraphics{newton_fractal_left_trefoil_jones.png}
+            }
+            \caption{Newton Fractal for the Left-Handed Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{0.7\textwidth}{!}{%
+                \includegraphics{newton_fractal_left_trefoil_jones_unreduced.png}
+            }
+            \caption{Unreduced Newton Fractal for the Left-Handed Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        Computationally the Jones polynomial is at most
+        $O(N)$ away from the Kauffman bracket, so we will restrict our
+        algorithmic efforts to computing $\langle{L}\rangle$.
+        \par\hfill\par
+        The definition gives us a recursive algorithm that is extremely
+        simple to implement. This can be done in just a handful of lines using
+        \texttt{C} or \texttt{Python}. The simplicity comes at a cost,
+        the algorithm is not only exponential in time, but also in space.
+        After about a dozen crossings one may need several gigabytes of
+        memory for the computation, and 17 crossings and higher is not
+        feasible on most personal computers.
+    \end{frame}
+    \begin{frame}
+        The recursion tree can be expanded into an iterative formula using
+        induction. For your $N$ crossing link diagram each number between 0 and
+        $2^{N}-1$ uniquely corresponds to a smoothing of all crossings in the
+        figure.
+        \par\hfill\par
+        Given $0\leq{n}\leq{2}^{N}-1$ write $n$ in binary. If the
+        $m^{\small\textrm{th}}$ bit is a zero, perform a zero smoothing at
+        the $m^{\small\textrm{th}}$ crossing. Otherwise perform a one
+        smoothing. Do this for each bit in the number.
+    \end{frame}
+    \begin{frame}
+        The Kauffman bracket is then computed via
+        \begin{equation}
+            \langle{L}\rangle
+            =\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
+        \end{equation}
+        where $w(n)$ is the \textit{Hamming weight}, the number of ones in the
+        binary expansion of $n$, and $c(n)$ is the
+        \textit{cycle counting function}, which counts the number of cycles
+        in the plane that result from the complete smoothing corresponding to
+        the number $n$.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
+            \caption{Cube of Resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \resizebox{0.55\textwidth}{!}{%
+                \includegraphics{figure_eight_knot_cube_of_resolutions.pdf}
+            }
+            \caption{Cube of Resolutions for the Figure-Eight}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        By representing knots and links with extended Gauss codes we can
+        use this summation to devise explicit algorithms for the Kauffman
+        bracket. This is done in \cite{MaguireJones}.
+        \par\hfill\par
+        While still running in
+        $O(2^{N})$ time the space requirements have been drastically reduced
+        to $O(N)$. A 32 crossing knot can be dealt with on a laptop, though
+        the computation will take several minutes to a few hours or days,
+        depending on the CPU.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        This invariant has been tabulated for all prime knots up to 19 crossings
+        in \cite{JonesData} using the algorithms in \cite{MaguireJones} and
+        \cite{Burton2018HOMFLFixedParameter}.
+        \par\hfill\par
+        We take a moment to outline one more algorithm since it will be of
+        use to us for the computation of Khovanov homology. It uses a
+        \textit{symbolic calculus} by manipulating planar diagram codes,
+        or PD codes. So first, what are PD codes?
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        Take a knot diagram and orient it, labeling the arcs from $0$ to
+        $2N-1$ in increasing order. Trace your finger along the drawing and at
+        each under crossing write down \texttt{X[a,b,c,d]} where
+        \texttt{a} is the arc behind you, \texttt{b} is to your right,
+        \texttt{c} is the arc in front, and \texttt{d} is the one on the left.
+        \par\hfill\par
+        The result is a string of $N$ $4-$tuples. The algorithm starts by
+        observing what the Kauffman relation does to PD code.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \includegraphics{resolving_crossings_pd_label.pdf}
+            \caption{Resolving a Crossing with PD Code}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        The Kauffman relation tells us to perform the symbolic replacement
+        \begin{equation}
+            \texttt{X[a,b,c,d]}\mapsto\texttt{P[a,b]P[c,d]}-q\texttt{P[a,d]P[b,c]}
+        \end{equation}
+        We do this for every crossing and obtain the product
+        \begin{equation}
+            \langle{L}\rangle
+            =\prod_{k=n}^{N-1}
+            (\texttt{P[an,bn]P[cn,dn]}-q\texttt{P[an,dn]P[bn,cn]})
+        \end{equation}
+        where \texttt{X[an,bn,cn,dn]} represents the
+        $n^{\small\textrm{th}}$ crossing.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        After expanding this we obtain a polynomial whose coefficients are
+        formal products of ordered pairs. We reduce further and obtain a
+        Laurent polynomial with integer coefficients by appealing to the
+        Kauffman relations.
+        \par\hfill\par
+        Should we see the product
+        \texttt{P[a,b]P[a,b]} we may replace it with \texttt{P[a,b]} since
+        both expressions tell us the arcs \texttt{a} and \texttt{b} are now
+        connected. Similarly, we may replace \texttt{P[a,b]P[b,c]} with
+        \texttt{P[a,c]}.
+        \par\hfill\par
+        Lastly, \texttt{P[a,a]} tells us we have a cycle. Should we find
+        such an expression we replace it with $q+q^{-1}$.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        Expanding the product on the previous page results in $2^{N}$
+        terms, meaning this algorithm is still exponential. Fortunately there
+        is a trick to significantly speed up our computation.
+        \par\hfill\par
+        Instead of expanding the product all at once, we pick a crossing and
+        perform the smoothing
+        $\texttt{X[a,b,c,d]}\mapsto\texttt{P[a,b]P[c,d]}-q\texttt{P[a,d]P[b,c]}$.
+        We then pick the crossing that has the most arcs in common with
+        \texttt{X[a,b,c,d]} and smooth that one. That is, we look for the
+        crossing \texttt{X[e,f,g,h]} such that
+        \texttt{a,b,c,d} and \texttt{e,f,g,h} have as many terms in common as
+        possible.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        We combine the products and simplify using the previous relations.
+        By adding the crossings in such a way we grow our
+        \textit{computational front} as slowly as possible, meaning we have
+        less work to do in the end.
+        \par\hfill\par
+        This idea is implemented in \cite{KatlasJones} and
+        \cite{MaguireJones} and gives a considerable speed boost for many
+        knot diagrams.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The other benefit is that it can be generalized and allow us to compute
+        Khovanov homology. Khovanov homology is a link invariant that
+        associates a chain complex to a link diagram, the homology of which
+        is a link invariant.
+        \par\hfill\par
+        Following \cite{BarNatanKhovanovJones} we again consider the cube of
+        resolutions and associate to each vertex a vector space (or module)
+        $V^{\otimes{c(n)}}$ where $V$ is a graded vector space (or free module)
+        of graded dimension $q+q^{-1}$. The chain groups are obtained by
+        direct sums over the vertices of the same Hamming weight. The chain
+        maps are defined by summing over local maps defined on the edges of
+        the cube.
+    \end{frame}
+    \begin{frame}{The Jones Polynomial}
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
+            \caption{Cube of Resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The resulting homology can be decomposed into homogeneous parts
+        \cite{KatlasKhoHo}, and the \textit{Khovanov polynomial} is defined
+        by the resulting Poincar\'{e} polynomial
+        \begin{equation}
+            Kh_{L}(q,\,t)=\sum_{n,\,m}q^{n}t^{m}
+                \textrm{dim}\big(Kh_{m}^{n}(L)\big)
+        \end{equation}
+        The Jones polynomial is recovered via
+        \begin{equation}
+            J_{L}(q)=Kh_{L}(q,\,-1)
+        \end{equation}
+        In \cite{BarNatan2006FASTKH} an explicit algorithm is outlined for
+        the computation and this is implemented in \cite{JavaKhv2}.\footnote{%
+            Work in progress implementations in \texttt{C} can be found in
+            \cite{MaguireKnotData} and \cite{MaguireLibtmpl}.
+        }
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        The Khovanov polynomial of all prime knots up to 17 crossings has been
+        tabulated and is available in \cite{KhovanovData}.
+        \par\hfill\par
+        The computation took 6 weeks using fairly powerful hardware.
+        19 crossings would have taken about 3 years. Optimizations for low
+        crossing knots are underway, as is experimenting with parallelization.
+        This may allow the computation to be done in months, instead of years.
+    \end{frame}
+    \begin{frame}{HOMFLY-PT Polynomial}
+        The final invariant to be experimented with is the HOMFLY-PT
+        polynomial. Like Khovanov homology, it generalizes the Jones polynomial,
+        but also generalizes the Alexander polynomial. It is defined via
+        \begin{align}
+            P(\mathbb{S}^{1})&=1\\
+            \alpha{P}(L_{n,\,+})-\alpha^{-1}P(L_{n,\,-})
+            &=zP(L_{n,\,0})
+        \end{align}
+        Where $L_{n,\,+}$ denotes the $n^{\small\textrm{th}}$ crossing as a
+        positive crossing, $L_{n,\,-}$ denotes swapping the strands over each
+        other to a negative crossing, and $L_{n,\,0}$ is the
+        orientation preserving smoothing.
+    \end{frame}
+    \begin{frame}{HOMFLY-PT Polynomial}
+        The Jones and Alexander polynomial, $J_{K}$ and $\Delta_{K}$,
+        respectively, are recovered via
+        \begin{align}
+            J_{K}(q)&=P(q^{-2},\,q-q^{-1})\\
+            \Delta_{K}(q)&=P(1,\,q-q^{-1})
+        \end{align}
+        So the computation is at least as hard as the Jones polynomial, and
+        indeed it is \textbf{NP-Hard} \cite{HOMFLYPTNPHard}.
+    \end{frame}
+    \begin{frame}{HOMFLY-PT Polynomial}
+        Three algorithms exist, of which I'm still in the early stages of
+        experimenting.
+        \begin{enumerate}
+            \item Kauffman's skein template algorithm \cite{KauffmanStateModelsLinkPolynomials}.
+            \item Gouesbet, Meunier-Guttin-Cluzel, and Letellier's algorithm using Gauss codes \cite{GOUESBET1999271}.
+            \item Burton's modification of Kauffman's algorithm \cite{Burton2018HOMFLFixedParameter}.
+        \end{enumerate}
+        Burton's algorithm gives the best performance, and he provided a
+        \texttt{C++} implementation as well \cite{regina}. Slight experiments
+        with this code have led to the tabulation of the HOMFLY-PT polynomial
+        of all prime knots up to 19 crossings
+        \cite{HOMFLYData}.
+    \end{frame}
+    \begin{frame}{Results}
+        \begin{table}
+            \centering
+            \resizebox{0.8\textwidth}{!}{%
+                \begin{tabular}{| l | l |}
+                    \hline
+                    Keyword & Description\\
+                    \hline
+                    Cr     & Crossing number, largest number of crossings considered.\\
+                    Unique & Number of polynomials that occur for one knot.\\
+                    Almost & Number of polynomials that occur for two knots.\\
+                    Total  & Total number of distinct polynomials in list.\\
+                    Knots  & Total number of knots in list.\\
+                    FracU  & Unique / Total\\
+                    FracT  & Total / Knots\\
+                    FracK  & Unique / Knots\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Legend for the Statistics Table}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Results}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr &  Unique  &  Almost  &   Total   &   Knots    &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &        1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &        2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &        4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &        7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &       14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &       35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &       84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &      223 &       13 &       236 &       249 & 0.944915 & 0.947791 & 0.895582\\
+                    11 &      626 &       77 &       710 &       801 & 0.881690 & 0.886392 & 0.781523\\
+                    12 &     1981 &      345 &      2420 &      2977 & 0.818595 & 0.812899 & 0.665435\\
+                    13 &     6855 &     1695 &      9287 &     12965 & 0.738129 & 0.716313 & 0.528731\\
+                    14 &    25271 &     7439 &     37578 &     59937 & 0.672495 & 0.626958 & 0.421626\\
+                    15 &   105246 &    35371 &    170363 &    313230 & 0.617775 & 0.543891 & 0.336002\\
+                    16 &   487774 &   173677 &    829284 &   1701935 & 0.588187 & 0.487260 & 0.286600\\
+                    17 &  2498968 &   894450 &   4342890 &   9755328 & 0.575416 & 0.445181 & 0.256164\\
+                    18 & 13817237 &  4863074 &  24116048 &  58021794 & 0.572948 & 0.415638 & 0.238139\\
+                    19 & 82712788 & 27409120 & 141439472 & 352152252 & 0.584793 & 0.401643 & 0.234878\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the Jones Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Results}
+        This raises the question, if $K_{n}$ is the number of prime
+        knots with at most $n$ crossings, and if $J_{n}$ is the number of
+        unique Jones polynomials for prime knots up to $n$ crossings, does
+        $J_{n}/K_{n}$ converge to zero?
+    \end{frame}
+    \begin{frame}{Results}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &       1 &       0 &       1 &       1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &       2 &       0 &       2 &       2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &       4 &       0 &       4 &       4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &       7 &       0 &       7 &       7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &      14 &       0 &      14 &      14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &      35 &       0 &      35 &      35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &      84 &       0 &      84 &      84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &     225 &      12 &     237 &     249 & 0.949367 & 0.951807 & 0.903614\\
+                    11 &     641 &      71 &     718 &     801 & 0.892758 & 0.896380 & 0.800250\\
+                    12 &    2051 &     326 &    2462 &    2977 & 0.833063 & 0.827007 & 0.688949\\
+                    13 &    7223 &    1636 &    9539 &   12965 & 0.757207 & 0.735750 & 0.557115\\
+                    14 &   27317 &    7441 &   39222 &   59937 & 0.696471 & 0.654387 & 0.455762\\
+                    15 &  118534 &   36867 &  182598 &  313230 & 0.649153 & 0.582952 & 0.378425\\
+                    16 &  578928 &  187639 &  919835 & 1701935 & 0.629382 & 0.540464 & 0.340159\\
+                    17 & 3167028 & 1001101 & 5033403 & 9755328 & 0.629202 & 0.515965 & 0.324646\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the Khovanov Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Results}
+        We can ask the same question for Khovanov homology. Labeling
+        $Kh_{n}$ and $K_{n}$ in a similar way, does
+        $Kh_{n}/K_{n}$ converge to zero?
+        \par\hfill\par
+        Note, as expected, $Kh_{n}>J_{n}$. This simply reiterates the fact
+        that $Kh_{L}(q,\,-1)=J_{L}(q)$ for any link $L$.
+        \par\hfill\par
+        While $4_{1}$ and $K11n19$ have the same Jones polynomial
+        (but different Alexander polynomials), their Khovanov polynomials
+        differ, further cementing the claim that the knots are different.
+    \end{frame}
+    \begin{frame}{Results}
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                    \hline
+                    Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
+                    \hline
+                    03 &         1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
+                    04 &         2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
+                    05 &         4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
+                    06 &         7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
+                    07 &        14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
+                    08 &        35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
+                    09 &        84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
+                    10 &       241 &        4 &       245 &       249 & 0.983673 & 0.983936 & 0.967871\\
+                    11 &       730 &       34 &       765 &       801 & 0.954248 & 0.955056 & 0.911361\\
+                    12 &      2494 &      210 &      2724 &      2977 & 0.915565 & 0.915015 & 0.837756\\
+                    13 &      9475 &     1302 &     11044 &     12965 & 0.857932 & 0.851832 & 0.730814\\
+                    14 &     39401 &     7170 &     48329 &     59937 & 0.815266 & 0.806330 & 0.657374\\
+                    15 &    186799 &    38833 &    238614 &    313230 & 0.782850 & 0.761785 & 0.596364\\
+                    16 &    979987 &   209669 &   1266261 &   1701935 & 0.773922 & 0.744013 & 0.575808\\
+                    17 &   5559808 &  1157938 &   7175287 &   9755328 & 0.774855 & 0.735525 & 0.569925\\
+                    18 &  33722920 &  6480965 &  42857755 &  58021794 & 0.786857 & 0.738649 & 0.581211\\
+                    19 & 213355372 & 36387952 & 264839694 & 352152252 & 0.805602 & 0.752060 & 0.605861\\
+                    \hline
+                \end{tabular}
+            }
+            \caption{Statistics for the HOMFLY-PT Polynomial}
+        \end{table}
+    \end{frame}
+    \begin{frame}{Results}
+        Most surprising, defining $H_{n}$ to be the number of unique
+        HOMFLY-PT polynomials for prime knots up to $n$ crossings, we see that
+        $H_{n}/K_{n}$ is not monotonic. Also surprising is how high the ratio
+        is for 19 crossings.
+        \par\hfill\par
+        It would be intriguing to know what the
+        $\textrm{lim}\;\textrm{sup}$ and $\textrm{lim}\;\textrm{inf}$ are.
+    \end{frame}
+    \begin{frame}{Results}
+        Future work
+        \begin{enumerate}
+            \item Finish FastKH reimplementation.
+            \begin{itemize}
+                \item Parallelize batch computations.
+                \item Parallelize individual computations?
+                \item Avoid arbitrary precision arithmetic.
+                \item \texttt{C} vs. \texttt{Java}, will there be noticeable
+                    performance differences?
+            \end{itemize}
+            \item Rewrite Alexander algorithms.
+            \begin{itemize}
+                \item The ones used are in \texttt{Sage}, \texttt{Python}, and
+                    \texttt{Mathematica}. My \texttt{C} routines are in the
+                    early stages. Gotten nice speed improvements so far.
+            \end{itemize}
+            \item Fixed parameter tractability for Khovanov homology?
+            \item Speed tests!
+            \begin{itemize}
+                \item More than half a dozen Jones polynomial algorithms.
+                \item A few Alexander polynomial algorithms.
+                \item Three HOMFLY-PT algorithms.
+                \item Which are the fastest for general knots?
+            \end{itemize}
+            \item Do all of this again for 20 crossings!
+        \end{enumerate}
+    \end{frame}
+    \begin{frame}{The End}
+        \begin{center}
+            Thank You!
+        \end{center}
+    \end{frame}
+    \begin{frame}[allowframebreaks]{References}
+        \bibliographystyle{annotate}
+        \bibliography{bib.bib}
+    \end{frame}
+\end{document}
