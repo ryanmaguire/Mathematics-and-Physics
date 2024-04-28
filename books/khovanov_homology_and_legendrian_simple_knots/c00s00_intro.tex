@@ -53,5 +53,101 @@ see what can be done.
     Kauffman skein algorithm is able to compute the Jones polynomial in
     $O(\textrm{poly}(N)\cdot{2}^{N})$ time, and by performing a depth-first
     search through the decision tree one can achieve $O(N)$ space
-    \cite{Burton2018HOMFLFixedParameter}.
+    \cite{Burton2018HOMFLFixedParameter}. Modifications of this have been made
+    (see \cite{GOUESBET1999271}) providing
+    $O(\textrm{poly}(N)\cdot{2}^{N})$ time requirements and polynomial
+    spatial needs. With these algorithms there is some sensitivity to the
+    \textit{initial conditions}, the data representing the knot, that can
+    make the computation much longer or much shorter. The number of
+    \textit{states} used can be more than double size of the
+    \textit{cube of resolutions}, or it can be a fraction of it. What this
+    means is the best and worst case scenario complexities vary, even for
+    nearly identical inputs, and it becomes a bit of a science trying to get the
+    best computational time for a given knot. This new algorithm picks a nice
+    middle ground and the best and worst case scenarios are identical.
+    \par\hfill\par
+    The fastest algorithm known to the author is provided in
+    \cite{Burton2018HOMFLFixedParameter} with
+    $O(\textrm{poly}(N)\cdot{2}^{\sqrt{N}})$ time requirements, but
+    $(2\sqrt{N})!^{2}$ spatial requirements, far from polynomial. A graph of
+    $f(x)=\Gamma(2\sqrt{x}+1)^{2}/2^{x}$ should convince the reader that this
+    tends to zero as $x$ approaches infinity, and indeed using some of the
+    derivative rules of the Gamma function one can prove this. Hence this
+    non-polynomial space algorithm is still better than the na\"{i}ve recursive
+    algorithm, but $(2\sqrt{N})!^{2}$ still grows enormously quick. The
+    speed of the algorithm makes it worthwhile to implement, and this is
+    done in \cite{regina}. This library was used extensively throughout the
+    making of this thesis.
+    \par\hfill\par
+    Finding improvements for these algorithms is still an active area of
+    research. Many methods are limited to
+    \textit{classical} knots, embeddings of
+    $\mathbb{S}^{1}$ in to $\mathbb{R}^{3}$ or $\mathbb{S}^{3}$, but the
+    polynomial is still well defined for \textit{virtual knots}. These are
+    embeddings of $\mathbb{S}^{1}$ in to $M\times\mathbb{R}$ where $M$ is a
+    compact orientable surface. In chapter 3 we provide a new generalization
+    of the Tait graph for classical knots that allows one to define
+    \textit{virtual} Tait graphs. The graph-theoretical algorithm for the
+    Jones polynomial which is based on a knots Tait graph can then be mimicked
+    with only slight alteration, providing a graph-theoretical algorithm for
+    the computation of the Jones polynomial of virtual knots.
 \section{Conjectures and Results}
+    After studying new algorithms for the Jones polynomial, and discussing
+    old algorithms for Khovanov homology, we present new tabulations of these
+    invariants (as well as the HOMFLY-PT polynomial) and state some conjectures.
+    One of the classic conjectures of knot theory asks if the Jones polynomial
+    is capable of uniquely determining if a knot is equivalent to the unknot.
+    That is, if $J_{K}$ denotes the Jones polynomial of a knot $K$, and if
+    $J_{K}$ is equal to the Jones polynomial of the unknot, must it be true
+    that $K$ is equivalent to the unknot? The conjecture has been verified for
+    knots up to 24 crossings \cite{VerificationUnknotJonesConjUpTo24} but
+    remains open. If one instead considers Khovanov homology, the answer is
+    yes. That is, if a knot has the same Khovanov homology as the unknot, then
+    it is equivalent to the unknot. In chapter 4 we expand upon this idea and
+    conjecture that certain knot types may be categorized by their Khovanov
+    homologies. In particular, we pose the following question.
+    \begin{question}
+        If a knot type is Legendrian or transversally simple, does its Khovanov
+        homology uniquely distinguish it among all other topological knot types?
+    \end{question}
+    We use the torus and twist knots, as well as Ng's table of conjectured
+    Legendrian simple knots, as a test case for this conjecture. All
+    torus knots are Legendrian simple, and the Legendrian and transversal
+    classification of twist knots has been completed in
+    \cite{EtnyreEtAlLegendrianAndTransverseTwistKnots}. We prove by brute
+    force methods the following theorem.
+    \begin{theorem}
+        If a prime knot $K$ has crossing number less than or equal to 19 and
+        has the Khovanov polynomial (the Poincar\'{e} polynomial
+        of its Khovanov homology) of a torus or twist knot $K'$, then $K$ is
+        equivalent to $K'$. In particular, if $K$ and $K'$ have the same
+        Khovanov homology they are equivalent since the Khovanov polynomial is
+        the Poincar\'{e} polynomial of Khovanov homology.
+    \end{theorem}
+    By similar brute force methods we check the conjectured Legendrian simple
+    knots in the Legendrian knot atlas and can provide the following claim.
+    \begin{theorem}
+        If a prime knot $K$ has crossing number less than or equal to 19 and
+        has the Khovanov polynomial of any conjectured
+        Legendrian simple knot $K'$ found
+        in \cite{LegendrianKnotAtlas}, then $K$ is equivalent to $K'$.
+    \end{theorem}
+    These theorems are proved using computers. While it would be simple enough
+    to program a Khovanov homology algorithm, and press \textit{go},
+    the exponential nature of Khovanov homology makes this a challenge.
+    Some methods of computation, as in \cite{sage}, using exponential in
+    space algorithms that can not get past 15 crossings without needing 100+ GB
+    of memory. We instead resort to the algorithm outlined in
+    \cite{BarNatan2006FASTKH}, which is both the fastest and most efficient
+    in memory algorithm presently available, as far as the author is aware.
+    Even with this the challenge of tabulating up to 19 crossings would have
+    taken about 3 years. This was not done. We instead use the Jones polynomial
+    to weed out possible matches for Khovanov homology, and only when a knot $K$
+    is found to have the same Jones polynomial as a torus knot, or a twist knot,
+    or a conjectured Legendrian simple knot $T$, are the Khovanov polynomials
+    of $K$ and $T$ computed and compared. In this manner we can reduce the
+    calculation to two and a half days on somewhat decent hardware. As a side
+    effect we get a tabulation of the Jones polynomial of all prime knots up
+    to 19 crossings, and can play around with the statistics. This data is
+    freely available and hosted via Dartmouth's servers, see
+    \cite{JonesData}.
