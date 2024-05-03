@@ -113,10 +113,11 @@
    \end{minipage}%
 }
 \newcommand{\@longsignatureline}[1]{%Required for the Dean's title to fit.
-  \begin{minipage}{3in}%
+  \begin{minipage}{5in}%
     \begin{singlespace}
-      \vspace{.3in}
-      \underline{\hspace{2.6667in}} \par #1 %
+      \hspace{-0.75in}\underline{\hspace{2.6667in}}\par
+      \hspace{-0.75in}\@dean \par
+      \hspace{-0.75in}#1 %
     \end{singlespace}
    \end{minipage}%
 }
@@ -151,8 +152,9 @@
           & \@signatureline{\@examinera} \\
           & \@signatureline{\@examinerb} \\
           & \@signatureline{\@examinerc} \\
-          \@longsignatureline{\@dean \par Dean of Graduate and Advanced Studies}
+          \phantom{\hspace{3in}} &
         \end{tabular}
+        \@longsignatureline{Dean of the Guarini School of Graduate and Advanced Studies}
       \end{center}
     \end{doublespace}
     \newpage

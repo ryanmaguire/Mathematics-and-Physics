@@ -137,11 +137,13 @@
         unknot is $q+q^{-1}$.
         \par\hfill\par
         The Kauffman bracket is invariant under Type II and Type III moves.
-        Type I, on the other hand, scales the polynomial by $q$ or $q^{-1}$,
+        Type I, on the other hand, scales the polynomial by
+        $-q^{2}$ or $q^{-1}$,
         depending on the sign of the introduced crossing. Hence the Kauffman
         bracket is an invariant of \textit{framed} or \textit{regular} knots
-        and links. Since scaling by a power of $q$ does not alter the individual
-        coefficients for the polynomial, this finite sequence is indeed a link
+        and links. Since scaling by a power of $\pm{q}$ does not alter the
+        individual coefficients for the polynomial, other than possibly
+        negating them, this finite sequence is indeed a link
         invariant. There are two ways to make an invariant polynomial out of
         this. Should the link diagram $L$ be oriented, the
         \textit{unnormalized} Jones polynomial is given by:
@@ -199,11 +201,17 @@
             There is an algorithm with input a valid extended Gauss code on $N$
             crossings, with output the Jones polynomial of the (possibly virtual)
             knot described by the extended Gauss code, such that the best, worst,
-            and average time complexity is identical and of
+            and average time complexities are identical and of
             $O(\textrm{poly}(N)\cdot{2}^{N})$, and with spatial requirement $O(N)$.
         \end{theorem}
         If we assume certain arithmetic operations are constant, then
-        $\textrm{poly}(N)$ can be replaced by $N$. The proof is contained in
+        $\textrm{poly}(N)$ can be replaced by $N$. If we wish to be very
+        precise, the spatial requirement is $O(N\log(N))$ since it requires
+        $\log(N)$ bits to work with integers that are no greater than $N$.
+        But since we often work with fixed widths (32-bits or 64-bits),
+        $O(N)$ is not unreasonable to say.
+        \par\hfill\par
+        The proof is contained in
         this section by explicitly providing the algorithm. An attempt is made
         to put this in terms of \textit{literate programming}, and the source
         code is embedded along with the details of the algorithm. It is written
@@ -219,7 +227,7 @@
         end of the calculation, and this is about
         $\textrm{poly}(N)\cdot{2}^{N}$ nodes. Analysis of the
         memory requirements for algorithms has become increasingly rare in
-        modern times since 64GB and 128GB memory is becoming increasingly
+        modern times since 64GB and 128GB memory is becoming
         commonplace even for personal computers, but an exponential-in-space
         algorithm will eat through this very quickly. Most implementations
         avoid this by rewriting the recursive step in some other way.
@@ -303,7 +311,7 @@
         \footnote{
             By \textit{constant time} on a finite set of inputs we mean the
             required \textit{human} time for an input $n=1$ is about the same
-            as $n=2^{32}-1$.
+            as $n=2^{32}-1$, and all integers in between.
         }
         A general and portable algorithm can be done in
         $\log(N)$ time as follows.
@@ -727,8 +735,8 @@ circle_count(const struct knot *K,
         We now move along to the new entry in the Gauss code by moving either
         forwards or backwards, pending our current direction. If we're at the
         final entry in the Gauss code and are moving forward, we loop back
-        around to the start. Similarly if we're at the first entry and a walking
-        backwards we loop around to the final entry. This gives us:
+        around to the start. Similarly, if we're at the first entry and walking
+        backwards, then we loop around to the final entry. This gives us:
 \begin{lstlisting}[style=CStyle, firstnumber=102]
             if (direction == forward)
             {
@@ -885,8 +893,13 @@ get_road_number(const struct knot *K,
         $O(N+\textrm{poly}(N)\cdot{2}^{N})=O(\textrm{poly}(N)\cdot{2}^{N})$.
         The primary benefit here is that the space
         requirement is linear, only storing the $4N$ array of Booleans in
-        memory and the Laurent polynomial itself (which is $O(N)$ in length).
-        The algorithm also operates on any valid extended Gauss code, meaning
+        memory, the $2N$ index array,
+        and the Laurent polynomial itself (which is $O(N)$ in length).
+        If we use arbitrarily large integers these $N$'s must be replaced by
+        $N\log(N)$ since we require $\log(N)$ bits to store the integer $N$,
+        meaning the total space requirement is $O(N\log(N))$.
+        Still significantly better than $2^{N}$. Moreover,
+        the algorithm operates on any valid extended Gauss code, meaning
         we can use it to compute the Kauffman bracket of virtual knots.
         \par\hfill\par
         To obtain the unnormalized Jones polynomial we need to shift
@@ -902,8 +915,10 @@ get_road_number(const struct knot *K,
             };
         \end{lstlisting}
         Once $N_{-}$ and $N_{+}$ have been computed,
-        multiplication by $q^{N_{+}-2N_{-}}$ thus takes $O(1)$ in time, we
-        simply add $N_{+}-2N_{-}$ to \texttt{highest\_degree} and
+        multiplication by $q^{N_{+}-2N_{-}}$ then takes $O(1)$ time,\footnote{%
+            Assuming addition is constant.
+        }
+        we simply add $N_{+}-2N_{-}$ to \texttt{highest\_degree} and
         \texttt{lowest\_degree}. This step does not impact the computation time
         in any significant way. A full implementation by the author is
         available as free software under the GPLv3 license
@@ -958,7 +973,7 @@ get_road_number(const struct knot *K,
         may replace this with \texttt{P[a,c]}. That is, we make the formal
         substitution $\texttt{P[a,b]P[b,c]}\mapsto\texttt{P[a,c]}$. Similarly
         \texttt{P[a,b]P[a,b]} tells us \texttt{a} and \texttt{b} are forming a
-        cycle. We may substitute $\texttt{P[a,b]P[a,b]}\mapsto\texttt{P[a,a]}$.
+        cycle. We may substitute $\texttt{P[a,b]P[a,b]}\mapsto\texttt{P[a,b]}$.
         In both of the substitutions the ordering of the pairs is immaterial.
         We simply wish to know which arcs are now connected to which.
         \texttt{P[a,a]} tells us we have a loop. The Kauffman bracket says
@@ -1019,7 +1034,16 @@ get_road_number(const struct knot *K,
         computation is about 100x faster with this trick. On a more somber
         note, 100x faster for an exponential-like algorithm means you can
         increase the crossing number by 7 or 8 before you're back to similar
-        times.
+        times. What's worse, this algorithm is highly dependent on the
+        crossing you choose first, and which crossing you choose next should
+        there be a tie with two or more crossings
+        having the same number of strands
+        going into your computational front. Making the wrong choice could
+        make the computation longer than the original,
+        had you not done this to begin with,
+        but such a phenomenon is rare. On average, this method is well worth
+        exploring. This does mean that the worst-case, average-case, and
+        best-case complexities differ, unlike the previous algorithm.
         \subsection{Tait Graph Expansion}
             The next method of computation has two uses for us. Firstly, it is
             very efficient in terms of speed, and secondly it will give us an
@@ -1103,8 +1127,8 @@ get_road_number(const struct knot *K,
             \end{align}
             This computation merely amounts to the fact that the Kauffman
             bracket polynomial is not invariant under Type I moves. It does,
-            however, show that the effect of Type I moves on a diagram is
-            is simply shifts of the degree and, possibly, changes in the signs
+            however, show that the effects of Type I moves on a diagram
+            are shifts of the degree and, possibly, changes in the signs
             of the coefficients.
             \par\hfill\par
             At the end of this deletion and contraction algorithm one will have
@@ -1113,7 +1137,7 @@ get_road_number(const struct knot *K,
             points and replace them with $(q+q^{-1})^{m}$ where $m$ is the
             number of dots.
             \par\hfill\par
-            As noted there is a lot of practical uses for this idea. Firstly
+            As noted, there is a lot of practical uses for this idea. Firstly,
             it presents another algorithm, but one that operates on graphs.
             Second, and perhaps most important for us, it gives us a fairly
             simple means of computing the Jones polynomial of twist knots.
@@ -1178,7 +1202,7 @@ get_road_number(const struct knot *K,
             \par\hfill\par
             The 0-smoothing is even nicer, we have obtained the Tait graph for
             the $K_{N-1}$ twist knot. We thus have the following recursion
-            relation.
+            relation:
             \begin{figure}
                 \centering
                 \includegraphics{twist_knot_tait_graph_kauffman_relation.pdf}
@@ -1193,14 +1217,14 @@ get_road_number(const struct knot *K,
                 +(-1)^{N+1}q^{2N+1}\langle{H}\rangle
             \end{align}
             We may expand this recusion out $N$ times until we get $K_{1}$,
-            which is the left-handed trefoil. Our formula becomes
+            which is the left-handed trefoil. Our formula becomes:
             \begin{equation}
                 \langle{K_{N+1}}\rangle
                 =\langle{K_{1}}\rangle
                 +\langle{H}\rangle
                 \sum_{k=1}^{k}(-1)^{k+1}q^{2k+1}
             \end{equation}
-            Using the geometric series we get
+            Using the geometric series we get:
             \begin{equation}
                 \langle{K_{N+1}}\rangle
                 =\langle{K_{1}}\rangle+\langle{H}\rangle
@@ -1234,7 +1258,7 @@ get_road_number(const struct knot *K,
             computation using red edges, either works.
             \par\hfill\par
             We can get an algorithm for virtual knots out of the Tait graph
-            if we use the modifications presented in the first chapter. Given
+            if we use the modifications presented in the second chapter. Given
             the virtual Tait graph for a virtual knot diagram, for any
             crossing (hollow vertex) there are three possibilities:
             \begin{enumerate}
