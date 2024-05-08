@@ -1,0 +1,246 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx} % Needed for figures.
+\usepackage{amsmath}  % Needed for align.
+\usepackage{amssymb}  % Needed for mathbb.
+\usepackage{amsthm}   % For the theorem environment.
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue}
+\newtheoremstyle{normal}
+    {\topsep}   % Amount of space above the theorem.
+    {\topsep}   % Amount of space above the theorem.
+    {}          % Font used for body of theorem.
+    {}          % Measure of space to indent.
+    {\bfseries} % Font of the header of the theorem.
+    {}          % Punctuation between head and body.
+    {0.5em}     % Space after theorem head.
+    {}
+\theoremstyle{normal}
+\newtheorem{examplex}{Example}
+\newenvironment{example}{%
+    \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacksquare$}\examplex%
+}{%
+    \popQED\endexamplex%
+}
+
+\title{Advanced Calculus: Tutorial 2}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        The following notes are from my tutorials for advanced calculus during
+        the spring 2021 semester at Dartmouth college. The nature of tutorial
+        sessions makes the handwritten notes very scattered as students ask
+        questions about different aspects of the course. These typed notes
+        reflect this scattering of information as well.
+    \end{abstract}
+    \begin{example}[\textbf{Derivatives and Inner Products}]
+        Suppose $\gamma_{0},\gamma_{1}:\mathbb{R}\rightarrow\mathbb{R}^{n}$
+        are smooth curves in $\mathbb{R}^{n}$. That is, if we write
+        $\gamma_{0}(t)=\big(x_{1}(t),\,\cdots,\,x_{n}(t)\big)$, then smooth
+        means $x_{k}:\mathbb{R}\rightarrow\mathbb{R}$ is a smooth
+        real-valued function for each $k$. Similarly for $\gamma_{1}$.
+        We can consider the real-valued function
+        $f:\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+        \begin{equation}
+            f(t)=\langle\,\gamma_{0}(t)\,|\,\gamma_{1}(t)\rangle
+        \end{equation}
+        Since this function takes in a real number and then returns a real
+        number we can ask if it is differentiable. The difference quotient is:
+        \begin{equation}
+            \frac{f(t+h)-f(t)}{h}
+            =\frac{%
+                \langle\,\gamma_{0}(t+h)\,|\,\gamma_{1}(t+h)\rangle-%
+                \langle\,\gamma_{0}(t)\,|\,\gamma_{1}(t)\rangle%
+            }{h}
+        \end{equation}
+        Using the bilinearity of the inner product we can simplify this.
+        \begin{align}
+            \frac{f(t+h)-f(t)}{h}
+            &=\frac{%
+                \langle\,\gamma_{0}(t+h)\,|\,\gamma_{1}(t+h)\rangle-%
+                \langle\,\gamma_{0}(t)\,|\,\gamma_{1}(t)\rangle%
+            }{h}\\
+            &=\frac{%
+                \langle\,\gamma_{0}(t+h)\,|\,\gamma_{1}(t+h)\rangle-%
+                \langle\,\gamma_{0}(t+h)\,|\,\gamma_{1}(t)\rangle%
+            }{h}\nonumber\\
+            &\hspace{2em}+\frac{%
+                \langle\,\gamma_{0}(t+h)\,|\,\gamma_{1}(t)\rangle-%
+                \langle\,\gamma_{0}(t)\,|\,\gamma_{1}(t)\rangle%
+            }{h}\\
+            &=
+            \frac{%
+                \langle\,\gamma_{0}(t+h)\,|\,%
+                    \gamma_{1}(t+h)-\gamma_{1}(t)\rangle%
+            }{h}\nonumber\\
+            &\hspace{2em}+\frac{%
+                \langle\,\gamma_{0}(t+h)-\gamma_{0}(t)\,|\,%
+                    \gamma_{1}(t)\rangle%
+            }{h}\\
+            &=
+            \langle\,\gamma_{0}(t+h)\,|\,
+                \frac{\gamma_{1}(t+h)-\gamma_{1}(t)}{h}\,\rangle\nonumber\\
+            &\hspace{2em}+
+            \langle\,\frac{\gamma_{0}(t+h)-\gamma_{0}(t)}{h}\,|\,
+                \gamma_{1}(t)\,\rangle
+        \end{align}
+        If we take limits we get:
+        \begin{align}
+            &\lim_{h\rightarrow{0}}\frac{f(t+h)-f(t)}{h}\nonumber\\
+            &=\lim_{h\rightarrow{0}}\Big(
+            \langle\,\gamma_{0}(t+h)\,|\,
+                \frac{\gamma_{1}(t+h)-\gamma_{1}(t)}{h}\,\rangle+
+            \langle\,\frac{\gamma_{0}(t+h)-\gamma_{0}(t)}{h}\,|\,
+                \gamma_{1}(t)\,\rangle\Big)
+        \end{align}
+        Since inner products are continuous, we can bring the limit into the
+        inside of the angle brackets.
+        \begin{align}
+            &\lim_{h\rightarrow{0}}\frac{f(t+h)-f(t)}{h}\nonumber\\
+            &=\lim_{h\rightarrow{0}}\Big(
+            \langle\,\gamma_{0}(t+h)\,|\,
+                \frac{\gamma_{1}(t+h)-\gamma_{1}(t)}{h}\,\rangle+
+            \langle\,\frac{\gamma_{0}(t+h)-\gamma_{0}(t)}{h}\,|\,
+                \gamma_{1}(t)\,\rangle\Big)\\
+            &=\langle\,
+                \lim_{h\rightarrow{0}}\gamma_{0}(t+h)\,|\,\lim_{h\rightarrow{0}}
+                \frac{\gamma_{1}(t+h)-\gamma_{1}(t)}{h}\,\rangle\nonumber\\
+            &\hspace{2em}+
+            \langle\,\lim_{h\rightarrow{0}}
+                \frac{\gamma_{0}(t+h)-\gamma_{0}(t)}{h}\,|\,
+                \gamma_{1}(t)\,\rangle\\
+            &=\langle\,\gamma_{0}(t)\,|\,\dot{\gamma}_{1}(t)\,\rangle
+                +\langle\,\dot{\gamma}_{0}(t)\,|\,\gamma_{1}(t)\,\rangle
+        \end{align}
+        where $\dot{\gamma}_{0}(t)$ and $\dot{\gamma}_{1}(t)$ denote the
+        derivatives of $\gamma_{0}$ and $\gamma_{1}$, respectively.
+        This is the \textbf{product rule} for derivatives of inner products.
+    \end{example}
+    \begin{example}[\textbf{Displacements and Angles}]
+        Suppose $\gamma:\mathbb{R}\rightarrow\mathbb{R}^{n}$ is a smooth
+        curve. Suppose $\mathbf{p}\in\mathbb{R}^{n}$
+        is a fixed point. The \textit{relative position vector}
+        from $\mathbf{p}$ to $\gamma(t)$ is the vector:
+        \begin{equation}
+            \mathbf{R}(t)=\gamma(t)-\mathbf{p}
+        \end{equation}
+        Associated to this is the \textit{displacement}, which is the length
+        of the relative position vector. We write:
+        \begin{equation}
+            \ell(t)=||\mathbf{R}(t)||
+            =\sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}
+            =\sqrt{\mathbf{R}(t)\cdot\mathbf{R}(t)}
+        \end{equation}
+        The rate of change of the displacement is the time-derivative of this
+        function. We get:
+        \begin{align}
+            \dot{\ell}(t)
+            &=\frac{\textrm{d}}{\textrm{d}t}\Big(
+                \sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}
+            \Big)\\
+            &=
+            \frac{1}{2\sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}}
+            \frac{\textrm{d}}{\textrm{d}t}\Big(
+                \langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle
+            \Big)\\
+            &=
+            \frac{1}{2\sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}}
+            \Big(
+                \langle\,\dot{\mathbf{R}}(t)\,|\,\mathbf{R}(t)\,\rangle
+                +
+                \langle\,\mathbf{R}(t)\,|\,\dot{\mathbf{R}}(t)\,\rangle
+            \Big)\\
+            &=\frac{\langle\,\dot{\mathbf{R}}(t)\,|\,\mathbf{R}(t)\,\rangle}
+                {\sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}}\\
+            &=\frac{\langle\,\dot{\mathbf{R}}(t)\,|\,\mathbf{R}(t)\,\rangle}
+                {||\mathbf{R}(t)||}
+        \end{align}
+        Since $\mathbf{R}(t)=\gamma(t)-\mathbf{p}$, we have that
+        $\dot{\mathbf{R}}(t)=\dot{\gamma}(t)$. We obtain:
+        \begin{align}
+            \dot{\ell}(t)
+            &=
+            \frac{\langle\,\dot{\gamma}(t)\,|\,\gamma(t)-\mathbf{p}\,\rangle}
+                {||\gamma(t)-\mathbf{p}||}\\
+            &=
+            \frac{\langle\,\dot{\gamma}(t)\,|\,\gamma(t)-\mathbf{p}\,\rangle}
+                {||\mathbf{R}(t)||}
+        \end{align}
+        We can derive this explicitly using the summation formula for the
+        Euclidean inner product. Writing
+        $\mathbf{p}=(p_{1},\,\cdots,\,p_{n})$, we have:
+        \begin{align}
+            \frac{\textrm{d}}{\textrm{d}t}
+            \sqrt{\langle\,\mathbf{R}(t)\,|\,\mathbf{R}(t)\,\rangle}
+            &=\frac{\textrm{d}}{\textrm{d}t}
+            \sqrt{\sum_{k=1}^{n}\big(\gamma_{k}(t)-p_{k}\big)^{2}}\\
+            &=
+            \frac{1}{2||\mathbf{R}(t)||}
+            \frac{\textrm{d}}{\textrm{d}t}\Big(
+                \sum_{k=1}^{n}\big(\gamma_{k}(t)-p_{k}\big)^{2}
+            \Big)\\
+            &=
+            \frac{1}{2||\mathbf{R}(t)||}
+            \sum_{k=1}^{n}
+            2\big(\gamma_{k}(t)-p_{k}\big)\dot{\gamma}_{k}(t)\\
+            &=
+            \frac{1}{||\mathbf{R}(t)||}
+            \sum_{k=1}^{n}
+            \big(\gamma_{k}(t)-p_{k}\big)\dot{\gamma}_{k}(t)\\
+            &=
+            \frac{\langle\,\dot{\gamma}(t)\,|\,\gamma(t)-\mathbf{p}\,\rangle}
+                {||\mathbf{R}(t)||}
+        \end{align}
+        Now suppose $\gamma$ describes a particle traveling at unit speed.
+        That is, $||\dot{\gamma}(t)||=1$ for all $t\in\mathbb{R}$. With this
+        assumption we can freely multiply and divide any expression by
+        $||\dot{\gamma}(t)||$ without changing it. Let's do this for
+        $\dot{\ell}(t)$. We get:
+        \begin{equation}
+            \dot{\ell}(t)
+            =\frac{\langle\,\dot{\gamma}(t)\,|\,\gamma(t)-\mathbf{p}\,\rangle}
+                {||\dot{\gamma}(t)||\,||\gamma(t)-\mathbf{p}||}
+        \end{equation}
+        This is the ratio of an inner product and a product of norms, which
+        describes the angle between the vectors. That is:
+        \begin{equation}
+            \cos\big(
+                \angle(\dot{\gamma}(t),\,\gamma(t)-\mathbf{p})
+            \big)=\dot{\ell}(t)
+        \end{equation}
+        If we label
+        $\theta(t)=\angle(\dot{\gamma}(t),\,\gamma(t)-\mathbf{p})$, then we
+        can write this as:
+        \begin{equation}
+            \dot{\ell}(t)
+            =\cos\big(\theta(t)\big)
+        \end{equation}
+        That is, the time-derivative of the displacement is described by
+        the cosine of the angle made with
+        $\mathbf{R}(t)$ and $\dot{\mathbf{R}}(t)$. This tells us that
+        $\gamma(t)$ is closest (or furthest) to $\mathbf{p}$ when
+        $\theta(t)=\frac{\pi}{2}$. That is, the extrema of the curve relative
+        to $\mathbf{p}$ occur when the displacement and the change in the
+        displacement are perpendicular.
+    \end{example}
+\end{document}
