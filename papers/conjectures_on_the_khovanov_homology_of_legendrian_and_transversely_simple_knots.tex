@@ -62,7 +62,7 @@
     \begin{abstract}
         \noindent
         A theorem of Kronheimer and Mrowka states that Khovanov homology is
-        able to detect the unknot \cite{kronheimermrowka2010}.
+        able to detect the unknot \cite{KronheimerMrowka2011KhovanovUnknot}.
         That is, if a knot has the Khovanov homology of the unknot, then it is
         equivalent to it. Similar results hold for the trefoils
         \cite{BaldwinSivekKhovanovTrefoils} and the figure-eight knot
@@ -115,7 +115,7 @@
         and rotation numbers \cite{Ding2006LEGENDRIANHA}.
         A link type is said to be \textit{Legendrian simple} if
         any two Legendrian embeddings of it with the same Thurston-Bennequin
-        and rotation numbers are Legendrian equivalent. That is, the classical
+        and rotation numbers are Legendrian equivalent. That is, if the classical
         invariants uniquely classify all Legendrian representations of the knot.
         Certain knot types are known to be Legendrian simple such as the unknot
         \cite{EliashbergFraserClassificationTopTrivialLegKnots}, torus knots,
@@ -152,11 +152,11 @@
         classifies when twist knots are transversely simple. In
         particular, infinitely many such knots are transversely simple giving
         us a family of knots to test conjectures with. It is also true that
-        infinite families of non-Legendrian simple and non-transversally simple
+        infinite families of non-Legendrian simple and non-transversely simple
         knots exist. See, for example, the works of Etnyre and Honda
         \cite{EtnyreHondaCabling} and Birman and Menasco
         \cite{BirmanMenasco2006}. More examples can be found in
-        \cite{vfoldvari2019legnonsimple}.
+        \cite{Foldvari2019legnonsimple}.
         \par\hfill\par
         There are several common ways of representing topological knots, the
         three used in our computations are extended Gauss code, planar diagram
@@ -182,7 +182,7 @@
         \par\hfill\par
         It is possible to go from DT code to unsigned
         Gauss code (i.e. the usual Gauss code, and not the extended Gauss code)
-        and back \cite{KhoHoDTCodes}. For certain computations,
+        and back \cite{KatlasDTCode}. For certain computations,
         like the Alexander polynomial which
         is mirror insensitive, DT code is easiest since it is the shortest.
         For things like the Jones polynomial and Khovanov homology, invariants
@@ -220,12 +220,12 @@
         expensive%
         \footnote{%
             The na\"{i}ve algorithm is exponential in the number of
-            crossings. Improvements by Bar-Natan \cite{BarNatanFastKhoHo}
+            crossings. Improvements by Bar-Natan \cite{BarNatan2006FASTKH}
             have sped up computations but no polynomial-time algorithm is
             known at the time of this writing.
         },
         invariant first introduced by Mikhail Khovanov
-        \cite{Khovanov1999CatJonesPoly} (See also \cite{barnatan2002khovanov}
+        \cite{Khovanov1999CatJonesPoly} (See also \cite{BarNatanKhovanovJones}
         for an excellent introduction). It is closely related to the Jones
         polynomial, but able to distinguish many more knots and links. The
         homology groups $KH^{r}(L)$ of a link (or knot) $L$ are the direct sum
@@ -243,7 +243,7 @@
         \cite{Watson2007KnotsWI}. That is, there are
         distinct knots with the same Khovanov homology, but it is a powerful
         invariant and is capable of detecting certain knot types.
-        \begin{theorem}[Kronheimer and Mrowka, 2001]
+        \begin{theorem}[Kronheimer and Mrowka, 2011]
             If a knot $K$ has the same Khovanov homology as the unknot, then $K$
             is equivalent to the unknot.
         \end{theorem}
@@ -260,6 +260,10 @@
         all knots of up to 24 crossings are either the unknot, or have a
         Jones polynomial different from the unknot
         \cite{VerificationUnknotJonesConjUpTo24}.
+        \par\hfill\par
+        In recent years it has been discovered that Khovanov homology can detect
+        a few other knot types. In particular, both the left and right handed
+        trefoils, as well as the figure eight.
         \begin{theorem}[Baldwin and Sivek, 2022]
             If a knot $K$ has the same Khovanov homology as either of the
             trefoils, then $K$ is equivalent to one of them.
@@ -288,8 +292,8 @@
             equivalent to $L$.
         \end{conjecture}
         Numerical evidence has been tallied for torus knots
-        against all prime knots up to 19 crossings. There are many
-        torus knots that have the same Jones polynomial as a non-torus knot
+        against all prime knots up to 19 crossings. There are four
+        non-torus knots that have the same Jones polynomial as a torus knot
         ($T(2,5)$ matches 10 and 17 crossing knots, $T(2,7)$
         matches a 12 crossing knot, and $T(2,11)$ matches a 14 crossing knot)
         so we cannot generalize the Jones unknot conjecture. Nevertheless, in
@@ -299,7 +303,8 @@
         The computations were done as follows. There are libraries in Python,
         Sage, and C++ for working with knot polynomials. In particular, we used
         Regina \cite{regina}, SnapPy \cite{SnapPy}, the Sage knot library
-        \cite{sage}, and our own ever-growing C library.
+        \cite{sage}, and our own ever-growing C library
+        \cite{MaguireLibtmpl}.
         \par\hfill\par
         We first gather the torus knots that could potentially have the same
         Jones polynomial as some other knot based on the bounds of the degree.
@@ -311,7 +316,7 @@
                 \frac{1-q^{m+1}-q^{n+1}+q^{m+n}}{1-q^{2}}
         \end{equation}
         The Kauffman bracket, of which the Jones polynomial is a simple
-        normalization \cite{barnatan2002khovanov},
+        normalization \cite{BarNatanKhovanovJones},
         of a knot $K$ with $N$ crossings has the following formula:
         \begin{equation}
             \langle{K}\rangle=\sum_{n=0}^{2^{N}-1}(-q)^{w(n)}(q+q^{-1})^{c(n)}
@@ -320,21 +325,22 @@
         binary representation, and $c(n)$ is the number of disjoint cycles
         that result in the complete smoothing of $K$ corresponding to
         $0\leq{n}\leq{2}^{N}-1$. With this the degree of the bracket polynomial
-        is bounded by $3n$ ($w(n)$ is bounded by $n$, and $c(n)$ is bounded
-        by $2n$). The degree of the normalization is bounded by $2n$
-        \cite{barnatan2002khovanov}, so the
-        Jones polynomial of a knot with $n$ crossings has degree at most $5n$.
+        is bounded by $2N+1$ ($w(n)$ is bounded by $N$, and $c(n)$ is bounded
+        by $N+1$). The degree of the normalization is bounded by $2N$
+        \cite{BarNatanKhovanovJones}, so the
+        Jones polynomial of a knot with $n$ crossings has degree at most
+        $4N+1$.
         \par\hfill\par
         Since we are looking at knots up to $19$ crossings, we collect the
         co-prime pairs $(m,\,n)$ with $1<m<n$ such that the degree
-        is less than $5\cdot{19}=95$. Since the Jones polynomial of a mirror
+        is less than $4\cdot{19}+1=77$. Since the Jones polynomial of a mirror
         can be computed by substituting $q\mapsto{q}^{-1}$
         \cite{jonespolyjones}, we need not look at
         negative values. The Khovanov polynomial makes a similar change,
         $(q,\,t)\mapsto(q^{-1},\,t^{-1})$
         \cite{WATSON2017915}.
         \par\hfill\par
-        Using any of the aforementioned libraries, the Jones polynomial of all
+        Using any of the aforementioned libraries, the Jones polynomials of all
         prime knots up to 19 crossings were computed and compared against this
         table of torus knot Jones polynomials (Eqn.~\ref{eqn:jones_poly_torus}).
         If a match was found the regina library was used to determine if the
@@ -371,13 +377,13 @@
             \end{cases}
         \end{equation}
         A search through all prime knots up to 19 crossings against twist knots
-        provided many matches for the Jones polynomial
+        provided eleven more matches for the Jones polynomial
         (See Tab.~\ref{table:matching_twist_knots}), but
         none for Khovanov homology. Infinitely many of the twists knots are
-        transversally simple, making them a good candidate to test the following
+        transversely simple, making them a good candidate to test the following
         conjecture on.
         \begin{conjecture}
-            If a link type $L$ is transversally simple, then the Khovanov
+            If a link type $L$ is transversely simple, then the Khovanov
             homology of $L$ distinguish it. That is, if $\tilde{L}$
             is another link with the same Khovanov homology, then $\tilde{L}$ is
             equivalent to $L$.
@@ -429,15 +435,461 @@
         In Tab.~\ref{table:matching_torus_knots}
         we have found four non-torus knots with the same
         Jones polynomial as some torus knot. In all four cases the Khovanov
-        polynomials differ. The tables for these polynomials are given below.
+        polynomials differ. The tables for these polynomials are given
+        in Appendix A.
         The coefficient of $q^{\ell}t^{r}$ is given by the corresponding entry.
         Empty equates to zero.
         \par\hfill\par
         The cinquefoil $T(2,\,5)$ has the same Jones polynomial as two
-        non-torus knots. As shown below in
+        non-torus knots. As shown in
         Tabs.~\ref{table:t_2_5_kho}-\ref{table:iNHlPJqCoKFmdABgE_kho}, the
         Khovanov polynomials differ
         (This had already been known, see \cite{KatlasKhoHo}).
+        Note the columns for the Euler characteristic $\chi$ are identical,
+        indicating matching Jones polynomials.
+        \par\hfill\par
+        The $T(7,2)$ knot, also the $7_{1}$ knot, and occasionally called the
+        septafoil, has the same Jones polynomial as \texttt{fJGkHlICEABd}. The
+        Khovanov polynomials are distinct
+        (Tabs.~\ref{table:t_7_2_kho}-\ref{table:fJGkHlICEABd_kho}).
+        Lastly, the $T(11,2)$ torus knot has the same Jones polynomial as the
+        14 crossing knot \texttt{gHlImJnKBDFAce}. Once again the Khovanov
+        polynomials differ.
+    \section{Numerical Results: Twist Knots}
+        \begin{table}[H]
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                        Twist Knot&
+                        Non-Twist Knot&
+                        Jones Polynomial\\
+                    \hline
+                        $m_{2}$&
+                        \texttt{eikGbHJCaFd}&
+                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{dgikFHaEjbc}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{gfJKHlaIEBCD}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{3}$&
+                        \texttt{hGJaMlCdEKBfI}&
+                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{5}$&
+                        \texttt{bhDGijCkaef}&
+                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{cefIgbajkDh}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{femIbaJKLCGHd}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{6}$&
+                        \texttt{jpIFNMrClqOhkEDabg}&
+                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{7}$&
+                        \texttt{cgjFHIaDEkb}&
+                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                        $m_{8}$&
+                        \texttt{knIHoBjCDQrMPaeLgF}&
+                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
+                    \hline
+                        $m_{9}$&
+                        jopIFMrDlqNhkEabcg&
+                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
+            \label{table:matching_twist_knots}
+        \end{table}
+        The twist knots have a few more matching non-twists knots for the
+        Jones polynomial (Tab.~\ref{table:matching_twist_knots}).
+        All tables are provided in Appendix B.
+        The first match is the
+        figure-eight knot, $m_{2}$, which has the same Jones polynomial as
+        K11n19 from the Hoste-Thistlewaite table.
+        Again, this had already been known
+        (See \cite{KatlasFigureEight} and \cite{KatlasK11n19}).
+        The Khovanov polynomials are
+        given in Tabs.~\ref{table:m_2_kho}-\ref{table:eikGbHJCaFd_kho}.
+        \par\hfill\par
+        The $m_{3}$ twist knot, which is $5_{2}$ on the Rolfsen table,
+        has the same Jones polynomial as (at least) three other knots. In each
+        case the Khovanov polynomial distinguishes it
+        (Tabs.~\ref{table:m_3_kho}-\ref{table:hGJaMlCdEKBfI_kho}).
+        The $m_{5}$ twist knot, which is $7_{2}$ on the Rolfsen table, has the
+        same Jones polynomial as \texttt{bhDGijCkaef}. The Khovanov polynomials
+        are given in Tabs.~\ref{table:m_5_kho} and \ref{table:bhDGijCkaef_kho}.
+        \par\hfill\par
+        Our original experiment concluded at 17 crossings. We have expanded
+        this to 19, and in doing so we have added a few new results,
+        the first of which comes with
+        $m_{6}$. An 18 crossing knot was found
+        that has the same Jones polynomial, but the Khovanov polynomials
+        differ. This is shown below
+        (Tabs.~\ref{table:m_6_kho} and \ref{table:jpIFNMrClqOhkEDabg_kho}.).
+        $m_{6}$ also shares its Jones polynomial with an 11 and a 13 crossing
+        knot. The Khovanov polynomials are given in
+        Tabs.~\ref{table:cefIgbajkDh_kho} and
+        \ref{table:femIbaJKLCGHd_kho}. Something to note is that the
+        the Khovanov polynomials of \texttt{cefIgbajkDh} and
+        \texttt{femIbaJKLCGHd} are identical, indicating that the
+        Khovanov polynomial is not a perfect invariant.
+        \par\hfill\par
+        Lastly, the twist knots $m_{7}$, $m_{8}$, and $m_{9}$ have the same
+        Jones polynomial of at least one other knot. As before, the Khovanov
+        polynomials differ in each case. We may now make the following claim.
+        \begin{theorem}
+            If a prime knot $K$ has less than or equal to 19 crossings and has
+            the Khovanov homology of a twist knot $T$,
+            then $K$ is equivalent to $T$.
+        \end{theorem}
+        An interesting thing to note is that not all twist knots are
+        transversely, or Legendrian, simple, yet there are no knots up to
+        19 crossings with the same Khovanov polynomial as a twist knot,
+        other than twist knots themselves. We ask the following.
+        \begin{question}
+            Does Khovanov homology distinguish all twist knots?
+        \end{question}
+    \section{Numerical Results: Conjectured Legendrian Simple Knots}
+        Ng presents several knots in \cite{LegendrianKnotAtlas} that are
+        \textit{possibly} Legendrian simple but not confirmed. For completeness
+        we used our scripts on these knots as well and found several knots with
+        identical Jones polynomials, but again all had differing Khovanov
+        polynomials. These are listed in
+        Tab.~\ref{fig:conj_leg_simp_knots} ($m$ indicates the knots mirror).
+        Note this table also includes knots that are conjectured to be
+        transversely simple.
+        The tables for the Khovanov polynomials are given in Appendix C.
+        \begin{table}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                    Ng Knot&Matching Knot&Jones Polynomial\\
+                    \hline
+                    $m(6_{2})$&\texttt{glfoJcbKMNDaHIe}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{hknEGmDbJLaIfc}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{gKHlmIdJCEABf}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(6_{2})$&\texttt{ehkjmGIaFlcbd}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
+                    \hline
+                    $m(7_{3})$&\texttt{hgelkIbaJFcd}&$-q^{18}+q^{16}-2q^{14}+3q^{12}-2q^{10}+2q^{8}-q^{6}+q^{4}$\\
+                    \hline
+                    $m(7_{4})$&\texttt{gfkHlbjIDaec}&$-q^{16}+q^{14}-2q^{12}+3q^{10}-2q^{8}+3q^{6}-2q^{4}+q^{2}$\\
+                    \hline
+                    $m(9_{48})$&\texttt{gnoqKDjIMrpEaHblfc}&$q^{2}-3+4q^{-2}-4q^{-4}+6q^{-6}-4q^{-8}+3q^{-10}-2q^{-12}$\\
+                    \hline
+                    $m(9_{49})$&\texttt{lFKJIOAEnDCpBhmG}&$q^{-4}-2q^{-6}+4q^{-8}-4q^{-10}+5q^{-12}-4q^{-14}+3q^{-16}-2q^{-18}$\\
+                    \hline
+                    $m(10_{128})$&\texttt{eHPNqGJlBFoiaDCkM}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
+                    \hline
+                    $m(10_{128})$&\texttt{edjkaGIlFbch}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
+                    \hline
+                    $m(10_{136})$&\texttt{igDKHJaEbFC}&$q^{6}-2q^{4}+2q^{2}-2+3q^{-2}-2q^{-4}+2q^{-6}-q^{-8}$\\
+                    \hline
+                    $10_{145}$&\texttt{eoHKqGJnCFmPDibaL}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
+                    \hline
+                    $10_{145}$&\texttt{kNJIpHLFECoMGABd}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
+                    \hline
+                    $10_{161}$&\texttt{hOqrljsnMeipFAgkbcd}&$-q^{22}+q^{20}-q^{18}+q^{16}-q^{14}+q^{12}+q^{6}$\\
+                    \hline
+                \end{tabular}%
+            }
+            \caption{Conjectured Legendrian Simple Knots}
+            \label{fig:conj_leg_simp_knots}
+        \end{table}
+    \section{Jones and Khovanov Polynomial Databases}
+        Using the \texttt{regina} and \texttt{JavaKh} libraries, the Jones
+        polynomials of all knots with less than or equal to 19 crossings were
+        tabulated, and the Khovanov polynomials of all knots up to 17 crossings
+        were computed.%
+        \footnote{%
+            This data is publicly available. See
+            \cite{JonesData} and \cite{KhovanovData}.
+        }
+        This allows us to measure how common it is for a knot
+        to have a unique Jones or Khovanov polynomial when compared with other
+        low crossing knots. Unsurprisingly, the Jones polynomial does not
+        distinguish nearly as many knots as the Khovanov polynomial.%
+        \footnote{%
+            The Khovanov polynomial throws away the torsion component of
+            Khovanov homology. It would be interesting to compare how much
+            stronger the \textit{full} Khovanov homology is.
+        }
+        The \textit{statistics} for these knot invariants are shown in
+        Tabs.~\ref{tab:jones_stat} and \ref{tab:kho_stat}, the key for the
+        tables is given in Tab.~\ref{tab:key}.
+        \par\hfill\par
+        Computational limits (temporarily) prohibit us from expanding
+        Tab.~\ref{tab:kho_stat} to 19 crossings, but this is being worked on.
+        After examining the data one sees that the Khovanov polynomial
+        distinguishes about $32\%$ of knots with up to 17 crossings. Put it
+        another way, about 7 out of 10 knots share their Khovanov polynomial
+        with another knot in the list.
+        \par\hfill\par
+        We can use this data to play around with the statistics and ask whether or
+        not the conjectures we've made in the previous sections are sound. That is,
+        we can now provide a heuristic argument.
+        The smaller the probability of a knot having a unique Khovanov
+        polynomial among all other prime knots up to $N$ crossings, the
+        more likely our findings are statistically significant. We note that
+        the probability of having a unique Jones or Khovanov polynomial appears
+        to be monotonically \textit{decreasing} with crossing number. Since
+        we do not have the Khovanov data for 18 or 19 crossings, we can use
+        the value for 17 crossings. If the trend continues and the probability
+        for $N=19$ is smaller, that will only make our heuristic argument
+        stronger. To avoid mixing the statistics, we also use the 17 crossing
+        probability for the Jones polynomial. Here we \textit{know} that
+        19 crossings produces a smaller probability since this data is
+        available to us.
+        \par\hfill\par
+        A first approach is to say that the probability of a prime knot having a
+        unique Khovanov polynomial among all other prime
+        knots with up to 17 crossings is 0.32 (Tab.~\ref{tab:kho_stat}).
+        Ignoring mirrors, there are 16 twist knots and 14 torus knots with
+        less than or equal to 17 crossings. For twist knots these are the knots
+        $K_{m}$ for $m=0,\,1,\,\cdots,\,15$, and for torus knots these are given
+        by the co-prime pairs
+        $(2, 3)$, $(2, 5)$, $(2, 7)$, $(2, 9)$, $(2, 11)$, $(2, 13)$,
+        $(2, 15)$, $(2, 17)$, $(3, 4)$, $(3, 5)$, $(3, 7)$, $(3, 8)$, $(4, 5)$,
+        and the unknot.
+        The (na\"{i}ve) probability of all of these knots having unique
+        Khovanov polynomials is $0.32^{16+14-1}\approx{4.5}\times{10}^{-15}$, where
+        the $-1$ in the exponent comes from double counting the unknot, once as
+        a twist knot and once as a torus knot.
+        For twist knots alone this is $0.32^{16}\approx{1.2}\times{10}^{-8}$ and
+        for torus knots this is $0.32^{14}\approx{1.2}\times{10}^{-7}$.
+        \par\hfill\par
+        These are ridiculously small probabilities, which is good for our
+        conjecture,
+        but this assumes these knots are more-or-less \textit{random}.
+        Let us use their Jones polynomials to demonstrate that they more-or-less
+        are. The Jones polynomial
+        has a $0.26$ probability of distinguishing a knot in our list of prime knots
+        up to 17 crossings. Since having a unique Jones polynomial would imply
+        having a unique Khovanov polynomial (recall $Kh_{K}(q,\,-1)=J_{K}(q)$),
+        the set of knots
+        that are distinguished by their Jones polynomial is a subset of the set of
+        knots distinguished by the Khovanov polynomial. If we label
+        \texttt{KH} as the event that a knot is determined by its Khovanov
+        polynomial (when considered among prime knots with 17 crossings or less),
+        and similarly label \texttt{J} for the Jones polynomial, the conditional
+        probability is:
+        \begin{equation}
+            P(\textrm{not }\texttt{J}\;|\;\texttt{KH})
+            =\frac{P(\texttt{KH})-P(\texttt{J})}{P(\texttt{KH})}
+            \approx{0.21}
+        \end{equation}
+        So with a $0.21$ probability a knot that is known to be distinguished by
+        its Khovanov polynomial will not be distinguished by its Jones polynomial.
+        We have shown by brute force methods that the torus and twist knots are
+        part of the Khovanov-distinguished family for prime knots up to 17
+        crossings, so we can apply this probability. There were 4 torus knots that
+        are not distinguished by their Jones polynomial and 9 such twist knots.%
+        \footnote{%
+            Tab.~\ref{table:matching_twist_knots} has 11 such twist knots, but
+            two of these matches are for knots with more than 17 crossings. To
+            avoid using the wrong probabilities with this data, we stick to
+            17 crossings.
+        }
+        When accounting for mirrors, this gives a
+        $0.15$ probability of a torus knot being distinguished by the Khovanov
+        polynomial and not the Jones polynomial, and a $0.3$ probability for twist
+        knots. Roughly, this means torus knots are more likely to be distinguished
+        by the Jones polynomial than the average Khovanov-distinguished knot,
+        and the twist knots are less likely. The total probability for the union
+        of these two families is $0.23$, which is close to the general
+        probability of $0.21$. It is then fair to say that these
+        families are behaving \textit{randomly}, as far as their
+        Jones detection rates are concerned.
+        \par\hfill\par
+        We can also look at the conditional probability of finding a knot that is
+        distinguished by its Khovanov polynomial given that we know it is not
+        distinguished by its Jones polynomial. First, a quick review of probability.
+        Given events $A,B\subseteq{X}$, for some probability space $X$, if $P(B)$
+        is non-zero, then:
+        \begin{align}
+            P(B)&=P\big((A\cap{B})\cup(A^{C}\cap{B})\big)\\
+            &=P(A\cap{B})+P(A^{C}\cap{B})\\
+            \Rightarrow
+            1&=\frac{P(A\cap{B})}{P(B)}+\frac{P(A^{C}\cap{B})}{P(B)}\\
+            &=P(A\;|\;B)+P(A^{C}\;|\;B)
+        \end{align}
+        where $A^{C}=X\setminus{A}$, the complement of $A$ in $X$, and
+        where $P(A\;|\;B)$ denotes the conditional probability. Note that
+        $P(A^{C})$ is the same thing as $P(\textrm{not }A)$.
+        Rearranging we have:
+        \begin{equation}
+            P(A\;|\;B)=1-P(A^{C}\;|\;B)
+        \end{equation}
+        a rather standard and intuitive result, we will now use this in our
+        following argument. We seek the probability
+        $P(\texttt{KH}\;|\;\textrm{not }\texttt{J})$.
+        That is, the probability a knot will
+        be distinguished by its Khovanov polynomial given that we know it is
+        not distinguished by its Jones polynomial. Combining our previous derivation
+        with Bayes' theorem, we obtain:
+        \begin{align}
+            P(\texttt{KH}\;|\;\textrm{not }\texttt{J})
+            &=P(\textrm{not }\texttt{J}\;|\;\texttt{KH})
+            \frac{P(\texttt{KH})}{P(\textrm{not }\texttt{J})}\\
+            &=\big(1-P(\texttt{J}\;|\;\texttt{KH})\big)
+                \frac{P(\texttt{KH})}{P(\textrm{not }\texttt{J})}\\
+            &=\big(
+                1-\frac{P(\texttt{KH}\;|\;\textrm{J})P(\texttt{J})}{P(\texttt{KH})}
+            \big)
+            \frac{P(\texttt{KH})}{P(\textrm{not }\texttt{J})}\\
+            &=\big(
+                1-\frac{P(\texttt{J})}{P(\texttt{KH})}
+            \big)
+            \frac{P(\texttt{KH})}{P(\textrm{not }\texttt{J})}\\
+            &=\big(
+                \frac{P(\texttt{KH})-P(\texttt{J})}{P(\texttt{KH})}
+            \big)
+            \frac{P(\texttt{KH})}{P(\textrm{not }\texttt{J})}\\
+            &=\frac{P(\texttt{KH})-P(\texttt{J})}{P(\textrm{not }\texttt{J})}\\
+            &=\frac{P(\texttt{KH})-P(\texttt{J})}{1-P(\texttt{J})}\\
+            &=0.092
+        \end{align}
+        We have used the fact that $P(\texttt{KH}\;|\;\texttt{J})=1$ to obtain our
+        result.
+        To be on the conservative side we can round this up (smaller probabilities
+        make our conjecture stronger) to $10\%$. So with roughly a $10\%$
+        probability a knot that is not Jones-distinguished will still be
+        distinguished by its Khovanov polynomial. We found 11 twist knots and 4
+        torus knots that are not Jones-distinguished, but are still
+        Khovanov-distinguished. Hence for the torus knots we may choose a $p$
+        value of $0.001$, and for the twist knots we can go much lower, indicating
+        that it is likely a statistically significant result.
+        \par\hfill\par
+        Now one may say that \textit{most} of the prime knots with 17 or less
+        crossings happen to have 17 crossings, whereas most of the twist knots
+        we've examined do not.
+        A similar claim can be made for the torus knots. We can reformulate
+        our probability argument as follows to account for this. Let
+        $p(k)$ be the fraction of prime knots of up to $k$ crossings that are
+        distinguished by their Khovanov polynomial. Let
+        $Cr(K)$ denote the crossing number of $K$. The product
+        $\prod_{m}p\big(Cr(K_{m})\big)$ over all twist knots with up to 17 crossings
+        then serves as a better probability that all should be
+        Khovanov-distinguished. Using our tables this number is
+        $2.8\times{10}^{-5}$, which is still very small. For the torus
+        knots we obtain $8.4\times{10}^{-6}$, a tiny probability.
+        \par\hfill\par
+        Lastly, one may argue that several of the torus and twist knots are known
+        to be Khovanov-distinguished among all possible knots, like the unknot,
+        and so should not be included in these probabilities.
+        Our previous argument handles this since these knots have
+        crossing number no greater than 5, and $p(k)=1$ for $k\leq{9}$.
+        \par\hfill\par
+        The premise behind these arguments, that knots are random, is a point of
+        contention. Nevertheless the above argument is not entirely meaningless
+        and the authors believe it does motivate further study of these conjectures.
+        \begin{table}
+            \centering
+            \begin{tabular}{| l | l |}
+                \hline
+                Keyword & Description\\
+                \hline
+                Cr     & Crossing number, largest number of crossings considered.\\
+                Unique & Number of polynomials that occur for one knot.\\
+                Almost & Number of polynomials that occur for two knots.\\
+                Total  & Total number of distinct polynomials in list.\\
+                Knots  & Total number of knots in list.\\
+                FracU  & Unique / Total\\
+                FracT  & Total / Knots\\
+                FracK  & Unique / Knots\\
+                \hline
+            \end{tabular}
+            \caption{Legend for Tabs.~\ref{tab:jones_stat} and \ref{tab:kho_stat}}
+            \label{tab:key}
+        \end{table}
+        \begin{table}
+            \centering
+            \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                \hline
+                Cr &  Unique  &  Almost  &   Total   &   Knots    &  FracU   &  FracT   &  FracK\\
+                \hline
+                03 &        1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
+                04 &        2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
+                05 &        4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
+                06 &        7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
+                07 &       14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
+                08 &       35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
+                09 &       84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
+                10 &      223 &       13 &       236 &       249 & 0.944915 & 0.947791 & 0.895582\\
+                11 &      626 &       77 &       710 &       801 & 0.881690 & 0.886392 & 0.781523\\
+                12 &     1981 &      345 &      2420 &      2977 & 0.818595 & 0.812899 & 0.665435\\
+                13 &     6855 &     1695 &      9287 &     12965 & 0.738129 & 0.716313 & 0.528731\\
+                14 &    25271 &     7439 &     37578 &     59937 & 0.672495 & 0.626958 & 0.421626\\
+                15 &   105246 &    35371 &    170363 &    313230 & 0.617775 & 0.543891 & 0.336002\\
+                16 &   487774 &   173677 &    829284 &   1701935 & 0.588187 & 0.487260 & 0.286600\\
+                17 &  2498968 &   894450 &   4342890 &   9755328 & 0.575416 & 0.445181 & 0.256164\\
+                18 & 13817237 &  4863074 &  24116048 &  58021794 & 0.572948 & 0.415638 & 0.238139\\
+                19 & 82712788 & 27409120 & 141439472 & 352152252 & 0.584793 & 0.401643 & 0.234878\\
+                \hline
+            \end{tabular}
+            \caption{Statistics for the Jones Polynomial}
+            \label{tab:jones_stat}
+        \end{table}
+        \begin{table}
+            \centering
+            \begin{tabular}{| r | r | r | r | r | r | r | r |}
+                \hline
+                Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
+                \hline
+                03 &       1 &       0 &       1 &       1 & 1.000000 & 1.000000 & 1.000000\\
+                04 &       2 &       0 &       2 &       2 & 1.000000 & 1.000000 & 1.000000\\
+                05 &       4 &       0 &       4 &       4 & 1.000000 & 1.000000 & 1.000000\\
+                06 &       7 &       0 &       7 &       7 & 1.000000 & 1.000000 & 1.000000\\
+                07 &      14 &       0 &      14 &      14 & 1.000000 & 1.000000 & 1.000000\\
+                08 &      35 &       0 &      35 &      35 & 1.000000 & 1.000000 & 1.000000\\
+                09 &      84 &       0 &      84 &      84 & 1.000000 & 1.000000 & 1.000000\\
+                10 &     225 &      12 &     237 &     249 & 0.949367 & 0.951807 & 0.903614\\
+                11 &     641 &      71 &     718 &     801 & 0.892758 & 0.896380 & 0.800250\\
+                12 &    2051 &     326 &    2462 &    2977 & 0.833063 & 0.827007 & 0.688949\\
+                13 &    7223 &    1636 &    9539 &   12965 & 0.757207 & 0.735750 & 0.557115\\
+                14 &   27317 &    7441 &   39222 &   59937 & 0.696471 & 0.654387 & 0.455762\\
+                15 &  118534 &   36867 &  182598 &  313230 & 0.649153 & 0.582952 & 0.378425\\
+                16 &  578928 &  187639 &  919835 & 1701935 & 0.629382 & 0.540464 & 0.340159\\
+                17 & 3167028 & 1001101 & 5033403 & 9755328 & 0.629202 & 0.515965 & 0.324646\\
+                \hline
+            \end{tabular}
+            \caption{Statistics for the Khovanov Polynomial}
+            \label{tab:kho_stat}
+        \end{table}
+    \section{Acknowledgements}
+        We thank Shadi Ali Ahmad, Ilya Kryukov and Jacob Swenberg for their
+        observation and remarks in the early stage of this work. The numerical
+        results of Samantha Allen and Jacob Swenberg about the Jones Polynomial
+        of a connected sum of two Hopf links were very inspirational since they
+        provided the connection to the work of Fan Ding and Hansjorg Geiges on
+        the Legendrian simple links. We are very grateful to Nikolay Pultsin
+        for his indispensable help with the Khovanov homology code available
+        on the internet. We are thankful to Jim Hoste, Morwen Thistlethwaite
+        and Jeff Weeks for sharing their database of DT codes of knots, and
+        to Benjamin Burton for providing his 19 crossing database freely to
+        the public.
+        We also thank Steven Sivek and Matthew Heddon
+        for alarming us about the bug that
+        existed in our KFH code.
+    \newpage
+    \section{Appendix A: Torus Knot Data}
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c |}
@@ -516,13 +968,6 @@
             \caption{Khovanov Polynomial for \texttt{iNHlPJqCoKFmdABgE}}
             \label{table:iNHlPJqCoKFmdABgE_kho}
         \end{table}
-        Note the columns for the Euler characteristic $\chi$ are identical,
-        indicating matching Jones polynomials.
-        \par\hfill\par
-        The $T(7,2)$ knot, also the $7_{1}$ knot, and occasionally called the
-        septafoil, has the same Jones polynomial as \texttt{fJGkHlICEABd}. The
-        Khovanov polynomials are distinct
-        (Tabs.~\ref{table:t_7_2_kho}-\ref{table:fJGkHlICEABd_kho}).
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
@@ -581,9 +1026,6 @@
             \caption{Khovanov Polynomial for \texttt{fJGkHlICEABd}}
             \label{table:fJGkHlICEABd_kho}
         \end{table}
-        Lastly, the $T(11,2)$ torus knot has the same Jones polynomial as the
-        14 crossing knot \texttt{gHlImJnKBDFAce}. Once again the Khovanov
-        polynomials differ.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -656,74 +1098,8 @@
             \caption{Khovanov Polynomial for \texttt{gHlImJnKBDFAce}}
             \label{table:t_gHlImJnKBDFAce_kho}
         \end{table}
-    \section{Numerical Results: Twist Knots}
-        \begin{table}[H]
-            \centering
-            \resizebox{\textwidth}{!}{%
-                \begin{tabular}{| l | l | l |}
-                    \hline
-                        Twist Knot&
-                        Non-Twist Knot&
-                        Jones Polynomial\\
-                    \hline
-                        $m_{2}$&
-                        \texttt{eikGbHJCaFd}&
-                        $q^{4}-q^{2}+1-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{3}$&
-                        \texttt{dgikFHaEjbc}&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{3}$&
-                        \texttt{gfJKHlaIEBCD}&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{3}$&
-                        \texttt{hGJaMlCdEKBfI}&
-                        $-q^{12}+q^{10}-q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{5}$&
-                        \texttt{bhDGijCkaef}&
-                        $-q^{16}+q^{14}-q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{6}$&
-                        \texttt{cefIgbajkDh}&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{6}$&
-                        \texttt{femIbaJKLCGHd}&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{6}$&
-                        \texttt{jpIFNMrClqOhkEDabg}&
-                        $q^{12}-q^{10}+q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{7}$&
-                        \texttt{cgjFHIaDEkb}&
-                        $-q^{20}+q^{18}-q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                        $m_{8}$&
-                        \texttt{knIHoBjCDQrMPaeLgF}&
-                        $q^{16}-q^{14}+q^{12}-2q^{10}+2q^{8}-2q^{6}+2q^{4}-2q^{2}+2-q^{-2}+q^{-4}$\\
-                    \hline
-                        $m_{9}$&
-                        jopIFMrDlqNhkEabcg&
-                        $-q^{24}+q^{22}-q^{20}+2q^{18}-2q^{16}+2q^{14}-2q^{12}+2q^{10}-2q^{8}+2q^{6}-q^{4}+q^{2}$\\
-                    \hline
-                \end{tabular}%
-            }
-            \caption{Knots whose Jones polynomial matches that of a Twist Knot}
-            \label{table:matching_twist_knots}
-        \end{table}
-        The twist knots have a few more matching non-twists knots for the
-        Jones polynomial
-        (Tab.~\ref{table:matching_twist_knots}). The first match is the
-        figure-eight knot, $m_{2}$, which has the same Jones polynomial as
-        K11n19 from the Hoste-Thistlewaite table.
-        Again, this had already been known
-        (See \cite{KatlasFigureEight} and \cite{KatlasK11n19}).
-        The Khovanov polynomials are
-        given in Tabs.~\ref{table:m_2_kho}-\ref{table:eikGbHJCaFd_kho}.
+    \newpage
+    \section{Appendix B: Twist Knot Data}
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c |}
@@ -772,10 +1148,6 @@
             \caption{Khovanov Polynomial for \texttt{eikGbHJCaFd}}
             \label{table:eikGbHJCaFd_kho}
         \end{table}
-        The $m_{3}$ twist knot, which is $5_{2}$ on the Rolfsen table,
-        has the same Jones polynomial as (at least) three other knots. In each
-        case the Khovanov polynomial distinguishes it
-        (Tabs.~\ref{table:m_3_kho}-\ref{table:hGJaMlCdEKBfI_kho}).
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c |}
@@ -886,9 +1258,6 @@
             \caption{Khovanov Polynomial for \texttt{hGJaMlCdEKBfI}}
             \label{table:hGJaMlCdEKBfI_kho}
         \end{table}
-        The $m_{5}$ twist knot, which is $7_{2}$ on the Rolfsen table, has the
-        same Jones polynomial as \texttt{bhDGijCkaef}. The Khovanov polynomials
-        are given in Tabs.~\ref{table:m_5_kho} and \ref{table:bhDGijCkaef_kho}.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
@@ -945,16 +1314,6 @@
             \caption{Khovanov Polynomial for \texttt{bhDGijCkaef}}
             \label{table:bhDGijCkaef_kho}
         \end{table}
-        Expanding our experiment from 17 crossings to 19 added a few new
-        results, the first of which comes with
-        $m_{6}$. An 18 crossing knot was found
-        that has the same Jones polynomial, but the Khovanov polynomials
-        differ. This is shown below
-        (Tabs.~\ref{table:m_6_kho} and \ref{table:jpIFNMrClqOhkEDabg_kho}.).
-        $m_{6}$ also shares its Jones polynomial with an 11 and a 13 crossing
-        knot. The Khovanov polynomials are given in
-        Tabs.~\ref{table:cefIgbajkDh_kho} and
-        \ref{table:femIbaJKLCGHd_kho}.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
@@ -1081,12 +1440,6 @@
             \caption{Khovanov Polynomial for \texttt{jpIFNMrClqOhkEDabg}}
             \label{table:jpIFNMrClqOhkEDabg_kho}
         \end{table}
-        Note the Khovanov polynomials of \texttt{cefIgbajkDh} and
-        \texttt{femIbaJKLCGHd} are identical, showing this is not a perfect
-        invariant.
-        \par\hfill\par
-        The knots $m_{7}$, $m_{8}$, and $m_{9}$ have the same Jones polynomial
-        of at least one other knot. The Khovanov polynomials are given below.
         \begin{table}[H]
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -1291,69 +1644,8 @@
             \caption{Khovanov Polynomial for \texttt{jopIFMrDlqNhkEabcg}}
             \label{table:jopIFMrDlqNhkEabcg_kho}
         \end{table}
-        We may now make the following claim.
-        \begin{theorem}
-            If a prime knot $K$ has less than or equal to 19 crossings and has
-            the Khovanov homology of a twist knot $T$,
-            then $K$ is equivalent to $T$.
-        \end{theorem}
-        An interesting thing to note is that not all twist knots are
-        transversally, or Legendrian, simple, yet there are no knots up to
-        19 crossings with the same Khovanov polynomial as a twist knot. We
-        ask the following.
-        \begin{question}
-            Does Khovanov homology distinguish all twist knots?
-        \end{question}
-    \section{Numerical Results: Conjectured Legendrian Simple Knots}
-        Ng presents several knots in \cite{LegendrianKnotAtlas} that are
-        \textit{possibly} Legendrian simple but not confirmed. For completeness
-        we used our scripts on these knots as well and found several knots with
-        identical Jones polynomials, but again all had differeing Khovanov
-        polynomials. These are listed in
-        Tab.~\ref{fig:conj_leg_simp_knots} ($m$ indicates the knots mirror).
-        \begin{table}
-            \centering
-            \resizebox{\textwidth}{!}{%
-                \begin{tabular}{| l | l | l |}
-                    \hline
-                    Ng Knot&Matching Knot&Jones Polynomial\\
-                    \hline
-                    $m(6_{2})$&\texttt{glfoJcbKMNDaHIe}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
-                    \hline
-                    $m(6_{2})$&\texttt{hknEGmDbJLaIfc}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
-                    \hline
-                    $m(6_{2})$&\texttt{gKHlmIdJCEABf}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
-                    \hline
-                    $m(6_{2})$&\texttt{ehkjmGIaFlcbd}&$q^{10}-2q^{8}+2q^{6}-2q^{4}+2q^{2}-1+q^{-2}$\\
-                    \hline
-                    $m(7_{3})$&\texttt{hgelkIbaJFcd}&$-q^{18}+q^{16}-2q^{14}+3q^{12}-2q^{10}+2q^{8}-q^{6}+q^{4}$\\
-                    \hline
-                    $m(7_{4})$&\texttt{gfkHlbjIDaec}&$-q^{16}+q^{14}-2q^{12}+3q^{10}-2q^{8}+3q^{6}-2q^{4}+q^{2}$\\
-                    \hline
-                    $m(9_{48})$&\texttt{gnoqKDjIMrpEaHblfc}&$q^{2}-3+4q^{-2}-4q^{-4}+6q^{-6}-4q^{-8}+3q^{-10}-2q^{-12}$\\
-                    \hline
-                    $m(9_{49})$&\texttt{lFKJIOAEnDCpBhmG}&$q^{-4}-2q^{-6}+4q^{-8}-4q^{-10}+5q^{-12}-4q^{-14}+3q^{-16}-2q^{-18}$\\
-                    \hline
-                    $m(10_{128})$&\texttt{eHPNqGJlBFoiaDCkM}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
-                    \hline
-                    $m(10_{128})$&\texttt{edjkaGIlFbch}&$-q^{20}+q^{18}-2q^{16}+2q^{14}-q^{12}+2q^{10}-q^{8}+q^{6}$\\
-                    \hline
-                    $m(10_{136})$&\texttt{igDKHJaEbFC}&$q^{6}-2q^{4}+2q^{2}-2+3q^{-2}-2q^{-4}+2q^{-6}-q^{-8}$\\
-                    \hline
-                    $10_{145}$&\texttt{eoHKqGJnCFmPDibaL}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
-                    \hline
-                    $10_{145}$&\texttt{kNJIpHLFECoMGABd}&$-q^{20}+q^{18}-q^{16}+q^{14}+q^{4}$\\
-                    \hline
-                    $10_{161}$&\texttt{hOqrljsnMeipFAgkbcd}&$-q^{22}+q^{20}-q^{18}+q^{16}-q^{14}+q^{12}+q^{6}$\\
-                    \hline
-                \end{tabular}%
-            }
-            \caption{Conjectured Legendrian Simple Knots}
-            \label{fig:conj_leg_simp_knots}
-        \end{table}
-        The tables for the Khovanov polynomials are given
-        on the following pages.
-        \newpage
+    \newpage
+    \section{Appendix C: Conjectured Legendrian Simple Knot Data}
         \begin{table}
             \centering
             \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
@@ -2016,122 +2308,6 @@
             \end{tabular}
             \caption{Khovanov Polynomial for \texttt{hOqrljsnMeipFAgkbcd}}
         \end{table}
-    \clearpage
-    \section{Jones and Khovanov Polynomial Databases}
-        Using the \texttt{regina} and \texttt{JavaKh} libraries, the Jones
-        polynomial of all knots with less than or equal to 19 crossings was
-        tabulated, and the Khovanov polynomial of all knots up to 17 crossings
-        was computed.%
-        \footnote{%
-            This data is publicly available. See
-            \cite{JonesData} and \cite{KhovanovData}.
-        }
-        This allows us to measure how common it is for a knot
-        to have a unique Jones or Khovanov polynomial when compared with other
-        low crossing knots. Unsurprisingly, the Jones polynomial does not
-        distinguish nearly as many knots as the Khovanov polynomial.%
-        \footnote{%
-            The Khovanov polynomial throws away the torsion component of
-            Khovanov homology. It would be interesting to compare how much
-            stronger the \textit{full} Khovanov homology is.
-        }
-        The \textit{statistics} for these knot invariants are shown in
-        Tabs.~\ref{tab:jones_stat} and \ref{tab:kho_stat}, the key for the
-        tables is given in Tab.~\ref{tab:key}.
-        \par\hfill\par
-        Computational limits (temporarily) prohibit us from expanding
-        Tab.~\ref{tab:kho_stat} to 19 crossings, but this is being worked on.
-        After examining the data one sees that the Khovanov polynomial
-        distinguishes about $32\%$ of knots with up to 17 crossings. Put it
-        another way, about 7 out of 10 knots share their Khovanov polynomial
-        with another knot in the list.
-        \begin{table}
-            \centering
-            \begin{tabular}{| l | l |}
-                \hline
-                Keyword & Description\\
-                \hline
-                Cr     & Crossing number, largest number of crossings considered.\\
-                Unique & Number of polynomials that occur for one knot.\\
-                Almost & Number of polynomials that occur for two knots.\\
-                Total  & Total number of distinct polynomials in list.\\
-                Knots  & Total number of knots in list.\\
-                FracU  & Unique / Total\\
-                FracT  & Total / Knots\\
-                FracK  & Unique / Knots\\
-                \hline
-            \end{tabular}
-            \caption{Legend for Tabs.~\ref{tab:jones_stat} and \ref{tab:kho_stat}}
-            \label{tab:key}
-        \end{table}
-        \begin{table}
-            \centering
-            \begin{tabular}{| r | r | r | r | r | r | r | r |}
-                \hline
-                Cr &  Unique  &  Almost  &   Total   &   Knots    &  FracU   &  FracT   &  FracK\\
-                \hline
-                03 &        1 &        0 &         1 &         1 & 1.000000 & 1.000000 & 1.000000\\
-                04 &        2 &        0 &         2 &         2 & 1.000000 & 1.000000 & 1.000000\\
-                05 &        4 &        0 &         4 &         4 & 1.000000 & 1.000000 & 1.000000\\
-                06 &        7 &        0 &         7 &         7 & 1.000000 & 1.000000 & 1.000000\\
-                07 &       14 &        0 &        14 &        14 & 1.000000 & 1.000000 & 1.000000\\
-                08 &       35 &        0 &        35 &        35 & 1.000000 & 1.000000 & 1.000000\\
-                09 &       84 &        0 &        84 &        84 & 1.000000 & 1.000000 & 1.000000\\
-                10 &      223 &       13 &       236 &       249 & 0.944915 & 0.947791 & 0.895582\\
-                11 &      626 &       77 &       710 &       801 & 0.881690 & 0.886392 & 0.781523\\
-                12 &     1981 &      345 &      2420 &      2977 & 0.818595 & 0.812899 & 0.665435\\
-                13 &     6855 &     1695 &      9287 &     12965 & 0.738129 & 0.716313 & 0.528731\\
-                14 &    25271 &     7439 &     37578 &     59937 & 0.672495 & 0.626958 & 0.421626\\
-                15 &   105246 &    35371 &    170363 &    313230 & 0.617775 & 0.543891 & 0.336002\\
-                16 &   487774 &   173677 &    829284 &   1701935 & 0.588187 & 0.487260 & 0.286600\\
-                17 &  2498968 &   894450 &   4342890 &   9755328 & 0.575416 & 0.445181 & 0.256164\\
-                18 & 13817237 &  4863074 &  24116048 &  58021794 & 0.572948 & 0.415638 & 0.238139\\
-                19 & 82712788 & 27409120 & 141439472 & 352152252 & 0.584793 & 0.401643 & 0.234878\\
-                \hline
-            \end{tabular}
-            \caption{Statistics for the Jones Polynomial}
-            \label{tab:jones_stat}
-        \end{table}
-        \begin{table}
-            \centering
-            \begin{tabular}{| r | r | r | r | r | r | r | r |}
-                \hline
-                Cr & Unique  & Almost  &  Total  &  Knots  &  FracU   &  FracT   &  FracK\\
-                \hline
-                03 &       1 &       0 &       1 &       1 & 1.000000 & 1.000000 & 1.000000\\
-                04 &       2 &       0 &       2 &       2 & 1.000000 & 1.000000 & 1.000000\\
-                05 &       4 &       0 &       4 &       4 & 1.000000 & 1.000000 & 1.000000\\
-                06 &       7 &       0 &       7 &       7 & 1.000000 & 1.000000 & 1.000000\\
-                07 &      14 &       0 &      14 &      14 & 1.000000 & 1.000000 & 1.000000\\
-                08 &      35 &       0 &      35 &      35 & 1.000000 & 1.000000 & 1.000000\\
-                09 &      84 &       0 &      84 &      84 & 1.000000 & 1.000000 & 1.000000\\
-                10 &     225 &      12 &     237 &     249 & 0.949367 & 0.951807 & 0.903614\\
-                11 &     641 &      71 &     718 &     801 & 0.892758 & 0.896380 & 0.800250\\
-                12 &    2051 &     326 &    2462 &    2977 & 0.833063 & 0.827007 & 0.688949\\
-                13 &    7223 &    1636 &    9539 &   12965 & 0.757207 & 0.735750 & 0.557115\\
-                14 &   27317 &    7441 &   39222 &   59937 & 0.696471 & 0.654387 & 0.455762\\
-                15 &  118534 &   36867 &  182598 &  313230 & 0.649153 & 0.582952 & 0.378425\\
-                16 &  578928 &  187639 &  919835 & 1701935 & 0.629382 & 0.540464 & 0.340159\\
-                17 & 3167028 & 1001101 & 5033403 & 9755328 & 0.629202 & 0.515965 & 0.324646\\
-                \hline
-            \end{tabular}
-            \caption{Statistics for the Khovanov Polynomial}
-            \label{tab:kho_stat}
-        \end{table}
-    \clearpage
-    \section{Acknowledgements}
-        We thank Shadi Ali Ahmad, Ilya Kryukov and Jacob Swenberg for their
-        observation and remarks in the early stage of this work. The numerical
-        results of Samantha Allen and Jacob Swenberg about the Jones Polynomial
-        of a connected sum of two Hopf links were very inspirational since they
-        provided the connection to the work of Fan Ding and Hansjorg Geiges on
-        the Legendrian simple links . We are very grateful to Nikolay Pultsin
-        for his indispensable help with the Khovanov homology code available
-        on the internet. We are thankful to Jim Hoste, Morwen Thistlethwaite
-        and Jeff Weeks for sharing their database of DT codes of knots.
-        We also thank Steven Sivek and Matthew Heddon
-        for alarming us about the bug that
-        existed in our KFH code.
     \newpage
     \bibliographystyle{plain}
     \bibliography{bib.bib}
