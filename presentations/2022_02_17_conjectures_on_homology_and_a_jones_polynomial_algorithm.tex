@@ -19,25 +19,37 @@
 %------------------------------------------------------------------------------%
 \documentclass{beamer}
 \usepackage{amsmath}
-
-\title{Conjectures on Khovanov and Knot Floer Homology and an Algorithm
-       for the Jones Polynomial}
+\graphicspath{{../images/}}
+\title{%
+    Conjectures on Khovanov and Knot Floer Homology
+    and an Algorithm for the Jones Polynomial%
+}
+\subtitle{Dartmouth Topology Seminar}
 \author{Ryan Maguire}
+\institute{Dartmouth College}
 \date{February 17, 2022}
 \usenavigationsymbolstemplate{}
 \setbeamertemplate{footline}[frame number]
 \begin{document}
     \maketitle
     \begin{frame}{\textbf{\color{red}{Corrections}}}
-        A bug was discovered in the Knot Floer Homology (KFH) code that led to
-        false negatives. The conjecture as presented in this talk for
-        KFH and Legendrian simple knots is false and counterexamples have been
-        found. For Khovanov homology the conjecture still stands as of this
-        correction (written 2023/02/27).
-        \par\hfill\par
-        The wording of the theorem about Gauss codes has been corrected, and
-        references given.
-        \par\hfill\par
+        A few corrections have been made in these slides since the talk was
+        given. They are:
+        \begin{enumerate}
+            \item
+                A bug was discovered in the Knot Floer Homology (KFH) code that
+                led to false negatives. The conjecture as presented in this
+                talk for KFH and Legendrian simple knots is false and
+                counterexamples have been found. For Khovanov homology the
+                conjecture still stands as of this correction
+                (2024/04/20).
+            \item
+                The wording of the theorem about Gauss codes has been improved,
+                and references given.
+            \item Added references throughout the slides.
+            \item
+                Fixed the wording for the Gauss code genus algorithm.
+        \end{enumerate}
         The remainder of these slides are unchanged from the original talk.
     \end{frame}
     \begin{frame}{Outline}
@@ -54,12 +66,16 @@
         Starting at the 0 crossing, travel along the knot and when you come
         to a crossing, record the crossing number and whether you're on the
         \textit{over} strand or the \textit{under} strand. The string of length
-        $2N$ you've obtained is the \textit{Gauss code} of the knot.
+        $2N$ you've obtained is the \textit{Gauss code} of the knot
+        (\cite{KatlasGaussCode},
+        \cite{KnotInfoGaussCode},
+        \cite[p.~871]{GibsonHomotopyInvariantsOfGaussWords},
+        \cite[p.~507-508]{LisitsaPotapovSalehAutomataOnGaussWords}).
         \begin{figure}
             \centering
             \resizebox{0.3\textwidth}{!}{%
                 \includegraphics{%
-                    ../images/trefoil_knot_oriented_with_gauss_code.pdf%
+                    trefoil_knot_oriented_with_gauss_code.pdf%
                 }
             }
             \caption{Gauss Code for the Right-Handed Trefoil}
@@ -75,7 +91,7 @@
         Take the left-handed trefoil, similar orientation and labelling scheme
         as before, but different starting point. The resulting code is the same
         as before. The left and right handed Trefoils are different
-        (Their Jones polynomials are different).%
+        (their Jones polynomials are different).%
         \footnote{
             Did it really take until the 1980's to know these are different?
         }
@@ -83,7 +99,7 @@
             \centering
             \resizebox{0.3\textwidth}{!}{%
                 \includegraphics{%
-                    ../images/trefoil_knot_mirror_oriented_with_gauss_code.pdf%
+                    trefoil_knot_mirror_oriented_with_gauss_code.pdf%
                 }
             }
             \caption{Gauss Code for the Left-Handed Trefoil}
@@ -98,9 +114,9 @@
         By \textit{classical} it is meant that the knots are not virtual
         (discussed in a few slides). Dowker and Thistlethwaite proved that DT
         code uniquely specifies a prime knot up to reflection
-        \cite{DOWKER198319}, and DT codes
+        \cite{DowkerThistlethwaiteDTCode}, and DT codes
         contain the same information as Gauss codes. Indeed, there are
-        algorithms to go from one to the other \cite{KatlasDTCodes}.
+        algorithms to go from one to the other \cite{KatlasDTCode}.
         \par\hfill\par
         We have an example of two distinct knots having the same Gauss code,
         the left and right handed trefoils. How can we describe knots while
@@ -112,7 +128,9 @@
         a \textit{negative crossing} and the one on the right \textit{positive}.
         \begin{figure}
             \centering
-            \includegraphics{../images/crossing_signs.pdf}
+            \resizebox{0.5\textwidth}{!}{%
+                \includegraphics{crossing_signs.pdf}
+            }
             \caption{Crossing Signs}
             \label{fig:crossing_signs}
         \end{figure}
@@ -123,15 +141,17 @@
             If two classical prime knots have the same extended Gauss code,
             they are isomorphic.
         \end{theorem}
-        Since unsigned codes distinguish knots up to mirror equivalence, and
-        since signing the code detects mirrors, the result is almost immediate.
+        Indeed, there is an algorithm to explicitly construct the knot diagram,
+        see \cite[p.~669]{KauffmanVirtualKnots1999}.
     \end{frame}
     \begin{frame}{Gauss Code}
         Below is the extended Gauss code for the right-handed trefoil.
         \begin{figure}
             \centering
-            \includegraphics{%
-                ../images/trefoil_knot_oriented_with_extended_gauss_code.pdf%
+            \resizebox{0.3\textwidth}{!}{%
+                \includegraphics{%
+                    trefoil_knot_oriented_with_extended_gauss_code.pdf%
+                }
             }
             \caption{Extended Gauss Code for the Right-Handed Trefoil}
             \label{fig:right_hand_trefoil_extended_gauss}
@@ -157,7 +177,7 @@
         exponential in crossings and it would be nice if there were a simpler
         knot than either of the trefoils. And there is!
         \begin{equation}
-            O0\;O1\;U0\;U1
+            O0+\;O1+\;U0+\;U1+
         \end{equation}
         You'll find no Reidemeister moves can reduce this to the unknot.
     \end{frame}
@@ -166,7 +186,11 @@
         There's this \textit{fake} crossing.
         \begin{figure}
             \centering
-            \includegraphics{../images/chain_link_fence_knot_virtual.pdf}
+            \resizebox{0.8\textwidth}{!}{%
+                \includegraphics[angle=270]{%
+                    chain_link_fence_knot_virtual.pdf
+                }
+            }
             \caption{The Chain Link Fence Knot}
             \label{fig:chain_link_fence_knot}
         \end{figure}
@@ -198,7 +222,7 @@
             \centering
             \resizebox{0.6\textwidth}{!}{%
                 \includegraphics{%
-                    ../images/chain_link_fence_knot_on_flat_torus_universal_cover.pdf%
+                    chain_link_fence_knot_on_flat_torus_universal_cover.pdf%
                 }%
             }
             \caption{Lift of the Chain Link Fence Knot to $\mathbb{R}^{2}$}
@@ -216,15 +240,18 @@
         chain-link fence knot has virtual genus 1.
     \end{frame}
     \begin{frame}{Gauss Code}
-        We can detect the virtual genus from extended Gauss code. Take the
-        right-handed trefoil and thicken it. Start anywhere you'd like, but
+        We can provide an upper bound for the virtual genus using
+        extended Gauss code. Take the right-handed trefoil and thicken it.
+        Start anywhere you'd like, but
         place your finger on the \textit{left} strand and start walking forward.
         When you encounter a crossing, go left! Eventually you'll end up back
         where you started. Keep doing this until you've traversed all of the
         strands, keeping track of the total number of cycles.
         \begin{figure}
             \centering
-            \includegraphics{../images/trefoil_knot_framed_001.pdf}
+            \resizebox{0.3\textwidth}{!}{%
+                \includegraphics{trefoil_knot_framed_001.pdf}%
+            }
             \caption{Framed Left-Handed Trefoil}
             \label{fig:trefoil_knot_framed_001}
         \end{figure}
@@ -234,9 +261,10 @@
         \begin{equation}
             V-E+F=2-2g
         \end{equation}
-        You've just computed $F$! $V$ is the number of crossings, and
-        $E$ is always $2V$ (the knot graph is a four-valent multigraph. By the
-        hand-shaking theorem, $E=4V/2=2V$). So:
+        You've just computed $F$, the number of cycles.
+        $V$ is the number of crossings, and
+        $E$ is always $2V$ since the knot graph is a four-valent multigraph,
+        so by the hand-shaking theorem, $E=4V/2=2V$. We obtain:
         \begin{equation}
             g=\frac{V-F+2}{2}
         \end{equation}
@@ -245,11 +273,12 @@
     \end{frame}
     \begin{frame}{The Kauffman Bracket and Jones Polynomial}
         The Kauffman Bracket is defined recursively in terms of smoothings of a
-        crossing. Given a crossing, there are two ways to make it
+        crossing \cite[p.~396]{KauffmanStateModels}.
+        Given a crossing, there are two ways to make it
         \textit{go away}. We will label these the 0 and 1 smoothings, see below.
         \begin{figure}
             \centering
-            \includegraphics{../images/resolving_crossings.pdf}
+            \includegraphics{resolving_crossings.pdf}
             \caption{Resolving a Crossing}
             \label{fig:resolving_crossing}
         \end{figure}
@@ -263,7 +292,7 @@
         \begin{figure}
             \centering
             \resizebox{0.8\textwidth}{!}{%
-                \includegraphics{../images/trefoil_knot_cube_of_resolutions.pdf}
+                \includegraphics{trefoil_knot_cube_of_resolutions.pdf}
             }
             \caption{Cube of Resolutions for the Left-Handed Trefoil}
             \label{fig:trefoil_knot_cube_of_resolutions}
@@ -275,7 +304,7 @@
             \centering
             \resizebox{0.5\textwidth}{!}{%
                 \includegraphics{%
-                    ../images/figure_eight_knot_cube_of_resolutions.pdf%
+                    figure_eight_knot_cube_of_resolutions.pdf%
                 }%
             }
             \caption{Cube of Resolutions for the Figure-Eight}
@@ -283,7 +312,11 @@
         \end{figure}
     \end{frame}
     \begin{frame}
-        The Kauffman bracket is defined recursively as follows:
+        The Kauffman bracket is defined recursively via
+        \cite[p.~338-339]{BarNatanKhovanovJones}:\footnote{%
+            This differs slightly from the original in
+            \cite[p.~396]{KauffmanStateModels}.
+        }
         \begin{align}
             \langle\emptyset\rangle&=1\\
             \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
@@ -299,6 +332,7 @@
             The Kauffman bracket is invariant under Reidemeister II and III
             moves.
         \end{theorem}
+        For the original proof, see \cite[p.~397-398]{KauffmanStateModels}.
         It is not invariant under Reidemeister I, so we have a
         \textit{framed knot} invariant.
     \end{frame}
@@ -319,11 +353,13 @@
     \end{frame}
     \begin{frame}{Khovanov Homology}
         You can get a homology theory out of this. Khovanov homology is the
-        ``categorification" of the Jones polynomial, the graded Euler
+        ``categorification" of the Jones polynomial
+        \cite{Khovanov1999CatJonesPoly}, the graded Euler
         characteristic of which gives you the Jones polynomial. I won't be
         discussing heavy details about Khovanov homology, only some of the
         technical difficulties involved in its computation.
-        The recursive definition of the chain complex is as follows:
+        The recursive definition of the chain complex is as follows
+        \cite[p.~338]{BarNatanKhovanovJones}:
         \begin{align}
             [[\emptyset]]&=0\rightarrow\mathbb{Z}\rightarrow{0}\\
             [[L\sqcup\mathbb{S}^{1}]]&=V\otimes[[L]]\\
@@ -331,9 +367,12 @@
                 0\rightarrow[[L_{n,0}]]\rightarrow[[L_{n,1}]]\{1\}\rightarrow{0}
             \big)
         \end{align}
-        $V$ is a graded vector space, $\{\ell\}$ is the
+        Where $V$ is a graded vector space, $\{\ell\}$ is the
         \textit{degree shift} operation, and $\mathcal{F}$ is the flatten
-        operation of graded vector spaces. Like the Kauffman bracket, we need
+        operation of graded vector spaces.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        Like the Kauffman bracket, we need
         the writhe to a get a true knot invariant. The chain complex is
         $C(L)=[[L]][N_{-}]\{N_{-}-2N_{+}\}$, $[\ell]$ is the height shift
         operation on chain complexes. Khovanov homology is the resulting
@@ -357,17 +396,30 @@
     \end{frame}
     \begin{frame}{Khovanov Homology}
         No working totally free-and-open-source implementation of a decent
-        Khovanov homology algorithm is known to me. There are three existing
+        Khovanov homology algorithm is known to me.\footnote{%
+            \textbf{\color{red}{Correction}}:
+            Not true anymore. See \cite{JavaKhv2}.
+        }
+        There are three existing
         versions, all open source, but each has a problem.
         \begin{itemize}
-            \item One is written in Mathematica, which is not an open language.%
-                  \footnote{Current pricing options are \$19/month
-                            or \$183/year. Ouch.}
-            \item Another is written in an old version of Java which wouldn't
-                  compile under the latest version of the language.%
-                  \footnote{Edit: Nikolay Pultsin recently fixed this and it compiles with OpenJDK-17.}
-            \item The sage implementation requires a super computer to actually
-                  use (see previous email).
+            \item
+                One is written in Mathematica, which is not an open language.%
+                \footnote{%
+                    Current pricing options are \$19/month or \$183/year. Ouch.%
+                }
+            \item
+                Another is written in an old version of Java which wouldn't
+                compile under the latest version of the language.%
+                \footnote{%
+                    \textbf{\color{red}{Correction}}:
+                    Nikolay Pultsin recently fixed this and it
+                    compiles with OpenJDK-17. I highly recommend this option.
+                    See \cite{JavaKhv2}.
+                }
+            \item
+                The sage implementation requires a super computer to actually
+                use (see previous email).
         \end{itemize}
         All efforts are greatly appreciated, but there needs to be a
         \textit{usable} implementation available to the general public without
@@ -376,9 +428,11 @@
     \begin{frame}{Khovanov Homology}
         Why might we care?
         \begin{itemize}
-            \item Khovanov homology is an unknot detector!
-                  An efficient algorithm gives a decent means of solving
-                  the unknotting problem.
+            \item
+                Khovanov homology is an unknot detector
+                \cite{KronheimerMrowka2011KhovanovUnknot}!
+                An efficient algorithm gives a decent means of solving
+                the unknotting problem.
             \item It is a very strong invariant. When trying to tabulate a list
                   of all knots up to $N$ crossings, Khovanov homology can be
                   used to help remove duplicates.
@@ -388,7 +442,12 @@
     \begin{frame}{An Algorithm for the Jones Polynomial}
         We'll first start with smaller means. We'll tackle the Jones
         polynomial. We'll do this by computing the Kauffman bracket. Using the
-        recursive definition we can inductively prove the following formula:
+        recursive definition we can inductively prove the following formula
+        (\cite[p.~158]{AdamsTheKnotBook}, \cite[p.~10]{Liu2022ABI}):\footnote{%
+            These references use the convention found in
+            \cite{KauffmanStateModels}. This sum follows the convention
+            from \cite{BarNatanKhovanovJones}.
+        }
         \begin{equation}
             \label{eqn:kauffman_bracket}%
             \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
@@ -572,19 +631,33 @@
         Fig.~\ref{fig:trefoil_knot_cube_of_resolutions}.
     \end{frame}
     \begin{frame}{An Algorithm for the Jones Polynomial}
-        The simplest knot to try this on in it's entirety by hand is the
+        The simplest knot to try this on in its entirety by hand is the
         chain-link-fence knot. You must use the circle counting algorithm
         4 times, one for each resolution. Try it!
     \end{frame}
     \begin{frame}{An Algorithm for the Jones Polynomial}
         Benefits:
         \begin{itemize}
-            \item Time complexity is $O(N2^{N})$, so no worse than the
-                  recursive algorithm.
-            \item The algorithm is $O(N)$ in space! Significantly better than
-                  $O(2^{N})$. The reason being we don't need to store all
-                  resolutions in memory. We can do one at a time, add the
-                  result to our polynomial, and continue.
+            \item
+                Time complexity is $O(N2^{N})$, so no worse than the
+                recursive algorithm.\footnote{%
+                    \textbf{\color{red}{Correction}}:
+                    This assumes certain arithmetic operations are constant.
+                    A better bound is $O(\textrm{poly}(N)\cdot{2}^{N})$ where
+                    $\textrm{poly}(N)$ is bounded by $N\log(N)$.
+                }
+            \item
+                The algorithm is $O(N)$ in space!\footnote{%
+                    \textbf{\color{red}{Correction}}:
+                    This assumes all of the numbers you are working with take
+                    up constant space. The number $N$ takes $O(\log(N))$
+                    bits to store, so a more accurate bound here is
+                    $O(N\log(N))$.
+                }
+                Significantly better than
+                $O(2^{N})$. The reason being we don't need to store all
+                resolutions in memory. We can do one at a time, add the
+                result to our polynomial, and continue.
             \item The idea should generalize to Khovanov homology. We need
                   only count the circles.
             \item The idea works for virtual knots. There is no restriction to
@@ -594,9 +667,11 @@
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         A Legendrian knot is an embedding of $\mathbb{S}^{1}$ into
         $\mathbb{R}^{3}$ that is everywhere tangent to the standard
-        contact structure.
+        contact structure
+        \cite[p.~1282-1283]{JoshuaMSabloffWhatIsLegendrianKnot}.
         \par\hfill\par
-        Every knot is topologically equivalent to a Legendrian knot. Two
+        Every knot is topologically equivalent to a Legendrian knot
+        \cite[p.~1003]{VeraVertessiTransNonSimpleKnots}. Two
         Legendrian knots are said to be equivalent if they are equivalent
         through a homotopy of Legendrian knots.
         \par\hfill\par
@@ -605,13 +680,21 @@
         \par\hfill\par
         If Legendrian knots in a given topological knot type are uniquely
         determined by two classical invariants (their Thurston-Bennequin
-        numbers and rotation numbers), they are said to be Legendrian simple.
+        numbers and rotation numbers), they are said to be Legendrian simple
+        (\cite[p.~12]{Foldvari2019legnonsimple},
+        \cite[p.~1004]{VeraVertessiTransNonSimpleKnots}).
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
-        It is known that torus knots are Legendrian simple.
+        It is known that torus knots are Legendrian simple
+        \cite[p.~64]{EtnyreHondaContactTopologyI}.
         \par\hfill\par
-        Two results have shown that Khovanov homology (Mrowka and Kronheimer)
-        and Knot Floer homology (Ozv\'{a}th and Szab\'{o}) are unknot detectors.
+        Two results have shown that Khovanov homology (Mrowka and Kronheimer,
+        2011 \cite{KronheimerMrowka2011KhovanovUnknot})
+        and Knot Floer homology
+        (Ozv\'{a}th and Szab\'{o}, 2004
+        \cite[p.~633]{ManolescuOzsvathSarkarCombinatorialDescriptionOfKnotFloerHomology},
+        \cite[p.~313]{OzsvathSzaboHolomorphicDisksGenusBounds})
+        are unknot detectors.
         The unknot being the simplest of the torus knots, a somewhat natural
         generalization would be that these two homology theories
         distinguish the Legendrian simple knots.
@@ -623,7 +706,8 @@
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         An open analogous question for the Jones polynomial is whether it too
-        detects the unknot. This is not true of torus knots. There are
+        detects the unknot \cite{VerificationUnknotJonesConjUpTo24}.
+        This is not true of torus knots. There are
         non-torus knots with the same Jones polynomial as a torus knot.
         \begin{itemize}
             \item $T(2,5)$ matches a 10 crossing knot.
@@ -646,9 +730,15 @@
         crossing matches, the Khovanov homologies are different.
         \par\hfill\par
         The 17 crossing knot can not be computed yet since no
-        available computer to me has the required 500+ GB of memory needed.
+        available computer to me has the required 500+ GB of memory needed.%
+        \footnote{%
+            \textbf{\color{red}{Correction}}:
+            The Khovanov homology is now able to be computed.
+            The results were different, which is good for the conjecture.
+        }
         \par\hfill\par
-        Hence the need for an iterative implementation that is $O(N)$ in space!
+        Hence the need for an iterative implementation that is
+        $O(\textrm{poly}(N))$ in space!
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         A similar search through the all knots up to 12 crossings yielded no
@@ -661,9 +751,9 @@
         \par\hfill\par
         The Alexander polynomial is first computed (this is polynomial time,
         much better than the Jones polynomial), and if matches were found the
-        Knot floer homologies were compared as well (slow, exponential in time).
+        Knot Floer Homologies were compared as well (slow, exponential in time).
     \end{frame}
-    \begin{frame}{References}
+    \begin{frame}[allowframebreaks]{References}
         \bibliographystyle{plain}
         \bibliography{bib.bib}
     \end{frame}
