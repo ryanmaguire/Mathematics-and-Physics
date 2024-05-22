@@ -66,7 +66,7 @@
         A similar question about \textit{transverse knots} is posed and
         numerical evidence has been gathered using the twist knots. These
         questions are also posed for Knot Floer Homology, which is also a
-        known unknot detector.
+        known unknot detector
         (\cite[p.~633]{ManolescuOzsvathSarkarCombinatorialDescriptionOfKnotFloerHomology},
         \cite[p.~313]{OzsvathSzaboHolomorphicDisksGenusBounds}).
     \end{frame}
@@ -253,7 +253,8 @@
     \end{frame}
     \begin{frame}{The Kauffman Bracket and Jones Polynomial}
         The Kauffman Bracket is defined recursively in terms of smoothings of a
-        crossing. Given a crossing, there are two ways to make it
+        crossing \cite[p.~396]{KauffmanStateModels}.
+        Given a crossing, there are two ways to make it
         \textit{go away}. We will label these the 0 and 1 smoothings, see below.
         \begin{figure}
             \centering
@@ -291,7 +292,11 @@
         \end{figure}
     \end{frame}
     \begin{frame}
-        The Kauffman bracket is defined recursively as follows:
+        The Kauffman bracket is defined recursively via
+        \cite[p.~338-339]{BarNatanKhovanovJones}:\footnote{%
+            This differs slightly from the original in
+            \cite[p.~396]{KauffmanStateModels}.
+        }
         \begin{align}
             \langle\emptyset\rangle&=1\\
             \langle{L\sqcup\mathbb{S}^{1}}\rangle&=(q+q^{-1})\langle{L}\rangle\\
@@ -307,6 +312,7 @@
             The Kauffman bracket is invariant under Reidemeister II and III
             moves.
         \end{theorem}
+        For the original proof, see \cite[p.~397-398]{KauffmanStateModels}.
         It is not invariant under Reidemeister I.
     \end{frame}
     \begin{frame}{The Kauffman Bracket and the Jones Polynomial}
@@ -326,10 +332,12 @@
     \end{frame}
     \begin{frame}{Khovanov Homology}
         You can get a homology theory by ``categorifying" the Jones polynomial.
-        This is Khovanov homology, the graded Euler characteristic of which
+        This is Khovanov homology \cite{Khovanov1999CatJonesPoly},
+        the graded Euler characteristic of which
         gives you the Jones polynomial. I won't be
         discussing heavy details about Khovanov homology.
-        The recursive definition of the chain complex is as follows:
+        The recursive definition of the chain complex is as follows
+        \cite[p.~338]{BarNatanKhovanovJones}:
         \begin{align}
             [[\emptyset]]&=0\rightarrow\mathbb{Z}\rightarrow{0}\\
             [[L\sqcup\mathbb{S}^{1}]]&=V\otimes[[L]]\\
@@ -337,21 +345,24 @@
                 0\rightarrow[[L_{n,0}]]\rightarrow[[L_{n,1}]]\{1\}\rightarrow{0}
             \big)
         \end{align}
-        $V$ is a graded vector space, $\{\ell\}$ is the
+        Where $V$ is a graded vector space, $\{\ell\}$ is the
         \textit{degree shift} operation, and $\mathcal{F}$ is the flatten
-        operation of graded vector spaces. Like the Kauffman bracket, we need
+        operation of graded vector spaces.
+    \end{frame}
+    \begin{frame}{Khovanov Homology}
+        Like the Kauffman bracket, we need
         the writhe to a get a true knot invariant. The chain complex is
         $C(L)=[[L]][N_{-}]\{N_{-}-2N_{+}\}$, $[\ell]$ is the height shift
         operation on chain complexes. Khovanov homology is the resulting
         homology from this (chain maps are not defined in this talk).
     \end{frame}
     \begin{frame}{Khovanov Homology}
-        The \textit{Khovanov polnyomial} is obtained via
+        The \textit{Khovanov polynomial} is obtained via:
 	    \begin{equation}
 	        Kh(L)(q,t)=
 	        \sum_{r,\ell}t^{r}q^{\ell}\textrm{dim}\big(KH_{\ell}^{r}(L)\big)
 	    \end{equation}
-	    The relation to the Jones polynomial is
+	    The relation to the Jones polynomial is:
 	    \begin{equation}
 	        J(L)(q)=Kh(q,-1)
 	    \end{equation}
@@ -389,7 +400,12 @@
     \begin{frame}{An Algorithm for the Jones Polynomial}
         We'll first start with smaller means. We'll tackle the Jones
         polynomial. We'll do this by computing the Kauffman bracket. Using the
-        recursive definition we can inductively prove the following formula:
+        recursive definition we can inductively prove the following formula
+        (\cite[p.~158]{AdamsTheKnotBook}, \cite[p.~10]{Liu2022ABI}):\footnote{%
+            These references use the convention found in
+            \cite{KauffmanStateModels}. This sum follows the convention
+            from \cite{BarNatanKhovanovJones}.
+        }
         \begin{equation}
             \label{eqn:kauffman_bracket}%
             \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
@@ -542,12 +558,26 @@
     \begin{frame}{An Algorithm for the Jones Polynomial}
         Benefits:
         \begin{itemize}
-            \item Time complexity is $O(N2^{N})$, so no worse than the
-                  recursive algorithm.
-            \item The algorithm is $O(N)$ in space! Significantly better than
-                  $O(2^{N})$. The reason being we don't need to store all
-                  resolutions in memory. We can do one at a time, add the
-                  result to our polynomial, and continue.
+            \item
+                Time complexity is $O(N2^{N})$, so no worse than the
+                recursive algorithm.\footnote{%
+                    \textbf{\color{red}{Correction}}:
+                    This assumes certain arithmetic operations are constant.
+                    A better bound is $O(\textrm{poly}(N)\cdot{2}^{N})$ where
+                    $\textrm{poly}(N)$ is bounded by $N\log(N)$.
+                }
+            \item
+                The algorithm is $O(N)$ in space!\footnote{%
+                    \textbf{\color{red}{Correction}}:
+                    This assumes all of the numbers you are working with take
+                    up constant space. The number $N$ takes $O(\log(N))$
+                    bits to store, so a more accurate bound here is
+                    $O(N\log(N))$.
+                }
+                Significantly better than
+                $O(2^{N})$. The reason being we don't need to store all
+                resolutions in memory. We can do one at a time, add the
+                result to our polynomial, and continue.
             \item The idea works for virtual knots. There is no restriction to
                   the classical setting.
         \end{itemize}
@@ -555,9 +585,11 @@
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         A Legendrian knot is an embedding of $\mathbb{S}^{1}$ into
         $\mathbb{R}^{3}$ that is everywhere tangent to the standard
-        contact structure.
+        contact structure
+        \cite[p.~1282-1283]{JoshuaMSabloffWhatIsLegendrianKnot}.
         \par\hfill\par
-        Every knot is topologically equivalent to a Legendrian knot. Two
+        Every knot is topologically equivalent to a Legendrian knot
+        \cite[p.~1003]{VeraVertessiTransNonSimpleKnots}. Two
         Legendrian knots are said to be equivalent if they are equivalent
         through a homotopy of Legendrian knots.
         \par\hfill\par
@@ -566,7 +598,9 @@
         \par\hfill\par
         If Legendrian knots in a given topological knot type are uniquely
         determined by two classical invariants (their Thurston-Bennequin
-        numbers and rotation numbers), they are said to be Legendrian simple.
+        numbers and rotation numbers), they are said to be Legendrian simple
+        (\cite[p.~12]{Foldvari2019legnonsimple},
+        \cite[p.~1004]{VeraVertessiTransNonSimpleKnots}).
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         We can similarly define transverse knots, which are knots that are
@@ -576,10 +610,16 @@
         through transverse knots.
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
-        It is known that torus knots are Legendrian simple.
+        It is known that torus knots are Legendrian simple
+        \cite[p.~64]{EtnyreHondaContactTopologyI}.
         \par\hfill\par
-        Two results have shown that Khovanov homology (Mrowka and Kronheimer)
-        and Knot Floer homology (Ozv\'{a}th and Szab\'{o}) are unknot detectors.
+        Two results have shown that Khovanov homology (Mrowka and Kronheimer,
+        2011 \cite{KronheimerMrowka2011KhovanovUnknot})
+        and Knot Floer homology
+        (Ozv\'{a}th and Szab\'{o}, 2004
+        \cite[p.~633]{ManolescuOzsvathSarkarCombinatorialDescriptionOfKnotFloerHomology},
+        \cite[p.~313]{OzsvathSzaboHolomorphicDisksGenusBounds})
+        are unknot detectors.
         The unknot being the simplest of the torus knots, a somewhat natural
         generalization would be that these two homology theories
         distinguish the Legendrian simple knots.
@@ -647,7 +687,10 @@
     \end{frame}
     \begin{frame}{Conjectures on Khovanov and Knot Floer Homology}
         A similar search yielded no matches for Knot Floer Homology.%
-        \footnote{\textbf{\color{red}{Correction:}} This is false, a bug was found.}
+        \footnote{%
+            \textbf{\color{red}{Correction:}}
+            This is false, a bug was found.
+        }
         \par\hfill\par
         Much the way Khovanov homology is the categorification of the Jones
         polynomial, so is Knot Floer homology for the Alexander polynomial.
