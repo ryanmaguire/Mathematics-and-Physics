@@ -28,35 +28,35 @@
 
 \begin{document}
     \maketitle
-    If $r:[t_{0},t_{1}]\rightarrow\mathbb{R}$ describes the position of a
-    particle in an interval of time $[t_{1},t_{1}]$, and if the velocity is
-    defined by $v(t)=r'(t)$, how can we relate the total displacement of the
-    particle to the velocity? The total dispacement is
-    $\Delta{r}=r(t_{1})-r(t_{0})$.
-    \par\hfill\par
-    The acceleration of gravity on the surface of the Earth is roughly
-    $-9.81$ meters per second per second. Let's round this to $-10$ meters per
-    second per second. The position of a particle that is dropped from 5
-    meters is then:
-    \begin{equation}
-        r(t)=-5t^{2}+5
-    \end{equation}
-    The velocity of the particle is the derivative with respect to time.
-    \begin{equation}
-        v(t)=-10t
-    \end{equation}
-    Split the interval $[0,1]$ into a partition and numerically integrate
-    the following:
-    \begin{equation}
-        D=\int_{0}^{1}v(t)\;\textrm{d}t
-    \end{equation}
     \begin{enumerate}
         \item
-            What physical quantity does $D$ represent?
+            $D$ represent the total displacement of the particle.
+            The integral is summing up all of the tiny displacements
+            $v(t)\;\textrm{d}t$ that occur by moving with velocity
+            $v(t)$ over a time increment $\textrm{d}t$. By integrating we
+            obtain the total displacement over the time interval.
         \item
-            Numerically, what value did you get for the integral?
+            Using a left-sided Riemann sum we can numerically compute
+            with a displacement of $10^{-4}$ to obtain an approximation of
+            $D\approx-4.995$. This can be done in a few lines in Python.
+            \begin{verbatim}
+displacement = 1.0E-4
+start = 0
+end = 1
+number_of_samples = int((end - start) / displacement)
+x = [n * displacement for n in range(number_of_samples)]
+v = [-10*r for r in x]
+numerical_integral = sum(v) * displacement
+print(numerical_integral)
+            \end{verbatim}
         \item
-            Compare this with $r(1)-r(0)$. What can you conclude?
+            The exact value of $r(1)-r(0)$ is $-5$.
+            From here we should be able to guess that displacement, velocity,
+            and integration are all connected. Indeed they are, and this is
+            fundamental theorem of calculus. It should be noted that intuition
+            is not a proof. It is quite fortunate, however, that a rigorous
+            proof of this theorem is about $\varepsilon$ away once one
+            understands the physical notions at play here.
     \end{enumerate}
     \newpage
     I, the copyright holder of this work, release it into the public domain.
