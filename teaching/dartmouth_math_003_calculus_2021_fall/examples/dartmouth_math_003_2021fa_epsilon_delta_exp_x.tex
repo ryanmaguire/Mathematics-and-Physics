@@ -15,9 +15,9 @@
 %   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
 %------------------------------------------------------------------------------%
 \documentclass{article}
-\usepackage{amsmath}                            % Needed for align.
-\usepackage{amssymb}                            % Needed for mathbb.
-\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{amsmath} % Needed for align.
+\usepackage{amssymb} % Needed for mathbb.
+\usepackage{amsthm}  % For the theorem environment.
 
 \newtheoremstyle{normal}
     {\topsep}               % Amount of space above the theorem.
@@ -56,7 +56,7 @@
     \begin{equation}
         \textbf{Want:}\quad
         |x-x_{0}|<\delta
-        \Rightarrow|f(x)-f(x)|<\varepsilon
+        \Rightarrow|f(x)-f(x_{0})|<\varepsilon
     \end{equation}
     Substituting $f$:
     \begin{equation}
@@ -74,7 +74,7 @@
         \exp(x)-\exp(x_{0})
             &=\big(\exp(x)-\exp(x_{0})\big)\frac{\exp(-x_{0})}{\exp(-x_{0})}\\
             &=\frac{\exp(x)\exp(-x_{0})-\exp(x_{0})\exp(-x_{0})}{\exp(-x_{0})}\\
-            &=\frac{\exp(x-x_{0})-\exp(x_{0}-x_{0})}{\exp(x_{0})}\\
+            &=\frac{\exp(x-x_{0})-\exp(x_{0}-x_{0})}{\exp(-x_{0})}\\
             &=\frac{\exp(x-x_{0})-1}{\exp(-x_{0})}
     \end{align}
     Using the fact that $\exp(-x_{0})=1/\exp(x_{0})$, we get:
@@ -140,6 +140,110 @@
             \ln\big(1+\frac{\varepsilon}{\exp(x_{0})}\big)
         \Big)
     \end{equation}
+    Now let's show that this works. Let $\varepsilon>0$ and $x_{0}\in\mathbb{R}$
+    be given. If $\epsilon\geq\exp(x_{0})$, choose $\delta=\frac{1}{2}$.
+    We then have:
+    \begin{align}
+        |x-x_{0}|&<\delta
+        \tag{Hypothesis}\\
+        \Rightarrow
+        |x-x_{0}|&<\frac{1}{2}
+        \tag{Definition of $\delta$}\\
+        \Rightarrow
+        -\frac{1}{2}<x-x_{0}&<\frac{1}{2}
+        \tag{Definition of absolute value}\\
+        \Rightarrow
+        \exp\big(-\frac{1}{2}\big)
+        <\exp(x-x_{0})
+        &<\exp\big(\frac{1}{2}\big)
+        \tag{Since $\exp$ is increasing}\\
+        \Rightarrow
+        0<\exp(x-x_{0})&<\exp\big(\frac{1}{2}\big)
+        \tag{Since $\exp$ is positive}\\
+        \Rightarrow
+        0<\exp(x-x_{0})&<2
+        \tag{Since $\exp(1/2)<2$}\\
+        \Rightarrow
+        -1<\exp(x-x_{0})-1&<1
+        \tag{Subtract 1 from all sides}\\
+        \Rightarrow
+        |\exp(x-x_{0})-1|&<1
+        \tag{Definition of absolute value}\\
+        \Rightarrow
+        |\exp(x)\exp(-x_{0})-1|&<1
+        \tag{Exponential rules}\\
+        \Rightarrow
+        \Big|(\exp(x)\exp(-x_{0})-1)\frac{\exp(x_{0})}{\exp(x_{0})}\Big|&<1
+        \tag{Multiply by 1}\\
+        \Rightarrow
+        \Big|\frac{\exp(x)-\exp(x_{0})}{\exp(x_{0})}\Big|&<1
+        \tag{Simplify}\\
+        \Rightarrow
+        |\exp(x)-\exp(x_{0})|&<\exp(x_{0})
+        \tag{Multiply by $\exp(x_{0})$}\\
+        \Rightarrow
+        |\exp(x)-\exp(x_{0})|&<\varepsilon
+        \tag{Since $\exp(x_{0})<\varepsilon$}\\
+        \Rightarrow
+        |f(x)-f(x_{0})|<\varepsilon
+        \tag{Definition of $f$}
+    \end{align}
+    Before handling the case of $\varepsilon<\exp(x_{0})$ let's get some
+    intuition. If $x_{0}$ is very big, then $\exp(x_{0})$ is huge.
+    If $\exp(x_{0})\leq\varepsilon$ is true, then $\varepsilon$ must be a
+    very large number as well. That is, the \textit{error} we're allowed is
+    very big. Because of this it is very easy to choose a value for $\delta$,
+    we simply set $\delta=\frac{1}{2}$.
+    Similarly, if $x_{0}$ is a large negative
+    number, then $\exp(x_{0})$ is roughly zero. Varying $x_{0}$ doesn't change
+    this much since the exponential function gets very flat as we go to the
+    left on the real axis. This flatness allows us to pick a simply candidate
+    for $\delta$, namely $\delta=\frac{1}{2}$.
+    \par\hfill\par
+    Now we handle the case where $\varepsilon<\exp(x_{0})$. Choose:
+    \begin{equation}
+        \delta=\textrm{min}\Big(
+            \big|\ln\big(1-\frac{\varepsilon}{\exp(x_{0})}\big)\big|,\,
+            \ln\big(1+\frac{\varepsilon}{\exp(x_{0})}\big)
+        \Big)
+    \end{equation}
+    This is well defined since $\varepsilon<\exp(x_{0})$, and hence
+    $\frac{\varepsilon}{\exp(x_{0})}<1$. Then we have:
+    \begin{align}
+        |x-x_{0}|&<\delta
+        \tag{Hypothesis}\\
+        \Rightarrow
+        -\delta<x-x_{0}&<\delta
+        \tag{Definition of absolute value}\\
+        \Rightarrow
+        \ln\big(1-\frac{\varepsilon}{\exp(x_{0})}\big)
+        <x-x_{0}
+        &<\ln\big(1+\frac{\varepsilon}{\exp(x_{0})}\big)
+        \tag{Definition of $\delta$}\\
+        \Rightarrow
+        1-\frac{\varepsilon}{\exp(x_{0})}
+        <\exp(x-x_{0})
+        &<1+\frac{\varepsilon}{\exp(x_{0})}
+        \tag{Since $\exp$ is increasing}\\
+        \Rightarrow
+        -\frac{\varepsilon}{\exp(x_{0})}
+        <\exp(x-x_{0})-1
+        &<\frac{\varepsilon}{\exp(x_{0})}
+        \tag{Subtract 1 from both sides}\\
+        \Rightarrow
+        |\exp(x-x_{0})-1|&<\frac{\varepsilon}{\exp(x_{0})}
+        \tag{Definition of absolute value}\\
+        \Rightarrow
+        |\exp(x)\exp(-x_{0})-1|&<\frac{\varepsilon}{\exp(x_{0})}
+        \tag{Exponential rules}\\
+        \Rightarrow
+        |\exp(x)-\exp(x_{0})|&<\varepsilon
+        \tag{Multiply by $\exp(x_{0})$}\\
+        \Rightarrow
+        |f(x)-f(x_{0})|<\varepsilon
+        \tag{Definition of $f$}
+    \end{align}
+    Which is what we wanted to prove.
     \newpage
     I, the copyright holder of this work, release it into the public domain.
     This applies worldwide. In some countries this may not be legally possible;
