@@ -1,0 +1,170 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}
+
+\title{$\varepsilon-\delta$ Continuity - $f(x)=\frac{1}{x}$}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    The definition of continuity is as follows:
+    \begin{definition}
+        A real-valued function that is continuous at a point
+        $x_{0}\in\mathbb{R}$ is a function $f:\mathbb{R}\rightarrow\mathbb{R}$
+        such that for all $\varepsilon>0$ there exists a $\delta>0$ such that
+        for all $x\in\mathbb{R}$ with $|x-x_{0}|<\delta$ it is true that
+        $|f(x)-f(x_{0})|<\varepsilon$.
+    \end{definition}
+    Let's prove $f(x)=1/x$ is continuous on $(0,\infty)$.
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        |f(x)-f(x_{0})|<\varepsilon
+    \end{equation}
+    Substituting $f$ with $f(x)=1/x$:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \big|\frac{1}{x}-\frac{1}{x_{0}}\big|<\varepsilon
+    \end{equation}
+    Simplifying the expression, this is equivalent to:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \big|\frac{x-x_{0}}{xx_{0}}\big|<\varepsilon
+    \end{equation}
+    Which can be further simplified to:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \frac{1}{|xx_{0}|}|x-x_{0}|<\varepsilon
+    \end{equation}
+    Since we only care about $|x-x_{0}|<\delta$, we have:
+    \begin{equation}
+        \frac{1}{|xx_{0}|}|x-x_{0}|<\frac{\delta}{|xx_{0}|}
+    \end{equation}
+    So now we update our wish-list:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \frac{\delta}{|xx_{0}|}\leq\varepsilon
+    \end{equation}
+    For if this were true, we would have:
+    \begin{align}
+        |x-x_{0}|<\delta&\Rightarrow\frac{\delta}{|xx_{0}|}\leq\varepsilon\\
+        &\Rightarrow\frac{1}{|xx_{0}|}|x-x_{0}|<\varepsilon\\
+        &\Rightarrow\big|\frac{x-x_{0}}{xx_{0}}\big|<\varepsilon\\
+        &\Rightarrow\big|\frac{1}{x}-\frac{1}{x_{0}}\big|<\varepsilon
+    \end{align}
+    So, we direct our attention to making $\delta/|xx_{0}|\leq\varepsilon$ a
+    true statement. It will \textbf{not} be true for all $x\in(0,\infty)$ since
+    as $x$ tends to 0, the expression $1/|xx_{0}|$ gets arbitrarily large. But
+    we don't need to care about values $x$ that are really close to zero, we
+    only care about values $x$ that are close to $x_{0}$. So let's restrict
+    our attention to $x\in(x_{0}/2,3x_{0}/2)$. In other words,
+    $|x-x_{0}|<x_{0}/2$. This is equivalent to requiring that
+    $\delta\leq{x}_{0}/2$. If we do this, the expression
+    $1/|xx_{0}|$ is now bounded. The largest this can be is when $x$ is at
+    it's smallest, which is $x_{0}/2$. Using this, we have:
+    \begin{equation}
+        \frac{\delta}{|xx_{0}|}<\frac{\delta}{|x_{0}^{2}/2|}
+        =\frac{2\delta}{x_{0}^{2}}
+    \end{equation}
+    We update our wish-list one last time:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        \frac{2\delta}{x_{0}^{2}}\leq\varepsilon
+    \end{equation}
+    The likely candidate is $\delta=\varepsilon{x}_{0}^{2}/2$, but we are
+    already requiring that $\delta\leq{x}_{0}/2$. We need to choose the smaller
+    of these two expressions.
+    \par\hfill\par
+    We have found our candidate $\delta$. Let's show that it works.
+    Let $\varepsilon>0$. Choose $\delta=\min(x_{0}/2,\varepsilon{x}_{0}^{2}/2)$.
+    If $|x-x_{0}|<\delta$, then:
+    \begin{align}
+        |x-x_{0}|&<\min(x_{0}/2,\varepsilon{x}_{0}^{2}/2)
+            \tag{Definition of $\delta$}\\
+        \Rightarrow|x-x_{0}|&<\varepsilon{x}_{0}^{2}/2
+            \tag{Definition of $\min$}\\
+        \Rightarrow\frac{2}{x_{0}^{2}}|x-x_{0}|&<\varepsilon
+            \tag{Division by a Positive Number}
+    \end{align}
+    But since $|x-x_{0}|<\min(x_{0}/2,\varepsilon{x}_{0}^{2}/2)$ we have
+    $|x-x_{0}|<x_{0}/2$, again by the definition of $\min$. Hence:
+    \begin{align}
+        \frac{x_{0}}{2}&<x
+            \tag{Since $|x-x_{0}|<\frac{x_{0}}{2}$}\\
+        \Rightarrow
+            \frac{1}{x}&<\frac{2}{x_{0}}
+                \tag{Division}\\
+        \Rightarrow
+            \frac{1}{xx_{0}}|x-x_{0}|&<\frac{2}{x_{0}^{2}}|x-x_{0}|
+                \tag{Multiplication by a Positive Number}\\
+        \Rightarrow
+            \frac{1}{xx_{0}}|x-x_{0}|&<\varepsilon
+                \tag{Since $\frac{2}{x_{0}^{2}}|x-x_{0}|<\varepsilon$}\\
+        \Rightarrow
+            \Big|\frac{x-x_{0}}{xx_{0}}\Big|&<\varepsilon
+                \tag{Absolute Value Rules}\\
+        \Rightarrow
+            \Big|\frac{1}{x}-\frac{1}{x_{0}}\Big|&<\varepsilon
+                \tag{Simplify}\\
+        \Rightarrow
+            |f(x)-f(x_{0})|&<\varepsilon
+                \tag{Definition of $f(x)$}
+    \end{align}
+    Therefore for all $\varepsilon>0$ there is a $\delta>0$ such that if
+    $x\in(0,\,\infty)$ and $|x-x_{0}|<\delta$, then it is true that
+    $|f(x)-f(x_{0})|<\varepsilon$.
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}

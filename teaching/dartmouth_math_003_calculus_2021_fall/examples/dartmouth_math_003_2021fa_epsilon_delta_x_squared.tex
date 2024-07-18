@@ -1,0 +1,156 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}
+
+\title{$\varepsilon-\delta$ Continuity - Quadratics}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    The definition of continuity is as follows:
+    \begin{definition}
+        A real-valued function that is continuous at a point
+        $x_{0}\in\mathbb{R}$ is a function $f:\mathbb{R}\rightarrow\mathbb{R}$
+        such that for all $\varepsilon>0$ there exists a $\delta>0$ such that
+        for all $x\in\mathbb{R}$ with $|x-x_{0}|<\delta$ it is true that
+        $|f(x)-f(x_{0})|<\varepsilon$.
+    \end{definition}
+    Let's prove $f(x)=x^{2}$ is continuous for all real numbers. Let's first
+    work out $x_{0}=0$ so we can avoid any annoying divisions by zero that may
+    occur in our work. For $x_{0}=0$, we have:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-0|<\delta
+        \Rightarrow|x^{2}-0|<\varepsilon
+    \end{equation}
+    Simplifying, we want $|x|<\delta$ implies $|x|^{2}<\varepsilon$. If we
+    choose $\delta=\sqrt{\varepsilon}$, we'd be done since
+    $|x|<\delta$ implies $|x|<\sqrt{\varepsilon}$, which then implies
+    $|x|^{2}<\varepsilon$.
+    \par\hfill\par
+    Now let's prove $f(x)=x^{2}$ is continuous at any non-zero value. We have
+    the following:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow|x^{2}-x_{0}^{2}|<\varepsilon
+    \end{equation}
+    Factoring this expression on the right, we can rephrase this:
+    \begin{equation}
+        \textbf{Want:}\quad
+        |x-x_{0}|<\delta
+        \Rightarrow
+        |x-x_{0}||x+x_{0}|<\varepsilon
+    \end{equation}
+    Since we will only look at $x$ values satisfying $|x-x_{0}|<\delta$,
+    we have:
+    \begin{equation}
+        |x-x_{0}||x+x_{0}|<\delta|x+x_{0}|
+    \end{equation}
+    If we can make $\delta|x+x_{0}|\leq\varepsilon$ we'd be done, since:
+    \begin{equation}
+        |x^{2}-x_{0}^{2}|=|x-x_{0}||x+x_{0}|
+        <\delta|x+x_{0}|\leq\varepsilon
+    \end{equation}
+    So, how do we make $\delta|x+x_{0}|\leq\varepsilon$ a reality? The
+    expression $\delta|x+x_{0}|\leq\varepsilon$ is \textbf{not} always true
+    since $|x+x_{0}|$ gets arbitrarily large as $x$ gets bigger. But we don't
+    care about larger and larger values of $x$, we only care about values of
+    $x$ that are close to $x_{0}$. So let's suppose we only look at values that
+    are no more than $|x_{0}|/2$ away from $x_{0}$. That is, we are introducing
+    the restriction that $\delta\leq|x_{0}|/2$. If this were true, the largest
+    $|x+x_{0}|$ could be is $5|x_{0}|/2$. To see this, we invoke the
+    \textit{triangle inequality} that says for any real numbers $a$ and $b$,
+    the following is true:
+    \begin{equation}
+        |a+b|\leq|a|+|b|
+    \end{equation}
+    Applying this to $a=x_{0}$ and $b=x_{0}\pm{x}_{0}/2$, we'd get:
+    \begin{equation}
+        |x+x_{0}|\leq|x|+|x_{0}|\leq|3x_{0}/2|+|x_{0}|=5|x_{0}|/2
+    \end{equation}
+    If we choose $\delta$ such that $5|x_{0}|\delta/2\leq\varepsilon$ we'd be
+    done. It is tempting to write \textit{choose}
+    $\delta=2\varepsilon/5|x_{0}|$, but remember we've already imposed the
+    restriction that $\delta\leq|x_{0}|/2$. We must choose the smaller of these
+    two.
+    \par\hfill\par
+    We now have a candidate for $\delta$. Let's show that it works. Let
+    $\varepsilon>0$. Choose $\delta=\min(|x_{0}|/2,2\varepsilon/5|x_{0}|)$. If
+    $|x-x_{0}|<\delta$, then:
+    \begin{align}
+        |x-x_{0}|&<\min\Big(
+            \frac{|x_{0}|}{2},\,
+            \frac{2\varepsilon}{5|x_{0}|}
+        \Big)
+            \tag{Definition of $\delta$}\\
+        \Rightarrow
+            |x-x_{0}|&<\frac{2\varepsilon}{5|x_{0}|}
+                \tag{Definition of $\min$}\\
+        \Rightarrow
+            \frac{5|x_{0}|}{2}|x-x_{0}|&<\varepsilon
+                \tag{Multiplication by a Positive Number}
+    \end{align}
+    But since $|x-x_{0}|<\min(|x_{0}|/2,2\varepsilon/5|x_{0}|)$, we have
+    $|x-x_{0}|<|x_{0}|/2$ by the definition of $\min$. But then:
+    \begin{align}
+        |x+x_{0}|&<\frac{5|x_{0}|}{2}
+            \tag{Since $|x-x_{0}|<\frac{|x_{0}|}{2}$}\\
+        \Rightarrow
+            |x+x_{0}||x-x_{0}|&<\frac{5|x_{0}|}{2}|x-x_{0}|
+                \tag{Multiplication by a Positive Number}\\
+        \Rightarrow
+            |x+x_{0}||x-x_{0}|&<\varepsilon
+                \tag{Since $\frac{5|x_{0}|}{2}|x-x_{0}|<\varepsilon$}\\
+        \Rightarrow
+            |x^{2}-x_{0}^{2}|&<\varepsilon
+                \tag{Simplify the Expression}\\
+        \Rightarrow
+            |f(x)-f(x_{0})|&<\varepsilon
+                \tag{Definition of $f$}
+    \end{align}
+    And hence $f$ is continuous at $x_{0}$.
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}

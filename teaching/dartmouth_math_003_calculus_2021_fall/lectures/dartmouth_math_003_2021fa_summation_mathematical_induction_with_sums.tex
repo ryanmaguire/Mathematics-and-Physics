@@ -1,0 +1,208 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}                           % Needed for figures.
+\usepackage{amsmath}                            % Needed for align.
+\usepackage{amssymb}                            % Needed for mathbb.
+\usepackage{amsthm}                             % For the theorem environment.
+\usepackage{float}
+
+\newtheoremstyle{normal}
+    {\topsep}               % Amount of space above the theorem.
+    {\topsep}               % Amount of space below the theorem.
+    {}                      % Font used for body of theorem.
+    {}                      % Measure of space to indent.
+    {\bfseries}             % Font of the header of the theorem.
+    {}                      % Punctuation between head and body.
+    {.5em}                  % Space after theorem head.
+    {}
+
+\theoremstyle{normal}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem{example}{Example}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newcommand{\ceil}[2][]{#1\lceil#2#1\rceil}
+
+\title{Induction and Summation}
+\author{Ryan Maguire}
+\date{Fall 2021}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    Suppose we have a sequence of sentences, $P_{0}$, $P_{1}$, $P_{2}$, so on
+    and so forth. Suppose also that I know $P_{0}$ is true. Lastly, suppose I
+    know that if $P_{n}$ is true, then $P_{n+1}$ is true. The question is then:
+    are there any sentences that are \textit{false}? Well, is $P_{1}$ false?
+    $P_{0}$ is true by hypothesis, and $P_{0}$ being true implies $P_{1}$ is
+    true, again by hypothesis, and therefore $P_{1}$ is true. What about
+    $P_{2}$? Well, we just showed that $P_{1}$ is true, and by hypothesis
+    $P_{1}$ being true implies $P_{2}$ is true, so we may conclude $P_{2}$ is
+    true. Continuing up the ladder, we have that $P_{n}$ is always
+    true for all $n$.
+    \par\hfill\par
+    This is very efficient. If we have some statement about the natural numbers
+    1, 2, 3, and so on, instead of proving infinitely many statements, we need
+    to prove only 2. We must prove the statement for 0 is true, and we must
+    prove that the $n$ statement implies the $n+1$ statement.
+    \begin{example}
+        Let's prove that $1+1+\cdots+1=n$ when there are $n$ 1's. What's the
+        base case? The base case is $1=1$, which is true. The next case is
+        $1+1=2$, which is also true. Suppose:
+        \begin{equation}
+            \underbrace{1+\cdots+1}_{n}=n
+        \end{equation}
+        is true. Let's now prove that this implies
+        \begin{equation}
+            \underbrace{1+\cdots+1}_{n+1}=n+1
+        \end{equation}
+        We have:
+        \begin{align}
+            n+1&=(n)+1\\
+                &=(\underbrace{1+\cdots+1}_{n})+1\\
+                &=\underbrace{1+\cdots+1}_{n}+1\\
+                &=\underbrace{1+\cdots+1}_{n+1}
+        \end{align}
+        Since the base case is true, and since the $n$ case implies the
+        $n+1$ case, by induction the statement is always true.
+    \end{example}
+    \newpage
+    We can use induction to solve some of the more basic questions of calculus.
+    Particularly, what is the area under the curve $f(x)=x$ and what is the
+    area under the curve $g(x)=x^{2}$. These questions have classical solutions
+    dating to antiquity. Euclid (\textit{c.} 300 B.C.E.) gave the formula for
+    the area under $f(x)=x$ and Archimedes' (\textit{c.} 250 B.C.E.) gave the
+    solution to the area under $g(x)=x^{2}$. When approximating these areas
+    using Riemann sums (rectangles that fit under the curve) we get the
+    following expressions. For the under under $f(x)=x$ in the interval
+    $[0,a]$, we get:
+    \begin{equation}
+        \textrm{Area}(f)\approx\frac{a^{2}}{N^{2}}
+            \sum_{n=0}^{N-1}n
+    \end{equation}
+    and for $g(x)=x^{2}$ on the interval $[0,a]$ we get:
+    \begin{equation}
+        \textrm{Area}(g)\approx\frac{a^{3}}{N^{3}}
+            \sum_{n=0}^{N-1}n^{2}
+    \end{equation}
+    Where $N$ is the number of rectangles we are using to approximate the area.
+    We define the integral to be the limit of these approximations:
+    \begin{align}
+        \int_{0}^{a}f(x)\;\textrm{d}x
+            &=\lim_{N\rightarrow\infty}\frac{a^{2}}{N^{2}}\sum_{n=0}^{N-1}n\\
+            \int_{0}^{a}g(x)\;\textrm{d}x
+                &=\lim_{N\rightarrow\infty}
+                \frac{a^{3}}{N^{3}}\sum_{n=0}^{N-1}n^{2}
+    \end{align}
+    If we can obtain a formula for these two expressions, we may be able to
+    simplify the limit and get a concrete answer.
+    \par\hfill\par
+    The sum $1+2+\cdots+n$ has two answers, one intuitive, one rigorous with
+    induction. Fortunately, these answers agree. Let's add
+    $1+2+\cdots+100$. We'll do this using the following table.
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{ccccccccccc}
+            &&$1$&$+$&$2$&$+$&$\cdots$&$+$&$99$&$+$&$100$\\
+            \hline\\
+            $=$&&$1$&$+$&$2$&$+$&$\cdots$&$+$&$49$&$+$&$50$\\
+            &$+$&$100$&$+$&$99$&$+$&$\cdots$&$+$&$52$&$+$&$51$\\
+            \hline\\
+            $=$&&$101$&$+$&$101$&$+$&$\cdots$&$+$&$101$&$+$&$101$\\
+            \hline\\
+            $=$&&$50$&$\times$&$101$\\
+            \hline\\
+            $=$&&$5050$
+        \end{tabular}
+        \caption{Gauss' Sum of 1 to 100}
+    \end{table}
+    So the answer is half of 100 times $100+1$. This is the general formula:
+    \begin{equation}
+        \sum_{n=1}^{N}n=\frac{N(N+1)}{2}
+    \end{equation}
+    Since we want to count from 0 to $N-1$, we need to shift this formula:
+    \begin{equation}
+        \sum_{n=0}^{N-1}n=\frac{N(N-1)}{2}
+    \end{equation}
+    Let's prove this is true rigorously with induction. The base case says that
+    $0=0$. This is true. Suppose the formula is true for some positive integer
+    $N$. Let's prove this implies the formula is also true for $N+1$. We have:
+    \begin{align}
+        \sum_{n=0}^{N}n
+            &=\Big(\sum_{n=0}^{N-1}n\Big)+N\tag{Definition of $\Sigma$}\\
+            &=\frac{N(N-1)}{2}+N\tag{Inductive Hypothesis}\\
+            &=\frac{N^{2}-N+2N}{2}\tag{Factoring and Common Denominators}\\
+            &=\frac{N^{2}+N}{2}\tag{Simplify}\\
+            &=\frac{N(N+1)}{2}\tag{Factor}
+    \end{align}
+    And this is precisely the formula for $N+1$. By induction, the formula
+    is true for every positive integer $N$.
+    \newpage
+    I know of no intuitive method for $1^{2}+2^{2}+3^{2}+\cdots+N^{2}$
+    (but would like to), but I have a feeling the answer is a cubic. If you
+    add 1 $N$ times you get $N$. If you add 1, 2, $\cdots$, $N$ you get
+    roughly $N^{2}$. The pattern seems to be that if you add
+    $1^{n}+2^{n}+\cdots+N^{n}$ you should get roughly $N^{n+1}$. So, for
+    $1^{2}+2^{2}+\cdots+N^{2}$ I expect the answer to be roughly $N^{3}$.
+    The first few sums are 1, 5, 14, 30, and 55. If I fit a cubic to these
+    data points, I get the cubic:
+    \begin{equation}
+        f(N)=\frac{N(N+1)(2N+1)}{6}
+    \end{equation}
+    Let's prove this. That is, let's prove:
+    \begin{equation}
+        \sum_{n=1}^{N}n^{2}=\frac{N(N+1)(2N+1)}{6}
+    \end{equation}
+    The base case $N=1$ says that $1=1$. This is true. Suppose the formula is
+    true for $N$. Let's prove that implies it is true for $N+1$. We have:
+    \begin{align}
+        \sum_{n=1}^{N+1}n^{2}
+            &=\Big(\sum_{n=1}^{N}n^{2}\Big)+(N+1)^{2}\\
+            &=\frac{N(N+1)(2N+1)}{6}+(N+1)^{2}\\
+            &=(N+1)\frac{N(2N+1)+6(N+1)}{6}\\
+            &=(N+1)\frac{2N^{2}+7N+6}{6}\\
+            &=(N+1)\frac{(N+2)(2N+3)}{6}\\
+            &=\frac{(N+1)(N+2)(2N+3)}{6}
+    \end{align}
+    Using this for integration, we have:
+    \begin{align}
+        \int_{0}^{a}f(x)\;\textrm{d}x
+            &=\lim_{N\rightarrow\infty}\frac{a^{2}}{N^{2}}\sum_{n=0}^{N-1}n
+            =\lim_{N\rightarrow\infty}\frac{a^{2}}{N^{2}}\frac{N(N-1)}{2}
+            =\frac{a^{2}}{2}\\
+        \int_{0}^{a}g(x)\;\textrm{d}x
+            &=\lim_{N\rightarrow\infty}
+            \frac{a^{3}}{N^{3}}\sum_{n=0}^{N-1}n^{2}
+            =\lim_{N\rightarrow\infty}\frac{a^{3}}{N^{3}}
+                \frac{N(N-1)(2N-1)}{6}
+            =\frac{a^{3}}{3}
+    \end{align}
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}

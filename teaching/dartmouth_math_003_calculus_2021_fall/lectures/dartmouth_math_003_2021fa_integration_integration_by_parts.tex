@@ -1,0 +1,120 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}   % Needed for figures.
+\usepackage{amsmath}    % Needed for align.
+\usepackage{amssymb}    % Needed for mathbb.
+\graphicspath{{../../../images/}}
+
+\title{Integration by Parts}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    $u$ substitution is the reverse of the chain rule, validated by the
+    fundamental theorem of calculus. Integration by parts is the reverse of the
+    product rule. It says, if $f$ and $g$ are differentiable functions, then:
+    \begin{align}
+        \int_{a}^{b}f(x)g'(x)\;\textrm{d}x
+            &=f(x)g(x)\big|_{a}^{b}-\int_{a}^{b}f'(x)g(x)\;\textrm{d}x\\
+            &=\Big(f(b)g(b)-f(a)g(a)\Big)-\int_{a}^{b}f'(x)g(x)\;\textrm{d}x
+    \end{align}
+    This is often written (though, slightly abusing notation), as follows:
+    \begin{equation}
+        \int_{a}^{b}f\;\textrm{d}g=fg\big|_{a}^{b}-\int_{a}^{b}g\;\textrm{d}f
+    \end{equation}
+    Before we give a rigorous proof, let's give a geometric and intuitive one.
+    Suppose $f$ is a function with inverse $f^{-1}$. We can write
+    $y=f(x)$ and $x=f^{-1}(y)$. The area under the curve $f$ from $a$ to $b$
+    can be computed via the figure below. We compute the area under $y=f(x)$
+    by noting this area, plus the area to the left of $x=f^{-1}(y)$, plus the
+    area of the grey rectangle, is equal to the area of the large rectangle
+    with $x$ values 0 to $b$ and $y$ values 0 to $f(b)$. If we know the area to
+    the left of the curve $x=f^{-1}(y)$, we can compute the area under $f$ as
+    follows:
+    \begin{equation}
+        \int_{a}^{b}y\;\textrm{d}x
+            =f(b)b-f(a)a-\int_{f(a)}^{f(b)}x\;\textrm{d}y
+    \end{equation}
+    See the image below for a visual.
+    \begin{figure}
+        \centering
+        \includegraphics{integration_by_parts.pdf}
+        \caption{Visual for Integration by Parts}
+    \end{figure}
+    This idea is best remembered via the abuse-of-notation equation. The
+    indefinite integral is:
+    \begin{equation}
+        \int{f}\;\textrm{d}g=fg-\int{g}\;\textrm{d}f
+    \end{equation}
+    Now you ask \textit{what if} $f$ \textit{is not invertible?} Well, the
+    picture isn't quite as nice. So let's prove this is true in general.
+    The product rule says that if $f$ and $g$ are differentiable functions,
+    then:
+    \begin{equation}
+        (fg)'(x)=f'(x)g(x)+f(x)g'(x)
+    \end{equation}
+    By the fundamental theorem of calculus, integrating gives us:
+    \begin{align}
+        \int_{a}^{b}\Big(f'(x)g(x)+f(x)g'(x)\Big)\;\textrm{d}x
+            &=\int_{a}^{b}(fg)'(x)\;\textrm{d}x\\
+            &=(fg)(b)-(fg)(a)\\
+            &=f(b)g(b)-f(a)g(a)
+    \end{align}
+    Rearranging, we get:
+    \begin{equation}
+        \int_{a}^{b}f(x)g'(x)\;\textrm{d}x
+            =\Big(f(b)g(b)-f(a)g(a)\Big)-\int_{a}^{b}f'(x)g(x)\;\textrm{d}x
+    \end{equation}
+    Now let's use it. Integration by parts works well when we see products of
+    functions. Let's integrate $x\sin(x)$. We have a choice when trying to
+    integrate this: Do we set $f(x)=x$ and $g'(x)=\sin(x)$, or
+    $f(x)=\sin(x)$ and $g'(x)=x$? We should set $f$ to be the function that's
+    gets simpler when we differentiate it. In this case, $f(x)=x$ looks ideal
+    because differentiating gives us $f'(x)=1$. Then we set $g'(x)=\sin(x)$ and
+    compute the anti-derivative, which is $g(x)=-\cos(x)$. We have:
+    \begin{align}
+        \int{x}\sin(x)\;\textrm{d}x
+            &=\int{f}(x)g'(x)\;\textrm{d}x\\
+            &=f(x)g(x)-\int{f}'(x)g(x)\;\textrm{d}x\\
+            &=-x\cos(x)-\int{1}\big(-\cos(x)\big)\;\textrm{d}x\\
+            &=-x\cos(x)+\int\cos(x)\;\textrm{d}x\\
+            &=-x\cos(x)+\sin(x)+C
+    \end{align}
+    We can differentiate to verify our answer:
+    \begin{align}
+        \frac{\textrm{d}}{\textrm{d}x}\Big(-x\cos(x)+\sin(x)+C\Big)
+            &=\frac{\textrm{d}}{\textrm{d}x}\Big(-x\cos(x)\Big)
+                +\frac{\textrm{d}}{\textrm{d}x}\Big(\sin(x)\Big)\\
+            &=-\cos(x)+x\sin(x)+\cos(x)\\
+            &=x\sin(x)
+    \end{align}
+    As expected.
+    \newpage
+    I, the copyright holder of this work, release it into the public domain.
+    This applies worldwide. In some countries this may not be legally possible;
+    if so: I grant anyone the right to use this work for any purpose, without
+    any conditions, unless such conditions are required by law.
+    \par\hfill\par
+    The source code used to generate this document is free software and released
+    under version 3 of the GNU General Public License.
+\end{document}
