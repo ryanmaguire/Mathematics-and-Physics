@@ -1,0 +1,272 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       March 29, 2024                                                 %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Introduction to Symplectic and Contact Geometry}
+\author{Ryan Maguire}
+\date{October 31, 2024}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\graphicspath{{../images/}}
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item Historical background.
+            \item Exterior algebra and exterior calculus.
+            \item The tautological one-form and the Liouville form.
+            \item Canonical contact structures.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Historical Background}
+        The \textit{Lagrangian} of a mechanical system is define via:
+        \[
+            \mathcal{L}=T-V
+        \]
+        where $T$ is the kinetic energy and $V$ is the potential energy of the
+        system. After studying calculus of variations, you can apply the
+        \textit{Euler-Lagrange equation} to this expression to get a new, but
+        equivalent, formulation of Newton's second law:
+        \[
+            \frac{\partial\mathcal{L}}{\partial{q}}
+            -\frac{\textrm{d}}{\textrm{d}t}
+            \frac{\partial\mathcal{L}}{\partial\dot{q}}
+        \]
+        where $q$ describes the position, $\dot{q}$ is the velocity,
+        and $t$ is time.
+    \end{frame}
+    \begin{frame}
+        Plotting the Lagrangian involves a curve (as a function of $t$)
+        that has $q$ coordinates and $\dot{q}$ coordinates. This collection of
+        ordered pairs $(q,\,\dot{q})$ is called the \textit{phase-space} of the
+        system.
+        \par\hfill\par
+        We go from Lagrangian mechanics to Hamiltonian mechanics by considering
+        the Hamiltonian. This replaces the \textit{position-velocity} coordinate
+        system $(q,\,\dot{q})$ with the \textit{momentum-position} coordinate
+        system $(p,\,q)$.
+        \[
+            \mathcal{H}
+            =p\dot{q}-\mathcal{L}
+        \]
+    \end{frame}
+    \begin{frame}{Historical Background}
+        The dynamics of this system can be obtained
+        from studying the differential
+        of the Hamiltonian, $\textrm{d}\mathcal{H}$. To do this in a general
+        setting requires some exterior algebra and understanding the exterior
+        derivative.
+    \end{frame}
+    \begin{frame}{Exterior Algebra and Calculus}
+        The \textit{wedge} product is something used to measure areas, volumes,
+        and hypervolumes (higher-dimensional volumes). It can be seen as a
+        generalization of the determinant of a matrix, or of the cross product
+        that appears in $\mathbb{R}^{3}$.
+        \par\hfill\par
+        Given two vectors $\mathbf{v}$ and $\mathbf{w}$, the wedge product is
+        some new object $\mathbf{v}\land\mathbf{w}$ such that the
+        \textit{magnitude} of this expression is precisely the area of the
+        parallelogram spanned by $\mathbf{v}$ and $\mathbf{w}$.
+        It is also called
+        the \textit{exterior product} because $\mathbf{v}\land\mathbf{w}$ is
+        something \textit{outside of the vector space}. That is, it is not
+        necessarily a vector itself.
+    \end{frame}
+    \begin{frame}{Exterior Algebra and Calculus}
+        We can continue, requiring that
+        $\mathbf{u}\land\mathbf{v}\land\mathbf{w}$
+        is some object that describes the volume of the
+        parallelpiped formed by the
+        three vectors $\mathbf{u}$, $\mathbf{v}$, and $\mathbf{w}$.
+        \par\hfill\par
+        Such a construction must satisfy a few properties. Firstly,
+        $\mathbf{v}\land\mathbf{v}=0$.
+        This is because the \textit{parallelogram}
+        a vector makes with itself is really just a line segment, and line
+        segments do not have any area.
+        \par\hfill\par
+        Similarly, if we are dealing with $n$ dimensional vectors,
+        then if we have
+        $n+1$ vectors $\mathbf{v}_{1},\,\dots,\,\mathbf{v}_{n+1}$, then the
+        wedge product $\mathbf{v}_{1}\land\cdots\land\mathbf{v}_{n+1}$ must be
+        zero. This is because there can't be any $n+1$ volume in an
+        $n$ dimensional space.
+    \end{frame}
+    \begin{frame}{Exterior Algebra and Calculus}
+        We can create a calculus on such objects by introducing the
+        \textit{exterior derivative}.
+        \par\hfill\par
+        We start with a $0$ form. A $0$ form is just a smooth function.
+        \par\hfill\par
+        A $1$ form is something that takes in a
+        a vector and returns a real number. There are some more restrictions in
+        the precise definition (stuff related to tangent bundles and smooth
+        sections), but this statement suffices for now.
+        \par\hfill\par
+        A $k$ form is a linear combination of $k$ wedges of $1$ forms. That is,
+        a $k$ wedge (also called a $k$ \textit{blade}), is and object of the
+        form $\alpha_{1}\land\cdots\land\alpha_{k}$, where each $\alpha_{n}$
+        is a $1$ form. A \textit{simple} $k$ form is just a $k$ blade.
+        A general $k$ form is a finite linear combination of $k$ blades.
+    \end{frame}
+    \begin{frame}{Exterior Algebra and Calculus}
+        The exterior derivative is defined as follows.
+        The exterior derivative of
+        a zero form is given by differentials. This produces a 1-form:
+        \[
+            \textrm{d}(f)=\textrm{d}f
+        \]
+        The differential of a wedge of $k$ forms is given by:
+        \[
+            d\left(\alpha\land\beta\right)
+            =\textrm{d}\alpha\land\beta
+            +(-1)^{k}\textrm{d}\beta
+        \]
+        We perform the general exterior derivative by requiring that
+        differentiation is linear. The final key property property is
+        that differentiating twice gives you zero:
+        \[
+            \textrm{d}\left(\textrm{d}\alpha\right)=\textrm{d}^{2}\alpha=0
+        \]
+    \end{frame}
+    \begin{frame}{The Tautological One-Form and the Liouville Form}
+        The Hamiltonian can be rewritten using the exterior derivative. We have:
+        \[
+            \mathcal{H}
+            =\sum_{n}p_{n}\land\textrm{d}q_{n}-\mathcal{L}
+        \]
+        The differential of the Hamiltonian is just the exterior derivative of
+        this expression:
+        \[
+            \begin{aligned}
+                \textrm{d}\mathcal{H}
+                &=\textrm{d}\left(
+                    \sum_{n}p_{n}\land\textrm{d}q_{n}-\mathcal{L}
+                \right)\\
+                &=\sum_{n}\textrm{d}\left(
+                    p_{n}\land\textrm{d}q_{n}
+                \right)-\textrm{d}\mathcal{L}\\
+                &=\sum_{n}
+                    \textrm{d}p_{n}\land\textrm{d}q_{n}
+                    +(-1)^{k}\textrm{d}^{2}q_{k}
+                    -\textrm{d}\mathcal{L}\\
+                    &=\sum_{n}
+                    \textrm{d}p_{n}\land\textrm{d}q_{n}
+                    -\textrm{d}\mathcal{L}
+            \end{aligned}
+        \]
+        Where we used the fact that $\textrm{d}^{2}\alpha=0$ for any $\alpha$.
+    \end{frame}
+    \begin{frame}{The Tautological One-Form and the Liouville Form}
+        Consider the case where $\mathcal{L}=0$. That is, the kinetic energy and
+        the potential energy are equal, and therefore the Lagrangian is zero.
+        \par\hfill\par
+        In this case, our Hamiltonian becomes:
+        \[
+            \mathcal{H}
+            =\sum_{n}p_{n}\land\textrm{d}q_{n}
+        \]
+        The position $\mathbf{q}=(q_{1},\,\cdots,\,q_{k})$ should vary smoothly
+        as a function of time, meaning this is a smooth function (a 0 form).
+        Similarly the momentum $\mathbf{p}=(p_{1},\,\cdots,\,p_{n})$ should be
+        smooth. $\mathcal{H}$ is thus a sum of exterior products of $0$ forms
+        and $1$ forms, meaning it is a $1$ form. This is called the
+        \textit{tautological one form}.
+    \end{frame}
+    \begin{frame}{The Tautological One-Form and the Liouville Form}
+        The exterior product of the tautological one form is then:
+        \[
+            \textrm{d}\mathcal{H}
+            =\sum_{n}\textrm{d}p_{n}\land\textrm{d}q_{n}
+        \]
+        This is called the \textit{Liouville form}.
+    \end{frame}
+    \begin{frame}{The Tautological One-Form and the Liouville Form}
+        A symplectic form on a smooth manifold $M$ is function
+        $\omega$ defined on the
+        tangent bundle $TM$ (which acts as our \textit{phase space})
+        that axiomatizes the properties of the Liouville form. In particular:
+        \begin{itemize}
+            \item
+                $\omega$ acts like a \textit{dot product}. That is, it is a
+                \textit{bilinear pairing}.
+            \item
+                $\omega$ is \textit{skew-symmetric}, meaning
+                $\omega(X,\,Y)=-\omega(Y,\,X)$. This comes from the alternating
+                property of the wedge product.
+            \item
+                $\omega$ is non-degenerate. If $X$ is fixed and
+                $\omega(X,\,Y)=0$ for all $Y$, then $X$ is zero.
+            \item
+                $\omega$ is \textit{closed}, meaning the exterior derivative
+                of it is zero. To see that the Liouville form is closed,
+                note that if we apply the exterior derivative to it we will
+                have a sum of $\textrm{d}^{2}p_{n}\land\textrm{d}q_{n}$ on the
+                left and $\textrm{d}p_{n}\land\textrm{d}^{2}q_{n}$ on the
+                right. All of this will be zero.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{The Tautological One-Form and the Liouville Form}
+        A bilinear product can be described by a matrix $A$. Given vectors
+        $X$ and $Y$, we write:
+        \[
+            \omega(X)=X^{T}AY
+        \]
+        where $X^{T}$ denotes the transpose of $X$. The skew-symmetric property
+        of $\omega$ implies that $A^{T}=-A$, and the non-degenerate property
+        means $\textrm{det}(A)\ne{0}$. Because of this we can note that
+        $M$ must be \textit{even dimensional}. This is because if the dimension
+        is odd, then the matrix $A$ must have determinant zero since:
+        \[
+            \begin{aligned}
+                \textrm{det}(A)
+                &=\textrm{det}(A^{T})\\
+                &=\textrm{det}(-A)\\
+                &=(-1)^{n}\textrm{det}(A)
+            \end{aligned}
+        \]
+        Hence, either $n$ is even or $\textrm{det}(A)=0$. For $A$ be
+        non-degenerate we then require $n$ to be even.
+    \end{frame}
+    \begin{frame}{Canonical Contact Structures}
+        If we restrict our attention to the \textit{spherical cotangent bundle},
+        and restrict the Liouville form as well, we create a
+        \textit{contact structure}.
+        \par\hfill\par
+        This is the canonical contact structure on the spherical cotangent
+        bundle of a manifold.
+        \par\hfill\par
+        As is often the case in physics, should we have a metric $g$ on the
+        manifold $M$, there is then a correspondence (an isomorphism) between
+        the spherical cotangent bundle and the spherical tangent bundle.
+        It is frequent in the literature to consider these objects the same.
+    \end{frame}
+    \begin{frame}{Canonical Contact Structures}
+        The contact structure has a nice physical interpretation. We are
+        considering hypersurfaces in $TM$ where the Hamiltonian $\mathcal{H}$
+        is constant.
+    \end{frame}
+    \begin{frame}{The End}
+        \begin{center}
+            Thank you!
+        \end{center}
+    \end{frame}
+\end{document}
