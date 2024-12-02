@@ -1,0 +1,354 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2024/12/02                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = blue}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\graphicspath{{../images/}}
+
+% Title page information.
+\title{%
+    Applications of Legendre Polynomial for
+    Fresnel Inversion and Occultation Observations%
+}
+\author{%
+    Ryan Maguire\footnote{%
+        Department of Mathematics,
+        MIT, Cambridge, MA 02139, USA
+    }
+    \and
+    Richard French\footnote{
+        Department of Physics and Astronomy,
+        Wellesley College, Wellelsey, MA 02481, USA
+    }
+}
+\date{\today}
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        Radio occultations can be used to study the rings of Saturn and
+        Uranus. The wavelength of the signal emitted from a space probe is
+        usually large enough that significant diffraction effects can occur,
+        and the data must be processed numerically in order to construct a
+        meaningful ring profile. The classic Fresnel approximation uses a
+        quadratic polynomial for the Fresnel kernel, and in some real cases
+        this is sufficient (i.e. Cassini's Rev 7, Voyager's fly-by of Uranus),
+        but certain scenarios require higher order terms in order to perform
+        accurate reconstructions. By following the derivation of the
+        Fresnel approximation carefully, one can obtain a polynomial expansion
+        for the Fresnel kernel in terms of Legendre polynomials, the degree
+        of which can be arbitrarily high. Quartic and octic
+        expansions are sufficient for the vast majority of the Cassini data
+        sets, and these approximations require only a small amount of
+        additional computational time when compared to the quadratic Fresnel
+        method.
+    \end{abstract}
+    \tableofcontents
+    \section{Fourier Optics in a Ring System}
+        The geometry of a radio occultation observation is determined by the
+        ring plane of the planet, the trajectory of the spacecraft, and the
+        location of Earth. Let $(\rho,\,\phi)$ denote the cylindrical
+        coordinates of the ring plane, let $\mathbf{R}$ be the position
+        vector of the spacecraft with respect to the core of the plane, and
+        let $B$ indicate the ring opening angle, which is the angle made
+        by the ring plane and the line segment between the spacecraft and
+        Earth. Since the distance between Earth and the other planets is
+        several orders of magnitute greater than the length of $\mathbf{R}$,
+        or even the diameter of the entire ring system, the angle $B$ may be
+        treated as a constant.
+        \par\hfill\par
+        Given a plane wave incident on the rings, the diffracted complex
+        transmittance at a point $\hat{T}(\rho_{0},\,\phi_{0})$ at the point
+        $(\rho_{0},\,\phi_{0})$ is given by:
+        \begin{equation}
+            \label{eqn:huygens_principal}
+            \hat{T}(\rho_{0},\,\phi_{0})
+            =\frac{\mu_{0}}{i\lambda}\int_{0}^{\infty}\int_{0}^{2\pi}
+                T(\rho,\,\phi)
+                \frac{%
+                    \exp\left(
+                        i\,\psi(\rho_{0},\,\phi_{0};\,\rho,\,\phi)
+                    \right)
+                }{%
+                    ||\mathbf{R}-\mathbf{r}||_{2}
+                }
+                \rho\,\textrm{d}\rho\,\textrm{d}\phi
+        \end{equation}
+        where $\mathbf{r}$ is the position vector for the point
+        $(\rho,\,\phi)$ in the ring plane, $T$ is the complex transmittance,
+        and where $||\mathbf{R}-\mathbf{r}||_{2}$ is the standard
+        Euclidean distance between this point and the spacecraft.
+        For convenience, we label this distance $D$:
+        \begin{equation}
+            D=||\mathbf{R}-\mathbf{r}||_{2}
+        \end{equation}
+        The quantity $\psi$ is purely geometric, and the complex
+        exponention $\exp(i\,\psi)$ is the \textit{Fresnel kernel}.
+        Following MTR86, $\psi$ is given in terms of auxiliary parameters
+        $\hat{\xi}$ and $\hat{\eta}$. We write:
+        \begin{align}
+            \hat{\xi}
+            &=\frac{\cos(B)}{D}\big(
+                \rho_{0}\cos(\phi_{0})-\rho\cos(\phi)
+            \big)\\[1em]
+            \hat{\eta}
+            &=\frac{%
+                \rho^{2}+\rho_{0}^{2}-2\rho\rho_{0}\cos(\phi-\phi_{0})%
+            }{D^{2}}\\[1em]
+            \psi
+            &=kD\left(
+                \sqrt{1+2\hat{\xi}+\hat{\eta}}-\hat{\xi}-1
+            \right)
+        \end{align}
+        Where $k$ is the wavenumber, $k=2\pi/\lambda$, with $\lambda$ being
+        the wavelength of the incident plane wave.
+        We define $\xi$ and $\eta$ using this, and rewrite $\psi$ accordingly:
+        \begin{align}
+            \xi&=-\hat{\xi}\\
+            \eta&=\hat{\eta}\\
+            \psi&=kD\left(
+                \sqrt{1-2\xi+\eta}+\xi-1
+            \right)
+        \end{align}
+        The reason for the subtle change in the notation used by other
+        authors is that it allows us to rewrite $\psi$ and its derivatives
+        more naturally in terms of Legendre polynomials later on. Indeed,
+        the generating function for the Legendre polynomials is given by:
+        \begin{equation}
+            \sum_{n=0}^{\infty}P_{n}(x)t^{n}
+            =\frac{1}{\sqrt{1-2xt+t^{2}}}
+        \end{equation}
+        and one can already start to see some similarities between this
+        expression and our new formula for $\psi$.
+        \par\hfill\par
+        By assuming perfectly symmetric rings, we may reduce
+        Eqn.~\ref{eqn:huygens_principal} to the following:
+        \begin{subequations}
+            \begin{align}
+                \hat{T}(\rho_{0})
+                &=\frac{\mu_{0}}{i\lambda}\int_{0}^{\infty}\int_{0}^{2\pi}
+                    T(\rho)
+                    \frac{%
+                        \exp\left(
+                            i\,\psi(\rho_{0},\,\phi_{0};\,\rho,\,\phi)
+                        \right)
+                    }{%
+                        ||\mathbf{R}-\mathbf{r}||_{2}
+                    }
+                    \rho\,\textrm{d}\rho\,\textrm{d}\phi\\
+                &=\frac{\mu_{0}}{i\lambda}\int_{0}^{\infty}
+                    \rho\,T(\rho)\left[
+                        \int_{0}^{2\pi}
+                        \frac{%
+                            \exp\left(
+                                i\,\psi(\rho_{0},\,\phi_{0};\,\rho,\,\phi)
+                            \right)
+                        }{%
+                            ||\mathbf{R}-\mathbf{r}||_{2}
+                        }
+                        \textrm{d}\phi
+                    \right]
+                    \textrm{d}\rho
+                \end{align}
+        \end{subequations}
+        Such an assumption is valid for Saturn's rings, but the rings of
+        Uranus are elliptical. We treat this special case in the appendix.
+        \par\hfill\par
+        The stationary phase approximation allows us to reduce this double
+        integral to a single integral, eliminating the inner integration over
+        the azimuthal component $\phi$. Let $\phi_{s}$ denote the stationary
+        azimuthal angle, which is the solution to
+        $\frac{\partial\psi}{\partial\phi}=0$ as a function of the other
+        parameters. The reduction becomes:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\frac{1-i}{2F}\int_{0}^{\infty}
+                T(\rho)\exp\left(
+                    i\,\psi(\rho_{0},\,\phi_{0};\,\rho,\,\phi)
+                \right)
+                \,\textrm{d}\rho
+        \end{equation}
+        where $F$ is the characteristic Fresnel scale:
+        \begin{equation}
+            F=\frac{\lambda{D}}{2}\frac{1-\cos^{2}(B)\sin^{2}(\phi_{0}}{\sin^{2}(B)}
+        \end{equation}
+        Note that in factoring $F$ \textit{outside} of the integral for
+        $\rho$, we are assuming the parameter varies very little with $\rho$.
+        This is the case when $||\mathbf{R}||_{2}>>||\mathbf{r}||_{2}$, but
+        for high resolution reconstructions this need not hold. We
+        handle this in the appendix.
+        \par\hfill\par
+        To obtain ring profiles we must solve this integral equation for $T$;
+        $\hat{T}$ is the measured diffraction data.
+        The geometric variables $\rho_{0}$, $\phi_{0}$, $B$, and $D$ are also
+        measured quantities, and remaining two parameters $\rho$ and $\phi$ are
+        just dummy variables of integration.
+    \section{The Fresnel Approximation}
+        Computing the stationary azimuth angle $\phi_{s}$ for $\psi$ can be
+        done numerically using Newton's method. Starting with
+        $\phi_{s,\,0}=\phi_{0}$, we obtained an improved solution via:
+        \begin{equation}
+            \phi_{s,\,n+1}=\phi_{s,\,n}-
+            \frac{\partial\psi/\partial\phi}
+                 {\partial^{2}\psi/\partial\phi^{2}}
+        \end{equation}
+        We may expand $\psi$ in terms of the $\phi_{s}$ using the Taylor
+        series:
+        \begin{equation}
+            \psi(\rho,\,\phi;\,\rho_{0},\,\phi_{0})
+            =\sum_{n=0}^{\infty}
+                \frac{\psi^{(n)}(\rho,\,\phi_{0};\,\rho_{0},\,\phi_{0})}{n!}
+                (\phi-\phi_{0})^{n}
+        \end{equation}
+        where $\psi^{(n)}$ denotes the $n^{\textrm{th}}$ partial derivative of
+        $psi$ with respect to $\phi$. Truncating at the quadratic term yields
+        a nice approximation:
+        \begin{equation}
+            \label{eqn:quadratic_taylor}
+            \psi(\rho,\,\phi;\,\rho_{0},\,\phi_{0})
+            \approx
+            \psi_{0}+\psi^{\prime}_{0}(\phi-\phi_{0})
+            +\frac{1}{2}\psi^{\prime\prime}_{0}(\phi-\phi_{0})^{2}
+        \end{equation}
+        where $\psi_{0}$, $\psi^{\prime}_{0}$, and $\psi^{\prime\prime}_{0}$
+        denote the zeroth, first, and second partial derivatives of $\psi$
+        evaluated at $(\rho,\,\phi_{0};\,\rho_{0},\,\phi_{0})$, respectively.
+        If we assume that the first Newton iterate is sufficient for numerical
+        purpose (i.e. $\phi_{s}=\phi_{s,\,1}$), we obtain:
+        \begin{subequations}
+            \begin{align}
+                \phi_{s}-\phi_{0}
+                &=\left(
+                    \phi_{0}-
+                    \frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+                \right)-\phi_{0}\\[1em]
+                &=-\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+            \end{align}
+        \end{subequations}
+        Plugging this into the quadratic approximation in
+        Eqn.~\ref{eqn:quadratic_taylor} yields:
+        \begin{align}
+            \psi(\rho,\,\phi_{s};\,\rho_{0},\,\phi_{0})
+            &=\psi_{0}+\psi^{\prime}_{0}(\phi_{s}-\phi_{0})
+                +\frac{1}{2}\psi^{\prime\prime}_{0}(\phi_{s}-\phi_{0})^{2}\\
+            &=\psi_{0}+\psi^{\prime}_{s}\left(
+                -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+            \right)+
+            \frac{1}{2}\psi^{\prime\prime}_{s}\left(
+                -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+            \right)^{2}\\
+            &=\psi_{0}
+                -\frac{1}{2}
+                \frac{\psi^{\prime\,2}_{0}}{\psi^{\prime\prime}_{0}}
+        \end{align}
+        The quadratic Fresnel approximation can be obtained once we
+        evaluate these derivatives. First, we substitute $\phi=\phi_{0}$
+        into $\xi$, $\eta$.
+        \begin{align}
+            \xi_{\phi=\phi_{0}}
+            &=\cos(B)\cos(\phi_{0})\frac{\rho-\rho_{0}}{D}\\
+            \eta_{\phi=\phi_{0}}
+            &=\left(\frac{\rho-\rho_{0}}{D}\right)^{2}
+        \end{align}
+        Define the auxiliary parameters $\alpha$ and $x$ via:
+        \begin{align}
+            \alpha&=\cos(B)\cos(\phi_{0})\\
+            x&=\frac{\rho-\rho_{0}}{D}
+        \end{align}
+        The formulas for $\xi$, $\eta$, and $\psi_{0}$ then become:
+        \begin{align}
+            \xi_{\phi=\phi_{0}}
+            &=\alpha{x}\\
+            \eta_{\phi=\phi_{0}}
+            &=x^{2}\\
+            \psi_{\phi=\phi_{0}}
+            &=kD\left(
+                \sqrt{1-2\alpha{x}+x^{2}}
+                +\alpha{x}-1
+            \right)
+        \end{align}
+        The observant reader may note how strikingly similar our formula is
+        to the generating function for the Legendre polynomials. We will
+        touch upon that in the next section.
+        \par\hfill\par
+        The partial derivatives for $\psi$ can be obtained from the partial
+        derivatives of $\xi$ and $\eta$. We have:
+        \begin{align}
+            \xi^{\prime}
+            &=-\cos(B)\sin(\phi)\frac{\rho}{D}\\
+            \xi^{\prime\prime}
+            &=-\cos(B)\cos(\phi)\frac{\rho}{D}\\
+            \eta^{\prime}
+            &=\frac{2\rho\rho_{0}\sin(\phi-\phi_{0})}{D^{2}}\\
+            \eta^{\prime\prime}
+            &=\frac{2\rho\rho_{0}\cos(\phi-\phi_{0})}{D^{2}}
+        \end{align}
+        The first partial derivative of $\psi$ is then:
+        \begin{align}
+            \psi^{\prime}
+            &=kD\left(
+                \frac{-2\xi^{\prime}+\eta^{\prime}}{2\sqrt{1-2\xi+\eta}}
+                +\xi^{\prime}
+            \right)
+        \end{align}
+        Plugging in $\phi=\phi_{0}$ yields:
+        \begin{equation}
+            \psi^{\prime}_{0}
+            =kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}\left(
+                \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+            \right)
+        \end{equation}
+        The second partial derivative isn't quite as nice:
+        \begin{equation}
+            \psi^{\prime\prime}
+            =kD\left(
+                    \frac{-2\xi^{\prime\prime}+\eta^{\prime\prime}}
+                          {2(1-2\xi+\eta)^{1/2}}-
+                    \frac{(-2\xi^{\prime}+\eta^{\prime})^{2}}
+                         {4(1-2\xi+\eta)^{3/2}}+
+                    \xi^{\prime\prime}
+            \right)
+        \end{equation}
+        Again substituting $\phi=\phi_{0}$, we obtain:
+        \begin{equation}
+            \psi^{\prime\prime}_{0}
+            =kD\left(
+                \frac{%
+                    -2\alpha\rho{D}+2\rho\rho_{0}
+                }{%
+                    2D^{2}(1-2\alpha{x}+x^{2})^{1/2}
+                }
+                -\frac{%
+                    \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
+                }{%
+                    D^{2}(1-2\alpha{x}+x^{2})^{3/2}
+                }
+                -\frac{\alpha\rho}{D}
+            \right)
+        \end{equation}
+    \section{Applications of Legendre Polynomial}
+    \section{Implementation and Results}
+
+\end{document}
