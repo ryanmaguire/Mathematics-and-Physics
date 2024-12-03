@@ -1,0 +1,116 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{margin=1.0in}
+\title{MIT PRIMES: Fresnel Inversion and the NASA Cassini Mission}
+\author{Ryan Maguire}
+\date{\today}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\begin{document}
+    \maketitle
+    \section{The Problem}
+        When a spacecraft transmits a radio signal to Earth, it usually goes
+        uninterrupted, traveling through the vacuum of space until it enters
+        the Earth's atmosphere. If the observer records that the signal has
+        dipped in power, or vanishes entirely, then they may rightly conclude
+        that some object now falls between the spacecraft and Earth. This is
+        called an \textbf{occultation}. Certain objects in the solar system
+        can be studied in great detail using occultation observations, which is
+        precisely how the Cassini space probe studied the rings of Saturn.
+        \par\hfill\par
+        When radio waves pass through Saturn's rings they are diffracted, and
+        the observer on Earth records a diffraction pattern given by
+        Huygen's principle \cite{Goodman1969IntroductionTF}:
+        \begin{equation}
+            \hat{T}(\rho_{0},\,\phi_{0})
+            =\int_{0}^{\infty}\int_{0}^{2\pi}
+                T(\rho,\,\phi)\,
+                K(\rho,\,\phi,\,\rho_{0},\,\phi_{0})\,
+                \rho\,\textrm{d}\rho\,\textrm{d}\phi
+        \end{equation}
+        where $\hat{T}$ is the \textit{diffracted transmission} (the measured
+        quantity), $T$ is the actual transmission, and $K$ is a geometric
+        quantity known as the Fresnel kernel. The function $T$ is what
+        describes the rings, and we must solve this inverse problem if we
+        wish to study them. Using some numerical approximations, and the
+        cylindrical symmetry of the rings, one can simplify this to:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\int_{0}^{\infty}T(\rho)\,
+                K^{\prime}(\rho,\,\phi_{s},\,\rho_{0},\,\phi_{0})\,
+                \rho\,\textrm{d}\rho
+        \end{equation}
+        where $\phi_{s}$ is the \textbf{stationary value} of $\phi$, and
+        $K^{\prime}$ is a modified Fresnel kernel. In the classic Fresnel
+        approximation we use a complex exponential with a quadratic to write:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\int_{0}^{\infty}
+            T(\rho)\exp\left(
+                \frac{i\pi}{2}\left(\frac{\rho-\rho_{0}}{F}\right)^{2}
+            \right)\,\textrm{d}\rho
+        \end{equation}
+        where $F$ is the so-called \textbf{Fresnel scale}
+        \cite{Marouf1982TheoryOR}.
+        Invoking the convolution theorem tells us how to solve for $T$ exactly.
+        Let $\mathcal{F}_{\xi}(f)$ denote the Fourier transform of $f$,
+        $f*g$ denote the convolution of $f$ and $g$, and define
+        $f(x)=\exp(i\pi{x}^{2}/2F^{2})$. We have:
+        \begin{align}
+            \mathcal{F}_{\xi}(\hat{T})
+            &=\mathcal{F}_{\xi}\left(
+                \int_{0}^{\infty}
+                T(\rho)\exp\left(
+                    \frac{i\pi}{2}\left(\frac{\rho-\rho_{0}}{F}\right)^{2}
+                \right)\,\textrm{d}\rho
+            \right)\\
+            &=\mathcal{F}_{\xi}(T*f)\\
+            &=\mathcal{F}_{\xi}(T)\,\mathcal{F}_{\xi}(f)\\
+            \Longrightarrow
+            \mathcal{F}_{\xi}(T)
+            &=\frac{\mathcal{F}_{\xi}(\hat{T})}{\mathcal{F}_{\xi}(f)}\\
+            \Longrightarrow
+            T(\rho)
+            &=\mathcal{F}^{-1}_{\rho}\left(
+                \frac{\mathcal{F}_{\xi}(\hat{T})}{\mathcal{F}_{\xi}(f)}
+            \right)
+        \end{align}
+        where $\mathcal{F}^{-1}_{\rho}$ denotes the inverse Fourier transform.
+        \par\hfill\par
+        Unfortunately, reality is far more difficult,
+        and the Fresnel approximation does not hold. This is the
+        case for much of the data obtained by Cassini. Here we must explore
+        other numerical methods to properly analyze the rings of Saturn.
+    \section{What to Expect}
+        By participating in the research project, you should expect to study
+        Fourier analysis, numerical analysis, partial differential equations,
+        numerical Euclidean geometry, elementary physics, and optics. You will
+        also get to work with \textbf{real data from the NASA Cassini mission},
+        and construct your own profiles of the rings of Saturn. To do this you
+        will need to develop some comfort with the C programming language, and
+        with Python. You are not expected to be an expert programmer or
+        applied mathematician: this will be taught to you.
+    \par\hfill\par
+    \bibliographystyle{plain}
+    \bibliography{../../bib.bib}
+\end{document}
