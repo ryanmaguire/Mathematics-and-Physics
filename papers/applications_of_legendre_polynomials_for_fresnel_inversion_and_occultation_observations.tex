@@ -18,19 +18,24 @@
 %       Date:   2024/12/02                                                     %
 %------------------------------------------------------------------------------%
 \documentclass{article}
-\usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{amscd}
+\usepackage{listings}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \hypersetup{colorlinks = true, linkcolor = blue}
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0em}
 \graphicspath{{../images/}}
+\lstset{
+    basicstyle = \small,
+    basewidth = 4.5pt,
+    linewidth = 360.0pt,
+    showstringspaces = false
+}
 
 % Title page information.
 \title{%
-    Applications of Legendre Polynomial for
+    Applications of Legendre Polynomials for
     Fresnel Inversion and Occultation Observations%
 }
 \author{%
@@ -50,7 +55,7 @@
     \begin{abstract}
         Radio occultations can be used to study the rings of Saturn and
         Uranus. The wavelength of the signal emitted from a space probe is
-        usually large enough that significant diffraction effects can occur,
+        large enough that significant diffraction effects occur,
         and the data must be processed numerically in order to construct a
         meaningful ring profile. The classic Fresnel approximation uses a
         quadratic polynomial for the Fresnel kernel, and in some real cases
@@ -71,7 +76,7 @@
         ring plane of the planet, the trajectory of the spacecraft, and the
         location of Earth. Let $(\rho,\,\phi)$ denote the cylindrical
         coordinates of the ring plane, let $\mathbf{R}$ be the position
-        vector of the spacecraft with respect to the core of the plane, and
+        vector of the spacecraft with respect to the core of the planet, and
         let $B$ indicate the ring opening angle, which is the angle made
         by the ring plane and the line segment between the spacecraft and
         Earth. Since the distance between Earth and the other planets is
@@ -80,7 +85,7 @@
         treated as a constant.
         \par\hfill\par
         Given a plane wave incident on the rings, the diffracted complex
-        transmittance at a point $\hat{T}(\rho_{0},\,\phi_{0})$ at the point
+        transmittance $\hat{T}(\rho_{0},\,\phi_{0})$ at the point
         $(\rho_{0},\,\phi_{0})$ is given by:
         \begin{equation}
             \label{eqn:huygens_principal}
@@ -159,7 +164,7 @@
                     }
                     \rho\,\textrm{d}\rho\,\textrm{d}\phi\\
                 &=\frac{\mu_{0}}{i\lambda}\int_{0}^{\infty}
-                    \rho\,T(\rho)\left[
+                    \rho\,T(\rho)\left(
                         \int_{0}^{2\pi}
                         \frac{%
                             \exp\left(
@@ -169,7 +174,7 @@
                             ||\mathbf{R}-\mathbf{r}||_{2}
                         }
                         \textrm{d}\phi
-                    \right]
+                    \right)
                     \textrm{d}\rho
                 \end{align}
         \end{subequations}
@@ -180,9 +185,10 @@
         integral to a single integral, eliminating the inner integration over
         the azimuthal component $\phi$. Let $\phi_{s}$ denote the stationary
         azimuthal angle, which is the solution to
-        $\frac{\partial\psi}{\partial\phi}=0$ as a function of the other
+        $\partial\psi/\partial\phi=0$ as a function of the other
         parameters. The reduction becomes:
         \begin{equation}
+            \label{eqn:single_variable_huygens}
             \hat{T}(\rho_{0})
             =\frac{1-i}{2F}\int_{0}^{\infty}
                 T(\rho)\exp\left(
@@ -192,29 +198,45 @@
         \end{equation}
         where $F$ is the characteristic Fresnel scale:
         \begin{equation}
-            F=\frac{\lambda{D}}{2}\frac{1-\cos^{2}(B)\sin^{2}(\phi_{0}}{\sin^{2}(B)}
+            \label{eqn:fresnel_scale}
+            F=
+            \sqrt{%
+                \frac{\lambda{D}}{2}%
+                \frac{1-\cos^{2}(B)\sin^{2}(\phi_{0})}{\sin^{2}(B)}%
+            }
         \end{equation}
         Note that in factoring $F$ \textit{outside} of the integral for
         $\rho$, we are assuming the parameter varies very little with $\rho$.
         This is the case when $||\mathbf{R}||_{2}>>||\mathbf{r}||_{2}$, but
-        for high resolution reconstructions this need not hold. We
-        handle this in the appendix.
+        for high resolution reconstructions this need not hold.
+        Such an approximation is valid if we may
+        treat $D$ as the following constant:
+        \begin{equation}
+            \label{eqn:d_approx}
+            D\approx||\mathbf{R}-\mathbf{r}_{0}||_{2}
+        \end{equation}
+        The limits in the integral in Eqn.~\ref{eqn:single_variable_huygens}
+        are changed dramatically when one considers real data. The true
+        integral takes place over a range $|\rho-\rho_{0}|<W/2$, where $W$ is
+        the window width, which is determined by the desired resolution.
+        For most reasonable scenarios, we have $W<<||\mathbf{R}||_{2}$,
+        meaning the approximation in Eqn.~\ref{eqn:d_approx} is valid.
         \par\hfill\par
         To obtain ring profiles we must solve this integral equation for $T$;
         $\hat{T}$ is the measured diffraction data.
         The geometric variables $\rho_{0}$, $\phi_{0}$, $B$, and $D$ are also
-        measured quantities, and remaining two parameters $\rho$ and $\phi$ are
-        just dummy variables of integration.
+        measured quantities, and $\phi_{s}$ is computed numerically.
+        The remaining variable $\rho$ is just a dummy variable of integration.
     \section{The Fresnel Approximation}
         Computing the stationary azimuth angle $\phi_{s}$ for $\psi$ can be
-        done numerically using Newton's method. Starting with
+        done using Newton's method. Starting with
         $\phi_{s,\,0}=\phi_{0}$, we obtained an improved solution via:
         \begin{equation}
             \phi_{s,\,n+1}=\phi_{s,\,n}-
             \frac{\partial\psi/\partial\phi}
                  {\partial^{2}\psi/\partial\phi^{2}}
         \end{equation}
-        We may expand $\psi$ in terms of the $\phi_{s}$ using the Taylor
+        We may expand $\psi$ in terms of the $\phi$ using the Taylor
         series:
         \begin{equation}
             \psi(\rho,\,\phi;\,\rho_{0},\,\phi_{0})
@@ -223,7 +245,7 @@
                 (\phi-\phi_{0})^{n}
         \end{equation}
         where $\psi^{(n)}$ denotes the $n^{\textrm{th}}$ partial derivative of
-        $psi$ with respect to $\phi$. Truncating at the quadratic term yields
+        $\psi$ with respect to $\phi$. Truncating to the quadratic term yields
         a nice approximation:
         \begin{equation}
             \label{eqn:quadratic_taylor}
@@ -243,37 +265,42 @@
                 &=\left(
                     \phi_{0}-
                     \frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
-                \right)-\phi_{0}\\[1em]
+                \right)-\phi_{0}\\[0.5em]
                 &=-\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
             \end{align}
         \end{subequations}
         Plugging this into the quadratic approximation in
         Eqn.~\ref{eqn:quadratic_taylor} yields:
-        \begin{align}
-            \psi(\rho,\,\phi_{s};\,\rho_{0},\,\phi_{0})
-            &=\psi_{0}+\psi^{\prime}_{0}(\phi_{s}-\phi_{0})
-                +\frac{1}{2}\psi^{\prime\prime}_{0}(\phi_{s}-\phi_{0})^{2}\\
-            &=\psi_{0}+\psi^{\prime}_{s}\left(
-                -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
-            \right)+
-            \frac{1}{2}\psi^{\prime\prime}_{s}\left(
-                -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
-            \right)^{2}\\
-            &=\psi_{0}
-                -\frac{1}{2}
-                \frac{\psi^{\prime\,2}_{0}}{\psi^{\prime\prime}_{0}}
-        \end{align}
+        \begin{subequations}
+            \begin{align}
+                \psi(\rho,\,\phi_{s};\,\rho_{0},\,\phi_{0})
+                &\approx\psi_{0}+\psi^{\prime}_{0}(\phi_{s}-\phi_{0})
+                    +\frac{1}{2}\psi^{\prime\prime}_{0}(\phi_{s}-\phi_{0})^{2}\\
+                &=\psi_{0}+\psi^{\prime}_{s}\left(
+                    -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+                \right)+
+                \frac{1}{2}\psi^{\prime\prime}_{s}\left(
+                    -\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+                \right)^{2}\\
+                &=\psi_{0}
+                    -\frac{1}{2}
+                    \frac{\psi^{\prime\,2}_{0}}{\psi^{\prime\prime}_{0}}
+            \end{align}
+        \end{subequations}
         The quadratic Fresnel approximation can be obtained once we
         evaluate these derivatives. First, we substitute $\phi=\phi_{0}$
-        into $\xi$, $\eta$.
+        into $\xi$ and $\eta$:
         \begin{align}
             \xi_{\phi=\phi_{0}}
-            &=\cos(B)\cos(\phi_{0})\frac{\rho-\rho_{0}}{D}\\
+            &=\cos(B)\cos(\phi_{0})\left(
+                \frac{\rho-\rho_{0}}{D}
+            \right)\\
             \eta_{\phi=\phi_{0}}
             &=\left(\frac{\rho-\rho_{0}}{D}\right)^{2}
         \end{align}
-        Define the auxiliary parameters $\alpha$ and $x$ via:
+        Define the auxiliary parameters $\alpha$ and $x$ by:
         \begin{align}
+            \label{eqn:alpha_and_x}
             \alpha&=\cos(B)\cos(\phi_{0})\\
             x&=\frac{\rho-\rho_{0}}{D}
         \end{align}
@@ -294,12 +321,15 @@
         touch upon that in the next section.
         \par\hfill\par
         The partial derivatives for $\psi$ can be obtained from the partial
-        derivatives of $\xi$ and $\eta$. We have:
+        derivatives of $\xi$ and $\eta$. For $\xi$ we have:
         \begin{align}
             \xi^{\prime}
             &=-\cos(B)\sin(\phi)\frac{\rho}{D}\\
             \xi^{\prime\prime}
-            &=-\cos(B)\cos(\phi)\frac{\rho}{D}\\
+            &=-\cos(B)\cos(\phi)\frac{\rho}{D}
+        \end{align}
+        and for $\eta$ the derivatives are:
+        \begin{align}
             \eta^{\prime}
             &=\frac{2\rho\rho_{0}\sin(\phi-\phi_{0})}{D^{2}}\\
             \eta^{\prime\prime}
@@ -336,9 +366,9 @@
             \psi^{\prime\prime}_{0}
             =kD\left(
                 \frac{%
-                    -2\alpha\rho{D}+2\rho\rho_{0}
+                    -\alpha\rho{D}+\rho\rho_{0}
                 }{%
-                    2D^{2}(1-2\alpha{x}+x^{2})^{1/2}
+                    D^{2}(1-2\alpha{x}+x^{2})^{1/2}
                 }
                 -\frac{%
                     \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
@@ -348,7 +378,381 @@
                 -\frac{\alpha\rho}{D}
             \right)
         \end{equation}
-    \section{Applications of Legendre Polynomial}
+        Considering the approximation
+        $%
+            \psi\approx%
+            \psi_{0}-\frac{1}{2}\psi^{\prime\,2}_{0}/\psi^{\prime\prime}_{0}%
+        $,
+        if we compute the Taylor series for this expression in terms of
+        $\rho$, centered about $\rho_{0}$, one finds the that constant and
+        linear terms are zero, and quadratic factor is:
+        \begin{equation}
+            \psi_{F}=
+            \frac{1}{2}
+            \frac{kD\sin^{2}(B)}{1-\sin^{2}(\phi_{0})\cos^{2}(B)}
+            \left(
+                \frac{\rho-\rho_{0}}{D}
+            \right)^{2}
+        \end{equation}
+        Rewriting this in terms of the Fresnel scale $F$
+        (Eqn.\ref{eqn:fresnel_scale}) yields the Fresnel approximation:
+        \begin{equation}
+            \psi_{F}
+            =\frac{\pi}{2}\left(
+                \frac{\rho-\rho_{0}}{F}
+            \right)^{2}
+        \end{equation}
+        Doing this calculation by hand quickly becomes in exercise in tedium.
+        Using the \texttt{sympy} package in Python can greatly ease this burden.
+        A short script for this can be found in the appendix.
+        \par\hfill\par
+        The quadratic Fresnel transform is then:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\frac{1-i}{2F}\int_{0}^{\infty}
+                T(\rho)\,\exp\left(
+                    \frac{i\pi}{2}\left(\frac{\rho-\rho_{0}}{F}\right)^{2}
+                \right)\,\textrm{d}\rho
+        \end{equation}
+        In practice, the limits of the integral are reduced to
+        $\rho_{0}\pm{W}/2$, where $W$ is the window width given by the
+        desired resolution. Because of this, we may assume
+        $T(\rho)$ is zero for sufficiently large $\rho$.
+        We may also extend the domain of $T$ to the negative real numbers, and
+        define $T(\rho)=0$ whenever $\rho<0$. These two assumptions mean that
+        $T$ is compactly supported. We now rewrite our transform as follows:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\frac{1-i}{2F}\int_{-\infty}^{\infty}
+                T(\rho)\,\exp\left(
+                    \frac{i\pi}{2}\left(\frac{\rho-\rho_{0}}{F}\right)^{2}
+                \right)\,\textrm{d}\rho
+        \end{equation}
+        This is the formula for the convolution of $T$ with the complex
+        Fresnel kernel $\exp(i\psi_{F})$. That is:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\frac{1-i}{2F}\big(T*\exp(i\psi_{F})\big)(\rho_{0})
+        \end{equation}
+        Since $T$ is compactly supported, and $\exp(i\psi_{F})$ is integrable,
+        we may apply the convolution theorem. Taking the Fourier transform
+        of both sides yields:
+        \begin{subequations}
+            \begin{align}
+                \mathcal{F}_{\xi}(\hat{T})
+                &=\mathcal{F}_{\xi}\left(
+                    \frac{1-i}{2F}\big(T*\exp(i\psi_{F})\big)(\rho_{0})
+                \right)\\
+                &=\frac{1-i}{2F}\mathcal{F}_{\xi}\left(T\right)\cdot
+                    \mathcal{F}_{\xi}\left(\exp(i\psi_{F})\right)
+            \end{align}
+        \end{subequations}
+        We may solve for $T$ using the inverse Fourier transform. We have:
+        \begin{equation}
+            T(\rho)=\frac{2F}{1-i}\mathcal{F}^{-1}_{\rho}\left(
+                \frac{%
+                    \mathcal{F}_{\xi}(\hat{T})%
+                }{%
+                    \mathcal{F}_{\xi}(\exp(i\psi_{F}))
+                }
+            \right)
+        \end{equation}
+        Applying techniques from Fourier analysis, this reduces to:
+        \begin{equation}
+            T(\rho)=\frac{1+i}{2F}\int_{-\infty}^{\infty}
+                \hat{T}(\rho_{0})\exp\left(
+                    -\frac{i\pi}{2}\left(\frac{\rho-\rho_{0}}{F}\right)^{2}
+                \right)\,\textrm{d}\rho_{0}
+        \end{equation}
+        Numerical evaluation of this expression can lead to accurate
+        ring profiles when the angle $B$ is not too small, or when the
+        desired resolution is not excessively fine. See
+        [INSERT PLOT HERE].
+        \par\hfill\par
+        For a more general $\psi$ we define an approximate inverse using this
+        formula. We write:
+        \begin{equation}
+            T(\rho)
+            \approx\frac{1+i}{2F}\int_{-\infty}^{\infty}
+                \hat{T}(\rho_{0})\exp\left(
+                    -i\psi(\rho,\,\phi_{s}\;\rho_{0},\,\phi_{0})
+                \right)\,\textrm{d}\rho_{0}
+        \end{equation}
+        where $\phi_{s}$ is again the stationary azimuthal angle.
+    \section{Applications of Legendre Polynomials}
+        To obtain the Fresnel approximation, we started with exacts formulas
+        for $\psi_{0}$, $\psi^{\prime}_{0}$, and $\psi^{\prime\prime}_{0}$,
+        and then proceeded to approximate $\psi$ via
+        $%
+            \psi\approx%
+            \psi_{0}-\frac{1}{2}\psi^{\prime\,2}_{0}/\psi^{\prime\prime}_{0}%
+        $.
+        We then estimate this final expression using a quadratic
+        Taylor series in $\rho$ centered about $\rho_{0}$. If we do some
+        bookkeeping, we can obtain an expansion for this expression in terms of
+        Legendre polynomials. These polynomials are defined as the
+        solution obtained from the power series method for the Legendre
+        differential equation:
+        \begin{equation}
+            (1-\alpha^{2})P^{\prime\prime}_{n}(\alpha)
+            -2\alpha{P}^{\prime}_{n}(\alpha)
+            +n(n+1)P_{n}(\alpha)=0
+        \end{equation}
+        The $n^{\textrm{th}}$ polynomial can be obtained from Bonnet's
+        recursion formula:
+        \begin{equation}
+            P_{n+2}(\alpha)
+            =\frac{(2n+3)\alpha{P}_{n+1}(\alpha)-(n+1)P_{n}(\alpha)}{n+2}
+        \end{equation}
+        starting with $P_{0}(\alpha)=1$ and $P_{1}(\alpha)=\alpha$.
+        The key fact we need is that the Legendre polynomials produce
+        the following generating function:
+        \begin{equation}
+            \sum_{n=0}^{\infty}P_{n}(\alpha)x^{n}
+            =\frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}
+        \end{equation}
+        This formula is valid for $|x|<1$. Since $x=(\rho-\rho_{0})/D$, and
+        since $W<<D$, for all $x$ under consideration this equation is true.
+        The Taylor series for $\psi_{0}$ in terms of $x$ centered about
+        the origin can be readiliy computed from this:
+        \begin{subequations}
+            \begin{align}
+                \psi_{0}
+                &=kD\left(\sqrt{1-2\alpha{x}+x^{2}}+\alpha{x}-1\right)\\
+                &=kD\left(
+                    -1+\alpha{x}+
+                    (1-2\alpha{x}+x^{2})\sum_{n=2}^{\infty}P_{n}(\alpha)x^{n}
+                \right)\\
+                &=kD\left(
+                    \frac{1-\alpha^{2}}{2}x^{2}
+                    +\frac{\alpha(1-\alpha^{2})}{3}x^{2}
+                    +\frac{-4\alpha^{4}+6\alpha^{2}-1}{8}x^{4}
+                    +\cdots
+                \right)
+            \end{align}
+        \end{subequations}
+        The partial derivative, $\psi^{\prime}_{0}$, also has a nice formula:
+        \begin{subequations}
+            \begin{align}
+                \psi^{\prime}_{0}
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}\left(
+                    \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+                \right)\\
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}
+                    \sum_{n=1}^{\infty}P_{n}(\alpha)x^{n}\\
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}\left(
+                    \alpha{x}
+                    +\frac{3\alpha^{2}-1}{2}x^{2}
+                    +\cdots
+                \right)
+            \end{align}
+        \end{subequations}
+        where we have made use of the fact that $P_{0}(\alpha)=1$ to simplify
+        our sum. The coefficients in the expansion for $\psi_{0}$ can be
+        expressed in terms of $\alpha$ and the Legendre polynomials.
+        We now demonstrate this fact.
+        \begin{subequations}
+            \begin{align}
+                \frac{\textrm{d}}{\textrm{d}x}\left(
+                    \sqrt{1-2\alpha{x}+x^{2}}
+                \right)
+                &=\frac{x-\alpha}{\sqrt{1-2\alpha{x}+x^{2}}}\\
+                &=(x-\alpha)\sum_{n=0}^{\infty}P_{n}(\alpha)x^{n}\\
+                &=\sum_{n=0}^{\infty}P_{n}(\alpha)x^{n+1}
+                    -\sum_{n=0}^{\infty}\alpha{P}_{n}(\alpha)x^{n}
+            \end{align}
+        \end{subequations}
+        Integrating term-by-term, we obtain:
+        \begin{subequations}
+            \begin{align}
+                \sqrt{1-2\alpha{x}+x^{2}}
+                &=1+\sum_{k=0}^{\infty}P_{n}(\alpha)\frac{x^{n+2}}{n+2}
+                    -\sum_{n=0}^{\infty}P_{n}(\alpha)\frac{x^{n+1}}{n+1}\\
+                &=1-\alpha{x}+\sum_{k=0}^{\infty}
+                    \frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}x^{n+2}
+            \end{align}
+        \end{subequations}
+        where we have again used the fact that $P_{0}(\alpha)=1$ to shift the
+        index of the right-most sum by one, pulling out a $-\alpha{x}$
+        term in the process. Shifting the constant and linear terms to
+        the left-hand side, we obtain:
+        \begin{equation}
+            \sqrt{1-2\alpha{x}+x^{2}}+\alpha{x}-1
+            =\sum_{k=0}^{\infty}
+                \frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}x^{n+2}
+        \end{equation}
+        The function $\psi_{0}$ then becomes:
+        \begin{equation}
+            \psi_{0}
+            =kD\sum_{n=0}^{\infty}
+                \frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}x^{n+2}
+            =kD\sum_{n=0}^{\infty}
+                b_{n}(\alpha)x^{n+2}
+        \end{equation}
+        where $b_{n}(\alpha)$ is our new
+        \textit{modified Legendre polynomial}:
+        \begin{equation}
+            b_{n}(\alpha)=\frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}
+        \end{equation}
+        The problem is that $\phi_{0}$ does not sufficiently approximate the
+        stationary azimuthal angle $\phi_{s}$. Because of this, using
+        $\psi_{0}$ directly in our inversion formula will result in a
+        very poor ring profile. We reintroduce the terms from the Newton
+        iterate to account for this. That is, we consider the
+        factor $-\psi^{\prime\,2}_{0}/\psi^{\prime\prime}_{0}$ in our
+        expansion. The second partial
+        derivative can be approximated fairly well by the constant term
+        for window sizes that arise from reasonable resolutions
+        (say, one kilometer). The constant approximation is given by the
+        Taylor series in $\rho$ centered about $\rho_{0}$. We have:
+        \begin{equation}
+            \psi^{\prime\prime}_{0}
+            \approx{kD}\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)\left(
+                \frac{\rho_{0}}{D}
+            \right)^{2}
+        \end{equation}
+        The expression
+        $\psi_{0}-\frac{1}{2}\psi^{\prime\,2}_{0}/\psi^{\prime\prime}_{0}$
+        then becomes:
+        \begin{subequations}
+            \begin{align}
+                \psi
+                &\approx\psi_{0}-
+                    \frac{1}{2}\psi^{\prime\,2}_{0}/\psi^{\prime\prime}_{0}\\
+                &\approx
+                \psi_{0}-\frac{1}{2}
+                \frac{\psi^{\prime\,2}_{0}}{%
+                    kD\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
+                    \left(\frac{\rho_{0}}{D}\right)^{2}
+                }\\
+                &=\psi_{0}-\frac{1}{2}
+                    \frac{%
+                        \left(
+                            kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}
+                        \right)^{2}
+                    }{%
+                        kD\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
+                        \left(\frac{\rho_{0}}{D}\right)^{2}
+                    }\left(
+                        \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+                    \right)^{2}\\
+                &=\psi_{0}-
+                    \frac{%
+                        kD\cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}%
+                    }{%
+                        2\left(
+                            1-\cos^{2}(B)\sin^{2}(\phi_{0})
+                        \right)\rho_{0}^{2}
+                    }\left(
+                        \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+                    \right)^{2}\\
+                &=\psi_{0}-
+                    \frac{%
+                        kD\cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}%
+                    }{%
+                        2\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
+                        \rho_{0}^{2}
+                    }\left(
+                        \sum_{n=1}^{\infty}P_{n}(\alpha)x^{n}
+                    \right)^{2}\\
+                &=kD\left(
+                    \sum_{n=0}^{\infty}b_{n}(\alpha)x^{n+2}-
+                    \frac{%
+                        \cos^{2}(B)\sin^{2}(\phi_{0})\rho_{0}^{2}
+                    }{%
+                        2\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
+                        \rho_{0}^{2}
+                    }\left(
+                        \sum_{n=1}^{\infty}P_{n}(\alpha)x^{n}
+                    \right)^{2}
+                \right)
+            \end{align}
+        \end{subequations}
+        where again we use $P_{0}(\alpha)=1$ to start the index
+        of the right-most sum at $n=1$. The quartic, sextic, and octic
+        truncations of this formula yield more
+        accurate reconstructions than the classic Fresnel approximation. We
+        compute partial sums by using the Cauchy product formula for the
+        right-most sum that is squared. We have:
+        \begin{equation}
+            \left(\sum_{n=1}^{\infty}P_{n}(\alpha)x^{n}\right)^{2}
+            =\sum_{n=0}^{\infty}c_{n}(\alpha)x^{n+2}
+        \end{equation}
+        where $c_{n}$ is the sum of the cross-terms from the Cauchy product:
+        \begin{equation}
+            c_{n}(\alpha)=\sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+        \end{equation}
+        The expansion for $\psi$ then becomes:
+        \begin{equation}
+            \label{eqn:fresnel_legendre_formula}
+            \psi\approx
+            kD\sum_{n=0}^{\infty}\left(
+                b_{n}(\alpha)-
+                \frac{%
+                    \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
+                }{%
+                    2\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
+                    \rho_{0}^{2}
+                }
+                c_{n}(\alpha)
+            \right)x^{n+2}
+        \end{equation}
+        We define the \textbf{Fresnel-Legendre} coefficients to be the
+        summand of this formula:
+        \begin{equation}
+            \label{eqn:fresnel_legendre_coeffs}
+            F_{n}(\alpha,\,\beta)
+            =\frac{P_{n}-\alpha{P}_{n+1}(\alpha)}{n+2}
+                -\beta\sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+        \end{equation}
+        where:
+        \begin{equation}
+            \beta=
+            \frac{%
+                \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
+            }{%
+                2(1-\cos^{2}(B)\sin^{2}(\phi_{0}))\rho_{0}^{2}
+            }
+        \end{equation}
+        Rewriting Eqn.~\ref{eqn:fresnel_legendre_formula} in terms of
+        these new variables, we have:
+        \begin{equation}
+            \psi\approx{k}D\sum_{n=0}^{N}F_{n}(\alpha,\,\beta)x^{n+2}
+        \end{equation}
+        Using $N=2$ is sufficient for nearly all of the Cassini occultation
+        observations with 1 kilometer resolutions. Substituting $N=4$
+        allows one to explore higher resolutions. The Uranus data from the
+        Voyager mission can also be processed using $N=2$.
     \section{Implementation and Results}
-
+    \section{Limitations}
+    \setcounter{secnumdepth}{0}
+    \section{Appendix A: Fresnel Approximation via \texttt{sympy}}
+        The following script symbolically calculates the Fresnel approximation.
+        It is written in Python using the \texttt{sympy} package.
+        \begin{lstlisting}[language = Python]
+import sympy
+sympy.init_printing()
+r, r0, phi, phi0, B, D = sympy.symbols('r r0 phi phi0 B D')
+xi = sympy.cos(B) * (r*sympy.cos(phi) - r0*sympy.cos(phi0)) / D
+eta = (r**2 + r0**2 - 2*r*r0*sympy.cos(phi - phi0)) / D**2
+psi = sympy.sqrt(1 - 2*xi + eta) + xi - 1
+psi_prime = sympy.diff(psi, phi)
+psi_2prime = sympy.diff(psi_prime, phi)
+psi0 = psi.subs(phi, phi0)
+psi_prime0 = psi_prime.subs(phi, phi0)
+psi_2prime0 = psi_2prime.subs(phi, phi0)
+psi_approx = psi0 - psi_prime0**2 / psi_2prime0 / 2
+psi_series = sympy.series(psi_approx, x = r, x0 = r0, n = 3).removeO()
+psi_simplify = sympy.simplify(psi_series)
+print(psi_simplify)
+        \end{lstlisting}
+        The output is:
+        \begin{equation}
+            \texttt{%
+                -(r - r0)**2*sin(B)**2/(2*D**2*(sin(phi0)**2*cos(B)**2 - 1))%
+            }
+        \end{equation}
+        By multiplying this by $kD$, and rewriting this in terms of $F$,
+        we obtain the Fresnel approximation.
+    \section{Appendix B: Elliptical Rings}
 \end{document}
