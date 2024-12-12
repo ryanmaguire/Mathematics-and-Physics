@@ -19,6 +19,7 @@
 %------------------------------------------------------------------------------%
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -32,6 +33,8 @@
     linewidth = 360.0pt,
     showstringspaces = false
 }
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
 
 % Title page information.
 \title{%
@@ -662,7 +665,7 @@
                 &=kD\left(
                     \sum_{n=0}^{\infty}b_{n}(\alpha)x^{n+2}-
                     \frac{%
-                        \cos^{2}(B)\sin^{2}(\phi_{0})\rho_{0}^{2}
+                        \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
                     }{%
                         2\left(1-\cos^{2}(B)\sin^{2}(\phi_{0})\right)
                         \rho_{0}^{2}
@@ -728,11 +731,99 @@
         allows one to explore higher resolutions. The Uranus data from the
         Voyager mission can also be processed using $N=2$.
     \section{Implementation and Results}
+        Direct evaluation of the modified Legendre polynomial using Eqn BLAH
+        requires the regular Legendre polynomials to have already been
+        computed. We can skip this by inventing a new recursive relation
+        for $b_{n+2}(x)$ in terms of $b_{n}(x)$ and $b_{n+1}(x)$, and then
+        compute in an upward iterative fashion. We prove the following.
+        \begin{theorem}
+            The modified Legendre polynomials satisfy the recursion relation:
+            \begin{equation}
+                b_{n+2}(x)=
+                \frac{(2n+5)xb_{n+1}(x)-(n+1)b_{n}(x)}{n+4}
+            \end{equation}
+            starting with $b_{0}(x)=(1-x^{2})/2$ and $b_{1}(x)=x(1-x^{2})/2$.
+        \end{theorem}
+        \begin{proof}
+            The initial conditions $b_{0}(x)$ and $b_{1}(x)$ can be obtained
+            directly from the definition of $b_{n}(x)$, which is
+            $(P_{n}(x)-xP_{n+1}(x))/(n+2)$, combined with the first few
+            terms in the Legendre sequence: $P_{0}(x)=1$, $P_{1}(x)=x$, and
+            $P_{2}(x)=(3x^{2}-1)/2$. The general recursion relation can be
+            proven by expanding $b_{n+1}(x)$ and $b_{n}(x)$ in terms of the
+            Legendre polynomials, and applying the Bonnet recursion formula.
+            We have:
+            \begin{equation}
+                \begin{aligned}
+                    &\frac{(2n+5)xb_{n+1}(x)-(n+1)b_{n}(x)}{n+4}\\
+                    &\quad\quad=\frac{%
+                        (2n+5)x\frac{P_{n+1}(x)-P_{n+2}(x)}{n+3}-
+                        (n+1)\frac{P_{n}(x)-xP_{n+1}(x)}{n+2}
+                    }{n+4}
+                \end{aligned}
+            \end{equation}
+            Reversing the Bonnet formula and solving for $P_{n}(x)$ gives us:
+            \begin{equation}
+                P_{n}(x)=\frac{(2n+3)xP_{n+1}(x)-(n+2)P_{n+2}(x)}{n+1}
+            \end{equation}
+            If we substitute $P_{n}(x)$ into the previous equation we get an
+            expression in terms of $P_{n+1}(x)$ and $P_{n+2}(x)$ alone.
+            Again using the Bonnet recursion formula, but for $P_{n+3}(x)$,
+            this simplifies to:
+            \begin{equation}
+                \frac{(2n+5)xb_{n+1}(x)-(n+1)b_{n}(x)}{n+4}
+                =\frac{P_{n+2}(x)-xP_{n+3}(x)}{n+4}
+            \end{equation}
+            which is the defining equation for $b_{n+2}(x)$.
+        \end{proof}
+        This formula allows us to compute $b_{n}(x)$ in an upward iterative
+        fashion without precomputing the Legendre polynomial. The real
+        bottleneck in the computation of the Fresnel-Legendre polynomials is
+        the evaluation of the Cauchy product, which runs in quadratic time.
+        We introduce a new formulation that can be computed linearly. The
+        functions $c_{n}(\alpha)$, by definition, satisify the following
+        equation:
+        \begin{equation}
+            \sum_{n=0}^{\infty}c_{n}(\alpha)x^{n+2}
+            =\left(
+                \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+            \right)^{2}
+        \end{equation}
+        Expanding the right-hand side yields:
+        \begin{equation}
+            \sum_{n=0}^{\infty}c_{n}(\alpha)x^{n+2}
+            =\frac{1}{1-2\alpha{x}+x^{2}}
+            -\frac{2}{\sqrt{1-2\alpha{x}+x^{2}}}
+            +1
+        \end{equation}
+        We can see that the generating function for the Legendre polynomials
+        appear once again, but this left-most expression is actually the
+        generating function for the Chebyshev polynomials of the second kind.
+        That is:
+        \begin{equation}
+            \sum_{n=0}^{\infty}U_{n}(\alpha)x^{n}
+            =\frac{1}{1-2\alpha{x}+x^{2}}
+        \end{equation}
+        These polynomials also have a recursive formula:
+        \begin{equation}
+            U_{n+2}(\alpha)=2\alpha{U}_{n+1}(\alpha)-U_{n}(\alpha)
+        \end{equation}
+        starting with $U_{0}(\alpha)=1$ and $U_{1}(\alpha)=2x$. Thus, we have:
+        \begin{equation}
+            \sum_{n=0}^{\infty}c_{n}(\alpha)x^{n+2}
+            =\sum_{n=0}^{\infty}\left(
+                U_{n+2}(\alpha)-2P_{n+2}(\alpha)
+            \right)x^{n+2}
+        \end{equation}
+        Comparing coefficients, we obtain the following simple expression:
+        \begin{equation}
+            c_{n}(\alpha)=U_{n+2}(\alpha)-2P_{n+2}(\alpha)
+        \end{equation}
     \section{Limitations}
         The primary source of error in this method is the assumption that
         the first iteration of Newton's method yields a sufficient
         approximation for the stationary azimuthal angle. The case where the
-        opening angle $B$ is right, $B=\pi/2$, is the most ideal.
+        opening angle is $B=\pi/2$ is most ideal.
         The $\xi$ term becomes $0$ since $\cos(\pi/2)=0$, meaning the
         Fresnel kernel $\psi$ reduces to:
         \begin{equation}
@@ -748,7 +839,7 @@
         \end{equation}
         The stationary azimuthal angle is thus \textbf{exactly}
         $\phi_{s}=\phi_{0}$. Using the fact that $\eta_{\phi=\phi_{0}}=x^{2}$,
-        we then get the follow exact formula for the stationary Fresnel
+        we then get the following exact formula for the stationary Fresnel
         kernel:
         \begin{equation}
             \label{eqn:stationary_fresnel_with_b_zero}
@@ -763,14 +854,14 @@
         use Eqn.~\ref{eqn:stationary_fresnel_with_b_zero} directly.
         \par\hfill\par
         The formula in Eqn.~\ref{eqn:stationary_fresnel_with_b_zero} can be
-        used for Voyager data with Uranus since $B$ is very close to 90
-        degrees, but for Saturn the opening angle never exceeds $30^{\circ}$.
+        used for Voyager data with Uranus since $B$ is very close to begin a
+        right angle, but for Saturn the opening never exceeds $30^{\circ}$.
         Disregarding the Newtonian correction leads to meaningless results, but
         the first iteration of Newton's method may also be insufficient. The
         issue with Saturn is that the angle $B$ can be arbitrarily close to
         zero (if $B=0$ the Huygens' principal is not well-formed and we do not
         attempt to perform Fresnel inversion). Indeed, Cassini's Rev133 had an
-        opening angle of only a few degrees. This causes the first Newton
+        opening angle of less than 2 degrees. This causes the first Newton
         iterate to be a poor approximation for the stationary azimuthal angle,
         meaning both the Fresnel approximation, and these new Fresnel-Legendre
         approximations, are inadequate. One must perform additional iterations
