@@ -1,0 +1,393 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2024/12/02                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = blue}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\graphicspath{{../images/}}
+\definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+\lstset{
+    basicstyle = \small,
+    basewidth = 6.0pt,
+    linewidth = \textwidth,
+    keywordstyle = \color{blue},
+    captionpos = b,
+    showstringspaces = false
+}
+\mdfsetup{%
+    outerlinewidth = 1.25,%
+    roundcorner = 6pt,%
+    linecolor = blue!60!black,%
+    backgroundcolor = black!10!white,%
+    innertopmargin = -1,%
+    innerbottommargin = -1,%
+    innerleftmargin = 5
+}
+
+\lstdefinelanguage[x64]{Assembler}
+{
+    morekeywords = {
+        mulsd, roundsd, xmm0, xmm1, add, addsd, sub, subsd,
+        mov, movsd, movapd, quad, rsp, r
+    }
+}
+
+\lstdefinelanguage[aarch64]{Assembler}
+{
+    morekeywords = {
+        fmov, fmul, frintz, fmsub, ret
+    }
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+% Title page information.
+\title{%
+    Fast and Accurate Evaluation of Trigonometric Functions
+    with a Normalized Argument
+}
+\author{%
+    Ryan Maguire\footnote{%
+        Department of Mathematics,
+        MIT, Cambridge, MA 02139, USA
+    }
+}
+\date{\today}
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        It is common in mathematics and physics to see expressions of the form
+        $\sin(\pi{x})$ or $\cos(\pi{x})$ where $x$ is some unitless
+        parameter. Simple examples include Fraunhofer diffraction, which uses
+        the normalized $\textrm{sinc}$ function, and Fresnel diffraction, where
+        the Fresnel cosine and Fresnel sine functions are employed.
+        Algorithms such as the one described in
+        \cite{NgArgumentReductionForPi} allow us to compute
+        $\sin(x)$ and $\cos(x)$ accurately for all single or double precision
+        floating point numbers, and modifications for extended and quadruple
+        precisions have been implemented in \texttt{glibc}
+        \cite{GLIBC}, \texttt{OpenLibm} \cite{OpenLibm}, and others
+        (\cite{FreeBSDmsun},
+        \cite{NetlibLibm},
+        \cite{OpenBSDLibm}), but na\"{i}vely computing
+        $\texttt{cos(M\_PI*x)}$ or $\texttt{sin(M\_PI*x)}$ can lead to
+        serious precision loss. In this paper we describe a simple method for
+        quickly evaluating trigonometric functions with argument
+        $\pi{x}$, where $x$ is an IEEE-754 floating point number
+        (32-bit single, 64-bit double, 80-bit extended, or 128-bit quadruple),
+        or a 128-bit double-double.
+    \end{abstract}
+    \tableofcontents
+    \section{The Algorithm}
+        The standard mathematical library in the C programming language is
+        required to provide $\cos$, $\sin$, and $\tan$ for inputs in radians.
+        Some compilers for other languages provide these functions with inputs
+        in degrees, usually naming the functions $\textrm{cosd}$,
+        $\textrm{sind}$, and $\textrm{tand}$, respectively, but prior to the
+        new \texttt{C23} standard, the functions $\textrm{cospi}$,
+        $\textrm{sinpi}$, and $\textrm{tanpi}$ were often omitted. The
+        \textit{normalized} variants are significantly easier to compute than
+        there radian or degree counterparts.
+        The trigonometric functions are periodic with period
+        $2\pi$; the degree variants have period $360$, and the normalized ones
+        have period $2$.
+        Computations in radians thus requires
+        computing $x\;\textrm{mod}\;\pi$, or some variant thereof, and this
+        is a difficult challenge. The calculation in degrees is signficantly
+        easier, but since $360$ is not a power of two the calculation
+        $x\;\textrm{mod}\;360$ is more cumbersome than computing
+        $x\;\textrm{mod}\;2$.\footnote{%
+            No \texttt{C} compiler that we tested optimizes
+            $\textrm{fmod}(x,\,360)$ in a way that is faster than doing out
+            the computation explicitly. The generated assembly simply calls
+            $\textrm{fmod}$, which often uses bit-tricks to perform the
+            calculation. The same is true of $\textrm{fmod}(x,\,2)$.
+        }
+        \par\hfill\par
+        Evaluation of $x\;\textrm{mod}\;2$ is very simple. With the
+        standard library, one could do:
+        \begin{mdframed}
+            \begin{lstlisting}[language={C}]
+#include <math.h>
+
+double mod2(double x)
+{
+    return x - 2.0 * trunc(0.5 * x);
+}
+            \end{lstlisting}
+        \end{mdframed}
+        Since most instruction sets provide truncation operations, we could
+        write this directly in assembly for a decent speed boost.
+        \texttt{libtmpl} uses the following for \texttt{x86\_64} machines:
+        \begin{mdframed}
+            \begin{lstlisting}[language={[x64]Assembler}]
+ASM_BEGIN(tmpl_Double_Mod_2)
+    sub     $24, %rsp
+    movsd   %xmm0, 8(%rsp)
+    mulsd   .TMPL_DOUBLE_MOD2_HALF_AS_HEX(%rip), %xmm0
+    roundsd $3, %xmm0, %xmm0
+    movsd   8(%rsp), %xmm1
+    add     $24, %rsp
+    addsd   %xmm0, %xmm0
+    subsd   %xmm0, %xmm1
+    movapd  %xmm1, %xmm0
+    ret
+
+.TMPL_DOUBLE_MOD2_HALF_AS_HEX:
+    .quad 0x3FE0000000000000
+ASM_END(tmpl_Double_Mod_2)
+            \end{lstlisting}
+        \end{mdframed}
+        \newpage
+        The code for \texttt{aarch64} machines is shorter:
+        \begin{mdframed}
+            \begin{lstlisting}[language={[aarch64]Assembler}]
+ASM_BEGIN(tmpl_Double_Mod_2)
+    fmov    d31, 5.0e-1
+    fmov    d30, 2.0e+0
+    fmul    d31, d0, d31
+    frintz  d31, d31
+    fmsub   d0, d31, d30, d0
+    ret
+ASM_END(tmpl_Double_Mod_2)
+            \end{lstlisting}
+        \end{mdframed}
+        The computation of $\cos(\pi{x})$, $\sin(\pi{x})$, and $\tan(\pi{x})$
+        all follow the same scheme.
+        \begin{enumerate}
+            \item
+                For \texttt{nan} or \texttt{inf}, return \texttt{nan}.
+            \item
+                If $|x|$ is very small, use the first term in the Taylor
+                series expansion ($\pi{x}$ for $\sin$ and $\tan$, 1 for
+                $\cos$). For slightly larger (say, less than $1/16$), a
+                Maclaurin or Remez polynomial of small degree may be used.
+            \item
+                For small $|x|$, say $|x|<\frac{1}{2}$, a rational Remez
+                approximation can be used, greatly speeding up the computation.
+                Since $\sin(x)/x$, $\tan(x)/x$, and $\cos(x)$ are all even
+                with respect to $x$, then degree $(2n,\,2m)$ rational Remez
+                approximation requires $n+1$ non-zero terms in the numerator
+                and $m+1$ non-zero terms in the denominator. We obtain a very
+                accurate approximation using only a few terms.
+            \item
+                For all other inputs, reduce to $y=|x|\;\textrm{mod}\;2$.
+                Write $y=r+\textrm{d}r$ where $r$ is an integer multiple of
+                $2^{-7}$ and $|\textrm{d}r|<2^{-7}$. Compute using a lookup
+                table, combined with the angle-sum formula.
+        \end{enumerate}
+        The bulk of the problem is the computation of $r$ and $\textrm{d}r$.
+        We now give the full description for $\sin(\pi{x})$ assuming 64-bit
+        floating point precision (1 bit for the sign, 11 bits for the exponent,
+        and 52 bits for the mantissa).
+        \par\hfill\par
+        Let $\oplus$, $\ominus$, and $\otimes$ denote floating point addition,
+        subtraction, and multiplication, respectively. We use \texttt{C} family
+        syntax and write \texttt{>>} for bit-shifting to the right,
+        $\veebar$ denotes bit-wise exclusive-or, and
+        $\land$ represents bit-wise and.
+        After setting $y=|x|\;\textrm{mod}\;2$, we compute:
+        \begin{equation}
+            s=y\oplus{2}^{45}
+        \end{equation}
+        Since $0\leq{y}<2$, and since floating point arithmetic truncates the
+        result, the last eight bits of $s$ now store the values of the one's bit
+        down to the $2^{-7}$ bit in $y$, correctly rounded. We create our
+        lookup tables by precomputing $\cos(\pi{r}_{n})$ and
+        $\sin(\pi{r}_{n})$ with $r_{n}=n\times2^{-7}$ for
+        $n=0,\,1,\,\dots,\,127$. The value $n$ is then just the last 7 bits of
+        $s$, read in binary as a whole number. Let $\textrm{LEB}$ denote the
+        \textit{last eight bits} of a floating point number, and let
+        $\textrm{SIGN}(x)$ be the sign bit of the floating point number $x$
+        (zero if positive, one if negative).
+        \begin{align}
+            \ell&=\textrm{LEB}(s)\\
+            n&=\ell\land\textrm{0x7F}\\
+            \textrm{neg}&=(\ell\;\texttt{>>}\;7)\veebar\textrm{SIGN}(x)\\
+            \textrm{d}r&=y\ominus(s\ominus2^{45})
+        \end{align}
+        $n$ is now the index for the lookup table, and $\textrm{neg}$ determines
+        if we need to negate the output, but it is not obvious as to why.
+        The last nine bits of $s$ determine a number $r$ such that
+        $0\leq{r}\leq{2}$, and such that the least significant bit is not
+        smaller than the $2^{-7}$ place. That is, since $0\leq{y}<2$, and since
+        $s=y\oplus{2}^{45}=y\oplus{2}^{53-8}$, the last nine bits of $s$
+        correspond to $y$ correctly rounded to the $2^{-7}$ bit. It is hence
+        possible for $r=2$ to occur if, say, $y=2-2^{-8}$. In this case, the
+        lowest eight bits are zero, and the ninth bit is one.
+        \par\hfill\par
+        Should the eighth bit (which is $\ell\;\texttt{>>}\;7$)
+        be a zero, then either $0\leq{r}<1$, or $r=2$.
+        The \textrm{neg} Boolean is $0\veebar\texttt{SIGN}(x)=\texttt{SIGN}(x)$,
+        meaning we only negate the output if the sign bit of $x$ is set to 1.
+        In the case $0\leq{r}<1$ this makes sense since the index for the
+        lookup table corresponds to precisely the values of $r$.
+        In the latter case the index is zero, $\textrm{d}r$ is negative,
+        and we have:
+        \begin{align}
+            \sin(\pi{y})
+            &=\sin\Big(\pi(r+\textrm{d}r)\Big)\\
+            &=\sin(\pi{r}+\pi\textrm{d}r)\\
+            &=\cos(\pi{r})\sin(\pi\textrm{d}r)
+                +\sin(\pi{r})\cos(\pi\textrm{d}r)\\
+            &\approx
+            \textrm{costable}[0]\otimes\sin(\pi\textrm{d}r)
+                \oplus
+                \textrm{sintable}[0]\otimes\cos(\pi\textrm{d}r)\\
+            &=\sin(\pi\textrm{d}r)
+        \end{align}
+        We should again only negate this if $x$ is negative.
+        \par\hfill\par
+        If the eight bit is 1, then $1\leq{r}<2$. In this case, the index for
+        the table is the integer $n$ such that $r=1+n\times{2}^{-7}$. Examining
+        the lowest 7 bits of $s$ will again retrieve this value, and we may
+        resume the computation using:
+        \begin{equation}
+            \sin(\pi{y})=-\sin\Big(\pi(y-1)\Big)
+        \end{equation}
+        We pick a minus sign in this reduction. Since double negatives cancle,
+        we only need to negate the final output if either $x$ is negative,
+        or the eigth bit is 1, but not if both occur simultaneously. This is
+        the exclusive or, which justifies setting
+        $\textrm{neg}=(\ell\;\texttt{>>}\;7)\veebar\textrm{SIGN}(x)$.
+        \par\hfill\par
+        Note that if the index been computed by truncating $y$,
+        zeroing all of the bits smaller than $2^{-7}$,
+        then the index would be $127$ and $\textrm{d}r$
+        would be positive. The expression
+        $%
+            \textrm{costable}[127]\otimes\sin(\pi\textrm{d}r)%
+            \oplus%
+            \textrm{sintable}[0]\otimes\cos(\pi\textrm{d}r)%
+        $
+        rounds the result three times (once for each floating point operation),
+        and would cause very poor relative error for values $y<2$ that are very
+        close to $2$. The issue disappears entirely by using rounding since
+        $\cos(0)=1$ and $\sin(0)=0$, meaning the only error occurs in the
+        evaluation of $\sin(\pi\textrm{d}r)$. This is done with a Maclaurin
+        series, meaning as $y\rightarrow{2}$ we maintain excellent relative
+        error. Experiment shows the peak error is bounded by 2 ULP,
+        and the root-mean-square error is less then
+        half a ULP.
+    \section{The Program}
+        The function is so short that it can be included into this paper
+        (with comments removed). We have removed the middle lines of the
+        code that check if the input is \texttt{nan} or \texttt{inf},
+        and also handle small inputs using Remez approximations.
+        The full source (with comments) is available in \cite{MaguireLibtmpl}.
+        \par\hfill\par
+        We access the bits of a double by type punning. The struct used for
+        this is defined as follows (assuming little endianness):
+        \begin{mdframed}
+            \begin{lstlisting}[language={C}]
+typedef union tmpl_IEEE754_Double_Def {
+    struct {
+        unsigned int man3 : 16;
+        unsigned int man2 : 16;
+        unsigned int man1 : 16;
+        unsigned int man0 : 4;
+        unsigned int expo : 11;
+        unsigned int sign : 1;
+    } bits;
+    double r;
+} tmpl_IEEE754_Double;
+            \end{lstlisting}
+        \end{mdframed}
+        The definition is quite portable since bit-fields are required to
+        store at least as many bits as \texttt{unsigned int}, which the
+        standard requires to be at least 16. By making the most significant
+        part of the mantissa, \texttt{man0}, 4 bits and placing it next to the
+        12-bit sign and exponent block, we eliminate the likelyhood that
+        the struct will be padded in any way, resulting in valid type punning.
+        Every single compiler tested (\texttt{GCC}, \texttt{clang},
+        \texttt{TCC}, \texttt{PCC}, \texttt{aocc}, \texttt{ixx}, \texttt{MSVC})
+        handles this struct just fine.
+        \par\hfill\par
+        The setup is small, just a few declarations for tables and functions.
+        In what follows, the symbolic constant \texttt{TMPL\_STATIC\_INLINE}
+        expands to \texttt{static inline} on compilers supporting the
+        \texttt{inline} keyword, and \texttt{static} otherwise. The
+        definitions for the $\cos$ and $\sin$ Maclaurin series use
+        5 non-zero terms evaluated with Horner's method. The program is:
+        \newpage
+        \begin{mdframed}
+            \begin{lstlisting}[language={C}]
+extern const double tmpl_double_cospi_table[128];
+extern const double tmpl_double_sinpi_table[128];
+extern double tmpl_Double_Mod_2(double x);
+
+TMPL_STATIC_INLINE
+double tmpl_Double_CosPi_Maclaurin(double x){...}
+
+TMPL_STATIC_INLINE
+double tmpl_Double_SinPi_Maclaurin(double x){...}
+
+double tmpl_Double_SinPi(double x)
+{
+    double cos_pi_r, cos_pi_dr, sin_pi_r, sin_pi_dr;
+    double dr, out;
+    unsigned int lowest_eight_bits, index;
+    unsigned int negate, sign;
+    tmpl_IEEE754_Double w, shifted;
+    const double shifter = 3.5184372088832E+13;
+
+    w.r = x;
+
+    /* Handle nan, inf, and small x, not shown here. */
+
+    sign = w.bits.sign;
+    w.bits.sign = 0x00U;
+
+    w.r = tmpl_Double_Mod_2(w.r);
+    shifted.r = w.r + shifter;
+
+    lowest_eight_bits = (0x00FFU & shifted.bits.man3);
+    negate = (lowest_eight_bits >> 7U) ^ sign;
+    index = (lowest_eight_bits & 0x007FU);
+    dr = w.r - (shifted.r - shifter);
+
+    sin_pi_r = tmpl_double_sinpi_table[index];
+    cos_pi_r = tmpl_double_cospi_table[index];
+    sin_pi_dr = tmpl_Double_SinPi_Maclaurin(dr);
+    cos_pi_dr = tmpl_Double_CosPi_Maclaurin(dr);
+    out = cos_pi_r*sin_pi_dr + sin_pi_r*cos_pi_dr;
+
+    if (negate)
+        return -out;
+
+    return out;
+}
+            \end{lstlisting}
+        \end{mdframed}
+
+    \section{Verifying Accuracy}
+    \section{Relative Performance}
+    \bibliographystyle{plain}
+    \bibliography{bib.bib}
+\end{document}

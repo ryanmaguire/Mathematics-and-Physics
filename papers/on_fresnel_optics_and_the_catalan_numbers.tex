@@ -1,0 +1,300 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2024/12/20                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = blue}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\graphicspath{{../images/}}
+\lstset{
+    basicstyle = \small,
+    basewidth = 4.5pt,
+    linewidth = 360.0pt,
+    showstringspaces = false
+}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+% Title page information.
+\title{%
+    Applications of Legendre Polynomials for
+    Fresnel Inversion and Occultation Observations%
+}
+\author{%
+    Ben Adenbaum\footnote{%
+        Department of Mathematics,
+        Florida Gulf Coast University, Fort Myers, FL 33965, USA
+    }
+    \and
+    Ryan Maguire\footnote{%
+        Department of Mathematics,
+        MIT, Cambridge, MA 02139, USA
+    }
+}
+\date{\today}
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        We doing stuff.
+    \end{abstract}
+    \tableofcontents
+    \section{The Cylindrical Fresnel Transform}
+        Consider a plane wave of light incident on a cylindrically symmetric
+        aperture that lies in the $z=0$ plane. Let $\mathbf{R}$ be the position
+        vector of the observer, let $(\rho,\,\phi)$ denote the polar coordinates
+        of the plane, and define $B$ to be the angle made between the plane and
+        the line segment between the observer and the source of light.
+        Diffraction effects are described by the Fresnel-Huygens principle
+        given by the following integral equation:
+        \begin{equation}
+            \hat{T}(\rho_{0})
+            =\frac{1-i}{2F}\int_{0}^{\infty}
+                T(\rho)\exp\left(
+                    i\psi\left(\rho,\,\phi_{s};\,\rho_{0},\,\phi_{0}\right)
+                \right)\,\textrm{d}\rho
+        \end{equation}
+        where $F$ is the Fresnel scale,
+        $(\rho_{0},\,\phi_{0})$ is the point of interest in the plane,
+        $\psi$ is the Fresnel kernel, and $\phi_{s}$ is the stationary
+        angle for $\psi$ (the solution to $\partial\psi/\partial\phi=0$).
+        $\psi$ is a purely geometric quantity, given by:
+        \begin{subequations}
+            \begin{align}
+                \xi
+                &=\frac{\cos(B)}{D}\big(
+                    \rho\cos(\phi)-\rho_{0}\cos(\phi_{0})
+                \big)\\[1em]
+                \eta
+                &=\frac{%
+                    \rho^{2}+\rho_{0}^{2}-2\rho\rho_{0}\cos(\phi-\phi_{0})%
+                }{D^{2}}\\[1em]
+                \psi
+                &=kD\left(\sqrt{1-2\xi+\eta}+\xi-1\right)
+            \end{align}
+        \end{subequations}
+        where $D=||\mathbf{R}-\mathbf{r}||$, with $\mathbf{r}$ being the
+        position vector for $(\rho,\,\phi)$ in the plane. $\phi_{s}$ is
+        approximated using Newton's method with starting guess
+        $\phi_{s,\,1}=\phi_{0}$. The first iterate is then:
+        \begin{equation}
+            \phi_{s,\,1}
+            =\phi_{0}-\frac{\psi^{\prime}_{0}}{\psi^{\prime\prime}_{0}}
+        \end{equation}
+        where $\psi^{\prime}_{0}$ and $\psi^{\prime\prime}_{0}$ denote the
+        first and second partial derivatives of $\psi$ with respect to $\phi$
+        evaluated at $\phi=\phi_{0}$. If $B=\frac{\pi}{2}$, $\phi_{s}=\phi_{0}$
+        is exact, and if $B$ is not too small (say, greater than 30 degrees),
+        the first iterate is sufficient for numerical purposes. Using a
+        second order Taylor expansion yields the following approximation:
+        \begin{subequations}
+            \begin{align}
+                \psi_{s}&
+                \approx\psi_{0}+\psi^{\prime}_{0}(\phi_{s}-\phi_{0})
+                +\frac{1}{2}\psi^{\prime\prime}_{0}(\phi_{s}-\phi_{0})^{2}\\
+                &=\psi_{0}-\frac{1}{2}
+                    \frac{\psi^{\prime\prime\,2}_{0}}{\psi^{\prime\prime}_{0}}
+            \end{align}
+        \end{subequations}
+        where $\psi_{0}=\psi(\rho,\,\phi_{0};\,\rho_{0},\,\phi_{0})$.
+        Defining the new variables $x$ and $\alpha$ via:
+        \begin{subequations}
+            \begin{align}
+                \label{eqn:alpha_and_x}
+                \alpha&=\cos(B)\cos(\phi_{0})\\
+                x&=\frac{\rho-\rho_{0}}{D}
+            \end{align}
+        \end{subequations}
+        then $\psi_{0}$ and $\psi^{\prime}_{0}$ have the following explicit
+        formulas:
+        \begin{subequations}
+            \begin{align}
+                \psi_{0}
+                &=kD\left(
+                    \sqrt{1-2\alpha{x}+x^{2}}+x-1
+                \right)\\
+                \psi^{\prime}_{0}
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}\left(
+                    \frac{1}{\sqrt{1-2\alpha{x}+x^{2}}}-1
+                \right)
+            \end{align}
+        \end{subequations}
+        Both of these expressions have expansions in terms of Legendre
+        polynomials:
+        \begin{subequations}
+            \begin{align}
+                \psi_{0}
+                &=kD\sum_{n=0}^{\infty}
+                    \frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}x^{n+2}\\
+                \psi^{\prime}_{0}
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}\left(
+                    \sum_{n=1}^{\infty}P_{n}(\alpha)x^{n}
+                \right)^{2}
+            \end{align}
+        \end{subequations}
+        $\psi^{\prime}_{0}$ can be further expanded using either a Cauchy
+        product, or by introducing the Chebyshev polynomials of the second kind,
+        $U_{n}(\alpha)$. We have:
+        \begin{subequations}
+            \begin{align}
+                \psi^{\prime}_{0}
+                &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}
+                    \sum_{n=0}^{\infty}\left(
+                        \sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+                    \right)x^{n+2}\\
+                    &=kD\cos(B)\sin(\phi_{0})\frac{\rho}{D}
+                    \sum_{n=0}^{\infty}\left(
+                        U_{n+2}(\alpha)-2P_{n+2}(\alpha)
+                    \right)x^{n+2}
+            \end{align}
+        \end{subequations}
+        $\psi$ can then be approximated using this. The Fresnel-Legendre
+        polynomials are given by:
+        \begin{equation}
+            \label{eqn:fresnel_legendre_coeffs}
+            L_{n}(\alpha,\,\beta)
+            =\frac{P_{n}(\alpha)-\alpha{P}_{n+1}(\alpha)}{n+2}
+                -\beta\sum_{n=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+        \end{equation}
+        where:
+        \begin{equation}
+            \beta=
+            \frac{%
+                \cos^{2}(B)\sin^{2}(\phi_{0})\rho^{2}
+            }{%
+                2(1-\cos^{2}(B)\sin^{2}(\phi_{0}))\rho_{0}^{2}
+            }
+        \end{equation}
+        $\psi$ is then given by:
+        \begin{equation}
+            \psi_{s}\approx
+            kD\sum_{n=0}^{\infty}L_{n}(\alpha,\,\beta)x^{n+2}
+        \end{equation}
+        We direct our attention to the Cauchy product term, labeling this
+        $c_{n}(\alpha)$:
+        \begin{equation}
+            c_{n}(\alpha)=\sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+        \end{equation}
+        Define $a_{n}$ to be the numerator of the leading coefficient of
+        $c_{n}(\alpha)$ (after putting the coefficient in reduced form).
+        We prove that this sequence is identical to OEIS A119951.
+    \section{The Eta Triangle}
+        The OEIS A119951 sequence is defined by:
+        \begin{equation}
+            \tilde{a}_{n}
+            =\textrm{Numerator}\left(
+                \sum_{k=0}^{n}\frac{C_{k+1}}{2^{2k}}
+            \right)
+        \end{equation}
+        where $C_{k}$ are the Catalan numbers. We can expand this as follows:
+        \begin{equation}
+            \tilde{a}_{n}
+            =\textrm{Numerator}\left(
+                4-\frac{1}{2^{2n+1}}\binom{2n+4}{n+2}
+            \right)
+        \end{equation}
+        Legendre polynomials and the Chebyshev polynomials of the second kind
+        have well-known explicit formulas:
+        \begin{subequations}
+            \begin{align}
+                U_{n}(\alpha)&=
+                \sum_{k=0}^{\lfloor{n/2}\rfloor}
+                    (-1)^{k}\binom{n-k}{k}(2x)^{n-2k}\\
+                P_{n}(\alpha)&=
+                \frac{1}{2^{n}}\sum_{k=0}^{\lfloor{n/2}\rfloor}
+                    (-1)^{k}\binom{n}{k}\binom{2n-2k}{n}x^{n-2k}
+            \end{align}
+        \end{subequations}
+        From this, we have:
+        \begin{subequations}
+            \begin{align}
+                &\sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+                =U_{n+2}(\alpha)-2P_{n+2}(\alpha)\\
+                &=\sum_{k=0}^{\lfloor{(n+2)/2}\rfloor}(-1)^{k}\alpha^{n+2-2k}
+                \nonumber\\
+                &\quad\quad\times\left(
+                    \binom{n+2-k}{k}2^{n+2-2k}
+                    -\frac{1}{2^{n+1}}\binom{n+2}{k}\binom{2n+4-2k}{n+2}
+                \right)
+            \end{align}
+        \end{subequations}
+        The leading term occurs when $k=0$, giving us:
+        \begin{subequations}
+            \begin{align}
+                \textrm{LC}\left(
+                    \sum_{k=0}^{n}P_{n+1-k}(\alpha)P_{k+1}(\alpha)
+                \right)
+                &=2^{n+2}-\frac{1}{2^{n+1}}\binom{2n+4}{n+2}\\
+                &=2^{n}\left(
+                    4-\frac{1}{2^{2n+1}}\binom{2n+4}{n+2}
+                \right)
+            \end{align}
+        \end{subequations}
+    \newpage
+    \setcounter{secnumdepth}{0}
+    \section{Appendix: Computing the sequence with \texttt{sympy}}
+        The following script symbolically calculates the Fresnel approximation.
+        It is written in Python using the \texttt{sympy} package.
+        \begin{lstlisting}[language = Python]
+import sympy
+sympy.init_printing()
+
+def chebyshev(Un, Un1, x):
+    return 2*x*Un1 - Un
+
+def legendre(Pn, Pn1, n, x):
+    return ((2*n+3)*x*Pn1 - (n+1)*Pn) / (n + 2)
+
+def get_value(poly):
+    leading_coefficient = sympy.polys.polytools.LC(poly)
+    numerator, _ = sympy.fraction(leading_coefficient)
+    return numerator
+
+alpha = sympy.symbols("alpha")
+P = [1, alpha]
+U = [1, 2*alpha]
+c = []
+a = []
+
+for n in range(6):
+    P.append(legendre(P[n], P[n + 1], n, alpha))
+    U.append(chebyshev(U[n], U[n+1], alpha))
+    c.append(sympy.simplify(U[n+2] - 2*P[n+2]))
+    a.append(get_value(c[n]))
+
+print(a)
+
+def formula(n):
+    n_factorial = sympy.factorial(n + 2)
+    two_n_factorial = sympy.factorial(2*n + 4)
+    power = 2**(n + 1)
+    return (power - two_n_factorial / (2*power * n_factorial**2)) * sympy.gcd(n_factorial, 2*power)
+
+def func(n):
+    return (2**(2*n+3) - sympy.binomial(2*n+4, n+2)) / 2**(2*n+1)
+
+
+        \end{lstlisting}
+        Running this will print out \texttt{[1, 3, 29, 65, 281, 595]},
+        in agreement with the first terms of OEIS A119951.
+\end{document}
