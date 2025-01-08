@@ -203,6 +203,7 @@ ASM_END(tmpl_Double_Mod_2)
                 table, combined with the angle-sum formula.
         \end{enumerate}
         The bulk of the problem is the computation of $r$ and $\textrm{d}r$.
+    \section{Sine of a Normalized Argument}
         We now give the full description for $\sin(\pi{x})$ assuming 64-bit
         floating point precision (1 bit for the sign, 11 bits for the exponent,
         and 52 bits for the mantissa).
@@ -216,7 +217,7 @@ ASM_END(tmpl_Double_Mod_2)
         \begin{equation}
             s=y\oplus{2}^{45}
         \end{equation}
-        Since $0\leq{y}<2$, and since floating point arithmetic truncates the
+        Since $0\leq{y}<2$, and since floating point arithmetic rounds the
         result, the last eight bits of $s$ now store the values of the one's bit
         down to the $2^{-7}$ bit in $y$, correctly rounded. We create our
         lookup tables by precomputing $\cos(\pi{r}_{n})$ and
@@ -257,9 +258,9 @@ ASM_END(tmpl_Double_Mod_2)
             &=\cos(\pi{r})\sin(\pi\textrm{d}r)
                 +\sin(\pi{r})\cos(\pi\textrm{d}r)\\
             &\approx
-            \textrm{costable}[0]\otimes\sin(\pi\textrm{d}r)
+            \textrm{cos\_table}[0]\otimes\sin(\pi\textrm{d}r)
                 \oplus
-                \textrm{sintable}[0]\otimes\cos(\pi\textrm{d}r)\\
+                \textrm{sin\_table}[0]\otimes\cos(\pi\textrm{d}r)\\
             &=\sin(\pi\textrm{d}r)
         \end{align}
         We should again only negate this if $x$ is negative.
@@ -326,7 +327,7 @@ typedef union tmpl_IEEE754_Double_Def {
         12-bit sign and exponent block, we eliminate the likelyhood that
         the struct will be padded in any way, resulting in valid type punning.
         Every single compiler tested (\texttt{GCC}, \texttt{clang},
-        \texttt{TCC}, \texttt{PCC}, \texttt{aocc}, \texttt{ixx}, \texttt{MSVC})
+        \texttt{TCC}, \texttt{PCC}, \texttt{aocc}, \texttt{icc}, \texttt{MSVC})
         handles this struct just fine.
         \par\hfill\par
         The setup is small, just a few declarations for tables and functions.
@@ -334,8 +335,7 @@ typedef union tmpl_IEEE754_Double_Def {
         expands to \texttt{static inline} on compilers supporting the
         \texttt{inline} keyword, and \texttt{static} otherwise. The
         definitions for the $\cos$ and $\sin$ Maclaurin series use
-        5 non-zero terms evaluated with Horner's method. The program is:
-        \newpage
+        5 non-zero terms evaluated with Horner's method.
         \begin{mdframed}
             \begin{lstlisting}[language={C}]
 extern const double tmpl_double_cospi_table[128];
@@ -347,7 +347,11 @@ double tmpl_Double_CosPi_Maclaurin(double x){...}
 
 TMPL_STATIC_INLINE
 double tmpl_Double_SinPi_Maclaurin(double x){...}
-
+            \end{lstlisting}
+        \end{mdframed}
+        The $\textrm{sinpi}$ function is computed as follows.
+        \begin{mdframed}
+            \begin{lstlisting}[language={C}]
 double tmpl_Double_SinPi(double x)
 {
     double cos_pi_r, cos_pi_dr, sin_pi_r, sin_pi_dr;
