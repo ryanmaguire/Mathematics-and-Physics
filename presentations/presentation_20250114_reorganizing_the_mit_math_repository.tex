@@ -1,0 +1,178 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       December 6, 2024                                               %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Reorganizing the MITx Mathematics Content}
+\author{Ryan Maguire}
+\date{January 13, 2025}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\graphicspath{{../images/}}
+\begin{document}
+    \maketitle
+    \begin{frame}
+        Some problems we'll discuss.
+        \begin{itemize}
+            \item
+                Decentralized repositories.
+                \begin{itemize}
+                    \item
+                        Nearly identical code split
+                        across several different sources.
+                    \item
+                        Nearly identical build systems, but with slight
+                        differences that make using the same files have
+                        a few hiccups.
+                \end{itemize}
+            \item
+                Bloated repository sizes.
+                \begin{itemize}
+                    \item
+                        Mostly caused by \texttt{git} keeping track of
+                        binary files.
+                    \item
+                        Copy / paste of problems and content also contribes.
+                \end{itemize}
+            \item
+                It takes a while to check your changes when using
+                XML workflow via \texttt{latex2edx}.
+            \item
+                Moving content around changes the associated URLs for a
+                vertical.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        The mathematics department had their content split across several
+        repositories.
+        \begin{itemize}
+            \item 18.01 residential / online.
+            \item 18.02 residential / online.
+            \item 18.03 residential / online.
+            \item 18.06 residential.
+            \item ASEs.
+        \end{itemize}
+        Each repo had a fork or two as well.
+    \end{frame}
+    \begin{frame}
+        The individual repositories also have a large amount of
+        bloat, taking up a few gigabytes.
+        \par\hfill\par
+        By contrast, the entire Linux kernel
+        is less than half a gigabyte (once compressed), and non-enterprise
+        GitHub accounts must keep their source under 1 gigabyte.
+    \end{frame}
+    \begin{frame}
+        The bloat comes from primarily from two sources.
+        \begin{itemize}
+            \item
+                Binary files being tracked by \texttt{git}.
+                Things like PDFs, Python binaries (\texttt{.pyc} files),
+                PNGs and other image formats.
+            \item
+                Lots of copy / paste across source files. A given problem
+                may occur, near verbatim, in different courses and
+                in different sections of the same course.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        Solution: A centralized repository with \textbf{source code} for
+        binaries.
+        \url{https://github.mit.edu/rmaguire/mitx_mathematics}
+        \par\hfill\par
+        This contains \textbf{all} of the mathematics departments MITx
+        content, and is gradually replacing binary files for figures with
+        source code to produces these figures.
+        \par\hfill\par
+        This has typically been written
+        in \texttt{asymptote}, which is a \texttt{C++} style vector graphics
+        language, but some SVGs are rendered using \texttt{C} libraries, and
+        a few \texttt{tikZ} files exist.
+    \end{frame}
+    \begin{frame}
+        Cut and paste of content is being reduced by reorganizing
+        commonly occuring material into their own directories.
+        \begin{itemize}
+            \item
+                \texttt{getting\_started} contains edX verticals that
+                many courses use (such as how to use MITx, submit answers,
+                write mathematical formulas, etc.). The language is written in
+                a \textit{course-agnostic} manner so that it may be included
+                into any mathematics course.
+            \item
+                \texttt{problems} contains, well, problems.
+                A function \texttt{\\inputProblem} is provided allowing one
+                to select a given file and give a user-provided name to the
+                vertical, as well as details about the grading for the problem.
+            \item
+                \texttt{lectures} contains lectures that are written in
+                a mostly course-independent way. If a given lecture cannot be
+                written here, it goes into
+                \texttt{course-number/content/unit-name/section-name/}.
+                Something like \textit{how to use Euler's formula} could
+                be written in a course-independent manner, and may be used
+                across several courses.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        The source code for rendering images are split across several of
+        my repositories. They are all open source, GPLv3 license:
+        \begin{itemize}
+            \item
+                \url{https://github.com/ryanmaguire/asymptote_figures}
+            \item
+                \url{https://github.com/ryanmaguire/tikz_figures}
+            \item
+                \url{https://github.com/ryanmaguire/libtmpl}
+        \end{itemize}
+        We use \texttt{git} submodules in the main repository to pull from
+        these sources and build. This saves a lot of space and duplication.
+    \end{frame}
+    \begin{frame}
+        To avoid repeatedly uploading tarballs to MITs servers
+        and waiting for webpages to render, a very primitive
+        \LaTeX file, \texttt{standalone\_preamble.tex}, is provided which
+        has many of the environments and macros provided by
+        \texttt{latex2edx}, but in a way that standard compilers such
+        as \texttt{pdflatex} can understand.
+        \par\hfill\par
+        This allows you to instantly review your content as a PDF.
+        Note, however, that nothing fancy is done. This cannot handle
+        Python or JavaScript scripts. The
+        \texttt{edXscript} macro simply expands to nothing.
+    \end{frame}
+    \begin{frame}
+        Lastly, the URL problem. The previous build systems have a very
+        clever method of using tex counters to automate and label
+        edX verticals and sections. But the order of the content matters,
+        and moving around a problem or lecture or video will alter the
+        URLs, potentially creating issues.
+        \par\hfill\par
+        Since all of the content is now in one repository, we fix this
+        by having the \texttt{url\_name} attribute for an edX vertical,
+        or problem, or section (etc.) set to the file path of the file.
+        Works so far!
+    \end{frame}
+    \begin{frame}
+        \begin{center}
+            Thank you!
+        \end{center}
+    \end{frame}
+\end{document}
