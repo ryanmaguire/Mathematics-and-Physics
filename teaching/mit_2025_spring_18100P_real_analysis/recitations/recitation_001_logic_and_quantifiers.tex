@@ -1,0 +1,206 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\title{Logic and Quantifiers}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newif\ifsolution
+\solutionfalse
+
+\begin{document}
+    \maketitle
+    \section{Various Types of Logic}
+        \begin{enumerate}
+            \item
+                Zeroth Order Logic
+                \begin{itemize}
+                    \item
+                        We allow \textit{propositions} (sentences that can be
+                        affirmed  true or false), \textit{inference rules}
+                        (rules of deduction) and \textit{axioms} (statements we
+                        accept as true without proof). No quantifying at all.
+                    \item
+                        Hilbert systems (without quantifiers) are a type of
+                        zeroth order logic.
+                    \item
+                        Also called sentential logic and propositional logic.
+                \end{itemize}
+            \item
+                First Order Logic
+                \begin{itemize}
+                    \item
+                        Everything from zeroth order logic is permissible.
+                    \item
+                        We allow ourselves to use the terms \textit{for all}
+                        or \textit{there exists} on \textbf{sets} or
+                        \textbf{elements} of sets, but not
+                        \textit{properties}.
+                    \item
+                        Most of the Peano axioms are first order. For example,
+                        \textit{for all} $n\in\mathbb{N}$, \textit{for all}
+                        $m\in\mathbb{N}$, \textit{if} $n+1=m+1$
+                        \textit{is true, then} $n=m$ \textit{is true}.
+                        This quantifies over the elements of the
+                        natural numbers.
+                    \item
+                        Peano arithmetic is \textit{almost} a first order
+                        system,  but the induction hypothesis quantifies over
+                        \textit{predicates} on the natural numbers.
+                \end{itemize}
+            \item
+                Second Order Logic
+                \begin{itemize}
+                    \item
+                        Most of mathematics works in this framework.
+                    \item
+                        All of first order and zeroth order
+                        logic is allowed.
+                    \item
+                        In addition, we can quantify over \textit{predicates},
+                        or sentences
+                        $P(x)$ that take in \textit{sets} or
+                        \textit{elements} $x$ and such
+                        that $P(x)$ can be asserted to be true or false.
+                    \item
+                        The final Peano axiom does this. Is says:
+                        \[
+                            \forall(P)\Big(
+                                P(0)
+                                \land
+                                \big(P(n)\Rightarrow{P}(n+1)\big)
+                            \Big)
+                            \Rightarrow
+                            \forall(n\in\mathbb{N})\big(P(n)\big)
+                        \]
+                    \item
+                        \textbf{DO NOT WRITE LIKE THIS}.
+                        Write this out in your preferred
+                        \textit{human readable} language. Since I prefer
+                        English, this would read:
+                        \begin{center}
+                            For all predicates $P$
+                            on the natural numbers, if $P(0)$ is true,
+                            and if $P(n)$ being
+                            true implies that $P(n+1)$ is true, then for all
+                            $n\in\mathbb{N}$ the proposition $P(n)$ is true.
+                        \end{center}
+                        This is far easier for the readier to comprehend.
+                \end{itemize}
+        \end{enumerate}
+    \section{Peano Arithmetic and Practice with Quantifiers}
+        \begin{enumerate}
+            \item
+                Try to come up with some everyday examples of quantifiers. For
+                example, for all \textit{towns in Massachusetts}, the town is
+                \textit{north of the equator.} If we let $P(x)$ be the
+                sentence $x$ \textit{is north of the equator},
+                then this sentence can be cryptically re-written as:
+                \[
+                    \forall(x\in\textrm{MA})\big(P(x)\big)
+                \]
+                \begin{itemize}
+                    \item
+                        \textbf{Question:}
+                        What type of logic does this statement fall under?
+                        \ifsolution
+                            \color{blue}
+                            \item
+                                \textbf{Answer}:
+                                First order logic. We are quantifying
+                                over \textit{things} (towns in Massachusetts),
+                                but not \textit{properties about things}.
+                                There is a property under consideration
+                                (being north of the equator), but it is
+                                \textit{fixed} and not being quantified over.
+                            \color{black}
+                        \fi
+                \end{itemize}
+            \item
+                Try to provide an intuitive \textit{proof}
+                of the induction axiom.
+                \begin{itemize}
+                    \item
+                        \textbf{Question:}
+                        What does the negation of Peano's induction axiom say?
+                        \ifsolution
+                            \color{blue}
+                            \item
+                                \textbf{Answer:}
+                                There exists a sentence $P$ for the natural
+                                numbers such that $P(0)$ is true, and
+                                $P(n)$ implies $P(n+1)$,
+                                but $P$ is \textbf{not} true for all $n$.
+                            \color{black}
+                        \fi
+                    \item
+                        \textbf{Question:}
+                        Can you describe an \textit{algorithm}
+                        to show that the negation is false?
+                        \ifsolution
+                            \color{blue}
+                            \item
+                                \textbf{Answer:}
+                                We are told $P(0)$ is true. Suppose there
+                                is some $n$ such that $P(n)$ is true.
+                                Could $n=1$? No, because $P(0)$ is true,
+                                and $P(0)$ implies $P(1)$ is true, and
+                                therefore by \textit{modus ponens}, $P(1)$ is
+                                also true. Could $P(2)$ be false?
+                                No, becuase $P(1)$ is true, and we know that
+                                $P(1)$ implies $P(2)$. If we iterate
+                                through the natural numbers we will find that
+                                $P(n)$ can never be \textit{false}, and so
+                                $P(n)$ is true for all $n$.
+                                \color{black}
+                            \item
+                                \textbf{NOTE:}
+                                This is not a \textit{proof} of the last Peano
+                                axiom since there is no axiom saying such an
+                                algorithm is permissible in mathematics.
+                                Indeed, the axiom that this is legal is indeed
+                                Peano's axiom, and this argument is
+                                \textit{circular}, but it provides intuition
+                                as to why we accept it as true.
+                        \fi
+                \end{itemize}
+            \item
+                Consider the statement:
+                \[
+                    \forall(P)(P\lor\neg{P})
+                \]
+                That is, for all propositions $P$, either $P$ is true,
+                or $P$ is false. This is the
+                \textit{law of the excluded middle}.
+                \begin{itemize}
+                    \item
+                        \textbf{Question:}
+                        What type of logic is this?
+                        \ifsolution
+                            \color{blue}
+                            \item
+                                \textbf{Answer:}
+                                Second order.  We are quantifying over all
+                                \textit{properties}.
+                            \color{black}
+                        \fi
+                \end{itemize}
+        \end{enumerate}
+\end{document}
