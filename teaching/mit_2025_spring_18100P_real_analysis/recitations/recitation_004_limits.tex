@@ -1,0 +1,224 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{xcolor}
+\theoremstyle{normal}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\title{Limits}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newif\ifsolution
+\solutionfalse
+
+\begin{document}
+    \maketitle
+    \section{Cauchy Sequences}
+        We defined real numbers using equivalence classes of Cauchy
+        sequences. Here's a quick reminder on some of the definitions.
+        \begin{definition}
+            A \textbf{sequence} in a set $A$ is a function
+            $a:\mathbb{N}\rightarrow{A}$.
+        \end{definition}
+        \begin{definition}
+            A \textbf{convergent sequence} in
+            $\mathbb{Q}$ is sequence $a:\mathbb{N}\rightarrow\mathbb{Q}$ such
+            that there exists a rational number $L\in\mathbb{Q}$ with the
+            property that for all $\epsilon>0$ there is an index
+            $N\in\mathbb{N}$ such that $n\in\mathbb{N}$ and $n>N$ implies
+            $|a_{n}-L|<\varepsilon$.
+        \end{definition}
+        \begin{definition}
+            A \textbf{Cauchy sequence} in $\mathbb{Q}$ is a sequence
+            $a:\mathbb{N}\rightarrow\mathbb{Q}$ such that for all
+            $\varepsilon>0$ there exists an index $N\in\mathbb{N}$ such that
+            for all $n,m\in\mathbb{N}$ with $n,m>N$ we have
+            $|a_{n}-a_{m}|<\varepsilon$.
+        \end{definition}
+        We can be more general and replace $\mathbb{Q}$ with any set that has
+        a \textit{distance function}. For the real and rational numbers this
+        is the absolute value function, and for the Euclidean / complex plane
+        this is given by the Pythagorean formula:
+        \begin{equation}
+            \textrm{dist}\Big((x_{0},\,y_{0}),\,(x_{1},\,y_{1})\Big)
+            =\sqrt{(x_{1}-x_{0})^{2}+(y_{1}-y_{0})^{2}}
+        \end{equation}
+        This is more commonly written using the \textit{Euclidean norm}:
+        \begin{equation}
+            \|(x,\,y)\|=\sqrt{x^{2}+y^{2}}
+        \end{equation}
+        The distance is then:
+        \begin{equation}
+            \textrm{dist}(\mathbf{x},\,\mathbf{y})
+            =\|\mathbf{x}-\mathbf{y}\|
+        \end{equation}
+        Because of this we may speak about Cauchy sequences in
+        $\mathbb{Q}$, $\mathbb{R}$, and $\mathbb{C}$ freely. $\mathbb{Q}$ has
+        a problem: Not all Cauchy sequences converge. Applying Heron's formula
+        to $x_{0}=2$ gives us a sequence of rationals that better approximates
+        $\sqrt{2}$ (via a Cauchy sequence), but there is no rational that
+        squares to two. Regardless, we always have the following.
+        \par\hfill\par
+        \textbf{Problem 1:}
+        Prove the following theorem.
+        \begin{theorem}
+            If $a:\mathbb{N}\rightarrow{X}$ is a convergent sequence
+            ($X=\mathbb{Q}$, $X=\mathbb{R}$, or $X=\mathbb{C}$), then it is
+            a Cauchy sequence.
+        \end{theorem}
+        \ifsolution
+            \color{blue}
+            \begin{proof}
+                Since $a$ converges, there is a limit $L$. But then for all
+                $\varepsilon>0$ there is an $N\in\mathbb{N}$ such that
+                $n\in\mathbb{N}$ and $n>N$ implies $|a_{n}-L|<\varepsilon/2$.
+                Let $n,m\in\mathbb{N}$ be two natural numbers that are
+                larger than $N$. Then:
+                \begin{align}
+                    |a_{n}-a_{m}|
+                    &=|a_{n}-L+L-a_{m}|\\
+                    &\leq|a_{n}-L|+|L-a_{m}|\\
+                    &<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}\\
+                    &=\varepsilon
+                \end{align}
+                That is, the sequence $a$ is a Cauchy sequence.
+            \end{proof}
+            \color{black}
+        \fi
+        \par\hfill\par
+        \textbf{Problem 2:}
+        \par
+        Consider $a:\mathbb{N}\rightarrow\mathbb{R}$ given by
+        $a_{n}=\ln(n+2)-\ln(n+1)$. Is this a convergent sequence?
+        Prove or disprove this.
+        \par\hfill\par
+        \ifsolution
+            \color{blue}
+            The natural logarithm gets very flat as we go to infinity,
+            meaning the difference $\ln(n+2)-\ln(n+1)$ gets very small.
+            Zero is a likely candidate for the limit. Suppose we know
+            $|\ln(n+2)-\ln(n+1)|<\varepsilon$ for large $n$. What does this
+            say? We have:
+                \begin{align}
+                    &&
+                    |\ln(n+2)-\ln(n+1)|
+                    &<
+                    \varepsilon\\
+                    &
+                    \Longrightarrow
+                    &
+                    \ln(n+2)-\ln(n+1)
+                    &<
+                    \varepsilon\\
+                    &
+                    \Longrightarrow
+                    &
+                    \ln\left(\frac{n+2}{n+1}\right)
+                    &<
+                    \varepsilon\\
+                    &
+                    \Longrightarrow
+                    &
+                    \frac{n+2}{n+1}<\exp(\varepsilon)
+                    &&
+                \end{align}
+                This is a little hard to work with, so let's suppose that
+                we've already shown $\frac{n+2}{n}<\exp(\varepsilon)$. If this
+                were true, than since $\frac{n+2}{n+1}<\frac{n+2}{n}$ we would
+                be able to conclude $\frac{n+2}{n+1}<\varepsilon$. We now
+                divert our attention to this new inequality. We continue:
+                \begin{align}
+                    &&
+                    \frac{n+2}{n}
+                    &<\exp(\varepsilon)\\
+                    &
+                    \Longrightarrow
+                    &
+                    1+\frac{2}{n}
+                    &<\exp(\varepsilon)\\
+                    &
+                    \Longrightarrow
+                    &
+                    \frac{2}{n}
+                    &<
+                    \exp(\varepsilon)-1\\
+                    &
+                    \Longrightarrow
+                    &
+                    n
+                    &>
+                    \frac{2}{\exp(\varepsilon)-1}
+                \end{align}
+                This was very backward reasoning, and not quite valid, but we
+                now have a candidate for $N$. Given $\varepsilon>0$, choose:
+                \begin{equation}
+                    N=\textrm{ceil}\left(
+                        \frac{2}{\exp(\varepsilon)-1}
+                    \right)
+                \end{equation}
+                Now we begin the rigorous (and laborious) process of proving
+                $a_{n}\rightarrow{0}$. Given $n>N$ we have:
+                \begin{align}
+                    |\ln(n+2)-\ln(n+1)-0|
+                    &=\ln(n+2)-\ln(n+1)\\
+                    &=\ln\left(
+                        \frac{n+2}{n+1}
+                    \right)\\
+                    &<\ln\left(
+                        \frac{n+2}{n}
+                    \right)\\
+                    &=
+                    \ln\left(1+\frac{2}{n}\right)\\
+                    &<\ln\left(1+\frac{2}{N}\right)\\
+                    &=\ln\left(
+                        1+\
+                        \frac{2}{
+                            \textrm{ceil}\left(
+                                \frac{2}{\exp(\varepsilon)-1}
+                            \right)
+                        }
+                    \right)\\
+                    &<\ln\left(
+                        1+\
+                        \frac{2}{\frac{2}{\exp(\varepsilon)-1}}
+                    \right)\\
+                    &=\ln\left(\exp(\varepsilon)\right)\\
+                    &=\varepsilon
+                \end{align}
+            \color{black}
+        \fi
+        \par\hfill\par
+        \textbf{Problem 3:}
+        \par
+        Define $a_{n}=\exp(n+1)-\exp(n)$. Does this converge? Prove or
+        disprove this.
+        \par\hfill\par
+        \ifsolution
+            It does not. The negation of convergence is that for all
+            $L\in\mathbb{R}$ there exists an $\varepsilon>0$ such that for all
+            $N\in\mathbb{N}$ there is an $n\in\mathbb{N}$ with $n>N$ such that
+            $|L-a_{n}|\geq\varepsilon$. But we do not need to rely on the
+            definition since we have proven that a convergent sequence is a
+            Cauchy sequence, and hence only need to show that this is not
+            Cauchy. Pick $\varepsilon=1$. Given $N\in\mathbb{N}$ choose
+            $n=N+1$ and $m=N+2$. The difference $|a_{n}-a_{m}|$ becomes
+            arbitrary large as $N$ increased, so this is not a Cauchy sequence.
+        \fi
+\end{document}
