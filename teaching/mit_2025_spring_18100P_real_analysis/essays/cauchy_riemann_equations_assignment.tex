@@ -1,0 +1,189 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amssymb}
+\title{The Cauchy-Riemann Equations}
+\author{MIT 18.100P}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\begin{document}
+    \maketitle
+    Continuous functions are those that \textbf{map convergent sequences to}
+    \textbf{convergent sequences}. That is, if $A\subseteq\mathbb{R}$, given
+    a function $f:A\rightarrow\mathbb{R}$ and a point $x_{0}\in{A}$, we say
+    that $f$ is continuous at $x_{0}$ provided that for any sequence
+    $a:\mathbb{N}\rightarrow{A}$ that converges to $x_{0}$,
+    $a_{n}\rightarrow{x}_{0}$, we have $f(a_{n})\rightarrow{f}(x_{0})$.
+    Written more succinctly, this says:
+    \begin{equation}
+        \lim_{n\rightarrow\infty}f(a_{n})
+        =f\left(\lim_{n\rightarrow\infty}a_{n}\right)
+        =f(x_{0})
+    \end{equation}
+    Continuity is \textit{pointwise}. A function can be continuous at a single
+    point and nowhere else. Conversely a function can be continuous everywhere
+    except for a single point. \textit{Differentiability} is defined similarly,
+    but now we take a ratio. Given any convergent sequence
+    $a:\mathbb{N}\rightarrow{A}$ with $a_{n}\rightarrow{x}_{0}$, and
+    $a_{n}\ne{x}_{0}$ for all $n$ (to avoid division-by-zero), we have:
+    \begin{equation}
+        f^{\prime}(x_{0})
+        =\lim_{n\rightarrow\infty}
+        \frac{f(a_{n})-f(x_{0})}{a_{n}-x_{0}}
+    \end{equation}
+    That is, if $a$ is a convergent sequence with limit $x_{0}$ (and is never
+    exactly equal to $x_{0}$), then this sequence of ratios is also a
+    convergent sequence.
+    \par\hfill\par
+    A small note, while continuity allows us to consider arbitrary subsets
+    $A$, differentiability is infinitely easier to work with when $A$ is open.
+    If $A$ is not open, and if $x_{0}\in{A}$, then there may not be any
+    convergent sequences $a_{n}\rightarrow{x}_{0}$ such that $a_{n}\ne{x}_{0}$
+    for all $n$, which is a problem. Please restrict your writing to
+    the case where $A$ is open.
+    \par\hfill\par
+    The definition requires two things: a notion of convergence (which comes
+    from the \textit{distance} function, $d(x,\,y)=|x-y|$), and a well-defined
+    meaning for division by non-zero elements. That is, we need a
+    \textit{field} and a \textit{metric}. The rationals have such a structure,
+    but Cauchy sequences rarely converge in $\mathbb{Q}$, which may cause
+    issues. The complex numbers $\mathbb{C}$ also form a field, and moreover
+    they have a metric given by the Pythagorean formula. That is, if we have
+    $z=(x_{0},\,y_{0})$ and $w=(x_{1},\,y_{1})$, the distance is then:
+    \begin{equation}
+        |z-w|
+        =\|(x_{0},\,y_{0})-(x_{1},\,y_{1})\|
+        =\sqrt{(x_{1}-x_{0})^{2}+(y_{1}-y_{0})^{2}}
+    \end{equation}
+    Complex differentiation is then defined in precisely the same way.
+    Given $A\subseteq\mathbb{C}$ (again, for simplicity stick to open subsets),
+    $f:A\rightarrow\mathbb{C}$, and
+    $z_{0}\in{A}$, we say $f$ is differentiable at $z_{0}$ provided that for
+    any sequence $a:\mathbb{N}\rightarrow\mathbb{C}$ with
+    $a_{n}\rightarrow{z}_{0}$ and $a_{n}\ne{z}_{0}$ for all $n$, the sequence
+    of ratios converges:
+    \begin{equation}
+        f^{\prime}(z_{0})
+        =\lim_{n\rightarrow\infty}
+        \frac{f(a_{n})-f(z_{0})}{a_{n}-z_{0}}
+    \end{equation}
+    In practice, this is hard to work with. Note that a function
+    $f:A\rightarrow\mathbb{C}$ is really two functions. That is:
+    \begin{equation}
+        f\big((x,\,y)\big)
+        =\big(u(x,\,y),\,v(x,\,y))
+    \end{equation}
+    or, using complex number notation:
+    \begin{equation}
+        f(z)=f(x+iy)=u(x,\,y)+iv(x,\,y)
+    \end{equation}
+    Where $u,v:A\rightarrow\mathbb{R}$ are real-valued functions defined on
+    $A$. A function is complex differentiable if and only if it satisfies the
+    \textbf{Cauchy-Riemann Equations}:
+    \begin{equation}
+        \begin{array}{rcl}
+            \displaystyle
+            \frac{\partial{u}}{\partial{x}}
+            &=&
+            \displaystyle
+            \frac{\partial{v}}{\partial{y}}\\
+            [1.5em]
+            \displaystyle
+            \frac{\partial{u}}{\partial{y}}
+            &=&
+            \displaystyle
+            -\frac{\partial{v}}{\partial{x}}
+        \end{array}
+    \end{equation}
+    Your goal is to prove this. You should mention:
+    \begin{enumerate}
+        \item
+            Partial differentiation.
+        \item
+            Directional derivatives.
+        \item
+            The Laplace equation and harmonic functions.
+        \item
+            Bonus: Geometric / physical interpretations.
+    \end{enumerate}
+    \par\hfill\par
+    \textbf{\Large{Guidelines}}
+    \par\hfill\par
+    Your article must be written in \LaTeX{} or \TeX, the primary typesetting
+    languages for mathematics and other sciences. \LaTeX{} is preferred since it
+    is much easier to hit the ground running and start writing documents.
+    \begin{itemize}
+        \item
+            Your article is expected to be at least 3 pages.
+            It would be hard to use less than 3 pages, but if you have
+            a good argument and a solid article, do not feel like you
+            must stretch it out just to meet a quota. This can actually
+            \textit{harm} your writing.
+        \item
+            50\% of the grade is for \textit{mathematical correctness}.
+            This addresses the following:
+            \begin{itemize}
+                \item
+                    Are you using definitions correctly?
+                \item
+                    Are you applying axioms and other theorems
+                    appropriately in your arguments?
+                \item
+                    Is your proof valid?
+                \item
+                    If you are using figures, are they relevant and explained
+                    properly?
+            \end{itemize}
+        \item
+            50\% comes from \textit{writing style}:
+            \begin{itemize}
+                \item
+                     Does the paper have an introduction that identifies
+                     and signals the purpose and the main result for a
+                     general audience (i.e. not someone currently enrolled
+                     in 18.100P or necessarily currently taking real analysis)?
+                \item
+                    Does the paper set up key definitions and give the
+                    intuition of the approach used to prove the result
+                    so that the reader can point to the places in the
+                    text where these are given?
+                \item
+                    Does the paper use of statement environments
+                    and proof environments?
+                \item
+                    Does the paper write in paragraphs,
+                    integrating words and symbols?
+            \end{itemize}
+    \end{itemize}
+    \par\hfill\par
+    \textbf{\Large{Deadlines}}
+    \par\hfill\par
+    \textbf{Rough Draft: 2025/03/21}
+    \par
+    A full draft of your article. You will do peer review with your fellow
+    students during the recitation, and then the course team will provide
+    feedback on your work.
+    \par\hfill\par
+    \textbf{Feedback Returned: 2025/04/04}
+    \par
+    Your rough draft will be returned with comments from the course team.
+    \par\hfill\par
+    \textbf{Final Due: 2025/04/11}
+    \par
+    After making revisions, you will turn in your final draft for grading.
+\end{document}
