@@ -15,8 +15,12 @@
 %   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
 %------------------------------------------------------------------------------%
 \documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper, margin = 1in}
 \usepackage{amsthm}
 \usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \hypersetup{colorlinks = true, linkcolor = blue}
 \title{Zorn's Lemma and the Axiom of Choice}
@@ -24,9 +28,15 @@
 \date{\today}
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0em}
-\newtheorem{theorem}{Theorem}
-\newtheorem{axiom}{Axiom}
-
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}{Axiom}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\graphicspath{{../../../images/}}
+\newcommand*{\twiddle}[1]{%
+    %\overset{\thicksim}{#1}
+    \tilde{#1}
+}
 \begin{document}
     \maketitle
     \begin{abstract}
@@ -65,8 +75,8 @@
             If $\mathcal{O}$ is a non-empty set such that for all
             $\mathcal{U}\in\mathcal{O}$ it is true that $\mathcal{U}$ is
             non-empty, then there is a function
-            $f:\mathcal{O}\rightarrow\bigcup\mathcal{O}$ with the property
-            that for all
+            $f:\mathcal{O}\rightarrow\bigcup\mathcal{O}$, called a
+            \textit{choice function}, with the property that for all
             $\mathcal{U}\in\mathcal{O}$ we have $f(\mathcal{U})\in\mathcal{U}$.
         \end{axiom}
         We have used the set-theoretic notation for union, but we may just as
@@ -86,7 +96,7 @@
         \begin{theorem}
             If $A$ and $B$ are sets, and if $f:A\rightarrow{B}$ is a
             surjective function, then there is a \textit{right inverse}
-            $g:B\rightarrow{A}$ such that $(f\circ{g})(b)=b$ for all
+            $g:B\rightarrow{A}$, meaning that $(f\circ{g})(b)=b$ for all
             $b\in{B}$.
         \end{theorem}
         \begin{proof}
@@ -108,7 +118,141 @@
             create two new copies of $\mathbb{S}^{2}$, each being the exact
             same size as the original one.
         \end{theorem}
+        In other words, you may start with a pea and eventually end up with
+        the sun. This is \textit{clearly} false, but the proof only relies on
+        the axiom of choice (together with the other familiar notions from
+        set theory).
+        \par\hfill\par
+        Regardless of these philosophical issues, the analysist and the
+        algebraists are not likely to invoke the axiom of choice explicitly
+        in their work. What is more common is for \textit{Zorn's lemma} to
+        be required, which is a foundational result on the properties of
+        partially ordered sets (or posets). Zorn's lemma states that if every
+        chain in a poset is bounded, then there exists a maximal elements.
+        Inuitively, if you have a tree with a trunk and branches, and if
+        every branch ends at a leaf, then there is a \textit{tallest} leaf.
+        This analogy will be made concrete later when we provide rigorous
+        definitions.
+        \subsection{Zermelo-Fraenkel Set Theory}
+            We will not start from complete scratch in our proof, but instead
+            rely on the solid foundations provided by modern set theory.
+            But as a matter of fact, most of the Zermelo-Fraenkel set theory
+            axioms (ZF) are not required. To be precise we must
+            adopt the axioms of union, pairing, power set, specification,
+            and extensionality, and we also assume the existence of the empty
+            set. The axioms of regularity, replacement, and infinity are not
+            used at any point in our discussion. Of the axioms we are accepting,
+            only the axioms of union, specification, and the empty set are
+            explicitly used.
+            The axiom of union guarantees that unions over collections always
+            exist and it is central to proving Zorn's lemma implies the axiom
+            of choice, and indeed the language of the axiom of choice requires
+            that unions have already been defined. The axiom of the empty set
+            simply asserts we are not working in a \textit{vacuum} where
+            nothing exists at all. There is, at the very least, the empty set.
+            Finally, specification allows us to construct new sets from old
+            ones by applying sentences and collecting the elements that
+            satisfy this statement. Using \textit{set-builder} notation,
+            this is often written:
+            \begin{equation}
+                B=\left\{\,
+                    x\in{A}\;|\;P(x)\,
+                \right\}
+            \end{equation}
+            where $A$ is some set and $P$ is a sentence that depends on the
+            elements of $A$.
+            \par\hfill\par
+            The use of the remaining axioms is subtle, and at first glance the
+            reader may not think we actually need them. Pairing, power set,
+            union, and specification allow us to define Cartesian products,
+            which in turn allow us to provide a non-circular definition for
+            functions (i.e. without saying that functions are just
+            \textit{rules}, which is circular). Indeed, we may go further and
+            construct the \textit{set of all functions} from a given set $A$
+            to another set $B$. For brevity, we omit this discussion, but the
+            reader can rest assurred that precise constructions can be made,
+            albeit with increased effort and patience.
+        \subsection{Partially Ordered Sets}
+            The crucial definitions for our result lie in order theory. Indeed,
+            Zorn's lemma is an order theory result above all else. We are
+            primarily concerned with \textit{partially ordered sets}, more
+            commonly referred to as posets. These arise naturally in just
+            about every branch of mathematics one can think of, from analysis
+            to algebra, geometry to topology, applied math to combinatorics.
+            Their widespread use stem from the simplicity of their definition.
+            \begin{definition}[\textbf{Partial Ordered Set}]
+                A partially order set is an ordered pair $(A,\,\leq)$ where $A$
+                is a set and $\leq$ is a relation on $A$ such that:
+                \begin{enumerate}
+                    \item
+                        For all $a\in{A}$ we have $a\leq{a}$.
+                        \hfill
+                        (Reflexivity)
+                    \item
+                        For all $a,b\in{A}$, if $a\leq{b}$ and $b\leq{a}$,
+                        then $a=b$
+                        \hfill
+                        (Anti-Symmetry)
+                    \item
+                        For all $a,b,c\in{A}$, if $a\leq{b}$ and
+                        $b\leq{c}$, then $a\leq{c}$
+                        \hfill
+                        (Transitivity)
+                \end{enumerate}
+                Partially ordered sets are often referred to as
+                \textbf{posets}
+            \end{definition}
+            \begin{figure}
+                \centering
+                \includegraphics{power_set_001}
+                \caption{Example of a Poset}
+                \label{fig:power_set}
+            \end{figure}
+            That's it, no more, no less. The quintessential example to have
+            in mind when thinking about posets is the
+            \textit{inclusion relation} ($\subseteq$) defined on the power set
+            of some set $A$. That is, $\big(\mathcal{P}(A),\,\subseteq\big)$
+            is a poset, where $\mathcal{P}(A)$ is the power set of $A$.
+            This structure is starkly different from the usual objects studied
+            in mathematics that have an order. For the real numbers,
+            $\mathbb{R}$, given $x,y\in\mathbb{R}$ either $x\leq{y}$ is true
+            or $y\leq{x}$ is. This is called \textbf{totality}. Partial orders
+            do not need to have such a concept, and indeed if we set
+            $A=\{\,1,\,2,\,3\,\}$, and $\{\,1\,\}$ and $\{\,2\,\}$ are elements
+            of $\mathcal{P}(A)$, but neither is a subset of the other. That is,
+            they are \textit{uncomparable}. We visually represent posets by
+            connecting edges between the elements that are comparable. The
+            result is a \textit{Hasse diagram} (see Fig.~\ref{fig:power_set}).
+            \par\hfill\par
+            The more familiar orders we experience in everyday life are
+            called \textit{total orders}.
+            \begin{definition}[\textbf{Totally Ordered Set}]
+                A totally ordered set is a partially ordered set
+                $(A,\,\leq)$ such that for all $a,b\in{A}$ either
+                $a\leq{b}$ or $b\leq{a}$. That is, the ordering satisfies
+                \textbf{totality}.
+            \end{definition}
+            A \textbf{maximal element} in a poset $(A,\,\leq)$ is some element
+            $x\in{A}$ such that for all $a\in{A}$, $x\leq{a}$ implies $x=a$.
+            In a totally ordered set this simply means $x$ is the
+            \textit{greatest} element. Because of this
+            Zorn's lemma is almost trivial in a totally ordered set. It merely
+            says if a totally ordered says has a greatest element, then it has
+            a greatest element. Not very controversial at all. The real power
+            of Zorn's lemma comes from its application to arbitrary posets
+            with the property that \textit{chains are bounded}, where a chain
+            is a totally ordered subset. Formally, we define:
+            \begin{definition}[\textbf{Chain}]
+                A chain in a partially ordered set $(A,\,\leq)$ is a subset
+                $C\subseteq{A}$ such that $(C,\,\leq_{C})$ is a totally ordered
+                set, where $\leq_{C}$ is simply the restriction of the relation
+                $\leq$ to the subset $C$.
+            \end{definition}
+            Maximality can be extended to chains. A
+            \textbf{maximal chain} is a chain $C\subseteq{A}$ such that if
+            $D\subseteq{A}$ is a chain and $C\subseteq{D}$, then $C=D$.
     \section{Plan of Attack}
+        We now have the prerequisites for our main result.
         The difficult direction in our proof is using the axiom of choice to
         imply Zorn's lemma. The converse is relatively straight forward, we
         form a partial ordering on the set of all
@@ -117,5 +261,356 @@
         $f:A\rightarrow\bigcup{A}$ and $g:B\rightarrow\bigcup{B}$, we will
         write $f\leq{g}$ provided $A\subseteq{B}$ and
         $g|_{A}=f$. That is, the restriction of $g$ to $A$ yields the function
-        $f$.
+        $f$. Zorn's lemma produces a maximal element which we then prove is
+        a choice function. This is really all there is to it, we simply need to
+        rigorously fill in the details.
+        \par\hfill\par
+        We tackle Zorn's lemma by first showing that the axiom of choice
+        implies \textit{Hausdorff's maximality principle}. Indeed, Hausdorff's
+        theorem is equivalent to the axiom of choice, much like Zorn's lemma.
+        Using this stepping stone we then prove Zorn's lemma by
+        reducing our search for a \textit{maximal element} to a search for a
+        \textit{maximal chain}, which is granted by Hausdorff's theorem.
+        Under the hypothesis of Zorn's lemma, such a chain has an upper bound,
+        and we then prove that this element is maximal. All that is left is to
+        prove that the axiom of choice implies Hausdorff's maximality principle.
+        This is the most difficult result presented, and the proof is the
+        certainly the more challenging one to grasp. We'll wade through
+        with caution.
+    \section{The Proofs}
+        Diving into the main part of the paper, we must now confront
+        Zorn's lemma. The standard formulation of set theory is to accept the
+        axiom of choice, together with the remaining ZF axioms, to produce
+        ZFC. Pedagically it seems best to prove Zorn's lemma first, and indeed
+        this is how most textbooks handle the ordering.
+        \subsection{Stepping Stone: Hausdorff's Maximality Principle}
+            As alluded to, the pieces fall together once Hausdorff's theorem
+            is given. We prove this first.
+            \begin{theorem}[\textbf{Hausdorff's Maximality Principle}]
+                If $(A,\,\leq)$ is a partially ordered set, and if
+                $C\subseteq{A}$ is a chain, then there is a maximal chain
+                $D\subseteq{A}$ such that $C\subseteq{D}$.
+            \end{theorem}
+            \begin{proof}
+                Let $\mathcal{C}$ denote the set of all chains in $A$.
+                Note that $\mathcal{C}$ satisfies a few properties:
+                \begin{enumerate}
+                    \item
+                        $\mathcal{C}$ is non-empty. Since $A$ is non-empty
+                        we may choose $x\in{A}$. The set $B=\{\,a\,\}$ is
+                        a chain, and hence an element of $\mathcal{C}$.
+                    \item
+                        If $\mathcal{O}\subseteq\mathcal{C}$ is such that for
+                        all $\mathcal{U},\mathcal{V}\in\mathcal{O}$ we have
+                        either $\mathcal{U}\subseteq\mathcal{V}$ or
+                        $\mathcal{V}\subseteq\mathcal{U}$, then
+                        $\bigcup\mathcal{O}\in\mathcal{C}$. That is, the union
+                        of \textbf{nested} chains is again a chain.
+                    \item
+                        If $B\in\mathcal{C}$ and if $B^{\prime}\subseteq{B}$,
+                        then $B^{\prime}\in\mathcal{C}$. That is, a subset of
+                        a chain is still a chain.
+                \end{enumerate}
+                We prove Hausdorff's maximality principle from these three
+                properties. Since $A$ is non-empty, the power set
+                $\mathcal{P}(A)$ contains more than just the empty set, and
+                hence $\mathcal{P}(A)\setminus\{\,\emptyset\,\}$ is non-empty.
+                By the axiom of choice there is a function
+                $f:\mathcal{P}(A)\setminus\{\,\emptyset\,\}%
+                    \rightarrow\bigcup\big(%
+                        \mathcal{P}(A)\setminus\{\,\emptyset\,\}%
+                    \big)$
+                such that $f(\mathcal{U})\in\mathcal{U}$
+                for all
+                $\mathcal{U}\in\mathcal{P}(A)\setminus\{\,\emptyset\,\}$.
+                Recognizing that
+                $\bigcup\big(\mathcal{P}(A)\setminus\{\,\emptyset\,\}\big)=A$,
+                the choice function may be rewritten as
+                $f:\mathcal{P}(A)\setminus\{\,\emptyset\,\}\rightarrow{A}$.
+                Given $B\in\mathcal{C}$, define $B^{\prime}$ by:
+                \begin{equation}
+                    B^{\prime}
+                    =\left\{\,
+                        x\in{A}\setminus{B}
+                        \;\big|\;
+                        B\cup\{\,x\,\}\in\mathcal{C}
+                    \right\}
+                \end{equation}
+                That is, starting with a chain $B$, $B^{\prime}$ consists of
+                all points $x\in{A}$ that may be appended to $B$ while still
+                defining a chain. We define $\twiddle{B}$ as follows:
+                \begin{equation}
+                    \twiddle{B}
+                    =\begin{cases}
+                        B\cup\left\{\,f(B^{\prime})\,\right\},
+                            &B^{\prime}\ne\emptyset\\
+                        B\,
+                            &\textrm{otherwise}
+                    \end{cases}
+                \end{equation}
+                Note that if $B=\twiddle{B}$, then $B$ is maximal. To see this,
+                note that if $B^{\prime}\ne\emptyset$, and if
+                $B=\twiddle{B}$, then $f(B^{\prime})\in{B}$ must hold by the
+                definition of $\twiddle{B}$. But $f$ is a choice function, so
+                $f(B^{\prime})\in{B}^{\prime}$, and $B$ and $B^{\prime}$ are
+                disjoint, a contradiction. Hence, $B^{\prime}=\emptyset$.
+                If $B^{\prime}$ is empty, then there are not elements we can
+                add to $B$ while still maintaining a chain. This means $B$ must
+                be maximal. Conversely, if $B$ is maximal, then $B=\twiddle{B}$,
+                and hence this equality holds if and only if $B$ is maximal.
+                We prove Hausdorff's maximality principle by finding an element
+                $B\in\mathcal{C}$ such that $B=\twiddle{B}$ and $C\subseteq{B}$,
+                where $C$ is the initial chain from our hypothesis.
+                \par\hfill\par
+                Given our starting chain $C\in\mathcal{C}$, we will call
+                $T\subseteq\mathcal{C}$ a \textbf{tower} over $C$ provided
+                that the following properties hold:
+                \begin{enumerate}
+                    \item
+                        $C\in{T}$.
+                    \item
+                        If $\mathcal{O}\subseteq{T}$, then
+                        $\bigcup\mathcal{O}\in{T}$. That is, $T$ is closed
+                        with respect to unions.
+                    \item
+                        If $C^{\prime}\in{T}$,
+                        then $\twiddle{C}^{\prime}\in{T}$.
+                \end{enumerate}
+                The set $\mathcal{C}$ is a tower over $C$, so towers certainly
+                exist. Define $T_{0}$ to be the intersection of all towers
+                containing $C$. The defining properties of a tower are closed
+                under intersections, so $T_{0}$ is also a tower over $C$.
+                Moreover, $T_{0}$ is totally ordered with respect to inclusion.
+                To prove this, let $T_{1}$ consist of all sets in $T_{0}$ that
+                are comparable with all other sets in $T_{0}$. That is, for
+                each $\mathcal{U}\in{T}_{1}$ for for all
+                $\mathcal{V}\in{T}_{0}$, either
+                $\mathcal{U}\subseteq\mathcal{V}$,
+                or $\mathcal{V}\subseteq\mathcal{U}$. $T_{1}$ is also a tower.
+                $C\in{T}_{1}$ follows from the fact that $T_{0}$ is a tower
+                over $C$, and the fact that $T_{1}$ is closed to unions comes
+                from $T_{1}$ being totally ordered with respect to inclusion
+                (this is its defining property). To conclude that $T_{1}$ is a
+                tower, we must now show that $B\in{T}_{1}$ implies
+                $\twiddle{B}\in{T}_{1}$.
+                \par\hfill\par
+                Given $B\in{T}_{1}$, define:
+                \begin{equation}
+                    T_{B}=\left\{\,
+                        \mathcal{U}\in{T}_{1}
+                        \;\big|\;
+                        \twiddle{B}\subseteq\mathcal{U}
+                        \textrm{ or }
+                        \mathcal{U}\subseteq{B}
+                    \right\}
+                \end{equation}
+                Then $T_{B}$ is also a tower over $C$. The first two properties
+                follow straight from the definition, the third one requires
+                some effort. Suppose $\mathcal{U}\in{T}_{B}$. Note, by the
+                definition of $T_{B}$ and $T_{1}$, $\mathcal{U}$ must be an
+                element of $T_{0}$ as well. Since $T_{0}$ is a tower,
+                $\twiddle{\mathcal{U}}\in{T}_{0}$ is also true.
+                By definition of $T_{B}$, $\mathcal{U}\in{T}_{B}$ implies that
+                either $\mathcal{U}\subseteq{B}$ or
+                $\twiddle{B}\subseteq\mathcal{U}$. If $\mathcal{U}\subseteq{B}$,
+                then since $B\in{T}_{1}$, $B$ must be comparable to
+                $\twiddle{\mathcal{U}}$
+                (since $\twiddle{\mathcal{U}}\in{T}_{0}$), and hence either
+                $\twiddle{\mathcal{U}}\subseteq{B}$ or
+                $B\subseteq\twiddle{\mathcal{U}}$. If
+                $\twiddle{\mathcal{U}}\subseteq{B}$, then
+                $\twiddle{\mathcal{U}}\in{T}_{B}$, by definition. If
+                $B\subseteq\twiddle{\mathcal{U}}$, then we have the string of
+                inclusions
+                $\mathcal{U}\subseteq{B}\subseteq\twiddle{\mathcal{U}}$,
+                and by definition of $\twiddle{\mathcal{U}}$ (given by our
+                choice function), this means either $\mathcal{U}=B$ or
+                $B=\tilde{\mathcal{U}}$. Either way,
+                $\tilde{\mathcal{U}}\in{T}_{B}$ is true. Similarly, if
+                $B\subseteq\mathcal{U}$, then $\tilde{\mathcal{U}}\in{T}_{B}$,
+                and hence $T_{B}$ is a tower. But $T_{B}\subseteq{T}_{0}$,
+                and $T_{0}$ is the intersection of \textbf{all} towers
+                above $C$, meaning $T_{0}\subseteq{T}_{B}$, and therefore
+                $T_{0}=T_{B}$. Since $T_{B}\subseteq{T}_{1}\subseteq{T}_{0}$,
+                and since $T_{0}=T_{B}$, since $T_{1}$ is squeezed in the
+                middle, we have $T_{0}=T_{1}$ as well. But $T_{1}$ is, by
+                definition, totally ordered with respect to inclusion, and
+                hence $T_{0}$ is totally ordered as well.
+                \par\hfill\par
+                The finale is within reach, and far simpler than the proceeding
+                paragraphs. Define $B=\bigcup{T}_{0}$. Then, since $T_{0}$ is
+                totally ordered, by property 2 of towers, this union is
+                in $T_{0}$. That is, $B$ is a chain and $C\subseteq{B}$.
+                But moreover, since $T_{0}$ is a tower and $B\in{T}_{0}$,
+                we have $\twiddle{B}\in{T}_{0}$. But $B$ is the union of
+                all things in $T_{0}$, so $\twiddle{B}\subseteq{B}$.
+                But $B\subseteq\twiddle{B}$ by definition, and therefore
+                $B=\twiddle{B}$. That is, $B$ is a maximal chain containing $C$.
+            \end{proof}
+        \subsection{Proving Zorn's Lemma}
+            With Hausdorff's maximality principle in our toolbelt, we proceed
+            with relative ease (or at least with increased confidence).
+            \begin{theorem}[\textbf{Zorn's Lemma}]
+                If $(X,\,\leq)$ is a non-empty poset such that every chain
+                chain $C\subseteq{X}$ has an upper bound, then there exists
+                a maximal element $s\in{X}$.
+            \end{theorem}
+            \begin{proof}
+                Since $X$ is non-empty, there is some $x\in{X}$. But the set
+                $C=\{\,x\,\}$ is a chain (there is only one element, so every
+                element of $C$ is comparable to every other element). By
+                Hausdorff's maximality principle there exists a maximal
+                chain $D$ such that $C\subseteq{D}$. By
+                hypethesis every chain has an upper bound. Let
+                $s\in{X}$ be an upper bound of $D$. Then $s$ must be
+                maximal. For if not, then there is some $y\in{X}$ such that
+                $s<y$. But then $D\cup\{\,y\,\}$ is a chain since
+                every element of $D$ is comparable with $s$ and $s$
+                is comparable with $y$. But this chain is strictly larger than
+                $D$ since it contains $y$, contradicting the fact
+                that $D$ is a maximal chain. Hence, $s$ is a
+                maximal element.
+            \end{proof}
+        \subsection{The Axiom of Choice from Zorn's Lemma}
+            The latter direction, proving the axiom of choice from Zorn's lemma,
+            is far more straight-forward. Let's begin.
+            \begin{theorem}
+                Assuming the axioms from Zermelo-Fraenkel set theory, if
+                every non-empty poset $(X,\,\leq)$, with the property that
+                every chain has an upper bounded, must necessarily have a
+                maximal element, then the axiom of choice is true.
+            \end{theorem}
+            \begin{proof}
+                Zermelo-Fraenkel set theory allows us to consider the set of
+                all functions from a set $A$ to a set $B$.  This may be
+                constructed using the axioms of the power set, union, pairing,
+                and specification. This fact will be used freely throughout.
+                Suppose $\mathcal{O}$ is a non-empty
+                set such that for all $\mathcal{U}\in\mathcal{O}$ the set
+                $\mathcal{U}$ is also non-empty. That is, suppose the hypotheses
+                from the axiom of choice are given. Define $\mathcal{X}$ as
+                follows:
+                \begin{equation}
+                    \mathcal{X}
+                    =\left\{\,
+                        f:\mathcal{A}
+                            \rightarrow\bigcup\mathcal{A}
+                        \;\big|\;
+                        \mathcal{A}
+                        \subseteq\mathcal{O}
+                        \textrm{ and }
+                        f(\mathcal{U})\in\mathcal{U}
+                        \textrm{ for each }
+                        \mathcal{U}\in\mathcal{A}
+                    \right\}
+                \end{equation}
+                That is, $\mathcal{X}$ is the set of all
+                \textit{partial choice functions}. Since $\mathcal{O}$ is
+                non-empty, there is some $\mathcal{U}\in\mathcal{O}$.
+                But by hypothesis $\mathcal{U}$ is non-empty, so there is some
+                $x\in\mathcal{U}$. Let
+                $\mathcal{A}=\{\,\mathcal{U}\,\}$ and define
+                $f:\mathcal{A}\rightarrow\bigcup\mathcal{A}$
+                by $f(\mathcal{U})=x$. Then $f$ is an example of a partial
+                choice function, meaning $\mathcal{X}$ is \textbf{non-empty}.
+                Order $\mathcal{X}$ as follows. We write
+                $f\leq{g}$ provided the domain of $f$ is a subset of the domain
+                of $g$, and if the restriction of $g$ to the domain of $f$ is
+                just $f$. That is, given
+                $f:\mathcal{A}\rightarrow\bigcup\mathcal{A}$
+                and
+                $g:\mathcal{B}%
+                    \rightarrow\bigcup\mathcal{B}$,
+                we write $f\leq{g}$ if
+                $\mathcal{A}\subseteq\mathcal{B}$ and
+                $g|_{\mathcal{A}}=f$. That is, $g$ is an
+                \textit{extension} of $f$. $(\mathcal{X},\,\leq)$ is a poset.
+                Reflexivity is realized, restricting a function to its entire
+                domain simply produces the same function. Anti-symmetry is
+                a consequence of the anti-symmetry of the inclusion relation.
+                That is,
+                $\mathcal{A}\subseteq\mathcal{B}$
+                and
+                $\mathcal{B}\subseteq\mathcal{A}$
+                implies
+                $\mathcal{A}=\mathcal{B}$. If
+                $f\leq{g}$ and $g\leq{f}$, the functions must then just be
+                equal to each other since their domains are the same and their
+                restrictions to these domains are identical. Lastly,
+                transitivity follows from the transitivity of inclusion.
+                That is, if
+                $\mathcal{A}\subseteq\mathcal{B}$
+                and
+                $\mathcal{B}%
+                    \subseteq\mathcal{C}$,
+                then
+                $\mathcal{A}\subseteq\mathcal{C}$.
+                If $f\leq{g}$ and $g\leq{h}$, then $g$ is an extension of
+                $f$ and $h$ is an extension of $g$. Restricting
+                $h$ to the domain of $f$ is equivalent to first restricting
+                it to the domain of $g$ (which yields $g$ since $h$ is an
+                extension of $g$), and then restricting this to the domain of
+                $f$ (which produces $f$ since $g$ is an extension of $f$).
+                Hence, $h$ is an extension of $f$.
+                \par\hfill\par
+                Our argument thus far shows that $\mathcal{X}$ is non-empty
+                and $(\mathcal{X},\,\leq)$ is a poset. We now prove that
+                all chains have an upper bound. Given a chain
+                $\Delta\subseteq\mathcal{X}$, define
+                $\mathcal{A}$ to be the union of the domains. That is:
+                \begin{equation}
+                    \mathcal{A}=
+                    \bigcup_{f\in\Delta}\textrm{dom}(f)
+                \end{equation}
+                By the definition of union, and of $\mathcal{X}$, this produces
+                a subset of $\mathcal{O}$. We
+                define $f:\mathcal{A}\rightarrow\bigcup\mathcal{A}$ as follows.
+                Given $\mathcal{U}\in\mathcal{A}$, by the definition of
+                union there is some function
+                $f_{\mathcal{B}}:\mathcal{B}\rightarrow\bigcup\mathcal{B}$
+                contained in $\Delta$ such that
+                $\mathcal{U}\in\textrm{dom}(f_{\mathcal{B}})=\mathcal{B}$.
+                Define
+                $f(\mathcal{U})=f_{\mathcal{B}}(\mathcal{U})$.
+                There is no ambiguity in the definition here. If
+                $f_{\mathcal{C}}:\mathcal{C}\rightarrow\bigcup\mathcal{C}$ is
+                another such function with
+                $\mathcal{U}\in\textrm{dom}(f_{\mathcal{C}})$, then since
+                $\Delta$ is a chain either $\mathcal{B}\subseteq\mathcal{C}$ or
+                $\mathcal{C}\subseteq\mathcal{B}$. Then either
+                $f_{\mathcal{C}}$ is an extensive of $f_{\mathcal{B}}$, or
+                vice-versa. In either case they produce the same output
+                for the input $\mathcal{U}$, meaning $f(\mathcal{U})$ is
+                well-defined. Since $f_{\mathcal{B}}$ is a partial choice
+                function, and since we have defined
+                $f(\mathcal{U})=f_{\mathcal{B}}(\mathcal{U})$, we may conclude
+                that $f(\mathcal{U})\in\mathcal{U}$ is true and hence
+                $f:\mathcal{A}\rightarrow\bigcup\mathcal{A}$ is a partial
+                choice function. That is, $f\in\mathcal{X}$. But by
+                construction $f$ is an extension of all of the elements of
+                $\Delta$, and hence the chain $\Delta$ has (at least one)
+                upper bound, namely the function $f$.
+                \par\hfill\par
+                We now have that $(\mathcal{X},\,\leq)$ is a non-empty poset
+                where each chain has an upper bound. By Zorn's lemma there is
+                a maximal element $f$. We conclude the proof by showing that
+                the domain of $f$ is all of $\mathcal{O}$, meaning $f$ is a
+                choice function on $\mathcal{O}$. If not then there is some
+                $\mathcal{U}$ not contained in the domain of $f$. But if
+                $\mathcal{U}\in\mathcal{O}$, then by hypothesis $\mathcal{U}$
+                is non-empty and contains some element $x$. We may then extend
+                $f$ by defining $f(\mathcal{U})=x$. But $f$ is maximal, meaning
+                it cannot be extended, a contradiction. Therefore the domain of
+                $f$ is all of $\mathcal{O}$ and we have found a choice function.
+            \end{proof}
+            From this we have that Zorn's lemma and the axiom of choice are
+            equivalent. We have actually established the equivalence of the
+            Axiom of Choice (AC), Zorn's Lemma (ZL), and
+            Hausdorff's Maximality Principle (HMP) since
+            $\textrm{AC}\Rightarrow\textrm{HMP}$, and
+            $\textrm{HMP}\Rightarrow\textrm{ZL}$ (the first part of the paper).
+            Since we have now proven $\textrm{ZL}\Rightarrow\textrm{AC}$, by
+            the transitivity of implication all three of these statements
+            are logically equivalent (assuming the remaining axioms of
+            Zermelo-Fraenkel set theory).
 \end{document}
