@@ -1,0 +1,368 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{xcolor}
+\theoremstyle{normal}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\title{Continuity and Differentiation}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newif\ifsolution
+\solutiontrue
+\graphicspath{{../../../images/}}
+
+\begin{document}
+    \maketitle
+    \section{Continuity}
+        We proved in class that continuity has three equivalent
+        definitions. Given $A\subseteq\mathbb{R}^{n}$ and
+        $f:A\rightarrow\mathbb{R}^{m}$, continuity means:
+        \begin{enumerate}
+            \item
+                For every convergent sequence
+                $a:\mathbb{N}\rightarrow{A}$, the sequence
+                given by $f(a_{n})$ is convergent.
+            \item
+                For every $x_{0}\in{A}$ and for all $\varepsilon>0$ there is
+                a $\delta>0$ such that $x\in{A}$ and
+                $|x-x_{0}|<\delta$ implies $|f(x)-f(x_{0})|<\varepsilon$
+                (Note: in $\mathbb{R}^{n}$ we replace the absolute value
+                function with the Euclidean distance function
+                $\|\mathbf{x}-\mathbf{y}\|$ which is given by the
+                Pythagorean formula).
+            \item
+                If $\mathcal{V}\subseteq\mathbb{R}^{n}$ is open, then
+                $f^{-1}[\mathcal{V}]\subseteq{A}$ is open (with respect to $A$).
+        \end{enumerate}
+        Where $\mathcal{U}\subseteq{A}$ is open \textit{open with respect to}
+        $A$ if for each $x\in\mathcal{U}$ there is a radius
+        $r>0$ such that $y\in\mathcal{U}$ and $|x-y|<r$
+        (or $\|\mathbf{x}-\mathbf{y}\|<r$) implies $y\in\mathcal{U}$.
+        \par\hfill\par
+        The third definition is where \textit{topology} starts, since it
+        only uses open sets. But we are interested in analysis (particularly
+        the analysis of $\mathbb{R}$, $\mathbb{R}^{n}$, and
+        $\mathbb{C}$). In these settings the second definition is perhaps the
+        most intuitive. This says that as long as our accuracy in measuring
+        $x_{0}$ is within $\delta$, the error in computing $f(x_{0})$ is no
+        more than $\varepsilon$ (see Fig.~\ref{fig:eps_delta_def}).
+        \begin{figure}
+            \centering
+            \resizebox{0.75\textwidth}{!}{%
+                \includegraphics{continuity_epsilon_delta_definition}
+            }
+            \caption{Visual for the $\varepsilon-\delta$ definition.}
+            \label{fig:eps_delta_def}
+        \end{figure}
+        \par\hfill\par
+        In the following problems you may use any of the three definitions.
+        \par\hfill\par
+        \textbf{Problem:}
+        \par\hfill\par
+        Show that the function $f:\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+        \begin{equation}
+            f(x)
+            =\begin{cases}
+                x,&x\in\mathbb{Q}\\
+                -x,&x\not\in\mathbb{Q}
+            \end{cases}
+        \end{equation}
+        is continuous at the origin and \textbf{nowhere else}.
+        \par\hfill\par
+        \ifsolution
+            \color{blue}
+            \textit{Solution.}
+            \par\hfill\par
+            Let $\varepsilon>0$. The value of $f$ at the origin is
+            $f(0)=0$. We want to show that there is some $\delta>0$ such that
+            if $|x-0|<\delta$, then $|f(x)-f(0)|<\varepsilon$. that is,
+            $|x|<\delta$ implies $|f(x)|<\varepsilon$.
+            Pick $\delta=\varepsilon$. By the definition of $f$ we have
+            $|f(x)|=|x|$. Note that if $|x|<\delta$, then
+            $|x|<\varepsilon$, by the definition of $\delta$, which means that
+            $|f(x)|<\varepsilon$ since $|f(x)|=|x|$. Hence $f$ is continuous
+            at the origin. If $x\in\mathbb{R}$ is \textit{not} the origin,
+            we argue as follows. If $x$ is rational, find a sequence
+            $a:\mathbb{N}\rightarrow\mathbb{R}$ of irrationals that
+            converges to $x$. This can be done explicitly:
+            \begin{equation}
+                a_{n}=x+\frac{\sqrt{2}}{n+1}
+            \end{equation}
+            Then $f(a_{n})=-a_{n}$ and this converges to $-x$. But
+            $f(x)=x$, and $x\ne{-x}$ since $x$ is non-zero.
+            \par\hfill\par
+            If $x\in\mathbb{R}$ is irrational, then by definition
+            there is a Cauchy sequence $a:\mathbb{N}\rightarrow\mathbb{Q}$
+            such that $a_{n}\rightarrow{x}$. But then
+            $f(a_{n})=a_{n}$ and this converges to $x$. However
+            $f(x)=-x$ and $x\ne{-x}$ since $x$ is non-zero. Hence if
+            $x$ is non-zero (either rational or irrational), then $f$ is
+            not continuous at $x$.
+            \par\hfill\par
+            \color{black}
+        \fi
+        \textbf{Problem:}
+        \par\hfill\par
+        Define $f:\mathbb{R}\rightarrow\mathbb{R}$ as follows:
+        \begin{equation}
+            f(x)
+            =\begin{cases}
+                0,&x\not\in\mathbb{Q}\\
+                \frac{\textrm{GCD}(p,\,q)}{q},&x=\frac{p}{q}
+            \end{cases}
+        \end{equation}
+        Since rational numbers $p/q$ can always be chosen to consist of
+        co-prime pairs (by dividing the numerator and denominator by their
+        greatest common divisor), we may write:
+        \begin{equation}
+            f\left(\frac{p}{q}\right)
+            =\frac{1}{q}
+        \end{equation}
+        given a co-prime pair $(p,\,q)$ (and non-zero $q\in\mathbb{Z}$).
+        The function is plotted in Fig.~\ref{fig:popcorn}.
+        Show that $f$ is continuous at every irrational number, and
+        discontinuous at every rational number.
+        \begin{figure}
+            \centering
+            \includegraphics{dirichlets_popcorn_function}
+            \caption{The Dirichlet Popcorn Function}
+            \label{fig:popcorn}
+        \end{figure}
+        \par\hfill\par
+        \ifsolution
+            \color{blue}
+            \textit{Solution.}
+            \par\hfill\par
+            Suppose $x\in\mathbb{R}$ is a rational number.
+            Define $a:\mathbb{N}\rightarrow\mathbb{R}$ by:
+            \begin{equation}
+                a_{n}=x+\frac{\sqrt{2}}{n+1}
+            \end{equation}
+            Then $a_{n}\rightarrow{x}$, but $f(a_{n})=0$ for all
+            $n\in\mathbb{N}$, and hence $f(a_{n})\rightarrow{0}$.
+            But $f(x)=1/q$, where $x=p/q$ and $p$ and $q$ are co-prime.
+            That is, $f(a_{n})\not\rightarrow{f}(x)$, so $f$ is not continuous
+            at $x$.
+            \par\hfill\par
+            If $x_{0}$ is irrational, then we can prove $f$ is continuous at
+            $x_{0}$ by using the $\varepsilon-\delta$ definition. Let
+            $\varepsilon>0$ be given. There is some positive integer
+            $N\in\mathbb{N}$ such that $1/N<\varepsilon$. Let
+            $\delta=1/N$. If $x$ satisfies $|x-x_{0}|<\delta$ and $x$
+            is irrational, then $|f(x)-f(x_{0})|=|0-0|=0$, and this is indeed
+            bounded by $\varepsilon$. For rational $x$, $x=p/q$, if
+            $|x-x_{0}|<\delta$, then $q$ must be very large, larger than
+            $N$ (otherwise $|x-p/q|$ would be greater than $1/N$). But then
+            $|f(x)|=|1/q|$, and since $|q|>N$, we have $|1/q|<1/N$, and hence
+            $|1/q|<\varepsilon$. But then $|f(x)-f(x_{0})|<\varepsilon$.
+            Since $\varepsilon>0$ is arbitrary, $f$ is continuous at
+            $x_{0}$.
+            \par\hfill\par
+            \color{black}
+        \fi
+        There is no reverse of this. That is, there is no function
+        $f:\mathbb{R}\rightarrow\mathbb{R}$ that is continuous on the
+        rationals, but discontinuous on the irrationals. The proof is
+        a little too difficult for our current discussion. Roughly speaking
+        there are types of sets called $F_{\sigma}$ sets and sets called
+        $G_{\delta}$ sets. The rationals form an $F_{\sigma}$ set, the
+        irrationals yield a $G_{\delta}$ set (whatever this means). Because of
+        this it is possible to have a function that is continuous on
+        $\mathbb{R}\setminus\mathbb{Q}$ and discontinuous on $\mathbb{Q}$,
+        but not the other way around.
+        \par\hfill\par
+    \section{Differentiation}
+        Differentiation is defined in a similar manner to continuity, but
+        we now consider a certain \textit{ratio}. For the time being we
+        restrict ourselves to functions $f:A\rightarrow\mathbb{R}$ with
+        $A\subseteq\mathbb{R}$. Due to technical reasons, life is a lot
+        simpler if we require $A$ to be an open subset. $f$ is
+        differentiable at $x_{0}\in{A}$ provided that for any sequence
+        $a:\mathbb{N}\rightarrow{A}$ that converges to $x_{0}$
+        (i.e. $a_{n}\rightarrow{x}_{0}$) with the property that
+        $a_{n}\ne{x}_{0}$ for all $n\in\mathbb{N}$, we have that:
+        \begin{equation}
+            \frac{f(x)-f(a_{n})}{x-a_{n}}
+        \end{equation}
+        is a convergent sequence.
+        \begin{theorem}
+            If $f:A\rightarrow\mathbb{R}$ is differentiable at
+            $x_{0}\in{A}$, and if $a,b:\mathbb{N}\rightarrow{A}$ are
+            convergent sequences with $a_{n}\rightarrow{x}_{0}$ and
+            $b_{n}\rightarrow{x}_{0}$, and $a_{n}\ne{x}_{0}$ and
+            $b_{n}\ne{x}_{0}$ for all $n\in\mathbb{N}$, then:
+            \begin{equation}
+                \lim_{n\rightarrow\infty}
+                \frac{f(x)-f(a_{n})}{x-a_{n}}
+                =
+                \lim_{n\rightarrow\infty}
+                \frac{f(x)-f(b_{n})}{x-b_{n}}
+            \end{equation}
+            That is, the limit is unique.
+        \end{theorem}
+        \begin{proof}
+            For suppose the limits are $A$ and $B$, respectively.
+            Form a new sequence $c:\mathbb{N}\rightarrow{A}$ by:
+            \begin{equation}
+                c_{n}=
+                \begin{cases}
+                    a_{n/2},&n\textrm{ is even.}\\
+                    b_{(n-1)/2},&n\textrm{ is odd.}
+                \end{cases}
+            \end{equation}
+            Then $c_{n}\rightarrow{x}_{0}$ since the $a$ and $b$ sequences
+            do this, and moreover $c_{n}\ne{x}_{0}$ for all $n\in\mathbb{N}$.
+            Since $f$ is differentiable at $x_{0}$, the sequence:
+            \begin{equation}
+                \frac{f(x)-f(c_{n})}{x-c_{n}}
+            \end{equation}
+            must converge, call the limit $C$. But this sequence contains a
+            convergent subsequence, namely the even entries, that converges to
+            $A$. Since limits are unique, we have $A=C$.
+            But this sequence of ratios also contains a convergent subsequence,
+            namely the odd entries, with limit $B$. Since limits are unique,
+            we see that $B=C$ must also be true. By the transitivity of
+            equality we may conclude $A=B$.
+        \end{proof}
+        We call the unique limit of ratios the \textit{derivative} of
+        $f$ at $x_{0}$, often denoted $f^{\prime}(x_{0})$ or
+        $\dot{f}(x_{0})$. Like continuity, there is an alternative way to
+        think about differentiation.
+        \begin{theorem}
+            If $A\subseteq\mathbb{R}$ is open, if $f:A\rightarrow\mathbb{R}$ is
+            a function, and if $x_{0}\in{A}$, then $f$ is differentiable at
+            $x_{0}$ if and only if there is an $L\in\mathbb{R}$ such that
+            for all $\varepsilon>0$ there is a $\delta>0$ such that $x\in{A}$
+            and $0<|x-x_{0}|<\delta$ implies:
+            \begin{equation}
+                \left|
+                    L-\frac{f(x)-f(x_{0})}{x-x_{0}}
+                \right|<\varepsilon
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            Going one way, suppose $f$ is differentiable. Pick any
+            sequence $a:\mathbb{N}\rightarrow{A}$ such that
+            $a_{n}\rightarrow{x}_{0}$ and $a_{n}\ne{x}_{0}$ for all
+            $n\in\mathbb{N}$. Such a sequence exists since $A$ is open
+            (this is precisely why we require this in the definition).
+            Define $L$ via:
+            \begin{equation}
+                L=
+                \lim_{n\rightarrow\infty}
+                \frac{f(a_{n})-f(x_{0})}{a_{n}-x_{0}}
+            \end{equation}
+            If the $\varepsilon-\delta$ property is not satisfied,
+            then there is an $\varepsilon>0$ such that for all $\delta>0$
+            there exists $x\in{A}$ with $0<|x-x_{0}|<\delta$, and yet
+            $\left|L-\frac{f(x)-f(x_{0})}{x-x_{0}}\right|\geq\varepsilon$.
+            Substituting $\delta=\frac{1}{n+1}$ we may find a sequence of
+            points (the axiom of countable choice is being subtly used here)
+            $b_{n}$ such that $0<|x-b_{n}|<\frac{1}{n+1}$ and:
+            \begin{equation}
+                \left|
+                    L-\frac{f(b_{n})-f(x{0})}{b_{n}-x_{0}}
+                \right|
+                \geq\varepsilon
+            \end{equation}
+            But such a sequence must converge to $x_{0}$,
+            $b_{n}\rightarrow{x}_{0}$, and since $f$ is differentiable at
+            $x_{0}$ the sequence of ratios must converge to $L$, which is a
+            contradiction. So the $\varepsilon-\delta$ criterion is satisfied.
+            \par\hfill\par
+            In the other direction, suppose $f$ satisfies the
+            $\varepsilon-\delta$ criterion. We wish to prove that $f$ is
+            differentiable at $x_{0}$. Let $a:\mathbb{N}\rightarrow{A}$ be
+            a sequence such that $a_{n}\rightarrow{x}_{0}$ and
+            $a_{n}\ne{x}_{0}$ for all $n\in\mathbb{N}$. Given
+            $\varepsilon>0$, since the $\varepsilon-\delta$ property is
+            satisfied, there exists $\delta>0$ such that
+            $x\in{A}$ and $0<|x-x_{0}|<\delta$ implies
+            $\left|L-\frac{f(x)-f(x_{0})}{x-x_{0}}\right|<\varepsilon$.
+            But if $\delta>0$ and $a_{n}\rightarrow{x}_{0}$, then by the
+            definition of convergence there is some $N\in\mathbb{N}$ such
+            that $n\in\mathbb{N}$ and $n>N$ implies
+            $|a_{n}-x_{0}|<\delta$. But then for all $n>N$ we have:
+            \begin{equation}
+                \left|
+                    L-\frac{f(a_{n})-f(x{0})}{a_{n}-x_{0}}
+                \right|<\varepsilon
+            \end{equation}
+            Hence the sequence of ratios converges and has $L$ as its limit.
+            That is, $f$ is differentiable at $x_{0}$.
+        \end{proof}
+        \par\hfill\par
+        \textbf{Problem:}
+        \par\hfill\par
+        Show that $f:\mathbb{R}\rightarrow\mathbb{R}$ defined by:
+        \begin{equation}
+            f(x)
+            =\begin{cases}
+                x^{2},&x\in\mathbb{Q}\\
+                -x^{2},&x\not\in\mathbb{Q}
+            \end{cases}
+        \end{equation}
+        is differentiable at the origin and nowhere else.
+        \par\hfill\par
+        \ifsolution
+            \color{blue}
+            \textit{Solution.}
+            \par\hfill\par
+            The function is wedged between $x^{2}$ and $-x^{2}$, both of
+            which are pretty flat near the origin. It is likely that the
+            derivative is $0$, if it exists at all. Given $\varepsilon>0$,
+            we want to find some $\delta>0$ such that $0<|x-0|<\delta$ implies:
+            \begin{equation}
+                \begin{array}{lrcl}
+                    &
+                    \displaystyle
+                    \left|
+                        0-\frac{f(x)-f(0)}{x-0}
+                    \right|
+                    &<&
+                    \varepsilon\\[1em]
+                    \Longleftrightarrow
+                    &
+                    \displaystyle
+                    \left|
+                        \frac{\pm{x}^{2}}{x}
+                    \right|
+                    &<&
+                    \varepsilon\\[1em]
+                    \Longleftrightarrow
+                    &
+                    \displaystyle
+                    \left|\pm{x}\right|
+                    &<&
+                    \varepsilon\\[1em]
+                    \Longleftrightarrow
+                    &
+                    |x|
+                    &<&
+                    \varepsilon
+                \end{array}
+            \end{equation}
+            Choosing $\delta=\varepsilon$ solves our problems. For any
+            non-zero $x$ the function is not even continuous, meaning it cannot
+            possibly be differentiable.
+        \fi
+\end{document}
