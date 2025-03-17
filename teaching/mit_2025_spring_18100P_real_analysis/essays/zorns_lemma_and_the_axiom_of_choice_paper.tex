@@ -20,6 +20,7 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage[nottoc]{tocbibind}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \hypersetup{colorlinks = true, linkcolor = blue}
@@ -34,9 +35,9 @@
 \newtheorem{definition}{Definition}[section]
 \graphicspath{{../../../images/}}
 \newcommand*{\twiddle}[1]{%
-    %\overset{\thicksim}{#1}
     \tilde{#1}
 }
+
 \begin{document}
     \maketitle
     \begin{abstract}
@@ -68,7 +69,8 @@
         first bucket, the second element corresponds to something in the
         second bucket, so on and so forth. Claiming that we may go about the
         buckets and collect an item from each is equivalent to saying that
-        \textbf{the Cartesian product of non-empty sets is non-empty}. Buckets
+        \textbf{the Cartesian product of non-empty sets is non-empty}
+        \cite[p.~59]{Halmos1974}. Buckets
         are not very formal, mathematically, but we may model this idea using
         the language of set theory. We have the following.
         \begin{axiom}[\textbf{Axiom of Choice}]
@@ -79,6 +81,9 @@
             \textit{choice function}, with the property that for all
             $\mathcal{U}\in\mathcal{O}$ we have $f(\mathcal{U})\in\mathcal{U}$.
         \end{axiom}
+        There are many equivalent formulations of this axiom
+        (see, for example, \cite[p.~109]{MoschovakisNotesOnSetTheory} or
+        \cite[p.~167]{Cunningham2010}).
         We have used the set-theoretic notation for union, but we may just as
         easily use the (perhaps) more familiar notation found in analysis:
         \begin{equation}
@@ -87,12 +92,13 @@
         \end{equation}
         The axiom of choice has far reaching applications in nearly all
         branches of mathematics. The topologist relies on it when they invoke
-        \textit{Tychonoff's theorem}, the graph theorist regularly
-        uses it to assert the existence of spanning trees, and most algebraists
-        enjoy the fact that every vector space has a basis. There are about
-        a dozen more statements in set theory that are equivalent to the
-        axiom of choice, some of which may seem even more obvious. Consider
-        the following.
+        \textit{Tychonoff's theorem} \cite[p.~234]{Munkres2000},
+        the graph theorist regularly uses it to assert the existence of
+        spanning trees, and most algebraists enjoy the fact that every
+        vector space has a basis \cite[p.~518]{ArtinAlgebra2014}.
+        There are about a dozen more statements in set theory that are
+        equivalent to the axiom of choice, some of which may seem even
+        more obvious. Consider the following.
         \begin{theorem}
             If $A$ and $B$ are sets, and if $f:A\rightarrow{B}$ is a
             surjective function, then there is a \textit{right inverse}
@@ -118,10 +124,11 @@
             create two new copies of $\mathbb{S}^{2}$, each being the exact
             same size as the original one.
         \end{theorem}
+        For a proof, see \cite[p.~29]{WagonBanachTarski}.
         In other words, you may start with a pea and eventually end up with
-        the sun. This is \textit{clearly} false, but the proof only relies on
-        the axiom of choice (together with the other familiar notions from
-        set theory).
+        the sun. This is \textit{clearly}
+        false, but the proof only relies on the axiom of choice
+        (together with the other familiar notions from set theory).
         \par\hfill\par
         Regardless of these philosophical issues, the analysts and the
         algebraists are not likely to invoke the axiom of choice explicitly
@@ -134,11 +141,16 @@
         every branch ends at a leaf, then there is a \textit{tallest} leaf.
         There may be several tallest leaves (each of equal height), but there
         is at least one. This analogy will be made concrete later when we
-        provide rigorous definitions.
+        provide rigorous definitions. The goal of this paper is to prove the
+        following equivalence:
+        \begin{theorem}[\textbf{Equivalence of AC and Zorn's Lemma}]
+            Assuming the axioms of Zermelo-Fraenkel set theory,
+            the axiom of choice (AC) is logically equivalent to Zorn's lemma.
+        \end{theorem}
         \subsection{Zermelo-Fraenkel Set Theory}
             We will not start from complete scratch in our proof, but instead
             rely on the solid foundations provided by modern set theory.
-            But as a matter of fact, most of the Zermelo-Fraenkel set theory
+            But as a matter of fact, several of the Zermelo-Fraenkel set theory
             axioms (ZF) are not required. To be precise we must
             adopt the axioms of union, pairing, power set, specification,
             and extensionality, and we also assume the existence of the empty
@@ -166,14 +178,16 @@
             \par\hfill\par
             The use of the remaining axioms is subtle, and at first glance the
             reader may not think we actually need them. Pairing, power set,
-            union, and specification allow us to define Cartesian products,
-            which in turn allow us to provide a non-circular definition for
+            union, and specification allow us to define Cartesian products
+            \cite[p.~24]{Halmos1974},
+            which in turn allow us to provide a non-circular definition of
             functions (i.e. without saying that functions are just
             \textit{rules}, which is circular). Indeed, we may go further and
             construct the \textit{set of all functions} from a given set $A$
             to another set $B$. For brevity, we omit this discussion, but the
             reader can rest assurred that precise constructions can be made,
             albeit with increased effort and patience.
+            \cite{Halmos1974} is the standard reference for this endeavor.
         \subsection{Partially Ordered Sets}
             The crucial definitions for our result lie in order theory. Indeed,
             Zorn's lemma is an order theory result above all else. We are
@@ -223,8 +237,9 @@
             do not need to have such a concept, and indeed if we set
             $A=\{\,1,\,2,\,3\,\}$, then $\{\,1\,\}$ and $\{\,2\,\}$ are elements
             of $\mathcal{P}(A)$, but neither is a subset of the other. That is,
-            they are \textit{uncomparable}. We visually represent posets by
-            connecting edges between the elements that are comparable. The
+            these subsets are \textit{incomparable}.
+            We visually represent posets by connecting edges between
+            the elements that are comparable. The
             result is a \textit{Hasse diagram} (see Fig.~\ref{fig:power_set}).
             \par\hfill\par
             The more familiar orders we experience in everyday life are
@@ -270,7 +285,10 @@
         \par\hfill\par
         We tackle Zorn's lemma by first showing that the axiom of choice
         implies \textit{Hausdorff's maximality principle}. Indeed, Hausdorff's
-        theorem is equivalent to the axiom of choice, much like Zorn's lemma.
+        theorem is equivalent to the axiom of choice
+        \cite[p.~69]{Munkres2000}, much like Zorn's lemma, and is important in
+        its own right due to many applications in topology
+        \cite[p.~32]{KelleyTopology}.
         Using this stepping stone we then prove Zorn's lemma by
         reducing our search for a \textit{maximal element} to a search for a
         \textit{maximal chain}, which is granted by Hausdorff's theorem.
@@ -614,4 +632,6 @@
             the transitivity of implication all three of these statements
             are logically equivalent (assuming the remaining axioms of
             Zermelo-Fraenkel set theory).
+    \bibliographystyle{plain}
+    \bibliography{bib.bib}
 \end{document}
