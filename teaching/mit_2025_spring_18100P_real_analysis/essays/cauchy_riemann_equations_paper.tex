@@ -1,0 +1,572 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper, margin = 1in}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[nottoc]{tocbibind}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = blue}
+\title{The Cauchy-Riemann Equations}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}{Axiom}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\graphicspath{{../../../images/}}
+\newcommand*{\twiddle}[1]{%
+    \tilde{#1}
+}
+
+\begin{document}
+    \maketitle
+    \begin{abstract}
+        Over the past few centuries complex analysis has found its way into all
+        of the physical and applied sciences. From electromagnetic waves and
+        circuits to computer graphics, the ability to add and multiply points
+        in the plane in a meaningful and geometry way has far applications,
+        but perhaps most import is the ability to differentiate functions of
+        a complex variable. It is well known that a function
+        $f:\mathbb{C}\rightarrow\mathbb{C}$ is differentiable if and only if
+        it satisfies the Cauchy-Riemann equations. We prove this rigorously
+        in a mostly self-contained manner and provide physical geometric
+        interpretations of this theorem.
+    \end{abstract}
+    \tableofcontents
+    \section{Introduction}
+        There is a natural way to add points in the Euclidean plane
+        $\mathbb{R}^{2}$ by using \textit{vector addition}. Given
+        $P=(x_{0},\,y_{0})$ and $Q=(x_{1},\,y_{1})$, we may sum $P$ and $Q$
+        together by simply adding their components:
+        \begin{equation}
+            P+Q
+            =(x_{0},\,y_{0})+(x_{1},\,y_{1})
+            =(x_{0}+x_{1},\,y_{0}+y_{1})
+        \end{equation}
+        See Fig.~\ref{fig:complex_number_addition_001}.
+        \begin{figure}
+            \centering
+            \includegraphics{complex_number_addition_001}
+            \caption{Visual for Vector Addition in $\mathbb{R}^{2}$}
+            \label{fig:complex_number_addition_001}
+        \end{figure}
+        The definiiton of multiplying points is not so clear at first glance.
+        Cardano, in his \textit{Ars Magna} (1545 C.E.), writes that
+        one may solve $x(10-x)=40$ if they allow for negative square roots,
+        such as $5-\sqrt{-15}$ and $5+\sqrt{-15}$
+        \cite[p.~252]{KlineMathematicalHistory}.
+        History, solutions to cubic equations of the form
+        $x^{3}+mx=n$ lead to auxiliary terms $t$ and $u$ given by
+        \cite[p.~264]{KlineMathematicalHistory}:
+        \begin{equation}
+            \begin{array}{rcl}
+                \displaystyle
+                t
+                &=&
+                \displaystyle
+                \sqrt{\left(\frac{n}{2}\right)^{2}+\left(\frac{m}{3}\right)^{3}}
+                +\frac{n}{2}\\[1.5em]
+                \displaystyle
+                u
+                &=&
+                \displaystyle
+                \sqrt{\left(\frac{n}{2}\right)^{2}+\left(\frac{m}{3}\right)^{3}}
+                -\frac{n}{2}\\
+            \end{array}
+        \end{equation}
+        For a cubic such as $x^{3}-6x-2=0$, which has three \textit{real} roots,
+        we require square roots of \textit{negative} numbers. The multiplicative
+        operation on the complex plane can be defined by modeling this behavior.
+        We set $i=(0,\,1)$ and require $i^{2}=-1$. Algebraically, we are
+        constructing a \textit{field extension} over the real numbers,
+        $\mathbb{C}=\mathbb{R}[i]$, where we are \textit{adjoining} $i$ to
+        $\mathbb{R}$ and writing $z\in\mathbb{C}$ as $z=a+ib$ with
+        $a,b\in\mathbb{R}$ \cite[p.~512]{DummitAndFooteAbstractAlgebra}.
+        While this is very formal and precise, it is far from concrete or
+        geometric. If we set out to define a multiplication on $\mathbb{R}^{2}$,
+        then by the Frobenius theorem \cite[p.~452]{JacobsonBasicAlgebraI}
+        there is only one way (up to isomorphism) to this in a \textit{nice}
+        manner. That is, to produce a field structure
+        $(\mathbb{R}^{2},\,+,\,\times)$ that is \textit{compatible} with the
+        real number system $(\mathbb{R},\,+,\,\times)$, there must be some
+        fixed negative real number $r$ such that:
+        \begin{equation}
+            (x_{0},\,y_{0})\times(x_{1},\,y_{1})
+            =(x_{0}y_{1}+ry_{0}y_{1},\,x_{0}y_{1}+x_{1}y_{0})
+        \end{equation}
+        By compatible, formally we mean that the complex numbers form an
+        \textit{algebra} over the reals.
+        Algebraically any choice of $r<0$ will do.
+        Choosing $r=-1$ is the geometrically reasonable selection since now
+        our multiplication is compatible with the Pythagorean formula:
+        \begin{equation}
+            \|(x_{0},\,y_{0})\times(x_{1},\,y_{1})\|
+            =\|(x_{0},\,y_{0})\|\;\|(x_{1},\,y_{1})\|
+        \end{equation}
+        Where $\|\cdot\|$ denotes the Euclidean norm given by the
+        Pythagorean formula. This produces the same structure as the more
+        abstract field extension method, we may write
+        $z=(x,\,y)=x+iy$ to jump back and forth between the two notions.
+        By treating complex numbers purely as points in the plane, there is
+        a third interpretations that is very geometric. Complex numbers are
+        \textit{matrices} (see \cite[p.~25]{PetersenLinearAlgebra} for a
+        simple example). Since multiplication satisfies the
+        distributive law, $(z_{0}+z_{1})w=z_{0}w+z_{1}w$, we may think of
+        $w=a+ib$ as a linear function
+        $f:\mathbb{R}^{2}\rightarrow\mathbb{R}^{2}$ given by $f(z)=zw$.
+        There is thus a representative matrix. To calculate the entries
+        we simply compute $f\big((1,\,0)\big)$ and $f\big((0,\,1)\big)$,
+        giving us:
+        \begin{equation}
+            w=
+            \begin{bmatrix}
+                a&-b\\
+                b&\phantom{+}a
+            \end{bmatrix}
+        \end{equation}
+        If $\|w\|=1$, we may write $w=\cos(\theta)+i\sin(\theta)$ for some
+        real angle $\theta$. The representative matrix is then:
+        \begin{equation}
+            w=
+            \begin{bmatrix}
+                \cos(\theta)&-\sin(\theta)\\[0.5em]
+                \sin(\theta)&\phantom{+}\cos(\theta)
+            \end{bmatrix}
+        \end{equation}
+        This is a \textbf{rotation matrix}. That is, complex arithmetic
+        describes geometric transformations of the plane. The combination
+        of these interpretations result in complex analysis invading every
+        branch of mathematics: algebra, analysis, combinatorics, geometry,
+        mathematical physics, number theory, topology, and applied mathematics.
+        In physics we describe electromagnetic waves using complex numbers
+        \cite[p.~380]{WangsnessElectromagneticFields}, the central postulate
+        behind quantum mechanics is the Schr\"{o}dinger equation which models
+        quantum systems using complex numbers
+        (\cite[p.~1]{GriffithsQuantumMechanics},
+        \cite[p.~68]{McIntyreQuantumMechanics}), in acoustics and
+        audio engineering the Fourier transform is used decompose sounds into
+        their component frequencies
+        \cite[p.~28]{MorseIngbardTheoreticalAcoustics}, and in computer
+        graphics we use complex numbers (and \textit{quaternions}) to describe
+        how we scale and rotate vectors. The list of applications goes on
+        and on. Most of these applications use more than the fact that complex
+        arithmetic has a geometric meaning, they make regular use of the fact
+        that \textit{ratios} are well-defined when the denominator is
+        non-zero. To keep the notation fixed, we provide the following
+        definition.
+        \begin{definition}[\textbf{Complex Numbers}]
+            A complex number is a point in the plane $z\in\mathbb{R}^{2}$
+            represented by writing $z=x+iy$ with $x,y\in\mathbb{R}$ where $x$
+            is the \textit{real part} and $y$ is the \textit{imaginary part}.
+            Arithmetic is given by the associative, commutative, and
+            distributive laws (i.e., real arithmetic plus factoring the $i$
+            symbol), and by using $i^{2}=-1$. We write
+            $\mathbb{R}^{2}=\mathbb{C}$ when we explicitly wish to think of
+            points as complex numbers, rather than geometric points in the
+            Euclidean plane.
+        \end{definition}
+        This arithmetic allows us to define division as follows.
+        Given $z=x+iy$, with $(x,\,y)\ne(0,\,0)$, we have:
+        \begin{equation}
+            z^{-1}=\frac{x-iy}{x^{2}+y^{2}}
+        \end{equation}
+        The geometric interpretation is shown in
+        Fig.~\ref{fig:complex_number_division_001}. We subtract angles and
+        scale by the ratio of the magnitudes for the two vectors.
+        \begin{figure}
+            \centering
+            \includegraphics{complex_number_division_001}
+            \caption{Visual for Division of Complex Numbers}
+            \label{fig:complex_number_division_001}
+        \end{figure}
+        There is a straight-forward metric we can place on the complex plane
+        given by the Pythagorean formula. Namely, given
+        $z=x_{0}+iy_{0}$ and $w=x_{1}+iy_{1}$, we write:
+        \begin{equation}
+            \operatorname{dist}(z,\,w)
+            =\|(x_{0},\,y_{0})-(x_{1},\,y_{1})\|
+            =\sqrt{(x_{0}-x_{1})^{2}+(y_{0}-y_{1})^{2}}
+        \end{equation}
+        The \textbf{modulus} of a complex number $z=x+iy$ is given by
+        $|z|=\|(x,\,y)\|$, meaning we may also write
+        $\operatorname{dist}(z,\,w)=|z-w|$. With this, convergence of sequences
+        is well-defined, and the complex numbers have a notion of
+        \textit{Cauchy sequences} as well. Indeed, the complex numbers are
+        \textbf{complete}: all Cauchy sequences converge
+        \cite[p.~33]{AlhforsComplexAnalysis}. Continuity may then be defined
+        as follows.
+        \begin{definition}[\textbf{Continuous Function}]
+            A continuous complex-valued function of a complex variable is a
+            function $f:\mathbb{C}\rightarrow\mathbb{C}$ such that for every
+            convergent sequence $a:\mathbb{N}\rightarrow\mathbb{C}$ we have:
+            \begin{equation}
+                \lim_{n\rightarrow\infty}f(a_{n})
+                =f\left(\lim_{n\rightarrow\infty}a_{n}\right)
+            \end{equation}
+            That is, the image of a convergent sequence under $f$ is again a
+            convergent sequence.
+        \end{definition}
+        \subsection{Differentiation}
+            Since the complex numbers form a field, we may take two sequences
+            of non-zero complex numbers and take their quotient. Differentiation
+            may be defined in the exact same manner as real numbers in this
+            respect.
+            \begin{definition}[\textbf{Differentiable Function}]
+                A differentiable complex-valued function of a complex variable
+                is a function $f:\mathbb{C}\rightarrow\mathbb{C}$ such that
+                for all $z_{0}\in\mathbb{C}$ and for any sequence
+                $a:\mathbb{N}\rightarrow\mathbb{C}$ that convergences to
+                $z_{0}$, the sequence of ratios converges. That is:
+                \begin{equation}
+                    f^{\prime}(z_{0})
+                    =\lim_{n\rightarrow\infty}
+                    \frac{f(a_{n})-f(z_{0})}{a_{n}-z_{0}}
+                \end{equation}
+                is well-defined.
+            \end{definition}
+            Checking differentiability using only the definition is far more
+            straight forward for real-valued functions than in the complex
+            setting. There are only two directions one may approach a real
+            number, from the left and from the right. There are infinitely
+            many directions to approach a fixed complex number from, which
+            dramatically increases the difficulty. The
+            \textbf{Cauchy-Riemann equations} are the primary tool used to
+            overcome this hurdle.
+        \subsection{The Cauchy-Riemann Equations}
+        \subsection{Harmonic Functions}
+    \section{Sketch of Proof}
+    \section{Proof of the Cauchy-Riemann Theorem}
+        We now prove the crucial main theorem, providing a necessary and
+        sufficient condition of differentiability.
+        \begin{theorem}[\textbf{The Cauchy-Riemann Equations: Part 1}]
+            If $f:\mathbb{C}\rightarrow\mathbb{C}$ is given by
+            $f(x+iy)=u(x,\,y)+iv(x,\,y)$, and if $f$ is differentiable, then
+            the Cauchy-Riemann equations are satisfied:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{x}}
+                    &=&
+                    \displaystyle
+                    \phantom{+}
+                    \frac{\partial{v}}{\partial{y}}\\[1.5em]
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{y}}
+                    &=&
+                    \displaystyle
+                    -\frac{\partial{v}}{\partial{x}}
+                \end{array}
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            If $f:\mathbb{C}\rightarrow\mathbb{C}$ is differentiable,
+            then letting $h\rightarrow{0}$ using solely real numbers produces:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    f^{\prime}(z)
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{f(z+h)-f(z)}{h}\\[1.5em]
+                    \displaystyle
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{u(x+h,\,y)+iv(x+h,\,y)-u(x,\,y)-iv(x,\,y)}{h}\\[1.5em]
+                    \displaystyle
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{u(x+h,\,y)-u(x,\,y)}{h}
+                    +i\lim_{h\rightarrow{0}}
+                        \frac{v(x+h,\,y)-v(x,\,y)}{h}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{x}}
+                        +i\frac{\partial{v}}{\partial{x}}
+                \end{array}
+            \end{equation}
+            Replacing $h$ with $ih$, we allow this quantity to approach zero
+            using purely imaginary numbers. We obtain:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    f^{\prime}(z)
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{f(z+ih)-f(z)}{ih}\\[1.5em]
+                    \displaystyle
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{u(x,\,y+h)+iv(x,\,y+h)-u(x,\,y)-iv(x,\,y)}{ih}\\[1.5em]
+                    \displaystyle
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{u(x,\,y+h)-u(x,\,y)}{ih}
+                    +i\lim_{h\rightarrow{0}}
+                        \frac{v(x,\,y+h)-v(x,\,y)}{ih}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    -i\frac{\partial{u}}{\partial{y}}
+                        +\frac{\partial{v}}{\partial{y}}
+                \end{array}
+            \end{equation}
+            Since the function is differentiable, the limit is independent of
+            the path to zero. Equating we get:
+            \begin{equation}
+                \frac{\partial{u}}{\partial{x}}
+                +i\frac{\partial{v}}{\partial{x}}
+                =
+                \frac{\partial{v}}{\partial{y}}
+                -i\frac{\partial{u}}{\partial{y}}
+            \end{equation}
+            Comparing the real and imaginary parts of both sides
+            produces the Cauchy-Riemann equations.
+        \end{proof}
+        \begin{theorem}
+            If $f:\mathbb{C}\rightarrow\mathbb{C}$ is given by
+            $f(x+iy)=u(x,\,y)+iv(x,\,y)$ and if $u$ and $v$ both have
+            continuous partial derivatives with respect to $x$ and $y$,
+            and if the Cauchy-Riemann equations are satisfied, then $f$ is
+            complex differentiable.
+        \end{theorem}
+        \begin{proof}
+            For let $h:\mathbb{N}\rightarrow\mathbb{C}$ be a sequence
+            that converges to $0$. For each $n\in\mathbb{N}$
+            we may write $h_{n}=a_{n}+ib_{n}$ with $a_{n},b_{n}\in\mathbb{R}$.
+            We have:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \frac{f(z+h_{n})-f(z)}{h_{n}}
+                    &=&
+                    \displaystyle
+                    \frac{f(z+h_{n})-f(z+a_{n})+f(z+a_{n})-f(z)}{h_{n}}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    \frac{f(z+h_{n})-f(z+a_{n})}{h_{n}}
+                        +\frac{f(z+a_{n})-f(z)}{h_{n}}
+                \end{array}
+            \end{equation}
+            Using $f(x+iy)=u(x,\,y)+iv(x,\,y)$, this final expression splits
+            into two equations, one for $u$ and one for $v$. Concentrating
+            on the real part of the equation ($u$), we get:
+            \begin{equation}
+                \label{eqn:u_difference_quotient}
+                \frac{u(x+a_{n},\,y+b_{n})-u(x,\,y)}{h_{n}}
+                =
+                \frac{u(x+a_{n},\,y+b_{n})-u(x+a_{n},\,y)}{h_{n}}
+                    +\frac{u(x+a_{n},\,y)-u(x,\,y)}{h_{n}}
+            \end{equation}
+            By the mean value theorem there is some real number
+            ${b}_{n}^{\prime}$ between $0$ and $b_{n}$ such that:
+            \begin{equation}
+                u(x+a_{n},\,y+b_{n})-u(x+a_{n},\,y)
+                =\frac{\partial{u}}{\partial{y}}
+                \left(x+a_{n},\,y+b_{n}^{\prime}\right)b_{n}
+            \end{equation}
+            Similarly there is a real number $a_{n}^{\prime}$ between $0$ and
+            $a_{n}$ such that:
+            \begin{equation}
+                u(x+a_{n},\,y)-u(x,\,y)
+                =\frac{\partial{u}}{\partial{x}}
+                \left(x+a_{n}^{\prime},\,y\right)a_{n}
+            \end{equation}
+            Plugging these two expressions into
+            Eqn.~\ref{eqn:u_difference_quotient}, we obtain:
+            \begin{equation}
+                \frac{u(x+a_{n},\,y+b_{n})-u(x,\,y)}{h_{n}}
+                =\frac{\partial{u}}{\partial{y}}
+                \left(x+a_{n},\,y+b_{n}^{\prime}\right)\frac{b_{n}}{h_{n}}
+                +\frac{\partial{u}}{\partial{x}}
+                \left(x+a_{n}^{\prime},\,y\right)\frac{a_{n}}{h_{n}}
+            \end{equation}
+            Similarly for $v$ there are numbers $a_{n}^{\prime\prime}$ and
+            $b_{n}^{\prime\prime}$ between $0$ and $a_{n}$ and $b_{n}$,
+            respectively, such that:
+            \begin{equation}
+                \frac{v(x+a_{n},\,y+b_{n})-v(x,\,y)}{h_{n}}
+                =\frac{\partial{v}}{\partial{y}}
+                \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
+                \frac{b_{n}}{h_{n}}
+                +\frac{\partial{v}}{\partial{x}}
+                \left(x+a_{n}^{\prime\prime},\,y\right)
+                \frac{a_{n}}{h_{n}}
+            \end{equation}
+            By hypothesis $u$ and $v$ satisfy the Cauchy-Riemann equations,
+            and hence:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{x}}
+                    \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
+                    &=&
+                    \displaystyle
+                    \phantom{+}
+                    \frac{\partial{v}}{\partial{y}}
+                    \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)\\[1.5em]
+                    \displaystyle
+                    \frac{\partial{v}}{\partial{x}}
+                    \left(x+a_{n},\,y+b_{n}^{\prime}\right)
+                    &=&
+                    \displaystyle
+                    -\frac{\partial{u}}{\partial{y}}
+                    \left(x+a_{n},\,y+b_{n}^{\prime}\right)
+                \end{array}
+            \end{equation}
+            Combining the previous equations we obtain:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                    &=&
+                    \displaystyle
+                    \left(
+                        \frac{\partial{u}}{\partial{y}}
+                        \left(x+a_{n},\,y+b_{n}^{\prime}\right)
+                        \frac{b_{n}}{h_{n}}
+                        +\frac{\partial{u}}{\partial{x}}
+                        \left(x+a_{n}^{\prime},\,y\right)
+                        \frac{a_{n}}{h_{n}}
+                    \right)\\[1.5em]
+                    &+&
+                    \displaystyle
+                    i\left(
+                        \frac{\partial{v}}{\partial{y}}
+                        \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
+                        \frac{b_{n}}{h_{n}}
+                        +\frac{\partial{v}}{\partial{x}}
+                        \left(x+a_{n}^{\prime\prime},\,y\right)
+                        \frac{a_{n}}{h_{n}}
+                    \right)\\[2em]
+                    &=&
+                    \displaystyle
+                    \left(
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n}^{\prime},\,y)
+                        \frac{a_{n}}{h_{n}}
+                        +\frac{\partial{u}}{\partial{x}}
+                        (x+a_{n},\,y+b_{n}^{\prime\prime})
+                        \frac{ib_{n}}{h_{n}}
+                    \right)\\[1.5em]
+                    &+&
+                    \displaystyle
+                    \left(
+                        \frac{\partial{v}}{\partial{x}}
+                        \left(x+a_{n}^{\prime\prime},\,y\right)
+                        \frac{a_{n}}{h_{n}}
+                        +\frac{\partial{v}}{\partial{x}}
+                        \left(x+a_{n},\,y+b_{n}^{\prime}\right)
+                        \frac{ib_{n}}{h_{n}}
+                    \right)
+                \end{array}
+            \end{equation}
+            Define $U_{n}$ and $V_{n}$ as follows:
+            \begin{equation}
+                \begin{array}{rcl}
+                    U_{n}
+                    &=&
+                    \displaystyle
+                    \left(
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n},\,y+b_{n}^{\prime\prime})
+                        -
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n}^{\prime},\,y)
+                    \right)
+                    \frac{ib_{n}}{h_{n}}\\[2em]
+                    V_{n}
+                    &=&
+                    \displaystyle
+                    \left(
+                        \frac{\partial{v}}{\partial{x}}
+                        (x+a_{n},\,y+b_{n}^{\prime\prime})
+                        -
+                        \frac{\partial{v}}{\partial{x}}
+                        (x+a_{n}^{\prime\prime},\,y)
+                    \right)
+                    \frac{ib_{n}}{h_{n}}
+                \end{array}
+            \end{equation}
+            The difference quotient is then:
+            \begin{equation}
+                \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                =\frac{\partial{u}}{\partial{x}}
+                    (x+a_{n}^{\prime},\,y)
+                    \frac{a+ib_{n}}{h_{n}}
+                +\frac{\partial{v}}{\partial{x}}
+                    (x+a_{n}^{\prime\prime},\,y)
+                    \frac{a+ib_{n}}{h_{n}}
+                +U_{n}+V_{n}
+            \end{equation}
+            But $h_{n}=a_{n}+ib_{n}$ by definition, and hence:
+            \begin{equation}
+                \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                =\frac{\partial{u}}{\partial{x}}
+                    (x+a_{n}^{\prime},\,y)
+                +\frac{\partial{v}}{\partial{x}}
+                    (x+a_{n}^{\prime\prime},\,y)
+                +U_{n}+V_{n}
+            \end{equation}
+            Since $h_{n}\rightarrow{0}$ we may conclude that
+            $a_{n}\rightarrow{0}$ and $b_{n}\rightarrow{0}$ as well.
+            But $a_{n}^{\prime}$ and $a_{n}^{\prime\prime}$ are wedged between
+            $0$ and $a_{n}$, and hence these sequences must converge to $0$
+            as well. A similar statement applies to $b_{n}^{\prime}$ and
+            $b_{n}^{\prime\prime}$.
+            If we take the limit as $n\rightarrow\infty$, then since
+            $u$ and $v$ are continuously differentiable, the partial
+            derivatives are continuous, and hence:
+            \begin{equation}
+                \lim_{n\rightarrow\infty}
+                \left(
+                    \frac{\partial{u}}{\partial{x}}
+                    (x+a_{n}^{\prime},\,y)
+                    +i\frac{\partial{v}}{\partial{x}}
+                    (x+a_{n}^{\prime\prime},\,y)
+                    +U_{n}+V_{n}
+                \right)
+                =\frac{\partial{u}}{\partial{x}}(x,\,y)
+                +\frac{\partial{v}}{\partial{x}}(x,\,y)
+                +\lim_{n\rightarrow\infty}\left(U_{n}+V_{n}\right)
+            \end{equation}
+            Again from continuity, from the definition of $U_{n}$
+            (and since $a_{n}^{\prime}$ and $b_{n}^{\prime\prime}$ both
+            converge to zero) we have $U_{n}\rightarrow{0}$. Similarly
+            $V_{n}\rightarrow{0}$, and hence:
+            \begin{equation}
+                \lim_{n\rightarrow\infty}
+                \frac{f(z+h_{n})-f(z)}{h_{n}}
+                =\frac{\partial{u}}{\partial{x}}(x,\,y)
+                +i\frac{\partial{v}}{\partial{x}}(x,\,y)
+            \end{equation}
+            and therefore $f$ is differentiable.
+        \end{proof}
+    \section{Geometric Interpretations}
+    \bibliographystyle{plain}
+    \bibliography{bib.bib}
+\end{document}
