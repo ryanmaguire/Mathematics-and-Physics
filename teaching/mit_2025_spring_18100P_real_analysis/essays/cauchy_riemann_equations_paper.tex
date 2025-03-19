@@ -44,7 +44,7 @@
         Over the past few centuries complex analysis has found its way into all
         of the physical and applied sciences. From electromagnetic waves and
         circuits to computer graphics, the ability to add and multiply points
-        in the plane in a meaningful and geometry way has far applications,
+        in the plane in a meaningful and geometric way has far applications,
         but perhaps most import is the ability to differentiate functions of
         a complex variable. It is well known that a function
         $f:\mathbb{C}\rightarrow\mathbb{C}$ is differentiable if and only if
@@ -70,14 +70,15 @@
             \caption{Visual for Vector Addition in $\mathbb{R}^{2}$}
             \label{fig:complex_number_addition_001}
         \end{figure}
-        The definiiton of multiplying points is not so clear at first glance.
+        The definition of multiplying points is not so clear at first glance.
+        One such method is motivatived by the study of polynomial equations.
         Cardano, in his \textit{Ars Magna} (1545 C.E.), writes that
         one may solve $x(10-x)=40$ if they allow for negative square roots,
         such as $5-\sqrt{-15}$ and $5+\sqrt{-15}$
-        \cite[p.~252]{KlineMathematicalHistory}.
-        History, solutions to cubic equations of the form
-        $x^{3}+mx=n$ lead to auxiliary terms $t$ and $u$ given by
-        \cite[p.~264]{KlineMathematicalHistory}:
+        \cite[p.~252]{KlineMathematicalHistory}, and later on he gives a
+        solution for cubic equations of the form
+        $x^{3}+mx-n=0$ (with $m$ and $n$ given) using auxiliary terms $t$
+        and $u$ given by \cite[p.~264]{KlineMathematicalHistory}:
         \begin{equation}
             \begin{array}{rcl}
                 \displaystyle
@@ -105,14 +106,14 @@
         While this is very formal and precise, it is far from concrete or
         geometric. If we set out to define a multiplication on $\mathbb{R}^{2}$,
         then by the Frobenius theorem \cite[p.~452]{JacobsonBasicAlgebraI}
-        there is only one way (up to isomorphism) to this in a \textit{nice}
+        there is only one way (up to isomorphism) to do this in a \textit{nice}
         manner. That is, to produce a field structure
         $(\mathbb{R}^{2},\,+,\,\times)$ that is \textit{compatible} with the
         real number system $(\mathbb{R},\,+,\,\times)$, there must be some
         fixed negative real number $r$ such that:
         \begin{equation}
             (x_{0},\,y_{0})\times(x_{1},\,y_{1})
-            =(x_{0}y_{1}+ry_{0}y_{1},\,x_{0}y_{1}+x_{1}y_{0})
+            =(x_{0}x_{1}+ry_{0}y_{1},\,x_{0}y_{1}+x_{1}y_{0})
         \end{equation}
         By compatible, formally we mean that the complex numbers form an
         \textit{algebra} over the reals.
@@ -125,7 +126,7 @@
         \end{equation}
         Where $\|\cdot\|$ denotes the Euclidean norm given by the
         Pythagorean formula. This produces the same structure as the more
-        abstract field extension method, we may write
+        abstract field extension method, and we may write
         $z=(x,\,y)=x+iy$ to jump back and forth between the two notions.
         By treating complex numbers purely as points in the plane, there is
         a third interpretations that is very geometric. Complex numbers are
@@ -170,10 +171,9 @@
         graphics we use complex numbers (and \textit{quaternions}) to describe
         how we scale and rotate vectors. The list of applications goes on
         and on. Most of these applications use more than the fact that complex
-        arithmetic has a geometric meaning, they make regular use of the fact
-        that \textit{ratios} are well-defined when the denominator is
-        non-zero. To keep the notation fixed, we provide the following
-        definition.
+        arithmetic has a geometric meaning, they often need \textit{ratios}
+        to well-defined when the denominator is non-zero.
+        To keep the notation fixed, we provide the following definition.
         \begin{definition}[\textbf{Complex Numbers}]
             A complex number is a point in the plane $z\in\mathbb{R}^{2}$
             represented by writing $z=x+iy$ with $x,y\in\mathbb{R}$ where $x$
@@ -226,7 +226,7 @@
             That is, the image of a convergent sequence under $f$ is again a
             convergent sequence.
         \end{definition}
-        \subsection{Differentiation}
+        \subsection{Differentiation and The Cauchy-Riemann Equations}
             Since the complex numbers form a field, we may take two sequences
             of non-zero complex numbers and take their quotient. Differentiation
             may be defined in the exact same manner as real numbers in this
@@ -235,7 +235,7 @@
                 A differentiable complex-valued function of a complex variable
                 is a function $f:\mathbb{C}\rightarrow\mathbb{C}$ such that
                 for all $z_{0}\in\mathbb{C}$ and for any sequence
-                $a:\mathbb{N}\rightarrow\mathbb{C}$ that convergences to
+                $a:\mathbb{N}\rightarrow\mathbb{C}$ that converges to
                 $z_{0}$, the sequence of ratios converges. That is:
                 \begin{equation}
                     f^{\prime}(z_{0})
@@ -244,17 +244,231 @@
                 \end{equation}
                 is well-defined.
             \end{definition}
+            Alternatively, we may look at sequences $h_{n}\rightarrow{0}$
+            and consider:
+            \begin{equation}
+                f^{\prime}(z_{0})
+                =\lim_{n\rightarrow\infty}
+                \frac{f(z_{0}+h_{n})-f(z_{0})}{h_{n}}
+            \end{equation}
             Checking differentiability using only the definition is far more
             straight forward for real-valued functions than in the complex
             setting. There are only two directions one may approach a real
-            number, from the left and from the right. There are infinitely
+            number, from the left or from the right. There are infinitely
             many directions to approach a fixed complex number from, which
             dramatically increases the difficulty. The
             \textbf{Cauchy-Riemann equations} are the primary tool used to
-            overcome this hurdle.
-        \subsection{The Cauchy-Riemann Equations}
+            overcome this hurdle. First note that for a function
+            $f:\mathbb{C}\rightarrow\mathbb{C}$, given a complex number
+            $z=x+iy$, the output $f(x+iy)$ is also a complex number, meaning
+            there are real-valued functions $u$ and $v$ such that:
+            \begin{equation}
+                f(x+iy)=u(x,\,y)+iv(x,\,y)
+            \end{equation}
+            We may think of $u$ and $v$ as \textit{surfaces}, functions
+            $F:\mathbb{R}^{2}\rightarrow\mathbb{R}$. Given such a function
+            $F$ we may define the \textbf{directional derivative} with respect
+            to a non-zero vector $\mathbf{e}\in\mathbb{R}^{2}$ at a fixed point
+            $\mathbf{x}\in\mathbb{R}^{2}$ via:
+            \begin{equation}
+                \nabla_{\mathbf{e}}(F)
+                =\lim_{h\rightarrow{0}}
+                \frac{F(\mathbf{x}+h\mathbf{e})-F(\mathbf{x})}{h}
+            \end{equation}
+            This measures the \textit{slope} of the surface in the $\mathbf{e}$
+            direction. Since $h$ is a purely real non-zero quantity, and since
+            $F(\mathbf{x}+h\mathbf{e})$ and $F(\mathbf{x})$ are real numbers,
+            this is the quotient of two real numbers, meaning
+            $\nabla_{\mathbf{e}}(F)$ is well-defined
+            (provided the limit exists).
+            \par\hfill\par
+            Suppose we set $\mathbf{e}=\hat{\mathbf{x}}=(1,\,0)$, the unit
+            vector in the positive $x$ direction. This becomes:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \nabla_{\hat{\mathbf{x}}}(F)
+                    &=&
+                    \displaystyle
+                    \lim_{h\rightarrow{0}}
+                    \frac{F(\mathbf{x}+h\hat{\mathbf{x}})-F(\mathbf{x})}{h}
+                    \\[2em]
+                    &=&
+                    \displaystyle
+                    \frac{F(x+h,\,y)-F(x,\,y)}{h}
+                \end{array}
+            \end{equation}
+            That is, we vary the $x$ component but keep $y$ fixed. We call this
+            the \textbf{partial derivative} of $F$ with respect to $x$ and
+            write:
+            \begin{equation}
+                \frac{\partial{F}}{\partial{x}}
+                =\nabla_{\hat{\mathbf{x}}}(F)
+            \end{equation}
+            We may perform a similar operation with $\hat{\mathbf{y}}=(0,\,1)$,
+            we write:
+            \begin{equation}
+                \frac{\partial{F}}{\partial{y}}
+                =\nabla_{\hat{\mathbf{y}}}(F)
+            \end{equation}
+            Given a complex function $f:\mathbb{C}\rightarrow\mathbb{C}$,
+            the Cauchy-Riemann equations relate the partial derivatives
+            of $u$ and $v$ with respect to $x$ and $y$ to one another.
+            The key theorem goes as follows.
+            \begin{theorem}[\textbf{Cauchy-Riemann}]
+                If $f:\mathbb{C}\rightarrow\mathbb{C}$ is given by
+                $f(x+iy)=u(x,\,y)+iv(x,\,y)$ where
+                $u,v:\mathbb{R}^{2}\rightarrow\mathbb{R}$ both have partial
+                derivatives with respect to $x$ and $y$, and such that
+                the partial derivatives are continuous in both variables,
+                then $f$ is (complex) differentiable if and only if
+                the following equations hold:
+                \begin{equation}
+                    \begin{array}{rcl}
+                        \displaystyle
+                        \frac{\partial{u}}{\partial{x}}
+                        &=&
+                        \displaystyle
+                        \phantom{+}
+                        \frac{\partial{v}}{\partial{y}}\\[2em]
+                        \displaystyle
+                        \frac{\partial{u}}{\partial{y}}
+                        &=&
+                        \displaystyle
+                        -\frac{\partial{v}}{\partial{x}}
+                    \end{array}
+                \end{equation}
+            \end{theorem}
         \subsection{Harmonic Functions}
+            One of the surprising facts about the Cauchy-Riemann equations
+            is that they reduce complex differentiation, with respect to a
+            complex variable, down to \textit{real} partial differentiations
+            with respect to a real variable. The is deeply connected to many
+            areas of mathematics, in particular the study of partial
+            differential equations. The Laplace equation is given by:
+            \begin{equation}
+                \nabla^{2}(\varphi)
+                =\frac{\partial^{2}\varphi}{\partial{x}^{2}}
+                +\frac{\partial^{2}\varphi}{\partial{y}^{2}}
+                =0
+            \end{equation}
+            A solution $\varphi:\mathbb{R}^{2}\rightarrow\mathbb{R}$ is called
+            a \textbf{harmonic function}. Harmonic functions and complex
+            differentiable ones are very closely related. For suppose
+            $\varphi$ is harmonic and define:
+            \begin{equation}
+                g(x+iy)
+                =\frac{\partial\varphi}{\partial{x}}(x,\,y)
+                -i\frac{\partial\varphi}{\partial{y}}(x,\,y)
+            \end{equation}
+            That is, $u=\partial\varphi/\partial{x}$ and
+            $v=-\partial\varphi/\partial{y}$.
+            Then $g$ satisfies the Cauchy-Riemann equations since:
+            \begin{equation}
+                \begin{array}{rcll}
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{x}}
+                    &=&
+                    \displaystyle
+                    \frac{\partial^{2}\varphi}{\partial{x}^{2}}
+                    &
+                    \textrm{(Definition of $u$)}\\[2em]
+                    &=&
+                    \displaystyle
+                    -\frac{\partial^{2}\varphi}{\partial{y}^{2}}
+                    &
+                    \textrm{(Since $\varphi$ is harmonic)}\\[2em]
+                    &=&
+                    \displaystyle
+                    \frac{\partial{v}}{\partial{y}}
+                    &
+                    \textrm{(Definition of $v$)}
+                \end{array}
+            \end{equation}
+            And so the first Cauchy-Riemann equation is satisfied. Similarly,
+            so is the second:
+            \begin{equation}
+                \begin{array}{rcll}
+                    \displaystyle
+                    \frac{\partial{u}}{\partial{y}}
+                    &=&
+                    \displaystyle
+                    \frac{\partial^{2}\varphi}{\partial{y}\partial{x}}
+                    &
+                    \textrm{(Definition of $u$)}\\[2em]
+                    &=&
+                    \displaystyle
+                    \frac{\partial^{2}\varphi}{\partial{x}\partial{y}}
+                    &
+                    \textrm{(Clairaut's Theorem)}\\[2em]
+                    &=&
+                    \displaystyle
+                    -\frac{\partial{v}}{\partial{x}}
+                    &
+                    \textrm{(Definition of $v$)}
+                \end{array}
+            \end{equation}
+            Flipping this, if $u$ and $v$ satisfy the Cauchy-Riemann
+            equations, then both $u$ and $v$ are harmonic. The tools used to
+            prove the Cauchy-Riemann theorem are those of real analysis, and
+            not complex.
     \section{Sketch of Proof}
+        The forward direction is relatively simple. That is, if
+        $f:\mathbb{C}\rightarrow\mathbb{C}$ is differentiable, then the
+        Cauchy-Riemann equations must be true. Differentiability at a point
+        $z_{0}\in\mathbb{C}$ means that regardless of the path one takes to
+        $z_{0}$, the difference quotient has a well-defined limit. This is
+        a very strong assumption. The Cauchy-Riemann equations appear once we
+        consider a path of purely real numbers and a path of purely imaginary
+        ones. That is, given $h:\mathbb{N}\rightarrow\mathbb{R}$ with
+        $h_{n}\rightarrow{0}$ and $h_{n}\ne{0}$, we have:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}
+            \frac{f\big((x+h_{n})+iy)-f(x+iy)}{h_{n}}
+            =
+            \lim_{n\rightarrow\infty}
+            \frac{f\big(x+i(y+h_{n}))-f(x+iy)}{ih_{n}}
+        \end{equation}
+        By replacing $f$ with $u$ and $v$ we see $x$ partial derivatives on
+        the left and $y$ partial derivatives on the right. We compare the
+        real and imaginary parts and are done.
+        \par\hfill\par
+        The converse is signficantly trickier. We must consider
+        \textit{arbitrary} sequences that converge to zero, not just purely
+        real or purely complex ones. The trick to overcoming this difficulty
+        lies in real analysis.
+        \subsection{The Mean Value Theorem}
+            Suppose you are driving a car from Boston to New York City.
+            This is roughly 215 miles, and suppose you complete the trip
+            in 2 hours and 30 minutes. The ratio of displacement over time
+            is $86$ miles per hour. The mean value theorem tells us that
+            so long as you drove in a sufficiently smooth path, than at some
+            point you were most definitely speeding. That is, there some some
+            moment in time where your speed was precisely $86$ miles per hour.
+            Formally, we have the following:
+            \begin{theorem}[\textbf{Mean Value Theorem}]
+                If $f:[a,\,b]\rightarrow\mathbb{R}$ is continuous, and
+                differentiable at each point $x\in(a,\,b)$, then there is a
+                point $c\in(a,\,b)$ such that:
+                \begin{equation}
+                    f^{\prime}(c)=\frac{f(b)-f(a)}{b-a}
+                \end{equation}
+                That is, there is a point where the tangent line of $f$ has
+                the same slope as the secant line across the interval.
+            \end{theorem}
+            For the latter direction (Cauchy-Riemann implies differentiable)
+            we use the mean value theorem to somehow get the partial
+            derivatives of $u$ and $v$ into the playing field. Note that if
+            $y$ is fixed, then the mean value theorem applies to $u$ as $x$
+            varies across $(x+h,\,y)$ and $(x,\,y)$. The mean value theorem
+            then says there is some $h^{\prime}$ between $0$ and $h$ such
+            that
+            \begin{equation}
+                u(x+h,\,y)-u(x,\,y)
+                =h\frac{\partial{u}}{\partial{x}}
+                (x+h^{\prime},\,y)
+            \end{equation}
+            A similar idea applies to the $y$ direction and to the function $v$.
     \section{Proof of the Cauchy-Riemann Theorem}
         We now prove the crucial main theorem, providing a necessary and
         sufficient condition of differentiability.
@@ -347,7 +561,10 @@
             Comparing the real and imaginary parts of both sides
             produces the Cauchy-Riemann equations.
         \end{proof}
-        \begin{theorem}
+        The latter part is harder, but fortunately it is mostly bookkeeping.
+        We invoke the mean value theorem, apply the Cauchy-Riemann equations,
+        and then show that the function must then be differentiable.
+        \begin{theorem}[\textbf{The Cauchy-Riemann Equations: Part 2}]
             If $f:\mathbb{C}\rightarrow\mathbb{C}$ is given by
             $f(x+iy)=u(x,\,y)+iv(x,\,y)$ and if $u$ and $v$ both have
             continuous partial derivatives with respect to $x$ and $y$,
@@ -356,9 +573,9 @@
         \end{theorem}
         \begin{proof}
             For let $h:\mathbb{N}\rightarrow\mathbb{C}$ be a sequence
-            that converges to $0$. For each $n\in\mathbb{N}$
-            we may write $h_{n}=a_{n}+ib_{n}$ with $a_{n},b_{n}\in\mathbb{R}$.
-            We have:
+            that converges to $0$ with $h_{n}\ne{0}$ for all $n$.
+            For each $n\in\mathbb{N}$ we may write $h_{n}=a_{n}+ib_{n}$
+            with $a_{n},b_{n}\in\mathbb{R}$. We have:
             \begin{equation}
                 \begin{array}{rcl}
                     \displaystyle
@@ -399,6 +616,7 @@
             Plugging these two expressions into
             Eqn.~\ref{eqn:u_difference_quotient}, we obtain:
             \begin{equation}
+                \label{eqn:u_mvt}
                 \frac{u(x+a_{n},\,y+b_{n})-u(x,\,y)}{h_{n}}
                 =\frac{\partial{u}}{\partial{y}}
                 \left(x+a_{n},\,y+b_{n}^{\prime}\right)\frac{b_{n}}{h_{n}}
@@ -409,6 +627,7 @@
             $b_{n}^{\prime\prime}$ between $0$ and $a_{n}$ and $b_{n}$,
             respectively, such that:
             \begin{equation}
+                \label{eqn:v_mvt}
                 \frac{v(x+a_{n},\,y+b_{n})-v(x,\,y)}{h_{n}}
                 =\frac{\partial{v}}{\partial{y}}
                 \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
@@ -420,7 +639,8 @@
             By hypothesis $u$ and $v$ satisfy the Cauchy-Riemann equations,
             and hence:
             \begin{equation}
-                \begin{array}{rcl}
+                \label{eqn:cauchy_riemann_with_mvt}
+                \begin{array}{rclr}
                     \displaystyle
                     \frac{\partial{u}}{\partial{x}}
                     \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
@@ -428,7 +648,8 @@
                     \displaystyle
                     \phantom{+}
                     \frac{\partial{v}}{\partial{y}}
-                    \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)\\[1.5em]
+                    \left(x+a_{n},\,y+b_{n}^{\prime\prime}\right)
+                    &(a)\\[1.5em]
                     \displaystyle
                     \frac{\partial{v}}{\partial{x}}
                     \left(x+a_{n},\,y+b_{n}^{\prime}\right)
@@ -436,13 +657,14 @@
                     \displaystyle
                     -\frac{\partial{u}}{\partial{y}}
                     \left(x+a_{n},\,y+b_{n}^{\prime}\right)
+                    &(b)
                 \end{array}
             \end{equation}
             Combining the previous equations we obtain:
             \begin{equation}
-                \begin{array}{rcl}
+                \begin{array}{rcll}
                     \displaystyle
-                    \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                    \frac{f(z+h_{n})-f(z)}{h_{n}}
                     &=&
                     \displaystyle
                     \left(
@@ -452,7 +674,9 @@
                         +\frac{\partial{u}}{\partial{x}}
                         \left(x+a_{n}^{\prime},\,y\right)
                         \frac{a_{n}}{h_{n}}
-                    \right)\\[1.5em]
+                    \right)
+                    &\textrm{(Eqn.~\ref{eqn:u_mvt})}
+                    \\[1.5em]
                     &+&
                     \displaystyle
                     i\left(
@@ -462,7 +686,10 @@
                         +\frac{\partial{v}}{\partial{x}}
                         \left(x+a_{n}^{\prime\prime},\,y\right)
                         \frac{a_{n}}{h_{n}}
-                    \right)\\[2em]
+                    \right)
+                    &
+                    \textrm{(Eqn.~\ref{eqn:v_mvt})}
+                    \\[2em]
                     &=&
                     \displaystyle
                     \left(
@@ -472,10 +699,12 @@
                         +\frac{\partial{u}}{\partial{x}}
                         (x+a_{n},\,y+b_{n}^{\prime\prime})
                         \frac{ib_{n}}{h_{n}}
-                    \right)\\[1.5em]
+                    \right)
+                    &
+                    \textrm{(Eqn.~\ref{eqn:cauchy_riemann_with_mvt}a)}\\[1.5em]
                     &+&
                     \displaystyle
-                    \left(
+                    i\left(
                         \frac{\partial{v}}{\partial{x}}
                         \left(x+a_{n}^{\prime\prime},\,y\right)
                         \frac{a_{n}}{h_{n}}
@@ -483,6 +712,8 @@
                         \left(x+a_{n},\,y+b_{n}^{\prime}\right)
                         \frac{ib_{n}}{h_{n}}
                     \right)
+                    &
+                    \textrm{(Eqn.~\ref{eqn:cauchy_riemann_with_mvt}b)}\\[1.5em]
                 \end{array}
             \end{equation}
             Define $U_{n}$ and $V_{n}$ as follows:
@@ -514,21 +745,21 @@
             \end{equation}
             The difference quotient is then:
             \begin{equation}
-                \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                \frac{f(z+h_{n})-f(z)}{h_{n}}
                 =\frac{\partial{u}}{\partial{x}}
                     (x+a_{n}^{\prime},\,y)
                     \frac{a+ib_{n}}{h_{n}}
-                +\frac{\partial{v}}{\partial{x}}
+                +i\frac{\partial{v}}{\partial{x}}
                     (x+a_{n}^{\prime\prime},\,y)
                     \frac{a+ib_{n}}{h_{n}}
                 +U_{n}+V_{n}
             \end{equation}
             But $h_{n}=a_{n}+ib_{n}$ by definition, and hence:
             \begin{equation}
-                \frac{f(x+a_{n},\,y+b_{n})-f(x,\,y)}{h_{n}}
+                \frac{f(z+h_{n})-f(z)}{h_{n}}
                 =\frac{\partial{u}}{\partial{x}}
                     (x+a_{n}^{\prime},\,y)
-                +\frac{\partial{v}}{\partial{x}}
+                +i\frac{\partial{v}}{\partial{x}}
                     (x+a_{n}^{\prime\prime},\,y)
                 +U_{n}+V_{n}
             \end{equation}
@@ -540,7 +771,7 @@
             $b_{n}^{\prime\prime}$.
             If we take the limit as $n\rightarrow\infty$, then since
             $u$ and $v$ are continuously differentiable, the partial
-            derivatives are continuous, and hence:
+            derivatives are continuous, hence:
             \begin{equation}
                 \lim_{n\rightarrow\infty}
                 \left(
@@ -551,22 +782,72 @@
                     +U_{n}+V_{n}
                 \right)
                 =\frac{\partial{u}}{\partial{x}}(x,\,y)
-                +\frac{\partial{v}}{\partial{x}}(x,\,y)
+                +i\frac{\partial{v}}{\partial{x}}(x,\,y)
                 +\lim_{n\rightarrow\infty}\left(U_{n}+V_{n}\right)
             \end{equation}
-            Again from continuity, from the definition of $U_{n}$
-            (and since $a_{n}^{\prime}$ and $b_{n}^{\prime\prime}$ both
-            converge to zero) we have $U_{n}\rightarrow{0}$. Similarly
-            $V_{n}\rightarrow{0}$, and hence:
+            Now note that by the definition of $h_{n}$, for all $n$ we have
+            $|b_{n}/h_{n}|\leq{1}$. Thus from continuity and the definition
+            of $U_{n}$ (and since $a_{n}^{\prime}$ and $b_{n}^{\prime\prime}$
+            both converge to zero) we have $U_{n}\rightarrow{0}$.
+            That is:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    \lim_{n\rightarrow\infty}\left|U_{n}\right|
+                    &=&
+                    \displaystyle
+                    \lim_{n\rightarrow\infty}
+                    \left|
+                        \left(
+                            \frac{\partial{u}}{\partial{x}}
+                            (x+a_{n},\,y+b_{n}^{\prime\prime})
+                            -
+                            \frac{\partial{u}}{\partial{x}}
+                            (x+a_{n}^{\prime},\,y)
+                        \right)
+                        \frac{ib_{n}}{h_{n}}
+                    \right|\\[2em]
+                    &\leq&
+                    \displaystyle
+                    \lim_{n\rightarrow\infty}
+                    \left|
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n},\,y+b_{n}^{\prime\prime})
+                        -
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n}^{\prime},\,y)
+                    \right|\\[2em]
+                    &=&
+                    \displaystyle
+                    \left|
+                        \lim_{n\rightarrow\infty}
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n},\,y+b_{n}^{\prime\prime})
+                        -
+                        \lim_{n\rightarrow\infty}
+                        \frac{\partial{u}}{\partial{x}}
+                        (x+a_{n}^{\prime},\,y)
+                    \right|\\[2em]
+                    &=&
+                    \displaystyle
+                    \left|
+                        \frac{\partial{u}}{\partial{x}}(x,\,y)
+                        -
+                        \frac{\partial{u}}{\partial{x}}(x,\,y)
+                    \right|\\[2em]
+                    &=&
+                    0
+                \end{array}
+            \end{equation}
+            Similarly $V_{n}\rightarrow{0}$, and therefore:
             \begin{equation}
                 \lim_{n\rightarrow\infty}
                 \frac{f(z+h_{n})-f(z)}{h_{n}}
                 =\frac{\partial{u}}{\partial{x}}(x,\,y)
                 +i\frac{\partial{v}}{\partial{x}}(x,\,y)
             \end{equation}
-            and therefore $f$ is differentiable.
+            Thus, $f$ is differentiable.
         \end{proof}
-    \section{Geometric Interpretations}
     \bibliographystyle{plain}
     \bibliography{bib.bib}
 \end{document}
