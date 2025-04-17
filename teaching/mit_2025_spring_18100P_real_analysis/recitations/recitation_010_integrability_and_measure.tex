@@ -1,0 +1,353 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{xcolor}
+\theoremstyle{normal}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\title{Integrability and Measure}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newif\ifsolution
+\solutiontrue
+\graphicspath{{../../../images/}}
+
+\begin{document}
+    \maketitle
+    \section{Integrability}
+        From calculus we know that the definition of the integral follows
+        from the intuitive notion of \textit{area under a curve},
+        see Fig.~\ref{fig:integral_of_continuous_function}.
+        \begin{figure}
+            \centering
+            \includegraphics{integral_of_continuous_function}
+            \caption{Integration as Area Under a Curve}
+            \label{fig:integral_of_continuous_function}
+        \end{figure}
+        A more rigorous definition is required if we are to prove things.
+        In particular, our motivating goal is to prove the Riemann-Lebesgue
+        theorem that says if a Fourier series converges, then the coefficients
+        tend to zero. That is, given $f:[a,\,b]\rightarrow\mathbb{R}$, define:
+        \begin{equation}
+            a_{n}=
+            \frac{1}{L}\int_{0}^{L}
+                f(x)\sin\left(\frac{n\pi}{L}\right)\,\textrm{d}x
+        \end{equation}
+        If these coefficients produce a convergent Fourier sine series, meaning:
+        \begin{equation}
+            f(x)=\sum_{n=0}^{\infty}a_{n}\sin\left(\frac{n\pi{x}}{L}\right)
+        \end{equation}
+        then $a_{n}\rightarrow{0}$.
+        \par\hfill\par
+        Darboux integration, which is equivalent to Riemannian integration,
+        only requires partitions (whereas Riemannian integration needs
+        tagged partitions).
+        \begin{definition}[\textbf{Partition}]
+            A partition of an interval $[a,\,b]$ is a function
+            $P:\mathbb{Z}_{n+1}\rightarrow[a,\,b]$ such that
+            $a=P_{0}<P_{1}<\cdots<P_{n-1}<P_{n}=b$. That is, a finite sequence
+            of points in $[a,\,b]$ that is strictly increasing and contains
+            the two endpoints.
+        \end{definition}
+        The Darboux integral is defined using the upper and lower sums of a
+        partition:
+        \begin{equation}
+            \begin{array}{rcl}
+                \displaystyle
+                L(f,\,P)
+                &=&
+                \displaystyle
+                \sum_{k=0}^{n-1}
+                    \inf\left(
+                        \left\{\,
+                            f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                        \right\}
+                    \right)
+                    \Delta{x}_{k}\\[1.5em]
+                    \displaystyle
+                    U(f,\,P)
+                    &=&
+                    \displaystyle
+                    \sum_{k=0}^{n-1}
+                        \sup\left(
+                            \left\{\,
+                                f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                            \right\}
+                        \right)
+                        \Delta{x}_{k}
+            \end{array}
+        \end{equation}
+        Where $\Delta_{k}$ is the width of the subinterval, $P_{k+1}-P_{k}$.
+        If there is a nested sequence of partitions $\mathfrak{P}$, meaning
+        $\mathfrak{P}_{n}$ is a partition of $[a,\,b]$ for each
+        $n\in\mathbb{N}$, and $\mathfrak{P}_{n+1}$ contains all of the points
+        in $\mathfrak{P}_{n}$, such that:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}\left(
+                U(f,\,\mathfrak{P}_{n})-L(f,\,\mathfrak{P}_{n})
+            \right)
+            =0
+        \end{equation}
+        and such that the \textbf{mesh}, $m(\mathfrak{P}_{k})$, which is the
+        maximum width $\Delta{x}_{k}$ for all subintervals in
+        $\mathfrak{P}_{n}$, tends to zero as well,
+        then the function is said to be Darboux (and hence Riemann) integrable.
+        We write:
+        \begin{equation}
+            \lim_{n\rightarrow\infty}L(f,\,\mathfrak{P}_{n})
+            =\lim_{n\rightarrow\infty}U(f,\,\mathfrak{P}_{n})
+            =\int_{a}^{b}f(x)\,\textrm{d}x
+        \end{equation}
+        Prove that the popcorn function $f:[0,\,2]\rightarrow\mathbb{R}$
+        given by:
+        \begin{equation}
+            f(x)=
+            \begin{cases}
+                \frac{1}{q},&x=p/q\textrm{ with }\operatorname{GCD}(p,\,q)=1\\
+                0,&\textrm{otherwise}
+            \end{cases}
+        \end{equation}
+        is Darboux integrable (see Fig.~\ref{fig:dirichlets_popcorn_function}).
+        \begin{figure}
+            \centering
+            \includegraphics{dirichlets_popcorn_function}
+            \caption{The Popcorn Function}
+            \label{fig:dirichlets_popcorn_function}
+        \end{figure}
+        \ifsolution
+            \color{blue}
+            \par\hfill\par
+            The integral is zero. There is a symmetry for the function between
+            $[0,\,1]$ and $[1,\,2]$, so we need only prove the integral
+            of $f$ on $[0,\,1]$ is zero. Let $\varepsilon>0$, and let
+            $N\in\mathbb{N}^{+}$ be such that $\frac{2}{N+1}<\varepsilon$.
+            Define $R$ to be the \textit{range} of $f$ with values greater
+            than or equal to $1/N$. That is:
+            \begin{equation}
+                R=
+                \left\{
+                    \,
+                    1,\,\frac{1}{2},\,\frac{1}{3},\,\frac{2}{3},\,
+                    \frac{1}{4},\,\frac{3}{4},\,\cdots,\,
+                    \frac{1}{N},\,\cdots,\,\frac{N-1}{N}
+                \right\}
+            \end{equation}
+            Since we are now considering $x\in[0,\,1]$, if $x\not\in{R}$,
+            then $f(x)<\frac{1}{N+1}$, and hence $f(x)<\frac{\varepsilon}{2}$.
+            Let $M=\operatorname{Card}(R)$, the number of points in $R$,
+            and choose a partition
+            $P$ for $[0,\,1]$ consisting of equally spaced subintervals, each
+            of width $\frac{\varepsilon}{4M}$. Since there are $M$ points in
+            $R$, there are at most $2M$ subintervals of $P$ containing points
+            in $R$. That is, any given point in $R$ may either lie in a single
+            interval, or it may fall on the boundary of two different
+            subintervals. If each point in $R$ lies on the boundary of two
+            subintervals, then there would be $2M$ subintervals containing
+            points in $R$. Hence, in general, there are at most $2M$
+            subintervals containing points in $R$, but possibly fewer.
+            On the subintervals which contain points in $R$, we may replace
+            $\sup(\{\,f(x)\;|\;P_{k}\leq{x}\leq{P}_{k+1}\,\})$ with $1$, and on
+            the remaining subintervals we may replace this supremum with
+            $\frac{1}{N+1}$. This will produce and upper bound for the sum
+            $U(f,\,P)$. Letting $n$ denote the total number of subintervals
+            produced by the partition $P$, we have:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    U(f,\,P_{N})
+                    &=&
+                    \displaystyle
+                    \sum_{k=0}^{n-1}
+                        \sup\left(
+                            \left\{\,
+                                f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                            \right\}
+                        \right)
+                        \Delta{x}_{k}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    \sum_{[x_{k},\,x_{k+1}]\cap{R}\ne\emptyset}
+                        \sup\left(
+                            \left\{\,
+                                f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                            \right\}
+                        \right)
+                        \Delta{x}_{k}\\[1.5em]
+                    &&
+                    \displaystyle
+                    \quad
+                    +\sum_{[x_{k},\,x_{k+1}]\cap{R}=\emptyset}
+                        \sup\left(
+                            \left\{\,
+                                f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                            \right\}
+                        \right)
+                        \Delta{x}_{k}\\[1.5em]
+                    &\leq&
+                    \displaystyle
+                    \sum_{[x_{k},\,x_{k+1}]\cap{R}\ne\emptyset}
+                        \Delta{x}_{k}
+                    +\sum_{[x_{k},\,x_{k+1}]\cap{R}=\emptyset}
+                        \sup\left(
+                            \left\{\,
+                                f(x)\;\big|\;P_{k}\leq{x}\leq{P}_{k+1}\,
+                            \right\}
+                        \right)
+                        \Delta{x}_{k}\\[1.5em]
+                    &\leq&
+                    \displaystyle
+                    \sum_{[x_{k},\,x_{k+1}]\cap{R}\ne\emptyset}
+                        \Delta{x}_{k}
+                    +\sum_{[x_{k},\,x_{k+1}]\cap{R}=\emptyset}
+                        \frac{1}{N+1}
+                        \Delta{x}_{k}\\[1.5em]
+                    &\leq&
+                    \displaystyle
+                    2M\frac{\varepsilon}{4M}
+                    +\sum_{[x_{k},\,x_{k+1}]\cap{R}=\emptyset}
+                        \frac{1}{N+1}
+                        \Delta{x}_{k}\\[1.5em]
+                    &\leq&
+                    \displaystyle
+                    2M\frac{\varepsilon}{4M}+\frac{1}{N+1}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    \frac{\varepsilon}{2}+\frac{1}{N+1}\\[1.5em]
+                    &<&
+                    \frac{\varepsilon}{2}+\frac{\varepsilon}{2}\\[1.5em]
+                    &=&
+                    \displaystyle
+                    \varepsilon
+                \end{array}
+            \end{equation}
+            The upper sum is hence bounded by $\varepsilon$, and from the
+            definition of $f$ the lower sum is always zero. The integral is
+            therefore zero.
+            \color{black}
+        \fi
+    \section{Measure}
+        Riemann and Darboux integration are not the only forms of integration.
+        A more powerful theory comes from Lebesgue which uses measures.
+        A \textbf{measure space} is an ordered triple $(X,\,\mathcal{A},\,\mu)$
+        where $X$ is a set, $\mathcal{A}\subseteq\mathcal{P}(X)$
+        is something called a \textit{sigma algebra}, and
+        $\mu:\mathcal{A}\rightarrow\mathbb{R}$ is a \textit{measure}. This is a
+        generalization of the likely more familiar notion of probability spaces.
+        $\mathcal{A}$ satisfies the following properties:
+        \begin{itemize}
+            \item
+                $\emptyset\in\mathcal{A}$.
+            \item
+                $X\in\mathcal{A}$.
+            \item
+                If $A\in\mathcal{A}$, then so is $X\setminus{A}$.
+            \item
+                If $\mathcal{O}\subseteq\mathcal{A}$ is \textit{countable},
+                then $\bigcup\mathcal{O}\in\mathcal{A}$ as well.
+        \end{itemize}
+        The connection to probability theory goes like this. The empty set is
+        an \textit{event}, it is the \textit{nothing happens} event.
+        Similarly, the entire set $X$ is an event, it is the
+        \textit{anything happens} event. If $A$ is an event, meaning
+        $A\in\mathcal{A}$, then the complement of $A$ is also an event, it
+        is the \textit{not} $A$ event. Lastly, the union of events is also an
+        event, it is the \textit{one of these happens} event.
+        \par\hfill\par
+        The \textit{measure} $\mu$, is a function
+        $\mu:\mathcal{A}\rightarrow\mathbb{R}$. The connection to probability
+        theory is that $\mu$ assigns a \textit{probability} to an event
+        $A\in\mathcal{A}$. It must satisfy some of the familiar rules from
+        probability theory:
+        \begin{itemize}
+            \item
+                For all $A\in\mathcal{A}$, the measure of $A$ is non-negative.
+                That is, $\mu(A)\geq{0}$. This means there are no negative
+                lengths.
+            \item
+                Given a sequence of sets in $\mathcal{A}$, $A_{0}$, $A_{1}$,
+                $\cdots$, the measure of the union is not greater than the
+                sum of the individual measures. That is:
+                \begin{equation}
+                    \mu\left(\bigcup_{n=0}^{\infty}A_{n}\right)
+                    \leq
+                    \sum_{n=0}^{\infty}
+                        \mu\left(A_{n}\right)
+                \end{equation}
+        \end{itemize}
+        For $\mathbb{R}$, the standard measure is given by defining
+        $\mu\big((a,\,b)\big)=b-a$. That is, the length of the interval
+        $(a,\,b)$ is just $b-a$. Given a set $A$, an upper bound for the
+        length of $A$ is obtained by covering $A$ with
+        (possibly infinitely many) open intervals, $(a_{n},\,b_{n})$.
+        The length of $A$ is then bounded by:
+        \begin{equation}
+            \mu(A)\leq\sum\left(b_{n}-a_{n}\right)
+        \end{equation}
+        The measure of $A$ is the infimum of the measures of all possible
+        open covers of $A$.
+        \par\hfill\par
+        To show that $A$ has measure zero you must show that for any
+        $\varepsilon>0$ there is a collection of open intervals that covers
+        $A$ and such that the measure of this collection (the sum of the
+        individual widths) is less than $\varepsilon$.
+        \par\hfill\par
+        We showed in class that the following function defined on $[0,\,1]$
+        is not Riemann or Darboux integrable:
+        \begin{equation}
+            f(x)=
+            \begin{cases}
+                1,&x\in\mathbb{Q}\\
+                0,&x\not\in\mathbb{Q}
+            \end{cases}
+        \end{equation}
+        For any partition $P$ we have $U(f,\,P)=1$ and $L(f,\,P)=0$, meaning
+        the lower sums and upper sums do not converge to the same value.
+        The Lebesgue integral (which we have not formally defined) allows us
+        to throw away sets of measure zero without changing the integral.
+        If we can show that $\mu(\mathbb{Q})=0$, then the integral of
+        $f$ must be zero as well since on $[0,\,1]\setminus\mathbb{Q}$ the
+        function is just zero.
+        \par\hfill\par
+        Prove that $\mu(\mathbb{Q})=0$.
+        \ifsolution
+            \color{blue}
+            \par\hfill\par
+            This will be true for any countable subset of $\mathbb{R}$.
+            Let $\varepsilon>0$ and pick a bijection
+            $a:\mathbb{N}\rightarrow\mathbb{Q}$. Define $\mathcal{U}_{n}$ by:
+            \begin{equation}
+                \mathcal{U}_{n}=
+                \left(
+                    a_{n}-\frac{\varepsilon}{2^{n+2}},\,
+                    a_{n}+\frac{\varepsilon}{2^{n+2}}
+                \right)
+            \end{equation}
+            Then $\mu(\mathcal{U}_{n})=\varepsilon/2^{n+1}$. The sum is then:
+            \begin{equation}
+                \mu(\mathbb{Q})
+                <\sum_{n=0}^{\infty}
+                    \mu\left(\mathcal{U}_{n}\right)
+                =\sum_{n=0}^{\infty}
+                    \frac{\varepsilon}{2^{n+1}}
+                =\varepsilon
+            \end{equation}
+        \fi
+\end{document}
