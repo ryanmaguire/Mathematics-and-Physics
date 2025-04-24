@@ -1,0 +1,145 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\title{Lemmas for the Fundamental Theorem of Calculus}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newtheorem{theorem}{Theorem}
+\newif\ifsolution
+\solutiontrue
+
+\begin{document}
+    \maketitle
+    \section{Mean Value Theorem for Integrals}
+        Here's an intuitive argument for the fundamental theorem of
+        calculus. Let $f:[a,\,b]\rightarrow\mathbb{R}$ be a continuous
+        function and define:
+        \begin{equation}
+            F(x)=
+            \int_{a}^{x}f(t)\,\textrm{d}t
+        \end{equation}
+        The derivative produces the following difference quotient:
+        \begin{equation}
+            \begin{array}{rcl}
+                \displaystyle
+                F^{\prime}(x)
+                &=&
+                \displaystyle
+                \lim_{h\rightarrow{0}}
+                \frac{
+                    \displaystyle
+                    \int_{a}^{x+h}f(t)\,\textrm{d}t-
+                    \int_{a}^{x}f(t)\,\textrm{d}t
+                }{h}\\[2em]
+                &=&
+                \displaystyle
+                \lim_{h\rightarrow{0}}
+                \frac{1}{h}
+                \int_{x}^{x+h}f(t)\,\textrm{d}t
+            \end{array}
+        \end{equation}
+        where we have made use of the additive property of the
+        limits of the Riemann / Darboux integral:
+        \begin{equation}
+            \int_{a}^{c}f(t)\,\textrm{d}t
+            =\int_{a}^{b}f(t)\,\textrm{d}t+\int_{b}^{c}f(t)\,\textrm{d}t
+        \end{equation}
+        Since $[x,\,x+h]$ is small, and $f$ is continuous, $f(t)$ varies
+        very little on this interval. We may as well replace it
+        with a constant $f(x_{h})$, giving us:
+        \begin{equation}
+            F^{\prime}(x)
+            =\lim_{h\rightarrow{0}}\frac{f(x_{h})}{h}
+                \int_{x}^{x+h}\textrm{d}t
+            =\lim_{h\rightarrow{0}}\frac{f(x_{h})}{h}h
+            =\lim_{h\rightarrow{0}}f(x_{h})
+        \end{equation}
+        Since $x_{h}\in[x,\,x+h]$, as $h$ tends to zero $x_{h}$ must
+        converge to $x$. From the continuity of $f$ we may conclude
+        that $F^{\prime}(x)=f(x)$.
+        \par\hfill\par
+        This argument can be made precise if we can rigorously prove that
+        there is indeed some $x_{h}\in[x,\,x+h]$ with the property that
+        the integral of $f$ over $[x,\,x+h]$ is just $f(x_{h})h$. There is,
+        this is the \textit{mean value theorem for integrals}.
+        \begin{theorem}[\textbf{Mean Value Theorem for Integrals}]
+            If $f:[a,\,b]\rightarrow\mathbb{R}$ is continuous, then there
+            is a $c\in[a,\,b]$ such that:
+            \begin{equation}
+                \int_{a}^{b}f(x)\,\textrm{d}x
+                =f(c)(b-a)
+            \end{equation}
+        \end{theorem}
+        \begin{proof}
+            Since $f$ is continuous and $[a,\,b]$ is compact, by the
+            extreme value theorem there exists $x_{m},x_{M}\in[a,\,b]$ such
+            that $f(x_{m})\leq{f}(x)\leq{f}(x_{M})$ for all
+            $x\in[a,\,b]$. But then:
+            \begin{equation}
+                \frac{1}{b-a}
+                \int_{a}^{b}f(x_{m})\,\textrm{d}x
+                \leq
+                \frac{1}{b-a}
+                \int_{a}^{b}f(x)\,\textrm{d}x
+                \leq
+                \frac{1}{b-a}
+                \int_{a}^{b}f(x_{M})\,\textrm{d}x
+            \end{equation}
+            We may factor constants out of the integral to give us:
+            \begin{equation}
+                f(x_{m})
+                \leq
+                \frac{1}{b-a}
+                \int_{a}^{b}f(x)\,\textrm{d}x
+                \leq
+                f(x_{M})
+            \end{equation}
+            Labeling the ratio in middle as $L$, this tells us that
+            $L$ is wedged between $f(x_{m})$ and $f(x_{M})$. Since $f$ is
+            continuous, by the intermediate value theorem there is some
+            $c\in[a,\,b]$ such that $f(c)=L$. But then, multiplying both sides
+            by $b-a$, we get:
+            \begin{equation}
+                f(c)(b-a)
+                =
+                \int_{a}^{b}f(x)\,\textrm{d}x
+            \end{equation}
+        \end{proof}
+        There are some things in this proof that you should be very explicit
+        about in your writing, some we have proven in class and some we have
+        not.
+        \begin{itemize}
+            \item
+                The integral is linear in the limits (proved in class):
+                \begin{equation}
+                    \int_{a}^{c}f(t)\,\textrm{d}t
+                    =\int_{a}^{b}f(t)\,\textrm{d}t+\int_{b}^{c}f(t)\,\textrm{d}t
+                \end{equation}
+            \item
+                Continuous functions on closed bounded intervals have
+                Riemann integrals (sketch of proof given, you should provide
+                a detailed one).
+        \end{itemize}
+        Try to prove the mean value theorem for integrals rigorously from the
+        definition of the Riemann / Darboux integral. You may freely use
+        the extreme value theorem, which comes in hand a few times.
+\end{document}
