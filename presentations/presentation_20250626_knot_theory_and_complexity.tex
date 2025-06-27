@@ -1,0 +1,306 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       June 24, 2025                                                  %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Knot Theory and Complexity}
+\author{Ryan Maguire}
+\date{June 26, 2025}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item Knot polynomials.
+            \item Complexity theory.
+            \item Computing the Jones polynomial with a computer.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        The Alexander-Conway polynomial of a link $L$ can be computed using its
+        skein relation. Pick any crossing in the diagram we have:
+        \begin{equation}
+            \nabla_{L_{+}}(t)-\nabla_{L_{-}}(t)=t\nabla_{L_{0}}(t)
+        \end{equation}
+        where $L_{+}$ replaces the original crossing with a positive one,
+        $L_{-}$ uses a negative crossing, and $L_{0}$ smooths the crossing,
+        effectively deleting it.
+        \par\hfill\par
+        Question to have in mind, if you have an $N$ crossing knot, how long
+        will it take to compute $\nabla_{L}(t)$ by doing this?
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        Let's examine another invariant you've already studied a bit, the
+        Jones polynomial. The Kauffman bracket polynomial can be computed,
+        using the Bar-Natan notation / convention, using the following
+        diagram.
+        \begin{figure}
+            \centering
+            \resizebox{0.75\textwidth}{!}{%
+                \includegraphics{kauffman_bracket_polynomial}
+            }
+            \caption{The Kauffman bracket using Bar-Natan's normalization.}
+        \end{figure}
+        Call the diagram on the center the \textit{zero smoothing} of this
+        particular crossing, and the diagram on the right the
+        \textit{one smoothing}. The naming is justified later, we can use
+        binary to aid our computations.
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        This recursive definition is completed by defining:
+        \begin{align}
+            \langle{L\cup{\bigcirc}}\rangle
+            &=(q+q^{-1})\langle{L}\rangle\\
+            \langle{\bigcirc}\rangle&=1
+        \end{align}
+        Note, this definition is slightly different from the one given by
+        Kauffman. Given a link $L$, and denoting the zero smoothing by
+        $L_{0}$ and the one smoothing via $L_{1}$, the original recursive
+        definition is:
+        \begin{equation}
+            \langle{L}\rangle
+            =A^{-1}\langle{L_{0}}\rangle+A\langle{L_{1}}\rangle
+        \end{equation}
+        To eliminate circles in the plane, we do:
+        \begin{equation}
+            \langle{L\cup\bigcirc}\rangle
+            =(-A^{2}-A^{-2})\langle{L}\rangle
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        Both the Bar-Natan method and the Kauffman definition are made into
+        true invariants once we normalize by a factor involving the writhe.
+        This is the Jones polynomial.
+        \par\hfill\par
+        We do not have two invariants here, it is possible to go back and
+        forth between the two conventions. The Bar-Natan definition has some
+        nice computational benefits, we will stick with this one.
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        Question, if a knot or link has $N$ crossings, how long will it take
+        to compute the Jones polynomial using this method?
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        The answer is $\textrm{poly}(N)\cdot{2}^{N}$, where
+        $\textrm{poly}(N)$ is some polynomial function that depends on how
+        long simple things like adding and multiplying numbers or
+        Laurent polynomials takes. This is quite long!
+        \par\hfill\par
+        At each crossing we create two branches, one where the zero smoothing
+        occurs, and one where the one smooth occurs. For $N$ crossings there
+        will be $2^{N}$ \textit{leaves} in our smoothing tree.
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        The leaves correspond to the \textit{cube of resolutions}, which is
+        all of the $2^{N}$ possible complete smoothings (meaning there are
+        no crossings left) of the knot or link diagram.
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions}
+            \caption{Cube of resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.8\textheight}{
+                \includegraphics{figure_eight_knot_cube_of_resolutions}
+            }
+            \caption{Cube of resolutions for the Figure-Eight}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        Is it really this hard? Let's consider a simpler problem, computing
+        the $n^{\textrm{th}}$ Fibonacci number. The definition is:
+        \begin{equation}
+            F_{n+2}=F_{n+1}+F_{n}
+        \end{equation}
+        With $F_{0}=F_{1}=1$. Na\"{i}vely, this has the same branching problem.
+        To compute $F_{n+2}$, you first need to compute $F_{n+1}$ and $F_{n}$,
+        and creating a simple program to do this will require $2^{n}$ steps.
+        But is it really that hard to compute the Fibonacci numbers?
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        No, this can be done in polynomial time, meaning we need at most
+        $\textrm{poly}(n)$ steps. To do this, note that computing $F_{n+1}$
+        is not independent from computing $F_{n}$ since
+        $F_{n+1}=F_{n}+F_{n-1}$. To compute $F_{n+2}$ you can simply start with
+        $F_{0}=F_{1}=1$, then compute $F_{2}=F_{1}+F_{0}=1+1=2$, and then
+        $F_{3}$, and so on. If we assume that arithmetic (adding numbers)
+        runs in constant time, then $F_{n}$ can be computed in linear time.
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        Returning to the Alexander-Conway polynomial, how long does it take?
+        The skein relation is not needed, there is a simpler method involving
+        matrices. If $K$ is a knot with $N$ crossings, then by Euler's formula
+        $(V-E+F=2)$, the knot with cut the plane into $N+2$ faces, where the
+        arcs of the knot form the edges and the crossings form the vertices.
+        \par\hfill\par
+        We can create a certain $(N+2)\times{N}$ matrix with affine entries
+        (meaning the entries are of the form $a+bt$ with integer coefficients
+        $a$ and $b$). The Alexander-Conway polynomial is computed by
+        considering a particular $N\times{N}$ minor and taking the determinant.
+        \par\hfill\par
+        How long does it take to compute a determinant?
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        The elementary method we learn about in school (co-factor expansion,
+        also called the Laplace expansion) requires $N!$ steps. $N!$ is
+        \textbf{much} worse than $2^{N}$. But if you learn more about linear
+        algebra you will learn about LU decomposition, which allows us to
+        compute determinants in cubic time.
+        \par\hfill\par
+        \textbf{The Alexander-Conway polynomial can be computed in polynomial}
+        \textbf{time}.
+    \end{frame}
+    \begin{frame}{Knot Polynomials}
+        So, how hard is it to compute the Jones polynomial? Can we do better
+        than $2^{N}$? We can indeed, there are methods of doing this in
+        $2^{C\sqrt{N}}$ time, where $C$ is a fixed constant that is independent
+        of the knot or link diagram.
+        \par\hfill\par
+        Can we compute the Jones polynomial in polynomial time?
+    \end{frame}
+    \begin{frame}{Complexity Theory}
+        Before answering this question, let's discuss complexity theory.
+        Loosely speaking, we use the symbol $\textrm{P}$ to denote all of
+        the problems that can be solved in polynomial time.
+        \par\hfill\par
+        Sorting a collection of $N$ numbers can be done in $N\log(N)$ times,
+        which is bounded by $N^{2}$, so sorting is a polynomial time problem.
+        \par\hfill\par
+        Search for a particular word in a dictionary with $N$ words can be
+        done in $\log(N)$ time, which is bounded by $N$, so searching is also
+        polynomial in time.
+    \end{frame}
+    \begin{frame}{Complexity Theory}
+        Every positive integer greater than one has a unique factorization
+        in terms of prime numbers. Can finding this factorization be done in
+        polynomial time?
+        \par\hfill\par
+        This is not currently known, but lets consider a similar problem.
+        If you are given an integer $N$, and you \textit{guess} a prime
+        factorization $p_{0},\,\cdots,\,p_{n}$, how long would it take to
+        verify that your factorization is correct?
+    \end{frame}
+    \begin{frame}{Complexity Theory}
+        You could simply multiply your factorization
+        $p_{0}\cdots{p}_{n}$ and see if you get $N$. If you do not, then you
+        do not have the correct factorization. Multiplication is indeed
+        polynomial in time, so
+        \textbf{verifying a solution runs in polynomial-time}.
+        \par\hfill\par
+        The set of problems that can be verified in polynomial time is
+        denoted $\textrm{NP}$.
+        \par\hfill\par
+        How does $\textrm{P}$ related to $\textrm{NP}$?
+    \end{frame}
+    \begin{frame}{Complexity Theory}
+        It is not hard to see that $\textrm{P}\subseteq\textrm{NP}$ is true,
+        but it is currently unknown (and, in fact, it is a million dollar
+        problem) if $\textrm{P}=\textrm{NP}$.
+    \end{frame}
+    \begin{frame}{Computing the Jones Polynomial with a Computer}
+        How does the Jones polynomial tie in to this?
+        The Jones polynomial is $\#\textrm{P-Hard}$ and $\textrm{NP-Hard}$,
+        which roughly means that it is as least as hard as any
+        $\textrm{P}$ or $\textrm{NP}$ problem. Because of this it is highly
+        unlikely that the Jones polynomial can be computed in polynomial time.
+    \end{frame}
+    \begin{frame}{Computing the Jones Polynomial with a Computer}
+        Let's study the trefoil diagram again.
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_cube_of_resolutions}
+            \caption{Cube of resolutions for the Trefoil}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        We can compute the Kauffman bracket via:
+        \begin{equation}
+            \label{eqn:kauffman_bracket}%
+            \langle{L}\rangle=\sum_{n=0}^{2^{N}-1}
+                (-q)^{w(n)}(q+q^{-1})^{c(n)}
+        \end{equation}
+        Here, $w(n)$ is the \textit{Hamming weight} of $n$, the number of 1's
+        that occur in the binary representation of $n$. $c(n)$ is the
+        \textit{circle counting function}, the number of disjoint circles that
+        result from the complete resolution of $L$ corresponding to $n$.
+        To compute $\langle{L}\rangle$ we need only compute $c(n)$.
+    \end{frame}
+    \begin{frame}{An Algorithm for the Jones Polynomial}
+        First, thicken the knot. All of the crossings then become
+        ``four-way intersections."
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_framed_001}
+            \caption{Framed Left-Handed Trefoil}
+            \label{fig:trefoil_knot_framed_001}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{An Algorithm for the Jones Polynomial}
+        The aforementioned four-way intersections.
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_crossings}
+            \caption{Signed Crossings in a Framed Knot}
+            \label{fig:thickened_crossings}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{An Algorithm for the Jones Polynomial}
+        A smoothing amounts to a roadblock.
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_negative_crossing_smoothings}
+            \caption{Smoothing a Negative Crossing in a Framed Knot}
+            \label{fig:thickened_negative_crossing_smoothings}
+        \end{figure}
+        \begin{figure}
+            \centering
+            \includegraphics{thickened_positive_crossing_smoothings}
+            \caption{Smoothing a Positive Crossing in a Framed Knot}
+            \label{fig:thickened_positive_crossing_smoothings}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{An Algorithm for the Jones Polynomial}
+        We can compute $c(n)$ by following along the knot, keeping track of
+        the road blocks and the orientations, until we get back to where we
+        started. This amounts to a single cycle. We do this for all of the
+        roads corresponding to a smoothing.
+        \par\hfill\par
+        More advanced algorithms that allow us to compute the Jones polynomial
+        in subexponential time, $2^{C\sqrt{N}}$, are possible, but are
+        considerably more sophisticated. They use tools like tangles, braids,
+        and other concepts that are common in knot theory.
+    \end{frame}
+    \begin{frame}
+        Our algorithm can be implemented in a computer using
+        \textit{Gauss code}.
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.8\textheight}{%
+                \includegraphics{trefoil_knot_oriented_with_extended_gauss_code}
+            }
+            \caption{Oriented Trefoil with Gauss Code}
+        \end{figure}
+    \end{frame}
+\end{document}
