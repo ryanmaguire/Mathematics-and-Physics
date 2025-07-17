@@ -1,0 +1,319 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       June 24, 2025                                                  %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings, arrows.meta}
+\graphicspath{{../images/}}
+\title{Fundamental Quandle and the Cocycle Invariant}
+\author{Ryan Maguire}
+\date{July 17, 2025}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item The knot group and the Wirtinger presentation.
+            \item Fundamental quandles.
+            \item 2-cocycles and the cocycle invariant.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        The fundamental group of a space $X$ is the set of
+        \textit{equivalence classes} of loops
+        $\gamma:\mathbb{S}^{1}\rightarrow{X}$ that start and end at a chosen
+        fixed point $x_{0}\in{X}$, where two loops $\gamma_{0}$ and
+        $\gamma_{1}$ are \textit{equivalent} if we can deform one into the
+        other continuously without cutting or tearing.
+        \par\hfill\par
+        The group operation is \textit{concatenation}. Given
+        $\gamma_{0},\,\gamma_{1}:\mathbb{S}^{1}\rightarrow{X}$, we form
+        $\gamma_{2}:\mathbb{S}^{1}\rightarrow{X}$ by first following along
+        $\gamma_{0}$, and then following along $\gamma_{1}$.
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        Note, the curve $\gamma$ can intersect itself. It does not need to
+        be a \textit{knot}, or an embedding.
+        \par\hfill\par
+        We denote the fundamental group of $X$ with chosen point $x_{0}$
+        by $\pi_{1}(X,\,x_{0})$.
+        \par\hfill\par
+        For most spaces (including all the ones we will care about),
+        the chosen point $x_{0}$ does not matter, and hence we may simply write
+        $\pi_{1}(X)$.
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        What do we think $\pi_{1}(\mathbb{R}^{3})$ is?
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        What do we think $\pi_{1}(\mathbb{S}^{1})$ is?
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        What about a torus, $\mathbb{T}=\mathbb{S}^{1}\times\mathbb{S}^{1}$?
+        \begin{figure}
+            \centering
+            \includegraphics{torus}
+            \caption{A Torus}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        Here's a tricky one, what about the Klein bottle?
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.5\textwidth}{%
+                \includegraphics{klein_bottle}
+            }
+            \caption{A Klein Bottle}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        \begin{align}
+            \pi_{1}(\mathbb{R}^{3})
+            &=\textrm{trivial}\\
+            \pi_{1}(\mathbb{S}^{1})
+            &=\mathbb{Z}\\
+            \pi_{1}(\mathbb{T})
+            &=\langle{a,\,b\;|\;ab=ba}\rangle\\
+            \pi_{1}(\textrm{Klein})
+            &=\langle{a,\,b\;|\;aba=b}\rangle
+        \end{align}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        The knot group of a knot $K$ is the fundamental group of the
+        complement, $\pi_{1}(\mathbb{R}^{3}\setminus{K})$.
+        \par\hfil\par
+        This group has a presentation, known as the
+        \textit{Wirtinger presentation}, of the form:
+        \begin{equation}
+            \pi_{1}(\mathbb{R}^{3}\setminus{K})
+            =\langle
+                x_{1},\,\dots,\,x_{N}\;|\;wx_{n}w^{-1}=x_{m},\,\dots
+            \rangle
+        \end{equation}
+        Where $w$ is a \textit{word}, a product of the generators
+        $x_{1},\,\dots,\,x_{N}$, which come from the \textit{arcs} in
+        a diagram.
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        Kervaire proved the following.
+        \begin{theorem}
+            A Wirtinger presentation for a group $G$
+            corresponds to a knot $K$ if and only if:%
+            \footnote{%
+                This \textit{knot} $K$ might live in higher dimensions.
+            }
+            \begin{enumerate}
+                \item
+                    The Abelianization of $G$ is $\mathbb{Z}$.
+                \item
+                    The second homology of the group is trivial.
+                \item
+                    The presentation is finite.
+                \item
+                    $G$ is the \textit{normal closure} of a single generator.
+            \end{enumerate}
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        Conditions 1 and 2 are pretty straight forward once we study algebraic
+        topology. The Abelianization of $\pi_{1}(X)$ is $H_{1}(X)$, the
+        first homology group, and for any knot $K$ it is well-known that
+        $H_{1}(\mathbb{R}^{3}\setminus{K})=\mathbb{Z}$.
+        \par\hfill\par
+        The second condition (second homology group is trivial)
+        says \textit{there are no spheres in the knot complement}.
+        This theorem goes back to the 1950s
+        (Papakyriakopoulos, 1957).
+        \par\hfill\par
+        Conditions 3 and 4 are the Wirtinger condition.
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        The trefoil has knot group
+        $\langle{x,\,y\;|\;(xy)^{-1}yxy=x}\rangle$.
+        We can simplify this to:
+        \begin{equation}
+            \pi_{1}(\mathbb{R}^{3}\setminus\textrm{trefoil})
+            =\langle{x,\,y\;|\;x^{2}=y^{3}}\rangle
+        \end{equation}
+    \end{frame}
+    \begin{frame}{The Knot Group and the Wirtinger Presentation}
+        The figure-eight is given by:
+        \begin{equation}
+            \pi_{1}(\mathbb{R}^{3}\setminus\textrm{figure-eight})
+            =\langle
+                x,\,y\;|\;yxy^{-1}xy=xyx^{-1}yx
+            \rangle
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Fundamental Quandles}
+        A quandle is a set $Q$ and a binary operation
+        $*:Q\times{Q}\rightarrow{Q}$ such that:
+        \begin{enumerate}
+            \item
+                $x*x=x$
+            \item
+                The function $f_{x}(y)=y*x$ is invertible for each $x\in{Q}$.
+            \item
+                $a*(b*c)=(a*b)*(a*c)$.
+        \end{enumerate}
+        Given a group $G$, the \textit{conjugate} of an element
+        $a\in{G}$ by an element $g\in{G}$ is the element
+        $g^{-1}ag\in{G}$. Wirtinger presentations are precisely conjugations
+        of elements of the group by words.
+    \end{frame}
+    \begin{frame}{Fundamental Quandles}
+        If $G$ is any group, then we automatically have a quandle by defining
+        \begin{equation}
+            x*y=y^{-1}xy
+        \end{equation}
+        The fact that this is a quandle follows directly from some basic
+        group properties:
+        \begin{enumerate}
+            \item
+                $a*a=a^{-1}aa=a$
+            \item
+                $\varphi_{x}(y)=xy$ and $\tilde{\varphi}_{x}(y)=y^{-1}x$
+                are both bijections, a fundamental fact about groups.
+                Because of this, $f_{x}(y)=y^{-1}xy$ is the composition of
+                bijections, which is hence a bijection, and therefore this
+                function has an inverse.
+            \item
+                Conjugation self-distributes.
+        \end{enumerate}
+    \end{frame}
+    \begin{frame}{Fundamental Quandles}
+        Observation: The Wirtinger presentation consists of conjugations,
+        and conjugations define quandles. We take the Wirtinger presentation
+        of the knot group, and use it as the presentation of a quandle.
+        This is the \textbf{fundamental quandle} of the knot. It detects
+        a knot up to mirror images and inversions (swapping the direction).
+    \end{frame}
+    \begin{frame}{Fundamental Quandles}
+        The fundamental quandle is indeed a knot invariant, and hence any
+        invariant of the quandle is also an invariant of the knot.
+        \par\hfill\par
+        For example, suppose we fix a knot $K$ and let $Q(K)$ denote the
+        fundamental quandle. Given any quandle $R$, we can consider the
+        set of all \textit{quandle homomorphisms}
+        $\varphi:Q(K)\rightarrow{R}$, denoted $\textrm{Hom}\big(Q(K),\,R\big)$,
+        which are functions with
+        $\varphi(x*y)=\varphi(x)*\varphi(y)$. The size of this set, or its
+        \textit{cardinality}, is another invariant of the knot $K$.
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        Given a group $G$, there is something called the
+        \textit{group ring} $\mathbb{Z}[G]$. Groups only have one operation,
+        but we are more familiar with having two (addition and multiplication).
+        An element of $\mathbb{Z}[G]$ is a finite combination
+        $n_{1}g_{1}+\cdots+n_{N}g_{N}$ where $n_{m}\in\mathbb{Z}$ and
+        $g_{m}\in{G}$. Addition and multiplication are carried out using
+        the distributive law, together with the usual arithmetic properties
+        of $\mathbb{Z}$, and by applying the group operation.
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        As an example, suppose $G$ is a group with
+        $g_{1},g_{2}\in{G}$. Then:
+        \begin{equation}
+            (g_{1}+2g_{2})(3g_{1}-g_{2})
+            =3g_{1}^{2}+6g_{2}*g_{1}-g_{1}*g_{2}-2g_{2}^{2}
+        \end{equation}
+        Note that, in general, groups do not need to be \textit{Abelian},
+        meaning $g_{1}*g_{2}$ and $g_{2}*g_{1}$ might be different
+        (think about matrices).
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        The cocycle invariant is given as follows. Fix a knot $K$ and a group
+        $G$ (it does not need to be Abelian, but it is easier to deal with
+        Abelian groups), and a quandle $R$. Given a diagram $D$ for $K$, we let
+        $X$ denote the set of \textit{arcs}, which are the curves that
+        start at a given under crossing, pass over all of the over crossings,
+        and then stop at the next under crossing.
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        \begin{figure}
+            \centering
+            \includegraphics{trefoil_knot_001}
+            \caption{Trefoil Knot}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        A coloring of $D$ with respect to the quandle $R$ is a function
+        $C:A\rightarrow{R}$ such that at each crossing we have:
+        \begin{equation}
+            C(\textrm{lower-right})*C(\textrm{lower-left})
+            =C(\textrm{upper-left})
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        Tricolorability can be recovered using certain 3-element quandles.
+        \begin{figure}
+            \centering
+            \resizebox{!}{0.5\textwidth}{%
+                \includegraphics{trefoil_tricolor}
+            }
+            \caption{Trefoil Knot}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        A 2-cocycle is a function
+        $\phi:R\times{R}\rightarrow{G}$ with $\phi(x,\,x)=0$ and:
+        \begin{equation}
+            \phi(x,\,y)\phi(x*y,\,z)=\phi(x,\,z)\phi(x*z,\,y*z)
+        \end{equation}
+        Note, if $G$ is Abelian we replace multiplication with addition.
+        The \textit{Boltzmann weight} for a crossing $\tau$ is
+        $B(C,\,\tau)=\phi(x_{\tau},\,y_{\tau})^{\textrm{sgn}(\tau)}$,
+        where $x_{\tau}$ and $y_{\tau}$ are the bottom-right and bottom-left
+        arcs for the crossing $\tau$, respectively, and
+        $\textrm{sgn}(\tau)$ is the sign of the crossing.
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        Letting $\textrm{Col}_{R}(K)$ denote the set of all colorings of $K$
+        by the quandle $R$, the cocycle invariant is an element of the
+        group-ring $\mathbb{Z}[G]$, defined by:
+        \begin{equation}
+            \Phi_{R,\,G}(K)
+            =\sum_{C\in\textrm{Col}_{R}(K)}\prod_{\tau}B(C,\,\tau)
+        \end{equation}
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        This definition is very involved, and next week when we learn
+        how to write Python code we will see how to make this more
+        computational. We conclude with some results.
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        \begin{theorem}
+            There are 26 quandles $R$ and groups $G$ such that
+            $\Phi_{R,\,G}(K)$ is a perfect invariant (up to mirrors and
+            inverses) for all knots with less than 12 crossings. There are
+            60 such pairs that detect all but 13 knots with less than
+            13 crossings.
+        \end{theorem}
+    \end{frame}
+    \begin{frame}{Cocycle Invariant}
+        The following has been conjectures. If $K$ and $K^{\prime}$ are
+        distinct knots, then there is a group $G$ and two distinct
+        quandles $R$, $R^{\prime}$ such that
+        $\Phi_{R,\,G}(K)\ne\Phi_{R^{\prime},\,G}(K^{\prime})$. That is,
+        the cocycle invariant might be a perfect invariant for knots.
+    \end{frame}
+\end{document}
