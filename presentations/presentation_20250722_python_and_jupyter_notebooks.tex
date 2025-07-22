@@ -1,0 +1,263 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       July 20, 2025                                                  %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{adjustbox}
+\usetikzlibrary{decorations.markings, arrows.meta}
+\graphicspath{{../images/}}
+\title{Python and Jupyter Notebooks}
+\author{Ryan Maguire}
+\date{July 22, 2025}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12}
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttm,
+    morekeywords={self},
+    keywordstyle=\ttb\color{deepblue},
+    emph={MyClass,__init__},
+    emphstyle=\ttb\color{deepred},
+    stringstyle=\color{deepgreen},
+    frame=tb,
+    showstringspaces=false
+}
+
+\begin{document}
+    \maketitle
+    \begin{frame}{Outline}
+        \begin{itemize}
+            \item Programming in Python.
+            \item Literate Programming.
+            \item Jupyter Notebooks and Markdown.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Python}
+        Python is an object oriented programming language that
+        emphasizes readability. The core philosophical principles are
+        outlines in PEP 20\footnote{%
+            \textit{Python Enhancement Proposal}.
+        }, the Zen of Python:
+        \begin{itemize}
+            \item
+                Beautiful is better than ugly.
+            \item
+                Explicit is better than implicit.
+            \item
+                Simple is better than complex.
+            \item
+                Complex is better than complicated.
+            \item
+                Flat is better than nested.
+            \item
+                Sparse is better than dense.
+            \item
+                Readability counts.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Python}
+        If you have familiarity in \texttt{C} / \texttt{C++} or
+        \texttt{Java}, this means there are a few key differences that take
+        some getting used to.
+        \begin{itemize}
+            \item No curly brackets everywhere.
+            \item No semi-colons at the end of a statement.
+            \item \textbf{Significant whitespace}.
+            \item Statements end at the end of a line.
+        \end{itemize}
+        Let's see a simple example.
+    \end{frame}
+    \begin{frame}[fragile]{Python}
+        \begin{adjustbox}{width=0.5\textwidth,keepaspectratio}
+            \begin{lstlisting}
+import math
+
+def dot(point0, point1):
+    """
+        Computes the Euclidean dot product of two points.
+    """
+    return point0[0]*point1[0] + point0[1]*point1[1]
+
+def norm(point):
+    """
+        Computes the distance between a point and the origin.
+    """
+    return math.sqrt(dot(point, point))
+
+def angle(point0, point1):
+    """
+        Computes the angle made by two points in the plane.
+    """
+    dot_prod = dot(point0, point1)
+    norm0 = norm(point0)
+    norm1 = norm(point1)
+
+    return math.acos(dot_prod / (norm0 * norm1))
+
+if __name__ == "__main__":
+    p = [1.0, 1.0]
+    q = [-1.0, 1.0]
+    theta = angle(p, q)
+    print(theta)
+            \end{lstlisting}
+        \end{adjustbox}
+    \end{frame}
+    \begin{frame}{Python}
+        Placing this in a file \texttt{angle.py} and typing
+        \texttt{python3 angle.py} will print out
+        \texttt{1.5707963267948966}.
+        \par\hfill\par
+        Some things to note.
+        \begin{enumerate}
+            \item
+                We use \textbf{\texttt{import}} to include external libraries
+                or \textit{packages} into our program for us to use.
+            \item
+                \textbf{\texttt{def}} defines a function.
+                Splitting up long and complicated programs into smaller
+                pieces helps make readability and maintenance a lot easier.
+            \item
+                There are \textit{four} spaces between the start of a line and
+                the start of a function. Python uses significant whitespace to
+                determine where a function starts and ends. It also does this
+                with if-then statements, for and while loops, classes, and
+                just about anything else that is nested.
+        \end{enumerate}
+    \end{frame}
+    \begin{frame}{Python}
+        You are not required to use four spaces (but this is quite common),
+        but you must be consistent. Using four spaces in some spots and
+        two spaces elsewhere will cause errors, and your program will not run.
+    \end{frame}
+    \begin{frame}{Python}
+        Since we intend to work with knots and quandles, we need data
+        structures that are a little more complicated than just real numbers
+        and functions. This is where \textit{classes} come into use.
+        \par\hfill\par
+        A class is a combination of data (perhaps the DT code of a knot, or
+        the Cayley table of a quandle), and \textit{methods}, which are
+        functions that are able to access and modify this data, and interact
+        with other classes and variables.
+        \par\hfill\par
+        Let's try a simple example.
+    \end{frame}
+    \begin{frame}[fragile]{Python}
+        \begin{adjustbox}{width=0.5\textwidth,keepaspectratio}
+            \begin{lstlisting}
+import math
+
+class Vec3:
+    """
+        Implements a 3D vector object.
+    """
+    def __init__(self, x_component, y_component, z_component):
+        """
+            Creates a 3D vector from its Cartesian coordinates.
+        """
+        self.x = x_component
+        self.y = y_component
+        self.z = z_component
+
+    def zenith(self):
+        """
+            Computes the angle this vector makes with the north pole.
+        """
+
+        # This is the azimuthal, or cylindrical, part of the vector.
+        rho = math.sqrt(self.x*self.x + self.y*self.y)
+
+        # The zenith angle is the angle made by rho and z.
+        return 0.5 * math.pi - math.atan2(self.z, rho)
+
+if __name__ == "__main__":
+    point = Vec3(3.0, 4.0, 5.0)
+    angle = point.zenith()
+    print(angle)
+            \end{lstlisting}
+        \end{adjustbox}
+    \end{frame}
+    \begin{frame}[fragile]{Literate Programming}
+        Complex mathematical objects will often have lots of data and methods.
+        For knot theory examples, see:
+        \begin{itemize}
+            \item
+                \footnotesize\url{%
+                    https://github.com/%
+                        sagemath/sage/tree/develop/src/sage/knots%
+                }
+            \item
+                \footnotesize\url{%
+                    https://github.com/3-manifolds/SnapPy%
+                }
+            \item
+                \footnotesize\url{%
+                    https://github.com/3-manifolds/Spherogram%
+                }
+        \end{itemize}
+        These libraries are very big and complex, but can be useful tools
+        for learning how other mathematicians implement various data
+        structures and algorithms.
+    \end{frame}
+    \begin{frame}[fragile]{Literate Programming}
+        In the previous example we saw \textit{comments}. Comments in Python
+        start with the \texttt{\#} symbol and end when the line ends.
+        In \textit{literate programming}, we write our programs for the human
+        reader, not just for the computer. Literate programming is more than
+        just leaving comments that help explain the algorithm, though comments
+        are important too.
+    \end{frame}
+    \begin{frame}[fragile]{Literate Programming}
+        In a literate program we mix together detailed explanations of an
+        algorithm with the source code that actually implements the algorithm.
+        This idea was introduced by Donald Knuth in the 1980s, and the concept
+        has been gaining popularity in recent years. There are many ways to
+        write literate programs (\textit{Mathematica Notebooks} are common),
+        but we will be concentrating on \textbf{Jupyter Notebooks}.
+    \end{frame}
+    \begin{frame}[fragile]{Literate Programming}
+        Jupyter notebooks mix together code (usually in Python, but you may
+        use C, C++, Java, and a handful of other languages) with
+        descriptive text that is written in \textit{Markdown}. Markdown is
+        similar to \LaTeX, you use a simple syntax to describe your text, and
+        then the Jupyter notebook renders the text and a nice format.
+        \par\hfill\par
+        Let's take a look at one of my Jupyter notebooks that I used to help
+        teach astronomy and optics.
+    \end{frame}
+    \begin{frame}{Jupyter Notebooks}
+        Ayush Jain has provided his Mathematica notebooks, and the syntax can
+        be quickly converted into Python (especially easy if you use the
+        \texttt{sympy} package). You are highly encouraged to read these
+        notebooks and try to understand the code. It provides a method of
+        compute the cocycle polynomia invariant, and you can adapt it to your
+        own project.
+    \end{frame}
+\end{document}
