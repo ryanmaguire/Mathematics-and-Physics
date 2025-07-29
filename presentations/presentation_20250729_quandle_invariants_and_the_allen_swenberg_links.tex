@@ -1,0 +1,264 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%   Author:     Ryan Maguire                                                   %
+%   Date:       July 29, 2025                                                  %
+%------------------------------------------------------------------------------%
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{{../images/}}
+\title{Quandle Invariants and the Allen-Swenberg Links}
+\author{Ryan Maguire}
+\date{July 29, 2025}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+\begin{document}
+    \maketitle
+    \begin{frame}
+        \begin{itemize}
+            \item
+                Symplectic forms.
+            \item
+                Symplectic quandles.
+            \item
+                The coloring polynomial for symplectic quandles.
+            \item
+                The Allen-Swenberg examples.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        The \textit{Lagrangian} of a mechanical system is define via:
+        \[
+            \mathcal{L}=T-V
+        \]
+        where $T$ is the kinetic energy and $V$ is the potential energy of the
+        system. After studying calculus of variations, you can apply the
+        \textit{Euler-Lagrange equation} to this expression to get a new, but
+        equivalent, formulation of Newton's second law:
+        \[
+            \frac{\partial\mathcal{L}}{\partial{q}}
+            -\frac{\textrm{d}}{\textrm{d}t}
+            \frac{\partial\mathcal{L}}{\partial\dot{q}}
+        \]
+        where $q$ describes the position, $\dot{q}$ is the velocity,
+        and $t$ is time.
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        Plotting the Lagrangian involves a curve (as a function of $t$)
+        that has $q$ coordinates and $\dot{q}$ coordinates. This collection of
+        ordered pairs $(q,\,\dot{q})$ is called the \textit{phase-space} of the
+        system.
+        \par\hfill\par
+        We go from Lagrangian mechanics to Hamiltonian mechanics by considering
+        the Hamiltonian. This replaces the \textit{position-velocity} coordinate
+        system $(q,\,\dot{q})$ with the \textit{momentum-position} coordinate
+        system $(p,\,q)$.
+        \[
+            \mathcal{H}
+            =p\dot{q}-\mathcal{L}
+        \]
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        Consider the case where $\mathcal{L}=0$. That is, the kinetic energy and
+        the potential energy are equal, and therefore the Lagrangian is zero.
+        \par\hfill\par
+        In this case, our Hamiltonian becomes:
+        \[
+            \mathcal{H}
+            =\sum_{n}p_{n}\land\textrm{d}q_{n}
+        \]
+        The position $\mathbf{q}=(q_{1},\,\cdots,\,q_{k})$ should vary smoothly
+        as a function of time, meaning this is a smooth function (a 0 form).
+        Similarly the momentum $\mathbf{p}=(p_{1},\,\cdots,\,p_{n})$ should be
+        smooth. $\mathcal{H}$ is thus a sum of exterior products of $0$ forms
+        and $1$ forms, meaning it is a $1$ form. This is called the
+        \textit{tautological one form}.
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        The \textit{differential} of the tautological one form is given by:
+        \[
+            \textrm{d}\mathcal{H}
+            =\sum_{n}\textrm{d}p_{n}\land\textrm{d}q_{n}
+        \]
+        Where $\land$ is a special operation called the
+        \textit{exterior product}.
+        This is called the \textit{Liouville form}.
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        A symplectic form is a type of function that generalizes the
+        Liouville form from classical mechanics. In particular, given a
+        vector field $V$ over a field $k$ (think of $\mathbb{R}^{n}$ over
+        $\mathbb{R}$, for example), a symplectic form is an
+        \textit{anti-symmetric non-degenerate bilinear form}.
+        \par\hfill\par
+        We'll explore what this means on the next slide.
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        A bilinear form is a function $\omega:V\times{V}\rightarrow{k}$ that
+        is linear in both components. That is, $\omega$ takes in two vectors
+        and returns a scalar, and it is linear in each slot:
+        \begin{equation}
+            \begin{array}{rcl}
+                \displaystyle
+                \omega(av_{0}+bv_{1},\,w)
+                &=&
+                \displaystyle
+                a\omega(v_{0},\,w)+b\omega(v_{1},\,w)\\[1em]
+                \displaystyle
+                \omega(v,\,aw_{0}+bw_{1})
+                &=&
+                \displaystyle
+                a\omega(v,\,w_{0})+b\omega(v,\,w_{1})
+            \end{array}
+        \end{equation}
+        Anti-symmetry (also called \textit{skew} symmetry) means
+        $\omega(v,\,w)=-\omega(w,\,v)$. The non-degeneracy requirement means
+        that if $\omega(v,\,w)=0$ for all $w$, then $v$ must be the zero vector.
+    \end{frame}
+    \begin{frame}{Symplectic Forms}
+        A bilinear product can be described by a matrix $A$. Given vectors
+        $X$ and $Y$, we write:
+        \[
+            \omega(X,\,Y)=X^{T}AY
+        \]
+        where $X^{T}$ denotes the transpose of $X$. The skew-symmetric property
+        of $\omega$ implies that $A^{T}=-A$, and the non-degenerate property
+        means $\textrm{det}(A)\ne{0}$. Because of this we can note that
+        $V$ must be \textit{even dimensional}. This is because if the dimension
+        is odd, then the matrix $A$ must have determinant zero since:
+        \[
+            \begin{aligned}
+                \textrm{det}(A)
+                &=\textrm{det}(A^{T})\\
+                &=\textrm{det}(-A)\\
+                &=(-1)^{n}\textrm{det}(A)
+            \end{aligned}
+        \]
+        Hence, either $n$ is even or $\textrm{det}(A)=0$. For $A$ to be
+        non-degenerate we then require $n$ to be even.
+    \end{frame}
+    \begin{frame}{Symplectic Quandles}
+        Given a vector space $V$ over a field $k$, if we have a symplectic
+        form $\omega$ then we can make $V$ into a quandle using the quandle
+        operation:
+        \begin{equation}
+            v\triangleright{w}
+            =v+\omega(v,\,w)w
+        \end{equation}
+        The inverse quandle operation is:
+        \begin{equation}
+            v\triangleright^{-1}{w}
+            =v-\omega(v,\,w)w
+        \end{equation}
+    \end{frame}
+    \begin{frame}{The Coloring Polynomial for Symplectic Quandles}
+        Given a knot $K$ and a symplectic quandle $T$, we may consider the
+        homomorphism set $\textrm{Hom}(Q(K),\,T)$, where $Q(K)$ is the
+        fundamental quandle of $K$.
+        \par\hfill\par
+        $Q(K)$ is determined by the relations:
+        \begin{equation}
+            x_{\ell}=x_{n}\triangleright{x}_{m}
+        \end{equation}
+        where $\ell$, $n$, and $m$ are the indices for the arcs at a given
+        crossing (taken in the correct order).
+    \end{frame}
+    \begin{frame}{The Coloring Polynomial for Symplectic Quandles}
+        To color $K$ with the quandle $T$ requires us to label the arcs
+        $\ell$, $n$, and $m$ with elements of $T$ satisfying:
+        \begin{equation}
+            x_{\ell}
+            =x_{n}+\omega(x_{n},\,x_{m})x_{m}
+        \end{equation}
+        where $\omega$ is the symplectic form from $T$.
+    \end{frame}
+    \begin{frame}{The Coloring Polynomial for Symplectic Quandles}
+        If we fix a prime number $p$, then $\mathbb{Z}_{p}$ becomes a field
+        (with addition and multiplication defined $\textrm{mod}\,\textrm{n}$).
+        $(\mathbb{Z}_{p})^{2}$ is thus a two dimension $\mathbb{Z}_{p}$
+        vector space, and given any anti-symmetric matrix $A$ with entries in
+        $\mathbb{Z}_{p}$ and non-zero determinant, this would automatically
+        produce a symplectic quandle.
+    \end{frame}
+    \begin{frame}{The Coloring Polynomial for Symplectic Quandles}
+        The simplest symmetric non-degenerate matrix is the identity:
+        \begin{equation}
+            I=
+            \begin{bmatrix}
+                1&0\\
+                0&1
+            \end{bmatrix}
+        \end{equation}
+        The simples anti-symmetric non-degenerate matrix is probably:
+        \begin{equation}
+            I=
+            \begin{bmatrix}
+                0&1\\
+                -1&0
+            \end{bmatrix}
+        \end{equation}
+    \end{frame}
+    \begin{frame}{The Coloring Polynomial for Symplectic Quandles}
+        Once we have chosen $A$, to compute the coloring polynomial we need to
+        solve the following non-linear vector equations:
+        \begin{equation}
+            x_{\ell}=x_{n}\triangleright{x}_{m}=x_{n}+x_{n}^{T}Ax_{m}
+        \end{equation}
+        Since $(\mathbb{Z}_{p})^{2}$ is two dimensional, each one of these
+        vector equations is really two scalar equations. If $K$ has $N$
+        crossings there are then $2N$ equations in $2N$ unknowns.
+    \end{frame}
+    \begin{frame}{The Allen-Swenberg Examples}
+        Performing this problem with the connected sum of two Hopf links
+        produces $8$ equations in $8$ unknowns. The solution set can be found
+        by the aid of a computer, and after counting how many \textit{distinct}
+        solutions there are, we may compute the coloring polynomial.
+    \end{frame}
+    \begin{frame}{The Allen-Swenberg Examples}
+        The first Allen-Swenberg link has 45 crossings, hence searching for
+        all possible solutions via brute force requires checking
+        $p^{2\cdot{45}}=p^{90}$ different combinations!
+        \par\hfill\par
+        Fortunately we may split the link into smaller parts, solving the
+        problem \textit{locally}, and then joining these individual solutions
+        together into a solution for the entire link. This is what Jain's
+        Mathematica program does.
+    \end{frame}
+    \begin{frame}{The Allen-Swenberg Examples}
+        You may do this using \texttt{sympy} as well. You need to:
+        \begin{itemize}
+            \item
+                Create the $2N$ system of equations in the $2N$
+                symbolic variables.
+            \item
+                Solve these equations \textit{locally}. If you break your
+                link into sections with at most $k$ crossings, the number of
+                possible combinations is $p^{2k}$. If $k$ is small this search
+                can easily be done with a computer.
+            \item
+                Join your solutions for the subdivisions of the link into a
+                solution for the entire link.
+                \item
+                Count the number of distinct solutions.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{The Allen-Swenberg Examples}
+        \begin{center}
+            Good luck!
+        \end{center}
+    \end{frame}
+\end{document}
