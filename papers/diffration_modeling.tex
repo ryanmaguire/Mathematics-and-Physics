@@ -1,0 +1,160 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2021/11/16                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+
+% Needed for figures.
+\usepackage{graphicx}
+
+% Needed for the iint symbol.
+\usepackage{amsmath}
+
+% Location of all of the images for the paper.
+\graphicspath{{../images/}}
+
+% No indent and no paragraph skip.
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+% Title page information.
+\title{Rayleigh-Sommerfeld Diffraction Modeling}
+\author{Ryan Maguire}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    We may model the diffraction pattern seen by a radio wave passing through a
+    thin screen using the Rayleigh-Sommerfeld equation, which is obtained
+    from the wave equation. Given a screen $S$ in the $xy$ plane and an observer
+    $\mathbf{R}$, if we let $\mathbf{r}_{0}$ denote the point where the line of
+    sight from the observer to the source of the incoming wave intersects the screen,
+    then we may model the diffraction pattern $\hat{T}$ by:
+    \begin{equation}
+        \label{eqn:forward_model}
+        \hat{T}(\mathbf{r}_{0})
+        =
+        \frac{\mu_{0}}{i\lambda}
+        \iint_{S}
+            T(\mathbf{r})
+            \frac{%
+                \exp\Big(
+                    ik\big(
+                        \hat{\mathbf{u}}\cdot(\mathbf{r}-\mathbf{R})+\|\mathbf{r}-\mathbf{R}\|
+                    \big)
+                \Big)
+            }{%
+                \|\mathbf{R}-\mathbf{r}\|
+            }\,\textrm{d}\mathbf{r},
+    \end{equation}
+    where $\mathbf{r}$ is a dummy variable of integration,
+    $\mu_{0}$ is the \textit{ubiquty factor}, and
+    $k$ and $\lambda$ are the wavenumber and wavelength, respectively. The $\hat{\mathbf{u}}$
+    vector is the normalized relative position vector of $\mathbf{R}$ with respect to
+    $\mathbf{r}_{0}$. That is:
+    \begin{equation}
+        \hat{\mathbf{u}}
+        =
+        \frac{\mathbf{R}-\mathbf{r}_{0}}{\|\mathbf{R}-\mathbf{r}_{0}\|}
+    \end{equation}
+    The function $T$ is the \textit{complex transmittance}, which measures how much of
+    the wave is allowed to pass through a given point in the screen.
+    From this description we can see that $\mathbf{r}$ is the only quantity that varies
+    across the integral; $\mathbf{R}$, $\mathbf{r}_{0}$, and $\hat{\mathbf{u}}$ are all held fixed.
+    \par\hfill\par
+    We may rewrite Eqn.~\ref{eqn:forward_model} in terms of the \textit{Fresnel kernel}, $\psi$,
+    which is defined by
+    \begin{equation}
+        \psi(\mathbf{r},\,\mathbf{r}_{0},\,\mathbf{R})
+        =
+        k\big(
+            \hat{\mathbf{u}}\cdot(\mathbf{r}-\mathbf{R})+\|\mathbf{r}-\mathbf{R}\|
+        \big)
+    \end{equation}
+    Hence we may rewrite the forward model (Eqn.~\ref{eqn:forward_model}) as
+    \begin{equation}
+        \label{eqn:forward_model_with_psi}
+        \hat{T}(\mathbf{r}_{0})
+        =
+        \frac{\mu_{0}}{i\lambda}
+        \iint_{S}
+            T(\mathbf{r})
+            \frac{%
+                \exp\left(
+                    i\psi(\mathbf{r},\,\mathbf{r}_{0},\,\mathbf{R})
+                \right)
+            }{%
+                \|\mathbf{R}-\mathbf{r}\|
+            }\,\textrm{d}\mathbf{r}.
+    \end{equation}
+    If we assume a circularly symmetric transmittance function, $T$, then
+    by applying the \textit{stationary phase approximation} we may reduce this
+    double integral down to a single one without compromising the accuracy of the model.
+    Working in polar coordinates, $\mathbf{r}=(r,\,\phi)$,
+    $\mathbf{r}_{0}=(r_{0},\,\phi_{0})$, we have
+    \begin{equation}
+        \label{eqn:single_forward_model}
+        \hat{T}(r_{0})
+        \approx
+        \frac{1-i}{2F}
+        \int_{0}^{\infty}
+            T(r)
+            \exp\left(
+                i\psi(\mathbf{r}_{s},\,\mathbf{r},\,\mathbf{R})
+            \right)\,\textrm{d}r,
+    \end{equation}
+    where $\mathbf{r}_{s}=(r,\,\phi_{s})$, with $\phi_{s}$ being the
+    \textit{stationary azimuth angle}, which is the solution to
+    $\partial\psi/\partial\phi=0$.
+    The geometry for this is given in Fig.~\ref{fig:fig}, where we let
+    $D=\|\mathbf{R}-\mathbf{r}_{0}\|$, the distance from the observer to the
+    point in the screen where the line of sight intersects.
+    \begin{figure}
+        \centering
+        \resizebox{\textwidth}{!}{%
+            \includegraphics{fresnel_diffraction_geometry_saturn_001}%
+        }
+        \caption{The Geometry of Diffraction}
+        \label{fig:fig}
+    \end{figure}
+    If we apply the classic Fresnel approximation to
+    $\psi(\mathbf{r}_{s},\,\mathbf{r}_{0},\,\mathbf{R})$ the we obtain the
+    \textit{Fresnel transform} of $T$. Quite fortunately, this has an explicit
+    inverse formula. We mimic this explicit inverse formula for the Fresnel
+    approximation to produce an approximate inverse for
+    Eqn.~\ref{eqn:single_forward_model}:
+    \begin{equation}
+        \label{eqn:single_inverse_model}
+        T(r)
+        \approx
+        \frac{1+i}{2F}
+        \int_{0}^{\infty}
+            \hat{T}(r_{s})
+            \exp\left(
+                -i\psi(\mathbf{r}_{s},\,\mathbf{r},\,\mathbf{R})
+            \right)\,\textrm{d}r_{0},
+    \end{equation}
+    For the inverse model we have $\mathbf{r}_{0}$ varying while
+    $\mathbf{r}$ is fixed. In practice, the observer $\mathbf{R}$ moves as
+    well. Since the point $\mathbf{r}_{0}$ is entirely dependent on the
+    position vector $\mathbf{R}$ and the direction of the incoming wave,
+    in the inverse model we must allow $\mathbf{R}$ to vary with $\mathbf{r}_{0}$
+    as well.
+
+\end{document}
+
