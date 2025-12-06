@@ -1,0 +1,97 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, citecolor = black}
+\geometry{margin=1.0in}
+\title{MIT PRIMES: Computational Knot Theory}
+\author{Ryan Maguire}
+\date{\today}
+\begin{document}
+    \maketitle
+    \section{The Problem}
+        Knots have become a central part of modern mathematics.
+        Topologists and geometers use them because of their central connections
+        to manifolds and contact structures, and computer scientists are
+        interested in the difficult problems that arise from their study.
+        One of the oldest problems in knot theory is the simplest to describe:
+        distinguishing two knots. That is, given two knots as input, determine
+        if it is possible to deform one into the other without cutting or
+        tearing. While this sounds simple enough, this is an amazingly
+        difficult problems. Given a knot diagram with $n$ crossings, which is
+        known \textit{a priori} to be a simple circle, it may take up to
+        $(231n)^{11}$ steps just to unknot it \cite{Lackenby2015Unknotting}.
+        For non-trivial knots, the number of steps required may involve
+        astronomical numbers that humans cannot comprehend
+        \cite{CowardLackenbyReidemeisterUpperBound}.
+        \par\hfill\par
+        Even with these obstacles, mathematicians still \textit{try} to
+        overcome them and find effecient means of distinguishing two knots.
+        This is done using \textbf{knot invariants}, which are mathematical
+        objects (usually algebraic) that may be assigned to a knot, and which
+        do not change as one continuously perturbs the knot. Some of the simpler
+        knot invariants are the knot polynomials, such as the single variable
+        \textbf{Jones} and \textbf{Alexander} polynomials, or the
+        two-variable \textbf{HOMFLY-PT} and \textbf{Khovanov} polynomials.
+        These invariants are not perfect, meaning
+        it is possible for two \textit{distinct} knots to have the same
+        polynomial, but they are quite good at distinguishing knots.
+        Out of the 352 millions prime knots with up to 19 crossings, about
+        25\% are uniquely determined by their Jones polynomial
+        \cite{JonesData}, and 60\% are distinguished by the HOMFLY-PT
+        polynomial \cite{HOMFLYData}. Efficiently computing these polynomials
+        gives us a quick first line-of-attack when trying to determine if
+        two knots are truly the same.
+        \par\hfill\par
+        Unfortunately, for each of these polynomials (besides the Alexander
+        polynomial) the best algorithms are exponential or sub-exponential
+        (\cite{Burton2018HOMFLFixedParameter},
+        \cite{ThistlethwaiteSpanningTree},
+        \cite{Przytycka1991SubexponentiallyCT},
+        \cite{MaguireJones}),
+        and their computations are known to be \textbf{NP-Hard}
+        \cite{HOMFLYPTNPHard}. In short, this means efficiently calculating
+        these invariants for a general knot or link would earn the
+        mathematician one million dollars \cite{Blank2000TheMP}.
+        While most think this is not possible, it shouldn't stop us from
+        trying to improve algorithms and implementations. That is precisely
+        the aim of this research project.
+        \par\hfill\par
+        During PRIMES 2025 we worked on improving methods for computing the
+        Jones polynomial, and this culminated in being able to efficiently
+        compute this invariant for all primes knots of less than 21 crossings
+        in just a few days. The tabulation of the Khovanov polynomial is still
+        stuck at 17 crossings, our goal to is to improve this all the way to
+        20 crossings. We will do this by analyzing the current best method
+        (\texttt{FastKh} by Bar-Natan \cite{BarNatan2006FASTKH}) and then
+        implement it in C. We will stick to fixed-width integers to try to
+        speed things up, even though this will limit us to knots with less than
+        a few dozen crossings. An emphasis on speed will be made, but we will
+        also certify that our algorithms are correct.
+    \section{What to Expect}
+        By participating in the research project, you should expect to study
+        knot theory, topology, complexity theory, computer programming, and a
+        bit of geometry. You will need to develop some comfort with the
+        C programming language, and a bit of Python and Sage. You are (k)not
+        expected to be an expert programmer or topologist: these things will be
+        taught to you.
+    \par\hfill\par
+    \bibliographystyle{plain}
+    \bibliography{../../bib.bib}
+\end{document}
