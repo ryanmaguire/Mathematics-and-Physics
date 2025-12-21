@@ -19,10 +19,10 @@
 #   <https://www.gnu.org/licenses/>.                                           #
 ################################################################################
 #   Purpose:                                                                   #
-#       Creates a visual for Fraunhofer diffraction with a rectanular aperture.#
+#       Creates a visual for Fraunhofer diffraction with a circular aperture.  #
 ################################################################################
 #   Author:     Ryan Maguire                                                   #
-#   Date:       March 20, 2025.                                                #
+#   Date:       December 21, 2025.                                             #
 ################################################################################
 """
 # pylint wants all of the variables to be SCREAMING_CASE. Ignore this.
@@ -33,30 +33,25 @@ import numpy
 import matplotlib.pyplot as plt
 import tmpyl
 
-# Parameters for the monochromatic wave.
-# Wavelength (lambda) is set to red, in the visible spectrum.
-wavelength = 6.5E-07
-
-# The initial intensity is the "I0" term that appears in
-# the Fraunhofer equation. We can set it to 1 for simplicity.
+# Set I0 to 1 for simplicity.
 initial_intensity = 1.0
 
-# We'll clip the colors a bit so we can see the pattern more clearly.
+# Clip to make dark colors a little brighter.
 clip = 0.025 * initial_intensity
 
-# Parameters for the aperture. It is rectangular and
-# centered about the origin. We only need a width and height.
-# Visible light (which is what we are working with)
-# diffracts through millimeter apertures (try this out yourself!),
-# so if we set W and H to 10^-3 we should expect a nice pattern.
-width = 1.0E-03
-height = 1.0E-03
+# We again use red light.
+wavelength = 6.5E-07
+
+# Parameters for the aperture.
+# It is circular, we only need the radius.
+radius = 5.0E-04
 
 # Distance between the aperture and the screen.
-# This is the "z" factor in the Fraunhofer equation.
-# For Fraunhofer to hold, this should be much larger than
-# width and height.
+# This must be much larger than the radius.
 distance = 5.0E-01
+
+# Scale factor for the independent variable.
+factor = 2.0 * numpy.pi * radius / (distance * wavelength)
 
 # Parameters for the image.
 x_size = 5.0E-03
@@ -73,24 +68,14 @@ y_displacement = 2.0 * y_size / float(y_pixels)
 x_vals = numpy.arange(-x_size, x_size, x_displacement)
 y_vals = numpy.arange(-y_size, y_size, y_displacement)
 
-# Multiplication is faster than division.
-# Compute 1 / (lambda z) and store it as a new variable.
-lambda_z = wavelength * distance
-rcpr_lambda_z = 1.0 / lambda_z
+# Parameters for the image.
+x_grid, y_grid = numpy.meshgrid(x_vals, y_vals)
+plane_vals = numpy.sqrt(x_grid**2 + y_grid**2)
+arg = factor * plane_vals
 
-# The Fraunhofer integral splits into two parts, x and y, and can
-# be handled individually. The output for a rectangular aperture is the
-# square of the normalized sinc function, given by sin(pi x) / (pi x)
-# for non-zero x, and 1 at the origin.
-x_term = numpy.square(tmpyl.sincpi(width * x_vals * rcpr_lambda_z))
-y_term = numpy.square(tmpyl.sincpi(height * y_vals * rcpr_lambda_z))
-
-# The intensity map for the (x, y) pixel is the product of sinc^2 for the
-# x component and sinc^2 for the y component. All together, this is the
-# "outer product" of the x and y arrays. Inner products take in two vectors
-# and return a number, whereas outer products take in two vectors and
-# return a matrix.
-intensity = initial_intensity * numpy.outer(x_term, y_term)
+intensity = initial_intensity * numpy.array(
+    [numpy.square(tmpyl.airy_j1(arr)) for arr in arg]
+)
 
 # Make the plots.
 figure, axes = plt.subplots()
@@ -106,11 +91,8 @@ image = axes.imshow(
 # Add labels for the axes and the plot.
 axes.set_xlabel("x (meters)")
 axes.set_ylabel("y (meters)")
-axes.set_title("Fraunhofer Diffraction: Rectangular Aperture")
-
-# We have significantly compressed the color scale so that
-# darker regions appear far brighter. Indicate this on the plot.
+axes.set_title("Fraunhofer Diffraction: Circular Aperture")
 figure.colorbar(image, ax = axes)
 
-# Render the image.
-plt.show()
+# Render the plot.
+plt.savefig(__file__.rsplit('.', 1)[0] + ".png")
