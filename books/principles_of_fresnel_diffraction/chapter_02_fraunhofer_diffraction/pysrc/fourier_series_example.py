@@ -57,18 +57,18 @@ def fourier_expansion(x_val, degree):
     out = 0
 
     # Perform the sum iteratively.
-    for ind in range(1, degree + 1):
+    for index in range(1, degree + 1):
 
         # The wavelength of the current wave is given by the
         # index and the length of the interval. Since we are
         # working on the unit interval [0, 1], the scale
         # factor is n*pi. That is, the current wave is
         # described by sin(n*pi*x).
-        wave = numpy.sin(ind * numpy.pi * x_val)
+        wave = numpy.sin(index * numpy.pi * x_val)
 
         # The amplitudes of the waves must decay for the
         # Fourier series to be valid (this is the Riemann-Lebesgue theorem).
-        coeff = fourier_coeff(ind)
+        coeff = fourier_coeff(index)
 
         # Update our approximation with the damped wave.
         out += coeff * wave
@@ -98,7 +98,7 @@ plt.legend()
 plt.subplot(2, 1, 1)
 f_array = fourier_expansion(x_array, 3)
 
-plt.plot(x_array, f_array, label = f"Degree 3 Fourier Approximation")
+plt.plot(x_array, f_array, label = "Degree 3 Fourier Approximation")
 plt.legend()
 plt.tight_layout()
 plt.savefig(__file__.rsplit('.', 1)[0] + ".png")
