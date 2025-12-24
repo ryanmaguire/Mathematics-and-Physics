@@ -22,13 +22,11 @@ At time $t_{0}$ the heat distribution across the bar is given
 by some smooth function $f(x)=u(x,\,t_{0})$. Fourier then derives
 that $u$ satisfies the following partial differential equation:
 
-$$
-    \displaystyle
+\begin{equation}
     \frac{\partial{u}}{\partial{t}}
     =
-    \displaystyle
     \alpha\frac{\partial^{2}u}{\partial{x}^{2}}
-$$
+\end{equation}
 
 Where $\alpha$ is some constant parameter.
 Fourier then proposes the following solution.
@@ -36,40 +34,63 @@ Suppose $u$ can be written as the product of spatial and
 temporal components. That is, suppose there are functions
 $X$ and $T$ such that:
 
-$$
-    \displaystyle
-    u(x,\,t)=X(x)T(t)
-$$
+\begin{equation}
+    u(x,\,t)
+    =
+    X(x)\,T(t)
+\end{equation}
 
-The heat equation then becomes:
+The heat equation then becomes (the $\Longrightarrow$ symbols reads as
+*implies*):
 
-$$
+\begin{equation}
+    \def\arraystretch{2.5em}
     \begin{array}{rrcl}
         &
         \displaystyle
         \frac{\partial{u}}{\partial{t}}
+        \!\!
         &=&
+        \!\!
         \displaystyle
         \alpha\frac{\partial^{2}u}{\partial{x}^{2}}\\
         \Longrightarrow
         &
         \displaystyle
-        X(x)\,\frac{\textrm{d}T}{\textrm{d}t}(t)
+        \frac{\partial}{\partial{t}}\left(
+            X(x)\,T(t)
+        \right)
+        \!\!
         &=&
+        \!\!
+        \displaystyle
+        \alpha
+        \frac{\partial^{2}}{\partial{x}^{2}}\left(
+            X(x)\,T(t)
+        \right)\\
+        \Longrightarrow
+        &
+        \displaystyle
+        X(x)\,\frac{\textrm{d}T}{\textrm{d}t}(t)
+        \!\!
+        &=&
+        \!\!
         \displaystyle
         \alpha{T}(t)\,
-            \frac{\textrm{d}^{2}X}{\textrm{d}x^{2}}(x)\\
+        \frac{\textrm{d}^{2}X}{\textrm{d}x^{2}}(x)\\
         \Longrightarrow
         &
         \displaystyle
         \frac{1}{\alpha{T}(t)}
-            \frac{\textrm{d}T}{\textrm{d}t}(t)
+        \frac{\textrm{d}T}{\textrm{d}t}(t)
+        \!\!
         &=&
+        \!\!
         \displaystyle
         \frac{1}{X(x)}
-            \frac{\textrm{d}^{2}X}{\textrm{d}x^{2}}(x)
+        \frac{\textrm{d}^{2}X}{\textrm{d}x^{2}}(x)
     \end{array}
-$$
+\end{equation}
 
 We note that the right-hand side is independent of $t$,
 varying with $x$ only. Moreover, the left-hand side is
@@ -79,60 +100,79 @@ $-\lambda$ where $\lambda$ is some real number.
 We then get the following
 *system of ordinary differential equations*.
 
-$$
+\begin{equation}
+    \def\arraystretch{2.5em}
     \begin{array}{rcl}
         \displaystyle
         \frac{\textrm{d}T}{\textrm{d}t}(t)
-        +\alpha\lambda{T}(t)
+        +
+        \alpha\lambda{T}(t)
+        \!\!
         &=&
+        \!\!
+        \displaystyle
         0\\
         \displaystyle
         \frac{\textrm{d}^{2}X}{\textrm{d}x^{2}}(x)
-        +\lambda{X}(x)
+        +
+        \lambda{X}(x)
+        \!\!
         &=&
+        \!\!
+        \displaystyle
         0
     \end{array}
-$$
+\end{equation}
 
 Using methods from differential equations, we can solve these.
 There will be some constants $A$, $B$, and $C$
 such that:
 
-$$
+\begin{equation}
+    \def\arraystretch{2em}
     \begin{array}{rcl}
         \displaystyle
         T(t)
+        \!\!
         &=&
+        \!\!
         \displaystyle
         A\exp\left(-\lambda\alpha{t}\right)\\
         \displaystyle
         X(x)
+        \!\!
         &=&
-        B\cos(\sqrt{\lambda}x)+
+        \!\!
+        \displaystyle
+        B\cos(\sqrt{\lambda}x)
+        +
         C\sin(\sqrt{\lambda}x)
     \end{array}
-$$
+\end{equation}
 
 If we set the initial temperatures $T_{L}$ and $T_{R}$ to zero
 (the units we are working in do not matter), this simplifies further
 since $C=0$ must be true. We can also show that $\lambda$ must
 satisfy:
 
-$$
-    \lambda=\frac{n^{2}\pi^{2}}{L^{2}}
-$$
+\begin{equation}
+    \lambda
+    =
+    \frac{n^{2}\pi^{2}}{L^{2}}
+\end{equation}
 
 where $n$ is an integer.
 The solution using this method yields:
 
-$$
+\begin{equation}
     \displaystyle
     u(x,\,t)
-    =a\sin\left(\frac{n\pi{x}}{L}\right)
+    =
+    a\sin\left(\frac{n\pi{x}}{L}\right)
     \exp\left(-\frac{n^{2}\pi^{2}\alpha{t}}{L^{2}}\right)
-$$
+\end{equation}
 
-Where $a=AB$.
+where $a=AB$.
 This is far too limiting. While this particular solution will
 satisfy the initial conditions given by the endpoints, it will
 probably *not* satisfy $u(x,\,t_{0})=f(x)$, our smooth function
@@ -144,13 +184,14 @@ numbers $b_{0}$ and $b_{1}$. That is, the heat equation is a
 together *infinitely many* of these partial solutions to obtain the
 solution $u$ that satisfies $u(x,\,t_{0})=f(x)$. That is:
 
-$$
+\begin{equation}
     \displaystyle
     u(x,\,t)
-    =\sum_{n=1}^{\infty}a_{n}
+    =
+    \sum_{n=1}^{\infty}a_{n}
         \sin\left(\frac{n\pi{x}}{L}\right)
         \exp\left(-\frac{n^{2}\pi^{2}\alpha{t}}{L^{2}}\right)
-$$
+\end{equation}
 
 Fourier's work would be finished if he could somehow show that
 *any* smooth function defined on the closed interval $[0,\,L]$
