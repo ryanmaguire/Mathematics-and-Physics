@@ -10,30 +10,32 @@ and $\mathbf{B}(\mathbf{r},\,t)$, where
 $\mathbf{r}=(x,\,y,\,z)$ denotes a point in space,
 to a new variable $\psi$. The wave equation is:
 
-$$
-    \displaystyle
-    \nabla^{2}\psi(\mathbf{r},\,t)
+\begin{equation}
+    \nabl    \displaystyle
+a^{2}\psi(\mathbf{r},\,t)
     -
     \frac{1}{c^{2}}
     \frac{\partial^{2}\psi}{\partial{t}^{2}}(\mathbf{r},\,t)
     =
     0
-$$
+\end{equation}
 
 We again try to use separation of variables, writing:
 
-$$
+\begin{equation}
     \psi(\mathbf{r},\,t)
-    =U(\mathbf{r})T(t)
-$$
+    =
+    U(\mathbf{r})\,T(t)
+\end{equation}
 
 Separating the wave equation, we obtain:
 
-$$
+\begin{equation}
     \frac{\nabla^{2}U(\mathbf{r})}{U(\mathbf{r})}
-    =\frac{1}{c^{2}T(t)}
-        \frac{\partial{T}}{\partial{t}}(t)
-$$
+    =
+    \frac{1}{c^{2}T(t)}
+    \frac{\partial{T}}{\partial{t}}(t)
+\end{equation}
 
 We again argue that since the left side depends only on
 $\mathbf{r}$, whereas the right-hand side varies only with
@@ -41,9 +43,13 @@ $t$, that both sides are indeed constant. We set this
 constant to $-k^{2}$, and the spatial component
 becomes:
 
-$$
-    \nabla^{2}U(\mathbf{r})+k^{2}U(\mathbf{r})=0
-$$
+\begin{equation}
+    \nabla^{2}U(\mathbf{r})
+    +
+    k^{2}U(\mathbf{r})
+    =
+    0
+\end{equation}
 
 This is the **Helmholtz Equation**, which is also known as the
 **Time-Independent Wave Equation**. The are various methods of
