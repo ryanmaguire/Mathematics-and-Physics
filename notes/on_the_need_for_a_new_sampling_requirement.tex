@@ -1,0 +1,298 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+%       Author: Ryan Maguire                                                   %
+%       Date:   2026/02/23                                                     %
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\title{On the Need for a New Sampling Requirement in RSS Reconstructions}
+\author{Ryan Maguire}
+\date{\today}
+\graphicspath{{../images/}}
+\begin{document}
+    \maketitle
+\    The one-dimensional Fresnel transform may be obtained from the
+    Rayleigh-Huygens equations by applying the stationary phase method.
+    The normalized complex diffraction profile $\hat{T}$ may be written
+    in terms of the complex transmittance $T$ via:
+
+    \begin{equation}
+        \hat{T}(\rho_{0})
+        =
+        \frac{1-i}{2F}
+        \int_{0}^{\infty}
+            T(\rho)
+            \exp\left(
+                i\psi(\rho,\,\phi_{s},\,\rho_{0},\,\phi_{0})
+            \right)\,\textrm{d}\rho
+    \end{equation}
+
+    where $\psi$ is the Fresnel kernel, and $\phi_{s}$ is the staionary
+    azimuth angle, the solution to $\partial\psi/\partial\phi=0$, and $F$
+    is the Fresnel scale.
+    When the opening angle is large, the classic quadratic Fresnel
+    approximation may be used to simplify this calculation:
+
+    \begin{equation}
+        \hat{T}(\rho_{0})
+            \approx
+            \frac{1-i}{2F}
+            \int_{0}^{\infty}
+                T(\rho)
+                \exp\left(
+                    \frac{i\pi}{2}\left(
+                        \frac{\rho-\rho_{0}}{F}
+                    \right)^{2}
+                \right)\,\textrm{d}\rho
+    \end{equation}
+
+    This is in the form of a convolution, and an inverse formula may be
+    obtained using the convolution theorem:
+
+    \begin{equation}
+        T(\rho)
+        \approx
+        \frac{1+i}{2F}
+        \int_{0}^{\infty}
+            \hat{T}(\rho_{0})
+            \exp\left(
+                -\frac{i\pi}{2}\left(
+                    \frac{\rho-\rho_{0}}{F}
+                \right)^{2}
+            \right)\,\textrm{d}\rho_{0}
+    \end{equation}
+
+    In practice we restrict our attention to a finite window $W$ centered
+    about $\rho$ so that the integral becomes:
+
+    \begin{equation}
+        T(\rho)
+        \approx
+        \frac{1+i}{2F}
+        \int_{\rho-W/2}^{\rho+W/2}
+            w(\rho-\rho_{0})
+            \hat{T}(\rho_{0})
+            \exp\left(
+                -\frac{i\pi}{2}\left(
+                    \frac{\rho-\rho_{0}}{F}
+                \right)^{2}
+            \right)\,\textrm{d}\rho_{0}
+    \end{equation}
+
+    where $w$ is the tapering function. Using a simple $\delta$ function
+    centered at $\rho_{*}$ for $T$, the diffraction profile $\hat{T}$ becomes:
+
+    \begin{equation}
+        \begin{array}{rcl}
+            \displaystyle
+            \hat{T}(\rho_{0})
+            \!\!
+            &\approx&
+            \!\!
+            \displaystyle
+            \frac{1-i}{2F}
+            \int_{0}^{\infty}
+                T(\rho)
+                \exp\left(
+                    \frac{i\pi}{2}\left(
+                        \frac{\rho-\rho_{0}}{F}
+                    \right)^{2}
+                \right)\,\textrm{d}\rho\\[1.5em]
+            \!\!
+            &=&
+            \!\!
+            \displaystyle
+            \frac{1-i}{2F}
+            \int_{0}^{\infty}
+                \delta(\rho-\rho_{*})
+                \exp\left(
+                    \frac{i\pi}{2}\left(
+                        \frac{\rho-\rho_{0}}{F}
+                    \right)^{2}
+                \right)\,\textrm{d}\rho\\[1.5em]
+            \!\!
+            &=&
+            \!\!
+            \displaystyle
+            \frac{1-i}{2F}
+            \exp\left(
+                \frac{i\pi}{2}\left(
+                    \frac{\rho_{*}-\rho_{0}}{F}
+                \right)^{2}
+            \right)
+        \end{array}
+    \end{equation}
+
+    Feeding this into the inverse transform for $T$ produces:
+
+    \begin{equation}
+        \begin{array}{rcl}
+            \displaystyle
+            T(\rho)
+            \!\!
+            &\approx&
+            \!\!
+            \displaystyle
+            \frac{1+i}{2F}
+            \int_{\rho-W/2}^{\rho+W/2}
+                \hat{T}(\rho_{0})
+                \exp\left(
+                    -\frac{i\pi}{2}\left(
+                        \frac{\rho-\rho_{0}}{F}
+                    \right)^{2}
+                \right)\,\textrm{d}\rho_{0}\\[1.5em]
+            \!\!
+            &=&
+            \!\!
+            \displaystyle
+            \frac{1+i}{2F}
+            \int_{\rho-W/2}^{\rho+W/2}
+                \frac{1-i}{2F}
+                \exp\left(
+                    \frac{i\pi}{2}\left(
+                        \left(
+                            \frac{\rho_{*}-\rho_{0}}{F}
+                        \right)^{2}
+                        -
+                        \left(
+                            \frac{\rho-\rho_{0}}{F}
+                        \right)^{2}
+                    \right)
+                \right)\,\textrm{d}\rho_{0}\\[1.5em]
+            \!\!
+            &=&
+            \!\!
+            \displaystyle
+            \frac{%
+                \exp\left(%
+                    \frac{i\pi}{2F^{2}}\left(\rho_{*}^{2}-\rho^{2}\right)%
+                \right)
+            }{2F^{2}}
+            \int_{\rho-W/2}^{\rho+W/2}
+                \exp\left(
+                    \frac{i\pi}{F^{2}}\rho_{0}\left(\rho-\rho_{*}\right)
+                \right)\,\textrm{d}\rho_{0}\\[1.5em]
+            \!\!
+            &=&
+            \!\!
+            \displaystyle
+            \frac{W}{2F^{2}}\,
+            \textrm{sinc}\left(
+                \frac{W}{2F^{2}}(\rho-\rho_{*})
+            \right)
+            \exp\left(
+                \frac{i\pi}{2}\left(
+                    \frac{\rho-\rho_{*}}{F}
+                \right)^{2}
+            \right)
+        \end{array}
+    \end{equation}
+
+    This follows directly from MTR86. The input is a delta response, and the
+    recovered profile is a sinc function. The resolution may then be defined
+    as half the width of the main lobe:
+
+    \begin{equation}
+        \Delta{R}
+        =
+        \frac{2F^{2}}{W}
+    \end{equation}
+
+    That is, if a resolution $\Delta$ has been requested, then the window
+    width of integration must be at least:
+
+    \begin{equation}
+        W
+        =
+        \frac{2F^{2}}{\Delta{R}}
+    \end{equation}
+
+    From this we may obtain an estimate for how finely the data must be
+    sampled for us to adequately perform the numerical integration needed for
+    the inverse transform.
+    \par\hfill\par
+    The diffraction profile $\hat{T}$ from a $\delta$ response has highly
+    oscillatory terms. A simple bound for the sampling rate is that
+    two samples per wave are recorded (Shannon's sampling theorem).
+    For $\exp(\frac{i\pi{x}^{2}}{2F^{2}})$,
+    the zeros in the imaginary part occur at $F\sqrt{2n}$, where $n$ is an
+    integer. The wavelength of the $n^{\footnotesize\textrm{th}}$ wave is hence:
+
+    \begin{equation}
+        \lambda_{n}
+        =
+        F\left(
+            \sqrt{2n+4}-\sqrt{2n}
+        \right)
+    \end{equation}
+
+    Since $x$ is bounded by $W/2$, solving $F\sqrt{2n}=W/2$ shows that
+    $n$ is bounded by $W^{2}/8F^{2}$. The smallest wave in the window has
+    a wavelength of:
+
+    \begin{equation}
+        \lambda_{min}
+        =
+        F\left(
+            \sqrt{4+\frac{W^{2}}{4F^{2}}}
+            -
+            \frac{W}{2F}
+        \right)
+        =
+        \frac{-W+\sqrt{16F^{2}+W^{2}}}{2}
+    \end{equation}
+
+    The maximum allowed distance between samples should be half of this.
+
+    \begin{equation}
+        \Delta{x}
+        =
+        \frac{-W+\sqrt{16F^{2}+W^{2}}}{4}
+    \end{equation}
+
+    Note, this has an asymptotic expansion (Laurent series) in $W$ given by:
+
+    \begin{equation}
+        \Delta{x}
+        =
+        \frac{2F^{2}}{W}
+        -
+        \frac{8F^{4}}{W^3}
+        +
+        \frac{64F^{6}}{W^{5}}
+        -
+        \cdots
+    \end{equation}
+
+    As an alternative, we simply find where the derivative of the phase is
+    maximum. For $\phi(x)=\pi{x}^{2}/2F^{2}$, this is achieved at the endpoints
+    where the slope is $\omega_{\textrm{max}}=\pi{W}/2F^{2}$.
+    The smallest period is hence $2\pi/\omega_{\textrm{max}}$, and we need
+    two samples per period, giving us:
+
+    \begin{equation}
+        \Delta{x}
+        =
+        \frac{2F^{2}}{{W}}
+    \end{equation}
+
+    This is the leading term for the asymptotic series found using the
+    previous definition of $\lambda_{\textrm{min}}$, meaning for large windows
+    (high resolutions) the two methods agree quite well.
+\end{document}
