@@ -1,0 +1,419 @@
+%-----------------------------------LICENSE------------------------------------%
+%   This file is part of Mathematics-and-Physics.                              %
+%                                                                              %
+%   Mathematics-and-Physics is free software: you can redistribute it and/or   %
+%   modify it under the terms of the GNU General Public License as             %
+%   published by the Free Software Foundation, either version 3 of the         %
+%   License, or (at your option) any later version.                            %
+%                                                                              %
+%   Mathematics-and-Physics is distributed in the hope that it will be useful, %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              %
+%   GNU General Public License for more details.                               %
+%                                                                              %
+%   You should have received a copy of the GNU General Public License along    %
+%   with Mathematics-and-Physics.  If not, see <https://www.gnu.org/licenses/>.%
+%------------------------------------------------------------------------------%
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{xcolor}
+\theoremstyle{normal}
+\newtheorem{problem}{Problem}
+\newtheorem{theorem}{Theorem}
+\title{The Arzel\'{a}-Ascoli Theorem}
+\author{Ryan Maguire}
+\date{\today}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+\newif\ifsolution
+\solutiontrue
+\graphicspath{{../../../images/}}
+
+\begin{document}
+    \maketitle
+    \textbf{Continuity} may be written as follows.
+    Given $f:A\rightarrow\mathbb{R}$, with $A\subseteq\mathbb{R}$,
+    $f$ is continuous provided
+    \begin{equation}
+        \forall_{x_{0}\in{A}}
+        \forall_{\varepsilon>0}
+        \exists_{\delta>0}
+        \forall_{x\in{A}}
+        \Big(
+            |x-x_{0}|<\delta
+            \Rightarrow
+            |f(x)-f(x_{0})|<\varepsilon
+        \Big),
+    \end{equation}
+    which reads
+    \textit{for all $x_{0}\in{A}$ and for all $\varepsilon>0$}
+    \textit{there exists a $\delta>0$ such that for all $x\in{A}$},
+    \textit{if $|x-x_{0}|<\delta$, then $|f(x)-f(x_{0})|<\varepsilon$}.
+    Writing the definition in the former way provides few benefits since it is
+    very hard to read, but since our eyes travel from left-to-right across
+    the page, this expression helps us see which variables are allowed to
+    depend on which other variables. In particular, $x_{0}\in{A}$ is chosen
+    first, and it may be anything in $A$. Then $\varepsilon>0$ is chosen, and
+    it may be any positive real number. The statement \textit{there exists}
+    $\delta>0$ occurs after $x_{0}$ and $\varepsilon$ have been chosen, and so
+    it is allowed to depend on these two variables. We may write
+    \begin{equation}
+        \delta
+        =
+        \delta(x_{0},\,\varepsilon).
+    \end{equation}
+    \textbf{Uniform continuity} is defined by slightly modifying the
+    definition of continuity. We have
+    \begin{equation}
+        \forall_{\varepsilon>0}
+        \exists_{\delta>0}
+        \forall_{x_{0}\in{A}}
+        \forall_{x\in{A}}
+        \Big(
+            |x-x_{0}|<\delta
+            \Rightarrow
+            |f(x)-f(x_{0})|<\varepsilon
+        \Big).
+    \end{equation}
+    All we have done is move $\forall_{x_{0}\in{A}}$ to occur \textit{after}
+    the statement for $\delta$. Hence $\delta$ is \textit{not} allowed to
+    depend on $x_{0}$, so we should write
+    \begin{equation}
+        \delta
+        =
+        \delta(\varepsilon).
+    \end{equation}
+    A small difference, but an important one.
+    We proved in class that if $A$ is compact, and if $f:A\rightarrow\mathbb{R}$
+    is continuous, then $f$ is uniformly continuous.
+    \par\hfill\par
+    Similar rearrangements of quantifiers occur with other notions.
+    If $C(\mathbb{R},\,\mathbb{R})$ denotes the set of all continuous
+    functions $f:\mathbb{R}\rightarrow\mathbb{R}$, then given a sequence
+    of functions $F:\mathbb{N}\rightarrow{C}(\mathbb{R},\,\mathbb{R})$,
+    we say that $F_{n}$ \textbf{converges point-wise} to a function $f$
+    provided
+    \begin{equation}
+        \forall_{x_{0}\in\mathbb{R}}
+        \forall_{\varepsilon>0}
+        \exists_{N\in\mathbb{N}}
+        \forall_{n\in\mathbb{N}}
+        \Big(
+            n>N
+            \Rightarrow
+            |f(x_{0})-F_{n}(x_{0})|<\varepsilon
+        \Big).
+    \end{equation}
+    Note that $x_{0}$ occurs \textit{before} $N$, and hence $N$ is allowed to
+    depend both on $\varepsilon$ and $x_{0}$, so we write
+    \begin{equation}
+        N
+        =
+        N(x_{0},\,\varepsilon).
+    \end{equation}
+    \textbf{Uniform convergence} occurs when $N$ may be chosen independent of
+    $x_{0}$. That is:
+    \begin{equation}
+        \forall_{\varepsilon>0}
+        \exists_{N\in\mathbb{N}}
+        \forall_{x_{0}\in\mathbb{R}}
+        \forall_{n\in\mathbb{N}}
+        \Big(
+            n>N
+            \Rightarrow
+            |f(x_{0})-F_{n}(x_{0})|<\varepsilon
+        \Big).
+    \end{equation}
+    We then write
+    \begin{equation}
+        N
+        =
+        N(\varepsilon).
+    \end{equation}
+    We proved that if $F_{n}$ is continuous for each $n$, and
+    $F_{n}\rightarrow{f}$ uniformly, then $f$ is continuous as well.
+    \begin{problem}
+        \par\hfill\par
+        Prove that if $A$ is compact, if $F_{n}:A\rightarrow\mathbb{R}$ is
+        continuous for all $n\in\mathbb{N}$, and if $F_{n}\rightarrow{f}$
+        uniformly, then the sequence $F$ is uniformly bounded. That is, there
+        is an $M\in\mathbb{R}$ such that for all $n\in\mathbb{N}$ and for all
+        $x\in{A}$ we have $|F_{n}(x)|<M$.
+    \end{problem}
+    \ifsolution
+        \color{blue}
+        \begin{proof}[Solution]
+            Since $F_{n}\rightarrow{f}$ uniformly, and since each $F_{n}$ is
+            continuous, we know that $f$ is continuous. But $A$ is compact
+            and hence by the extreme value theorem, $f$ is bounded. Let
+            $M_{f}>0$ be a bound and let $\varepsilon=1$. Since $\varepsilon>0$
+            and $F_{n}\rightarrow{f}$ uniformly, there is an $N\in\mathbb{N}$
+            such that for all $x_{0}\in{A}$ and for all $n>N$ we have
+            $|F_{n}(x_{0})-f(x_{0})|<\varepsilon$. Since each function
+            $F_{0}$, $F_{1}$, $\dots$, $F_{N}$ is continuous and $A$ is compact,
+            each of these is bounded. Let $M_{0}$, $M_{1}$, $\dots$, $M_{N}$
+            be bounds for $F_{0}$, $F_{1}$, $\dots$, $F_{N}$, respectively.
+            Define $M$ to be:
+            \begin{equation}
+                M
+                =
+                \textrm{max}\left(
+                    M_{0},\,M_{1},\,\cdots,\,M_{N},\,M_{f}
+                \right)+1.
+            \end{equation}
+            Then for all $x_{0}\in{A}$ and for all $n>N$ we have:
+            \begin{equation}
+                \begin{array}{rcl}
+                    \displaystyle
+                    |F_{n}(x_{0})|
+                    \!\!
+                    &=&
+                    \!\!
+                    \displaystyle
+                    |F_{n}(x_{0})-f(x_{0})+f(x_{0})|\\[1em]
+                    \!\!
+                    &\leq&
+                    \!\!
+                    \displaystyle
+                    |F_{n}(x_{0})-f(x_{0})|+|f(x_{0})|\\[1em]
+                    \!\!
+                    &<&
+                    \!\!
+                    \displaystyle
+                    \varepsilon+M_{f}\\[1em]
+                    \!\!
+                    &=&
+                    \!\!
+                    \displaystyle
+                    1+M_{f}\\[1em]
+                    \!\!
+                    &<&
+                    \!\!
+                    \displaystyle
+                    M
+                \end{array}
+            \end{equation}
+            And $|F_{n}(x_{0})|<M$ by definition for each $n\leq{N}$, so
+            $F$ is uniformly bounded.
+        \end{proof}
+        \color{black}
+    \fi
+    \begin{problem}
+        Prove that if $A$ is compact, if $F_{n}:A\rightarrow\mathbb{R}$ is
+        continuous for all $n\in\mathbb{N}$, and if
+        $F_{n}\rightarrow{f}$ uniformly, then $F$ is
+        \textbf{uniformly equicontinuous}, meaning for all $\varepsilon>0$
+        there is a $\delta>0$ such that for all $n\in\mathbb{N}$, for all
+        $x_{0}\in{A}$, and for all $x\in{A}$, if
+        $|x-x_{0}|<\delta$, then
+        $|F_{n}(x)-F_{n}(x_{0})|<\varepsilon$.
+        That is
+        \begin{equation}
+            \forall_{\varepsilon>0}
+            \exists_{\delta>0}
+            \forall_{n\in\mathbb{N}}
+            \forall_{x_{0}\in{A}}
+            \forall_{x\in{A}}
+            \Big(
+                |x-x_{0}|<\delta
+                \Rightarrow
+                |F_{n}(x)-F_{n}(x_{0})|<\varepsilon
+            \Big).
+        \end{equation}
+        Note that this means that $\delta$ may be chosen independent of
+        $x_{0}$ and independent of $n$.
+    \end{problem}
+    \ifsolution
+        \color{blue}
+        \begin{proof}[Solution]
+            For let $\varepsilon>0$. Since $A$ is compact, and since
+            each $F_{n}$ is continuous, we may conclude that each $F_{n}$ is
+            uniformly continuous. Similarly, since $F_{n}\rightarrow{f}$
+            uniformly, we may conclude that $f$ is continuous, and since
+            $A$ is compact, $f$ must be uniformly continuous as well.
+            Hence for each $n\in\mathbb{N}$ there is a $\delta_{n}>0$ such that
+            for all $x,x_{0}\in{A}$, if $|x-x_{0}|<\delta$, then
+            $|F_{n}(x)-F_{n}(x_{0})|<\varepsilon/3$. Similarly, there is a
+            $\delta_{f}$ for $f$. Since $F_{n}\rightarrow{f}$ uniformly, there
+            is an $N\in\mathbb{N}$ such that for all $x\in{A}$ and for all
+            $n>N$ we have $|f(x)-F_{n}(x)|<\varepsilon/3$. Define $\delta$
+            by
+            \begin{equation}
+                \delta
+                =
+                \min\left(
+                    \delta_{0},\,
+                    \delta_{1},\,
+                    \dots,\,
+                    \delta_{N},\,
+                    \delta_{f}
+                \right).
+            \end{equation}
+            If $n\leq{N}$, then by definition of $\delta$ we have
+            $|x-x_{0}|<\delta$ implies
+            $|F_{n}(x)-F_{n}(x_{0})|<\varepsilon$. If $n>N$, then for all
+            $x,x_{0}\in{A}$ with $|x-x_{0}|<\delta$, we have:
+            \begin{equation}
+                \begin{array}{rcl}
+                    &&
+                    \!\!
+                    \displaystyle
+                    |F_{n}(x)-F_{n}(x_{0})|\\[1em]
+                    \!\!
+                    &=&
+                    \!\!
+                    \displaystyle
+                    |F_{n}(x)-f(x)+f(x)-f(x_{0})+f(x_{0})-F_{n}(x_{0})|\\[1em]
+                    \!\!
+                    &\leq&
+                    \!\!
+                    \displaystyle
+                    |F_{n}(x)-f(x)|
+                    +
+                    |f(x)-f(x_{0})|
+                    +
+                    |f(x_{0})-F_{n}(x_{0})|\\[1em]
+                    \!\!
+                    &<&
+                    \!\!
+                    \displaystyle
+                    \frac{\varepsilon}{3}
+                    +
+                    \frac{\varepsilon}{3}
+                    +
+                    \frac{\varepsilon}{3}\\[1em]
+                    \!\!
+                    &=&
+                    \!\!
+                    \varepsilon,
+                \end{array}
+            \end{equation}
+            and hence $F$ is uniformly equicontinuous.
+        \end{proof}
+        \color{black}
+    \fi
+    The other direction works as well.
+    \begin{theorem}[Arzel\'{a}-Ascoli Theorem]
+        If $F:\mathbb{N}\rightarrow{C}(A,\,\mathbb{R})$ is a uniformly
+        equicontinuous sequence of functions on a compact set $A$, and if
+        $F_{n}\rightarrow{f}$, then the convergence is uniform.
+    \end{theorem}
+    \begin{proof}
+        To show that $F_{n}\rightarrow{f}$ uniformly, we show that $F$ defines
+        a \textit{uniformly Cauchy} sequence. That is, $F_{n}(x)$ is Cauchy
+        for each $x\in{A}$, and the $N\in\mathbb{N}$ such that
+        $n,m>N$ implies $|F_{n}(x)-F_{m}(x)|<\varepsilon$ may be chosen
+        independent of $x$.
+        \par\hfill\par
+        Let $\varepsilon>0$.
+        Since $F$ is uniformly equicontinuous, there is a $\delta>0$ such
+        that for all $x,x_{0}\in{A}$, and for all $n\in\mathbb{N}$, if
+        $|x-x_{0}|<\delta$, then $|F_{n}(x)-F_{n}(x_{0})|<\varepsilon/3$.
+        Since $F_{n}(x)\rightarrow{f}(x)$ (point-wise), for each
+        $x\in{A}$ there is an $N_{x}\in\mathbb{N}$ such that
+        $n,m>N_{x}$ implies $|F_{m}(x)-F_{n}(x)|<\varepsilon/3$.
+        That is, point-wise convergence implies point-wise Cauchy sequences.
+        Now consider the open cover $\mathcal{O}$ given by
+        \begin{equation}
+            \mathcal{O}
+            =
+            \left\{\,
+                \left(x-\frac{\delta}{4},\,x+\frac{\delta}{4}\right)
+                \;\Big|\;
+                x\in{A}\,
+            \right\}.
+        \end{equation}
+        $\mathcal{O}$ is an open cover of $A$ since
+        $x\in(x-\delta/4,\,x+\delta/4)$ for each $x\in{A}$.
+        Since $A$ is compact, there is a finite subcover $\Delta$ which we
+        may write as
+        \begin{equation}
+            \Delta
+            =
+            \left\{\,
+                \left(
+                    x_{0}-\frac{\delta}{4},\,x_{0}+\frac{\delta}{4}
+                \right),\,
+                \dots,\,
+                \left(
+                    x_{k}-\frac{\delta}{4},\,x_{k}+\frac{\delta}{4}
+                \right)
+            \right\}.
+        \end{equation}
+        For each $x_{0}$, $x_{1}$, $\dots$, $x_{k}$ there is an integer
+        $N_{0}$, $N_{1}$, $\dots$, $N_{k}$ attached to it from before.
+        Define $N=\textrm{max}(N_{0},\,\dots,\,N_{k})$, and suppose
+        $n,m>N$. If $x\in{A}$, then since $\Delta$ is an open cover
+        of $A$, there is some $x_{M}\in{A}$ such that
+        $x\in(x_{M}-\delta/4,\,x_{M}+\delta/4)$. But then:
+        \begin{equation}
+            \begin{array}{rcl}
+                &&
+                \!\!
+                \displaystyle
+                |F_{n}(x)-F_{m}(x)|\\[1em]
+                \!\!
+                &=&
+                \!\!
+                \displaystyle
+                |
+                    F_{n}(x)-F_{n}(x_{M})
+                    +
+                    F_{n}(x_{M})-F_{m}(x_{M})
+                    +
+                    F_{m}(x_{M})-F_{m}(x)
+                |\\[1em]
+                \!\!
+                &\leq&
+                \!\!
+                \displaystyle
+                |F_{n}(x)-F_{n}(x_{M})|
+                +
+                |F_{n}(x_{M})-F_{m}(x_{M})|
+                +
+                |F_{m}(x_{M})-F_{m}(x)|.
+            \end{array}
+        \end{equation}
+        Now $|F_{n}(x)-F_{n}(x_{M})|<\varepsilon/3$ since
+        $|x-x_{M}|<\delta$, and similarly
+        $|F_{m}(x)-F_{m}(x_{M})|<\varepsilon/3$.
+        Finally, $|F_{n}(x_{M})-F_{m}(x_{M})|<\varepsilon/3$
+        since $n,m>N$ ($F_{n}(x_{M})$ is a Cauchy sequence).
+        Thus:
+        \begin{equation}
+            \begin{array}{rcl}
+                &&
+                \!\!
+                \displaystyle
+                |F_{n}(x)-F_{m}(x)|\\[1em]
+                \!\!
+                &\leq&
+                \!\!
+                \displaystyle
+                |F_{n}(x)-F_{n}(x_{M})|
+                +
+                |F_{n}(x_{M})-F_{m}(x_{M})|
+                +
+                |F_{m}(x_{M})-F_{m}(x)|\\[1em]
+                \!\!
+                &<&
+                \!\!
+                \displaystyle
+                \frac{\varepsilon}{3}
+                +
+                \frac{\varepsilon}{3}
+                +
+                \frac{\varepsilon}{3}\\[1em]
+                \!\!
+                &=&
+                \!\!
+                \displaystyle
+                \varepsilon.
+            \end{array}
+        \end{equation}
+        That is, $F_{n}$ is uniformly Cauchy, and hence
+        $F_{n}\rightarrow{f}$ uniformly.
+    \end{proof}
+
+\end{document}
